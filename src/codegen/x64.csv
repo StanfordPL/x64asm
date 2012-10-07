@@ -1,0 +1,386 @@
+ Opcode  (AT&T)   Prefix  Opcode  +r   Reg  Field    Arg  1  (target)   Arg  2  Arg3   Implicit  Read    Implicit  Write    Cond  Read    Cond  Write    Cond  Undef 
+                      
+label_defn :  :  :  :  :  64  L  R    :  :  :  :  : 
+                      
+adcb :  : 14 :  :  :  8  AL  X   8  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcw :  : 15 :  :  :  16  AX  X   16  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcl :  : 15 :  :  :  32  EAX  X   32  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcq :  : 15 :  :  :  64  RAX  X   32  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcb :  : 80 :  : 02 :  8  RM  X   8  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcw :  : 81 :  : 02 :  16  RM  X   16  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcl :  : 81 :  : 02 :  32  RM  X   32  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcq :  : 81 :  : 02 :  64  RM  X   32  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcw :  : 83 :  : 02 :  16  RM  X   8  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcl :  : 83 :  : 02 :  32  RM  X   8  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcq :  : 83 :  : 02 :  64  RM  X   8  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcb :  : 10 :  :  :  8  RM  X   8  R  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcw :  : 11 :  :  :  16  RM  X   16  R  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcl :  : 11 :  :  :  32  RM  X   32  R  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcq :  : 11 :  :  :  64  RM  X   64  R  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcb :  : 12 :  :  :  8  R  X   8  RM  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcw :  : 13 :  :  :  16  R  X   16  RM  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcl :  : 13 :  :  :  32  R  X   32  RM  R   :  :  : C :  O  S  Z  A  P  C  : 
+adcq :  : 13 :  :  :  64  R  X   64  RM  R   :  :  : C :  O  S  Z  A  P  C  : 
+                      
+addb :  : 04 :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+addw :  : 05 :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+addl :  : 05 :  :  :  32  EAX  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+addq :  : 05 :  :  :  64  RAX  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+addb :  : 80 :  : 00 :  8  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+addw :  : 81 :  : 00 :  16  RM  X   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+addl :  : 81 :  : 00 :  32  RM  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+addq :  : 81 :  : 00 :  64  RM  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+addw :  : 83 :  : 00 :  16  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+addl :  : 83 :  : 00 :  32  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+addq :  : 83 :  : 00 :  64  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+addb :  : 00 :  :  :  8  RM  X   8  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+addw :  : 01 :  :  :  16  RM  X   16  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+addl :  : 01 :  :  :  32  RM  X   32  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+addq :  : 01 :  :  :  64  RM  X   64  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+addb :  : 02 :  :  :  8  R  X   8  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+addw :  : 03 :  :  :  16  R  X   16  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+addl :  : 03 :  :  :  32  R  X   32  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+addq :  : 03 :  :  :  64  R  X   64  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+                      
+andb :  : 24 :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+andw :  : 25 :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  P  C  : A
+andl :  : 25 :  :  :  32  EAX  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+andq :  : 25 :  :  :  64  RAX  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+andb :  : 80 :  : 04 :  8  RM  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+andw :  : 81 :  : 04 :  16  RM  X   16  I  R   :  :  :  :  O  S  Z  P  C  : A
+andl :  : 81 :  : 04 :  32  RM  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+andq :  : 81 :  : 04 :  64  RM  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+andw :  : 83 :  : 04 :  16  RM  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+andl :  : 83 :  : 04 :  32  RM  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+andq :  : 83 :  : 04 :  64  RM  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+andb :  : 20 :  :  :  8  RM  X   8  R  R   :  :  :  :  O  S  Z  P  C  : A
+andw :  : 21 :  :  :  16  RM  X   16  R  R   :  :  :  :  O  S  Z  P  C  : A
+andl :  : 21 :  :  :  32  RM  X   32  R  R   :  :  :  :  O  S  Z  P  C  : A
+andq :  : 21 :  :  :  64  RM  X   64  R  R   :  :  :  :  O  S  Z  P  C  : A
+andb :  : 22 :  :  :  8  R  X   8  RM  R   :  :  :  :  O  S  Z  P  C  : A
+andw :  : 23 :  :  :  16  R  X   16  RM  R   :  :  :  :  O  S  Z  P  C  : A
+andl :  : 23 :  :  :  32  R  X   32  RM  R   :  :  :  :  O  S  Z  P  C  : A
+andq :  : 23 :  :  :  64  R  X   64  RM  R   :  :  :  :  O  S  Z  P  C  : A
+                      
+bsfw :  :  0f  bc  :  :  :  16  R  X   16  RM  R   :  :  :  : Z :  O  S  A  P  C 
+bsfl :  :  0f  bc  :  :  :  32  R  X   32  RM  R   :  :  :  : Z :  O  S  A  P  C 
+bsfq :  :  0f  bc  :  :  :  64  R  X   64  RM  R   :  :  :  : Z :  O  S  A  P  C 
+                      
+bsrw :  :  0f  bd  :  :  :  16  R  X   16  RM  R   :  :  :  : Z :  O  S  A  P  C 
+bsrl :  :  0f  bd  :  :  :  32  R  X   32  RM  R   :  :  :  : Z :  O  S  A  P  C 
+bsrq :  :  0f  bd  :  :  :  64  R  X   64  RM  R   :  :  :  : Z :  O  S  A  P  C 
+                      
+bswap :  :  0f  c8  : y :  :  32  R  X    :  :  :  :  : 
+bswap :  :  0f  c8  : y :  :  64  R  X    :  :  :  :  : 
+                      
+btw :  :  0f  a3  :  :  :  16  RM  W   16  R  R   :  :  :  : C :  O  S  Z  A  P 
+btl :  :  0f  a3  :  :  :  32  RM  W   32  R  R   :  :  :  : C :  O  S  Z  A  P 
+btq :  :  0f  a3  :  :  :  64  RM  W   64  R  R   :  :  :  : C :  O  S  Z  A  P 
+btw :  :  0f  ba  :  : 04 :  16  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btl :  :  0f  ba  :  : 04 :  32  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btq :  :  0f  ba  :  : 04 :  64  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+                      
+btcw :  :  0f  bb  :  :  :  16  RM  W   16  R  R   :  :  :  : C :  O  S  Z  A  P 
+btcl :  :  0f  bb  :  :  :  32  RM  W   32  R  R   :  :  :  : C :  O  S  Z  A  P 
+btcq :  :  0f  bb  :  :  :  64  RM  W   64  R  R   :  :  :  : C :  O  S  Z  A  P 
+btcw :  :  0f  ba  :  : 07 :  16  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btcl :  :  0f  ba  :  : 07 :  32  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btcq :  :  0f  ba  :  : 07 :  64  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+                      
+btrw :  :  0f  b3  :  :  :  16  RM  W   16  R  R   :  :  :  : C :  O  S  Z  A  P 
+btrl :  :  0f  b3  :  :  :  32  RM  W   32  R  R   :  :  :  : C :  O  S  Z  A  P 
+btrq :  :  0f  b3  :  :  :  64  RM  W   64  R  R   :  :  :  : C :  O  S  Z  A  P 
+btrw :  :  0f  ba  :  : 06 :  16  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btrl :  :  0f  ba  :  : 06 :  32  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btrq :  :  0f  ba  :  : 06 :  64  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+                      
+btsw :  :  0f  ab  :  :  :  16  RM  W   16  R  R   :  :  :  : C :  O  S  Z  A  P 
+btsl :  :  0f  ab  :  :  :  32  RM  W   32  R  R   :  :  :  : C :  O  S  Z  A  P 
+btsq :  :  0f  ab  :  :  :  64  RM  W   64  R  R   :  :  :  : C :  O  S  Z  A  P 
+btsw :  :  0f  ba  :  : 05 :  16  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btsl :  :  0f  ba  :  : 05 :  32  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btsq :  :  0f  ba  :  : 05 :  64  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+                      
+cbtw :  : 98 :  :  :    : AX : AL :  :  : 
+cwtl :  : 98 :  :  :    : EAX : AX :  :  : 
+cltq :  : 98 :  :  :    : RAX : EAX :  :  : 
+                      
+clc :  : f8 :  :  :    :  :  :  : C : 
+                      
+cmpb :  : 3c :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpw :  : 3d :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpl :  : 3d :  :  :  32  EAX  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpq :  : 3d :  :  :  64  RAX  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpb :  : 80 :  : 00 :  8  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpw :  : 81 :  : 07 :  16  RM  X   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpl :  : 81 :  : 07 :  32  RM  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpq :  : 81 :  : 07 :  64  RM  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpw :  : 83 :  : 07 :  16  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpl :  : 83 :  : 07 :  32  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpq :  : 83 :  : 07 :  64  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpb :  : 38 :  :  :  8  RM  X   8  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpw :  : 39 :  :  :  16  RM  X   16  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpl :  : 39 :  :  :  32  RM  X   32  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpq :  : 39 :  :  :  64  RM  X   64  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpb :  : 3a :  :  :  8  R  X   8  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpw :  : 3b :  :  :  16  R  X   16  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpl :  : 3b :  :  :  32  R  X   32  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpq :  : 3b :  :  :  64  R  X   64  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+                      
+decb :  : fe :  : 01 :  8  RM  X    :  :  :  :  O  S  Z  A  P  : 
+decw :  : ff :  : 01 :  16  RM  X    :  :  :  :  O  S  Z  A  P  : 
+decl :  : ff :  : 01 :  32  RM  X    :  :  :  :  O  S  Z  A  P  : 
+decq :  : ff :  : 01 :  64  RM  X    :  :  :  :  O  S  Z  A  P  : 
+decw :  : 48 : y :  :  16  R  X    :  :  :  :  O  S  Z  A  P  : 
+decl :  : 48 : y :  :  32  R  X    :  :  :  :  O  S  Z  A  P  : 
+                      
+divb :  : f6 :  : 06 :  8  RM  R    : AX : AX :  :  :  O  S  Z  A  P  C 
+divw :  : f7 :  : 06 :  16  RM  R    :  AX  DX  :  AX  DX  :  :  :  O  S  Z  A  P  C 
+divl :  : f7 :  : 06 :  32  RM  R    :  EAX  EDX  :  EAX  EDX  :  :  :  O  S  Z  A  P  C 
+divq :  : f7 :  : 06 :  64  RM  R    :  RAX  RDX  :  RAX  RDX  :  :  :  O  S  Z  A  P  C 
+                      
+fabs :  :  d9  e1  :  :  :    :  :  :  :  : 
+                      
+fadds :  : d8 :  : 00 :  32  M  R    : ST0 : ST0 :  :  : 
+faddl :  : dc :  : 00 :  64  M  R    : ST0 : ST0 :  :  : 
+fadd :  :  d8  c0  : y :  :  64  ST0  X   64  F  R   :  :  :  :  : 
+fadd :  :  dc  c0  : y :  :  64  F  X   64  ST0  R   :  :  :  :  : 
+faddp :  :  de  c0  : y :  :  64  F  X   64  ST0  R   : TOP : TOP :  :  : 
+fiadds :  : da :  : 00 :  32  M  R    : ST0 : ST0 :  :  : 
+fiaddl :  : de :  : 00 :  16  M  R    : ST0 : ST0 :  :  : 
+                      
+idivb :  : f6 :  : 07 :  8  RM  R    : AX : AX :  :  :  O  S  Z  A  P  C 
+idivw :  : f7 :  : 07 :  16  RM  R    :  AX  DX  :  AX  DX  :  :  :  O  S  Z  A  P  C 
+idivl :  : f7 :  : 07 :  32  RM  R    :  EAX  EDX  :  EAX  EDX  :  :  :  O  S  Z  A  P  C 
+idivq :  : f7 :  : 07 :  64  RM  R    :  RAX  RDX  :  RAX  RDX  :  :  :  O  S  Z  A  P  C 
+                      
+imulb :  : f6 :  : 05 :  8  RM  R    : AL : AX :  :  O  C  :  S  Z  A  P 
+imulw :  : f7 :  : 05 :  16  RM  R    : AX :  AX  DX  :  :  O  C  :  S  Z  A  P 
+imull :  : f7 :  : 05 :  32  RM  R    : EAX :  EAX  EDX  :  :  O  C  :  S  Z  A  P 
+imulq :  : f7 :  : 05 :  64  RM  R    : RAX :  RAX  RDX  :  :  O  C  :  S  Z  A  P 
+imulw :  :  0f  af  :  :  :  16  R  X   16  RM  R   :  :  :  :  O  C  :  S  Z  A  P 
+imull :  :  0f  af  :  :  :  32  R  X   32  RM  R   :  :  :  :  O  C  :  S  Z  A  P 
+imulq :  :  0f  af  :  :  :  64  R  X   64  RM  R   :  :  :  :  O  C  :  S  Z  A  P 
+imulw :  : 6b :  :  :  16  R  W   16  RM  R   8  I  R  :  :  :  :  O  C  :  S  Z  A  P 
+imull :  : 6b :  :  :  32  R  W   32  RM  R   8  I  R  :  :  :  :  O  C  :  S  Z  A  P 
+imulq :  : 6b :  :  :  64  R  W   64  RM  R   8  I  R  :  :  :  :  O  C  :  S  Z  A  P 
+imulw :  : 69 :  :  :  16  R  W   16  RM  R   16  I  R  :  :  :  :  O  C  :  S  Z  A  P 
+imull :  : 69 :  :  :  32  R  W   32  RM  R   32  I  R  :  :  :  :  O  C  :  S  Z  A  P 
+imulq :  : 69 :  :  :  64  R  W   64  RM  R   32  I  R  :  :  :  :  O  C  :  S  Z  A  P 
+                      
+incb :  : fe :  : 00 :  8  RM  X    :  :  :  :  O  S  Z  A  P  : 
+incw :  : ff :  : 00 :  16  RM  X    :  :  :  :  O  S  Z  A  P  : 
+incl :  : ff :  : 00 :  32  RM  X    :  :  :  :  O  S  Z  A  P  : 
+incq :  : ff :  : 00 :  64  RM  X    :  :  :  :  O  S  Z  A  P  : 
+incw :  : 40 : y :  :  16  R  X    :  :  :  :  O  S  Z  A  P  : 
+incl :  : 40 : y :  :  32  R  X    :  :  :  :  O  S  Z  A  P  : 
+                      
+ja :  :  0f  87  :  :  :  64  L  R    :  :  :  Z  C  :  : 
+jae :  :  0f  83  :  :  :  64  L  R    :  :  : C :  : 
+jb :  :  0f  82  :  :  :  64  L  R    :  :  : C :  : 
+jbe :  :  0f  86  :  :  :  64  L  R    :  :  :  Z  C  :  : 
+je :  :  0f  84  :  :  :  64  L  R    :  :  : Z :  : 
+jg :  :  0f  8f  :  :  :  64  L  R    :  :  :  O  S  Z  :  : 
+jge :  :  0f  8d  :  :  :  64  L  R    :  :  :  O  S  :  : 
+jl :  :  0f  8c  :  :  :  64  L  R    :  :  :  O  S  :  : 
+jle :  :  0f  8e  :  :  :  64  L  R    :  :  :  O  S  Z  :  : 
+jne :  :  0f  85  :  :  :  64  L  R    :  :  : Z :  : 
+jno :  :  0f  81  :  :  :  64  L  R    :  :  : O :  : 
+jnp :  :  0f  8b  :  :  :  64  L  R    :  :  : P :  : 
+jns :  :  0f  89  :  :  :  64  L  R    :  :  : S :  : 
+jo :  :  0f  80  :  :  :  64  L  R    :  :  : O :  : 
+jp :  :  0f  8a  :  :  :  64  L  R    :  :  : P :  : 
+js :  :  0f  88  :  :  :  64  L  R    :  :  : S :  : 
+                      
+jmp :  : e9 :  :  :  64  L  R    :  :  :  :  : 
+                      
+leaw :  : 8d :  :  :  16  R  W   8  M  N   :  :  :  :  : 
+leal :  : 8d :  :  :  32  R  W   8  M  N   :  :  :  :  : 
+leaq :  : 8d :  :  :  64  R  W   8  M  N   :  :  :  :  : 
+                      
+movb :  : 88 :  :  :  8  RM  W   8  R  R   :  :  :  :  : 
+movw :  : 89 :  :  :  16  RM  W   16  R  R   :  :  :  :  : 
+movl :  : 89 :  :  :  32  RM  W   32  R  R   :  :  :  :  : 
+movq :  : 89 :  :  :  64  RM  W   64  R  R   :  :  :  :  : 
+movb :  : 8a :  :  :  8  R  W   8  RM  R   :  :  :  :  : 
+movw :  : 8b :  :  :  16  R  W   16  RM  R   :  :  :  :  : 
+movl :  : 8b :  :  :  32  R  W   32  RM  R   :  :  :  :  : 
+movq :  : 8b :  :  :  64  R  W   64  RM  R   :  :  :  :  : 
+movb :  : b0 :  :  :  8  R  W   8  I  R   :  :  :  :  : 
+movw :  : b8 :  :  :  16  R  W   16  I  R   :  :  :  :  : 
+movl :  : b8 :  :  :  32  R  W   32  I  R   :  :  :  :  : 
+movq :  : b8 :  :  :  64  R  W   64  I  R   :  :  :  :  : 
+movb :  : c6 :  : 00 :  8  RM  W   8  I  R   :  :  :  :  : 
+movw :  : c7 :  : 00 :  16  RM  W   16  I  R   :  :  :  :  : 
+movl :  : c7 :  : 00 :  32  RM  W   32  I  R   :  :  :  :  : 
+movq :  : c7 :  : 00 :  64  RM  W   32  I  R   :  :  :  :  : 
+                      
+movd :  :  0f  6e  :  :  :  128  S  W   32  RM  R   :  :  :  :  : 
+movq :  :  0f  6e  :  :  :  128  S  W   64  RM  R   :  :  :  :  : 
+movd :  :  0f  7e  :  :  :  32  RM  W   128  S  R   :  :  :  :  : 
+movq :  :  0f  7e  :  :  :  64  RM  W   128  S  R   :  :  :  :  : 
+                      
+movzbw :  :  0f  b6  :  :  :  16  R  W   8  RM  R   :  :  :  :  : 
+movzbl :  :  0f  b6  :  :  :  32  R  W   8  RM  R   :  :  :  :  : 
+movzbq :  :  0f  b6  :  :  :  64  R  W   8  RM  R   :  :  :  :  : 
+movzwl :  :  0f  b7  :  :  :  32  R  W   16  RM  R   :  :  :  :  : 
+movzwq :  :  0f  b7  :  :  :  64  R  W   16  RM  R   :  :  :  :  : 
+                      
+mulb :  : f6 :  : 04 :  8  RM  R    : AL : AX :  :  O  C  :  S  Z  A  P 
+mulw :  : f7 :  : 04 :  16  RM  R    : AX :  AX  DX  :  :  O  C  :  S  Z  A  P 
+mull :  : f7 :  : 04 :  32  RM  R    : EAX :  EAX  EDX  :  :  O  C  :  S  Z  A  P 
+mulq :  : f7 :  : 04 :  64  RM  R    : RAX :  RAX  RDX  :  :  O  C  :  S  Z  A  P 
+                      
+negb :  : f6 :  : 03 :  8  RM  X    :  :  :  :  O  S  Z  A  P  C  : 
+negw :  : f7 :  : 03 :  16  RM  X    :  :  :  :  O  S  Z  A  P  C  : 
+negl :  : f7 :  : 03 :  32  RM  X    :  :  :  :  O  S  Z  A  P  C  : 
+negq :  : f7 :  : 03 :  64  RM  X    :  :  :  :  O  S  Z  A  P  C  : 
+                      
+nop :  : 90 :  :  :    :  :  :  :  : 
+                      
+notb :  : f6 :  : 02 :  8  RM  X    :  :  :  :  : 
+notw :  : f7 :  : 02 :  16  RM  X    :  :  :  :  : 
+notl :  : f7 :  : 02 :  32  RM  X    :  :  :  :  : 
+notq :  : f7 :  : 02 :  64  RM  X    :  :  :  :  : 
+                      
+orb :  : 0c :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+orw :  : 0d :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  P  C  : A
+orl :  : 0d :  :  :  32  EAX  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+orq :  : 0d :  :  :  64  RAX  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+orb :  : 80 :  : 01 :  8  RM  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+orw :  : 81 :  : 01 :  16  RM  X   16  I  R   :  :  :  :  O  S  Z  P  C  : A
+orl :  : 81 :  : 01 :  32  RM  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+orq :  : 81 :  : 01 :  64  RM  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+orw :  : 83 :  : 01 :  16  RM  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+orl :  : 83 :  : 01 :  32  RM  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+orq :  : 83 :  : 01 :  64  RM  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+orb :  : 08 :  :  :  8  RM  X   8  R  R   :  :  :  :  O  S  Z  P  C  : A
+orw :  : 09 :  :  :  16  RM  X   16  R  R   :  :  :  :  O  S  Z  P  C  : A
+orl :  : 09 :  :  :  32  RM  X   32  R  R   :  :  :  :  O  S  Z  P  C  : A
+orq :  : 09 :  :  :  64  RM  X   64  R  R   :  :  :  :  O  S  Z  P  C  : A
+orb :  : 0a :  :  :  8  R  X   8  RM  R   :  :  :  :  O  S  Z  P  C  : A
+orw :  : 0b :  :  :  16  R  X   16  RM  R   :  :  :  :  O  S  Z  P  C  : A
+orl :  : 0b :  :  :  32  R  X   32  RM  R   :  :  :  :  O  S  Z  P  C  : A
+orq :  : 0b :  :  :  64  R  X   64  RM  R   :  :  :  :  O  S  Z  P  C  : A
+                      
+paddb :  :  0f  fc  :  :  :  64  X  X   64  XM  R   :  :  :  :  : 
+paddb : 66 :  0f  fc  :  :  :  128  S  X   128  SM  R   :  :  :  :  : 
+paddw :  :  0f  fd  :  :  :  64  X  X   64  XM  R   :  :  :  :  : 
+paddw : 66 :  0f  fd  :  :  :  128  S  X   128  SM  R   :  :  :  :  : 
+paddd :  :  0f  fe  :  :  :  64  X  X   64  XM  R   :  :  :  :  : 
+paddd : 66 :  0f  fe  :  :  :  128  S  X   128  SM  R   :  :  :  :  : 
+                      
+paddq :  :  0f  d4  :  :  :  64  X  X   64  XM  R   :  :  :  :  : 
+paddq : 66 :  0f  d4  :  :  :  128  S  X   128  SM  R   :  :  :  :  : 
+                      
+pmulld : 66 :  0f  38  40  :  :  :  128  S  X   128  SM  R   :  :  :  :  : 
+                      
+pmullw : 66 :  0f  d5  :  :  :  128  S  X   128  SM  R   :  :  :  :  : 
+                      
+popw :  : 58 : y :  :  16  R  W    : RSP : RSP :  :  : 
+popq :  : 58 : y :  :  64  R  W    : RSP : RSP :  :  : 
+popw :  : 8f :  :  :  16  RM  W    : RSP : RSP :  :  : 
+popq :  : 8f :  :  :  64  RM  W    : RSP : RSP :  :  : 
+                      
+                      
+popcntw : f3 :  0f  b8  :  :  :  16  R  W   16  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+popcntl : f3 :  0f  b8  :  :  :  32  R  W   32  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+popcntq : f3 :  0f  b8  :  :  :  64  R  W   64  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+                      
+pushw :  : 50 : y :  :  16  R  R    : RSP : RSP :  :  : 
+pushq :  : 50 : y :  :  64  R  R    : RSP : RSP :  :  : 
+pushw :  : ff :  :  :  16  RM  R    : RSP : RSP :  :  : 
+pushq :  : ff :  :  :  64  RM  R    : RSP : RSP :  :  : 
+                      
+retq :  : c3 :  :  :    :  :  :  :  : 
+                      
+sbbb :  : 1c :  :  :  8  AL  X   8  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbw :  : 1d :  :  :  16  AX  X   16  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbl :  : 1d :  :  :  32  EAX  X   32  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbq :  : 1d :  :  :  64  RAX  X   32  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbb :  : 80 :  : 03 :  8  RM  X   8  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbw :  : 81 :  : 03 :  16  RM  X   16  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbl :  : 81 :  : 03 :  32  RM  X   32  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbq :  : 81 :  : 03 :  64  RM  X   32  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbw :  : 83 :  : 03 :  16  RM  X   8  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbl :  : 83 :  : 03 :  32  RM  X   8  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbq :  : 83 :  : 03 :  64  RM  X   8  I  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbb :  : 18 :  :  :  8  RM  X   8  R  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbw :  : 19 :  :  :  16  RM  X   16  R  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbl :  : 19 :  :  :  32  RM  X   32  R  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbq :  : 19 :  :  :  64  RM  X   64  R  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbb :  : 1a :  :  :  8  R  X   8  RM  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbw :  : 1b :  :  :  16  R  X   16  RM  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbl :  : 1b :  :  :  32  R  X   32  RM  R   :  :  : C :  O  S  Z  A  P  C  : 
+sbbq :  : 1b :  :  :  64  R  X   64  RM  R   :  :  : C :  O  S  Z  A  P  C  : 
+                      
+shld :  :  0f  a4  :  :  :  16  RM  X   16  R  X   8  I  R  :  :  :  :  S  Z  P  C  :  O  A 
+shld :  :  0f  a5  :  :  :  16  RM  X   16  R  X   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
+shld :  :  0f  a4  :  :  :  32  RM  X   32  R  X   8  I  R  :  :  :  :  S  Z  P  C  :  O  A 
+shld :  :  0f  a5  :  :  :  64  RM  X   64  R  X   8  I  R  :  :  :  :  S  Z  P  C  :  O  A 
+shld :  :  0f  a4  :  :  :  32  RM  X   32  R  X   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
+shld :  :  0f  a5  :  :  :  64  RM  X   64  R  X   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+shufpd :  :  0f  c6  :  :  :  128  S  X   128  SM  R   8  I  R  :  :  :  :  : 
+                      
+shufps :  :  0f  c6  :  :  :  128  S  X   128  SM  R   8  I  R  :  :  :  :  : 
+                      
+subb :  : 2c :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+subw :  : 2d :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+subl :  : 2d :  :  :  32  EAX  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+subq :  : 2d :  :  :  64  RAX  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+subb :  : 80 :  : 05 :  8  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+subw :  : 81 :  : 05 :  16  RM  X   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+subl :  : 81 :  : 05 :  32  RM  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+subq :  : 81 :  : 05 :  64  RM  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+subw :  : 83 :  : 05 :  16  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+subl :  : 83 :  : 05 :  32  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+subq :  : 83 :  : 05 :  64  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+subb :  : 28 :  :  :  8  RM  X   8  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+subw :  : 29 :  :  :  16  RM  X   16  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+subl :  : 29 :  :  :  32  RM  X   32  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+subq :  : 29 :  :  :  64  RM  X   64  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+subb :  : 2a :  :  :  8  R  X   8  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+subw :  : 2b :  :  :  16  R  X   16  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+subl :  : 2b :  :  :  32  R  X   32  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+subq :  : 2b :  :  :  64  R  X   64  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+                      
+testb :  : a8 :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+testw :  : a9 :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  P  C  : A
+testl :  : a9 :  :  :  32  EAX  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+testq :  : a9 :  :  :  64  RAX  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+testb :  : f6 :  : 00 :  8  RM  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+testw :  : f7 :  : 00 :  16  RM  X   16  I  R   :  :  :  :  O  S  Z  P  C  : A
+testl :  : f7 :  : 00 :  32  RM  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+testq :  : f7 :  : 00 :  64  RM  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+testb :  : 84 :  :  :  8  RM  X   8  R  R   :  :  :  :  O  S  Z  P  C  : A
+testw :  : 85 :  :  :  16  RM  X   16  R  R   :  :  :  :  O  S  Z  P  C  : A
+testl :  : 85 :  :  :  32  RM  X   32  R  R   :  :  :  :  O  S  Z  P  C  : A
+testq :  : 85 :  :  :  64  RM  X   64  R  R   :  :  :  :  O  S  Z  P  C  : A
+                      
+xorb :  : 34 :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+xorw :  : 35 :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  P  C  : A
+xorl :  : 35 :  :  :  32  EAX  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+xorq :  : 35 :  :  :  64  RAX  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+xorb :  : 80 :  : 06 :  8  RM  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+xorw :  : 81 :  : 06 :  16  RM  X   16  I  R   :  :  :  :  O  S  Z  P  C  : A
+xorl :  : 81 :  : 06 :  32  RM  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+xorq :  : 81 :  : 06 :  64  RM  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+xorw :  : 83 :  : 06 :  16  RM  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+xorl :  : 83 :  : 06 :  32  RM  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+xorq :  : 83 :  : 06 :  64  RM  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+xorb :  : 30 :  :  :  8  RM  X   8  R  R   :  :  :  :  O  S  Z  P  C  : A
+xorw :  : 31 :  :  :  16  RM  X   16  R  R   :  :  :  :  O  S  Z  P  C  : A
+xorl :  : 31 :  :  :  32  RM  X   32  R  R   :  :  :  :  O  S  Z  P  C  : A
+xorq :  : 31 :  :  :  64  RM  X   64  R  R   :  :  :  :  O  S  Z  P  C  : A
+xorb :  : 32 :  :  :  8  R  X   8  RM  R   :  :  :  :  O  S  Z  P  C  : A
+xorw :  : 33 :  :  :  16  R  X   16  RM  R   :  :  :  :  O  S  Z  P  C  : A
+xorl :  : 33 :  :  :  32  R  X   32  RM  R   :  :  :  :  O  S  Z  P  C  : A
+xorq :  : 33 :  :  :  64  R  X   64  RM  R   :  :  :  :  O  S  Z  P  C  : A
