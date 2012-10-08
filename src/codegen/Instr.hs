@@ -95,21 +95,9 @@ expand_operands key val1 val2 (Instr a p r o rc rf rm rmo os ir iw cr cw cu mo) 
             True  -> v
             False -> o
 
--- Expand mem override
-expand_mem_or :: Instr -> [Instr]
-expand_mem_or (Instr a p r o rc rf rm rmo os ir iw cr cw cu _) =
-  (Instr a p r o rc rf rm rmo os ir iw cr cw cu False) :
-  case (elem "M" os) of
-    True  -> (Instr a (insert p) r o rc rf rm rmo os ir iw cr cw cu True) : []
-    False -> []								
-    where insert [] = "67":[]
-          insert ps = (head ps):["67"]++(tail ps)
-
-
 -- Applies each of the above functions in appropriate turn					
 expand_instr :: Instr -> [Instr]
 expand_instr i = 
-  --concat $ map expand_mem_or $
   concat $ map (expand_operands "XM" "X" "M") $
   concat $ map (expand_operands "SM" "S" "M") $
   (expand_operands "RM" "R" "M") $ 
