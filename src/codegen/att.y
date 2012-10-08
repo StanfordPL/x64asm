@@ -174,6 +174,7 @@ Instruction* build_label(const OperandInfo& label) {
 %token <operand> ATT_MMX_REG
 %token <operand> ATT_SCALE 
 %token <operand> ATT_XMM_REG
+%token <operand> ATT_OFFSET
 
 %token <str>  ATT_OPCODE
 
@@ -265,7 +266,7 @@ operands : /* empty */ {
 				 ;
 
 operand : ATT_FP_REG | ATT_GP_REG | ATT_IMM | ATT_LABEL | ATT_MMX_REG |
-          ATT_SCALE  | ATT_XMM_REG
+          ATT_OFFSET | ATT_SCALE  | ATT_XMM_REG
         ;
 
 mem : OPEN ATT_GP_REG CLOSE { 
@@ -274,7 +275,10 @@ mem : OPEN ATT_GP_REG CLOSE {
 						$2->width); 
 				delete $2; 
 			}
-    | ATT_IMM OPEN ATT_GP_REG CLOSE { 
+    | ATT_OFFSET OPEN ATT_GP_REG CLOSE { 
+			if ( ($1->val & 0xffffffff00000000) != 0 )
+				is.setstate(std::ios::failbit);
+
 			$$ = new OperandInfo(Addr(GpReg($3->val), Imm($1->val)), 
 					ADDR, 
 					$3->width); 
@@ -298,7 +302,10 @@ mem : OPEN ATT_GP_REG CLOSE {
 			delete $4; 
 			delete $6; 
 		}
-    | ATT_IMM OPEN ATT_GP_REG COMMA ATT_GP_REG CLOSE { 
+    | ATT_OFFSET OPEN ATT_GP_REG COMMA ATT_GP_REG CLOSE { 
+			if ( ($1->val & 0xffffffff00000000) != 0 )
+				is.setstate(std::ios::failbit);
+
 			$$ = new OperandInfo(
 					Addr(GpReg($3->val), GpReg($5->val), Imm($1->val)), 
 					ADDR, 
@@ -307,7 +314,10 @@ mem : OPEN ATT_GP_REG CLOSE {
 			delete $3; 
 			delete $5; 
 		}
-    | ATT_IMM OPEN ATT_GP_REG COMMA ATT_GP_REG COMMA ATT_SCALE CLOSE { 
+    | ATT_OFFSET OPEN ATT_GP_REG COMMA ATT_GP_REG COMMA ATT_SCALE CLOSE { 
+			if ( ($1->val & 0xffffffff00000000) != 0 )
+				is.setstate(std::ios::failbit);
+
 			$$ = new OperandInfo(
 					Addr(GpReg($3->val), GpReg($5->val), (ScaleVal) $7->val, Imm($1->val)), 
 					ADDR, 

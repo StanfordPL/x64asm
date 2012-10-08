@@ -13,9 +13,10 @@
 #include "src/code/imm.h"
 #include "src/code/label.h"
 #include "src/code/mmx_reg.h"
-#include "src/code/reg_set.h"
+#include "src/code/offset.h"
 #include "src/code/opcode.h"
 #include "src/code/operand.h"
+#include "src/code/reg_set.h"
 #include "src/code/xmm_reg.h"
 
 namespace x64 {
@@ -103,6 +104,17 @@ class Instruction {
 		inline void set_mmx_reg(size_t index, MmxReg r) { 
 			assert(type(index) == MMX_REG);
 			operands_[index] = r; 
+		}
+
+		// Get/Set offset
+		inline Offset get_offset(size_t index) const {
+			assert(type(index) == OFFSET);
+			return operands_[index];
+		}
+
+		inline void set_offset(size_t index, Offset o) {
+			assert(type(index) == OFFSET);
+			operands_[index] = o;
 		}
 
 		// Get/Set Imms

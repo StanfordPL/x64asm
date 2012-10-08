@@ -45,6 +45,7 @@ write_arity = instr_array "size_t" "Opcode::arity_" (show . arity)
 type_render :: Instr -> String
 type_render i = inline_array "Type" (render' (operands i) 0)
     where render' (_:"M":_:xs)   i = ["ADDR"]     ++ (render' xs (i+1))
+          render' (_:"O":_:xs)   i = ["OFFSET"]   ++ (render' xs (i+1))
           render' (_:"R":_:xs)   i = ["GP_REG"]   ++ (render' xs (i+1))
           render' (_:"X":_:xs)   i = ["MMX_REG"]  ++ (render' xs (i+1))
           render' (_:"F":_:xs)   i = ["FP_REG"]   ++ (render' xs (i+1))
@@ -69,6 +70,7 @@ width_render i = inline_array "BitWidth" (render' (operands i) 0 (mem_size_or i)
     where render' (_:"M":_:xs)  i o = (case o of 
                                          True ->  ["DOUBLE"]
                                          False -> ["QUAD"]) ++ (render' xs (i+1) o)
+          render' (_:"O":_:xs)    i o = ["QUAD"]     ++ (render' xs (i+1) o)
           render' (w:"R":_:xs)    i o = [(width' w)] ++ (render' xs (i+1) o)
           render' (_:"X":_:xs)    i o = ["QUAD"]     ++ (render' xs (i+1) o)
           render' (_:"F":_:xs)    i o = ["QUAD"]     ++ (render' xs (i+1) o)

@@ -2,7 +2,6 @@
 #define X64_SRC_CODE_LABEL_H
 
 #include <iostream>
-#include <sstream>
 
 #include "src/code/operand.h"
 

@@ -19,6 +19,7 @@ enum Type {
 	LABEL,
 	SCALE,
 	ADDR,
+	OFFSET,
 
 	NUM_TYPES,
 	TYPE_NULL = NUM_TYPES

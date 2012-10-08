@@ -32,10 +32,16 @@ Operand to_imm(const char* c, bool from_decimal) {
 	istringstream iss(c);
 	Operand o;
 
-  if( from_decimal )
-    iss >> dec >> o;
-  else
-	  iss >> hex >> o;
+	if ( from_decimal )
+		iss >> dec >> o;
+	else
+		iss >> hex >> o;
+
+	return o;
+}
+
+Operand to_imm_truncate(const char* c, bool from_decimal) {
+	auto o = to_imm(c, from_decimal);
 
 	// This removes sign extension (I think).
 	// It should give us the invariant that we use exactly BitWidth bits.
@@ -50,7 +56,7 @@ Operand to_imm(const char* c, bool from_decimal) {
 }
 
 BitWidth to_imm_width(const char* c, bool from_decimal) {
-	auto imm = to_imm(c, from_decimal);
+	auto imm = to_imm_truncate(c, from_decimal);
 
 	if ( imm <= 0x00000000000000ff )
 		return LOW;
@@ -174,10 +180,11 @@ Operand to_label(const char* c) {
 "8"/")" { OPERAND(TIMES_8, SCALE, FIXED); return ATT_SCALE; }
 
 
-"-"?"0x"[0-9a-f]+ { OPERAND(to_imm(yytext, false), IMM, DOUBLE); return ATT_IMM; }
-"-"?[0-9]+ { OPERAND(to_imm(yytext, true), IMM, DOUBLE); return ATT_IMM; }
-"$""-"?"0x"[0-9a-f]+ { OPERAND(to_imm(yytext+1, false), IMM, to_imm_width(yytext+1, false)); return ATT_IMM; }
-"$""-"?[0-9]+ { OPERAND(to_imm(yytext+1, true), IMM, to_imm_width(yytext+1, true)); return ATT_IMM; }
+"-"?"0x"[0-9a-f]+ { OPERAND(to_imm(yytext, false), OFFSET, QUAD); return ATT_OFFSET; }
+"-"?[0-9]+        { OPERAND(to_imm(yytext, true),  OFFSET, QUAD); return ATT_OFFSET; }
+
+"$""-"?"0x"[0-9a-f]+ { OPERAND(to_imm_truncate(yytext+1, false), IMM, to_imm_width(yytext+1, false)); return ATT_IMM; }
+"$""-"?[0-9]+        { OPERAND(to_imm_truncate(yytext+1, true),  IMM, to_imm_width(yytext+1, true));  return ATT_IMM; }
 
 "."[a-zA-Z][0-9a-zA-Z_]* { OPERAND(to_label(yytext+1), LABEL, FIXED); return ATT_LABEL; }
 

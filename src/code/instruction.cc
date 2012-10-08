@@ -88,6 +88,9 @@ void Instruction::write_att(ostream& os) const {
 			case ADDR:
 				get_addr(i).write_att(os);
 				break;
+			case OFFSET:
+				get_offset(i).write_att(os);
+				break;
 
 			default:      
 				os.setstate(ios::failbit);
@@ -125,6 +128,9 @@ bool Instruction::check_operand(size_t index) const {
 			return true;
 		case ADDR:     
 			get_addr(index);
+			return true;
+		case OFFSET:
+			get_offset(index);
 			return true;
 		default:       
 			assert(false);

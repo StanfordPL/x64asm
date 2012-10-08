@@ -13,6 +13,7 @@ assm_args i = concat $ intersperse "," $ (args' (operand_types i) 0)
     where args' ("F":xs) i = ("FpReg arg"  ++ (show i)):[] ++ (args' xs (i+1))
           args' ("L":xs) i = ("Label arg"  ++ (show i)):[] ++ (args' xs (i+1))
           args' ("M":xs) i = ("Addr arg"   ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("O":xs) i = ("Offset arg" ++ (show i)):[] ++ (args' xs (i+1))
           args' ("R":xs) i = ("GpReg arg"  ++ (show i)):[] ++ (args' xs (i+1))
           args' ("S":xs) i = ("XmmReg arg" ++ (show i)):[] ++ (args' xs (i+1))
           args' ("X":xs) i = ("MmxReg arg" ++ (show i)):[] ++ (args' xs (i+1))
@@ -87,6 +88,7 @@ assm_defn is = concat $ map render $ tail is
           disp i = disp' (operand_types i) 
           disp' ("L":_) = "\tjumps_[pos_] = arg0;\n" ++
                           "\tpos_ += 4;\n"
+          disp' ("O":_) = "\temit_quad(buf_,pos_,(Operand) arg0);\n"
           disp' _       = "\t// NO DISPLACEMENT\n"
 
           immed i = immed' (operands i) 0
@@ -107,6 +109,7 @@ assm_switch is = concat $ map render $ tail is
           args' ("F":xs) i = ("i.get_fp_reg("  ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
           args' ("L":xs) i = ("i.get_label("   ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
           args' ("M":xs) i = ("i.get_addr("    ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("O":xs) i = ("i.get_offset("  ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
           args' ("R":xs) i = ("i.get_gp_reg("  ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
           args' ("S":xs) i = ("i.get_xmm_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
           args' ("X":xs) i = ("i.get_mmx_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))

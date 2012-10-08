@@ -13,6 +13,7 @@
 #include "src/code/imm.h"
 #include "src/code/instruction.h"
 #include "src/code/label.h"
+#include "src/code/offset.h"
 #include "src/code/opcode.h"
 #include "src/code/reg_set.h"
 #include "src/code/scale.h"
