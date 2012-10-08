@@ -327,6 +327,9 @@ void Assembler::finish() {
 	}
 }
 
+// void Assembler::adcb(Imm arg0) { } ...
+#include "src/gen/assembler.defn"
+
 void Assembler::write_binary(ostream& os, const Code& code) {
 	unsigned char buffer[1024];
 	start(buffer);
@@ -364,5 +367,7 @@ void Assembler::start(unsigned char* buffer) {
 	pos_ = 0;
 	buf_ = buffer;
 }
+
+
 
 } // namespace x64

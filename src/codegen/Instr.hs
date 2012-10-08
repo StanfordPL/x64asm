@@ -109,7 +109,7 @@ expand_mem_or (Instr a p r o rc rf rm rmo os ir iw cr cw cu _) =
 -- Applies each of the above functions in appropriate turn					
 expand_instr :: Instr -> [Instr]
 expand_instr i = 
-  concat $ map expand_mem_or $
+  --concat $ map expand_mem_or $
   concat $ map (expand_operands "XM" "X" "M") $
   concat $ map (expand_operands "SM" "S" "M") $
   (expand_operands "RM" "R" "M") $ 

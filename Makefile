@@ -82,7 +82,7 @@ src/gen: src/codegen/*.hs src/codegen/*.csv src/codegen/att.l src/codegen/att.y
 	cd build/codegen && \
 		./cfg ../../src/codegen/x64.csv && \
 		./assembler ../../src/codegen/x64.csv && \
-		mv assembler.switch ../../src/gen/ && \
+		mv assembler.* ../../src/gen/ && \
 		mv opcode.* ../../src/gen/
 	flex $(FLEXOPS) -Patt src/codegen/att.l && \
 		mv lex.att.c src/gen

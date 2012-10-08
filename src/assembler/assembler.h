@@ -40,6 +40,9 @@ class Assembler {
 			return true;
 		}
 
+		// void adcb(Imm arg0) ...
+		#include "src/gen/assembler.decl"
+
 		void write_binary(std::ostream& os, const Code& code);
 
 		void write_hex(std::ostream& os, const Code& code);
