@@ -69,9 +69,10 @@ Instruction* build_instr(istream& is, const string& opcode,
 	// A nasty bit of context sensitivity with the SHL/SHR class of instructions
 	// CL in the right place is a RCX_ONLY (we can't check this until now)
 	// Ditto for the arithmetic ops and AL,AX,EAX,RAX and RAX_ONLY
-
+	{
 	const auto len = opcode.length() > 3 ? 3 : opcode.length();
 	const auto base = opcode.substr(0, len);
+
 	if ( base == "sal" || base == "sar" || base == "shl" || base == "shr" )
 		if ( operand_info.size() == 2 && operand_info[1].type == GP_REG ) {
 			if ( operand_info[1].val != rcx || operand_info[1].width != LOW )
@@ -86,13 +87,27 @@ Instruction* build_instr(istream& is, const string& opcode,
 			if ((operand_info[0].width == QUAD && operand_info[1].width == DOUBLE) || 
 					(operand_info[0].width == operand_info[1].width) ) 
 				get<1>(key)[0] = RAX_ONLY;
+	}
 
 	// Similar issue related to floating point instructions which require st0
-
 	if ( operand_info.size() >= 1 && operand_info[0].type == FP_REG && operand_info[0].val == st0 )
 		get<1>(key)[0] = ST0_ONLY;
 	if ( operand_info.size() >= 2 && operand_info[1].type == FP_REG && operand_info[1].val == st0 )
 		get<1>(key)[1] = ST0_ONLY;
+
+	// And once again for movabs
+	{
+	const auto len = opcode.length() > 6 ? 6 : opcode.length();
+	const auto base = opcode.substr(0, len);
+	if ( base == "movabs" ) {
+		if ( operand_info[0].type == GP_REG && operand_info[0].val == rax )
+			get<1>(key)[0] = RAX_ONLY;
+		else if ( operand_info[1].type == GP_REG && operand_info[1].val == rax )
+			get<1>(key)[1] = RAX_ONLY;
+		else
+			is.setstate(std::ios::failbit);
+	}
+	}
 
 	vector<Operand> ops;
 	const auto itr = signatures_.find(key);

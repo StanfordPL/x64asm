@@ -206,6 +206,8 @@ movb :  : 8a :  :  :  8  R  W   8  RM  R   :  :  :  :  :
 movw :  : 8b :  :  :  16  R  W   16  RM  R   :  :  :  :  : 
 movl :  : 8b :  :  :  32  R  W   32  RM  R   :  :  :  :  : 
 movq :  : 8b :  :  :  64  R  W   64  RM  R   :  :  :  :  : 
+movabsq :  : a1 :  :  :  64  RAX  W   64  I  R   :  :  :  :  : 
+movabsq :  : a3 :  :  :  64  I  W   64  RAX  R   :  :  :  :  : 
 movb :  : b0 :  :  :  8  R  W   8  I  R   :  :  :  :  : 
 movw :  : b8 :  :  :  16  R  W   16  I  R   :  :  :  :  : 
 movl :  : b8 :  :  :  32  R  W   32  I  R   :  :  :  :  : 
