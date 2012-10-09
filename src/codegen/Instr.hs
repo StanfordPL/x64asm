@@ -60,6 +60,8 @@ add_66_prefix (Instr a p r o rc rf rm rmo os ir iw cr cw cu mo) =
       ("16":"M":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu mo)
       ("16":"R":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu mo)
       ("16":"RM":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu mo)
+      ("16":"AX":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu mo)
+      ("16":"CX":_) -> error "Does this ever happen?  CX Target?"
       _             -> (Instr a p           r o rc rf rm rmo os ir iw cr cw cu mo)
 
 -- 64-bit operands require a mandator rex.w prefix
