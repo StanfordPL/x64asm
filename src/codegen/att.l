@@ -82,12 +82,13 @@ Operand to_label(const char* c) {
 
 %%
 
-","     { return COMMA; }
-":"     { return COLON; }
-"("     { return OPEN; }
-")"     { return CLOSE; }
-"\n"    { return ENDL; }
-[ \t]   { ; }
+","   { return COMMA; }
+":"   { return COLON; }
+"("   { return OPEN; }
+")"   { return CLOSE; }
+"\n"  { return ENDL; }
+[ \t] { ; }
+"#"[^\n]*"\n" { return ENDL; }
 
 "%rax" { OPERAND(rax, GP_REG, QUAD);   return ATT_GP_REG; }
 "%eax" { OPERAND(rax, GP_REG, DOUBLE); return ATT_GP_REG; }

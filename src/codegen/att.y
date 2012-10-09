@@ -200,7 +200,9 @@ bool is_valid_disp(Operand d) {
 
 %%
 
-code : instrs { code.assign($1->begin(), $1->end()); delete $1; }
+blank : /* empty */ | blank ENDL { }
+
+code : blank instrs { code.assign($2->begin(), $2->end()); delete $2; }
 		 ;
 
 instrs : instr { 
@@ -214,12 +216,12 @@ instrs : instr {
 			 }
 		   ;
 
-instr : ATT_OPCODE operands ENDL { 
+instr : ATT_OPCODE operands ENDL blank { 
 				$$ = build_instr(is, *$1, *$2); 
 				delete $1; 
 				delete $2; 
 			}
-      | ATT_LABEL COLON ENDL {
+      | ATT_LABEL COLON ENDL blank {
 				$$ = build_label(*$1); 
 				delete $1; 
 			} 
