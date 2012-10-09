@@ -194,6 +194,8 @@ js :  :  0f  88  :  :  :  64  L  R    :  :  : S :  :
                       
 jmp :  : e9 :  :  :  64  L  R    :  :  :  :  : 
                       
+lahf :  : 9f :  :  :    :  :  :  :  : 
+                      
 leaw :  : 8d :  :  :  16  R  W   8  M  N   :  :  :  :  : 
 leal :  : 8d :  :  :  32  R  W   8  M  N   :  :  :  :  : 
 leaq :  : 8d :  :  :  64  R  W   8  M  N   :  :  :  :  : 
@@ -295,6 +297,8 @@ pushw :  : ff :  :  :  16  RM  R    : RSP : RSP :  :  :
 pushq :  : ff :  :  :  64  RM  R    : RSP : RSP :  :  : 
                       
 retq :  : c3 :  :  :    :  :  :  :  : 
+                      
+sahf :  : 9e :  :  :    :  :  :  :  O  S  Z  A  P  C  : 
                       
 sbbb :  : 1c :  :  :  8  AL  X   8  I  R   :  :  : C :  O  S  Z  A  P  C  : 
 sbbw :  : 1d :  :  :  16  AX  X   16  I  R   :  :  : C :  O  S  Z  A  P  C  : 

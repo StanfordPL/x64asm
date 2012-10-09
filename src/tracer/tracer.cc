@@ -23,13 +23,12 @@ Trace& Tracer::trace(Trace& t, const Code& code) {
 
 		//if ( before )
 		//	trace_before(t.trace_[t.next_elem_], instr);
-		assm_.assemble(instr);
-		//if ( after )
-		//	trace_after(t.trace_[t.next_elem_], instr);
 
 		if ( before || after ) {
 			assm_.pushq_64r(rax);
 			assm_.pushq_64r(rbx);
+			assm_.lahf();
+			assm_.pushw_16r(rax);
 
 			// t.trace_[t.next_elem_].line_ = i;
 			assm_.movabsq_64rax_64o(rax, (Operand) &t.next_elem_);
@@ -42,9 +41,16 @@ Trace& Tracer::trace(Trace& t, const Code& code) {
 			assm_.movq_64r_64i(rax, (Operand) &t.next_elem_);
 			assm_.incq_64m_rm0(Addr(rax));
 
+			assm_.popw_16r(rax);
+			assm_.sahf();
 			assm_.popq_64r(rbx);
 			assm_.popq_64r(rax);
 		}
+
+		assm_.assemble(instr);
+		//if ( after )
+		//	trace_after(t.trace_[t.next_elem_], instr);
+
 	}
 
 	assm_.finish();
