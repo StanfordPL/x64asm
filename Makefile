@@ -27,7 +27,7 @@ OBJ=build/cfg/control_flow_graph.o \
 		\
 		build/tracer/tracer.o
 
-BIN=bin/att_exec bin/att_trace bin/att2dot bin/att2hex
+BIN=bin/att_exec bin/att_trace bin/att2dot bin/att2hex bin/att2bin
 
 DOC=doc/html
 
@@ -122,4 +122,6 @@ bin/att_trace: tools/att_trace.cc $(LIB)
 bin/att2dot: tools/att2dot.cc $(LIB)
 	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
 bin/att2hex: tools/att2hex.cc $(LIB)
+	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
+bin/att2bin: tools/att2bin.cc $(LIB)
 	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)

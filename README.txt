@@ -12,8 +12,8 @@ $ sudo apt-get install doxygen
 $ sudo apt-get install ghc
 $ sudo apt-get install graphviz
 $ sudo apt-get install libghc-split-dev
+$ sudo apt-get install ccache
 
-$ sudo cabal install Split
 
 Note that there are almost certainly more that I'm unaware of.
 

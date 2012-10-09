@@ -41,6 +41,10 @@ def test_fail(instruction, expected, got, errors):
 
 def test_warn(instruction, expected, got, errors, message):
     global warns
+    yellow("WARN: " + instruction.strip())
+    write( "Reason: " + message )
+    write( "Expected: " + expected )
+    write( "Got: " + got )
     warns = warns + 1
 
 
@@ -51,6 +55,9 @@ def run_test(hexstring, instruction):
     #call.stdin.close()
     #got = results[0].strip()
     got = att_hex(instruction).strip()
+    
+    output_file.write(instruction)
+    output_file.write(got)
     errors = ""
 
     if ( hexstring == got ):

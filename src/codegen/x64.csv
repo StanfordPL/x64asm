@@ -101,6 +101,8 @@ btsw :  :  0f  ba  :  : 05 :  16  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  
 btsl :  :  0f  ba  :  : 05 :  32  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
 btsq :  :  0f  ba  :  : 05 :  64  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
                       
+call :  : e8 :  :  :  64  L  R    :  RAX  RBX  RCX  RDX  RDI  RSI  RBP  RSP  :  RAX  RCX  RDX  RSP  :  :  :  C  O  S  Z  A  P 
+                      
 cbtw :  : 98 :  :  :    : AX : AL :  :  : 
 cwtl :  : 98 :  :  :    : EAX : AX :  :  : 
 cltq :  : 98 :  :  :    : RAX : EAX :  :  : 
@@ -200,6 +202,8 @@ leaw :  : 8d :  :  :  16  R  W   8  M  N   :  :  :  :  :
 leal :  : 8d :  :  :  32  R  W   8  M  N   :  :  :  :  : 
 leaq :  : 8d :  :  :  64  R  W   8  M  N   :  :  :  :  : 
                       
+leave :  : c9 :  :  :    :  RBP  RSP  :  RBP  RSP  :  :  : 
+                      
 movb :  : 88 :  :  :  8  RM  W   8  R  R   :  :  :  :  : 
 movw :  : 89 :  :  :  16  RM  W   16  R  R   :  :  :  :  : 
 movl :  : 89 :  :  :  32  RM  W   32  R  R   :  :  :  :  : 
@@ -296,9 +300,43 @@ pushq :  : 50 : y :  :  64  R  R    : RSP : RSP :  :  :
 pushw :  : ff :  :  :  16  RM  R    : RSP : RSP :  :  : 
 pushq :  : ff :  :  :  64  RM  R    : RSP : RSP :  :  : 
                       
+ret :  : c3 :  :  :    :  :  :  :  : 
 retq :  : c3 :  :  :    :  :  :  :  : 
                       
 sahf :  : 9e :  :  :    :  :  :  :  O  S  Z  A  P  C  : 
+                      
+salb :  : d0 :  : 04 :  8  RM  X    :  :  :  :  : 
+salb :  : c0 :  : 04 :  8  RM  X   8  I  R   :  :  :  :  : 
+salw :  : d1 :  : 04 :  16  RM  X    :  :  :  :  : 
+salw :  : c1 :  : 04 :  16  RM  X   8  I  R   :  :  :  :  : 
+sall :  : d1 :  : 04 :  32  RM  X    :  :  :  :  : 
+sall :  : c1 :  : 04 :  32  RM  X   8  I  R   :  :  :  :  : 
+salq :  : d1 :  : 04 :  64  RM  X    :  :  :  :  : 
+salq :  : c1 :  : 04 :  64  RM  X   8  I  R   :  :  :  :  : 
+sarb :  : d0 :  : 07 :  8  RM  X    :  :  :  :  : 
+sarb :  : c0 :  : 07 :  8  RM  X   8  I  R   :  :  :  :  : 
+sarw :  : d1 :  : 07 :  16  RM  X    :  :  :  :  : 
+sarw :  : c1 :  : 07 :  16  RM  X   8  I  R   :  :  :  :  : 
+sarl :  : d1 :  : 07 :  32  RM  X    :  :  :  :  : 
+sarl :  : c1 :  : 07 :  32  RM  X   8  I  R   :  :  :  :  : 
+sarq :  : d1 :  : 07 :  64  RM  X    :  :  :  :  : 
+sarq :  : c1 :  : 07 :  64  RM  X   8  I  R   :  :  :  :  : 
+shlb :  : d0 :  : 04 :  8  RM  X    :  :  :  :  : 
+shlb :  : c0 :  : 04 :  8  RM  X   8  I  R   :  :  :  :  : 
+shlw :  : d1 :  : 04 :  16  RM  X    :  :  :  :  : 
+shlw :  : c1 :  : 04 :  16  RM  X   8  I  R   :  :  :  :  : 
+shll :  : d1 :  : 04 :  32  RM  X    :  :  :  :  : 
+shll :  : c1 :  : 04 :  32  RM  X   8  I  R   :  :  :  :  : 
+shlq :  : d1 :  : 04 :  64  RM  X    :  :  :  :  : 
+shlq :  : c1 :  : 04 :  64  RM  X   8  I  R   :  :  :  :  : 
+shrb :  : d0 :  : 05 :  8  RM  X    :  :  :  :  : 
+shrb :  : c0 :  : 05 :  8  RM  X   8  I  R   :  :  :  :  : 
+shrw :  : d1 :  : 05 :  16  RM  X    :  :  :  :  : 
+shrw :  : c1 :  : 05 :  16  RM  X   8  I  R   :  :  :  :  : 
+shrl :  : d1 :  : 05 :  32  RM  X    :  :  :  :  : 
+shrl :  : c1 :  : 05 :  32  RM  X   8  I  R   :  :  :  :  : 
+shrq :  : d1 :  : 05 :  64  RM  X    :  :  :  :  : 
+shrq :  : c1 :  : 05 :  64  RM  X   8  I  R   :  :  :  :  : 
                       
 sbbb :  : 1c :  :  :  8  AL  X   8  I  R   :  :  : C :  O  S  Z  A  P  C  : 
 sbbw :  : 1d :  :  :  16  AX  X   16  I  R   :  :  : C :  O  S  Z  A  P  C  : 
@@ -326,13 +364,6 @@ shld :  :  0f  a4  :  :  :  32  RM  X   32  R  X   8  I  R  :  :  :  :  S  Z  P 
 shld :  :  0f  a5  :  :  :  64  RM  X   64  R  X   8  I  R  :  :  :  :  S  Z  P  C  :  O  A 
 shld :  :  0f  a4  :  :  :  32  RM  X   32  R  X   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
 shld :  :  0f  a5  :  :  :  64  RM  X   64  R  X   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
-                      
-                      
-                      
-                      
-                      
-                      
-                      
                       
 shufpd :  :  0f  c6  :  :  :  128  S  X   128  SM  R   8  I  R  :  :  :  :  : 
                       
