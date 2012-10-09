@@ -23,9 +23,11 @@ OBJ=build/cfg/control_flow_graph.o \
 		build/code/scale.o \
 		build/code/seg_reg.o \
 		build/code/stream.o \
-		build/code/xmm_reg.o
+		build/code/xmm_reg.o \
+		\
+		build/tracer/tracer.o
 
-BIN=bin/att_exec bin/att2dot bin/att2hex
+BIN=bin/att_exec bin/att_trace bin/att2dot bin/att2hex
 
 DOC=doc/html
 
@@ -97,12 +99,14 @@ doc/html: doxyfile src/cfg/*.cc src/cfg/*.h src/assembler/*.cc src/assembler/*.h
 
 ##### BUILD TARGETS
 
+build/assembler/%.o: src/assembler/%.cc src/assembler/%.h src/gen
+	mkdir -p build/assembler && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/cfg/%.o: src/cfg/%.cc src/cfg/%.h src/gen
 	mkdir -p build/cfg && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/code/%.o: src/code/%.cc src/code/%.h src/gen
 	mkdir -p build/code && $(GCC) $(OPT) $(INC) -c $< -o $@
-build/assembler/%.o: src/assembler/%.cc src/assembler/%.h src/gen
-	mkdir -p build/assembler && $(GCC) $(OPT) $(INC) -c $< -o $@
+build/tracer/%.o: src/tracer/%.cc src/tracer/%.h src/gen
+	mkdir -p build/tracer && $(GCC) $(OPT) $(INC) -c $< -o $@
 
 ##### LIBRARY TARGET
 
@@ -112,6 +116,8 @@ $(LIB): $(OBJ)
 ##### BINARY TARGET
 
 bin/att_exec: tools/att_exec.cc $(LIB)
+	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
+bin/att_trace: tools/att_trace.cc $(LIB)
 	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
 bin/att2dot: tools/att2dot.cc $(LIB)
 	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
