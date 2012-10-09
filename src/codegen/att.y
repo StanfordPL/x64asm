@@ -151,6 +151,11 @@ Instruction* build_label(const OperandInfo& label) {
 	return instr;
 }
 
+bool is_valid_disp(Operand d) {
+	const auto top = (d & 0xffffffff00000000) >> 32;
+	return (top == 0) || (top == 0xffffffff);
+}
+
 }
 
 %union {
@@ -276,7 +281,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 				delete $2; 
 			}
     | ATT_OFFSET OPEN ATT_GP_REG CLOSE { 
-			if ( ($1->val & 0xffffffff00000000) != 0 )
+			if ( !is_valid_disp($1->val) )
 				is.setstate(std::ios::failbit);
 
 			$$ = new OperandInfo(Addr(GpReg($3->val), Imm($1->val)), 
@@ -303,7 +308,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 			delete $6; 
 		}
     | ATT_OFFSET OPEN ATT_GP_REG COMMA ATT_GP_REG CLOSE { 
-			if ( ($1->val & 0xffffffff00000000) != 0 )
+			if ( !is_valid_disp($1->val) )
 				is.setstate(std::ios::failbit);
 
 			$$ = new OperandInfo(
@@ -315,7 +320,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 			delete $5; 
 		}
     | ATT_OFFSET OPEN ATT_GP_REG COMMA ATT_GP_REG COMMA ATT_SCALE CLOSE { 
-			if ( ($1->val & 0xffffffff00000000) != 0 )
+			if ( !is_valid_disp($1->val) )
 				is.setstate(std::ios::failbit);
 
 			$$ = new OperandInfo(
