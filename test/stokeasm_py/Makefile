@@ -4,5 +4,5 @@ stokeasm.so: stokeasm.cc setup.py
 	find build -name "*.so" | xargs /bin/cp -t .
 
 clean:
-	- rm *.so
-	- rm -r build
+	- rm -f *.so
+	- rm -rf build

@@ -14,12 +14,12 @@ objdump_file: test.s
 	gcc -c test.s
 	objdump -d -Msuffix test.o | cut -c11- | tail -n +8 > objdump_file
 	- mkdir -p tmp
-	- rm tmp/dump*
+	- rm -f tmp/dump*
 	split -d -l100000 objdump_file "tmp/dump"
 	
 
 test: objdump_file
-	- rm tmp/*.output
+	- rm -f tmp/*.output
 	find -H tmp -name "dump*" -print0 | xargs -0 -n1 -P16 -I Z ./run.py Z > /dev/null 2> /dev/null
 	cat tmp/dump*.output > output
 	@echo "PASS:"
@@ -30,11 +30,11 @@ test: objdump_file
 	@grep Fail output | cut -c 13- | grep -o "^[0-9]*" | awk '{ sum += $$1 } END { print sum}' | cat -
 
 clean:
-	- rm enumerate_all.hi
-	- rm enumerate_all
-	- rm enumerate_all.o
-	- rm test.s
-	- rm test.o
-	- rm objdump_file
-	- rm tmp/*
+	- rm -f enumerate_all.hi
+	- rm -f enumerate_all
+	- rm -f enumerate_all.o
+	- rm -f test.s
+	- rm -f test.o
+	- rm -f objdump_file
+	- rm -f tmp/*
 	$(MAKE) clean -C stokeasm_py
