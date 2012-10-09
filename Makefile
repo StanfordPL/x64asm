@@ -1,6 +1,6 @@
 ##### CONSTANT DEFINITIONS
 
-GCC=g++
+GCC=ccache g++
 
 INC=-I./ \
 

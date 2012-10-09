@@ -1,8 +1,6 @@
 #ifndef X64_SRC_ASSEMBLER_FUNCTION_H
 #define X64_SRC_ASSEMBLER_FUNCTION_H
 
-#include "src/assembler/assembler.h"
-
 #include <sys/mman.h>
 #include <stddef.h>
 #include <stdint.h>

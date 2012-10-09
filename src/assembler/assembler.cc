@@ -4,8 +4,6 @@
 #include <iomanip>
 #include <set>
 
-#include "src/assembler/function.h"
-
 using namespace std;
 using namespace x64;
 

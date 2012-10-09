@@ -208,10 +208,10 @@ movl :  : 8b :  :  :  32  R  W   32  RM  R   :  :  :  :  :
 movq :  : 8b :  :  :  64  R  W   64  RM  R   :  :  :  :  : 
 movabsq :  : a1 :  :  :  64  RAX  W   64  O  R   :  :  :  :  : 
 movabsq :  : a3 :  :  :  64  O  W   64  RAX  R   :  :  :  :  : 
-movb :  : b0 :  :  :  8  R  W   8  I  R   :  :  :  :  : 
-movw :  : b8 :  :  :  16  R  W   16  I  R   :  :  :  :  : 
-movl :  : b8 :  :  :  32  R  W   32  I  R   :  :  :  :  : 
-movq :  : b8 :  :  :  64  R  W   64  I  R   :  :  :  :  : 
+movb :  : b0 : y :  :  8  R  W   8  I  R   :  :  :  :  : 
+movw :  : b8 : y :  :  16  R  W   16  I  R   :  :  :  :  : 
+movl :  : b8 : y :  :  32  R  W   32  I  R   :  :  :  :  : 
+movq :  : b8 : y :  :  64  R  W   64  I  R   :  :  :  :  : 
 movb :  : c6 :  : 00 :  8  RM  W   8  I  R   :  :  :  :  : 
 movw :  : c7 :  : 00 :  16  RM  W   16  I  R   :  :  :  :  : 
 movl :  : c7 :  : 00 :  32  RM  W   32  I  R   :  :  :  :  : 

@@ -4,24 +4,31 @@
 #include <iostream>
 #include <map>
 
+#include "src/assembler/function.h"
 #include "src/code/code.h"
 #include "src/code/instruction.h"
 #include "src/code/label.h"
 
 namespace x64 {
 
-class Function;
-
 /** 
 	A JIT assembler.
 */
 class Assembler {
 	public:
-		inline void assemble(Function& fxn, const Code& code) {
+		inline Function assemble(const Code& code) {
+			Function fxn;
+			assemble(fxn, code);
+			return fxn;
+		}
+
+		inline Function& assemble(Function& fxn, const Code& code) {
 			start(fxn);
 			for ( const auto& instr : code )
 				assemble(instr);
 			finish();
+
+			return fxn;
 		}
 
 		void start(Function& fxn);
