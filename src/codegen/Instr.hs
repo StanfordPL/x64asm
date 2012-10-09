@@ -63,13 +63,20 @@ add_66_prefix (Instr a p r o rc rf rm rmo os ir iw cr cw cu mo) =
       _             -> (Instr a p           r o rc rf rm rmo os ir iw cr cw cu mo)
 
 -- 64-bit operands require a mandator rex.w prefix
+-- Sort of... it's more complicated than this.
+-- I'm afraid this function is going to get ugly.
 add_rexw_prefix :: Instr -> Instr
 add_rexw_prefix (Instr a p _ o rc rf rm rmo os ir iw cr cw cu mo) =
   case os of
-    ("64":"M":_)  -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu mo)
-    ("64":"R":_)  -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu mo)
-    ("64":"RM":_) -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu mo)
-    _            -> (Instr a p ""   o rc rf rm rmo os ir iw cr cw cu mo)
+    ("64":"M":_)   -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu mo)
+    ("64":"O":_)   -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu mo)
+    ("64":"RM":_)  -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu mo)
+    ("64":"R":_)   -> case a of 
+                        "pushq" -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu mo)
+                        "popq"  -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu mo)
+                        _ -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu mo)
+    ("64":"RAX":_) -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu mo)
+    _              -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu mo)
 
 -- We need to distinguish the possibility and position of r/m operands
 add_rm_info :: Instr -> Instr
@@ -153,17 +160,21 @@ mem_offset instr = mo (operand_types instr) 0
 -- Is the instruction a conditional jump?
 cond_jump :: Instr -> Bool
 cond_jump i = cj $ att i
-    where cj "jae" = True
-          cj "ja"  = True
-          cj "jbe" = True
+    where cj "ja"  = True
+          cj "jae" = True
           cj "jb"  = True
+          cj "jbe" = True
           cj "je"  = True
-          cj "jge" = True
           cj "jg"  = True
-          cj "jle" = True
+          cj "jge" = True
           cj "jl"  = True
+          cj "jle" = True
           cj "jne" = True
+          cj "jno" = True
+          cj "jnp" = True
           cj "jns" = True
+          cj "jo"  = True
+          cj "jp"  = True
           cj "js"  = True
           cj _     = False
 

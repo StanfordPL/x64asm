@@ -60,6 +60,8 @@ assm_defn is = concat $ map render $ tail is
           rm ("EAX":_:_) _  = ""
           rm ("RAX":_:_) _  = ""
           rm (_:"I":_) _    = ",(Operand)arg0"
+          rm (_:"O":_) _    = ""
+          rm ("O":_:_) _    = ""
           rm (_:_:_) True   = ",(Operand)arg1,(Operand)arg0"
           rm (_:_:_) False  = ",(Operand)arg0,(Operand)arg1"
           rm ("I":_) _ = ""
@@ -86,10 +88,11 @@ assm_defn is = concat $ map render $ tail is
           opc_delta' _ _ = ""
 
           disp i = disp' (operand_types i) 
-          disp' ("L":_) = "\tjumps_[pos_] = arg0;\n" ++
-                          "\tpos_ += 4;\n"
-          disp' ("O":_) = "\temit_quad(buf_,pos_,(Operand) arg0);\n"
-          disp' _       = "\t// NO DISPLACEMENT\n"
+          disp' ("L":_)   = "\tjumps_[pos_] = arg0;\n" ++
+                            "\tpos_ += 4;\n"
+          disp' (_:"O":_) = "\temit_quad(buf_,pos_,(Operand) arg1);\n"
+          disp' ("O":_)   = "\temit_quad(buf_,pos_,(Operand) arg0);\n"
+          disp' _         = "\t// NO DISPLACEMENT\n"
 
           immed i = immed' (operands i) 0
           immed' (w:"I":_:xs) i = case w of
@@ -99,7 +102,7 @@ assm_defn is = concat $ map render $ tail is
                                     "64" -> "\temit_quad(buf_,pos_,arg"   ++ (show i) ++ ");\n"
                                     _ -> error "This should never happen!" 
           immed' (_:_:_:xs) i = immed' xs (i+1)
-          immed' _ i          = "\t // NO IMMEDIATE\n"
+          immed' _ i          = "\t// NO IMMEDIATE\n"
 
 -- Generates a switch statement based on opcode enum
 assm_switch :: [Instr] -> String
