@@ -48,11 +48,13 @@ int main() {
 	cout << "Tracing function... " << endl;
 	const auto trace = tracer.trace(code);
 
-	cout << "Traced " << trace.size() << " instructions" << endl;
-
 	for ( const auto& state : trace ) {
 		const auto l = state.line();
 		const auto i = code.get(l);
+
+		if ( i.is_label_defn() )
+			continue;
+
 		cout << "Line " << dec << l << ": " << format(ATT) << i << endl;
 	
 		print_gp(i, "rax", state, rax);

@@ -37,16 +37,6 @@ class Assembler {
 
 		void finish();
 
-		inline bool assemble(std::istream& is) {
-			Instruction instr;
-			instr.read_att(is);
-			if ( is.fail() )
-				return false;
-
-			assemble(instr);
-			return true;
-		}
-
 		// void adcb(Imm arg0) ...
 		#include "src/gen/assembler.decl"
 

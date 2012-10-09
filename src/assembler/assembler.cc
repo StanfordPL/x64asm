@@ -91,7 +91,7 @@ inline void emit(unsigned char* buf, size_t& pos, unsigned char c) {
 }
 
 inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c) {
-	emit(buf, pos, c);;
+	emit(buf, pos, c);
 }
 
 inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c, 
@@ -215,8 +215,8 @@ inline void emit_mod_rm(unsigned char* buf, size_t& pos, Addr rm, Operand r) {
 		if ( base == 0x5 )
 			emit(buf, pos, 0x0);
 	}
-	else if ( disp <= 0xff )
-		emit_byte(buf, pos, disp);
+	// Displacements are ALWAYS 32 bits.
+	// Should this be moved out to codegen?
 	else
 		emit_double(buf, pos, disp);
 }

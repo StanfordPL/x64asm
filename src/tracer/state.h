@@ -3,7 +3,6 @@
 
 #include "src/code/gp_reg.h"
 
-#include <array>
 #include <cassert>
 #include <stdint.h>
 
@@ -32,8 +31,8 @@ class State {
 	private:
 		size_t line_;
 
-		std::array<gp_reg_val_type, 16> gp_before_;
-		std::array<gp_reg_val_type, 16> gp_after_;
+		gp_reg_val_type gp_before_[16];
+		gp_reg_val_type gp_after_[16];
 };	
 
 } // namespace x64

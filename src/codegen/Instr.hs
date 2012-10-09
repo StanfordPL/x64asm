@@ -57,9 +57,9 @@ read_instrs s = map format $ rows
 add_66_prefix :: Instr -> Instr
 add_66_prefix (Instr a p r o rc rf rm rmo os ir iw cr cw cu mo) =
     case os of
-      ("16":"M":_)  -> (Instr a (p++["66"]) r o rc rf rm rmo os ir iw cr cw cu mo)
-      ("16":"R":_)  -> (Instr a (p++["66"]) r o rc rf rm rmo os ir iw cr cw cu mo)
-      ("16":"RM":_) -> (Instr a (p++["66"]) r o rc rf rm rmo os ir iw cr cw cu mo)
+      ("16":"M":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu mo)
+      ("16":"R":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu mo)
+      ("16":"RM":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu mo)
       _             -> (Instr a p           r o rc rf rm rmo os ir iw cr cw cu mo)
 
 -- 64-bit operands require a mandator rex.w prefix

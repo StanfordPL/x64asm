@@ -56,8 +56,8 @@ def run_test(hexstring, instruction):
     #got = results[0].strip()
     got = att_hex(instruction).strip()
     
-    output_file.write(instruction)
-    output_file.write(got)
+		#output_file.write(instruction)
+		#output_file.write(got)
     errors = ""
 
     if ( hexstring == got ):

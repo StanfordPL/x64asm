@@ -19,7 +19,7 @@ class Tracer {
 	public:
 		inline void set(GpReg gp) {
 			assert(gp.is_valid() && !gp.is_null());
-			gp_regs_.insert(gp);
+			gps_.insert(gp);
 		}
 
 		inline void set_before(size_t line) {
@@ -45,7 +45,9 @@ class Tracer {
 		std::set<size_t> befores_;
 		std::set<size_t> afters_;
 
-		std::set<GpReg> gp_regs_;
+		std::set<GpReg> gps_;
+
+		void trace_gp(Trace& t, bool is_before);
 };
 
 } // namespace x64
