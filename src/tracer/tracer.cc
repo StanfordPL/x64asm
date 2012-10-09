@@ -20,10 +20,46 @@ Trace& Tracer::trace(Trace& t, const Code& code) {
 		auto before = befores_.find(i) != befores_.end();
 		auto after = afters_.find(i) != afters_.end();
 
+		// This is the easy case, if we're tracing before the instruction,
+		//   just grab everything without thinking about it.
+		if ( before ) {
+			// Backup original rax and rbx
+			assm_.pushq_64r(rax); 
+			assm_.pushq_64r(rbx); 
+			// Backup condition regiters (this clobbers rax, so get it back)
+			assm_.lahf();         
+			assm_.pushw_16r(rax); 
+			assm_.movq_64r_64m_rm1(rax, Addr(rsp, Imm(10)));
 
-		//if ( before )
-		//	trace_before(t.trace_[t.next_elem_], instr);
+			// Push everything we want to write out to the stack
+			for ( auto gp = gp_regs_.begin(), gpe = gp_regs_.end(); gp != gpe; ++gp )
+				assm_.pushq_64r(*gp);
 
+			// Find the address of the current State
+			assm_.movabsq_64rax_64o(rax, (Operand) &t.next_elem_);
+			assm_.movq_64r_64i(rbx, (Operand) sizeof(State));
+			assm_.imulq_64r_64r_rm1(rbx, rax);
+			assm_.movq_64r_64i(rax, (Operand) &t.trace_);
+			assm_.addq_64r_64r_rm0(rbx, rax);
+
+			// Pop the gp registers of the stack (reverse order!) and write to State
+			for ( auto gp = gp_regs_.rbegin(), gpe = gp_regs_.rend(); 
+							gp != gpe; ++gp ) {
+				assm_.popq_64r(rax);
+				const auto disp = Imm(offset(State, gp_before_) + 
+						                  *gp * sizeof(State::gp_reg_val_type));
+				assm_.movq_64m_64r_rm0(Addr(rbx, disp), rax);
+			}
+
+			// Put things back like we found them
+			assm_.popw_16r(rax);
+			assm_.sahf();
+			assm_.popq_64r(rbx);
+			assm_.popq_64r(rax);
+		}
+
+		// If we're tracing either before or after this instruction,
+		//   then we'll want to record its line number and increment next_elem_.
 		if ( before || after ) {
 			assm_.pushq_64r(rax);
 			assm_.pushq_64r(rbx);
@@ -59,17 +95,7 @@ Trace& Tracer::trace(Trace& t, const Code& code) {
 	return t;
 }
 
-void Tracer::trace_before(State& state, const Instruction& instr) {
-	assm_.pushq_64r(rax);
-
-	for ( const auto& gp : gp_regs_ ) {
-		assm_.movq_64r_64r_rm0(rax, gp);
-		assm_.movabsq_64o_64rax((Operand) &state.gp_before_[gp], rax);
-	}
-
-	assm_.popq_64r(rax);
-}
-
+/*
 void Tracer::trace_after(State& state, const Instruction& instr) {
 	assm_.pushq_64r(rax);
 
@@ -80,5 +106,6 @@ void Tracer::trace_after(State& state, const Instruction& instr) {
 
 	assm_.popq_64r(rax);
 }
+*/
 
 } // namespace x64

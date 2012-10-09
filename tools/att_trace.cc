@@ -6,11 +6,18 @@
 using namespace std;
 using namespace x64;
 
-void print_gp(const char* name, const State& s, GpReg gp) {
+void print_gp(const Instruction& instr, 
+		          const char* name, const State& s, GpReg gp) {
 	cout << "  " << name << ": ";
-	cout << hex << setw(32) << setfill('0') << s.gp_before(gp);
+
+	cout << hex << noshowbase << setw(32) << setfill('0') << s.gp_before(gp);
 	cout << " -> ";
-	cout << hex << setw(32) << setfill('0') << s.gp_after(gp);
+
+	if ( instr.is_jump() || instr.is_ret() )
+		cout << "???";
+	else
+		cout << hex << noshowbase << setw(32) << setfill('0') << s.gp_after(gp);
+
 	cout << endl;
 }
 
@@ -45,25 +52,26 @@ int main() {
 
 	for ( const auto& state : trace ) {
 		const auto l = state.line();
-		cout << "Line " << dec << l << ": " << format(ATT) << code.get(l) << endl;
-/*	
-		print_gp("rax", state, rax);
-		print_gp("rcx", state, rcx);
-		print_gp("rdx", state, rdx);
-		print_gp("rbx", state, rbx);
-		print_gp("rsp", state, rsp);
-		print_gp("rbp", state, rbp);
-		print_gp("rsi", state, rsi);
-		print_gp("rdi", state, rdi);
-		print_gp(" r8", state, r8);
-		print_gp(" r9", state, r9);
-		print_gp("r10", state, r10);
-		print_gp("r11", state, r11);
-		print_gp("r12", state, r12);
-		print_gp("r13", state, r13);
-		print_gp("r14", state, r14);
-		print_gp("r15", state, r15);
-*/
+		const auto i = code.get(l);
+		cout << "Line " << dec << l << ": " << format(ATT) << i << endl;
+	
+		print_gp(i, "rax", state, rax);
+		print_gp(i, "rcx", state, rcx);
+		print_gp(i, "rdx", state, rdx);
+		print_gp(i, "rbx", state, rbx);
+		print_gp(i, "rsp", state, rsp);
+		print_gp(i, "rbp", state, rbp);
+		print_gp(i, "rsi", state, rsi);
+		print_gp(i, "rdi", state, rdi);
+		print_gp(i, " r8", state, r8);
+		print_gp(i, " r9", state, r9);
+		print_gp(i, "r10", state, r10);
+		print_gp(i, "r11", state, r11);
+		print_gp(i, "r12", state, r12);
+		print_gp(i, "r13", state, r13);
+		print_gp(i, "r14", state, r14);
+		print_gp(i, "r15", state, r15);
+
 		cout << endl;
 	}
 

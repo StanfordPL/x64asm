@@ -46,9 +46,6 @@ class Tracer {
 		std::set<size_t> afters_;
 
 		std::set<GpReg> gp_regs_;
-
-		void trace_before(State& state, const Instruction& instr);
-		void trace_after(State& state, const Instruction& instr);
 };
 
 } // namespace x64
