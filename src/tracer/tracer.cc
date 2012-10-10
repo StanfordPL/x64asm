@@ -11,8 +11,8 @@ using namespace std;
 
 namespace x64 {
 
-Trace& Tracer::trace(Trace& t, const Code& code) {
-	assm_.start(fxn_);
+Function& Tracer::trace(Function& fxn, Trace& t, const Code& code) {
+	assm_.start(fxn);
 
 	for ( size_t i = 0, ie = code.size(); i < ie; ++i ) {
 		const auto& instr = code.get(i);
@@ -22,42 +22,39 @@ Trace& Tracer::trace(Trace& t, const Code& code) {
 
 		if ( before )
 			trace_gp(t, true);
-
-		// If we're tracing either before or after this instruction,
-		//   then we'll want to record its line number and increment next_elem_.
-		if ( before || after ) {
-			assm_.pushq_64r(rax);
-			assm_.pushq_64r(rbx);
-			assm_.lahf();
-			assm_.pushw_16r(rax);
-
-			// t.trace_[t.next_elem_].line_ = i;
-			assm_.movabsq_64rax_64o(rax, (Operand) &t.next_elem_);
-			assm_.movq_64r_64i(rbx, (Operand) sizeof(State));
-			assm_.imulq_64r_64r_rm1(rbx, rax);
-			assm_.movq_64r_64i(rax, (Operand) &t.trace_);
-			assm_.movq_64m_32i_rm0(Addr(rax, rbx), (Operand) i);
-
-			// t.next_elem_++;
-			assm_.movq_64r_64i(rax, (Operand) &t.next_elem_);
-			assm_.incq_64m_rm0(Addr(rax));
-
-			assm_.popw_16r(rax);
-			assm_.sahf();
-			assm_.popq_64r(rbx);
-			assm_.popq_64r(rax);
-		}
-
+		if ( before || after )
+			finish_state(t, i);
 		assm_.assemble(instr);
-
 		if ( after )
 			trace_gp(t, false);
 	}
 
 	assm_.finish();
-	fxn_();
 
-	return t;
+	return fxn;
+}
+
+void Tracer::finish_state(Trace& t, size_t line) {
+	assm_.pushq_64r(rax);
+	assm_.pushq_64r(rbx);
+	assm_.lahf();
+	assm_.pushw_16r(rax);
+
+	// Record the line number of the current instruction
+	assm_.movabsq_64rax_64o(rax, (Operand) &t.next_elem_);
+	assm_.movq_64r_64i(rbx, (Operand) sizeof(State));
+	assm_.imulq_64r_64r_rm1(rbx, rax);
+	assm_.movq_64r_64i(rax, (Operand) &t.trace_);
+	assm_.movq_64m_32i_rm0(Addr(rax, rbx), (Operand) line);
+
+	// Increment the trace's next elem pointer
+	assm_.movq_64r_64i(rax, (Operand) &t.next_elem_);
+	assm_.incq_64m_rm0(Addr(rax));
+
+	assm_.popw_16r(rax);
+	assm_.sahf();
+	assm_.popq_64r(rbx);
+	assm_.popq_64r(rax);
 }
 
 void Tracer::trace_gp(Trace& t, bool is_before) {
