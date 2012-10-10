@@ -25,9 +25,16 @@ OBJ=build/cfg/control_flow_graph.o \
 		build/code/stream.o \
 		build/code/xmm_reg.o \
 		\
+		build/sandboxer/sandboxer.o \
+		\
 		build/tracer/tracer.o
 
-BIN=bin/att_exec bin/att_trace bin/att2dot bin/att2hex bin/att2bin
+BIN=bin/att_exec \
+		bin/att_sandbox \
+		bin/att_trace \
+		bin/att2dot \
+		bin/att2hex \
+		bin/att2bin
 
 DOC=doc/html
 
@@ -105,6 +112,8 @@ build/cfg/%.o: src/cfg/%.cc src/cfg/%.h src/gen
 	mkdir -p build/cfg && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/code/%.o: src/code/%.cc src/code/%.h src/gen
 	mkdir -p build/code && $(GCC) $(OPT) $(INC) -c $< -o $@
+build/sandboxer/%.o: src/sandboxer/%.cc src/sandboxer/%.h src/gen
+	mkdir -p build/sandboxer && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/tracer/%.o: src/tracer/%.cc src/tracer/%.h src/gen
 	mkdir -p build/tracer && $(GCC) $(OPT) $(INC) -c $< -o $@
 
@@ -116,6 +125,8 @@ $(LIB): $(OBJ)
 ##### BINARY TARGET
 
 bin/att_exec: tools/att_exec.cc $(LIB)
+	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
+bin/att_sandbox: tools/att_sandbox.cc $(LIB)
 	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
 bin/att_trace: tools/att_trace.cc $(LIB)
 	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)

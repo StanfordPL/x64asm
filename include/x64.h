@@ -21,6 +21,9 @@
 #include "src/code/stream.h"
 #include "src/code/xmm_reg.h"
 
+#include "src/sandboxer/sandbox.h"
+#include "src/sandboxer/sandboxer.h"
+
 #include "src/tracer/state.h"
 #include "src/tracer/trace.h"
 #include "src/tracer/tracer.h"
