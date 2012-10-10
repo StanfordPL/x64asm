@@ -17,7 +17,7 @@ class Trace;
 class Tracer {
 	public:
 		inline void set(GpReg gp) {
-			assert(gp.is_valid() && !gp.is_null());
+			assert(!gp.is_null());
 			gps_.insert(gp);
 		}
 
