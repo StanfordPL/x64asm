@@ -15,13 +15,16 @@ OBJ=build/cfg/control_flow_graph.o \
 		build/code/instruction.o \
 		build/code/opcode.o \
 		build/code/mmx_reg.o \
+		build/code/reader.o \
 		build/code/reg_set.o \
 		build/code/scale.o \
 		build/code/seg_reg.o \
-		build/code/stream.o \
+		build/code/writer.o \
 		build/code/xmm_reg.o \
 		\
 		build/sandboxer/sandboxer.o \
+		\
+		build/stream/stream.o \
 		\
 		build/tracer/tracer.o
 
@@ -108,6 +111,8 @@ build/code/%.o: src/code/%.cc src/code/%.h src/gen
 	mkdir -p build/code && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/sandboxer/%.o: src/sandboxer/%.cc src/sandboxer/%.h src/gen
 	mkdir -p build/sandboxer && $(GCC) $(OPT) $(INC) -c $< -o $@
+build/stream/%.o: src/stream/%.cc src/stream/%.h src/gen
+	mkdir -p build/stream && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/tracer/%.o: src/tracer/%.cc src/tracer/%.h src/gen
 	mkdir -p build/tracer && $(GCC) $(OPT) $(INC) -c $< -o $@
 

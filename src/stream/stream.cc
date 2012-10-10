@@ -1,4 +1,4 @@
-#include "src/code/stream.h"
+#include "src/stream/stream.h"
 
 #include "src/assembler/assembler.h"
 #include "src/cfg/control_flow_graph.h"
@@ -45,15 +45,15 @@ istream& operator>>(istream& is, Code& c) {
 ostream& operator<<(ostream& os, const Code& c) {
 	const auto format = get_format(os);
 	if ( format == ATT ) {
-		Reader r;
-		r.read_att(os, c);
+		Writer w;
+		w.write_att(os, c);
 	}
 	else if ( format == BIN ) {
 		Assembler assm;
 		assm.write_binary(os, c);
 	}
 	else if ( format == DOT ) {
-		ControlFlowGraph cfg(code);
+		ControlFlowGraph cfg(c);
 		cfg.write_dot(os);
 	}
 	else if ( format == HEX ) {
