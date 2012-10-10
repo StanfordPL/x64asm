@@ -33,12 +33,16 @@ class Assembler {
 
 		void start(Function& fxn);
 
-		void assemble(const Instruction& instr);
+		inline void bind(Label label) {
+			labels_[label] = pos_;
+		}
 
-		void finish();
+		void assemble(const Instruction& instr);
 
 		// void adcb(Imm arg0) ...
 		#include "src/gen/assembler.decl"
+
+		void finish();
 
 		void write_binary(std::ostream& os, const Code& code);
 

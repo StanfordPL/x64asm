@@ -23,6 +23,8 @@ class Sandboxer {
 		Assembler assm_;
 
 		void sandbox_runaway(Sandbox& s);
+		void sandbox_jump(Sandbox& s);
+		void sandbox_jump_final(Sandbox& s);
 };
 
 } // namespace x64

@@ -295,7 +295,7 @@ void Assembler::start(Function& fxn) {
 void Assembler::assemble(const Instruction& i) {
 	switch ( i.get_opcode() ) {
 		case LABEL_DEFN_64L:
-			labels_[i.get_label(0)] = pos_;
+			bind(i.get_label(0));
 			break;
 
 		// 4000-way switch
