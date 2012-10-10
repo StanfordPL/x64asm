@@ -5,7 +5,6 @@
 #include <array>
 #include <cassert>
 #include <initializer_list>
-#include <iostream>
 
 #include "src/code/addr.h"
 #include "src/code/fp_reg.h"
@@ -177,20 +176,8 @@ class Instruction {
 			return opcode_.width(index); 
 		}
 
-		inline size_t mem_offset() const { 
-			return opcode_.mem_offset(); 
-		}
-
 		inline bool accesses_mem() const { 
 			return opcode_.accesses_mem(); 
-		}
-
-		inline size_t read_offset() const {
-			return opcode_.read_offset();
-		}
-
-		inline bool writes_reg() const {
-			return opcode_.writes_reg();
 		}
 
 		inline bool does_implicit_zero_extend() const {
@@ -213,14 +200,6 @@ class Instruction {
 			return opcode_.is_jump();
 		}
 
-		inline bool rexw_prefix() const {
-			return opcode_.rexw_prefix();
-		}
-
-		inline bool mem_size_or() const {
-			return opcode_.mem_size_or();
-		}
-
 		inline RegSet implicit_read_set() const {
 			return opcode_.implicit_read_set();
 		}
@@ -239,7 +218,7 @@ class Instruction {
 
 		// Higher order attributes
 		inline bool acceses_stack() const {
-			const auto mo = opcode_.mem_offset();
+			const auto mo = 0;// TODO -- FIX opcode_.mem_offset();
 			if ( mo == 16 )
 				return false;
 
@@ -252,7 +231,7 @@ class Instruction {
 		}
 
 		inline bool accesses_heap() const { 
-			const auto mo = opcode_.mem_offset();
+			const auto mo = 0; // TODO --- FIX opcode_.mem_offset();
 			if ( mo == 16 )
 				return false;
 
@@ -275,12 +254,6 @@ class Instruction {
 		inline RegSet undef_set() const {
 			return implicit_undef_set();
 		}
-
-		inline void read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-		}
-
-		void write_att(std::ostream& os) const;
 
 	private:
 

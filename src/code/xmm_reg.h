@@ -1,14 +1,11 @@
 #ifndef X64_SRC_CODE_XMM_REG_H
 #define X64_SRC_CODE_XMM_REG_H
 
-#include <cassert>
-#include <iostream>
-
 #include "src/code/operand.h"
 
 namespace x64 {
 
-/** An SSE register: XMM0, ..., XMM15.
+/** An SSE register: xmm0, ..., xmm15.
 */
 class XmmReg {
 	public:
@@ -18,7 +15,6 @@ class XmmReg {
 
 		inline XmmReg(Operand x) 
 				: x_(x) { 
-			assert(is_valid());
 		}
 
 		inline operator Operand() const {
@@ -26,18 +22,8 @@ class XmmReg {
 		}
 
 		inline bool is_null() const {
-			return x_ == 16;	
+			return x_ >= 16;	
 		}
-
-		inline bool is_valid() const { 
-			return x_ <= 16; 
-		}
-
-		inline void read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-		}
-
-		void write_att(std::ostream& os) const;
 
 	private:
 		Operand x_;

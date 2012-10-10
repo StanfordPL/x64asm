@@ -28,10 +28,6 @@ opcode_enum is = "enum OpcodeVal {\n" ++
                  "\n, OPCODE_VAL_NULL = NUM_OPCODE_VALS" ++
                  "\n};"
 
--- Writes out the Instruction opcode range
-opcode_range :: [Instr] -> String
-opcode_range = instr_array "Opcode" "Opcode::range_" enum
-
 -- Writes out the att encoding for each instruction
 opcodes :: [Instr] -> String
 opcodes = instr_array "const char*" "opcodes_" render
@@ -66,25 +62,23 @@ types = instr_array "array<Type, 3>" "Opcode::type_" type_render
 
 -- Writes out width info for each instruction
 width_render :: Instr -> String
-width_render i = inline_array "BitWidth" (render' (operands i) 0 (mem_size_or i))
-    where render' (_:"M":_:xs)  i o = (case o of 
-                                         True ->  ["DOUBLE"]
-                                         False -> ["QUAD"]) ++ (render' xs (i+1) o)
-          render' (_:"O":_:xs)    i o = ["QUAD"]     ++ (render' xs (i+1) o)
-          render' (w:"R":_:xs)    i o = [(width' w)] ++ (render' xs (i+1) o)
-          render' (_:"X":_:xs)    i o = ["QUAD"]     ++ (render' xs (i+1) o)
-          render' (_:"F":_:xs)    i o = ["QUAD"]     ++ (render' xs (i+1) o)
-          render' (_:"S":_:xs)    i o = ["OCT"]      ++ (render' xs (i+1) o)
-          render' (w:"I":_:xs)    i o = [(width' w)] ++ (render' xs (i+1) o)
-          render' (_:"L":_:xs)    i o = ["FIXED"]    ++ (render' xs (i+1) o)
-          render' (_:"AL":_:xs)   i o = ["LOW"]      ++ (render' xs (i+1) o)
-          render' (_:"AX":_:xs)   i o = ["WORD"]     ++ (render' xs (i+1) o)
-          render' (_:"EAX":_:xs)  i o = ["DOUBLE"]   ++ (render' xs (i+1) o)
-          render' (_:"RAX":_:xs)  i o = ["QUAD"]     ++ (render' xs (i+1) o)
-          render' (_:"CL":_:xs)   i o = ["LOW"]      ++ (render' xs (i+1) o)
-          render' (_:"ST0":_:xs)  i o = ["QUAD"]     ++ (render' xs (i+1) o)
-          render' _ 3 _ = []
-          render' _ i o = ["BIT_WIDTH_NULL"] ++ (render' [] (i+1) o)
+width_render i = inline_array "BitWidth" (render' (operands i) 0)
+    where render' (w:"M":_:xs)   i = [(width' w)] ++ (render' xs (i+1))
+          render' (_:"O":_:xs)   i = ["QUAD"]     ++ (render' xs (i+1))
+          render' (w:"R":_:xs)   i = [(width' w)] ++ (render' xs (i+1))
+          render' (_:"X":_:xs)   i = ["QUAD"]     ++ (render' xs (i+1))
+          render' (_:"F":_:xs)   i = ["QUAD"]     ++ (render' xs (i+1))
+          render' (_:"S":_:xs)   i = ["OCT"]      ++ (render' xs (i+1))
+          render' (w:"I":_:xs)   i = [(width' w)] ++ (render' xs (i+1))
+          render' (_:"L":_:xs)   i = ["FIXED"]    ++ (render' xs (i+1))
+          render' (_:"AL":_:xs)  i = ["LOW"]      ++ (render' xs (i+1))
+          render' (_:"AX":_:xs)  i = ["WORD"]     ++ (render' xs (i+1))
+          render' (_:"EAX":_:xs) i = ["DOUBLE"]   ++ (render' xs (i+1))
+          render' (_:"RAX":_:xs) i = ["QUAD"]     ++ (render' xs (i+1))
+          render' (_:"CL":_:xs)  i = ["LOW"]      ++ (render' xs (i+1))
+          render' (_:"ST0":_:xs) i = ["QUAD"]     ++ (render' xs (i+1))
+          render' _ 3 = []
+          render' _ i = ["BIT_WIDTH_NULL"] ++ (render' [] (i+1))
 
           width' "8"   = "LOW"					
           width' "16"  = "WORD"				
@@ -109,37 +103,6 @@ signatures is = "map<tuple<string, array<Type, 3>, array<BitWidth, 3>>, Opcode> 
 					           (enum i) ++ 
                      "}"
 
--- Writes out the location of the first memory operand
-write_mem_offset :: [Instr] -> String
-write_mem_offset = instr_array "size_t" "Opcode::mem_offset_" wmo
-    where wmo i = case mem_offset i of
-                    (Just mo) -> show mo 
-                    _ -> "16"
-
--- Writes out the location of the first operand which is read
-read_offset :: [Instr] -> String
-read_offset = instr_array "size_t" "Opcode::read_offset_" render
-    where render  i = (render' (operands i) 0) 
-          render' (_:_:"R":_) i = (show i)
-          render' (_:_:"X":_) i = (show i)
-          render' (_:_:_:xs)  i = render' xs (i+1)
-          render' _           i = (show i)	
-
--- Writes out whether the instruction writes a register or not
-writes_reg :: [Instr] -> String
-writes_reg = instr_array "bool" "Opcode::writes_reg_" render
-    where render  i = (render' (operands i))
-          render' (_:"R":"W":_) = "true";
-          render' (_:"R":"X":_) = "true";
-          render' (_:"S":"W":_) = "true";
-          render' (_:"S":"X":_) = "true";
-          render' (_:"X":"W":_) = "true";
-          render' (_:"X":"X":_) = "true";
-          render' (_:"F":"W":_) = "true";
-          render' (_:"F":"X":_) = "true";
-          render' (_:_:_:xs)    = render' xs
-          render' _             = "false"
-
 -- Writes out whether the instruction is a conditional jump
 is_cond_jump :: [Instr] -> String
 is_cond_jump = instr_array "bool" "Opcode::is_cond_jump_" render
@@ -154,11 +117,6 @@ is_uncond_jump = instr_array "bool" "Opcode::is_uncond_jump_" render
 is_jump :: [Instr] -> String
 is_jump = instr_array "bool" "Opcode::is_jump_" render 
     where render i = (map toLower (show (jump i))) 
-
--- Writes out whether the instruction uses the mem_size override flag
-mem_or :: [Instr] -> String
-mem_or = instr_array "bool" "Opcode::mem_size_or_" render
-    where render i = map toLower (show (mem_size_or i))
 
 -- Functions for emitting register masks
 reg_mask :: String -> (Instr -> [String]) -> [Instr] -> String
@@ -204,19 +162,14 @@ main = do args <- getArgs
 
           writeFile  "opcode.enum"   $ opcode_enum     instrs
           writeFile  "opcode.sigs"   $ signatures      instrs
+          writeFile  "opcode.char"   $ opcodes         instrs
 
-          writeFile  "opcode.static" $ opcode_range     instrs
-          appendFile "opcode.static" $ opcodes          instrs
-          appendFile "opcode.static" $ write_arity      instrs
+          writeFile  "opcode.static" $ write_arity      instrs
           appendFile "opcode.static" $ types            instrs
           appendFile "opcode.static" $ widths           instrs
-          appendFile "opcode.static" $ write_mem_offset instrs
-          appendFile "opcode.static" $ read_offset      instrs
-          appendFile "opcode.static" $ writes_reg       instrs
           appendFile "opcode.static" $ is_cond_jump     instrs
           appendFile "opcode.static" $ is_uncond_jump   instrs
           appendFile "opcode.static" $ is_jump          instrs
-          appendFile "opcode.static" $ mem_or           instrs
           appendFile "opcode.static" $ reg_mask2 "implicit_read_set_"  
 					           implicit_reads cond_read instrs
           appendFile "opcode.static" $ reg_mask2 "implicit_write_set_" 

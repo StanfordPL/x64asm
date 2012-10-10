@@ -302,7 +302,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 		}
     | OPEN ATT_GP_REG COMMA ATT_GP_REG COMMA ATT_SCALE CLOSE { 
 			$$ = new OperandInfo(
-					Addr(GpReg($2->val), GpReg($4->val), (ScaleVal) $6->val), 
+					Addr(GpReg($2->val), GpReg($4->val), Scale($6->val)), 
 					ADDR, 
 					$2->width); 
 			delete $2; 
@@ -326,7 +326,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 				is.setstate(std::ios::failbit);
 
 			$$ = new OperandInfo(
-					Addr(GpReg($3->val), GpReg($5->val), (ScaleVal) $7->val, Imm($1->val)), 
+					Addr(GpReg($3->val), GpReg($5->val), Scale($7->val), Imm($1->val)), 
 					ADDR, 
 					$3->width); 
 			delete $1; 

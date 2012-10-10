@@ -5,9 +5,13 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#ifdef __APPLE__
+	#define MAP_ANONYMOUS MAP_ANON
+#endif
+
 namespace x64 {
 
-/** An executable Function with an associated sandbox.
+/** An executable Function.
 */
 class Function {
 	friend class Assembler;
@@ -19,21 +23,17 @@ class Function {
 		typedef uint64_t (*f3_type)(uint64_t, uint64_t, uint64_t z);
 
 	public:
-		inline Function() {
-			init(1024, 0, 0, 0);
-		}
-
-		inline Function(size_t stack_size, size_t heap_size, uint64_t min_heap) {
-			init(1024, stack_size, heap_size, min_heap);
+		inline Function(size_t capacity = 1024) {
+			buffer_ = (unsigned char*) mmap(0, capacity,
+					PROT_READ | PROT_WRITE | PROT_EXEC,
+					MAP_PRIVATE | MAP_ANONYMOUS,
+					-1, 0);
+			capacity_ = capacity;
 		}
 
 		inline ~Function() {
 			if ( (long) buffer_ != -1 )
-				munmap(buffer_, length_);
-			if ( stack_ != 0 )
-				delete stack_;
-			if ( heap_ != 0 )
-				delete heap_;
+				munmap(buffer_, capacity_);
 		}
 
 		inline uint64_t operator()() {
@@ -51,14 +51,7 @@ class Function {
 
 	private:
 		unsigned char* buffer_;
-		size_t length_;
-
-		uint8_t* stack_;
-		uint8_t* heap_;
-		uint64_t min_heap_;
-
-		void init(size_t length, 
-				      size_t stack_size, size_t heap_size, uint64_t min_heap);
+		size_t capacity_;
 };
 
 } // namespace x64

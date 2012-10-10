@@ -1,4 +1,4 @@
-#include "src/code/code.h"
+#include "src/code/reader.h"
 
 #include <sstream>
 
@@ -9,13 +9,13 @@ using namespace std;
 
 namespace x64 {
 
-void Code::read_att(istream& is) {
+void Reader::read_att(istream& is, Code& code) const {
 	stringstream ss;
 	ss << is.rdbuf();
 
 	auto buffer = att_scan_string(ss.str().c_str());
 	att_switch_to_buffer(buffer);
-	attparse(is, *this);
+	attparse(is, code);
 	att_delete_buffer(buffer);
 }
 

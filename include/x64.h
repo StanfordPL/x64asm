@@ -18,11 +18,12 @@
 #include "src/code/reg_set.h"
 #include "src/code/scale.h"
 #include "src/code/seg_reg.h"
-#include "src/code/stream.h"
 #include "src/code/xmm_reg.h"
 
 #include "src/sandboxer/sandbox.h"
 #include "src/sandboxer/sandboxer.h"
+
+#include "src/stream/stream.h"
 
 #include "src/tracer/state.h"
 #include "src/tracer/trace.h"

@@ -201,10 +201,10 @@ inline void emit_mod_rm(unsigned char* buf, size_t& pos, Addr rm, Operand r) {
 	if ( base == 0x4 || !index.is_null() ) {
 		const auto idx = index.is_null() ? 0x4 : index & 0x7;
 		switch ( rm.get_scale() ) {
-			case TIMES_1: emit(buf, pos, sib_00_[idx][base]); break;
-			case TIMES_2: emit(buf, pos, sib_01_[idx][base]); break;
-			case TIMES_4: emit(buf, pos, sib_10_[idx][base]); break;
-			case TIMES_8: emit(buf, pos, sib_11_[idx][base]); break;
+			case 0: emit(buf, pos, sib_00_[idx][base]); break;
+			case 1: emit(buf, pos, sib_01_[idx][base]); break;
+			case 2: emit(buf, pos, sib_10_[idx][base]); break;
+			case 3: emit(buf, pos, sib_11_[idx][base]); break;
 			default:
 				assert(false);
 		}

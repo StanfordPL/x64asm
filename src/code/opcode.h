@@ -4,7 +4,6 @@
 #include <array>
 #include <algorithm>
 #include <cassert>
-#include <iostream>
 #include <vector>
 
 #include "src/code/operand.h"
@@ -20,16 +19,6 @@ namespace x64 {
 */
 class Opcode {
 	public:
-		typedef std::vector<Opcode>::const_iterator iterator;
-
-		static iterator begin() {
-			return range_.begin();
-		}
-
-		static iterator end() {
-			return range_.end();
-		}
-
 		inline Opcode() 
 				: o_(NOP) { 
 		}
@@ -43,11 +32,7 @@ class Opcode {
 		}
 
 		inline bool is_null() const {
-			return o_ == OPCODE_VAL_NULL;
-		}
-
-		inline bool is_valid() const {
-			return o_ <= OPCODE_VAL_NULL;
+			return o_ >= OPCODE_VAL_NULL;
 		}
 
 		__attribute__((pure)) 
@@ -71,32 +56,15 @@ class Opcode {
 		}
 
 		__attribute__((pure)) 
-		inline size_t mem_offset() const {
-			assert(o_ < mem_offset_.size());
-			return mem_offset_[o_];
-		}
-
-		__attribute__((pure)) 
 		inline bool accesses_mem() const {
-			// NOTE: This is a magic number indicating false
-			return mem_offset() != 16;
-		}
-
-		__attribute__((pure))
-		inline size_t read_offset() const {
-			assert(o_ < read_offset_.size());
-			return read_offset_[o_];
-		}
-
-		__attribute__((pure))
-		inline bool writes_reg() const {
-			assert(o_ < read_offset_.size());
-			return writes_reg_[o_];
+			// TODO -- Fix this!!
+			return false;
 		}
 
 		__attribute__((pure))
 		inline bool does_implicit_zero_extend() const {
-			return writes_reg() && type(0) == GP_REG && width(0) == DOUBLE;
+			// TODO -- Fix this or remove this!!
+			return /*writes_reg() &&*/ type(0) == GP_REG && width(0) == DOUBLE;
 		}
 
 		__attribute__((pure))
@@ -123,18 +91,6 @@ class Opcode {
 		}
 
 		__attribute__((pure))
-		inline bool rexw_prefix() const {
-			assert(o_ < rexw_prefix_.size());
-			return rexw_prefix_[o_];
-		}
-
-		__attribute__((pure))
-		inline bool mem_size_or() const {
-			assert(o_ < mem_size_or_.size());
-			return mem_size_or_[o_];
-		}
-
-		__attribute__((pure))
 		inline RegSet implicit_read_set() const {
 			assert(o_ < implicit_read_set_.size());
 			return implicit_read_set_[o_];
@@ -157,28 +113,15 @@ class Opcode {
 			return o_ == LABEL_DEFN_64L;
 		}
 
-		inline void read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-		}
-
-		void write_att(std::ostream& os) const;
-
 	private:
 		Operand o_;
 
-		static std::vector<Opcode> range_;
-		static std::vector<const char*> opcodes_;
 		static std::vector<size_t> arity_;
 		static std::vector<std::array<Type, 3>> type_;
 		static std::vector<std::array<BitWidth, 3>> width_;
-		static std::vector<size_t> mem_offset_;
-		static std::vector<size_t> read_offset_;
-		static std::vector<bool> writes_reg_;
 		static std::vector<bool> is_cond_jump_;
 		static std::vector<bool> is_uncond_jump_;
 		static std::vector<bool> is_jump_;
-		static std::vector<bool> rexw_prefix_;
-		static std::vector<bool> mem_size_or_;
 		static std::vector<RegSet> implicit_read_set_;
 		static std::vector<RegSet> implicit_write_set_;
 		static std::vector<RegSet> implicit_undef_set_;
