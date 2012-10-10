@@ -15,7 +15,6 @@ class MmxReg {
 
 		inline MmxReg(Operand m) 
 				: m_(m) { 
-			assert(is_valid());
 		}
 
 		inline operator Operand() const {

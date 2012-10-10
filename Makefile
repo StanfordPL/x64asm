@@ -2,21 +2,17 @@
 
 GCC=ccache g++
 
-INC=-I./ \
+INC=-I./
 
 OBJ=build/cfg/control_flow_graph.o \
 		\
 		build/assembler/assembler.o \
 		build/assembler/function.o \
 		\
-		build/code/addr.o \
-		build/code/code.o \
 		build/code/cond_reg.o \
 		build/code/fp_reg.o \
 		build/code/gp_reg.o \
-		build/code/imm.o \
 		build/code/instruction.o \
-		build/code/label.o \
 		build/code/opcode.o \
 		build/code/mmx_reg.o \
 		build/code/reg_set.o \
