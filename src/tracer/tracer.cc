@@ -84,28 +84,15 @@ void Tracer::trace_gp(Trace& t, bool is_before) {
 	assm_.imulq_64r_64r_rm1(rbx, rax);
 	assm_.movq_64r_64i(rax, (Operand) &t.trace_);
 	assm_.addq_64r_64r_rm0(rbx, rax);
-
-	/*
-	static int foo = 0;
-	for ( auto i = 0; i < 16; ++i ) {
-		const auto disp = is_before ? 
-			Imm(offset(State, gp_before_) + GpReg(i) * sizeof(State::gp_reg_val_type)) :
-			Imm(offset(State, gp_after_)  + GpReg(i) * sizeof(State::gp_reg_val_type));
-		cerr << "DISP = " << disp << endl;
-		assm_.movq_64r_64i(rax, Imm(i | (foo << (4*foo))));
-		assm_.movq_64m_64r_rm0(Addr(rbx, disp), rax);
-	}
-	foo++;
-
+	
 	// Pop the registers of the stack (reverse order!) and write to State
 	for ( auto gp = gps_.rbegin(), gpe = gps_.rend(); gp != gpe; ++gp ) {
 		const auto disp = is_before ? 
 			Imm(offset(State, gp_before_) + *gp * sizeof(State::gp_reg_val_type)) :
 			Imm(offset(State, gp_after_)  + *gp * sizeof(State::gp_reg_val_type));
 		assm_.popq_64r(rax);
-		//assm_.movq_64m_64r_rm0(Addr(rbx, disp), rax);
+		assm_.movq_64m_64r_rm0(Addr(rbx, disp), rax);
 	}
-	*/
 
 	// Put everything back the way we found it
 	assm_.popw_16r(rax);
