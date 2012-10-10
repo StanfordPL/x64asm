@@ -19,23 +19,64 @@ instr_array t name f is = array t name body
     where body = map f' is 
           f' i = (f i) ++ " // " ++ (enum i)
 
--- Writes out the Instruction enum
-opcode_enum :: [Instr] -> String
-opcode_enum is = "enum OpcodeVal {\n" ++ 
-                 "  " ++ (enum (head is)) ++ " = 0\n, " ++
-                 (concat (intersperse "\n, " (map enum (tail is)))) ++
-                 "\n, NUM_OPCODE_VALS = " ++ (show (length is)) ++
-                 "\n, OPCODE_VAL_NULL = NUM_OPCODE_VALS" ++
-                 "\n};"
-
 -- Writes out the att encoding for each instruction
 opcodes :: [Instr] -> String
 opcodes = instr_array "const char*" "opcodes_" render
     where render i = "\"" ++ (att i) ++ "\""
 
--- Writes out the arity for each instruction
-write_arity :: [Instr] -> String
-write_arity = instr_array "size_t" "Opcode::arity_" (show . arity)
+-- Writes out the Instruction enum
+opcode_enum :: [Instr] -> String
+opcode_enum is = "enum OpcodeVal {\n" ++ 
+                 "  " ++ (enum (head is)) ++ " = 0\n, " ++
+                 (concat (intersperse "\n, " (map enum' (zip (tail is) [1..])))) ++
+                 "\n, OPCODE_VAL_NULL" ++
+                 "\n};"
+    where enum' (i,idx) = (enum i) ++ " = DEF(" ++ (show idx) ++ "," ++
+                            (a i) ++ "," ++ (t i) ++ "," ++ (w  i) ++ "," ++ (m  i) ++ "," ++ 
+                            (r i) ++ "," ++ (j i) ++ "," ++ (uj i) ++ "," ++ (cj i) ++ ")"
+          a  i = show $ arity i
+          t  i = concat $ intersperse "," $ 
+                 take 3 $ (map to_type (operand_types i)) ++ 
+                 ["TYPE_NULL","TYPE_NULL","TYPE_NULL"]
+          w  i = concat $ intersperse "," $ 
+                 take 3 $ (map to_width (operand_widths i)) ++ 
+                 ["BIT_WIDTH_NULL", "BIT_WIDTH_NULL", "BIT_WIDTH_NULL"]
+          m  i = concat $ intersperse "," $ 
+                 take 3 $ (map to_mod (operand_mods i)) ++ 
+                 ["MODIFIER_NULL", "MODIFIER_NULL", "MODIFIER_NULL"]
+          r  i = map toLower $ show $ ret i
+          j  i = map toLower $ show $ jump i
+          uj i = map toLower $ show $ uncond_jump i
+          cj i = map toLower $ show $ cond_jump i
+
+          to_width "8"   = "LOW"
+          to_width "16"  = "WORD"
+          to_width "32"  = "DOUBLE"
+          to_width "64"  = "QUAD"
+          to_width "128" = "OCT"
+          to_width _ = error "Unrecognized width!"
+
+          to_type "M"   = "ADDR"
+          to_type "F"   = "FP_REG"
+          to_type "R"   = "GP_REG"
+          to_type "I"   = "IMM"
+          to_type "L"   = "LABEL"
+          to_type "X"   = "MMX_REG"
+          to_type "O"   = "OFFSET"
+          to_type "S"   = "XMM_REG"
+          to_type "AL"  = "RAX_ONLY"
+          to_type "AX"  = "RAX_ONLY" 
+          to_type "EAX" = "RAX_ONLY" 
+          to_type "RAX" = "RAX_ONLY" 
+          to_type "CL"  = "RCX_ONLY"
+          to_type "ST0" = "ST0_ONLY"
+          to_type _ = error "Unrecognized type!"
+
+          to_mod "R" = "READ"
+          to_mod "W" = "WRITE"
+          to_mod "X" = "READ_WRITE"
+          to_mod "N" = "NONE"
+          to_mod _ = error "Unrecognized modifier!"
 
 -- Writes out type info for each instruction
 type_render :: Instr -> String
@@ -56,9 +97,6 @@ type_render i = inline_array "Type" (render' (operands i) 0)
           render' (_:"ST0":_:xs) i = ["ST0_ONLY"] ++ (render' xs (i+1))
           render' _ 3 = []
           render' _ i = ["TYPE_NULL"] ++ (render' [] (i+1))
-
-types :: [Instr] -> String
-types = instr_array "array<Type, 3>" "Opcode::type_" type_render
 
 -- Writes out width info for each instruction
 width_render :: Instr -> String
@@ -87,9 +125,6 @@ width_render i = inline_array "BitWidth" (render' (operands i) 0)
           width' "128" = "OCT"					
           width' _     = "BIT_WIDTH_VAL_NULL"
 
-widths :: [Instr] -> String
-widths = instr_array "array<BitWidth, 3>" "Opcode::width_" width_render
-
 -- Writes out opcode signatures (this is gross)
 signatures :: [Instr] -> String
 signatures is = "map<tuple<string, array<Type, 3>, array<BitWidth, 3>>, Opcode> " ++
@@ -102,21 +137,6 @@ signatures is = "map<tuple<string, array<Type, 3>, array<BitWidth, 3>>, Opcode> 
                      (width_render i) ++ "), " ++ 
 					           (enum i) ++ 
                      "}"
-
--- Writes out whether the instruction is a conditional jump
-is_cond_jump :: [Instr] -> String
-is_cond_jump = instr_array "bool" "Opcode::is_cond_jump_" render
-    where render i = map toLower (show (cond_jump i))
-
--- Writes out whether the instruction is an unconditional jump
-is_uncond_jump :: [Instr] -> String
-is_uncond_jump = instr_array "bool" "Opcode::is_uncond_jump_" render
-    where render i = map toLower (show (uncond_jump i))
-
--- Writes out whether the instruction is a jump
-is_jump :: [Instr] -> String
-is_jump = instr_array "bool" "Opcode::is_jump_" render 
-    where render i = (map toLower (show (jump i))) 
 
 -- Functions for emitting register masks
 reg_mask :: String -> (Instr -> [String]) -> [Instr] -> String
@@ -164,15 +184,9 @@ main = do args <- getArgs
           writeFile  "opcode.sigs"   $ signatures      instrs
           writeFile  "opcode.char"   $ opcodes         instrs
 
-          writeFile  "opcode.static" $ write_arity      instrs
-          appendFile "opcode.static" $ types            instrs
-          appendFile "opcode.static" $ widths           instrs
-          appendFile "opcode.static" $ is_cond_jump     instrs
-          appendFile "opcode.static" $ is_uncond_jump   instrs
-          appendFile "opcode.static" $ is_jump          instrs
-          appendFile "opcode.static" $ reg_mask2 "implicit_read_set_"  
+          writeFile  "opcode.implicit" $ reg_mask2 "implicit_read_set_"  
 					           implicit_reads cond_read instrs
-          appendFile "opcode.static" $ reg_mask2 "implicit_write_set_" 
+          appendFile "opcode.implicit" $ reg_mask2 "implicit_write_set_" 
 					           implicit_writes cond_write instrs
-          appendFile "opcode.static" $ reg_mask "implicit_undef_set_"     
+          appendFile "opcode.implicit" $ reg_mask "implicit_undef_set_"     
                      cond_undef instrs

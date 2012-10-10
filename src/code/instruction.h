@@ -163,6 +163,30 @@ class Instruction {
 
 		RegSet explicit_write_set() const;
 
+		inline RegSet implicit_read_set() const {
+			return opcode_.implicit_read_set();
+		}
+
+		inline RegSet implicit_write_set() const {
+			return opcode_.implicit_write_set();
+		}
+
+		inline RegSet implicit_undef_set() const {
+			return opcode_.implicit_undef_set();
+		}
+
+		inline RegSet read_set() const {
+			return implicit_read_set() |= explicit_read_set();
+		}
+
+		inline RegSet write_set() const {
+			return implicit_write_set() |= explicit_write_set();
+		}
+
+		inline RegSet undef_set() const {
+			return implicit_undef_set();
+		}
+
 		// Convenience Accessors inherited from current opcode
 		inline size_t arity() const { 
 			return opcode_.arity(); 
@@ -176,12 +200,12 @@ class Instruction {
 			return opcode_.width(index); 
 		}
 
-		inline bool accesses_mem() const { 
-			return opcode_.accesses_mem(); 
+		inline Modifier mod(size_t index) const {
+			return opcode_.mod(index);
 		}
 
-		inline bool does_implicit_zero_extend() const {
-			return opcode_.does_implicit_zero_extend();
+		inline bool is_label_defn() const {
+			return opcode_.is_label_defn();
 		}
 
 		inline bool is_ret() const {
@@ -198,22 +222,6 @@ class Instruction {
 
 		inline bool is_jump() const {
 			return opcode_.is_jump();
-		}
-
-		inline RegSet implicit_read_set() const {
-			return opcode_.implicit_read_set();
-		}
-
-		inline RegSet implicit_write_set() const {
-			return opcode_.implicit_write_set();
-		}
-
-		inline RegSet implicit_undef_set() const {
-			return opcode_.implicit_undef_set();
-		}
-
-		inline bool is_label_defn() const {
-			return opcode_.is_label_defn();
 		}
 
 		// Higher order attributes
@@ -241,18 +249,6 @@ class Instruction {
 			const auto d = addr.get_disp();
 
 			return b != rsp || !i.is_null() || (int64_t) d > 0;
-		}
-
-		inline RegSet read_set() const {
-			return implicit_read_set() |= explicit_read_set();
-		}
-
-		inline RegSet write_set() const {
-			return implicit_write_set() |= explicit_write_set();
-		}
-
-		inline RegSet undef_set() const {
-			return implicit_undef_set();
 		}
 
 	private:

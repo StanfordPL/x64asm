@@ -5,6 +5,6 @@ using namespace std;
 namespace x64 { 
 
 // Static array declarations
-#include "src/gen/opcode.static"
+#include "src/gen/opcode.implicit"
 
 } // namespace x64

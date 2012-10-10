@@ -12,18 +12,19 @@ typedef uint64_t Operand;
 /** Operand types.
 */
 enum Type { 
-	GP_REG = 0,
-	RAX_ONLY,
-	RCX_ONLY,
-	XMM_REG,
-	MMX_REG,
+	ADDR = 0,
 	FP_REG,
-	ST0_ONLY,
+	GP_REG,
 	IMM,
 	LABEL,
-	SCALE,
-	ADDR,
+	MMX_REG,
 	OFFSET,
+	SCALE,
+	XMM_REG,
+
+	RAX_ONLY,
+	RCX_ONLY,
+	ST0_ONLY,
 
 	TYPE_NULL
 };

@@ -2,13 +2,14 @@ module Instr
 	( Instr(..)
 	, parse_instrs
 	, enum
-	, arity
 	, operand_widths
 	, operand_types
 	, operand_mods
+	, arity
 	, cond_jump
 	, uncond_jump
 	, jump
+	, ret
 	) where
 
 import Data.Char
@@ -125,10 +126,6 @@ enum instr = (up (att instr)) ++
           rm_suff True i = "_RM" ++ (show i)
           rm_suff _ _    = ""
 
--- Returns number of operands
-arity :: Instr -> Int
-arity instr = (length (operands instr)) `div` 3
-
 -- Unpacks operand widths
 operand_widths :: Instr -> [String]
 operand_widths instr = ow $ operands instr
@@ -146,6 +143,10 @@ operand_mods :: Instr -> [String]
 operand_mods instr = om $ operands instr
     where om (_:_:m:os) = m:(om os)
           om _ = []
+
+-- Returns number of operands
+arity :: Instr -> Int
+arity instr = (length (operands instr)) `div` 3
 
 -- Is the instruction a conditional jump?
 cond_jump :: Instr -> Bool
@@ -177,3 +178,29 @@ uncond_jump i = uj $ att i
 -- Is the instruction a jump?
 jump :: Instr -> Bool
 jump i = (cond_jump) i || (uncond_jump i)
+
+-- Is the instruction a ret?
+ret :: Instr -> Bool
+ret i = r $ att i
+    where r "retq" = True
+          r _ = False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
