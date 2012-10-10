@@ -14,7 +14,7 @@ namespace {
 namespace x64 {
 
 void Writer::write_att(ostream& os, Addr addr) const {
-	const auto w = QUAD; // TODO -- make this part of the class
+	const auto w = addr.get_size_or() ? DOUBLE : QUAD;
 	
 	const auto s = addr.get_seg();
 	if ( !s.is_null() ) {

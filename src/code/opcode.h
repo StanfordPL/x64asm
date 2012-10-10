@@ -19,16 +19,6 @@ namespace x64 {
 */
 class Opcode {
 	public:
-		typedef std::vector<Opcode>::const_iterator iterator;
-
-		static iterator begin() {
-			return range_.begin();
-		}
-
-		static iterator end() {
-			return range_.end();
-		}
-
 		inline Opcode() 
 				: o_(NOP) { 
 		}
@@ -42,11 +32,7 @@ class Opcode {
 		}
 
 		inline bool is_null() const {
-			return o_ == OPCODE_VAL_NULL;
-		}
-
-		inline bool is_valid() const {
-			return o_ <= OPCODE_VAL_NULL;
+			return o_ >= OPCODE_VAL_NULL;
 		}
 
 		__attribute__((pure)) 
@@ -128,12 +114,6 @@ class Opcode {
 		}
 
 		__attribute__((pure))
-		inline bool mem_size_or() const {
-			assert(o_ < mem_size_or_.size());
-			return mem_size_or_[o_];
-		}
-
-		__attribute__((pure))
 		inline RegSet implicit_read_set() const {
 			assert(o_ < implicit_read_set_.size());
 			return implicit_read_set_[o_];
@@ -159,7 +139,6 @@ class Opcode {
 	private:
 		Operand o_;
 
-		static std::vector<Opcode> range_;
 		static std::vector<const char*> opcodes_;
 		static std::vector<size_t> arity_;
 		static std::vector<std::array<Type, 3>> type_;
@@ -171,7 +150,6 @@ class Opcode {
 		static std::vector<bool> is_uncond_jump_;
 		static std::vector<bool> is_jump_;
 		static std::vector<bool> rexw_prefix_;
-		static std::vector<bool> mem_size_or_;
 		static std::vector<RegSet> implicit_read_set_;
 		static std::vector<RegSet> implicit_write_set_;
 		static std::vector<RegSet> implicit_undef_set_;

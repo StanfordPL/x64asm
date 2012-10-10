@@ -19,28 +19,28 @@ class Addr {
 				: a_(o) {
 		}
 
-		inline Addr(GpReg b) {
-			set_all(seg_null, b, gp_null, times_1, 0);
+		inline Addr(GpReg b, bool size_or = false) {
+			set_all(seg_null, b, gp_null, times_1, 0, size_or);
 		}
 
-		inline Addr(GpReg b, Imm d) {
-			set_all(seg_null, b, gp_null, times_1, d);
+		inline Addr(GpReg b, Imm d, bool size_or = false) {
+			set_all(seg_null, b, gp_null, times_1, d, size_or);
 		}
 
-		inline Addr(GpReg b, GpReg i) {
-			set_all(seg_null, b, i, times_1, 0);
+		inline Addr(GpReg b, GpReg i, bool size_or = false) {
+			set_all(seg_null, b, i, times_1, 0, size_or);
 		}
 
-		inline Addr(GpReg b, GpReg i, Scale s) {
-			set_all(seg_null, b, i, s, 0);
+		inline Addr(GpReg b, GpReg i, Scale s, bool size_or = false) {
+			set_all(seg_null, b, i, s, 0, size_or);
 		}
 
-		inline Addr(GpReg b, GpReg i, Imm d) {
-			set_all(seg_null, b, i, times_1, d);
+		inline Addr(GpReg b, GpReg i, Imm d, bool size_or = false) {
+			set_all(seg_null, b, i, times_1, d, size_or);
 		}
 
-		inline Addr(GpReg b, GpReg i, Scale s, Imm d) {
-			set_all(seg_null, b, i, s, d);
+		inline Addr(GpReg b, GpReg i, Scale s, Imm d, bool size_or = false) {
+			set_all(seg_null, b, i, s, d, size_or);
 		}
 
 		inline operator Operand() const {
@@ -67,6 +67,10 @@ class Addr {
 			return (Operand) (a_ & 0xffffffff);
 		}
 
+		inline bool get_size_or() const {
+			return (a_ >> 48) & 0x1;
+		}
+
 		inline void set_seg(SegReg s) {
 			a_ = (a_ & ~((Operand) 0x7 << 45)) | (s << 45);
 		}
@@ -89,17 +93,25 @@ class Addr {
 			a_ = (a_ & ~((Operand) 0xffffffff)) | (d & 0xffffffff);
 		}
 
+		inline void set_size_or(bool size_or) {
+			if ( size_or )
+				a_ |= ((Operand) 0x1 << 48);
+			else
+				a_ &= ~((Operand) 0x1 << 48);
+		}
+
 	private:
-		// seg    base   index  scale  disp
-		// [47:45][44:40][39:35][34:32][31:0]
+		// or  seg    base   index  scale  disp
+		// [48][47:45][44:40][39:35][34:32][31:0]
 		Operand a_;
 
-		inline void set_all(SegReg s, GpReg b, GpReg i, Scale sc, Imm d) {
+		inline void set_all(SegReg s, GpReg b, GpReg i, Scale sc, Imm d, bool so) {
 			set_seg(s);
 			set_base(b);
 			set_index(i);
 			set_scale(sc);
 			set_disp(d);
+			set_size_or(so);
 		}
 };
 

@@ -216,10 +216,6 @@ class Instruction {
 			return opcode_.rexw_prefix();
 		}
 
-		inline bool mem_size_or() const {
-			return opcode_.mem_size_or();
-		}
-
 		inline RegSet implicit_read_set() const {
 			return opcode_.implicit_read_set();
 		}
