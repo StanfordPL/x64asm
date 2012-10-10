@@ -25,6 +25,10 @@ class FpReg {
 			return f_ >= 8;	
 		}
 
+		inline bool is_top() const {
+			return f_ == 0;
+		}
+
 	private:
 		Operand f_;
 };
