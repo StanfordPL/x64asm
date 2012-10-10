@@ -19,12 +19,12 @@ class State {
 		}
 
 		inline gp_reg_val_type gp_before(GpReg gp) const {
-			assert(gp.is_valid() && !gp.is_null());
+			assert(!gp.is_null());
 			return gp_before_[gp];
 		}
 
 		inline gp_reg_val_type gp_after(GpReg gp) const {
-			assert(gp.is_valid() && !gp.is_null());
+			assert(!gp.is_null());
 			return gp_after_[gp];
 		}
 
