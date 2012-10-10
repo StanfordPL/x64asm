@@ -77,8 +77,6 @@ clean:
 	rm -rf $(BIN) $(DOC) $(LIB) build/* src/gen
 	$(MAKE) clean -C test
 
-really_clean: clean
-
 ##### EXTERNAL AND CODEGEN TARGETS
 
 src/gen: src/codegen/*.hs src/codegen/*.csv src/codegen/att.l src/codegen/att.y
