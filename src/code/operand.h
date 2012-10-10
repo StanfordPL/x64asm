@@ -28,7 +28,7 @@ enum Type {
 	TYPE_NULL
 };
 
-/** Bit field widths.
+/** Operand widths.
 */
 enum BitWidth {
 	LOW = 0,
@@ -40,6 +40,17 @@ enum BitWidth {
 	FIXED,
 
 	BIT_WIDTH_NULL
+};
+
+/** Operand modifiers.
+*/
+enum Modifier {
+	READ = 0,
+	WRITE,
+	READ_WRITE,
+	NONE,
+
+	MODIFIER_NULL
 };
 
 } // namespace x64

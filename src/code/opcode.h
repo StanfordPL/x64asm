@@ -56,32 +56,15 @@ class Opcode {
 		}
 
 		__attribute__((pure)) 
-		inline size_t mem_offset() const {
-			assert(o_ < mem_offset_.size());
-			return mem_offset_[o_];
-		}
-
-		__attribute__((pure)) 
 		inline bool accesses_mem() const {
-			// NOTE: This is a magic number indicating false
-			return mem_offset() != 16;
-		}
-
-		__attribute__((pure))
-		inline size_t read_offset() const {
-			assert(o_ < read_offset_.size());
-			return read_offset_[o_];
-		}
-
-		__attribute__((pure))
-		inline bool writes_reg() const {
-			assert(o_ < read_offset_.size());
-			return writes_reg_[o_];
+			// TODO -- Fix this!!
+			return false;
 		}
 
 		__attribute__((pure))
 		inline bool does_implicit_zero_extend() const {
-			return writes_reg() && type(0) == GP_REG && width(0) == DOUBLE;
+			// TODO -- Fix this or remove this!!
+			return /*writes_reg() &&*/ type(0) == GP_REG && width(0) == DOUBLE;
 		}
 
 		__attribute__((pure))
@@ -105,12 +88,6 @@ class Opcode {
 		inline bool is_jump() const {
 			assert(o_ < is_jump_.size());
 			return is_jump_[o_];
-		}
-
-		__attribute__((pure))
-		inline bool rexw_prefix() const {
-			assert(o_ < rexw_prefix_.size());
-			return rexw_prefix_[o_];
 		}
 
 		__attribute__((pure))
@@ -139,17 +116,12 @@ class Opcode {
 	private:
 		Operand o_;
 
-		static std::vector<const char*> opcodes_;
 		static std::vector<size_t> arity_;
 		static std::vector<std::array<Type, 3>> type_;
 		static std::vector<std::array<BitWidth, 3>> width_;
-		static std::vector<size_t> mem_offset_;
-		static std::vector<size_t> read_offset_;
-		static std::vector<bool> writes_reg_;
 		static std::vector<bool> is_cond_jump_;
 		static std::vector<bool> is_uncond_jump_;
 		static std::vector<bool> is_jump_;
-		static std::vector<bool> rexw_prefix_;
 		static std::vector<RegSet> implicit_read_set_;
 		static std::vector<RegSet> implicit_write_set_;
 		static std::vector<RegSet> implicit_undef_set_;

@@ -5,8 +5,9 @@ using namespace std;
 namespace x64 {
 
 RegSet Instruction::explicit_read_set() const {
+	// TODO ~!
 	RegSet rs;
-	for ( size_t i = read_offset(), ie = arity(); i < ie; ++i )
+	for ( size_t i = 0/*read_offset()*/, ie = arity(); i < ie; ++i )
 		switch ( type(i) ) {
 			case RAX_ONLY:
 			case RCX_ONLY:
@@ -37,7 +38,7 @@ RegSet Instruction::explicit_read_set() const {
 
 RegSet Instruction::explicit_write_set() const {
 	RegSet rs;
-	if ( writes_reg() ) {
+	if ( /*writes_reg()*/true ) {
 		const auto t = type(0);
 		if ( t == GP_REG ) {
 			// Implicit zero extension

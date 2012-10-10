@@ -103,37 +103,6 @@ signatures is = "map<tuple<string, array<Type, 3>, array<BitWidth, 3>>, Opcode> 
 					           (enum i) ++ 
                      "}"
 
--- Writes out the location of the first memory operand
-write_mem_offset :: [Instr] -> String
-write_mem_offset = instr_array "size_t" "Opcode::mem_offset_" wmo
-    where wmo i = case mem_offset i of
-                    (Just mo) -> show mo 
-                    _ -> "16"
-
--- Writes out the location of the first operand which is read
-read_offset :: [Instr] -> String
-read_offset = instr_array "size_t" "Opcode::read_offset_" render
-    where render  i = (render' (operands i) 0) 
-          render' (_:_:"R":_) i = (show i)
-          render' (_:_:"X":_) i = (show i)
-          render' (_:_:_:xs)  i = render' xs (i+1)
-          render' _           i = (show i)	
-
--- Writes out whether the instruction writes a register or not
-writes_reg :: [Instr] -> String
-writes_reg = instr_array "bool" "Opcode::writes_reg_" render
-    where render  i = (render' (operands i))
-          render' (_:"R":"W":_) = "true";
-          render' (_:"R":"X":_) = "true";
-          render' (_:"S":"W":_) = "true";
-          render' (_:"S":"X":_) = "true";
-          render' (_:"X":"W":_) = "true";
-          render' (_:"X":"X":_) = "true";
-          render' (_:"F":"W":_) = "true";
-          render' (_:"F":"X":_) = "true";
-          render' (_:_:_:xs)    = render' xs
-          render' _             = "false"
-
 -- Writes out whether the instruction is a conditional jump
 is_cond_jump :: [Instr] -> String
 is_cond_jump = instr_array "bool" "Opcode::is_cond_jump_" render
@@ -198,9 +167,6 @@ main = do args <- getArgs
           writeFile  "opcode.static" $ write_arity      instrs
           appendFile "opcode.static" $ types            instrs
           appendFile "opcode.static" $ widths           instrs
-          appendFile "opcode.static" $ write_mem_offset instrs
-          appendFile "opcode.static" $ read_offset      instrs
-          appendFile "opcode.static" $ writes_reg       instrs
           appendFile "opcode.static" $ is_cond_jump     instrs
           appendFile "opcode.static" $ is_uncond_jump   instrs
           appendFile "opcode.static" $ is_jump          instrs

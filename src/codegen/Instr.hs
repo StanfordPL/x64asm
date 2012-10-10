@@ -6,7 +6,6 @@ module Instr
 	, operand_widths
 	, operand_types
 	, operand_mods
-	, mem_offset
 	, cond_jump
 	, uncond_jump
 	, jump
@@ -147,13 +146,6 @@ operand_mods :: Instr -> [String]
 operand_mods instr = om $ operands instr
     where om (_:_:m:os) = m:(om os)
           om _ = []
-
--- Index of memory operand
-mem_offset :: Instr -> (Maybe Int)
-mem_offset instr = mo (operand_types instr) 0
-    where mo ("M":_) i = (Just i)
-          mo (_:os)  i = mo os (i+1)
-          mo []      _ = Nothing
 
 -- Is the instruction a conditional jump?
 cond_jump :: Instr -> Bool
