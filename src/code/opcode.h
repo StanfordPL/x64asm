@@ -4,7 +4,6 @@
 #include <array>
 #include <algorithm>
 #include <cassert>
-#include <iostream>
 #include <vector>
 
 #include "src/code/operand.h"
@@ -156,12 +155,6 @@ class Opcode {
 		inline bool is_label_defn() const {
 			return o_ == LABEL_DEFN_64L;
 		}
-
-		inline void read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-		}
-
-		void write_att(std::ostream& os) const;
 
 	private:
 		Operand o_;

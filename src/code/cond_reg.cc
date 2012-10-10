@@ -1,7 +1,5 @@
 #include "src/code/cond_reg.h"
 
-using namespace std;
-
 namespace x64 {
 
 const CondReg af = 0;

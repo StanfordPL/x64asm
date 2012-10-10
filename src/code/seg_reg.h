@@ -1,14 +1,11 @@
 #ifndef X64_SRC_CODE_SEG_REG_H
 #define X64_SRC_CODE_SEG_REG_H
 
-#include <cassert>
-#include <iostream>
-
 #include "src/code/operand.h"
 
 namespace x64 {
 
-/** A Segmentation register: CS, DS, SS, ES, FS, GS
+/** A Segmentation register: cs, ds, ss, es, fs, gs
 */
 class SegReg {
 	public:
@@ -18,7 +15,6 @@ class SegReg {
 
 		inline SegReg(Operand s)
 				: s_(s) {
-			assert(is_valid());
 		}
 
 		inline operator Operand() const {
@@ -26,27 +22,11 @@ class SegReg {
 		}
 
 		inline bool is_null() const {
-			return s_ == 6;
+			return s_ >= 6;
 		}
 
 		inline bool is_valid() const {
 			return s_ <= 6;
-		}
-
-		inline void read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-		}
-
-		inline void write_att(std::ostream& os) const {
-			switch ( s_ ) {
-				case 0: os << "es"; break;
-				case 1: os << "cs"; break;
-				case 2: os << "ss"; break;
-				case 3: os << "ds"; break;
-				case 4: os << "fs"; break;
-				case 5: os << "gs"; break;
-				default: assert(false); break;
-			}
 		}
 
 	private:

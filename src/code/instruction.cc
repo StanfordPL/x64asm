@@ -54,50 +54,6 @@ RegSet Instruction::explicit_write_set() const {
 	return rs;
 }
 
-void Instruction::write_att(ostream& os) const {
-	if ( get_opcode().is_label_defn() ) {
-		os << ".L" << dec << get_label(0) << ":";
-		return;
-	}
-
-	get_opcode().write_att(os);
-	os << " ";
-
-	auto comma = false;
-	for ( int i = arity()-1; i >= 0; --i ) {
-		if ( comma )
-			os << ",";
-		else
-			comma = true;
-
-		switch ( type(i) ) {
-			case GP_REG:  
-			case RAX_ONLY:
-			case RCX_ONLY:
-				get_gp_reg(i).write_att(os, width(i)); 
-				break;
-			case XMM_REG: 
-				get_xmm_reg(i).write_att(os);
-				break;
-			case IMM:     
-				get_imm(i).write_att(os, width(i)); 
-				break;
-			case LABEL:
-				get_label(i).write_att(os);
-				break;
-			case ADDR:
-				get_addr(i).write_att(os);
-				break;
-			case OFFSET:
-				get_offset(i).write_att(os);
-				break;
-
-			default:      
-				os.setstate(ios::failbit);
-		}
-	}
-}
-
 bool Instruction::check_opcode(Opcode o) const {
 	if ( arity() != o.arity() )
 		return false;

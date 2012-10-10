@@ -5,7 +5,6 @@
 #include <array>
 #include <cassert>
 #include <initializer_list>
-#include <iostream>
 
 #include "src/code/addr.h"
 #include "src/code/fp_reg.h"
@@ -275,12 +274,6 @@ class Instruction {
 		inline RegSet undef_set() const {
 			return implicit_undef_set();
 		}
-
-		inline void read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-		}
-
-		void write_att(std::ostream& os) const;
 
 	private:
 

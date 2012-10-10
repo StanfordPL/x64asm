@@ -5,6 +5,10 @@
 
 namespace x64 {
 
+/** Base operand type.
+*/
+typedef uint64_t Operand;
+
 /** Operand types.
 */
 enum Type { 
@@ -21,8 +25,7 @@ enum Type {
 	ADDR,
 	OFFSET,
 
-	NUM_TYPES,
-	TYPE_NULL = NUM_TYPES
+	TYPE_NULL
 };
 
 /** Bit field widths.
@@ -36,20 +39,8 @@ enum BitWidth {
 	OCT,
 	FIXED,
 
-	NUM_BIT_WIDTHS,
-	BIT_WIDTH_NULL = NUM_BIT_WIDTHS
+	BIT_WIDTH_NULL
 };
-
-/** Operand values.
-*/
-enum OperandVal {
-	NUM_OPERAND_VALS = 0,
-	OPERAND_VAL_NULL = NUM_OPERAND_VALS
-};
-
-/** Base operand type.
-*/
-typedef uint64_t Operand;
 
 } // namespace x64
 

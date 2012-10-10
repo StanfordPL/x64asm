@@ -204,9 +204,9 @@ main = do args <- getArgs
 
           writeFile  "opcode.enum"   $ opcode_enum     instrs
           writeFile  "opcode.sigs"   $ signatures      instrs
+          writeFile  "opcode.char"   $ opcodes         instrs
 
           writeFile  "opcode.static" $ opcode_range     instrs
-          appendFile "opcode.static" $ opcodes          instrs
           appendFile "opcode.static" $ write_arity      instrs
           appendFile "opcode.static" $ types            instrs
           appendFile "opcode.static" $ widths           instrs
