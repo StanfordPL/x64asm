@@ -5,6 +5,7 @@
 #include <string>
 #include <tuple>
 #include <vector>
+#include <array>
 
 #include "src/code/code.h"
 #include "src/code/gp_reg.h"
@@ -111,7 +112,41 @@ Instruction* build_instr(istream& is, const string& opcode,
 	}
 
 	vector<Operand> ops;
-	const auto itr = signatures_.find(key);
+	const auto opcode_sigs = signatures_[get<0>(key)];
+    //opcode_sigs has a list of all signatures for the opcode
+    
+    const auto options = new vector<tuple<array<Type, 3>, array<BitWidth, 3>, OpcodeVal>>();
+    //in options, we'll get only the ones with the right arguments
+
+    for(const auto& sig : opcode_sigs) {
+        bool accept = true;
+        for(int i = 0;i<3;i++) {
+
+            //ensure that the argument types match
+            if(get<1>(key)[i] != get<0>(sig)[i]) {
+                accept = false;
+
+                if(get<1>(key)[i] == IMM) {
+                    //for immediates, check that we can fit the value correctly
+                    if(get<2>(key)[i] < get<1>(sig)[i])
+                        accept=false;
+
+                } else {
+                    //otherwise, make sure widths match
+                    if(get<2>(key)[i] != get<1>(sig)[i])
+                        accept = false;
+                }
+            }
+        }
+        if(accept)
+            options->push_back(sig);
+    }
+
+    bool parse_success = (options->size()) > 0;
+    OpcodeVal parsed_opcode = NOP;
+    if(parse_success)
+        parsed_opcode = get<2>(options->front());
+
 
 	// Trouble with parsing?  Try uncommenting this to see signatures
 	cerr << opcode << "\t type [ ";
@@ -124,20 +159,20 @@ Instruction* build_instr(istream& is, const string& opcode,
 	for ( const auto& i : operand_info )
 		cerr << hex << i.val << " ";
 	cerr << "] ---> ";
-	if ( itr != signatures_.end() )
-		cerr << dec << itr->second;
+	if ( parse_success )
+		cerr << dec << parsed_opcode;
 	else
 		cerr << "???";
 	cerr << endl;
 
-	if ( itr == signatures_.end() ) {
+	if ( !parse_success ) {
 		*instr = Instruction(NOP, ops.begin(), ops.end());
 		is.setstate(std::ios::failbit);
 	}
 	else {
  		for ( const auto& i : operand_info )
 			ops.push_back(i.val);
-		*instr = Instruction(itr->second, ops.begin(), ops.end());
+		*instr = Instruction(parsed_opcode, ops.begin(), ops.end());
 	}
 
 	return instr;

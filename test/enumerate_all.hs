@@ -9,35 +9,34 @@ data ArgType = I | R | M | S | F | X | AL | AX | EAX | RAX | CL | CX | ECX | RCX
 data Argument = Arg Int ArgType deriving Show
 
 -- Turn a list of strings into a list of arguments
-parse_args :: ([String],Bool) -> Maybe [[String]]
-parse_args ([],_) = Just []
-parse_args ((a:b:c:rest),mem) = let newarg = parse_arg a b c mem in 
+parse_args :: [String] -> Maybe [[String]]
+parse_args [] = Just []
+parse_args (a:b:c:rest)=        let newarg = parse_arg a b c in 
                                 case newarg of
                                     Nothing -> Nothing
-                                    Just newarg' -> case (parse_args (rest,mem)) of
+                                    Just newarg' -> case (parse_args rest) of
                                                      Just x -> Just (x ++ [arg_to_reglist newarg'])
                                                      Nothing -> Nothing
 parse_args _ = Nothing
 
 -- Turn a description of three strings into an argument
-parse_arg :: String -> String -> String -> Bool -> Maybe Argument
-parse_arg a b _ mem = let w = read a :: Int in
-                  case (b, mem) of
-                    ("AL", _)  -> Just (Arg w AL)
-                    ("AX", _)  -> Just (Arg w AX)
-                    ("EAX", _) -> Just (Arg w EAX)
-                    ("RAX", _) -> Just (Arg w RAX)
-                    ("CL", _)  -> Just (Arg w CL)
-                    ("CX", _)  -> Just (Arg w CX)
-                    ("ECX", _) -> Just (Arg w ECX)
-                    ("RCX", _) -> Just (Arg w RCX)
-                    ("R", _)   -> Just (Arg w R)
-                    ("M", true)  -> Just (Arg 32 M)
-                    ("M", false) -> Just (Arg 64 M)
-                    ("I", _) -> Just (Arg w I)
-                    ("S", _) -> Just (Arg w S)
-                    ("F", _) -> Just (Arg w F)
-                    ("X", _) -> Just (Arg w X)
+parse_arg :: String -> String -> String -> Maybe Argument
+parse_arg a b _ = let w = read a :: Int in
+                  case b of
+                    "AL"  -> Just (Arg w AL)
+                    "AX"  -> Just (Arg w AX)
+                    "EAX" -> Just (Arg w EAX)
+                    "RAX" -> Just (Arg w RAX)
+                    "CL"  -> Just (Arg w CL)
+                    "CX"  -> Just (Arg w CX)
+                    "ECX" -> Just (Arg w ECX)
+                    "RCX" -> Just (Arg w RCX)
+                    "R"   -> Just (Arg w R)
+                    "M"   -> Just (Arg w M)
+                    "I"   -> Just (Arg w I)
+                    "S"   -> Just (Arg w S)
+                    "F"   -> Just (Arg w F)
+                    "X"   -> Just (Arg w X)
                     _ -> Nothing
 
 -- For each argument, get a list of strings that it could represent
@@ -46,8 +45,13 @@ gp 8  = ["%al", "%cl", "%bl", "%dl"]--, "%ah", "%ch", "%bh", "%dh"]
 gp 16 = ["%ax", "%cx", "%dx", "%bx", "%sp", "%bp", "%si", "%di"]
 gp 32 = ["%eax", "%ecx", "%ebx", "%edx", "%esp", "%ebp", "%esi", "%edi"]
 gp 64 = ["%rax", "%rcx", "%rbx", "%rdx", "%rsp", "%rbp", "%rsi", "%rdi"]
+gp x = error ("Registers must have width 8/16/32/64, not " ++ (show x))
+
+gp_no_sp 8 = gp 8
+gp_no_sp 16 = ["%ex", "%cx", "%bx", "%dx", "%bp", "%si", "%di"]
 gp_no_sp 32 = ["%eax", "%ecx", "%ebx", "%edx", "%ebp", "%esi", "%edi"]
 gp_no_sp 64 = ["%rax", "%rcx", "%rbx", "%rdx", "%rbp", "%rsi", "%rdi"]
+gp_no_sp x = error ("Registers must have width 8/16/32/64, not " ++ (show x))
 
 memtest = ["", "0x00", "0x01", "-0x01", "0x7fffffff", "-0x7fffffff"]
 
@@ -72,10 +76,10 @@ arg_to_reglist (Arg w F) = [ "%st0" , "%st7"  ]
 arg_to_reglist (Arg w X) = [ "%mm0", "%mm7" ]
 arg_to_reglist (Arg w R) = gp w
 arg_to_reglist (Arg w I) = immediate w
-arg_to_reglist (Arg w M) = [ disp ++ "(" ++ base ++ ")" | base <- gp w, disp <- memtest ] ++
-                           [ disp ++ "(" ++ base ++ "," ++ index ++ ")" | base <- gp w, disp <- memtest, index <- gp_no_sp w] ++ 
+arg_to_reglist (Arg w M) = [ disp ++ "(" ++ base ++ ")" | base <- gp 32, disp <- memtest ] ++
+                           [ disp ++ "(" ++ base ++ "," ++ index ++ ")" | base <- gp 32, disp <- memtest, index <- gp_no_sp 32] ++ 
                            [ disp ++ "(" ++ base ++ "," ++ index ++ "," ++ scale ++ ")" | 
-                               base <- gp w, disp <- memtest, index <- gp_no_sp w, scale <- ["1", "2", "4", "8"] ]
+                               base <- gp 32, disp <- memtest, index <- gp_no_sp 32, scale <- ["1", "2", "4", "8"] ]
 
 -- Print one instruction
 
@@ -94,8 +98,8 @@ print_prefix_list prefix (first_list:tail_lists) = case (first_list, length tail
 --memsize_override = false -> 64-bit
 print_instruction :: Instr -> IO()
 --print_instruction i = print i
-print_instruction (Instr att _ _ _ _ _ _ _ ops _ _ _ _ _ memsize_override) = 
-    let op_list = parse_args (ops, memsize_override) in
+print_instruction (Instr att _ _ _ _ _ _ _ ops _ _ _ _ _) = 
+    let op_list = parse_args ops in
     case op_list of
         Nothing -> putStr "" --putStr ("Error in test script!  Couldn't figure out opcode " ++ att ++ " with " ++ (show ops) ++ "\n")
         Just x -> print_prefix_list att x
