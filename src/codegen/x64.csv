@@ -73,12 +73,12 @@ bsrq :  :  0f  bd  :  :  :  64  R  X   64  RM  R   :  :  :  : Z :  O  S  A  P  C
 bswap :  :  0f  c8  : y :  :  32  R  X    :  :  :  :  : 
 bswap :  :  0f  c8  : y :  :  64  R  X    :  :  :  :  : 
                       
-btw :  :  0f  a3  :  :  :  16  RM  W   16  R  R   :  :  :  : C :  O  S  Z  A  P 
-btl :  :  0f  a3  :  :  :  32  RM  W   32  R  R   :  :  :  : C :  O  S  Z  A  P 
-btq :  :  0f  a3  :  :  :  64  RM  W   64  R  R   :  :  :  : C :  O  S  Z  A  P 
-btw :  :  0f  ba  :  : 04 :  16  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
-btl :  :  0f  ba  :  : 04 :  32  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
-btq :  :  0f  ba  :  : 04 :  64  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btw :  :  0f  a3  :  :  :  16  RM  R   16  R  R   :  :  :  : C :  O  S  Z  A  P 
+btl :  :  0f  a3  :  :  :  32  RM  R   32  R  R   :  :  :  : C :  O  S  Z  A  P 
+btq :  :  0f  a3  :  :  :  64  RM  R   64  R  R   :  :  :  : C :  O  S  Z  A  P 
+btw :  :  0f  ba  :  : 04 :  16  RM  R   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btl :  :  0f  ba  :  : 04 :  32  RM  R   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btq :  :  0f  ba  :  : 04 :  64  RM  R   8  I  R   :  :  :  : C :  O  S  Z  A  P 
                       
 btcw :  :  0f  bb  :  :  :  16  RM  W   16  R  R   :  :  :  : C :  O  S  Z  A  P 
 btcl :  :  0f  bb  :  :  :  32  RM  W   32  R  R   :  :  :  : C :  O  S  Z  A  P 
