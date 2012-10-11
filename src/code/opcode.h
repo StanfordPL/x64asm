@@ -15,14 +15,14 @@ namespace x64 {
 // That's enough room to fit the answers to most interesting queries.
 // This allows us to answer those queries using at most two arithmetic ops.
 #define DEF(idx, a, t1, t2, t3, w1, w2, w3, m1, m2, m3, r, j, uj, cj, mi, fr, nw) \
-  (((Operand) idx) << 50) | \
-	(((Operand) a)   << 48) | \
-	(((Operand) t3)  << 44) | (((Operand) t2) << 40) | (((Operand) t1) << 36) | \
-	(((Operand) w3)  << 32) | (((Operand) w2) << 28) | (((Operand) w1) << 24) | \
-	(((Operand) m3)  << 22) | (((Operand) m2) << 20) | (((Operand) m1) << 18) | \
-	(((Operand) r)   << 17) | \
-	(((Operand) j)   << 16) | (((Operand) uj) << 15) | (((Operand) cj) << 14) | \
-	(((Operand) mi)  << 12) | (((Operand) fr) << 10) | (((Operand) nw) << 8)
+  ((Operand) idx << 50) | \
+	((Operand) a   << 48) | \
+	((Operand) t3  << 44) | ((Operand) t2 << 40) | ((Operand) t1) << 36 | \
+	((Operand) w3  << 32) | ((Operand) w2 << 28) | ((Operand) w1) << 24 | \
+	((Operand) m3  << 22) | ((Operand) m2 << 20) | ((Operand) m1) << 18 | \
+	((Operand) r   << 17) | \
+	((Operand) j   << 16) | ((Operand) uj << 15) | ((Operand) cj) << 14 | \
+	((Operand) mi  << 12) | ((Operand) fr << 10) | ((Operand) nw) << 8
 
 /** Opcodes values.
 */	
@@ -58,12 +58,12 @@ class Opcode {
 
 		inline Type type(size_t index) const {
 			assert(index < arity());
-			return (Type) ((o_ >> (36 + index*4)) & 0x7);
+			return (Type) ((o_ >> (36 + index*4)) & 0xf);
 		}
 
 		inline BitWidth width(size_t index) const {
 			assert(index < arity());
-			return (BitWidth) ((o_ >> (24 + index*4)) & 0x7);
+			return (BitWidth) ((o_ >> (24 + index*4)) & 0xf);
 		}
 
 		inline Modifier mod(size_t index) const {

@@ -26,7 +26,7 @@ opcodes = instr_array "const char*" "opcodes_" render
 
 -- Writes out the Instruction enum
 opcode_enum :: [Instr] -> String
-opcode_enum is = "enum OpcodeVal {\n  " ++ 
+opcode_enum is = "enum OpcodeVal : Operand {\n  " ++ 
                  (concat (intersperse "\n, " (map enum' (zip is [0..])))) ++
                  "\n};"
     where enum' (i,idx) = (enum i) ++ " = DEF(" ++ (show idx) ++ "," ++
@@ -79,11 +79,10 @@ opcode_enum is = "enum OpcodeVal {\n  " ++
           to_mod "R" = "READ"
           to_mod "W" = "WRITE"
           to_mod "X" = "READ_WRITE"
-          to_mod "N" = "NONE"
-          to_mod _ = error "Unrecognized modifier!"
+          to_mod _   = "MODIFIER_NULL" 
 
-          tf True = "0x1"
-          tf False = "0x0"
+          tf True = "1"
+          tf False = "0"
 
 -- Writes out the opcode domain
 opcode_domain :: [Instr] -> String

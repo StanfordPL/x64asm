@@ -49,7 +49,6 @@ enum Modifier {
 	READ = 0,
 	WRITE,
 	READ_WRITE,
-	NONE,
 
 	MODIFIER_NULL
 };
