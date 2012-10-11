@@ -76,9 +76,11 @@ RegSet Instruction::explicit_write_set() const {
 				const auto w = width(i);
 				assert(!gp.is_null());
 				rs.set(gp, w == DOUBLE ? QUAD : w);
+				break;
 			}
 			case XMM_REG:
 				rs.set(get_xmm_reg(i));
+				break;
 
 			default:
 				assert(false);
