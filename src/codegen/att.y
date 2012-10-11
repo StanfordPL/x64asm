@@ -226,6 +226,11 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
         for(int i = 0;i<len;i++)
             if(operand_info[i].type == IMM)
                 immediate_index = i;
+            else if(operand_info[i].type == TYPE_NULL) {
+                len = i;
+                break;
+            }
+
 
         // ***** PHASE 1: Find all rows in spreadsheet that could plausibly work *****
 
@@ -253,9 +258,7 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
                 //ensure that the argument types match
                 //the chosen signature must be more general than 
                 //the one we're looking for in operands_info
-                if (get<0>(sig)[i] == TYPE_NULL)
-                    continue;
-                else if(operand_info[i].type == GP_REG) {
+                if(operand_info[i].type == GP_REG) {
 
                     //user provided rax => spreadsheet provides GP_REG or RAX
                     if( operand_info[i].val == rax ) {
