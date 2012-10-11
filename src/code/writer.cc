@@ -193,6 +193,7 @@ void Writer::write_att(ostream& os, MmxReg mm) const {
 void Writer::write_att(ostream& os, Opcode o) const {
 	assert(!o.is_label_defn());
 	assert(!o.is_null());
+	assert((o >> 50) < opcodes_.size());
 	os << opcodes_[o >> 50];
 }
 
