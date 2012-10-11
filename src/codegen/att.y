@@ -62,7 +62,7 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
             o &= 0x000000000000ffff;
         else if ( bw == DOUBLE)
             o &= 0x00000000ffffffff;
-        return 0;
+        return o;
     }
 
 
