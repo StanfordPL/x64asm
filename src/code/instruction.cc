@@ -78,7 +78,6 @@ RegSet Instruction::explicit_write_set() const {
 				rs.set(gp, w == DOUBLE ? QUAD : w);
 			}
 			case XMM_REG:
-				assert(t == XMM_REG);
 				rs.set(get_xmm_reg(i));
 
 			default:
