@@ -109,6 +109,8 @@ cltq : 48 : 98 :  :  :    : RAX : EAX :  :  :
                       
 clc :  : f8 :  :  :    :  :  :  : C : 
                       
+cmc :  : f5 :  :  :    :  :  :  : C : 
+                      
 cmpb :  : 3c :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
 cmpw :  : 3d :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
 cmpl :  : 3d :  :  :  32  EAX  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
