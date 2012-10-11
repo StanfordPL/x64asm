@@ -55,14 +55,47 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
     BitWidth imm_width(Operand o) {
 
-        if ( ((o >> 8) == 0) || (((o >> 7) ^ 0x1ffffffffffffff) == 0) )
+        /*TABLE
+        PQ -> LOW
+        FFPQ -> LOW
+        FFFFFFPQ -> LOW
+        FFFFFFFFFFFFFFPQ -> LOW
+
+        PQRS -> WORD
+        FFFFPQRS -> WORD
+        FFFFFFFFFFFFPQRS -> WORD
+
+        PQRSTUVW -> DOUBLE
+        FFFFFFFFPQRSTUVW -> DOUBLE
+
+        _ -> QUAD
+        */
+        cout << "operand: " << o << endl;
+
+        if( ((o >> 8) == 0) ||
+            ((o >> 8) == 0xFF) ||
+            ((o >> 8) == 0xFFFFFF) ||
+            ((o >> 8) == 0xFFFFFFFFFFFFFF) ) {
+            cout << "LOW\n";
             return LOW;
-        else if ( ((o >> 16) == 0) || (((o >> 15) ^ 0x1ffffffffffff) == 0) )
+        }
+
+        if( ((o >> 16) == 0) ||
+            ((o >> 16) == 0xFFFF) ||
+            ((o >> 16) == 0xFFFFFFFFFFFF)) {
+            cout << "WORD\n";
             return WORD;
-        else if ( ((o >> 32) == 0) || (((o >> 31) ^ 0x1ffffffff) == 0) )
+        }
+
+        if( ((o >> 32) == 0) ||
+            ((o >> 32) == 0xFFFFFFFF) ) {
+            cout << "DOUBLE\n";
             return DOUBLE;
-        
+        }
+
+        cout << "QUAD\n";
         return QUAD;
+
     }
 
 
@@ -220,6 +253,11 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
                 index++;
             }
         }
+
+        for(const auto &o : options) {
+            cout << o << "\n";
+        }
+        cout << "best: " << (min_immediate_index >> 50) << "\n";
 
         bool parse_success = (options.size()) > 0;
         OpcodeVal parsed_opcode = NOP;

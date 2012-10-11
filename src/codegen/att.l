@@ -40,17 +40,53 @@ Operand to_imm(const char* c, bool from_decimal) {
 	return o;
 }
 
-BitWidth to_imm_width(const char* c, bool from_decimal) {
-	auto o = to_imm(c, from_decimal);
 
-	if ( ((o >> 8) == 0) || (((o >> 7) ^ 0x1ffffffffffffff) == 0) )
-		return LOW;
-	else if ( ((o >> 16) == 0) || (((o >> 15) ^ 0x1ffffffffffff) == 0) )
-		return WORD;
-	else if ( ((o >> 32) == 0) || (((o >> 31) ^ 0x1ffffffff) == 0) )
-		return DOUBLE;
-	
-	return QUAD;
+
+
+BitWidth to_imm_width(const char* c, bool from_decimal) {
+    auto o = to_imm(c, from_decimal);
+
+    /*TABLE
+      PQ -> LOW
+      FFPQ -> LOW
+      FFFFFFPQ -> LOW
+      FFFFFFFFFFFFFFPQ -> LOW
+
+      PQRS -> WORD
+      FFFFPQRS -> WORD
+      FFFFFFFFFFFFPQRS -> WORD
+
+      PQRSTUVW -> DOUBLE
+      FFFFFFFFPQRSTUVW -> DOUBLE
+
+      _ -> QUAD
+     */
+    cout << "operand: " << o << endl;
+
+    if( ((o >> 8) == 0) ||
+            ((o >> 8) == 0xFF) ||
+            ((o >> 8) == 0xFFFFFF) ||
+            ((o >> 8) == 0xFFFFFFFFFFFFFF) ) {
+        cout << "LOW\n";
+        return LOW;
+    }
+
+    if( ((o >> 16) == 0) ||
+            ((o >> 16) == 0xFFFF) ||
+            ((o >> 16) == 0xFFFFFFFFFFFF)) {
+        cout << "WORD\n";
+        return WORD;
+    }
+
+    if( ((o >> 32) == 0) ||
+            ((o >> 32) == 0xFFFFFFFF) ) {
+        cout << "DOUBLE\n";
+        return DOUBLE;
+    }
+
+    cout << "QUAD\n";
+    return QUAD;
+
 }
 
 Operand to_label(const char* c) {
@@ -169,8 +205,10 @@ Operand to_label(const char* c) {
 "-"?"0x"[0-9a-f]+ { OPERAND(to_imm(yytext, false), OFFSET, QUAD); return ATT_OFFSET; }
 "-"?[0-9]+        { OPERAND(to_imm(yytext, true),  OFFSET, QUAD); return ATT_OFFSET; }
 
-"$""-"?"0x"[0-9a-f]+ { OPERAND(to_imm(yytext+1, false), IMM, to_imm_width(yytext+1, false)); return ATT_IMM; }
-"$""-"?[0-9]+        { OPERAND(to_imm(yytext+1, true),  IMM, to_imm_width(yytext+1, true));  return ATT_IMM; }
+"$-0x"[0-9a-f]+ { OPERAND(-to_imm(yytext+2, false), IMM, to_imm_width(yytext+1, false)); return ATT_IMM; }
+"$0x"[0-9a-f]+ { OPERAND(to_imm(yytext+1, false), IMM, to_imm_width(yytext+1, false)); return ATT_IMM; }
+"$-"[0-9]+     { OPERAND(-to_imm(yytext+2, true),  IMM, to_imm_width(yytext+1, true));  return ATT_IMM; }
+"$"[0-9]+      { OPERAND(to_imm(yytext+1, true),  IMM, to_imm_width(yytext+1, true));  return ATT_IMM; }
 
 "."[a-zA-Z][0-9a-zA-Z_]* { OPERAND(to_label(yytext+1), LABEL, FIXED); return ATT_LABEL; }
 
