@@ -15,7 +15,7 @@ Function& Tracer::trace(Function& fxn, Trace& t, const Code& code) {
 	assm_.start(fxn);
 
 	for ( size_t i = 0, ie = code.size(); i < ie; ++i ) {
-		const auto& instr = code.get(i);
+		const auto& instr = code[i];
 		
 		auto before = befores_.find(i) != befores_.end();
 		auto after = afters_.find(i) != afters_.end();

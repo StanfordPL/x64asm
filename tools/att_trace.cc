@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
 
 	for ( const auto& state : trace ) {
 		const auto l = state.line();
-		const auto i = code.get(l);
+		const auto i = code[l];
 
 		if ( i.is_label_defn() )
 			continue;

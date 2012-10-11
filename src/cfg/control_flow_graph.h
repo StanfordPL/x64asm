@@ -130,7 +130,7 @@ class ControlFlowGraph {
 		*/
 		inline const Instruction& get_instr(const location_type& loc) const {
 			assert(get_index(loc) < code_.size());
-			return code_.get(get_index(loc));
+			return code_[get_index(loc)];
 		}
 
 		typedef Code::const_iterator block_iterator;
@@ -214,7 +214,7 @@ class ControlFlowGraph {
 		*/
 		inline RegSet get_live_ins(const location_type& loc) const {
 			auto rs = get_live_outs(loc);
-			const auto& instr = code_.get(get_index(loc));
+			const auto& instr = code_[get_index(loc)];
 			rs -= instr.write_set();
 			rs -= instr.undef_set();
 			rs |= instr.read_set();
@@ -235,7 +235,7 @@ class ControlFlowGraph {
 		inline RegSet get_live_outs(const location_type& loc) const {
 			auto rs = live_outs_[loc.first];
 			for ( int i = blocks_[loc.first+1]-1, ie = get_index(loc); i > ie; --i ) {
-				const auto& instr = code_.get(i);
+				const auto& instr = code_[i];
 				rs -= instr.write_set();
 				rs -= instr.undef_set();
 				rs |= instr.read_set();
@@ -257,7 +257,7 @@ class ControlFlowGraph {
 		inline RegSet get_def_ins(const location_type& loc) const {
 			auto rs = def_ins_[loc.first];
 			for ( int i = blocks_[loc.first], ie = get_index(loc); i < ie; ++i ) {
-				const auto& instr = code_.get(i);
+				const auto& instr = code_[i];
 				rs |= instr.write_set();
 				rs -= instr.undef_set();
 			}
@@ -277,7 +277,7 @@ class ControlFlowGraph {
 		*/
 		inline RegSet get_def_outs(const location_type& loc) const {
 			auto rs = get_def_ins(loc);
-			const auto& instr = code_.get(get_index(loc));
+			const auto& instr = code_[get_index(loc)];
 			rs |= instr.write_set();
 			rs -= instr.undef_set();
 
@@ -295,7 +295,7 @@ class ControlFlowGraph {
 		*/
 		inline bool performs_undef_read() const {
 			for ( size_t i = 0, ie = code_.size(); i < ie; ++i ) {
-				const auto reads = code_.get(i).read_set();
+				const auto reads = code_[i].read_set();
 				if ( (reads & def_ins_[i]) != reads )
 					return true;
 			}

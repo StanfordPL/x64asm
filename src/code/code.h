@@ -36,7 +36,7 @@ class Code {
 		/** Returns a reference to an Instruction.
 				@param index The index of the Instruction, asserts if out of range.
 		*/
-		inline Instruction& get(size_t index) {
+		inline Instruction& operator[](size_t index) {
 			assert(index < size());
 			return instrs_[index];
 		}
@@ -44,7 +44,7 @@ class Code {
 		/** Returns a const reference to an Instruction.
 				@param index The index of the Instruction, asserts if out of range.
 		*/
-		inline const Instruction& get(size_t index) const {
+		inline const Instruction& operator[](size_t index) const {
 			assert(index < size());
 			return instrs_[index];
 		}
@@ -65,7 +65,7 @@ class Code {
 			return instrs_.end();
 		}
 
-		inline void append(const Instruction& instr) {
+		inline void push_back(const Instruction& instr) {
 			instrs_.push_back(instr);
 		}
 

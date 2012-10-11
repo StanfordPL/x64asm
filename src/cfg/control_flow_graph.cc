@@ -18,7 +18,7 @@ void ControlFlowGraph::recompute_blocks() {
 	// Record block begins
 	blocks_.push_back(0);
 	for ( size_t i = 1, ie = code_.size(); i < ie; ++i ) {
-		const auto& instr = code_.get(i);
+		const auto& instr = code_[i];
 
 		// Labels or the first instruction define the beginning of a block
 		if ( instr.is_label_defn() )
@@ -28,7 +28,7 @@ void ControlFlowGraph::recompute_blocks() {
 		// We increment i to avoid double counts for labels. 
 		if ( (instr.is_jump() || instr.is_ret()) && (i+1 != ie) ) {
 			blocks_.push_back(i+1);
-			if ( code_.get(i+1).is_label_defn() )
+			if ( code_[i+1].is_label_defn() )
 				i++;
 		}
 	}
@@ -81,7 +81,7 @@ void ControlFlowGraph::recompute_liveness() {
 
 	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
 		for ( int j = blocks_[i+1]-1, je = blocks_[i]; j >= je; --j ) {
-			const auto& instr = code_.get(j);
+			const auto& instr = code_[j];
 			kill[i] |= instr.write_set();
 			kill[i] |= instr.undef_set();
 			gen[i]  |= instr.read_set();
