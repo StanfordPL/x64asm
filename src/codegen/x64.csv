@@ -87,19 +87,19 @@ btcw :  :  0f  ba  :  : 07 :  16  RM  X   8  I  R   :  :  :  : C :  O  S  Z  A  
 btcl :  :  0f  ba  :  : 07 :  32  RM  X   8  I  R   :  :  :  : C :  O  S  Z  A  P 
 btcq :  :  0f  ba  :  : 07 :  64  RM  X   8  I  R   :  :  :  : C :  O  S  Z  A  P 
                       
-btrw :  :  0f  b3  :  :  :  16  RM  W   16  R  R   :  :  :  : C :  O  S  Z  A  P 
-btrl :  :  0f  b3  :  :  :  32  RM  W   32  R  R   :  :  :  : C :  O  S  Z  A  P 
-btrq :  :  0f  b3  :  :  :  64  RM  W   64  R  R   :  :  :  : C :  O  S  Z  A  P 
-btrw :  :  0f  ba  :  : 06 :  16  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
-btrl :  :  0f  ba  :  : 06 :  32  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
-btrq :  :  0f  ba  :  : 06 :  64  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btrw :  :  0f  b3  :  :  :  16  RM  X   16  R  R   :  :  :  : C :  O  S  Z  A  P 
+btrl :  :  0f  b3  :  :  :  32  RM  X   32  R  R   :  :  :  : C :  O  S  Z  A  P 
+btrq :  :  0f  b3  :  :  :  64  RM  X   64  R  R   :  :  :  : C :  O  S  Z  A  P 
+btrw :  :  0f  ba  :  : 06 :  16  RM  X   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btrl :  :  0f  ba  :  : 06 :  32  RM  X   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btrq :  :  0f  ba  :  : 06 :  64  RM  X   8  I  R   :  :  :  : C :  O  S  Z  A  P 
                       
-btsw :  :  0f  ab  :  :  :  16  RM  W   16  R  R   :  :  :  : C :  O  S  Z  A  P 
-btsl :  :  0f  ab  :  :  :  32  RM  W   32  R  R   :  :  :  : C :  O  S  Z  A  P 
-btsq :  :  0f  ab  :  :  :  64  RM  W   64  R  R   :  :  :  : C :  O  S  Z  A  P 
-btsw :  :  0f  ba  :  : 05 :  16  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
-btsl :  :  0f  ba  :  : 05 :  32  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
-btsq :  :  0f  ba  :  : 05 :  64  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btsw :  :  0f  ab  :  :  :  16  RM  X   16  R  R   :  :  :  : C :  O  S  Z  A  P 
+btsl :  :  0f  ab  :  :  :  32  RM  X   32  R  R   :  :  :  : C :  O  S  Z  A  P 
+btsq :  :  0f  ab  :  :  :  64  RM  X   64  R  R   :  :  :  : C :  O  S  Z  A  P 
+btsw :  :  0f  ba  :  : 05 :  16  RM  X   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btsl :  :  0f  ba  :  : 05 :  32  RM  X   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btsq :  :  0f  ba  :  : 05 :  64  RM  X   8  I  R   :  :  :  : C :  O  S  Z  A  P 
                       
 call :  : e8 :  :  :  64  L  R    :  RAX  RBX  RCX  RDX  RDI  RSI  RBP  RSP  :  RAX  RCX  RDX  RSP  :  :  :  C  O  S  Z  A  P 
                       
