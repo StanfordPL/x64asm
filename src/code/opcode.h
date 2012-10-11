@@ -103,17 +103,17 @@ class Opcode {
 
 		inline RegSet implicit_read_set() const {
 			assert(o_ < implicit_read_set_.size());
-			return implicit_read_set_[o_];
+			return implicit_read_set_[o_ >> 50];
 		}
 
 		inline RegSet implicit_write_set() const {
 			assert(o_ < implicit_write_set_.size());
-			return implicit_write_set_[o_];
+			return implicit_write_set_[o_ >> 50];
 		}
 
 		inline RegSet implicit_undef_set() const {
 			assert(o_ < implicit_undef_set_.size());
-			return implicit_undef_set_[o_];
+			return implicit_undef_set_[o_ >> 50];
 		}
 
 	private:
