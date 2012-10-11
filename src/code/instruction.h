@@ -59,7 +59,7 @@ class Instruction {
 
 		inline FpReg get_fp_reg(size_t index) const {
 			assert(index < arity() && 
-					   (type(index) == FP_REG || type(index) == ST0));
+					   (type(index) == FP_REG || type(index) == ST0_ONLY));
 			return operands_[index];
 		}
 

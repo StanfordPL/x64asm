@@ -14,15 +14,15 @@ namespace x64 {
 // We have 64-bits worth of space for each opcode name.
 // That's enough room to fit the answers to most interesting queries.
 // This allows us to answer those queries using at most two arithmetic ops.
-#define DEF(idx, a, t1, t2, t3, w1, w2, w3, m1, m2, m3, r, j, uj, cj, mi) \
+#define DEF(idx, a, t1, t2, t3, w1, w2, w3, m1, m2, m3, r, j, uj, cj, mi, fr, nw) \
   ((Operand) idx << 50) | \
 	((Operand) a   << 48) | \
 	((Operand) t3  << 44) | ((Operand) t2 << 40) | ((Operand) t1 << 36) | \
 	((Operand) w3  << 32) | ((Operand) w2 << 28) | ((Operand) w1 << 24) | \
 	((Operand) m3  << 22) | ((Operand) m2 << 20) | ((Operand) m1 << 18) | \
 	((Operand) r   << 17) | \
-	((Operand) j   << 16) | ((Operand) uj << 15) | (cj << 14) | \
-	((Operand) mi  << 12)
+	((Operand) j   << 16) | ((Operand) uj << 15) | ((Operand) cj << 14) | \
+	((Operand) mi  << 12) | ((Operand) fr << 10) | ((Operand) nw << 8)
 
 /** Opcodes values.
 */	
@@ -128,13 +128,11 @@ class Opcode {
 		}
 
 		inline size_t first_read() const {
-			// TODO!
-			return 0;
+			return (o_ >> 10) & 0x3;
 		}
 
 		inline size_t num_writes() const {
-			// TODO!
-			return 0;
+			return (o_ >> 8) & 0x3;
 		}
 };
 

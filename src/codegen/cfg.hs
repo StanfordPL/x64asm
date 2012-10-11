@@ -36,7 +36,7 @@ opcode_enum is = "enum OpcodeVal {\n" ++
                             (t i)  ++ "," ++ (w  i) ++ "," ++ (m  i) ++ "," ++ 
                             (r i)  ++ "," ++ 
                             (j i)  ++ "," ++ (uj i) ++ "," ++ (cj i) ++ "," ++ 
-                            (mi i) ++ ")"
+                            (mi i) ++ "," ++ (fr i) ++ "," ++ (nw i) ++ ")"
           a  i = show $ arity i
           t  i = concat $ intersperse "," $ 
                  take 3 $ (map to_type (operand_types i)) ++ 
@@ -52,6 +52,8 @@ opcode_enum is = "enum OpcodeVal {\n" ++
           uj i = map toLower $ show $ uncond_jump i
           cj i = map toLower $ show $ cond_jump i
           mi i = show $ mem_index i
+          fr i = show $ first_read i
+          nw i = show $ num_writes i
 
           to_width "8"   = "LOW"
           to_width "16"  = "WORD"

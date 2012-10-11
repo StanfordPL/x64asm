@@ -11,6 +11,8 @@ module Instr
 	, jump
 	, ret
 	, mem_index
+	, first_read
+	, num_writes
 	) where
 
 import Data.Char
@@ -192,3 +194,19 @@ mem_index i = mi (operand_types i) 0
     where mi ("M":_) i = i
           mi (_:xs) i = mi xs (i+1)
           mi [] _ = 3
+
+-- What is the first operand that gets read?
+first_read :: Instr -> Int
+first_read i = fr (operand_mods i) 0
+    where fr ("R":_) i = i
+          fr ("X":_) i = i
+          fr (_:xs) i = fr xs (i+1)
+          fr [] _ = 3
+
+-- What is the first non-write operand?
+num_writes :: Instr -> Int
+num_writes i = nw (operand_mods i) 0
+    where nw ("R":_) i = i
+          nw ("N":_) i = i
+          nw (_:xs) i = nw xs (i+1)
+          nw [] _ = 3
