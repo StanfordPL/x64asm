@@ -115,7 +115,7 @@ cmpb :  : 3c :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  :
 cmpw :  : 3d :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
 cmpl :  : 3d :  :  :  32  EAX  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
 cmpq :  : 3d :  :  :  64  RAX  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpb :  : 80 :  : 00 :  8  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpb :  : 80 :  : 07 :  8  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
 cmpw :  : 81 :  : 07 :  16  RM  X   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
 cmpl :  : 81 :  : 07 :  32  RM  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
 cmpq :  : 81 :  : 07 :  64  RM  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
