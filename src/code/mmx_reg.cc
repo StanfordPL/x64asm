@@ -1,5 +1,7 @@
 #include "src/code/mmx_reg.h"
 
+using namespace std;
+
 namespace x64 {
 
 const MmxReg mm0 = 0;
@@ -11,5 +13,16 @@ const MmxReg mm5 = 5;
 const MmxReg mm6 = 6;
 const MmxReg mm7 = 7;
 const MmxReg mm_null = 8;
+
+const vector<MmxReg> MmxReg::domain_ {{
+	mm0,
+	mm1,
+	mm2,
+	mm3,
+	mm4,
+	mm5,
+	mm6,
+	mm7
+}};
 
 } // namespace x64

@@ -1,6 +1,8 @@
 #ifndef X64_SRC_CODE_MMX_REG_H
 #define X64_SRC_CODE_MMX_REG_H
 
+#include <vector>
+
 #include "src/code/operand.h"
 
 namespace x64 {
@@ -25,8 +27,20 @@ class MmxReg {
 			return m_ >= 8;	
 		}
 
+		typedef const std::vector<MmxReg>::const_iterator iterator;
+
+		static iterator begin() {
+			return domain_.begin();
+		}
+
+		static iterator end() {
+			return domain_.end();
+		}
+
 	private:
 		Operand m_;
+
+		static const std::vector<MmxReg> domain_;
 };
 
 extern const MmxReg mm0;

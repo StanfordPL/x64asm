@@ -1,6 +1,8 @@
 #ifndef X64_SRC_CODE_SCALE_H
 #define X64_SRC_CODE_SCALE_H 
 
+#include <vector>
+
 #include "src/code/operand.h"
 
 namespace x64 {
@@ -25,8 +27,20 @@ class Scale {
 			return s_ >= 4;
 		}
 
+		typedef const std::vector<Scale>::const_iterator iterator;
+
+		static iterator begin() {
+			return domain_.begin();
+		}
+
+		static iterator end() {
+			return domain_.end();
+		}
+
 	private:
 		Operand s_;
+
+		static const std::vector<Scale> domain_;
 };
 
 extern const Scale times_1;

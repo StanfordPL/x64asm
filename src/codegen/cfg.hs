@@ -5,7 +5,7 @@ import System.Environment
 
 -- Helper functions for writing carrays
 array :: String -> String -> [String] -> String
-array t name body = "vector<" ++ t ++ "> " ++ 
+array t name body = "const vector<" ++ t ++ "> " ++ 
                     name ++ "{{\n  " ++
                     (concat (intersperse "\n, " body)) ++
                     "\n}};\n"
@@ -83,6 +83,10 @@ opcode_enum is = "enum OpcodeVal {\n" ++
           to_mod "X" = "READ_WRITE"
           to_mod "N" = "NONE"
           to_mod _ = error "Unrecognized modifier!"
+
+-- Writes out the opcode domain
+opcode_domain :: [Instr] -> String
+opcode_domain = instr_array "Opcode" "Opcode::domain_" enum 
 
 -- Writes out type info for each instruction
 type_render :: Instr -> String
@@ -190,9 +194,10 @@ main = do args <- getArgs
           instrs_file <- readFile $ head args
           let instrs = parse_instrs instrs_file
 
-          writeFile  "opcode.enum"   $ opcode_enum     instrs
-          writeFile  "opcode.sigs"   $ signatures      instrs
-          writeFile  "opcode.char"   $ opcodes         instrs
+          writeFile  "opcode.enum"   $ opcode_enum   instrs
+          writeFile  "opcode.sigs"   $ signatures    instrs
+          writeFile  "opcode.char"   $ opcodes       instrs
+          writeFile  "opcode.domain" $ opcode_domain instrs
 
           writeFile  "opcode.implicit" $ reg_mask2 "implicit_read_set_"  
 					           implicit_reads cond_read instrs

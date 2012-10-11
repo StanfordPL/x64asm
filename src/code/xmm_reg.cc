@@ -1,5 +1,7 @@
 #include "src/code/xmm_reg.h"
 
+using namespace std;
+
 namespace x64 {
 
 const XmmReg xmm0 = 0;
@@ -19,5 +21,24 @@ const XmmReg xmm13 = 13;
 const XmmReg xmm14 = 14;
 const XmmReg xmm15 = 15;
 const XmmReg xmm_null = 16;
+
+const vector<XmmReg> XmmReg::domain_ {{
+	xmm0,
+	xmm1,
+	xmm2,
+	xmm3,
+	xmm4,
+	xmm5,
+	xmm6,
+	xmm7,
+	xmm8,
+	xmm9,
+	xmm10,
+	xmm11,
+	xmm12,
+	xmm13,
+	xmm14,
+	xmm15
+}};
 
 } // namespace x64
