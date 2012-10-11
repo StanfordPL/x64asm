@@ -40,31 +40,16 @@ Operand to_imm(const char* c, bool from_decimal) {
 	return o;
 }
 
-Operand to_imm_truncate(const char* c, bool from_decimal) {
+BitWidth to_imm_width(const char* c, bool from_decimal) {
 	auto o = to_imm(c, from_decimal);
 
-	// This removes sign extension (I think).
-	// It should give us the invariant that we use exactly BitWidth bits.
-	if ( ((o >> 8) == 0) || (((o >> 8) ^ 0xffffffffffffff) == 0) )
-		o &= 0x00000000000000ff;
-	else if ( ((o >> 16) == 0) || (((o >> 16) ^ 0xffffffffffff) == 0) )
-		o &= 0x000000000000ffff;
-	else if ( ((o >> 32) == 0) || (((o >> 32) ^ 0xffffffff) == 0) )
-		o &= 0x00000000ffffffff;
-	
-	return o;
-}
-
-BitWidth to_imm_width(const char* c, bool from_decimal) {
-	auto imm = to_imm_truncate(c, from_decimal);
-
-	if ( imm <= 0x00000000000000ff )
+	if ( ((o >> 8) == 0) || (((o >> 7) ^ 0x1ffffffffffffff) == 0) )
 		return LOW;
-	if ( imm <= 0x000000000000ffff )
+	else if ( ((o >> 16) == 0) || (((o >> 15) ^ 0x1ffffffffffff) == 0) )
 		return WORD;
-	if ( imm <= 0x00000000ffffffff ) 
+	else if ( ((o >> 32) == 0) || (((o >> 31) ^ 0x1ffffffff) == 0) )
 		return DOUBLE;
-
+	
 	return QUAD;
 }
 
@@ -184,8 +169,8 @@ Operand to_label(const char* c) {
 "-"?"0x"[0-9a-f]+ { OPERAND(to_imm(yytext, false), OFFSET, QUAD); return ATT_OFFSET; }
 "-"?[0-9]+        { OPERAND(to_imm(yytext, true),  OFFSET, QUAD); return ATT_OFFSET; }
 
-"$""-"?"0x"[0-9a-f]+ { OPERAND(to_imm_truncate(yytext+1, false), IMM, to_imm_width(yytext+1, false)); return ATT_IMM; }
-"$""-"?[0-9]+        { OPERAND(to_imm_truncate(yytext+1, true),  IMM, to_imm_width(yytext+1, true));  return ATT_IMM; }
+"$""-"?"0x"[0-9a-f]+ { OPERAND(to_imm(yytext+1, false), IMM, to_imm_width(yytext+1, false)); return ATT_IMM; }
+"$""-"?[0-9]+        { OPERAND(to_imm(yytext+1, true),  IMM, to_imm_width(yytext+1, true));  return ATT_IMM; }
 
 "."[a-zA-Z][0-9a-zA-Z_]* { OPERAND(to_label(yytext+1), LABEL, FIXED); return ATT_LABEL; }
 
