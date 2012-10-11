@@ -66,8 +66,7 @@ RegSet Instruction::explicit_read_set() const {
 
 RegSet Instruction::explicit_write_set() const {
 	RegSet rs;
-	for ( size_t i = 0, ie = opcode_.num_writes(); i < ie; ++i ) {
-		const auto t = type(i);
+	for ( size_t i = 0, ie = opcode_.num_writes(); i < ie; ++i )
 		switch ( type(i) ) {
 			case GP_REG:
 			case RAX_ONLY:
@@ -85,7 +84,6 @@ RegSet Instruction::explicit_write_set() const {
 			default:
 				assert(false);
 		}
-	}
 
 	return rs;
 }
