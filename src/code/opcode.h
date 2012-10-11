@@ -14,14 +14,15 @@ namespace x64 {
 // We have 64-bits worth of space for each opcode name.
 // That's enough room to fit the answers to most interesting queries.
 // This allows us to answer those queries using at most two arithmetic ops.
-#define DEF(idx, a, t1, t2, t3, w1, w2, w3, m1, m2, m3, r, j, uj, cj) \
+#define DEF(idx, a, t1, t2, t3, w1, w2, w3, m1, m2, m3, r, j, uj, cj, mi) \
   ((Operand) idx << 50) | \
 	((Operand) a   << 48) | \
 	((Operand) t3  << 44) | ((Operand) t2 << 40) | ((Operand) t1 << 36) | \
 	((Operand) w3  << 32) | ((Operand) w2 << 28) | ((Operand) w1 << 24) | \
 	((Operand) m3  << 22) | ((Operand) m2 << 20) | ((Operand) m1 << 18) | \
 	((Operand) r   << 17) | \
-	((Operand) j   << 16) | ((Operand) uj << 15) | (cj << 14)
+	((Operand) j   << 16) | ((Operand) uj << 15) | (cj << 14) | \
+	((Operand) mi  << 12)
 
 /** Opcodes values.
 */	
@@ -32,6 +33,8 @@ namespace x64 {
 /** An extended opcode representation that makes argument types explicit.
 */
 class Opcode {
+	friend class Instruction;
+
 	public:
 		inline Opcode() 
 				: o_(NOP) { 
@@ -89,6 +92,15 @@ class Opcode {
 			return o_ & ((Operand) 0x1 << 14);
 		}
 
+    inline bool touches_mem() const {
+			return mem_index() != 3;
+		}
+
+		inline Modifier mem_mod() const {
+			assert(touches_mem());
+			return mod(mem_index());
+		}
+
 		inline RegSet implicit_read_set() const {
 			assert(o_ < implicit_read_set_.size());
 			return implicit_read_set_[o_];
@@ -110,6 +122,20 @@ class Opcode {
 		static std::vector<RegSet> implicit_read_set_;
 		static std::vector<RegSet> implicit_write_set_;
 		static std::vector<RegSet> implicit_undef_set_;
+
+		inline size_t mem_index() const {
+			return (o_ >> 12) & 0x3;
+		}
+
+		inline size_t first_read() const {
+			// TODO!
+			return 0;
+		}
+
+		inline size_t num_writes() const {
+			// TODO!
+			return 0;
+		}
 };
 
 } // namespace x64

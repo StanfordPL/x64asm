@@ -32,8 +32,11 @@ opcode_enum is = "enum OpcodeVal {\n" ++
                  "\n, OPCODE_VAL_NULL" ++
                  "\n};"
     where enum' (i,idx) = (enum i) ++ " = DEF(" ++ (show idx) ++ "," ++
-                            (a i) ++ "," ++ (t i) ++ "," ++ (w  i) ++ "," ++ (m  i) ++ "," ++ 
-                            (r i) ++ "," ++ (j i) ++ "," ++ (uj i) ++ "," ++ (cj i) ++ ")"
+                            (a i)  ++ "," ++ 
+                            (t i)  ++ "," ++ (w  i) ++ "," ++ (m  i) ++ "," ++ 
+                            (r i)  ++ "," ++ 
+                            (j i)  ++ "," ++ (uj i) ++ "," ++ (cj i) ++ "," ++ 
+                            (mi i) ++ ")"
           a  i = show $ arity i
           t  i = concat $ intersperse "," $ 
                  take 3 $ (map to_type (operand_types i)) ++ 
@@ -48,6 +51,7 @@ opcode_enum is = "enum OpcodeVal {\n" ++
           j  i = map toLower $ show $ jump i
           uj i = map toLower $ show $ uncond_jump i
           cj i = map toLower $ show $ cond_jump i
+          mi i = show $ mem_index i
 
           to_width "8"   = "LOW"
           to_width "16"  = "WORD"

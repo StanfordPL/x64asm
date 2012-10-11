@@ -133,6 +133,38 @@ class Instruction {
 			return opcode_.is_jump();
 		}
 
+		inline bool touches_mem() const {
+			return opcode_.touches_mem();
+		}
+
+		inline Modifier mem_mod() const {
+			return opcode_.mem_mod();
+		}
+
+		inline bool touches_stack() const {
+			const auto mi = opcode_.mem_index();
+			if ( mi == 3 )
+				return false;
+			return get_addr(mi).is_stack();
+		}
+
+		inline Modifier stack_mod() const {
+			assert(touches_stack());
+			return mod(opcode_.mem_index());
+		}
+
+		inline bool touches_heap() const {
+			const auto mi = opcode_.mem_index();
+			if ( mi == 3 )
+				return false;
+			return get_addr(mi).is_heap();
+		}
+
+		inline Modifier heap_mod() const {
+			assert(touches_heap());
+			return mod(opcode_.mem_index());
+		}
+
 		inline RegSet implicit_read_set() const {
 			return opcode_.implicit_read_set();
 		}
@@ -159,39 +191,6 @@ class Instruction {
 
 		inline RegSet undef_set() const {
 			return implicit_undef_set();
-		}
-
-		// Higher order attributes
-		inline bool acceses_stack() const {
-			/*
-			const auto mo = 0;// TODO -- FIX opcode_.mem_offset();
-			if ( mo == 16 )
-				return false;
-
-			const auto addr = get_addr(mo);
-			const auto b = addr.get_base();
-			const auto i = addr.get_index();
-			const auto d = addr.get_disp();
-
-			return b == rsp && i.is_null() && (int64_t) d <= 0;
-			*/
-			return true;
-		}
-
-		inline bool accesses_heap() const { 
-			/*
-			const auto mo = 0; // TODO --- FIX opcode_.mem_offset();
-			if ( mo == 16 )
-				return false;
-
-			const auto addr = get_addr(mo);
-			const auto b = addr.get_base();
-			const auto i = addr.get_index();
-			const auto d = addr.get_disp();
-
-			return b != rsp || !i.is_null() || (int64_t) d > 0;
-			*/
-			return true;
 		}
 
 	private:

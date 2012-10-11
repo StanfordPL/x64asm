@@ -10,6 +10,7 @@ module Instr
 	, uncond_jump
 	, jump
 	, ret
+	, mem_index
 	) where
 
 import Data.Char
@@ -185,22 +186,9 @@ ret i = r $ att i
     where r "retq" = True
           r _ = False
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- What index does memory appear at?
+mem_index :: Instr -> Int
+mem_index i = mi (operand_types i) 0
+    where mi ("M":_) i = i
+          mi (_:xs) i = mi xs (i+1)
+          mi [] _ = 3

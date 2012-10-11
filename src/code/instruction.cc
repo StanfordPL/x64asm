@@ -33,10 +33,8 @@ bool Instruction::is_null() const {
 }
 
 RegSet Instruction::explicit_read_set() const {
-	// TODO ~!
 	RegSet rs;
-	/*
-	for ( size_t i = 0read_offset(), ie = arity(); i < ie; ++i )
+	for ( size_t i = opcode_.first_read(), ie = arity(); i < ie; ++i )
 		switch ( type(i) ) {
 			case RAX_ONLY:
 			case RCX_ONLY:
@@ -50,40 +48,38 @@ RegSet Instruction::explicit_read_set() const {
 				rs.set_xmm(get_xmm_reg(i)); 
 				break;						 
 			case ADDR: { 
-					const auto w = width(i);
 					const auto a = get_addr(i); 
+					const auto w = a.get_reg_width();
 					const auto b = a.get_base();
-					const auto in = a.get_index();
+					const auto idx = a.get_index();
 					if ( !b.is_null() )
 						rs.set_gp(b, w);
-					if ( !in.is_null() )
-						rs.set_gp(in, w);
+					if ( !idx.is_null() )
+						rs.set_gp(idx, w);
 				}
 			default: 
 				break;
 		}
-		*/
+
 	return rs;
 }
 
 RegSet Instruction::explicit_write_set() const {
 	RegSet rs;
-	/*
-	if ( writes_reg() ) {
-		const auto t = type(0);
+	for ( size_t i = 0, ie = opcode_.num_writes(); i < ie; ++i ) {
+		const auto t = type(i);
 		if ( t == GP_REG ) {
-			// Implicit zero extension
-			const auto gp = get_gp_reg(0);
-			const auto w = width(0);
+			const auto gp = get_gp_reg(i);
+			const auto w = width(i);
 			assert(!gp.is_null());
 			rs.set_gp(gp, w == DOUBLE ? QUAD : w);
 		}
 		else {
 			assert(t == XMM_REG);
-			rs.set_xmm(get_xmm_reg(0));
+			rs.set_xmm(get_xmm_reg(i));
 		}
 	}
-	*/
+
 	return rs;
 }
 

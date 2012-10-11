@@ -89,6 +89,18 @@ class Addr {
 			return (a_ >> 48) & 0x1;
 		}
 
+		inline BitWidth get_reg_width() const {
+			return get_size_or() ? DOUBLE : QUAD;
+		}
+
+		inline bool is_stack() const {
+			return get_base() == rsp && get_index().is_null();
+		}
+
+		inline bool is_heap() const {
+			return !is_stack();
+		}
+
 	private:
 		Operand a_;
 };
