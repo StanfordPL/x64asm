@@ -313,7 +313,7 @@ operand : ATT_FP_REG | ATT_GP_REG | ATT_IMM | ATT_LABEL | ATT_MMX_REG |
         ;
 
 mem : OPEN ATT_GP_REG CLOSE { 
-				$$ = new OperandInfo(Addr(GpReg($2->val)), 
+				$$ = new OperandInfo(Addr(GpReg($2->val), $2->width == DOUBLE), 
 						ADDR, 
 						$2->width); 
 				delete $2; 
@@ -322,7 +322,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 			if ( !is_valid_disp($1->val) )
 				is.setstate(std::ios::failbit);
 
-			$$ = new OperandInfo(Addr(GpReg($3->val), Imm($1->val)), 
+			$$ = new OperandInfo(Addr(GpReg($3->val), Imm($1->val), $3->width == DOUBLE), 
 					ADDR, 
 					$3->width); 
 			delete $1; 
@@ -330,7 +330,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 		} 
     | OPEN ATT_GP_REG COMMA ATT_GP_REG CLOSE { 
 			$$ = new OperandInfo(
-					Addr(GpReg($2->val), GpReg($4->val)), 
+					Addr(GpReg($2->val), GpReg($4->val), $2->width == DOUBLE), 
 					ADDR, 
 					$2->width); 
 			delete $2; 
@@ -338,7 +338,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 		}
     | OPEN ATT_GP_REG COMMA ATT_GP_REG COMMA ATT_SCALE CLOSE { 
 			$$ = new OperandInfo(
-					Addr(GpReg($2->val), GpReg($4->val), Scale($6->val)), 
+					Addr(GpReg($2->val), GpReg($4->val), Scale($6->val), $2->width == DOUBLE), 
 					ADDR, 
 					$2->width); 
 			delete $2; 
@@ -350,7 +350,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 				is.setstate(std::ios::failbit);
 
 			$$ = new OperandInfo(
-					Addr(GpReg($3->val), GpReg($5->val), Imm($1->val)), 
+					Addr(GpReg($3->val), GpReg($5->val), Imm($1->val), $3->width == DOUBLE), 
 					ADDR, 
 					$3->width); 
 			delete $1;
@@ -362,7 +362,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 				is.setstate(std::ios::failbit);
 
 			$$ = new OperandInfo(
-					Addr(GpReg($3->val), GpReg($5->val), Scale($7->val), Imm($1->val)), 
+					Addr(GpReg($3->val), GpReg($5->val), Scale($7->val), Imm($1->val), $3->width == DOUBLE), 
 					ADDR, 
 					$3->width); 
 			delete $1; 

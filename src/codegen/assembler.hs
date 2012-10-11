@@ -39,15 +39,16 @@ assm_decl is = concat $ map render $ tail is
 assm_defn :: [Instr] -> String
 assm_defn is = concat $ map render $ tail is
     where render i = "void Assembler::" ++ (assm_fxn i) ++ "(" ++ (assm_args i) ++ "){\n" ++ (body i) ++ "}\n"		
-          body i = (pref i) ++ (rex_pref i) ++ (opc i) ++ (mod_rm i) ++ (disp i) ++ (immed i)
+          body i = (mem_pref i) ++ (pref i) ++ (rex_pref i) ++ (opc i) ++ (mod_rm i) ++ (disp i) ++ (immed i)
+
+          mem_pref i = case mem_index i of
+                       3 -> "\t// NO MEM PREFIX\n"
+                       i -> "\temit_mem_prefix(buf_,pos_,arg" ++ (show i) ++ ");\n"
 
           pref i = case prefix i of
-                     (x:[])     -> "\temit(buf_,pos_,0x" ++ x ++ ");\n"
-                     (x:y:[])   -> "\temit(buf_,pos_,0x" ++ x ++ ");\n" ++
-                                   "\temit(buf_,pos_,0x" ++ y ++ ");\n"
-                     (x:y:z:[]) -> "\temit(buf_,pos_,0x" ++ x ++ ");\n" ++
-                                   "\temit(buf_,pos_,0x" ++ y ++ ");\n" ++
-                                   "\temit(buf_,pos_,0x" ++ z ++ ");\n"
+                     (x:[])     -> "\temit_prefix(buf_,pos_,0x" ++ x ++ ");\n"
+                     (x:y:[])   -> "\temit_prefix(buf_,pos_,0x" ++ x ++ ",0x" ++ y ++ ");\n"
+                     (x:y:z:[]) -> "\temit_prefix(buf_,pos_,0x" ++ x ++ ",0x" ++ y ++ ",0x" ++ z ++ ");\n"
                      _ -> "\t// NO PREFIX\n"
 
           rex_pref i = "\temit_rex(" ++ (rex_pref_args i) ++ (rex_def (rex i)) ++ ");\n"
