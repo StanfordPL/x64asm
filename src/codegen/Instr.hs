@@ -78,7 +78,10 @@ add_rexw_prefix (Instr a p _ o rc rf rm rmo os ir iw cr cw cu) =
                         "faddl" -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
                         _ -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
     ("64":"O":_)   -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
-    ("64":"RM":_)  -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
+    ("64":"RM":_)  -> case a of 
+                        "pushq" -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
+                        "popq"  -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
+                        _ -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
     ("64":"R":_)   -> case a of 
                         "pushq" -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
                         "popq"  -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
