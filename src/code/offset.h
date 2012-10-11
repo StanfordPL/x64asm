@@ -21,6 +21,10 @@ class Offset {
 			return o_;
 		}
 
+		inline bool is_null() const {
+			return false;
+		}
+
 	private:
 		Operand o_;
 };

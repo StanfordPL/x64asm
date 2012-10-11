@@ -4,9 +4,9 @@ using namespace std;
 
 namespace x64 {
 
-vector<GpReg> RegSet::gp_regs_;
-vector<XmmReg> RegSet::xmm_regs_;
-vector<CondReg> RegSet::cond_regs_;
+list<GpReg> RegSet::gp_regs_;
+list<XmmReg> RegSet::xmm_regs_;
+list<CondReg> RegSet::cond_regs_;
 
 BitWidth RegSet::get_widest_set(GpReg r) const {
 	if ( is_set_gp(r, QUAD) )

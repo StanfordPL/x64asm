@@ -25,10 +25,6 @@ class SegReg {
 			return s_ >= 6;
 		}
 
-		inline bool is_valid() const {
-			return s_ <= 6;
-		}
-
 	private:
 		Operand s_;
 };

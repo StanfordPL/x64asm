@@ -1,5 +1,6 @@
 %{
 
+#include <array>
 #include <map>
 #include <string>
 #include <tuple>
@@ -130,13 +131,13 @@ Instruction* build_instr(istream& is, const string& opcode,
 	cerr << endl;
 
 	if ( itr == signatures_.end() ) {
-		instr->set_all(NOP, ops.begin(), ops.end());
+		*instr = Instruction(NOP, ops.begin(), ops.end());
 		is.setstate(std::ios::failbit);
 	}
 	else {
  		for ( const auto& i : operand_info )
 			ops.push_back(i.val);
-		instr->set_all(itr->second, ops.begin(), ops.end());
+		*instr = Instruction(itr->second, ops.begin(), ops.end());
 	}
 
 	return instr;
@@ -146,7 +147,7 @@ Instruction* build_label(const OperandInfo& label) {
 	Instruction* instr = new Instruction();
 
 	vector<Operand> ops {{ label.val }};
-	instr->set_all(LABEL_DEFN_64L, ops.begin(), ops.end());
+	*instr = Instruction(LABEL_DEFN_64L, ops.begin(), ops.end());
 
 	return instr;
 }
