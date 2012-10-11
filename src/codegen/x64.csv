@@ -150,8 +150,8 @@ faddl :  : dc :  : 00 :  64  M  R    : ST0 : ST0 :  :  :
 fadd :  :  d8  c0  : y :  :  64  ST0  X   64  F  R   :  :  :  :  : 
 fadd :  :  dc  c0  : y :  :  64  F  X   64  ST0  R   :  :  :  :  : 
 faddp :  :  de  c0  : y :  :  64  F  X   64  ST0  R   : TOP : TOP :  :  : 
-fiadds :  : da :  : 00 :  32  M  R    : ST0 : ST0 :  :  : 
-fiaddl :  : de :  : 00 :  16  M  R    : ST0 : ST0 :  :  : 
+fiaddl :  : da :  : 00 :  32  M  R    : ST0 : ST0 :  :  : 
+fiadds :  : de :  : 00 :  16  M  R    : ST0 : ST0 :  :  : 
                       
 hlt :  : f4 :  :  :    :  :  :  :  : 
                       
