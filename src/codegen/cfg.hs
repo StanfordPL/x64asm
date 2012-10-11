@@ -98,16 +98,20 @@ widths = instr_array "array<BitWidth, 3>" "Opcode::width_" width_render
 
 -- Writes out opcode signatures (this is gross)
 signatures :: [Instr] -> String
-signatures is = "map<tuple<string, array<Type, 3>, array<BitWidth, 3>>, Opcode> " ++
+signatures is = "map<string, vector<tuple< array<Type,3>, array<BitWidth,3>, OpcodeVal>>> " ++
                 "signatures_\n{ " ++ body ++ "\n};\n"
-    where body     = (concat (intersperse "\n, " (map render is)))
-          render i = "{ " ++ 
-                     "tuple<string, array<Type, 3>, array<BitWidth, 3>>(\"" ++ 
-                     (att i) ++ "\", " ++ 
-                     (type_render i) ++ ", " ++ 
-                     (width_render i) ++ "), " ++ 
-					           (enum i) ++ 
-                     "}"
+    where body     = (concat (intersperse "\n, " (map render classes)))
+          render c = "{ \"" ++ c ++ "\", " ++
+                     "vector<tuple<array<Type,3>,array<BitWidth,3>,OpcodeVal>>{\n" ++
+                     (concat (intersperse "\n, " (map render' (instrs c)))) ++
+                     "}}"
+
+          instrs c = filter (\i -> att i == c) is
+          render' i = "    tuple<array<Type,3>, array<BitWidth,3>,OpcodeVal>{\n" ++
+                      (type_render i) ++ ", " ++
+                      (width_render i) ++ ", " ++
+                      (enum i) ++ "}"
+          classes = nub $ map att is
 
 -- Writes out the location of the first memory operand
 write_mem_offset :: [Instr] -> String
