@@ -52,8 +52,36 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
 #include "src/gen/opcode.sigs"
 
+
+    BitWidth imm_width(Operand o) {
+
+        if ( ((o >> 8) == 0) || (((o >> 7) ^ 0x1ffffffffffffff) == 0) )
+            return LOW;
+        else if ( ((o >> 16) == 0) || (((o >> 15) ^ 0x1ffffffffffff) == 0) )
+            return WORD;
+        else if ( ((o >> 32) == 0) || (((o >> 31) ^ 0x1ffffffff) == 0) )
+            return DOUBLE;
+        
+        return QUAD;
+    }
+
+
     Operand truncate_immediate(Operand o, BitWidth bw) {
 
+        // This removes sign extension (I think).
+        // It should give us the invariant that we use exactly BitWidth bits.
+        if ( bw == LOW )
+            o &= 0x00000000000000ff;
+        else if ( bw == WORD)
+            o &= 0x000000000000ffff;
+        else if ( bw == DOUBLE)
+            o &= 0x00000000ffffffff;
+        return o;
+    }
+
+    Operand truncate_immediate(Operand o) {
+        BitWidth bw = imm_width(o);
+        
         // This removes sign extension (I think).
         // It should give us the invariant that we use exactly BitWidth bits.
         if ( bw == LOW )
@@ -132,7 +160,7 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
         //in options, we'll get only the ones with the right arguments
 
         //when we loop through options, we'll use these to figure out the right one to pick.
-        BitWidth min_immediate_size  = (BitWidth)65535;
+        BitWidth min_immediate_size  = OCT;
         int min_immediate_index = -1;
         int index = 0;
 
@@ -142,17 +170,27 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
                 //ensure that the argument types match
                 if(get<1>(key)[i] != get<0>(sig)[i]) {
-                    accept = false;
 
+                    accept = false;
+                    break;
+
+                } else {
                     if(get<1>(key)[i] == IMM) {
                         //for immediates, check that we can fit the value correctly
-                        if(get<2>(key)[i] < get<1>(sig)[i])
+                        //we want value in key to be less than or equal to a valid signature
+                        if( ! (get<2>(key)[i] <= get<1>(sig)[i]) ) {
                             accept=false;
+                            break;
+                        }
 
                     } else {
                         //otherwise, make sure widths match
-                        if(get<2>(key)[i] != get<1>(sig)[i])
+                        //but ignore the width for memory.
+                        if( get<1>(key)[i] != ADDR &&
+                            get<2>(key)[i] != get<1>(sig)[i]) {
                             accept = false;
+                            break;
+                        }
                     }
                 }
             }
@@ -161,13 +199,20 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
                 for(int i = 0;i<3;i++)
                     if(get<0>(sig)[i] == IMM) {
                         if(get<1>(sig)[i] < min_immediate_size) {
+                            //cout << "signature size: " << get<1>(sig)[i] << "\n";
+                            //cout << "min imm size: " << min_immediate_size << "\n";
+                            //cout << "key imm size: " << get<2>(key)[i] << "\n";
                             min_immediate_size = get<1>(sig)[i];
                             min_immediate_index = index;
 
                             //now truncate the immediate, and update the width
+                            assert(min_immediate_size >= get<2>(key)[i]);
                             operand_info[i].width = min_immediate_size;
+                            //cout << min_immediate_size << endl;
+                            //cout << operand_info[i].val << "\n";
                             operand_info[i].val = truncate_immediate(operand_info[i].val, 
                                                                         min_immediate_size);
+                            //cout << operand_info[i].val << "\n";
                         }
                     }
 
@@ -198,7 +243,7 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
             cerr << hex << i.val << " ";
         cerr << "] ---> ";
         if ( parse_success )
-            cerr << dec << parsed_opcode;
+            cerr << dec << (parsed_opcode >> 50);
         else
             cerr << "???";
         cerr << endl;
@@ -360,7 +405,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 			if ( !is_valid_disp($1->val) )
 				is.setstate(std::ios::failbit);
 
-			$$ = new OperandInfo(Addr(GpReg($3->val), Imm($1->val), $3->width == DOUBLE), 
+			$$ = new OperandInfo(Addr(GpReg($3->val), Imm(truncate_immediate($1->val)), $3->width == DOUBLE), 
 					ADDR, 
 					$3->width); 
 			delete $1; 
@@ -388,7 +433,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 				is.setstate(std::ios::failbit);
 
 			$$ = new OperandInfo(
-					Addr(GpReg($3->val), GpReg($5->val), Imm($1->val), $3->width == DOUBLE), 
+					Addr(GpReg($3->val), GpReg($5->val), Imm(truncate_immediate($1->val)), $3->width == DOUBLE), 
 					ADDR, 
 					$3->width); 
 			delete $1;
@@ -400,7 +445,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 				is.setstate(std::ios::failbit);
 
 			$$ = new OperandInfo(
-					Addr(GpReg($3->val), GpReg($5->val), Scale($7->val), Imm($1->val), $3->width == DOUBLE), 
+					Addr(GpReg($3->val), GpReg($5->val), Scale($7->val), Imm(truncate_immediate($1->val)), $3->width == DOUBLE), 
 					ADDR, 
 					$3->width); 
 			delete $1; 
