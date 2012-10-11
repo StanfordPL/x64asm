@@ -40,9 +40,6 @@ Operand to_imm(const char* c, bool from_decimal) {
 	return o;
 }
 
-
-
-
 BitWidth to_imm_width(const char* c, bool from_decimal) {
     auto o = to_imm(c, from_decimal);
 
@@ -202,13 +199,16 @@ Operand to_label(const char* c) {
 "8"/")" { OPERAND(times_8, SCALE, FIXED); return ATT_SCALE; }
 
 
-"-"?"0x"[0-9a-f]+ { OPERAND(to_imm(yytext, false), OFFSET, QUAD); return ATT_OFFSET; }
-"-"?[0-9]+        { OPERAND(to_imm(yytext, true),  OFFSET, QUAD); return ATT_OFFSET; }
+"-""0x"[0-9a-f]+ { OPERAND(-to_imm(yytext+1, false), OFFSET, QUAD); return ATT_OFFSET; }
+"-"[0-9]+        { OPERAND(-to_imm(yytext+1, true),  OFFSET, QUAD); return ATT_OFFSET; }
+"0x"[0-9a-f]+    { OPERAND(to_imm(yytext, false),  OFFSET, QUAD); return ATT_OFFSET; }
+[0-9]+           { OPERAND(to_imm(yytext, true),   OFFSET, QUAD); return ATT_OFFSET; }
+
 
 "$-0x"[0-9a-f]+ { OPERAND(-to_imm(yytext+2, false), IMM, to_imm_width(yytext+1, false)); return ATT_IMM; }
-"$0x"[0-9a-f]+ { OPERAND(to_imm(yytext+1, false), IMM, to_imm_width(yytext+1, false)); return ATT_IMM; }
-"$-"[0-9]+     { OPERAND(-to_imm(yytext+2, true),  IMM, to_imm_width(yytext+1, true));  return ATT_IMM; }
-"$"[0-9]+      { OPERAND(to_imm(yytext+1, true),  IMM, to_imm_width(yytext+1, true));  return ATT_IMM; }
+"$-"[0-9]+      { OPERAND(-to_imm(yytext+2, true),  IMM, to_imm_width(yytext+1, true));  return ATT_IMM; }
+"$0x"[0-9a-f]+  { OPERAND(to_imm(yytext+1, false),  IMM, to_imm_width(yytext+1, false)); return ATT_IMM; }
+"$"[0-9]+       { OPERAND(to_imm(yytext+1, true),   IMM, to_imm_width(yytext+1, true));  return ATT_IMM; }
 
 "."[a-zA-Z][0-9a-zA-Z_]* { OPERAND(to_label(yytext+1), LABEL, FIXED); return ATT_LABEL; }
 

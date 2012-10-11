@@ -153,21 +153,6 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
         return o;
     }
 
-    Operand truncate_immediate(Operand o) {
-        BitWidth bw = imm_width(o);
-        
-        // This removes sign extension (I think).
-        // It should give us the invariant that we use exactly BitWidth bits.
-        if ( bw == LOW )
-            o &= 0x00000000000000ff;
-        else if ( bw == WORD)
-            o &= 0x000000000000ffff;
-        else if ( bw == DOUBLE)
-            o &= 0x00000000ffffffff;
-        return o;
-    }
-
-
     Instruction* build_instr(istream& is, const string& opcode, 
             vector<OperandInfo>& operand_info) {
         Instruction* instr = new Instruction();
@@ -480,11 +465,12 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
         return instr;
     }
 
-    bool is_valid_disp(Operand d) {
-        const auto top = (d & 0xffffffff00000000) >> 32;
-        return (top == 0) || (top == 0xffffffff);
-    }
+		// Memory Displacement Methods:
 
+		// Does this value fit into 32 bits?
+    inline bool is_valid_disp(Operand d) {
+			return (int64_t) d == (int32_t) d;
+    }
 }
 
 %union {
@@ -596,7 +582,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 			if ( !is_valid_disp($1->val) )
 				is.setstate(std::ios::failbit);
 
-			$$ = new OperandInfo(Addr(GpReg($3->val), Imm(truncate_immediate($1->val)), $3->width == DOUBLE), 
+			$$ = new OperandInfo(Addr(GpReg($3->val), Imm($1->val), $3->width == DOUBLE), 
 					ADDR, 
 					$3->width); 
 			delete $1; 
@@ -624,7 +610,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 				is.setstate(std::ios::failbit);
 
 			$$ = new OperandInfo(
-					Addr(GpReg($3->val), GpReg($5->val), Imm(truncate_immediate($1->val)), $3->width == DOUBLE), 
+					Addr(GpReg($3->val), GpReg($5->val), Imm($1->val), $3->width == DOUBLE), 
 					ADDR, 
 					$3->width); 
 			delete $1;
@@ -636,7 +622,7 @@ mem : OPEN ATT_GP_REG CLOSE {
 				is.setstate(std::ios::failbit);
 
 			$$ = new OperandInfo(
-					Addr(GpReg($3->val), GpReg($5->val), Scale($7->val), Imm(truncate_immediate($1->val)), $3->width == DOUBLE), 
+					Addr(GpReg($3->val), GpReg($5->val), Scale($7->val), Imm($1->val), $3->width == DOUBLE), 
 					ADDR, 
 					$3->width); 
 			delete $1; 

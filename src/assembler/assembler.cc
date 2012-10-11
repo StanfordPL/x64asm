@@ -202,7 +202,8 @@ inline void emit_mod_rm(unsigned char* buf, size_t& pos, Operand rm,
 inline void emit_mod_rm(unsigned char* buf, size_t& pos, Addr rm, Operand r) {
 	auto base  = rm.get_base() & 0x7;
 	auto index = rm.get_index();
-	const auto disp  = rm.get_disp();
+	const auto disp  = (int32_t) rm.get_disp();
+	const auto disp8 = disp < 128 && disp >= -128;
 
 	// Step 1: Emit the MOD R/M byte.
 	if ( disp == 0 ) {
@@ -213,7 +214,7 @@ inline void emit_mod_rm(unsigned char* buf, size_t& pos, Addr rm, Operand r) {
 		else
 			emit(buf, pos, mod_rm_00_[index.is_null() ? base : 0x4][r & 0x7]);
 	}
-	else if ( disp <= 0xff )
+	else if ( disp8 )
 		emit(buf, pos, mod_rm_01_[index.is_null() ? base : 0x4][r & 0x7]);
 	else
 		emit(buf, pos, mod_rm_10_[index.is_null() ? base : 0x4][r & 0x7]);
@@ -237,7 +238,7 @@ inline void emit_mod_rm(unsigned char* buf, size_t& pos, Addr rm, Operand r) {
 		if ( base == 0x5 )
 			emit(buf, pos, 0x0);
 	}
-	else if ( disp <= 0xff )
+	else if ( disp8 )
 		emit_byte(buf, pos, disp);
 	else
 		emit_double(buf, pos, disp);
