@@ -1,7 +1,5 @@
 #include "src/code/writer.h"
 
-#include <cassert>
-
 using namespace std;
 
 namespace {
@@ -62,7 +60,7 @@ void Writer::write_att(ostream& os, FpReg fp) const {
 		case 7: os << "%st(7)"; break;
 
 		default:
-			assert(false);
+			os << "<null>";
 	}
 }
 
@@ -110,7 +108,7 @@ void Writer::write_att(ostream& os, GpReg gp, BitWidth w) const {
 		#undef OTH
 
 		default:
-			assert(false);
+			os << "<null>";
 	}
 }
 
@@ -123,7 +121,7 @@ void Writer::write_att(ostream& os, Imm i, BitWidth w) const {
 		case QUAD:   os << i; break;
 
 		default:		 
-			assert(false);
+			os << "<null>";
 	}
 }
 
@@ -163,7 +161,7 @@ void Writer::write_att(ostream& os, const Instruction& instr) const {
 										 break;
 
 			default:      
-				assert(false);							 
+			os << "<null>";
 		}
 	}
 }
@@ -188,14 +186,14 @@ void Writer::write_att(ostream& os, MmxReg mm) const {
 		case 7: os << "%mm7"; break;
 
 		default:
-			assert(false);
+			os << "<null>";
 	}	
 }
 
 void Writer::write_att(ostream& os, Opcode o) const {
 	assert(!o.is_label_defn());
 	assert(!o.is_null());
-	os << opcodes_[o];
+	os << opcodes_[o >> 50];
 }
 
 void Writer::write_att(ostream& os, Scale s) const {
@@ -206,7 +204,7 @@ void Writer::write_att(ostream& os, Scale s) const {
 		case 3: os << "8"; break;
 		
 		default: 
-			assert(false);
+			os << "<null>";
 	}
 }
 
@@ -220,7 +218,7 @@ void Writer::write_att(ostream& os, SegReg seg) const {
 		case 5: os << "gs"; break;
 
 		default: 
-			assert(false);
+			os << "<null>";
 	}
 }
 
@@ -244,7 +242,7 @@ void Writer::write_att(ostream& os, XmmReg xmm) const {
 		case 15: os << "%xmm15"; break;
 
 		default:
-			assert(false);
+			os << "<null>";
 	}
 }
 
