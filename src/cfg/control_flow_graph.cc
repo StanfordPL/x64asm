@@ -194,7 +194,7 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 			os << "\\l";
 		}
 
-		os << "|live-outs";
+		os << "|live-outs:";
 		const auto los = get_live_outs(location_type(i, num_instrs(i)-1));
 		for ( auto r = 0; r < 16; ++r ) {
 			const auto w = los.get_widest_set(GpReg(r));

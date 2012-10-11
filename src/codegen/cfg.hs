@@ -26,10 +26,8 @@ opcodes = instr_array "const char*" "opcodes_" render
 
 -- Writes out the Instruction enum
 opcode_enum :: [Instr] -> String
-opcode_enum is = "enum OpcodeVal {\n" ++ 
-                 "  " ++ (enum (head is)) ++ " = 0\n, " ++
-                 (concat (intersperse "\n, " (map enum' (zip (tail is) [1..])))) ++
-                 "\n, OPCODE_VAL_NULL" ++
+opcode_enum is = "enum OpcodeVal {\n  " ++ 
+                 (concat (intersperse "\n, " (map enum' (zip is [0..])))) ++
                  "\n};"
     where enum' (i,idx) = (enum i) ++ " = DEF(" ++ (show idx) ++ "," ++
                             (a i)  ++ "," ++ 
