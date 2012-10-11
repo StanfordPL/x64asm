@@ -1,6 +1,8 @@
 #ifndef X64_SRC_CODE_SEG_REG_H
 #define X64_SRC_CODE_SEG_REG_H
 
+#include <vector>
+
 #include "src/code/operand.h"
 
 namespace x64 {
@@ -25,8 +27,20 @@ class SegReg {
 			return s_ >= 6;
 		}
 
+		typedef const std::vector<SegReg>::const_iterator iterator;
+
+		static iterator begin() {
+			return domain_.begin();
+		}
+
+		static iterator end() {
+			return domain_.end();
+		}
+
 	private:
 		Operand s_;
+
+		static const std::vector<SegReg> domain_;
 };
 
 extern const SegReg es;

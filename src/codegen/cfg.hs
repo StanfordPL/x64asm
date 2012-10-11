@@ -5,7 +5,7 @@ import System.Environment
 
 -- Helper functions for writing carrays
 array :: String -> String -> [String] -> String
-array t name body = "vector<" ++ t ++ "> " ++ 
+array t name body = "const vector<" ++ t ++ "> " ++ 
                     name ++ "{{\n  " ++
                     (concat (intersperse "\n, " body)) ++
                     "\n}};\n"
@@ -84,6 +84,10 @@ opcode_enum is = "enum OpcodeVal {\n" ++
           to_mod "N" = "NONE"
           to_mod _ = error "Unrecognized modifier!"
 
+-- Writes out the opcode domain
+opcode_domain :: [Instr] -> String
+opcode_domain = instr_array "Opcode" "Opcode::domain_" enum 
+
 -- Writes out type info for each instruction
 type_render :: Instr -> String
 type_render i = inline_array "Type" (render' (operands i) 0)
@@ -153,36 +157,36 @@ reg_mask :: String -> (Instr -> [String]) -> [Instr] -> String
 reg_mask name fxn = instr_array "RegSet" ("Opcode::" ++ name) render
     where render i = "RegSet()" ++ 
                      (concat (map render' (fxn i)))
-          render' r = ".set_cond(" ++ (map toLower r) ++")"
+          render' r = ".set(" ++ (map toLower r) ++")"
 
 reg_mask2 :: String -> (Instr -> [String]) -> (Instr -> [String]) -> [Instr] -> String
 reg_mask2 name fxn1 fxn2 = instr_array "RegSet" ("Opcode::" ++ name) render
     where render i = "RegSet()" ++ 
                      (concat (map render_gp   (fxn1 i))) ++ 
 										 (concat (map render_cond (fxn2 i)))
-          render_gp "AL"  = ".set_gp(rax, LOW)"
-          render_gp "AH"  = ".set_gp(rax, HIGH)"
-          render_gp "AX"  = ".set_gp(rax, WORD)"
-          render_gp "DX"  = ".set_gp(rdx, WORD)"
-          render_gp "SP"  = ".set_gp(rsp, WORD)"
-          render_gp "EAX" = ".set_gp(rax, DOUBLE)"
-          render_gp "ECX" = ".set_gp(rcx, DOUBLE)"
-          render_gp "EDX" = ".set_gp(rdx, DOUBLE)"
-          render_gp "ESP" = ".set_gp(rsp, DOUBLE)"
-          render_gp "RAX" = ".set_gp(rax, QUAD)"
-          render_gp "RBX" = ".set_gp(rbx, QUAD)"
-          render_gp "RCX" = ".set_gp(rcx, QUAD)"
-          render_gp "RDX" = ".set_gp(rdx, QUAD)"
-          render_gp "RSP" = ".set_gp(rsp, QUAD)"					
-          render_gp "RBP" = ".set_gp(rbp, QUAD)"
-          render_gp "RSI" = ".set_gp(rsi, QUAD)"
-          render_gp "RDI" = ".set_gp(rdi, QUAD)"
+          render_gp "AL"  = ".set(rax, LOW)"
+          render_gp "AH"  = ".set(rax, HIGH)"
+          render_gp "AX"  = ".set(rax, WORD)"
+          render_gp "DX"  = ".set(rdx, WORD)"
+          render_gp "SP"  = ".set(rsp, WORD)"
+          render_gp "EAX" = ".set(rax, DOUBLE)"
+          render_gp "ECX" = ".set(rcx, DOUBLE)"
+          render_gp "EDX" = ".set(rdx, DOUBLE)"
+          render_gp "ESP" = ".set(rsp, DOUBLE)"
+          render_gp "RAX" = ".set(rax, QUAD)"
+          render_gp "RBX" = ".set(rbx, QUAD)"
+          render_gp "RCX" = ".set(rcx, QUAD)"
+          render_gp "RDX" = ".set(rdx, QUAD)"
+          render_gp "RSP" = ".set(rsp, QUAD)"					
+          render_gp "RBP" = ".set(rbp, QUAD)"
+          render_gp "RSI" = ".set(rsi, QUAD)"
+          render_gp "RDI" = ".set(rdi, QUAD)"
           render_gp "ST0" = "" -- TODO
           render_gp "TOP" = "" -- TODO
-          render_gp _     = "CODEGEN ERROR SHOULD NOT COMPILE"
+          render_gp _     = error "Unrecognized operand!"
 					-- ...
 					-- Add to this as interesting values appear in x64.csv
-          render_cond r   = ".set_cond(" ++ (map toLower r) ++ ")"
+          render_cond r   = ".set(" ++ (map toLower r) ++ ")"
 
 -- Write some code!
 main :: IO ()
@@ -190,9 +194,10 @@ main = do args <- getArgs
           instrs_file <- readFile $ head args
           let instrs = parse_instrs instrs_file
 
-          writeFile  "opcode.enum"   $ opcode_enum     instrs
-          writeFile  "opcode.sigs"   $ signatures      instrs
-          writeFile  "opcode.char"   $ opcodes         instrs
+          writeFile  "opcode.enum"   $ opcode_enum   instrs
+          writeFile  "opcode.sigs"   $ signatures    instrs
+          writeFile  "opcode.char"   $ opcodes       instrs
+          writeFile  "opcode.domain" $ opcode_domain instrs
 
           writeFile  "opcode.implicit" $ reg_mask2 "implicit_read_set_"  
 					           implicit_reads cond_read instrs

@@ -69,24 +69,56 @@ class Addr {
 			return (SegReg) ((a_ >> 45) & 0x7);
 		}
 
+		inline void set_seg(SegReg s) {
+			a_ &= ~((Operand) 0x3 << 45);
+			a_ |= s << 45;
+		}
+
 		inline GpReg get_base() const {
 			return (GpReg) ((a_ >> 40) & 0x1f);
+		}
+
+		inline void set_base(GpReg b) {
+			a_ &= ~((Operand) 0x7f << 40);
+			a_ |= b << 40;
 		}
 
 		inline GpReg get_index() const {
 			return (GpReg) ((a_ >> 35) & 0x1f);
 		}
 
+		inline void set_index(GpReg i) {
+			a_ &= ~((Operand) 0x7f << 35);
+			a_ |= i << 35;
+		}
+
 		inline Scale get_scale() const {
 			return (Scale) ((a_ >> 32)  & 0x7);
+		}
+
+		inline void set_scale(Scale s) {
+			a_ &= ~((Operand) 0x7 << 32);
+			a_ |= s << 32;
 		}
 
 		inline Imm get_disp() const {
 			return (Operand) (a_ & 0xffffffff);
 		}
 
+		inline void set_disp(Imm d) {
+			a_ &= ~((Operand) 0xffffffff);
+			a_ |= d;
+		}
+
 		inline bool get_size_or() const {
 			return (a_ >> 48) & 0x1;
+		}
+
+		inline void set_size_or(bool sor) {
+			if ( sor )
+				a_ |= ((Operand) 0x1 << 48);
+			else
+				a_ &= ~((Operand) 0x1 << 48);
 		}
 
 		inline BitWidth get_reg_width() const {

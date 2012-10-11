@@ -49,8 +49,7 @@ class Opcode {
 		}
 
 		inline bool is_null() const {
-			// TODO -- This isn't correct!
-			return o_ >= OPCODE_VAL_NULL;
+			return (o_ >> 50) >= domain_.size();
 		}
 
 		inline size_t arity() const {
@@ -116,12 +115,24 @@ class Opcode {
 			return implicit_undef_set_[o_ >> 50];
 		}
 
+		typedef const std::vector<Opcode>::const_iterator iterator;
+
+		static iterator begin() {
+			return domain_.begin();
+		}
+
+		static iterator end() {
+			return domain_.end();
+		}
+
 	private:
 		Operand o_;
 
-		static std::vector<RegSet> implicit_read_set_;
-		static std::vector<RegSet> implicit_write_set_;
-		static std::vector<RegSet> implicit_undef_set_;
+		static const std::vector<RegSet> implicit_read_set_;
+		static const std::vector<RegSet> implicit_write_set_;
+		static const std::vector<RegSet> implicit_undef_set_;
+
+		static const std::vector<Opcode> domain_;
 
 		inline size_t mem_index() const {
 			return (o_ >> 12) & 0x3;

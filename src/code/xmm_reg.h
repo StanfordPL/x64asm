@@ -1,6 +1,8 @@
 #ifndef X64_SRC_CODE_XMM_REG_H
 #define X64_SRC_CODE_XMM_REG_H
 
+#include <vector>
+
 #include "src/code/operand.h"
 
 namespace x64 {
@@ -25,8 +27,20 @@ class XmmReg {
 			return x_ >= 16;	
 		}
 
+		typedef const std::vector<XmmReg>::const_iterator iterator;
+
+		static iterator begin() {
+			return domain_.begin();
+		}
+
+		static iterator end() {
+			return domain_.end();
+		}
+
 	private:
 		Operand x_;
+
+		static const std::vector<XmmReg> domain_;
 };
 
 extern const XmmReg xmm0;

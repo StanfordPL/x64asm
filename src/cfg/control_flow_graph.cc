@@ -92,7 +92,7 @@ void ControlFlowGraph::recompute_liveness() {
 
 	// Boundary conditions
 	const auto bound = 
-		RegSet().set_gp(rax, QUAD).set_gp(rbp, QUAD).set_gp(rsp, QUAD);
+		RegSet().set(rax, QUAD).set(rbp, QUAD).set(rsp, QUAD);
 	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
 		if ( is_exit(i) )
 			live_outs_[i] = bound;

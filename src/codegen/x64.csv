@@ -153,6 +153,8 @@ faddp :  :  de  c0  : y :  :  64  F  X   64  ST0  R   : TOP : TOP :  :  :
 fiadds :  : da :  : 00 :  32  M  R    : ST0 : ST0 :  :  : 
 fiaddl :  : de :  : 00 :  16  M  R    : ST0 : ST0 :  :  : 
                       
+hlt :  : f4 :  :  :    :  :  :  :  : 
+                      
 idivb :  : f6 :  : 07 :  8  RM  R    : AX : AX :  :  :  O  S  Z  A  P  C 
 idivw :  : f7 :  : 07 :  16  RM  R    :  AX  DX  :  AX  DX  :  :  :  O  S  Z  A  P  C 
 idivl :  : f7 :  : 07 :  32  RM  R    :  EAX  EDX  :  EAX  EDX  :  :  :  O  S  Z  A  P  C 

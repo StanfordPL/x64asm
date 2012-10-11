@@ -1,6 +1,8 @@
 #ifndef X64_SRC_CODE_GP_REG_H
 #define X64_SRC_CODE_GP_REG_H
 
+#include <vector>
+
 #include "src/code/operand.h"
 
 namespace x64 {
@@ -43,8 +45,20 @@ class GpReg {
 			return g_ == 6 || g_ == 7;
 		}
 
+		typedef const std::vector<GpReg>::const_iterator iterator;
+
+		static iterator begin() {
+			return domain_.begin();
+		}
+
+		static iterator end() {
+			return domain_.end();
+		}
+
 	private:
 		Operand g_;
+
+		static const std::vector<GpReg> domain_;
 };
 
 extern const GpReg rax;
