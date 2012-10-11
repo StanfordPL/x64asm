@@ -2,7 +2,7 @@
 #define X64_SRC_CODE_REG_SET_H
 
 #include <cassert>
-#include <list>
+#include <vector>
 
 #include "src/code/cond_reg.h"
 #include "src/code/gp_reg.h"
@@ -27,9 +27,9 @@ class RegSet {
 		};
 
 	public:
-		typedef std::list<GpReg>::const_iterator gp_reg_iterator;
-		typedef std::list<XmmReg>::const_iterator xmm_reg_iterator;
-		typedef std::list<CondReg>::const_iterator cond_reg_iterator;
+		typedef std::vector<GpReg>::const_iterator gp_reg_iterator;
+		typedef std::vector<XmmReg>::const_iterator xmm_reg_iterator;
+		typedef std::vector<CondReg>::const_iterator cond_reg_iterator;
 
 		inline RegSet() {
 			clear();
@@ -41,41 +41,41 @@ class RegSet {
 			return *this;
 		}
 
-		inline RegSet& set_gp(GpReg r, BitWidth w) {
-			assert(!r.is_null());
-			assert(w < FIXED);
+		inline RegSet& set(GpReg r, BitWidth w) {
 			static Mask m[5] { M_LOW, M_HIGH, M_WORD, M_DOUBLE, M_QUAD };
+			assert(!r.is_null());
+			assert(w <= QUAD);
 			gp_mask_ |= (m[w] << r);
 			return *this;
 		}
 
-		inline RegSet& set_xmm(XmmReg r) {
+		inline RegSet& set(XmmReg r) {
 			assert(!r.is_null());
 			xmm_cr_mask_ |= (M_XMM << r);	
 			return *this;
 		}
 
-		inline RegSet& set_cond(CondReg r) {
+		inline RegSet& set(CondReg r) {
 			assert(!r.is_null());
 			xmm_cr_mask_ |= (M_CR << r);
 			return *this;
 		}
 
-		inline bool is_set_gp(GpReg r, BitWidth w) const {
-			assert(!r.is_null());
-			assert(w < FIXED);
+		inline bool is_set(GpReg r, BitWidth w) const {
 			static Mask m[5] { M_LOW, M_HIGH, M_WORD, M_DOUBLE, M_QUAD };
+			assert(!r.is_null());
+			assert(w <= QUAD);
 			return gp_mask_ & (m[w] << r);
 		}
 
 		BitWidth get_widest_set(GpReg r) const;
 
-		inline bool is_set_xmm(XmmReg r) const {
+		inline bool is_set(XmmReg r) const {
 			assert(!r.is_null());
 			return xmm_cr_mask_ & (M_XMM << r);
 		}
 
-		inline bool is_set_cond(CondReg r) const {
+		inline bool is_set(CondReg r) const {
 			assert(!r.is_null());
 			return xmm_cr_mask_ & (M_CR << r);
 		}
@@ -181,12 +181,12 @@ class RegSet {
 		uint64_t gp_mask_;
 		uint64_t xmm_cr_mask_;
 
-		static std::list<GpReg> gp_regs_;
-		static std::list<XmmReg> xmm_regs_;
-		static std::list<CondReg> cond_regs_;
+		static std::vector<GpReg> gp_regs_;
+		static std::vector<XmmReg> xmm_regs_;
+		static std::vector<CondReg> cond_regs_;
 		
 		template <typename T, Mask M, int Max>
-		static inline void build(std::list<T>& v, uint64_t m) {
+		static inline void build(std::vector<T>& v, uint64_t m) {
 			v.clear();
 			for ( int i = 0; i < Max; ++i ) {
 				if ( m & M )
