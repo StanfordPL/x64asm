@@ -150,8 +150,8 @@ faddl :  : dc :  : 00 :  64  M  R    : ST0 : ST0 :  :  :
 fadd :  :  d8  c0  : y :  :  64  ST0  X   64  F  R   :  :  :  :  : 
 fadd :  :  dc  c0  : y :  :  64  F  X   64  ST0  R   :  :  :  :  : 
 faddp :  :  de  c0  : y :  :  64  F  X   64  ST0  R   : TOP : TOP :  :  : 
-fiadds :  : da :  : 00 :  32  M  R    : ST0 : ST0 :  :  : 
-fiaddl :  : de :  : 00 :  16  M  R    : ST0 : ST0 :  :  : 
+fiaddl :  : da :  : 00 :  32  M  R    : ST0 : ST0 :  :  : 
+fiadds :  : de :  : 00 :  16  M  R    : ST0 : ST0 :  :  : 
                       
 hlt :  : f4 :  :  :    :  :  :  :  : 
                       
@@ -291,8 +291,8 @@ pmullw : 66 :  0f  d5  :  :  :  128  S  X   128  SM  R   :  :  :  :  :
                       
 popw :  : 58 : y :  :  16  R  W    : RSP : RSP :  :  : 
 popq :  : 58 : y :  :  64  R  W    : RSP : RSP :  :  : 
-popw :  : 8f :  :  :  16  RM  W    : RSP : RSP :  :  : 
-popq :  : 8f :  :  :  64  RM  W    : RSP : RSP :  :  : 
+popw :  : 8f :  : 00 :  16  RM  W    : RSP : RSP :  :  : 
+popq :  : 8f :  : 00 :  64  RM  W    : RSP : RSP :  :  : 
                       
                       
 popcntw : f3 :  0f  b8  :  :  :  16  R  W   16  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
@@ -301,8 +301,8 @@ popcntq : f3 :  0f  b8  :  :  :  64  R  W   64  RM  R   :  :  :  :  O  S  Z  A  
                       
 pushw :  : 50 : y :  :  16  R  R    : RSP : RSP :  :  : 
 pushq :  : 50 : y :  :  64  R  R    : RSP : RSP :  :  : 
-pushw :  : ff :  :  :  16  RM  R    : RSP : RSP :  :  : 
-pushq :  : ff :  :  :  64  RM  R    : RSP : RSP :  :  : 
+pushw :  : ff :  : 06 :  16  RM  R    : RSP : RSP :  :  : 
+pushq :  : ff :  : 06 :  64  RM  R    : RSP : RSP :  :  : 
                       
 ret :  : c3 :  :  :    :  :  :  :  : 
 retq :  : c3 :  :  :    :  :  :  :  : 

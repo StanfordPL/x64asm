@@ -59,7 +59,9 @@ read_instrs s = map format $ rows
 add_66_prefix :: Instr -> Instr
 add_66_prefix (Instr a p r o rc rf rm rmo os ir iw cr cw cu) =
     case os of
-      ("16":"M":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
+      ("16":"M":_)  -> case a of
+                        "fiaddl" -> (Instr a p       r o rc rf rm rmo os ir iw cr cw cu)
+                        _        -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
       ("16":"R":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
       ("16":"RM":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
       ("16":"AX":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
@@ -76,7 +78,10 @@ add_rexw_prefix (Instr a p _ o rc rf rm rmo os ir iw cr cw cu) =
                         "faddl" -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
                         _ -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
     ("64":"O":_)   -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
-    ("64":"RM":_)  -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
+    ("64":"RM":_)  -> case a of 
+                        "pushq" -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
+                        "popq"  -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
+                        _ -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
     ("64":"R":_)   -> case a of 
                         "pushq" -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
                         "popq"  -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)

@@ -386,12 +386,13 @@ instr : ATT_OPCODE operands ENDL blank {
 
 operands : /* empty */ { 
 			 		 $$ = new vector<OperandInfo>(); 
-				 }
-         | operand { 
+                }
+                | operand { 
 					 $$ = new vector<OperandInfo>(); 
 					 $$->push_back(*$1); 
 					 delete $1; 
 				 }
+                 /*
 				 | mem { 
 					 $$ = new vector<OperandInfo>(); 
 					 $$->push_back(*$1); 
@@ -418,6 +419,14 @@ operands : /* empty */ {
 					 delete $1; 
 					 delete $3; 
 				 } 
+                 */
+                 | operand COMMA operand {
+                     $$ = new vector<OperandInfo>();
+                     $$->push_back(*$3);
+                     $$->push_back(*$1);
+                     delete $1;
+                     delete $3;
+                 }
 				 | operand COMMA operand COMMA operand { 
 					 $$ = new vector<OperandInfo>(); 
 					 $$->push_back(*$5); 
@@ -430,7 +439,7 @@ operands : /* empty */ {
 				 ;
 
 operand : ATT_FP_REG | ATT_GP_REG | ATT_IMM | ATT_LABEL | ATT_MMX_REG |
-          ATT_OFFSET | ATT_SCALE  | ATT_XMM_REG
+          ATT_OFFSET | ATT_SCALE  | ATT_XMM_REG | mem
         ;
 
 mem : OPEN ATT_GP_REG CLOSE { 

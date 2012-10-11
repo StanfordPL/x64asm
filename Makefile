@@ -43,7 +43,7 @@ LIB=lib/libx64.a
 all: release
 
 debug:
-	make -C . erthing FLEXOPS="-d" OPT="-std=c++0x -Wall -fPIC -g"
+	make -C . erthing FLEXOPS="-d" BISONOPS="-t" OPT="-std=c++0x -Wall -fPIC -g"
 release:
 	make -C . erthing OPT="-std=c++0x -Wall -fPIC -DNDEBUG -O3 -funroll-all-loops"
 profile:
@@ -91,7 +91,7 @@ src/gen: src/codegen/*.hs src/codegen/*.csv src/codegen/att.l src/codegen/att.y
 		mv opcode.* ../../src/gen/
 	flex $(FLEXOPS) -Patt src/codegen/att.l && \
 		mv lex.att.c src/gen
-	bison -batt -patt --defines src/codegen/att.y && \
+	bison $(BISONOPS) -batt -patt --defines src/codegen/att.y && \
 		mv att.tab.h src/gen && \
 		mv att.tab.c src/gen
 		
