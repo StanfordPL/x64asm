@@ -72,7 +72,9 @@ add_66_prefix (Instr a p r o rc rf rm rmo os ir iw cr cw cu) =
 add_rexw_prefix :: Instr -> Instr
 add_rexw_prefix (Instr a p _ o rc rf rm rmo os ir iw cr cw cu) =
   case os of
-    ("64":"M":_)   -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
+    ("64":"M":_)   -> case a of
+                        "faddl" -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
+                        _ -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
     ("64":"O":_)   -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
     ("64":"RM":_)  -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
     ("64":"R":_)   -> case a of 
