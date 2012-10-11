@@ -15,46 +15,37 @@ namespace x64 {
 */
 class Addr {
 	public:
+		inline Addr() {
+			set_all(seg_null, gp_null, gp_null, scale_null, 0, true); 
+		}
+
 		inline Addr(Operand a) 
 				: a_(a) {
 		}
 
-		// What's going on here?  Everything is packed into 64 bits
-		// or  seg    base   index  scale  disp
-		// [48][47:45][44:40][39:35][34:32][31:0]
-		#define DEF(s, b, i, sc, d, so) \
-			((Operand) (so ? 0x1 : 0x0) << 48) | \
-			((Operand) (s & 0x7) << 45)  | \
-			((Operand) (b & 0x1f) << 40) | \
-			((Operand) (i & 0x1f) << 35) | \
-		  ((Operand) (sc & 0x7) << 32) | \
-			((Operand) (d & 0xffffffff))
-
-		inline Addr(GpReg b, bool size_or = false)
-				: a_(DEF(seg_null, b, gp_null, times_1, 0, size_or)) {
+		inline Addr(GpReg b, bool size_or = false) {
+			set_all(seg_null, b, gp_null, times_1, 0, size_or);
 		}
 
-		inline Addr(GpReg b, Imm d, bool size_or = false)
-				: a_(DEF(seg_null, b, gp_null, times_1, d, size_or)) {
+		inline Addr(GpReg b, Imm d, bool size_or = false) {
+			set_all(seg_null, b, gp_null, times_1, d, size_or);
 		}
 
-		inline Addr(GpReg b, GpReg i, bool size_or = false)
-				: a_(DEF(seg_null, b, i, times_1, 0, size_or)) {
+		inline Addr(GpReg b, GpReg i, bool size_or = false) {
+			set_all(seg_null, b, i, times_1, 0, size_or);	
 		}
 
-		inline Addr(GpReg b, GpReg i, Scale s, bool size_or = false) 
-				: a_(DEF(seg_null, b, i, s, 0, size_or)) {
+		inline Addr(GpReg b, GpReg i, Scale s, bool size_or = false) {
+			set_all(seg_null, b, i, s, 0, size_or);
 		}
 
-		inline Addr(GpReg b, GpReg i, Imm d, bool size_or = false)
-				: a_(DEF(seg_null, b, i, times_1, d, size_or)) {
+		inline Addr(GpReg b, GpReg i, Imm d, bool size_or = false) {
+			set_all(seg_null, b, i, times_1, d, size_or);
 		}
 
-		inline Addr(GpReg b, GpReg i, Scale s, Imm d, bool size_or = false)
-				: a_(DEF(seg_null, b, i, s, d, size_or)) {
+		inline Addr(GpReg b, GpReg i, Scale s, Imm d, bool size_or = false) {
+			set_all(seg_null, b, i, s, d, size_or);
 		}
-
-		#undef DEF
 
 		inline operator Operand() const {
 			return a_;
@@ -134,7 +125,20 @@ class Addr {
 		}
 
 	private:
+		// or  seg    base   index  scale  disp
+		// [48][47:45][44:40][39:35][34:32][31:0]
+
 		Operand a_;
+
+		inline void set_all(SegReg s, GpReg b, GpReg i, Scale sc, Imm d, bool so) {
+			a_ = 0x0;
+			a_ = ((Operand) (so ? 0x1 : 0x0) << 48) |
+					 ((Operand) (s & 0x7) << 45)  | 
+					 ((Operand) (b & 0x1f) << 40) | 
+					 ((Operand) (i & 0x1f) << 35) | 
+		  		 ((Operand) (sc & 0x7) << 32) | 
+					 ((Operand) (d & 0xffffffff));
+		}
 };
 
 } // namespace x64

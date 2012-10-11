@@ -27,6 +27,15 @@ class Code {
 				: instrs_(instrs) {
 		}
 
+		/** Returns true if any Instruction are null.
+		*/
+		inline bool is_null() const {
+			for ( const auto& instr : instrs_ )
+				if ( instr.is_null() )
+					return true;
+			return false;
+		}
+
 		/** Returns the number of Instruction in the block.
 		*/
 		inline size_t size() const {

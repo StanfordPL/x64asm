@@ -12,7 +12,7 @@ namespace x64 {
 class Scale {
 	public:
 		inline Scale() 
-				: s_(0) { 
+				: s_(4) { 
 		}
 
 		inline Scale(Operand s) 
@@ -47,6 +47,7 @@ extern const Scale times_1;
 extern const Scale times_2;
 extern const Scale times_4;
 extern const Scale times_8;
+extern const Scale scale_null;
 
 } // namespace x64
 
