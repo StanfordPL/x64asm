@@ -41,11 +41,11 @@ RegSet Instruction::explicit_read_set() const {
 			case GP_REG: { 
 					const auto gp = get_gp_reg(i); 
 					if ( !gp.is_null() ) 
-						rs.set_gp(gp, width(i)); 
+						rs.set(gp, width(i)); 
 				} 
 				break;
 			case XMM_REG: 
-				rs.set_xmm(get_xmm_reg(i)); 
+				rs.set(get_xmm_reg(i)); 
 				break;						 
 			case ADDR: { 
 					const auto a = get_addr(i); 
@@ -53,9 +53,9 @@ RegSet Instruction::explicit_read_set() const {
 					const auto b = a.get_base();
 					const auto idx = a.get_index();
 					if ( !b.is_null() )
-						rs.set_gp(b, w);
+						rs.set(b, w);
 					if ( !idx.is_null() )
-						rs.set_gp(idx, w);
+						rs.set(idx, w);
 				}
 			default: 
 				break;
@@ -72,11 +72,11 @@ RegSet Instruction::explicit_write_set() const {
 			const auto gp = get_gp_reg(i);
 			const auto w = width(i);
 			assert(!gp.is_null());
-			rs.set_gp(gp, w == DOUBLE ? QUAD : w);
+			rs.set(gp, w == DOUBLE ? QUAD : w);
 		}
 		else {
 			assert(t == XMM_REG);
-			rs.set_xmm(get_xmm_reg(i));
+			rs.set(get_xmm_reg(i));
 		}
 	}
 

@@ -9,15 +9,15 @@ vector<XmmReg> RegSet::xmm_regs_;
 vector<CondReg> RegSet::cond_regs_;
 
 BitWidth RegSet::get_widest_set(GpReg r) const {
-	if ( is_set_gp(r, QUAD) )
+	if ( is_set(r, QUAD) )
 		return QUAD;
-	else if ( is_set_gp(r, DOUBLE) )
+	else if ( is_set(r, DOUBLE) )
 		return DOUBLE;
-	else if ( is_set_gp(r, WORD) )
+	else if ( is_set(r, WORD) )
 		return WORD;
-	else if ( is_set_gp(r, HIGH) )
+	else if ( is_set(r, HIGH) )
 		return HIGH;
-	else if ( is_set_gp(r, LOW) )
+	else if ( is_set(r, LOW) )
 		return LOW;
 	else
 		return BIT_WIDTH_NULL;
