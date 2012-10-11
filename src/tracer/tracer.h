@@ -12,13 +12,12 @@
 
 namespace x64 {
 
-class State;
 class Trace;
 
 class Tracer {
 	public:
 		inline void set(GpReg gp) {
-			assert(gp.is_valid() && !gp.is_null());
+			assert(!gp.is_null());
 			gps_.insert(gp);
 		}
 
@@ -30,23 +29,23 @@ class Tracer {
 			afters_.insert(line);
 		}
 
-		inline Trace trace(const Code& code) {
-			Trace t;
-			trace(t, code);
-			return t;
+		inline Function trace(Trace& t, const Code& code) {
+			Function fxn;
+			trace(fxn, t, code);
+			return fxn;
 		}
 
-		Trace& trace(Trace& trace, const Code& code);
+		Function& trace(Function& fxn, Trace& trace, const Code& code);
 
 	private:
 		Assembler assm_;
-		Function fxn_;
 
 		std::set<size_t> befores_;
 		std::set<size_t> afters_;
 
 		std::set<GpReg> gps_;
 
+		void finish_state(Trace& t, size_t line);
 		void trace_gp(Trace& t, bool is_before);
 };
 

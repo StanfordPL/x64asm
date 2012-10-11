@@ -175,10 +175,10 @@ Operand to_label(const char* c) {
 "%dil"  { OPERAND(rdi, GP_REG, LOW);    return ATT_GP_REG; }
 
 
-"1"/")" { OPERAND(TIMES_1, SCALE, FIXED); return ATT_SCALE; }
-"2"/")" { OPERAND(TIMES_2, SCALE, FIXED); return ATT_SCALE; }
-"4"/")" { OPERAND(TIMES_4, SCALE, FIXED); return ATT_SCALE; }
-"8"/")" { OPERAND(TIMES_8, SCALE, FIXED); return ATT_SCALE; }
+"1"/")" { OPERAND(times_1, SCALE, FIXED); return ATT_SCALE; }
+"2"/")" { OPERAND(times_2, SCALE, FIXED); return ATT_SCALE; }
+"4"/")" { OPERAND(times_4, SCALE, FIXED); return ATT_SCALE; }
+"8"/")" { OPERAND(times_8, SCALE, FIXED); return ATT_SCALE; }
 
 
 "-"?"0x"[0-9a-f]+ { OPERAND(to_imm(yytext, false), OFFSET, QUAD); return ATT_OFFSET; }

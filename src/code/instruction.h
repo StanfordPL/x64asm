@@ -5,7 +5,6 @@
 #include <array>
 #include <cassert>
 #include <initializer_list>
-#include <iostream>
 
 #include "src/code/addr.h"
 #include "src/code/fp_reg.h"
@@ -164,6 +163,30 @@ class Instruction {
 
 		RegSet explicit_write_set() const;
 
+		inline RegSet implicit_read_set() const {
+			return opcode_.implicit_read_set();
+		}
+
+		inline RegSet implicit_write_set() const {
+			return opcode_.implicit_write_set();
+		}
+
+		inline RegSet implicit_undef_set() const {
+			return opcode_.implicit_undef_set();
+		}
+
+		inline RegSet read_set() const {
+			return implicit_read_set() |= explicit_read_set();
+		}
+
+		inline RegSet write_set() const {
+			return implicit_write_set() |= explicit_write_set();
+		}
+
+		inline RegSet undef_set() const {
+			return implicit_undef_set();
+		}
+
 		// Convenience Accessors inherited from current opcode
 		inline size_t arity() const { 
 			return opcode_.arity(); 
@@ -177,24 +200,12 @@ class Instruction {
 			return opcode_.width(index); 
 		}
 
-		inline size_t mem_offset() const { 
-			return opcode_.mem_offset(); 
+		inline Modifier mod(size_t index) const {
+			return opcode_.mod(index);
 		}
 
-		inline bool accesses_mem() const { 
-			return opcode_.accesses_mem(); 
-		}
-
-		inline size_t read_offset() const {
-			return opcode_.read_offset();
-		}
-
-		inline bool writes_reg() const {
-			return opcode_.writes_reg();
-		}
-
-		inline bool does_implicit_zero_extend() const {
-			return opcode_.does_implicit_zero_extend();
+		inline bool is_label_defn() const {
+			return opcode_.is_label_defn();
 		}
 
 		inline bool is_ret() const {
@@ -213,33 +224,9 @@ class Instruction {
 			return opcode_.is_jump();
 		}
 
-		inline bool rexw_prefix() const {
-			return opcode_.rexw_prefix();
-		}
-
-		inline bool mem_size_or() const {
-			return opcode_.mem_size_or();
-		}
-
-		inline RegSet implicit_read_set() const {
-			return opcode_.implicit_read_set();
-		}
-
-		inline RegSet implicit_write_set() const {
-			return opcode_.implicit_write_set();
-		}
-
-		inline RegSet implicit_undef_set() const {
-			return opcode_.implicit_undef_set();
-		}
-
-		inline bool is_label_defn() const {
-			return opcode_.is_label_defn();
-		}
-
 		// Higher order attributes
 		inline bool acceses_stack() const {
-			const auto mo = opcode_.mem_offset();
+			const auto mo = 0;// TODO -- FIX opcode_.mem_offset();
 			if ( mo == 16 )
 				return false;
 
@@ -252,7 +239,7 @@ class Instruction {
 		}
 
 		inline bool accesses_heap() const { 
-			const auto mo = opcode_.mem_offset();
+			const auto mo = 0; // TODO --- FIX opcode_.mem_offset();
 			if ( mo == 16 )
 				return false;
 
@@ -263,24 +250,6 @@ class Instruction {
 
 			return b != rsp || !i.is_null() || (int64_t) d > 0;
 		}
-
-		inline RegSet read_set() const {
-			return implicit_read_set() |= explicit_read_set();
-		}
-
-		inline RegSet write_set() const {
-			return implicit_write_set() |= explicit_write_set();
-		}
-
-		inline RegSet undef_set() const {
-			return implicit_undef_set();
-		}
-
-		inline void read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-		}
-
-		void write_att(std::ostream& os) const;
 
 	private:
 

@@ -2,6 +2,7 @@
 #define X64_SRC_CFG_CONTROL_FLOW_GRAPH_H
 
 #include <cassert>
+#include <iostream>
 #include <vector>
 
 #include "src/code/code.h"
@@ -305,14 +306,6 @@ class ControlFlowGraph {
 		*/
 		inline bool is_well_formed() const {
 			return !performs_undef_read();
-		}
-
-		inline void read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-		}
-
-		inline void write_att(std::ostream& os) const {
-			code_.write_att(os);
 		}
 
 		void write_dot(std::ostream& os) const;

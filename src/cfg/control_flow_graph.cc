@@ -3,6 +3,7 @@
 #include <map>
 
 #include "src/code/label.h"
+#include "src/code/writer.h"
 
 using namespace std;
 
@@ -167,6 +168,8 @@ void ControlFlowGraph::recompute_defs() {
 }
 
 void ControlFlowGraph::write_dot(ostream& os) const {
+	Writer writer;
+
 	os << "digraph g {" << endl;
 
 	os << "entry [shape=box label=\"ENTRY\"];" << endl;
@@ -181,13 +184,13 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 			const auto w = lis.get_widest_set(GpReg(r));
 			if ( w != BIT_WIDTH_NULL ) {
 				os << " ";
-				GpReg(r).write_att(os, w);
+				writer.write_att(os, GpReg(r), w);	
 			}
 		}
 		os << "|";
 
 		for ( auto j = instr_begin(i), je = instr_end(i); j != je; ++j ) {
-			j->write_att(os);
+			writer.write_att(os, *j);
 			os << "\\l";
 		}
 
@@ -197,7 +200,7 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 			const auto w = los.get_widest_set(GpReg(r));
 			if ( w != BIT_WIDTH_NULL ) {
 				os << " ";
-				GpReg(r).write_att(os, w);
+				writer.write_att(os, GpReg(r), w);
 			}
 		}
 

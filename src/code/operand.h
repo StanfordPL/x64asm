@@ -5,27 +5,31 @@
 
 namespace x64 {
 
+/** Base operand type.
+*/
+typedef uint64_t Operand;
+
 /** Operand types.
 */
 enum Type { 
-	GP_REG = 0,
-	RAX_ONLY,
-	RCX_ONLY,
-	XMM_REG,
-	MMX_REG,
+	ADDR = 0,
 	FP_REG,
-	ST0_ONLY,
+	GP_REG,
 	IMM,
 	LABEL,
-	SCALE,
-	ADDR,
+	MMX_REG,
 	OFFSET,
+	SCALE,
+	XMM_REG,
 
-	NUM_TYPES,
-	TYPE_NULL = NUM_TYPES
+	RAX_ONLY,
+	RCX_ONLY,
+	ST0_ONLY,
+
+	TYPE_NULL
 };
 
-/** Bit field widths.
+/** Operand widths.
 */
 enum BitWidth {
 	LOW = 0,
@@ -36,20 +40,19 @@ enum BitWidth {
 	OCT,
 	FIXED,
 
-	NUM_BIT_WIDTHS,
-	BIT_WIDTH_NULL = NUM_BIT_WIDTHS
+	BIT_WIDTH_NULL
 };
 
-/** Operand values.
+/** Operand modifiers.
 */
-enum OperandVal {
-	NUM_OPERAND_VALS = 0,
-	OPERAND_VAL_NULL = NUM_OPERAND_VALS
-};
+enum Modifier {
+	READ = 0,
+	WRITE,
+	READ_WRITE,
+	NONE,
 
-/** Base operand type.
-*/
-typedef uint64_t Operand;
+	MODIFIER_NULL
+};
 
 } // namespace x64
 

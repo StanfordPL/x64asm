@@ -1,10 +1,11 @@
 #include "src/code/scale.h"
 
-using namespace std;
-
 namespace x64 {
 
-vector<Scale> Scale::range_ {{ TIMES_1, TIMES_2, TIMES_4, TIMES_8 }};
+const Scale times_1 = 0;
+const Scale times_2 = 1;
+const Scale times_4 = 2;
+const Scale times_8 = 3;
 
 } // namespace x64
 

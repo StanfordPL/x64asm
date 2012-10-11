@@ -3,7 +3,6 @@
 
 #include <cassert>
 #include <initializer_list>
-#include <iostream>
 
 #include "src/code/instruction.h"
 
@@ -77,15 +76,6 @@ class Code {
 
 		inline void clear() {
 			instrs_.clear();
-		}
-
-		void read_att(std::istream& is);
-
-		inline void write_att(std::ostream& os) const {
-			for ( const auto instr : instrs_ ) {
-				instr.write_att(os);
-				os << std::endl;
-			}
 		}
 
 	private:	

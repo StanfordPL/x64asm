@@ -1,15 +1,12 @@
 #ifndef X64_SRC_CODE_GP_REG_H
 #define X64_SRC_CODE_GP_REG_H
 
-#include <cassert>
-#include <iostream>
-
 #include "src/code/operand.h"
 
 namespace x64 {
 
 /** A general purpose register: 
-		  RAX, RBX, RCX, RDX, RBP, RSP, RDI, RSI, R8, ..., R15.
+		rax, rbx, rcx, rdx, rbp, rsp, rdi, rsi, R8, ..., R15.
 */
 class GpReg {
 	public:
@@ -20,7 +17,6 @@ class GpReg {
 		
 		inline GpReg(Operand g) 
 				: g_(g) { 
-			assert(is_valid());
 		}
 
 		inline operator Operand() const {
@@ -28,11 +24,7 @@ class GpReg {
 		}
 
 		inline bool is_null() const {
-			return g_ == 16;
-		}
-
-		inline bool is_valid() const {
-			return g_ <= 16;
+			return g_ >= 16;
 		}
 
 		inline bool is_abcd() const {
@@ -50,12 +42,6 @@ class GpReg {
 		inline bool is_index() const {
 			return g_ == 6 || g_ == 7;
 		}
-
-		inline void read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-		}
-
-		void write_att(std::ostream& os, BitWidth w = QUAD) const;
 
 	private:
 		Operand g_;

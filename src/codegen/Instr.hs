@@ -2,14 +2,14 @@ module Instr
 	( Instr(..)
 	, parse_instrs
 	, enum
-	, arity
 	, operand_widths
 	, operand_types
 	, operand_mods
-	, mem_offset
+	, arity
 	, cond_jump
 	, uncond_jump
 	, jump
+	, ret
 	) where
 
 import Data.Char
@@ -31,7 +31,6 @@ data Instr =
         , cond_read       :: [String]
         , cond_write      :: [String]
         , cond_undef      :: [String]
-        , mem_size_or     :: Bool
         } deriving (Show)
 
 -- Remove leading/trailing whitespace
@@ -49,56 +48,56 @@ read_instrs s = map format $ rows
                    (words os) 
                    (words ir) (words iw) 
                    (to_flag cr) (to_flag cw) (to_flag cu) 
-                   False) 
+                   ) 
           format _ = error $ "Unable to parse row"
           to_flag cs = map (++ "F") $ (words cs)
 
 -- 16-bit operands require a 66 override prefix
 add_66_prefix :: Instr -> Instr
-add_66_prefix (Instr a p r o rc rf rm rmo os ir iw cr cw cu mo) =
+add_66_prefix (Instr a p r o rc rf rm rmo os ir iw cr cw cu) =
     case os of
-      ("16":"M":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu mo)
-      ("16":"R":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu mo)
-      ("16":"RM":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu mo)
-      ("16":"AX":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu mo)
+      ("16":"M":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
+      ("16":"R":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
+      ("16":"RM":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
+      ("16":"AX":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
       ("16":"CX":_) -> error "Does this ever happen?  CX Target?"
-      _             -> (Instr a p           r o rc rf rm rmo os ir iw cr cw cu mo)
+      _             -> (Instr a p           r o rc rf rm rmo os ir iw cr cw cu)
 
 -- 64-bit operands require a mandator rex.w prefix
 -- Sort of... it's more complicated than this.
 -- I'm afraid this function is going to get ugly.
 add_rexw_prefix :: Instr -> Instr
-add_rexw_prefix (Instr a p _ o rc rf rm rmo os ir iw cr cw cu mo) =
+add_rexw_prefix (Instr a p _ o rc rf rm rmo os ir iw cr cw cu) =
   case os of
-    ("64":"M":_)   -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu mo)
-    ("64":"O":_)   -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu mo)
-    ("64":"RM":_)  -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu mo)
+    ("64":"M":_)   -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
+    ("64":"O":_)   -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
+    ("64":"RM":_)  -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
     ("64":"R":_)   -> case a of 
-                        "pushq" -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu mo)
-                        "popq"  -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu mo)
-                        _ -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu mo)
-    ("64":"RAX":_) -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu mo)
-    _              -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu mo)
+                        "pushq" -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
+                        "popq"  -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
+                        _ -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
+    ("64":"RAX":_) -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
+    _              -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
 
 -- We need to distinguish the possibility and position of r/m operands
 add_rm_info :: Instr -> Instr
-add_rm_info (Instr a p r o rc rf _ _ os ir iw cr cw cu mo) =
+add_rm_info (Instr a p r o rc rf _ _ os ir iw cr cw cu) =
   case os of 
-    (_:"RM":_)       -> (Instr a p r o rc rf True  0 os ir iw cr cw cu mo)
-    (_:"SM":_)       -> (Instr a p r o rc rf True  0 os ir iw cr cw cu mo)
-    (_:"XM":_)       -> (Instr a p r o rc rf True  0 os ir iw cr cw cu mo)
-    (_:_:_:_:"RM":_) -> (Instr a p r o rc rf True  1 os ir iw cr cw cu mo)
-    (_:_:_:_:"SM":_) -> (Instr a p r o rc rf True  1 os ir iw cr cw cu mo)
-    (_:_:_:_:"XM":_) -> (Instr a p r o rc rf True  1 os ir iw cr cw cu mo)
-    _                -> (Instr a p r o rc rf False 0 os ir iw cr cw cu mo)
+    (_:"RM":_)       -> (Instr a p r o rc rf True  0 os ir iw cr cw cu)
+    (_:"SM":_)       -> (Instr a p r o rc rf True  0 os ir iw cr cw cu)
+    (_:"XM":_)       -> (Instr a p r o rc rf True  0 os ir iw cr cw cu)
+    (_:_:_:_:"RM":_) -> (Instr a p r o rc rf True  1 os ir iw cr cw cu)
+    (_:_:_:_:"SM":_) -> (Instr a p r o rc rf True  1 os ir iw cr cw cu)
+    (_:_:_:_:"XM":_) -> (Instr a p r o rc rf True  1 os ir iw cr cw cu)
+    _                -> (Instr a p r o rc rf False 0 os ir iw cr cw cu)
 
 -- Expand instructions operands
 expand_operands :: String -> String -> String -> Instr -> [Instr]
-expand_operands key val1 val2 (Instr a p r o rc rf rm rmo os ir iw cr cw cu mo) =
+expand_operands key val1 val2 (Instr a p r o rc rf rm rmo os ir iw cr cw cu) =
     case (elem key os) of 
-      True  -> (Instr a p r o rc rf rm rmo (repl key val1 os) ir iw cr cw cu mo) :
-               (Instr a p r o rc rf rm rmo (repl key val2 os) ir iw cr cw cu mo) : []
-      False -> (Instr a p r o rc rf rm rmo os                 ir iw cr cw cu mo) : []
+      True  -> (Instr a p r o rc rf rm rmo (repl key val1 os) ir iw cr cw cu) :
+               (Instr a p r o rc rf rm rmo (repl key val2 os) ir iw cr cw cu) : []
+      False -> (Instr a p r o rc rf rm rmo os                 ir iw cr cw cu) : []
     where repl k v os = map (repl' k v) os
           repl' k v o = case (o == k) of 
             True  -> v
@@ -120,19 +119,12 @@ parse_instrs s = concat $ map expand_instr $ read_instrs s
 enum :: Instr -> String
 enum instr = (up (att instr)) ++ 
              (arg (operands instr)) ++ 
-             (rm_suff (rm_operand instr) (rm_offset instr)) ++
-             (mo_suff (mem_size_or instr))
+             (rm_suff (rm_operand instr) (rm_offset instr))
     where up xs = (map toUpper xs)
           arg (w:t:_:xs) = "_" ++ w ++ (up t) ++ (arg xs)
           arg _ = ""					
           rm_suff True i = "_RM" ++ (show i)
           rm_suff _ _    = ""
-          mo_suff True = "_OR"
-          mo_suff _    = ""
-
--- Returns number of operands
-arity :: Instr -> Int
-arity instr = (length (operands instr)) `div` 3
 
 -- Unpacks operand widths
 operand_widths :: Instr -> [String]
@@ -152,12 +144,9 @@ operand_mods instr = om $ operands instr
     where om (_:_:m:os) = m:(om os)
           om _ = []
 
--- Index of memory operand
-mem_offset :: Instr -> (Maybe Int)
-mem_offset instr = mo (operand_types instr) 0
-    where mo ("M":_) i = (Just i)
-          mo (_:os)  i = mo os (i+1)
-          mo []      _ = Nothing
+-- Returns number of operands
+arity :: Instr -> Int
+arity instr = (length (operands instr)) `div` 3
 
 -- Is the instruction a conditional jump?
 cond_jump :: Instr -> Bool
@@ -189,3 +178,29 @@ uncond_jump i = uj $ att i
 -- Is the instruction a jump?
 jump :: Instr -> Bool
 jump i = (cond_jump) i || (uncond_jump i)
+
+-- Is the instruction a ret?
+ret :: Instr -> Bool
+ret i = r $ att i
+    where r "retq" = True
+          r _ = False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

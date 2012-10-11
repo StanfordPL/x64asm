@@ -2,32 +2,37 @@
 
 GCC=ccache g++
 
-INC=-I./ \
+INC=-I./
 
 OBJ=build/cfg/control_flow_graph.o \
 		\
 		build/assembler/assembler.o \
-		build/assembler/function.o \
 		\
-		build/code/addr.o \
-		build/code/code.o \
 		build/code/cond_reg.o \
 		build/code/fp_reg.o \
 		build/code/gp_reg.o \
-		build/code/imm.o \
 		build/code/instruction.o \
-		build/code/label.o \
 		build/code/opcode.o \
 		build/code/mmx_reg.o \
+		build/code/reader.o \
 		build/code/reg_set.o \
 		build/code/scale.o \
 		build/code/seg_reg.o \
-		build/code/stream.o \
+		build/code/writer.o \
 		build/code/xmm_reg.o \
+		\
+		build/sandboxer/sandboxer.o \
+		\
+		build/stream/stream.o \
 		\
 		build/tracer/tracer.o
 
-BIN=bin/att_exec bin/att_trace bin/att2dot bin/att2hex bin/att2bin
+BIN=bin/att_exec \
+		bin/att_sandbox \
+		bin/att_trace \
+		bin/att2dot \
+		bin/att2hex \
+		bin/att2bin
 
 DOC=doc/html
 
@@ -70,8 +75,6 @@ clean:
 	rm -rf $(BIN) $(DOC) $(LIB) build/* src/gen
 	$(MAKE) clean -C test
 
-really_clean: clean
-
 ##### EXTERNAL AND CODEGEN TARGETS
 
 src/gen: src/codegen/*.hs src/codegen/*.csv src/codegen/att.l src/codegen/att.y
@@ -105,6 +108,10 @@ build/cfg/%.o: src/cfg/%.cc src/cfg/%.h src/gen
 	mkdir -p build/cfg && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/code/%.o: src/code/%.cc src/code/%.h src/gen
 	mkdir -p build/code && $(GCC) $(OPT) $(INC) -c $< -o $@
+build/sandboxer/%.o: src/sandboxer/%.cc src/sandboxer/%.h src/gen
+	mkdir -p build/sandboxer && $(GCC) $(OPT) $(INC) -c $< -o $@
+build/stream/%.o: src/stream/%.cc src/stream/%.h src/gen
+	mkdir -p build/stream && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/tracer/%.o: src/tracer/%.cc src/tracer/%.h src/gen
 	mkdir -p build/tracer && $(GCC) $(OPT) $(INC) -c $< -o $@
 
@@ -116,6 +123,8 @@ $(LIB): $(OBJ)
 ##### BINARY TARGET
 
 bin/att_exec: tools/att_exec.cc $(LIB)
+	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
+bin/att_sandbox: tools/att_sandbox.cc $(LIB)
 	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
 bin/att_trace: tools/att_trace.cc $(LIB)
 	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)

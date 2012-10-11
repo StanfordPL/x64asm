@@ -1,3 +1,4 @@
+#include <iomanip>
 #include <iostream>
 
 #include "include/x64.h"
@@ -18,8 +19,14 @@ int main(int argc, char** argv) {
 	assm.write_hex(cout, code);
 	cout << endl << endl;
 
-	cout << "Calling function... " << endl;
-	auto fxn = assm.assemble(code);
+	Sandboxer sandboxer;
+	Sandbox sandbox;
+
+	const auto max_jumps = 1024 * 1024 * 1024;
+	sandbox.set_max_jumps(max_jumps);
+
+	cout << "Calling function in sandbox... " << endl;
+	auto fxn = sandboxer.sandbox(sandbox, code);
 	uint64_t res = 0;
 
 	switch ( argc ) {
@@ -35,10 +42,17 @@ int main(int argc, char** argv) {
 						 return 2;
 	}
 
-	cout << "Function returned with value " << hex << showbase << res << endl;
+	if ( !sandbox.error() )
+		cout << "Function returned normally with value " 
+			   << hex << showbase << res << endl;
+	else {
+		cout << "Function returned abnormally" << endl;
+		if ( sandbox.runaway() )
+			cout << " -> Control exited due to runaway execution";
+		if ( sandbox.max_jumps_exceeded() )
+			cout << " -> Maximum jumps (" << dec << max_jumps << ") exceeded, "
+				   << "likely infinite loop" << endl;
+	}
 
 	return res;
 }
-
-
-

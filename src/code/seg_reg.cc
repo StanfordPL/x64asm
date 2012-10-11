@@ -1,7 +1,5 @@
 #include "src/code/seg_reg.h"
 
-using namespace std;
-
 namespace x64 {
 
 const SegReg es = 0;

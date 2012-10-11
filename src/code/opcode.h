@@ -1,10 +1,8 @@
 #ifndef X64_SRC_CODE_OPCODE_H
 #define X64_SRC_CODE_OPCODE_H
 
-#include <array>
-#include <algorithm>
 #include <cassert>
-#include <iostream>
+#include <cstddef>
 #include <vector>
 
 #include "src/code/operand.h"
@@ -12,29 +10,34 @@
 
 namespace x64 {
 
+// What's going on here?
+// We have 64-bits worth of space for each opcode name.
+// That's enough room to fit the answers to most interesting queries.
+// This allows us to answer those queries using at most two arithmetic ops.
+#define DEF(idx, a, t1, t2, t3, w1, w2, w3, m1, m2, m3, r, j, uj, cj) \
+  ((Operand) idx << 50) | \
+	((Operand) a   << 48) | \
+	((Operand) t3  << 44) | ((Operand) t2 << 40) | ((Operand) t1 << 36) | \
+	((Operand) w3  << 32) | ((Operand) w2 << 28) | ((Operand) w1 << 24) | \
+	((Operand) m3  << 22) | ((Operand) m2 << 20) | ((Operand) m1 << 18) | \
+	((Operand) r   << 17) | \
+	((Operand) j   << 16) | ((Operand) uj << 15) | (cj << 14)
+
 /** Opcodes values.
 */	
 #include "src/gen/opcode.enum"
+
+#undef DEF
 
 /** An extended opcode representation that makes argument types explicit.
 */
 class Opcode {
 	public:
-		typedef std::vector<Opcode>::const_iterator iterator;
-
-		static iterator begin() {
-			return range_.begin();
-		}
-
-		static iterator end() {
-			return range_.end();
-		}
-
 		inline Opcode() 
 				: o_(NOP) { 
 		}
 
-		inline Opcode(OpcodeVal o) 
+		inline Opcode(Operand o) 
 				: o_(o) {
 		}
 
@@ -43,142 +46,66 @@ class Opcode {
 		}
 
 		inline bool is_null() const {
-			return o_ == OPCODE_VAL_NULL;
+			return o_ >= OPCODE_VAL_NULL;
 		}
 
-		inline bool is_valid() const {
-			return o_ <= OPCODE_VAL_NULL;
-		}
-
-		__attribute__((pure)) 
 		inline size_t arity() const {
-			assert(o_ < arity_.size());
-			return arity_[o_];
+			return (o_ >> 48) & 0x3;
 		}
 
-		__attribute__((pure)) 
 		inline Type type(size_t index) const {
-			assert(o_ < type_.size());
 			assert(index < arity());
-			return type_[o_][index];
+			return (Type) ((o_ >> (36 + index*4)) & 0x7);
 		}
 
-		__attribute__((pure)) 
 		inline BitWidth width(size_t index) const {
-			assert(o_ < width_.size());
 			assert(index < arity());
-			return width_[o_][index];
+			return (BitWidth) ((o_ >> (24 + index*4)) & 0x7);
 		}
 
-		__attribute__((pure)) 
-		inline size_t mem_offset() const {
-			assert(o_ < mem_offset_.size());
-			return mem_offset_[o_];
+		inline Modifier mod(size_t index) const {
+			assert(index < arity());
+			return (Modifier) ((o_ >> (18 + index*2)) & 0x3);
 		}
 
-		__attribute__((pure)) 
-		inline bool accesses_mem() const {
-			// NOTE: This is a magic number indicating false
-			return mem_offset() != 16;
+		inline bool is_label_defn() const {
+			return o_ == LABEL_DEFN_64L;
 		}
 
-		__attribute__((pure))
-		inline size_t read_offset() const {
-			assert(o_ < read_offset_.size());
-			return read_offset_[o_];
-		}
-
-		__attribute__((pure))
-		inline bool writes_reg() const {
-			assert(o_ < read_offset_.size());
-			return writes_reg_[o_];
-		}
-
-		__attribute__((pure))
-		inline bool does_implicit_zero_extend() const {
-			return writes_reg() && type(0) == GP_REG && width(0) == DOUBLE;
-		}
-
-		__attribute__((pure))
 		inline bool is_ret() const {
-			return o_ == RETQ;
+			return o_ & ((Operand) 0x1 << 17);
 		}
 
-		__attribute__((pure))
-		inline bool is_cond_jump() const {
-			assert(o_ < is_cond_jump_.size());
-			return is_cond_jump_[o_];
-		}
-
-		__attribute__((pure))
-		inline bool is_uncond_jump() const {
-			assert(o_ < is_uncond_jump_.size());
-			return is_uncond_jump_[o_];
-		}
-
-		__attribute__((pure))
 		inline bool is_jump() const {
-			assert(o_ < is_jump_.size());
-			return is_jump_[o_];
+			return o_ & ((Operand) 0x1 << 16);
 		}
 
-		__attribute__((pure))
-		inline bool rexw_prefix() const {
-			assert(o_ < rexw_prefix_.size());
-			return rexw_prefix_[o_];
+		inline bool is_cond_jump() const {
+			return o_ & ((Operand) 0x1 << 15);
 		}
 
-		__attribute__((pure))
-		inline bool mem_size_or() const {
-			assert(o_ < mem_size_or_.size());
-			return mem_size_or_[o_];
+		inline bool is_uncond_jump() const {
+			return o_ & ((Operand) 0x1 << 14);
 		}
 
-		__attribute__((pure))
 		inline RegSet implicit_read_set() const {
 			assert(o_ < implicit_read_set_.size());
 			return implicit_read_set_[o_];
 		}
 
-		__attribute__((pure))
 		inline RegSet implicit_write_set() const {
 			assert(o_ < implicit_write_set_.size());
 			return implicit_write_set_[o_];
 		}
 
-		__attribute__((pure))
 		inline RegSet implicit_undef_set() const {
 			assert(o_ < implicit_undef_set_.size());
 			return implicit_undef_set_[o_];
 		}
 
-		__attribute__((pure))
-		inline bool is_label_defn() const {
-			return o_ == LABEL_DEFN_64L;
-		}
-
-		inline void read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-		}
-
-		void write_att(std::ostream& os) const;
-
 	private:
 		Operand o_;
 
-		static std::vector<Opcode> range_;
-		static std::vector<const char*> opcodes_;
-		static std::vector<size_t> arity_;
-		static std::vector<std::array<Type, 3>> type_;
-		static std::vector<std::array<BitWidth, 3>> width_;
-		static std::vector<size_t> mem_offset_;
-		static std::vector<size_t> read_offset_;
-		static std::vector<bool> writes_reg_;
-		static std::vector<bool> is_cond_jump_;
-		static std::vector<bool> is_uncond_jump_;
-		static std::vector<bool> is_jump_;
-		static std::vector<bool> rexw_prefix_;
-		static std::vector<bool> mem_size_or_;
 		static std::vector<RegSet> implicit_read_set_;
 		static std::vector<RegSet> implicit_write_set_;
 		static std::vector<RegSet> implicit_undef_set_;

@@ -103,9 +103,9 @@ btsq :  :  0f  ba  :  : 05 :  64  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  
                       
 call :  : e8 :  :  :  64  L  R    :  RAX  RBX  RCX  RDX  RDI  RSI  RBP  RSP  :  RAX  RCX  RDX  RSP  :  :  :  C  O  S  Z  A  P 
                       
-cbtw :  : 98 :  :  :    : AX : AL :  :  : 
+cbtw : 66 : 98 :  :  :    : AX : AL :  :  : 
 cwtl :  : 98 :  :  :    : EAX : AX :  :  : 
-cltq :  : 98 :  :  :    : RAX : EAX :  :  : 
+cltq : 48 : 98 :  :  :    : RAX : EAX :  :  : 
                       
 clc :  : f8 :  :  :    :  :  :  : C : 
                       
@@ -223,10 +223,10 @@ movw :  : c7 :  : 00 :  16  RM  W   16  I  R   :  :  :  :  :
 movl :  : c7 :  : 00 :  32  RM  W   32  I  R   :  :  :  :  : 
 movq :  : c7 :  : 00 :  64  RM  W   32  I  R   :  :  :  :  : 
                       
-movd :  :  0f  6e  :  :  :  128  S  W   32  RM  R   :  :  :  :  : 
-movq :  :  0f  6e  :  :  :  128  S  W   64  RM  R   :  :  :  :  : 
-movd :  :  0f  7e  :  :  :  32  RM  W   128  S  R   :  :  :  :  : 
-movq :  :  0f  7e  :  :  :  64  RM  W   128  S  R   :  :  :  :  : 
+movd : 66 :  0f  6e  :  :  :  128  S  W   32  RM  R   :  :  :  :  : 
+movq : 66 :  0f  6e  :  :  :  128  S  W   64  RM  R   :  :  :  :  : 
+movd : 66 :  0f  7e  :  :  :  32  RM  W   128  S  R   :  :  :  :  : 
+movq : 66 :  0f  7e  :  :  :  64  RM  W   128  S  R   :  :  :  :  : 
                       
 movzbw :  :  0f  b6  :  :  :  16  R  W   8  RM  R   :  :  :  :  : 
 movzbl :  :  0f  b6  :  :  :  32  R  W   8  RM  R   :  :  :  :  : 
@@ -365,7 +365,7 @@ shld :  :  0f  a5  :  :  :  64  RM  X   64  R  X   8  I  R  :  :  :  :  S  Z  P 
 shld :  :  0f  a4  :  :  :  32  RM  X   32  R  X   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
 shld :  :  0f  a5  :  :  :  64  RM  X   64  R  X   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
                       
-shufpd :  :  0f  c6  :  :  :  128  S  X   128  SM  R   8  I  R  :  :  :  :  : 
+shufpd : 66 :  0f  c6  :  :  :  128  S  X   128  SM  R   8  I  R  :  :  :  :  : 
                       
 shufps :  :  0f  c6  :  :  :  128  S  X   128  SM  R   8  I  R  :  :  :  :  : 
                       
