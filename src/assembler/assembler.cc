@@ -90,6 +90,28 @@ inline void emit(unsigned char* buf, size_t& pos, unsigned char c) {
 	buf[pos++] = c;
 }
 
+inline void emit_mem_prefix(unsigned char* buf, size_t& pos, Addr addr) {
+	if ( addr.get_size_or() )
+		emit(buf, pos, 0x67);
+}
+
+inline void emit_prefix(unsigned char* buf, size_t& pos, unsigned char c) {
+	emit(buf, pos, c);
+}
+
+inline void emit_prefix(unsigned char* buf, size_t& pos, unsigned char c1,
+		                    unsigned char c2) {
+	emit(buf, pos, c1);
+	emit(buf, pos, c2);
+}
+
+inline void emit_prefix(unsigned char* buf, size_t& pos, unsigned char c1,
+		                    unsigned char c2, unsigned char c3) {
+	emit(buf, pos, c1);
+	emit(buf, pos, c2);
+	emit(buf, pos, c3);
+}
+
 inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c) {
 	emit(buf, pos, c);
 }
