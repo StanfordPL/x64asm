@@ -206,7 +206,6 @@ first_read i = fr (operand_mods i) 0
 -- What is the first non-write operand?
 num_writes :: Instr -> Int
 num_writes i = nw (operand_mods i) 0
-    where nw ("W":_) i = nw xs (i+1)
-          nw ("X":_) i = nw xs (i+1)
-          nw (_:xs) i = i
-          nw [] _ = 3
+    where nw ("W":xs) i = nw xs (i+1)
+          nw ("X":xs) i = nw xs (i+1)
+          nw _ i = i
