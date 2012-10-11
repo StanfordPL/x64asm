@@ -8,13 +8,15 @@ stoke_module = Extension('stokeasm',
                                     '../../'],
                     extra_objects = map (
                         lambda x:"../../build/code/" + x + ".o",
-                        ["opcode", "cond_reg", "imm", "fp_reg",
-                         "stream", "code", "instruction", "scale",
-                         "seg_reg", "reg_set", "xmm_reg", "mmx_reg",
-                         "addr", "gp_reg", "label"]) +
+                        [ "cond_reg", "gp_reg", "mmx_reg", "reader",
+                          "scale", "writer", "fp_reg", "instruction",
+                          "opcode", "reg_set", "seg_reg", "xmm_reg" ]) +
                         ["../../build/cfg/control_flow_graph.o",
                          "../../build/assembler/assembler.o",
-                         "../../build/assembler/function.o"],
+                         "../../build/sandboxer/sandboxer.o",
+                         "../../build/stream/stream.o",
+                         "../../build/tracer/tracer.o"
+                        ],
                     libraries = ['stdc++'],
                     extra_compile_args = ['-funroll-all-loops',
                                           '-std=c++0x' ],
