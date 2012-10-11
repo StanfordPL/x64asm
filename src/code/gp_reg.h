@@ -6,7 +6,7 @@
 namespace x64 {
 
 /** A general purpose register: 
-		rax, rbx, rcx, rdx, rbp, rsp, rdi, rsi, R8, ..., R15.
+		rax, rbx, rcx, rdx, rbp, rsp, rdi, rsi, r8, ..., r15.
 */
 class GpReg {
 	public:

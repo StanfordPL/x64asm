@@ -2,7 +2,7 @@
 #define X64_SRC_CODE_REG_SET_H
 
 #include <cassert>
-#include <vector>
+#include <list>
 
 #include "src/code/cond_reg.h"
 #include "src/code/gp_reg.h"
@@ -27,9 +27,9 @@ class RegSet {
 		};
 
 	public:
-		typedef std::vector<GpReg>::const_iterator gp_reg_iterator;
-		typedef std::vector<XmmReg>::const_iterator xmm_reg_iterator;
-		typedef std::vector<CondReg>::const_iterator cond_reg_iterator;
+		typedef std::list<GpReg>::const_iterator gp_reg_iterator;
+		typedef std::list<XmmReg>::const_iterator xmm_reg_iterator;
+		typedef std::list<CondReg>::const_iterator cond_reg_iterator;
 
 		inline RegSet() {
 			clear();
@@ -181,12 +181,12 @@ class RegSet {
 		uint64_t gp_mask_;
 		uint64_t xmm_cr_mask_;
 
-		static std::vector<GpReg> gp_regs_;
-		static std::vector<XmmReg> xmm_regs_;
-		static std::vector<CondReg> cond_regs_;
+		static std::list<GpReg> gp_regs_;
+		static std::list<XmmReg> xmm_regs_;
+		static std::list<CondReg> cond_regs_;
 		
 		template <typename T, Mask M, int Max>
-		static inline void build(std::vector<T>& v, uint64_t m) {
+		static inline void build(std::list<T>& v, uint64_t m) {
 			v.clear();
 			for ( int i = 0; i < Max; ++i ) {
 				if ( m & M )

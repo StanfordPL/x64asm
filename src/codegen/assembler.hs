@@ -109,14 +109,14 @@ assm_switch :: [Instr] -> String
 assm_switch is = concat $ map render $ tail is
     where render i = "case " ++ (enum i) ++ ":\n\t" ++ (assm_fxn i) ++ "(" ++ (args i) ++ ");\n\tbreak;\n"
           args i = concat $ intersperse "," $ (args' (operand_types i) 0)
-          args' ("F":xs) i = ("i.get_fp_reg("  ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("L":xs) i = ("i.get_label("   ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("M":xs) i = ("i.get_addr("    ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("O":xs) i = ("i.get_offset("  ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("R":xs) i = ("i.get_gp_reg("  ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("F":xs) i = ("i.get_fp_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("L":xs) i = ("i.get_label(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("M":xs) i = ("i.get_addr(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("O":xs) i = ("i.get_offset(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("R":xs) i = ("i.get_gp_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
           args' ("S":xs) i = ("i.get_xmm_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
           args' ("X":xs) i = ("i.get_mmx_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("I":xs) i = ("i.get_imm("     ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("I":xs) i = ("i.get_imm(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
 
           args' ("AL":xs)  i = ("i.get_gp_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
           args' ("AX":xs)  i = ("i.get_gp_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))

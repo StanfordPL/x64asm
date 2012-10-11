@@ -40,7 +40,7 @@ void ControlFlowGraph::recompute_blocks() {
 	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i ) {
 		const auto& instr = *instr_begin(i);
 		if ( instr.is_label_defn() )
-			labels[instr.get_label(0)] = i;
+			labels[instr.get_operand(0)] = i;
 	}
 
 	// Set up successors
@@ -50,7 +50,7 @@ void ControlFlowGraph::recompute_blocks() {
 		
 		// Unconditional jumps have non-trivial fallthrough targets.
 		if ( instr.is_uncond_jump() ) {
-			succs_[i].push_back(labels[instr.get_label(0)]);
+			succs_[i].push_back(labels[instr.get_operand(0)]);
 			continue;
 		}
 
@@ -61,7 +61,7 @@ void ControlFlowGraph::recompute_blocks() {
 		// Everything else has a fallthrough and a possible conditional target.
 		succs_[i].push_back(i+1);			
 		if ( instr.is_cond_jump() )
-			succs_[i].push_back(labels[instr.get_label(0)]);
+			succs_[i].push_back(labels[instr.get_operand(0)]);
 	}
 
 	// Set up predecessors (these have no particular order) and exits

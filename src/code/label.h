@@ -21,6 +21,10 @@ class Label {
 			return l_;
 		}
 
+		inline bool is_null() const {
+			return false;
+		}
+
 	private:
 		Operand l_;
 };

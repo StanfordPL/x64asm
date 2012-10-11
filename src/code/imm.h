@@ -21,6 +21,10 @@ class Imm {
 			return i_;
 		}
 
+		inline bool is_null() const {
+			return false;
+		}
+
 	private:
 		Operand i_;
 };

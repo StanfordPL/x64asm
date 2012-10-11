@@ -46,6 +46,7 @@ class Opcode {
 		}
 
 		inline bool is_null() const {
+			// TODO -- This isn't correct!
 			return o_ >= OPCODE_VAL_NULL;
 		}
 

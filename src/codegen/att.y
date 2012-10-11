@@ -1,5 +1,6 @@
 %{
 
+#include <array>
 #include <map>
 #include <string>
 #include <tuple>
@@ -164,14 +165,23 @@ Instruction* build_instr(istream& is, const string& opcode,
 		cerr << "???";
 	cerr << endl;
 
+<<<<<<< HEAD
 	if ( !parse_success ) {
 		instr->set_all(NOP, ops.begin(), ops.end());
+=======
+	if ( itr == signatures_.end() ) {
+		*instr = Instruction(NOP, ops.begin(), ops.end());
+>>>>>>> b4f83b11c028821abdef87e30da581cf658a2988
 		is.setstate(std::ios::failbit);
 	}
 	else {
  		for ( const auto& i : operand_info )
 			ops.push_back(i.val);
+<<<<<<< HEAD
 		instr->set_all(parsed_opcode, ops.begin(), ops.end());
+=======
+		*instr = Instruction(itr->second, ops.begin(), ops.end());
+>>>>>>> b4f83b11c028821abdef87e30da581cf658a2988
 	}
 
 	return instr;
@@ -181,7 +191,7 @@ Instruction* build_label(const OperandInfo& label) {
 	Instruction* instr = new Instruction();
 
 	vector<Operand> ops {{ label.val }};
-	instr->set_all(LABEL_DEFN_64L, ops.begin(), ops.end());
+	*instr = Instruction(LABEL_DEFN_64L, ops.begin(), ops.end());
 
 	return instr;
 }
