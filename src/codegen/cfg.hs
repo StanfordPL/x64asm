@@ -45,10 +45,10 @@ opcode_enum is = "enum OpcodeVal {\n  " ++
           m  i = concat $ intersperse "," $ 
                  take 3 $ (map to_mod (operand_mods i)) ++ 
                  ["MODIFIER_NULL", "MODIFIER_NULL", "MODIFIER_NULL"]
-          r  i = map toLower $ show $ ret i
-          j  i = map toLower $ show $ jump i
-          uj i = map toLower $ show $ uncond_jump i
-          cj i = map toLower $ show $ cond_jump i
+          r  i = tf $ ret i
+          j  i = tf $ jump i
+          uj i = tf $ uncond_jump i
+          cj i = tf $ cond_jump i
           mi i = show $ mem_index i
           fr i = show $ first_read i
           nw i = show $ num_writes i
@@ -81,6 +81,9 @@ opcode_enum is = "enum OpcodeVal {\n  " ++
           to_mod "X" = "READ_WRITE"
           to_mod "N" = "NONE"
           to_mod _ = error "Unrecognized modifier!"
+
+          tf True = "0x1"
+          tf False = "0x0"
 
 -- Writes out the opcode domain
 opcode_domain :: [Instr] -> String
