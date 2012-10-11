@@ -20,7 +20,7 @@ objdump_file: test.s
 
 test: objdump_file
 	- rm -f tmp/*.output
-	find -H tmp -name "dump*" -print0 | xargs -0 -n1 -P16 -I Z ./run.py Z > /dev/null 2> /dev/null
+	- find -H tmp -name "dump*" -print0 | xargs -0 -n1 -P16 -I Z ./run.py Z > /dev/null 2> /dev/null
 	cat tmp/dump*.output > output
 	@echo "PASS:"
 	@grep Pass output | cut -c 14- | grep -o "^[0-9]*" | awk '{ sum += $$1 } END { print sum}' | cat -

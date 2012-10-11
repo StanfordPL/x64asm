@@ -52,6 +52,52 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
 #include "src/gen/opcode.sigs"
 
+    string bw2string(BitWidth bw) {
+        switch(bw) {
+            case LOW:
+            case HIGH:
+                return "8";
+            case WORD:
+                return "16";
+            case DOUBLE:
+                return "32";
+            case QUAD:
+                return "64";
+            case OCT:
+                return "128";
+            case BIT_WIDTH_NULL:
+                return "null";
+            default:
+                return "???";
+        }
+    }
+
+    string type2string(Type t) {
+        switch(t) {
+            case ADDR:
+                return "address";
+            case FP_REG:
+                return "fp reg";
+            case GP_REG:
+                return "gp reg";
+            case IMM:
+                return "immediate";
+            case LABEL:
+                return "label";
+            case MMX_REG:
+                return "mmx reg";
+            case RAX_ONLY:  
+                return "rax";
+            case RCX_ONLY:
+                return "rcx";
+            case ST0_ONLY:
+                return "st0";
+            case TYPE_NULL:
+                return "null";
+            default:
+                return "???";
+        }
+    }
 
     BitWidth imm_width(Operand o) {
 
@@ -70,30 +116,25 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
         _ -> QUAD
         */
-        cout << "operand: " << o << endl;
 
         if( ((o >> 8) == 0) ||
             ((o >> 8) == 0xFF) ||
             ((o >> 8) == 0xFFFFFF) ||
             ((o >> 8) == 0xFFFFFFFFFFFFFF) ) {
-            cout << "LOW\n";
             return LOW;
         }
 
         if( ((o >> 16) == 0) ||
             ((o >> 16) == 0xFFFF) ||
             ((o >> 16) == 0xFFFFFFFFFFFF)) {
-            cout << "WORD\n";
             return WORD;
         }
 
         if( ((o >> 32) == 0) ||
             ((o >> 32) == 0xFFFFFFFF) ) {
-            cout << "DOUBLE\n";
             return DOUBLE;
         }
 
-        cout << "QUAD\n";
         return QUAD;
 
     }
@@ -130,23 +171,13 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
     Instruction* build_instr(istream& is, const string& opcode, 
             vector<OperandInfo>& operand_info) {
         Instruction* instr = new Instruction();
-        auto key = make_tuple(opcode, array<Type, 3>(), array<BitWidth, 3>());
-
-        size_t i = 0;
-        for ( size_t ie = operand_info.size(); i < ie; ++i ) {
-            get<1>(key)[i] = operand_info[i].type;
-            get<2>(key)[i] = operand_info[i].width;
-        }
-        for ( ; i < 3; ++i ) {
-            get<1>(key)[i] = TYPE_NULL;
-            get<2>(key)[i] = BIT_WIDTH_NULL;
-        }
 
         // A nasty bit of context sensitivity with the SHL/SHR class of instructions
         // CL in the right place is a RCX_ONLY (we can't check this until now)
         // Ditto for the arithmetic ops and AL,AX,EAX,RAX and RAX_ONLY
+        /*
         {
-            const auto len = opcode.length() > 3 ? 3 : opcode.length();
+            const auto len = opcode.length() > 3 ? 3 : opcode.length() - 1;
             const auto base = opcode.substr(0, len);
 
             if ( base == "sal" || base == "sar" || base == "shl" || base == "shr" )
@@ -157,7 +188,8 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
                 }
 
             if ( base == "adc" || base == "add" || base == "and" || base == "cmp" ||
-                    base == "or"  || base == "sbb" || base == "sub" || base == "xor" )
+                 base == "or"  || base == "sbb" || base == "sub" || base == "xor" ||
+                 base == "tes" )
                 if ( operand_info[0].type == GP_REG && operand_info[0].val == rax && 
                         operand_info[1].type == IMM )
                     if ((operand_info[0].width == QUAD && operand_info[1].width == DOUBLE) || 
@@ -184,51 +216,123 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
                     is.setstate(std::ios::failbit);
             }
         }
+        */
 
-        vector<Operand> ops;
-        const auto opcode_sigs = signatures_[get<0>(key)];
+        // ***** PHASE 0: book keeping *****
+
+        //find operand # of any immediate
+        int immediate_index = -1;
+        int len = operand_info.size();
+        for(int i = 0;i<len;i++)
+            if(operand_info[i].type == IMM)
+                immediate_index = i;
+
+        // ***** PHASE 1: Find all rows in spreadsheet that could plausibly work *****
+
+        const auto opcode_sigs = signatures_[opcode];
         //opcode_sigs has a list of all signatures for the opcode
 
-        auto options = vector<OpcodeVal>();
+        auto options = vector<tuple<array<Type,3>,array<BitWidth,3>,OpcodeVal>>();
         //in options, we'll get only the ones with the right arguments
-
-        //when we loop through options, we'll use these to figure out the right one to pick.
-        BitWidth min_immediate_size  = OCT;
-        int min_immediate_index = -1;
-        int index = 0;
 
         for(const auto& sig : opcode_sigs) {
             bool accept = true;
-            for(int i = 0;i<3;i++) {
+
+        
+            cout << "\nNew Signature attempt!" << endl;
+            for(int i = 0; i < len; i++) {
+                cout << "[";
+                cout << "type: " << type2string(get<0>(sig)[i]);
+                cout << " width: " << bw2string(get<1>(sig)[i]);
+                cout << " ]";
+            }
+            cout << "\n";
+
+            for(int i = 0;i<len;i++) {
 
                 //ensure that the argument types match
-                if(get<1>(key)[i] != get<0>(sig)[i]) {
+                //the chosen signature must be more general than 
+                //the one we're looking for in operands_info
+                if (get<0>(sig)[i] == TYPE_NULL)
+                    continue;
+                else if(operand_info[i].type == GP_REG) {
 
-                    accept = false;
-                    break;
+                    //user provided rax => spreadsheet provides GP_REG or RAX
+                    if( operand_info[i].val == rax ) {
 
-                } else {
-                    if(get<1>(key)[i] == IMM) {
-                        //for immediates, check that we can fit the value correctly
-                        //we want value in key to be less than or equal to a valid signature
-                        if( ! (get<2>(key)[i] <= get<1>(sig)[i]) ) {
-                            accept=false;
-                            break;
-                        }
-
-                    } else {
-                        //otherwise, make sure widths match
-                        //but ignore the width for memory.
-                        if( get<1>(key)[i] != ADDR &&
-                            get<2>(key)[i] != get<1>(sig)[i]) {
+                        if ( ( get<0>(sig)[i] != RAX_ONLY ) &&
+                             ( get<0>(sig)[i] != GP_REG   ) ) {
+                            //cout << "X1" << endl;
                             accept = false;
                             break;
                         }
+
+                    //user provided rcx => spreadsheet provides GP_REG or RCX
+                    } else if (operand_info[i].val == rcx ) {
+
+                        if ( ( get<0>(sig)[i] != RCX_ONLY ) &&
+                             ( get<0>(sig)[i] != GP_REG   ) ) {
+                            //cout << "X2" << endl;
+                            accept = false;
+                            break;
+                        }
+
+                    } else if ( get<0>(sig)[i] != GP_REG ) {
+                        //cout << "X3" << endl;
+                        accept = false;
+                        break;
+                    }
+
+                } else if (operand_info[i].type == FP_REG) {
+
+                    if( operand_info[i].val == st0 ) {
+                      
+                        if ( ( get<0>(sig)[i] != ST0_ONLY ) &&
+                             ( get<0>(sig)[i] != FP_REG   ) ) {
+                            accept = false;
+                            break;
+                        }
+
+                    } else if ( get<0>(sig)[i] != FP_REG ) {
+                        
+                        accept = false;
+                        break;
+
+                    }
+
+                } else if (operand_info[i].type != get<0>(sig)[i] ) {
+
+                    //cout << "X5" << endl;
+                    accept = false;
+                    break;
+
+                }
+                
+            
+                //check that the widths are OK
+                if(operand_info[i].type == IMM) {
+                    //for immediates, check that we can fit the value correctly
+                    //we want value in key to be less than or equal to a valid signature
+                    if( ! (operand_info[i].width <= get<1>(sig)[i]) ) {
+                        accept=false;
+                        break;
+                    }
+
+                } else {
+                    //otherwise, make sure widths match
+                    //but ignore the width for memory.
+                    if( operand_info[i].type  != ADDR &&
+                        operand_info[i].width != get<1>(sig)[i]) {
+                        accept = false;
+                        break;
                     }
                 }
             }
+
+
             if(accept) {
                 //figure out which has smallest immediate value
+                /*
                 for(int i = 0;i<3;i++)
                     if(get<0>(sig)[i] == IMM) {
                         if(get<1>(sig)[i] < min_immediate_size) {
@@ -248,28 +352,89 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
                             //cout << operand_info[i].val << "\n";
                         }
                     }
+                */
 
-                options.push_back(get<2>(sig));
-                index++;
+                /*
+                cout << "accepted possible:";
+                for(int i = 0; i < 3; i++) {
+                    cout << "[";
+                    cout << "type: " << type2string(get<0>(sig)[i]);
+                    cout << " width: " << bw2string(get<1>(sig)[i]);
+                    cout << " ]";
+                }
+                cout << "\n";
+                */
+
+                options.push_back(sig);
             }
         }
 
-        for(const auto &o : options) {
-            cout << o << "\n";
-        }
-        cout << "best: " << (min_immediate_index >> 50) << "\n";
+        // ***** PHASE 2: Find the rows that we want.  *****
+        //  This means the rows are
+        //  (1) are specific, e.g. using EAX variants instead of general purpose
+        //  (2) have small immediate fields whenever possible.
 
-        bool parse_success = (options.size()) > 0;
+        //when we loop through options, we'll use these to figure out the right one to pick.
+        int max_score  = -10000;
+        int max_score_index = -1;
+        int index = 0;
+
+        for(const auto &opt : options) {
+
+
+            //PART (a): Compute Score
+            int score = 0;
+
+            //the smaller the width, the better
+            if (immediate_index != -1) {
+                score += 10*(20 - get<1>(opt)[immediate_index]) ;
+            }
+
+
+            //you get a few points for having a more specific register
+            for(int i = 0; i < len; i++ )
+                if(get<0>(opt)[i] == RAX_ONLY ||
+                   get<0>(opt)[i] == RCX_ONLY ||
+                   get<0>(opt)[i] == ST0_ONLY)
+                   score += 5;
+
+
+
+            //PART (b): Update Variables
+            if(score > max_score) {
+                max_score = score;
+                max_score_index = index;
+            }
+
+            index++;
+
+        }
+
+
+
+        // ***** PHASE 3: Cleanup.  Resize immediates, print debug info, etc.  *****
+
+        //get the opcode
+        bool parse_success = (max_score_index >= 0);
         OpcodeVal parsed_opcode = NOP;
 
         if(parse_success) {
-            if(min_immediate_index == -1)
-                parsed_opcode = options.front();
-            else
-                parsed_opcode = options[min_immediate_index];
+            parsed_opcode = get<2>(options[max_score_index]);
+
+            if(immediate_index != -1) {
+                int i = immediate_index;
+                operand_info[i].width = get<1>(options[max_score_index])[i];
+                operand_info[i].val = truncate_immediate(operand_info[i].val, 
+                        operand_info[i].width);
+            }
+
+            //cout << "Index chosen: " << max_score_index << endl;
         }
 
+        //resize immediate
         // Trouble with parsing?  Try uncommenting this to see signatures
+        //Note: this code needs to be revised to not use key.
+        /*
         cerr << opcode << "\t type [ ";
         for ( const auto& i : get<1>(key) )
             cerr << i << " ";
@@ -285,16 +450,20 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
         else
             cerr << "???";
         cerr << endl;
+        */
+
+        vector<Operand> ops;
 
         if ( !parse_success ) {
             *instr = Instruction(NOP, ops.begin(), ops.end());
-            is.setstate(std::ios::failbit);
+            //is.setstate(std::ios::failbit);
         }
         else {
             for ( const auto& i : operand_info )
                 ops.push_back(i.val);
             *instr = Instruction(parsed_opcode, ops.begin(), ops.end());
         }
+
 
         return instr;
     }
@@ -392,34 +561,6 @@ operands : /* empty */ {
 					 $$->push_back(*$1); 
 					 delete $1; 
 				 }
-                 /*
-				 | mem { 
-					 $$ = new vector<OperandInfo>(); 
-					 $$->push_back(*$1); 
-					 delete $1; 
-				 }
-				 | operand COMMA operand { 
-					 $$ = new vector<OperandInfo>(); 
-					 $$->push_back(*$3); 
-					 $$->push_back(*$1); 
-					 delete $1; 
-					 delete $3; 
-				 } 
-				 | mem COMMA operand { 
-					 $$ = new vector<OperandInfo>(); 
-					 $$->push_back(*$3); 
-					 $$->push_back(*$1); 
-					 delete $1; 
-					 delete $3; 
-				 } 
-				 | operand COMMA mem { 
-					 $$ = new vector<OperandInfo>(); 
-					 $$->push_back(*$3); 
-					 $$->push_back(*$1); 
-					 delete $1; 
-					 delete $3; 
-				 } 
-                 */
                  | operand COMMA operand {
                      $$ = new vector<OperandInfo>();
                      $$->push_back(*$3);
