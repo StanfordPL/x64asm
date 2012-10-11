@@ -80,12 +80,12 @@ btw :  :  0f  ba  :  : 04 :  16  RM  R   8  I  R   :  :  :  : C :  O  S  Z  A  P
 btl :  :  0f  ba  :  : 04 :  32  RM  R   8  I  R   :  :  :  : C :  O  S  Z  A  P 
 btq :  :  0f  ba  :  : 04 :  64  RM  R   8  I  R   :  :  :  : C :  O  S  Z  A  P 
                       
-btcw :  :  0f  bb  :  :  :  16  RM  W   16  R  R   :  :  :  : C :  O  S  Z  A  P 
-btcl :  :  0f  bb  :  :  :  32  RM  W   32  R  R   :  :  :  : C :  O  S  Z  A  P 
-btcq :  :  0f  bb  :  :  :  64  RM  W   64  R  R   :  :  :  : C :  O  S  Z  A  P 
-btcw :  :  0f  ba  :  : 07 :  16  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
-btcl :  :  0f  ba  :  : 07 :  32  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
-btcq :  :  0f  ba  :  : 07 :  64  RM  W   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btcw :  :  0f  bb  :  :  :  16  RM  X   16  R  R   :  :  :  : C :  O  S  Z  A  P 
+btcl :  :  0f  bb  :  :  :  32  RM  X   32  R  R   :  :  :  : C :  O  S  Z  A  P 
+btcq :  :  0f  bb  :  :  :  64  RM  X   64  R  R   :  :  :  : C :  O  S  Z  A  P 
+btcw :  :  0f  ba  :  : 07 :  16  RM  X   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btcl :  :  0f  ba  :  : 07 :  32  RM  X   8  I  R   :  :  :  : C :  O  S  Z  A  P 
+btcq :  :  0f  ba  :  : 07 :  64  RM  X   8  I  R   :  :  :  : C :  O  S  Z  A  P 
                       
 btrw :  :  0f  b3  :  :  :  16  RM  W   16  R  R   :  :  :  : C :  O  S  Z  A  P 
 btrl :  :  0f  b3  :  :  :  32  RM  W   32  R  R   :  :  :  : C :  O  S  Z  A  P 
