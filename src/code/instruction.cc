@@ -68,15 +68,21 @@ RegSet Instruction::explicit_write_set() const {
 	RegSet rs;
 	for ( size_t i = 0, ie = opcode_.num_writes(); i < ie; ++i ) {
 		const auto t = type(i);
-		if ( t == GP_REG ) {
-			const auto gp = get_gp_reg(i);
-			const auto w = width(i);
-			assert(!gp.is_null());
-			rs.set(gp, w == DOUBLE ? QUAD : w);
-		}
-		else {
-			assert(t == XMM_REG);
-			rs.set(get_xmm_reg(i));
+		switch ( type(i) ) {
+			case GP_REG:
+			case RAX_ONLY:
+			case RCX_ONLY: {
+				const auto gp = get_gp_reg(i);
+				const auto w = width(i);
+				assert(!gp.is_null());
+				rs.set(gp, w == DOUBLE ? QUAD : w);
+			}
+			case XMM_REG:
+				assert(t == XMM_REG);
+				rs.set(get_xmm_reg(i));
+
+			default:
+				assert(false);
 		}
 	}
 
