@@ -196,7 +196,7 @@ js :  :  0f  88  :  :  :  64  L  R    :  :  : S :  :
                       
 jmp :  : e9 :  :  :  64  L  R    :  :  :  :  : 
                       
-lahf :  : 9f :  :  :    :  :  :  :  : 
+lahf :  : 9f :  :  :    : AH :  :  O  S  Z  A  P  C  :  : 
                       
 leaw :  : 8d :  :  :  16  R  W   8  M  N   :  :  :  :  : 
 leal :  : 8d :  :  :  32  R  W   8  M  N   :  :  :  :  : 
