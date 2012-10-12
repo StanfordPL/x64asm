@@ -135,8 +135,6 @@ decb :  : fe :  : 01 :  8  RM  X    :  :  :  :  O  S  Z  A  P  :
 decw :  : ff :  : 01 :  16  RM  X    :  :  :  :  O  S  Z  A  P  : 
 decl :  : ff :  : 01 :  32  RM  X    :  :  :  :  O  S  Z  A  P  : 
 decq :  : ff :  : 01 :  64  RM  X    :  :  :  :  O  S  Z  A  P  : 
-decw :  : 48 : y :  :  16  R  X    :  :  :  :  O  S  Z  A  P  : 
-decl :  : 48 : y :  :  32  R  X    :  :  :  :  O  S  Z  A  P  : 
                       
 divb :  : f6 :  : 06 :  8  RM  R    : AX : AX :  :  :  O  S  Z  A  P  C 
 divw :  : f7 :  : 06 :  16  RM  R    :  AX  DX  :  AX  DX  :  :  :  O  S  Z  A  P  C 
