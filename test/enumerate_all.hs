@@ -53,7 +53,7 @@ gp_no_sp 32 = ["%eax", "%ecx", "%ebx", "%edx", "%ebp", "%esi", "%edi"]
 gp_no_sp 64 = ["%rax", "%rcx", "%rbx", "%rdx", "%rbp", "%rsi", "%rdi"]
 gp_no_sp x = error ("Registers must have width 8/16/32/64, not " ++ (show x))
 
-memtest = ["", "0x00", "0x01", "-0x01", "0x7fffffff", "-0x7fffffff"]
+memtest = ["", "0x00", "0x01", "-0x01", "0x80", "-0x80", "0x7f", "-0x7f", "0x7fffffff", "-0x7fffffff"]
 
 immediate :: Int -> [String]
 immediate 8 =  ["$0x0", "$0x7f", "$-0x7f" ] --"$0xff", "$0x7f", "$0x80"]
