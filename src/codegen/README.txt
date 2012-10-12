@@ -1,6 +1,10 @@
-Some annoying mnemonic confusions:
+Some *annoying* mnemonic confusions:
 
-CDQ = CLTD
-CDQE = CLTQ
-CWD = CWTD
-CWDE = CWTL
+Intel     Gas
+
+CDQ     = CLTD
+CDQE    = CLTQ
+CWD     = CWTD
+CWDE    = CWTL
+CBW     = CBTW
+

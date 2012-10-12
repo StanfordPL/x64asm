@@ -238,6 +238,19 @@ movq : 66 :  0f  6e  :  :  :  128  S  W   64  RM  R   :  :  :  :  :
 movd : 66 :  0f  7e  :  :  :  32  RM  W   128  S  R   :  :  :  :  : 
 movq : 66 :  0f  7e  :  :  :  64  RM  W   128  S  R   :  :  :  :  : 
                       
+movdqa : 66 :  0f  6f  :  :  :  128  S  W   128  SM  R   :  :  :  :  : 
+movdqa : 66 :  0f  7f  :  :  :  128  SM  W   128  S  R   :  :  :  :  : 
+                      
+movdqu : f3 :  0f  6f  :  :  :  128  S  W   128  SM  R   :  :  :  :  : 
+movdqu : f3 :  0f  7f  :  :  :  128  SM  W   128  S  R   :  :  :  :  : 
+                      
+movsbw :  :  0f  be  :  :  :  16  R  W   8  RM  R   :  :  :  :  : 
+movsbl :  :  0f  be  :  :  :  32  R  W   8  RM  R   :  :  :  :  : 
+movsbq :  :  0f  be  :  :  :  64  R  W   8  RM  R   :  :  :  :  : 
+movswl :  :  0f  bf  :  :  :  32  R  W   16  RM  R   :  :  :  :  : 
+movswq :  :  0f  bf  :  :  :  64  R  W   16  RM  R   :  :  :  :  : 
+movslq :  : 63 :  :  :  64  R  W   32  RM  R   :  :  :  :  : 
+                      
 movzbw :  :  0f  b6  :  :  :  16  R  W   8  RM  R   :  :  :  :  : 
 movzbl :  :  0f  b6  :  :  :  32  R  W   8  RM  R   :  :  :  :  : 
 movzbq :  :  0f  b6  :  :  :  64  R  W   8  RM  R   :  :  :  :  : 
@@ -293,24 +306,50 @@ paddd : 66 :  0f  fe  :  :  :  128  S  X   128  SM  R   :  :  :  :  :
 paddq :  :  0f  d4  :  :  :  64  X  X   64  XM  R   :  :  :  :  : 
 paddq : 66 :  0f  d4  :  :  :  128  S  X   128  SM  R   :  :  :  :  : 
                       
+pmuldq : 66 :  0f  38  28  :  :  :  128  S  W   128  SM  R   :  :  :  :  : 
+                      
+pmulhrsw :  :  0f  38  0b  :  :  :  64  X  W   64  XM  R   :  :  :  :  : 
+pmulhrsw : 66 :  0f  38  0b  :  :  :  128  S  W   128  SM  R   :  :  :  :  : 
+                      
+pmulhuw :  :  0f  e4  :  :  :  64  X  W   64  XM  R   :  :  :  :  : 
+pmulhuw : 66 :  0f  e4  :  :  :  128  S  W   128  SM  R   :  :  :  :  : 
+                      
+pmulhw :  :  0f  e5  :  :  :  64  X  W   64  XM  R   :  :  :  :  : 
+pmulhw : 66 :  0f  e5  :  :  :  128  S  W   128  SM  R   :  :  :  :  : 
+                      
 pmulld : 66 :  0f  38  40  :  :  :  128  S  X   128  SM  R   :  :  :  :  : 
                       
+pmullw :  :  0f  d5  :  :  :  64  X  W   64  XM  R   :  :  :  :  : 
 pmullw : 66 :  0f  d5  :  :  :  128  S  X   128  SM  R   :  :  :  :  : 
+                      
+pmuludq :  :  0f  f4  :  :  :  64  X  W   64  XM  R   :  :  :  :  : 
+pmuludq : 66 :  0f  f4  :  :  :  128  S  X   128  SM  R   :  :  :  :  : 
                       
 popw :  : 58 : y :  :  16  R  W    : RSP : RSP :  :  : 
 popq :  : 58 : y :  :  64  R  W    : RSP : RSP :  :  : 
 popw :  : 8f :  : 00 :  16  RM  W    : RSP : RSP :  :  : 
 popq :  : 8f :  : 00 :  64  RM  W    : RSP : RSP :  :  : 
                       
-                      
 popcntw : f3 :  0f  b8  :  :  :  16  R  W   16  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
 popcntl : f3 :  0f  b8  :  :  :  32  R  W   32  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
 popcntq : f3 :  0f  b8  :  :  :  64  R  W   64  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+                      
+popfq :  : 9d :  :  :    : RSP : RSP :  :  O  S  Z  A  P  C  : 
+                      
+pshufd : 66 :  0f  70  :  :  :  128  S  W   128  SM  R   8  I  R  :  :  :  :  : 
+                      
+psrldq : 66 :  0f  73  :  : 03 :  128  S  W   8  I  R   :  :  :  :  : 
+                      
+punpckldq :  :  0f  62  :  :  :  32  X  W   32  XM  R   :  :  :  :  : 
+punpckldq : 66 :  0f  62  :  :  :  128  S  X   128  SM  R   :  :  :  :  : 
+punpcklqdq : 66 :  0f  6c  :  :  :  128  S  X   128  SM  R   :  :  :  :  : 
                       
 pushw :  : 50 : y :  :  16  R  R    : RSP : RSP :  :  : 
 pushq :  : 50 : y :  :  64  R  R    : RSP : RSP :  :  : 
 pushw :  : ff :  : 06 :  16  RM  R    : RSP : RSP :  :  : 
 pushq :  : ff :  : 06 :  64  RM  R    : RSP : RSP :  :  : 
+                      
+pushfq :  : 9c :  :  :    : RSP : RSP :  O  S  Z  A  P  C  :  : 
                       
 ret :  : c3 :  :  :    :  :  :  :  : 
 retq :  : c3 :  :  :    :  :  :  :  : 
