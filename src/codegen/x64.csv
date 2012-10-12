@@ -111,6 +111,16 @@ clc :  : f8 :  :  :    :  :  :  : C :
                       
 cmc :  : f5 :  :  :    :  :  :  : C : 
                       
+cmovae :  :  0f  43  :  :  :  16  R  W   16  RM  R   :  :  : C :  : 
+cmovae :  :  0f  43  :  :  :  32  R  W   32  RM  R   :  :  : C :  : 
+cmovae :  :  0f  43  :  :  :  64  R  W   64  RM  R   :  :  : C :  : 
+cmove :  :  0f  44  :  :  :  16  R  W   16  RM  R   :  :  : Z :  : 
+cmove :  :  0f  44  :  :  :  32  R  W   32  RM  R   :  :  : Z :  : 
+cmove :  :  0f  44  :  :  :  64  R  W   64  RM  R   :  :  : Z :  : 
+cmovle :  :  0f  4e  :  :  :  16  R  W   16  RM  R   :  :  :  Z  S  O  :  : 
+cmovle :  :  0f  4e  :  :  :  32  R  W   32  RM  R   :  :  :  Z  S  O  :  : 
+cmovle :  :  0f  4e  :  :  :  64  R  W   64  RM  R   :  :  :  Z  S  O  :  : 
+                      
 cmpb :  : 3c :  :  :  8  AL  R   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
 cmpw :  : 3d :  :  :  16  AX  R   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
 cmpl :  : 3d :  :  :  32  EAX  R   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
@@ -249,6 +259,8 @@ negl :  : f7 :  : 03 :  32  RM  X    :  :  :  :  O  S  Z  A  P  C  :
 negq :  : f7 :  : 03 :  64  RM  X    :  :  :  :  O  S  Z  A  P  C  : 
                       
 nop :  : 90 :  :  :    :  :  :  :  : 
+nopw :  :  0f  1f  :  : 00 :  16  RM  R    :  :  :  :  : 
+nopl :  :  0f  1f  :  : 00 :  32  RM  R    :  :  :  :  : 
                       
 notb :  : f6 :  : 02 :  8  RM  X    :  :  :  :  : 
 notw :  : f7 :  : 02 :  16  RM  X    :  :  :  :  : 
