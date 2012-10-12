@@ -370,6 +370,23 @@ sbbw :  : 1b :  :  :  16  R  X   16  RM  R   :  :  : C :  O  S  Z  A  P  C  :
 sbbl :  : 1b :  :  :  32  R  X   32  RM  R   :  :  : C :  O  S  Z  A  P  C  : 
 sbbq :  : 1b :  :  :  64  R  X   64  RM  R   :  :  : C :  O  S  Z  A  P  C  : 
                       
+seta :  :  0f  97  :  :  :  8  RM  W    :  :  :  C  Z  :  : 
+setae :  :  0f  93  :  :  :  8  RM  W    :  :  : C :  : 
+setb :  :  0f  92  :  :  :  8  RM  W    :  :  : C :  : 
+setbe :  :  0f  96  :  :  :  8  RM  W    :  :  :  C  Z  :  : 
+sete :  :  0f  94  :  :  :  8  RM  W    :  :  : Z :  : 
+setg :  :  0f  9f  :  :  :  8  RM  W    :  :  : S :  : 
+setge :  :  0f  9d  :  :  :  8  RM  W    :  :  : S :  : 
+setl :  :  0f  9c  :  :  :  8  RM  W    :  :  :  S  O  :  : 
+setle :  :  0f  9e  :  :  :  8  RM  W    :  :  :  Z  S  O  :  : 
+setne :  :  0f  95  :  :  :  8  RM  W    :  :  : Z :  : 
+setno :  :  0f  91  :  :  :  8  RM  W    :  :  : O :  : 
+setnp :  :  0f  9b  :  :  :  8  RM  W    :  :  : P :  : 
+setns :  :  0f  99  :  :  :  8  RM  W    :  :  : S :  : 
+seto :  :  0f  90  :  :  :  8  RM  W    :  :  : O :  : 
+setp :  :  0f  9a  :  :  :  8  RM  W    :  :  : P :  : 
+sets :  :  0f  98  :  :  :  8  RM  W    :  :  : S :  : 
+                      
 shld :  :  0f  a4  :  :  :  16  RM  X   16  R  X   8  I  R  :  :  :  :  S  Z  P  C  :  O  A 
 shld :  :  0f  a5  :  :  :  16  RM  X   16  R  X   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
 shld :  :  0f  a4  :  :  :  32  RM  X   32  R  X   8  I  R  :  :  :  :  S  Z  P  C  :  O  A 
