@@ -3,6 +3,7 @@
 
 #include "src/code/cond_reg.h"
 #include "src/code/gp_reg.h"
+#include "src/code/xmm_reg.h"
 
 #include <cassert>
 #include <stdint.h>
@@ -15,6 +16,7 @@ class State {
 	public:
 		typedef uint64_t gp_reg_val_type;
 		typedef bool cond_reg_val_type;
+		typedef __uint128_t xmm_reg_val_type;
 
 		inline size_t line() const {
 			return line_;
@@ -56,6 +58,16 @@ class State {
 			}
 		}
 
+		inline xmm_reg_val_type xmm_before(XmmReg xmm) const {
+			assert(!xmm.is_null());
+			return xmm_before_[xmm];
+		}
+
+		inline xmm_reg_val_type xmm_after(XmmReg xmm) const {
+			assert(!xmm.is_null());
+			return xmm_after_[xmm];
+		}
+
 	private:
 		size_t line_;
 
@@ -64,6 +76,9 @@ class State {
 
 		uint64_t cond_before_;
 		uint64_t cond_after_;
+
+		xmm_reg_val_type xmm_before_[16];
+		xmm_reg_val_type xmm_after_[16];
 };	
 
 } // namespace x64
