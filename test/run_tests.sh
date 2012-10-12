@@ -8,9 +8,14 @@ JOBS=16
 rm -rf tmp
 mkdir tmp
 
+echo "Creating test cases..."
+##Compile enumerate_all
+ghc -i../src/codegen enumerate_all.hs
+
 ##First, generate lots of instructions, and split them up
 ./enumerate_all ../src/codegen/x64.csv | split -d -l200000 - "tmp/instrs"
 
+echo "Running tests..."
 ##Process each file individually (map)
 find -H tmp -name "instrs*" -print0 | xargs -P$JOBS -0 -n1 -I Z ./process.sh Z
 

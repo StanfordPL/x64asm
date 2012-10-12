@@ -54,17 +54,16 @@ erthing: $(BIN) $(DOC) $(LIB)
 ##### TEST TARGETS
 
 test: erthing
-	make -C test
-
+	cd test/stokeasm_py; python setup.py build; find -name "*.so" -print0 | xargs -0 cp -t .
+	cd test; ./run_tests.sh
 
 ##### CLEAN TARGETS
 
 clean:
 	rm -rf $(BIN) $(DOC) $(LIB) build/* src/gen
-	cd test
-	rm -rf enumerate_all.hi enumerate_all.o tmp/* enumerate_all
-	rm -f stokeasm_py/*.so
-	rm -rf stokeasm_py/build
+	rm -rf test/enumerate_all.hi test/enumerate_all.o test/tmp/* test/enumerate_all
+	rm -f test/stokeasm_py/*.so
+	rm -rf test/stokeasm_py/build
 
 ##### EXTERNAL AND CODEGEN TARGETS
 

@@ -58,15 +58,16 @@ read_instrs s = map format $ rows
 -- 16-bit operands require a 66 override prefix
 add_66_prefix :: Instr -> Instr
 add_66_prefix (Instr a p r o rc rf rm rmo os ir iw cr cw cu) =
-    case os of
-      ("16":"M":_)  -> case a of
-                        "fiaddl" -> (Instr a p       r o rc rf rm rmo os ir iw cr cw cu)
-                        _        -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
-      ("16":"R":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
-      ("16":"RM":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
-      ("16":"AX":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
-      ("16":"CX":_) -> error "Does this ever happen?  CX Target?"
-      _             -> (Instr a p           r o rc rf rm rmo os ir iw cr cw cu)
+    case a of
+        "fiaddl" -> (Instr a p       r o rc rf rm rmo os ir iw cr cw cu)
+        "fiadds" -> (Instr a p       r o rc rf rm rmo os ir iw cr cw cu)
+        _ -> case os of
+              ("16":"M":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
+              ("16":"R":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
+              ("16":"RM":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
+              ("16":"AX":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
+              ("16":"CX":_) -> error "Does this ever happen?  CX Target?"
+              _             -> (Instr a p           r o rc rf rm rmo os ir iw cr cw cu)
 
 -- 64-bit operands require a mandator rex.w prefix
 -- Sort of... it's more complicated than this.
