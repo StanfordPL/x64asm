@@ -53,27 +53,18 @@ erthing: $(BIN) $(DOC) $(LIB)
 
 ##### TEST TARGETS
 
-test: test/objdump_file release
+test: erthing
+	make -C test
 
-test/objdump_file: $(OBJ) $(BIN) test/enumerate_all.hs test/run.py
-	$(MAKE) -C test
-	@echo
-	@echo "***********************************************"
-	@echo
-	@echo "If this compilation process succeeded, do"
-	@echo "'make runtests' to continue."
-	@echo
-	@echo "***********************************************"
-	@echo
-
-runtests: test
-	$(MAKE) test -C test
 
 ##### CLEAN TARGETS
 
 clean:
 	rm -rf $(BIN) $(DOC) $(LIB) build/* src/gen
-	$(MAKE) clean -C test
+	cd test
+	rm -rf enumerate_all.hi enumerate_all.o tmp/* enumerate_all
+	rm -f stokeasm_py/*.so
+	rm -rf stokeasm_py/build
 
 ##### EXTERNAL AND CODEGEN TARGETS
 

@@ -1,5 +1,5 @@
 
-stokeasm.so: stokeasm.cc setup.py
+all:
 	python setup.py build
 	find build -name "*.so" | xargs /bin/cp -t .
 
