@@ -246,19 +246,23 @@ inline void emit_mod_rm(unsigned char* buf, size_t& pos, Addr rm, Operand r) {
 
 // REX nop -- Simplifies codegen.
 // Calls to this method should be inlined away.
-inline void emit_rex(unsigned char* buf, size_t& pos) {
+inline void emit_rex(unsigned char* buf, size_t& pos, GpReg low) {
 }
 
 // REX nop -- Simplifies codegen.
 // Calls to this method should be inlined away.
-inline void emit_rex(unsigned char* buf, size_t& pos, unsigned char rex) {
+inline void emit_rex(unsigned char* buf, size_t& pos, unsigned char rex, 
+		                 GpReg low) {
 }
 
 // Figure 2.7: Intel Manual Vol 2A 2-9
 // This ignores the distinction between high and low general purpose regs,
 //   but that's fine because it wouldn't get you an rex.b either way.
 inline void emit_rex(unsigned char* buf, size_t& pos, Operand rm, 
-		                 unsigned char rex) {
+		                 unsigned char rex, GpReg low) {
+	if ( low >> 2 == 0x1 )
+		rex |= 0x40;
+
 	if ( rm & 0x8 )
 		rex |= 0x41;
 	if ( rex )
@@ -269,7 +273,10 @@ inline void emit_rex(unsigned char* buf, size_t& pos, Operand rm,
 // This ignores the distinction between high and low general purpose regs,
 //   but that's fine because it wouldn't get you an rex.b either way.
 inline void emit_rex(unsigned char* buf, size_t& pos, Operand rm, Operand r, 
-		                 unsigned char rex) {
+		                 unsigned char rex, GpReg low) {
+	if ( low >> 2 == 0x1 )
+		rex |= 0x40;
+
 	if ( r & 0x8 )
 		rex |= 0x44;
 	if ( rm & 0x8 )
@@ -282,7 +289,10 @@ inline void emit_rex(unsigned char* buf, size_t& pos, Operand rm, Operand r,
 // This ignores the distinction between high and low general purpose regs,
 //   but that's fine because it wouldn't get you an rex.b either way.
 inline void emit_rex(unsigned char* buf, size_t& pos, Addr rm, Operand r, 
-		                 unsigned char rex) {
+		                 unsigned char rex, GpReg low) {
+	if ( low >> 2 == 0x1 )
+		rex |= 0x40;
+
 	if ( r & 0x8 )
 		rex |= 0x44;
 	if ( rm.get_base() & 0x8 )
@@ -297,7 +307,10 @@ inline void emit_rex(unsigned char* buf, size_t& pos, Addr rm, Operand r,
 // This is essentially identical to the case above.
 // The only difference being that there is no possibility of setting rex.b.
 inline void emit_rex(unsigned char* buf, size_t& pos, Addr rm, 
-		                 unsigned char rex) {
+		                 unsigned char rex, GpReg low) {
+	// No check for is8bit since this only takes a mem argument
+	assert(low.is_null());
+
 	if ( rm.get_base() & 0x8 )
 		rex |= 0x41;
 	// Note: This relies on GP_REG_NUL == 16

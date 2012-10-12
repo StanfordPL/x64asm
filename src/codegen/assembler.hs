@@ -51,7 +51,10 @@ assm_defn is = concat $ map render $ tail is
                      (x:y:z:[]) -> "\temit_prefix(buf_,pos_,0x" ++ x ++ ",0x" ++ y ++ ",0x" ++ z ++ ");\n"
                      _ -> "\t// NO PREFIX\n"
 
-          rex_pref i = "\temit_rex(" ++ (rex_pref_args i) ++ (rex_def (rex i)) ++ ");\n"
+          rex_pref i = "\temit_rex(" ++ (rex_pref_args i) ++ 
+                                        (rex_def (rex i)) ++
+                                        (is_8bit (operands i)) ++
+                                        ");\n"
           rex_pref_args i = "buf_,pos_" ++ (rm (operand_types i) ((rm_offset i) == 1))
           rm ("M":"I":_) _  = ",arg0"
           rm ("M":_:_) _    = ",arg0,(Operand)arg1"
@@ -71,6 +74,10 @@ assm_defn is = concat $ map render $ tail is
           rm _ _ = ""
           rex_def "" = ",0x00"
           rex_def d  = ",0x" ++ d 
+          is_8bit ("8":"R":_:"8":"R":_) = ",GpReg(arg0|arg1)"
+          is_8bit ("8":"R":_) = ",arg0"
+          is_8bit (_:_:_:"8":"R":_) = ",arg1" 
+          is_8bit _ = ",gp_null"
 
           mod_rm i = "\temit_mod_rm(" ++ (mod_rm_args i) ++ ");\n"
           mod_rm_args i = rex_pref_args i ++ (digit (reg_field i))
