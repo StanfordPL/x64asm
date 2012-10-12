@@ -1,6 +1,7 @@
 
 all: enumerate_all objdump_file
 
+### make ###
 enumerate_all: enumerate_all.hs stokeasm_py/stokeasm.so
 	ghc -i../src/codegen enumerate_all.hs
 
@@ -12,12 +13,12 @@ stokeasm_py/stokeasm.so: stokeasm_py/stokeasm.cc
 
 objdump_file: test.s
 	gcc -c test.s
-	objdump -d -Msuffix test.o | cut -c11- | tail -n +8 > objdump_file
+	objdump -d test.o | cut -c11-31 | tail -n +8 > objdump_file
 	- mkdir -p tmp
 	- rm -f tmp/dump*
 	split -d -l100000 objdump_file "tmp/dump"
 	
-
+### make test ###
 test: objdump_file
 	- rm -f tmp/*.output
 	- find -H tmp -name "dump*" -print0 | xargs -0 -n1 -P16 -I Z ./run.py Z > /dev/null 2> /dev/null

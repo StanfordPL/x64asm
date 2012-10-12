@@ -41,10 +41,10 @@ parse_arg a b _ = let w = read a :: Int in
 
 -- For each argument, get a list of strings that it could represent
 gp :: Int -> [String]
-gp 8  = ["%al", "%cl", "%bl", "%dl"]--, "%ah", "%ch", "%bh", "%dh"]
+gp 8  = ["%al", "%cl", "%bl", "%dl", "%dil"]--, "%ah", "%ch", "%bh", "%dh"]
 gp 16 = ["%ax", "%cx", "%dx", "%bx", "%sp", "%bp", "%si", "%di"]
 gp 32 = ["%eax", "%ecx", "%ebx", "%edx", "%esp", "%ebp", "%esi", "%edi"]
-gp 64 = ["%rax", "%rcx", "%rbx", "%rdx", "%rsp", "%rbp", "%rsi", "%rdi"]
+gp 64 = ["%rax", "%rcx", "%rbx", "%rdx", "%rsp", "%rbp", "%rsi", "%rdi", "%r11", "%r12", "%r13"]
 gp x = error ("Registers must have width 8/16/32/64, not " ++ (show x))
 
 gp_no_sp 8 = gp 8

@@ -81,10 +81,11 @@ instruction = ""
 output_file = None
 objdump_file = None
 try:
-  objdump_file = open(sys.argv[1])
+  instruction_file = open(sys.argv[1] + ".s", 'r')
+  objdump_file = open(sys.argv[1] + ".dump", 'r')
   output_file = open(sys.argv[1] + ".output", 'w')
 except:
-  print "Need to specify file as command line argument."
+  print "Need to specify prefix as command line argument."
 
 for line in objdump_file:
     tmp_instruction = line[22:].strip()
@@ -93,7 +94,8 @@ for line in objdump_file:
     else:
         #run the test
         if instruction != "":
-            run_test(hexstring.strip(), instruction + "\n")
+            real_instruction = instruction_file.readline()
+            run_test(hexstring.strip(), real_instruction + "\n")
 
         #prepare for next test
         instruction = tmp_instruction
@@ -106,3 +108,5 @@ red("Fails: " + str(fails) + " (" + str(fails*100/total) + "%)")
 write("Total tests: " + str(total))
 output_file.flush()
 output_file.close()
+instruction_file.close()
+objdump_file.close()
