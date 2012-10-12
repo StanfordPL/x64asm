@@ -176,8 +176,6 @@ incb :  : fe :  : 00 :  8  RM  X    :  :  :  :  O  S  Z  A  P  :
 incw :  : ff :  : 00 :  16  RM  X    :  :  :  :  O  S  Z  A  P  : 
 incl :  : ff :  : 00 :  32  RM  X    :  :  :  :  O  S  Z  A  P  : 
 incq :  : ff :  : 00 :  64  RM  X    :  :  :  :  O  S  Z  A  P  : 
-incw :  : 40 : y :  :  16  R  X    :  :  :  :  O  S  Z  A  P  : 
-incl :  : 40 : y :  :  32  R  X    :  :  :  :  O  S  Z  A  P  : 
                       
 ja :  :  0f  87  :  :  :  64  L  R    :  :  :  Z  C  :  : 
 jae :  :  0f  83  :  :  :  64  L  R    :  :  : C :  : 
@@ -198,7 +196,7 @@ js :  :  0f  88  :  :  :  64  L  R    :  :  : S :  :
                       
 jmp :  : e9 :  :  :  64  L  R    :  :  :  :  : 
                       
-lahf :  : 9f :  :  :    :  :  :  :  : 
+lahf :  : 9f :  :  :    : AH :  :  O  S  Z  A  P  C  :  : 
                       
 leaw :  : 8d :  :  :  16  R  W   8  M  N   :  :  :  :  : 
 leal :  : 8d :  :  :  32  R  W   8  M  N   :  :  :  :  : 
