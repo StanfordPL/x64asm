@@ -370,12 +370,12 @@ sbbw :  : 1b :  :  :  16  R  X   16  RM  R   :  :  : C :  O  S  Z  A  P  C  :
 sbbl :  : 1b :  :  :  32  R  X   32  RM  R   :  :  : C :  O  S  Z  A  P  C  : 
 sbbq :  : 1b :  :  :  64  R  X   64  RM  R   :  :  : C :  O  S  Z  A  P  C  : 
                       
-shld :  :  0f  a4  :  :  :  16  RM  X   16  R  X   8  I  R  :  :  :  :  S  Z  P  C  :  O  A 
-shld :  :  0f  a5  :  :  :  16  RM  X   16  R  X   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
-shld :  :  0f  a4  :  :  :  32  RM  X   32  R  X   8  I  R  :  :  :  :  S  Z  P  C  :  O  A 
-shld :  :  0f  a4  :  :  :  64  RM  X   64  R  X   8  I  R  :  :  :  :  S  Z  P  C  :  O  A 
-shld :  :  0f  a5  :  :  :  32  RM  X   32  R  X   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
-shld :  :  0f  a5  :  :  :  64  RM  X   64  R  X   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
+shld :  :  0f  a4  :  :  :  16  RM  X   16  R  R   8  I  R  :  :  :  :  S  Z  P  C  :  O  A 
+shld :  :  0f  a5  :  :  :  16  RM  X   16  R  R   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
+shld :  :  0f  a4  :  :  :  32  RM  X   32  R  R   8  I  R  :  :  :  :  S  Z  P  C  :  O  A 
+shld :  :  0f  a4  :  :  :  64  RM  X   64  R  R   8  I  R  :  :  :  :  S  Z  P  C  :  O  A 
+shld :  :  0f  a5  :  :  :  32  RM  X   32  R  R   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
+shld :  :  0f  a5  :  :  :  64  RM  X   64  R  R   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
                       
 shufpd : 66 :  0f  c6  :  :  :  128  S  X   128  SM  R   8  I  R  :  :  :  :  : 
                       
