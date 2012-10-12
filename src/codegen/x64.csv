@@ -145,8 +145,6 @@ decb :  : fe :  : 01 :  8  RM  X    :  :  :  :  O  S  Z  A  P  :
 decw :  : ff :  : 01 :  16  RM  X    :  :  :  :  O  S  Z  A  P  : 
 decl :  : ff :  : 01 :  32  RM  X    :  :  :  :  O  S  Z  A  P  : 
 decq :  : ff :  : 01 :  64  RM  X    :  :  :  :  O  S  Z  A  P  : 
-decw :  : 48 : y :  :  16  R  X    :  :  :  :  O  S  Z  A  P  : 
-decl :  : 48 : y :  :  32  R  X    :  :  :  :  O  S  Z  A  P  : 
                       
 divb :  : f6 :  : 06 :  8  RM  R    : AX : AX :  :  :  O  S  Z  A  P  C 
 divw :  : f7 :  : 06 :  16  RM  R    :  AX  DX  :  AX  DX  :  :  :  O  S  Z  A  P  C 
@@ -188,8 +186,6 @@ incb :  : fe :  : 00 :  8  RM  X    :  :  :  :  O  S  Z  A  P  :
 incw :  : ff :  : 00 :  16  RM  X    :  :  :  :  O  S  Z  A  P  : 
 incl :  : ff :  : 00 :  32  RM  X    :  :  :  :  O  S  Z  A  P  : 
 incq :  : ff :  : 00 :  64  RM  X    :  :  :  :  O  S  Z  A  P  : 
-incw :  : 40 : y :  :  16  R  X    :  :  :  :  O  S  Z  A  P  : 
-incl :  : 40 : y :  :  32  R  X    :  :  :  :  O  S  Z  A  P  : 
                       
 ja :  :  0f  87  :  :  :  64  L  R    :  :  :  Z  C  :  : 
 jae :  :  0f  83  :  :  :  64  L  R    :  :  : C :  : 
@@ -210,7 +206,7 @@ js :  :  0f  88  :  :  :  64  L  R    :  :  : S :  :
                       
 jmp :  : e9 :  :  :  64  L  R    :  :  :  :  : 
                       
-lahf :  : 9f :  :  :    :  :  :  :  : 
+lahf :  : 9f :  :  :    :  :  :  O  S  Z  A  P  C  :  : 
                       
 leaw :  : 8d :  :  :  16  R  W   8  M  N   :  :  :  :  : 
 leal :  : 8d :  :  :  32  R  W   8  M  N   :  :  :  :  : 
@@ -405,18 +401,18 @@ subw :  : 2b :  :  :  16  R  X   16  RM  R   :  :  :  :  O  S  Z  A  P  C  :
 subl :  : 2b :  :  :  32  R  X   32  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
 subq :  : 2b :  :  :  64  R  X   64  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
                       
-testb :  : a8 :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
-testw :  : a9 :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  P  C  : A
-testl :  : a9 :  :  :  32  EAX  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
-testq :  : a9 :  :  :  64  RAX  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
-testb :  : f6 :  : 00 :  8  RM  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
-testw :  : f7 :  : 00 :  16  RM  X   16  I  R   :  :  :  :  O  S  Z  P  C  : A
-testl :  : f7 :  : 00 :  32  RM  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
-testq :  : f7 :  : 00 :  64  RM  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A
-testb :  : 84 :  :  :  8  RM  X   8  R  R   :  :  :  :  O  S  Z  P  C  : A
-testw :  : 85 :  :  :  16  RM  X   16  R  R   :  :  :  :  O  S  Z  P  C  : A
-testl :  : 85 :  :  :  32  RM  X   32  R  R   :  :  :  :  O  S  Z  P  C  : A
-testq :  : 85 :  :  :  64  RM  X   64  R  R   :  :  :  :  O  S  Z  P  C  : A
+testb :  : a8 :  :  :  8  AL  R   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+testw :  : a9 :  :  :  16  AX  R   16  I  R   :  :  :  :  O  S  Z  P  C  : A
+testl :  : a9 :  :  :  32  EAX  R   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+testq :  : a9 :  :  :  64  RAX  R   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+testb :  : f6 :  : 00 :  8  RM  R   8  I  R   :  :  :  :  O  S  Z  P  C  : A
+testw :  : f7 :  : 00 :  16  RM  R   16  I  R   :  :  :  :  O  S  Z  P  C  : A
+testl :  : f7 :  : 00 :  32  RM  R   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+testq :  : f7 :  : 00 :  64  RM  R   32  I  R   :  :  :  :  O  S  Z  P  C  : A
+testb :  : 84 :  :  :  8  RM  R   8  R  R   :  :  :  :  O  S  Z  P  C  : A
+testw :  : 85 :  :  :  16  RM  R   16  R  R   :  :  :  :  O  S  Z  P  C  : A
+testl :  : 85 :  :  :  32  RM  R   32  R  R   :  :  :  :  O  S  Z  P  C  : A
+testq :  : 85 :  :  :  64  RM  R   64  R  R   :  :  :  :  O  S  Z  P  C  : A
                       
 xorb :  : 34 :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
 xorw :  : 35 :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  P  C  : A
