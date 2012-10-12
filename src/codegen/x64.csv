@@ -225,10 +225,21 @@ movw :  : c7 :  : 00 :  16  RM  W   16  I  R   :  :  :  :  :
 movl :  : c7 :  : 00 :  32  RM  W   32  I  R   :  :  :  :  : 
 movq :  : c7 :  : 00 :  64  RM  W   32  I  R   :  :  :  :  : 
                       
+movd :  :  0f  6e  :  :  :  64  X  W   32  RM  R   :  :  :  :  : 
+                      
+movd :  :  0f  7e  :  :  :  32  RM  W   64  X  R   :  :  :  :  : 
+                      
 movd : 66 :  0f  6e  :  :  :  128  S  W   32  RM  R   :  :  :  :  : 
-movq : 66 :  0f  6e  :  :  :  128  S  W   64  RM  R   :  :  :  :  : 
+                      
 movd : 66 :  0f  7e  :  :  :  32  RM  W   128  S  R   :  :  :  :  : 
-movq : 66 :  0f  7e  :  :  :  64  RM  W   128  S  R   :  :  :  :  : 
+                      
+                      
+movq :  :  0f  6f  :  :  :  64  X  W   64  XM  R   :  :  :  :  : 
+movq :  :  0f  7f  :  :  :  64  XM  W   64  X  R   :  :  :  :  : 
+movq :  :  f3  0f  7e  :  :  :  128  S  W   128  S  R   :  :  :  :  : 
+movq :  :  f3  0f  7e  :  :  :  128  S  W   64  M  R   :  :  :  :  : 
+                      
+movq : 66 :  0f  d6  :  :  :  64  M  W   128  S  R   :  :  :  :  : 
                       
 movzbw :  :  0f  b6  :  :  :  16  R  W   8  RM  R   :  :  :  :  : 
 movzbl :  :  0f  b6  :  :  :  32  R  W   8  RM  R   :  :  :  :  : 
