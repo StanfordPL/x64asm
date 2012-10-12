@@ -37,8 +37,7 @@ Function& Tracer::trace(Function& fxn, Trace& t, const Code& code) {
 void Tracer::finish_state(Trace& t, size_t line) {
 	assm_.pushq_64r(rax);
 	assm_.pushq_64r(rbx);
-	assm_.lahf();
-	assm_.pushw_16r(rax);
+	assm_.pushfq();
 
 	// Record the line number of the current instruction
 	assm_.movabsq_64rax_64o(rax, (Operand) &t.next_elem_);
@@ -51,25 +50,21 @@ void Tracer::finish_state(Trace& t, size_t line) {
 	assm_.movq_64r_64i(rax, (Operand) &t.next_elem_);
 	assm_.incq_64m_rm0(Addr(rax));
 
-	assm_.popw_16r(rax);
-	assm_.sahf();
+	assm_.popfq();
 	assm_.popq_64r(rbx);
 	assm_.popq_64r(rax);
 }
 
+// TODO: This turned into a trace everything method.
 void Tracer::trace_gp(Trace& t, bool is_before) {
-	// Backup original rax and rbx
 	assm_.pushq_64r(rax); 
 	assm_.pushq_64r(rbx); 
-	// Backup condition regiters
-	assm_.lahf();         
-	assm_.pushw_16r(rax); 
-	// We've lost ax, get it back
-	assm_.movq_64r_64m_rm1(rax, Addr(rsp, Imm(10)));
+	assm_.pushfq();
 
-	// Push everything we want to write out to the stack
+	// Push whatever gp regs we care about onto the stack
 	for ( auto gp = gps_.begin(), gpe = gps_.end(); gp != gpe; ++gp )
 		assm_.pushq_64r(*gp);
+	// Add more state here ...
 
 	// Find the address of the current State
 	// If this is an after trace, you'll have to subtract 1
@@ -82,6 +77,7 @@ void Tracer::trace_gp(Trace& t, bool is_before) {
 	assm_.movq_64r_64i(rax, (Operand) &t.trace_);
 	assm_.addq_64r_64r_rm0(rbx, rax);
 	
+	// Pop everything else we've tracked and save it (in reverse order!)...
 	// Pop the registers of the stack (reverse order!) and write to State
 	for ( auto gp = gps_.rbegin(), gpe = gps_.rend(); gp != gpe; ++gp ) {
 		const auto disp = is_before ? 
@@ -91,9 +87,18 @@ void Tracer::trace_gp(Trace& t, bool is_before) {
 		assm_.movq_64m_64r_rm0(Addr(rbx, disp), rax);
 	}
 
-	// Put everything back the way we found it
-	assm_.popw_16r(rax);
-	assm_.sahf();
+	// Pop the condition registers off the stack 
+	assm_.popfq();
+
+	// Write them out to the state if we want them
+	if ( conds_ ) {
+		const auto disp = is_before ?
+			Imm(offset(State, cond_before_)) : Imm(offset(State, cond_after_));
+		assm_.lahf();
+		assm_.movq_64m_64r_rm0(Addr(rbx, disp), rax);
+	}
+
+	// Now clean everything up
 	assm_.popq_64r(rbx);
 	assm_.popq_64r(rax);
 }

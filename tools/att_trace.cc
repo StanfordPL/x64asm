@@ -9,15 +9,24 @@ using namespace x64;
 void print_gp(const Instruction& instr, 
 		          const char* name, const State& s, GpReg gp) {
 	cout << "  " << name << ": ";
-
 	cout << hex << noshowbase << setw(32) << setfill('0') << s.gp_before(gp);
 	cout << " -> ";
-
 	if ( instr.is_jump() || instr.is_ret() )
 		cout << "???";
 	else
 		cout << hex << noshowbase << setw(32) << setfill('0') << s.gp_after(gp);
+	cout << endl;
+}
 
+void print_cond(const Instruction& instr,
+                const char* name, const State& s, CondReg cond) {
+	cout << "  " << name << ": ";
+	cout << hex << noshowbase << s.cond_before(cond);
+	cout << " -> ";
+	if ( instr.is_jump() || instr.is_ret() )
+		cout << "???";
+	else
+		cout << hex << noshowbase << s.cond_after(cond);
 	cout << endl;
 }
 
@@ -35,8 +44,10 @@ int main(int argc, char** argv) {
 	cout << endl << endl;
 
 	Tracer tracer;
-	for ( auto i = 0; i < 16; ++i )
-		tracer.set((GpReg) i);
+	for ( auto i = GpReg::begin(), ie = GpReg::end(); i != ie; ++i )
+		tracer.set(*i);
+	for ( auto i = CondReg::begin(), ie = CondReg::end(); i != ie; ++i )
+		tracer.set(*i);
 	for ( size_t i = 0, ie = code.size(); i < ie; ++i ) {
 		tracer.set_before(i);
 		tracer.set_after(i);
@@ -84,7 +95,14 @@ int main(int argc, char** argv) {
 		print_gp(i, "r13", state, r13);
 		print_gp(i, "r14", state, r14);
 		print_gp(i, "r15", state, r15);
+		cout << endl;
 
+		print_cond(i, "af", state, af);
+		print_cond(i, "cf", state, cf);
+		print_cond(i, "of", state, of);
+		print_cond(i, "pf", state, pf);
+		print_cond(i, "sf", state, sf);
+		print_cond(i, "zf", state, zf);
 		cout << endl;
 	}
 

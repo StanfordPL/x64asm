@@ -16,9 +16,17 @@ class Trace;
 
 class Tracer {
 	public:
+		Tracer() 
+				: conds_(false) {
+		}
+
 		inline void set(GpReg gp) {
 			assert(!gp.is_null());
 			gps_.insert(gp);
+		}
+		inline void set(CondReg cond) {
+			assert(!cond.is_null());
+			conds_ = true;
 		}
 
 		inline void set_before(size_t line) {
@@ -44,6 +52,7 @@ class Tracer {
 		std::set<size_t> afters_;
 
 		std::set<GpReg> gps_;
+		bool conds_;
 
 		void finish_state(Trace& t, size_t line);
 		void trace_gp(Trace& t, bool is_before);
