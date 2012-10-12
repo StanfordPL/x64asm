@@ -111,25 +111,25 @@ clc :  : f8 :  :  :    :  :  :  : C :
                       
 cmc :  : f5 :  :  :    :  :  :  : C : 
                       
-cmpb :  : 3c :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpw :  : 3d :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpl :  : 3d :  :  :  32  EAX  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpq :  : 3d :  :  :  64  RAX  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpb :  : 80 :  : 07 :  8  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpw :  : 81 :  : 07 :  16  RM  X   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpl :  : 81 :  : 07 :  32  RM  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpq :  : 81 :  : 07 :  64  RM  X   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpw :  : 83 :  : 07 :  16  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpl :  : 83 :  : 07 :  32  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpq :  : 83 :  : 07 :  64  RM  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpb :  : 38 :  :  :  8  RM  X   8  R  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpw :  : 39 :  :  :  16  RM  X   16  R  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpl :  : 39 :  :  :  32  RM  X   32  R  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpq :  : 39 :  :  :  64  RM  X   64  R  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpb :  : 3a :  :  :  8  R  X   8  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpw :  : 3b :  :  :  16  R  X   16  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpl :  : 3b :  :  :  32  R  X   32  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
-cmpq :  : 3b :  :  :  64  R  X   64  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpb :  : 3c :  :  :  8  AL  R   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpw :  : 3d :  :  :  16  AX  R   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpl :  : 3d :  :  :  32  EAX  R   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpq :  : 3d :  :  :  64  RAX  R   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpb :  : 80 :  : 07 :  8  RM  R   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpw :  : 81 :  : 07 :  16  RM  R   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpl :  : 81 :  : 07 :  32  RM  R   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpq :  : 81 :  : 07 :  64  RM  R   32  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpw :  : 83 :  : 07 :  16  RM  R   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpl :  : 83 :  : 07 :  32  RM  R   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpq :  : 83 :  : 07 :  64  RM  R   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpb :  : 38 :  :  :  8  RM  R   8  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpw :  : 39 :  :  :  16  RM  R   16  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpl :  : 39 :  :  :  32  RM  R   32  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpq :  : 39 :  :  :  64  RM  R   64  R  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpb :  : 3a :  :  :  8  R  R   8  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpw :  : 3b :  :  :  16  R  R   16  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpl :  : 3b :  :  :  32  R  R   32  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
+cmpq :  : 3b :  :  :  64  R  R   64  RM  R   :  :  :  :  O  S  Z  A  P  C  : 
                       
 decb :  : fe :  : 01 :  8  RM  X    :  :  :  :  O  S  Z  A  P  : 
 decw :  : ff :  : 01 :  16  RM  X    :  :  :  :  O  S  Z  A  P  : 
