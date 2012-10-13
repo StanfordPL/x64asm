@@ -29,6 +29,33 @@ class Imm {
 		Operand i_;
 };
 
+class Imm8 : public Imm {
+	public:
+		inline Imm8() : Imm() { }
+		inline Imm8(Operand o) : Imm(o) { }
+};
+
+class Imm16 : public Imm {
+	public:
+		inline Imm16() : Imm() { }
+		inline Imm16(Operand o) : Imm(o) { }
+};
+
+class Imm32 : public Imm {
+	public:
+		inline Imm32() : Imm() { }
+		inline Imm32(Operand o) : Imm(o) { }
+};
+
+class Imm64 : public Imm {
+	public:
+		inline Imm64() : Imm() { }
+		inline Imm64(Operand o) : Imm(o) { }
+
+		template <typename T>
+		inline Imm64(T* t) : Imm((Operand) t) { }
+};
+
 } // namespace x64
 
 #endif

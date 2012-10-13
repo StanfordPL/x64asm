@@ -4,26 +4,19 @@ using namespace std;
 
 namespace x64 {
 
-const FpReg st0 = 0;
-const FpReg st1 = 1;
-const FpReg st2 = 2;
-const FpReg st3 = 3;
-const FpReg st4 = 4;
-const FpReg st5 = 5;
-const FpReg st6 = 6;
-const FpReg st7 = 7;
-const FpReg fp_null = 8;
-
-const std::vector<FpReg> FpReg::domain_ {{ 
-	st0, 
-	st1, 
-	st2, 
-	st3, 
-	st4, 
-	st5, 
-	st6, 
-	st7 
+const std::vector<St> St::domain_ {{ 
+	0, 1, 2, 3, 4, 5, 6, 7
 }};
+
+const St0 st0 = 0;
+const St st1 = 1;
+const St st2 = 2;
+const St st3 = 3;
+const St st4 = 4;
+const St st5 = 5;
+const St st6 = 6;
+const St st7 = 7;
+const St st_null = 8;
 
 } // namespace x64
 

@@ -7,15 +7,13 @@
 
 namespace x64 {
 
-/** A floating point stack register: st(0), ..., st(7).
-*/
-class FpReg {
+class St {
 	public:
-		inline FpReg() 
+		inline St() 
 				: f_(8) { 
 		}
 
-		inline FpReg(Operand f) 
+		inline St(Operand f) 
 				: f_(f) { 
 		}
 
@@ -31,7 +29,7 @@ class FpReg {
 			return f_ == 0;
 		}
 
-		typedef const std::vector<FpReg>::const_iterator iterator;
+		typedef const std::vector<St>::const_iterator iterator;
 
 		static iterator begin() {
 			return domain_.begin();
@@ -44,17 +42,23 @@ class FpReg {
 	private:
 		Operand f_;
 
-		static const std::vector<FpReg> domain_;
+		static const std::vector<St> domain_;
 };
 
-extern const FpReg st0;
-extern const FpReg st1;
-extern const FpReg st2;
-extern const FpReg st3;
-extern const FpReg st4;
-extern const FpReg st5;
-extern const FpReg st6;
-extern const FpReg st7;
+class St0 : public St {
+	public:
+		inline St0() : St() { }
+		inline St0(Operand o) : St(o) { }
+};
+
+extern const St0 st0;
+extern const St st1;
+extern const St st2;
+extern const St st3;
+extern const St st4;
+extern const St st5;
+extern const St st6;
+extern const St st7;
 
 } // namespace x64
 

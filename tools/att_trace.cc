@@ -17,7 +17,7 @@ void print_128(__uint128_t x) {
 }
 
 void print_gp(const Instruction& instr, 
-		          const char* name, const State& s, GpReg gp) {
+		          const char* name, const State& s, R64 gp) {
 	cout << "  " << name << ": ";
 	print_64(s.gp_before(gp));
 	cout << "-> ";
@@ -41,7 +41,7 @@ void print_cond(const Instruction& instr,
 }
 
 void print_xmm(const Instruction& instr, 
-		           const char* name, const State& s, XmmReg xmm) {
+		           const char* name, const State& s, Xmm xmm) {
 	cout << "  " << name << ": ";
 	print_128(s.xmm_before(xmm));
 	cout << "-> ";
@@ -66,11 +66,11 @@ int main(int argc, char** argv) {
 	cout << endl << endl;
 
 	Tracer tracer;
-	for ( auto i = GpReg::begin(), ie = GpReg::end(); i != ie; ++i )
+	for ( auto i = R64::begin(), ie = R64::end(); i != ie; ++i )
 		tracer.set(*i);
 	for ( auto i = CondReg::begin(), ie = CondReg::end(); i != ie; ++i )
 		tracer.set(*i);
-	for ( auto i = XmmReg::begin(), ie = XmmReg::end(); i != ie; ++i )
+	for ( auto i = Xmm::begin(), ie = Xmm::end(); i != ie; ++i )
 		tracer.set(*i);
 	for ( size_t i = 0, ie = code.size(); i < ie; ++i ) {
 		tracer.set_before(i);
@@ -152,7 +152,3 @@ int main(int argc, char** argv) {
 
 	return 0;
 }
-
-
-
-

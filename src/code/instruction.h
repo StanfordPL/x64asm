@@ -47,10 +47,6 @@ class Instruction {
 			return opcode_; 
 		}
 
-		inline void set_opcode(Opcode o) {
-			opcode_ = o;
-		}
-
 		inline Operand get_operand(size_t index) const {
 			assert(index < arity());
 			return operands_[index];
@@ -59,86 +55,6 @@ class Instruction {
 		inline void set_operand(size_t index, Operand o) {
 			assert(index < arity());
 			operands_[index] = o;
-		}
-
-		inline Addr get_addr(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_addr(size_t index, Addr a) {
-			assert(index < arity());
-			operands_[index] = a;
-		}
-
-		inline FpReg get_fp_reg(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_fp_reg(size_t index, FpReg fp) {
-			assert(index < arity());
-			operands_[index] = fp;
-		}
-
-		inline GpReg get_gp_reg(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_gp_reg(size_t index, GpReg gp) {
-			assert(index < arity());
-			operands_[index] = gp;
-		}
-
-		inline Imm get_imm(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_imm(size_t index, Imm i) {
-			assert(index < arity());
-			operands_[index] = i;
-		}
-
-		inline Label get_label(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_label(size_t index, Label l) {
-			assert(index < arity());
-			operands_[index] = l;
-		}
-
-		inline MmxReg get_mmx_reg(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_mmx_reg(size_t index, MmxReg mm) {
-			assert(index < arity());
-			operands_[index] = mm;
-		}
-
-		inline Offset get_offset(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_offset(size_t index, Offset o) {
-			assert(index < arity());
-			operands_[index] = o;
-		}
-
-		inline XmmReg get_xmm_reg(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_xmm_reg(size_t index, XmmReg x) {
-			assert(index < arity());
-			operands_[index] = x;
 		}
 
 		bool is_null() const;
@@ -191,7 +107,7 @@ class Instruction {
 			const auto mi = opcode_.mem_index();
 			if ( mi == 3 )
 				return false;
-			return get_addr(mi).is_stack();
+			return ((M)get_operand(mi)).is_stack();
 		}
 
 		inline Modifier stack_mod() const {
@@ -203,7 +119,7 @@ class Instruction {
 			const auto mi = opcode_.mem_index();
 			if ( mi == 3 )
 				return false;
-			return get_addr(mi).is_heap();
+			return ((M)get_operand(mi)).is_heap();
 		}
 
 		inline Modifier heap_mod() const {

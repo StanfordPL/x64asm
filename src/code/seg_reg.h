@@ -9,13 +9,13 @@ namespace x64 {
 
 /** A Segmentation register: cs, ds, ss, es, fs, gs
 */
-class SegReg {
+class Sreg {
 	public:
-		inline SegReg()
+		inline Sreg()
 				: s_(6) {
 		}
 
-		inline SegReg(Operand s)
+		inline Sreg(Operand s)
 				: s_(s) {
 		}
 
@@ -27,7 +27,7 @@ class SegReg {
 			return s_ >= 6;
 		}
 
-		typedef const std::vector<SegReg>::const_iterator iterator;
+		typedef const std::vector<Sreg>::const_iterator iterator;
 
 		static iterator begin() {
 			return domain_.begin();
@@ -40,16 +40,16 @@ class SegReg {
 	private:
 		Operand s_;
 
-		static const std::vector<SegReg> domain_;
+		static const std::vector<Sreg> domain_;
 };
 
-extern const SegReg es;
-extern const SegReg cs;
-extern const SegReg ss;
-extern const SegReg ds;
-extern const SegReg fs;
-extern const SegReg gs;
-extern const SegReg seg_null;
+extern const Sreg es;
+extern const Sreg cs;
+extern const Sreg ss;
+extern const Sreg ds;
+extern const Sreg fs;
+extern const Sreg gs;
+extern const Sreg sreg_null;
 
 } // namespace x64
 

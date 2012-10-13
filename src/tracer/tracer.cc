@@ -36,40 +36,40 @@ Function& Tracer::trace(Function& fxn, Trace& t, const Code& code) {
 
 template <bool is_before>
 void Tracer::trace(Trace& t) {
-	assm_.pushq_64r(rax); 
-	assm_.pushq_64r(rbx); 
+	assm_.pushq(rax); 
+	assm_.pushq(rbx); 
 	assm_.pushfq();
 
 	// Push whatever gp regs we care about onto the stack
-	for ( auto gp = gps_.begin(), gpe = gps_.end(); gp != gpe; ++gp )
-		assm_.pushq_64r(*gp);
+	for ( auto r = r64_.begin(), re = r64_.end(); r != re; ++r )
+		assm_.pushq(*r);
 
 	// Find the address of the current State
 	// If this is an after trace, you'll have to subtract 1
-	assm_.movabsq_64rax_64o(rax, (Operand) &t.next_elem_);
+	assm_.movabsq(rax, Moffs64(&t.next_elem_));
 	if ( !is_before )
-		assm_.decq_64r(rax);
+		assm_.decq(rax);
 
-	assm_.movq_64r_64i(rbx, (Operand) sizeof(State));
-	assm_.imulq_64r_64r(rbx, rax);
-	assm_.movq_64r_64i(rax, (Operand) &t.trace_);
-	assm_.addq_64r_64r(rbx, rax);
+	assm_.movq(rbx, Imm64(sizeof(State)));
+	assm_.imulq(rbx, rax);
+	assm_.movq(rax, Imm64(&t.trace_));
+	assm_.addq(rbx, rax);
 	
 	// Pop the registers of the stack (reverse order!) and write to State
-	for ( auto gp = gps_.rbegin(), gpe = gps_.rend(); gp != gpe; ++gp ) {
+	for ( auto r = r64_.rbegin(), re = r64_.rend(); r != re; ++r ) {
 		const auto disp = is_before ? 
-			Imm(offset(State, gp_before_) + *gp * sizeof(State::gp_reg_val_type)) :
-			Imm(offset(State, gp_after_)  + *gp * sizeof(State::gp_reg_val_type));
-		assm_.popq_64r(rax);
-		assm_.movq_64m_64r(Addr(rbx, disp), rax);
+			Imm32(offset(State, r64_before_) + *r * sizeof(State::r64_val_type)) :
+			Imm32(offset(State, r64_after_)  + *r * sizeof(State::r64_val_type));
+		assm_.popq(rax);
+		assm_.movq(M64(rbx, disp), rax);
 	}
 
 	// Write out XMM Registers
-	for ( auto xmm = xmms_.begin(), xmme = xmms_.end(); xmm != xmme; ++xmm ) {
+	for ( auto xmm = xmm_.begin(), xmme = xmm_.end(); xmm != xmme; ++xmm ) {
 		const auto disp = is_before ? 
-			Imm(offset(State, xmm_before_) + *xmm * sizeof(State::xmm_reg_val_type)) :
-			Imm(offset(State, xmm_after_)  + *xmm * sizeof(State::xmm_reg_val_type));
-		assm_.movdqa_128m_128s(Addr(rbx, disp), *xmm);
+			Imm32(offset(State, xmm_before_) + *xmm * sizeof(State::xmm_val_type)) :
+			Imm32(offset(State, xmm_after_)  + *xmm * sizeof(State::xmm_val_type));
+		assm_.movdqa(M128(rbx, disp), *xmm);
 	}
 
 	// Pop the condition registers off the stack 
@@ -78,35 +78,35 @@ void Tracer::trace(Trace& t) {
 	// Write them out to the state if we want them
 	if ( conds_ ) {
 		const auto disp = is_before ?
-			Imm(offset(State, cond_before_)) : Imm(offset(State, cond_after_));
+			Imm32(offset(State, cond_before_)) : Imm32(offset(State, cond_after_));
 		assm_.lahf();
-		assm_.movq_64m_64r(Addr(rbx, disp), rax);
+		assm_.movq(M64(rbx, disp), rax);
 	}
 
 	// Now clean everything up
-	assm_.popq_64r(rbx);
-	assm_.popq_64r(rax);
+	assm_.popq(rbx);
+	assm_.popq(rax);
 }
 
 void Tracer::finish_state(Trace& t, size_t line) {
-	assm_.pushq_64r(rax);
-	assm_.pushq_64r(rbx);
+	assm_.pushq(rax);
+	assm_.pushq(rbx);
 	assm_.pushfq();
 
 	// Record the line number of the current instruction
-	assm_.movabsq_64rax_64o(rax, (Operand) &t.next_elem_);
-	assm_.movq_64r_64i(rbx, (Operand) sizeof(State));
-	assm_.imulq_64r_64r(rbx, rax);
-	assm_.movq_64r_64i(rax, (Operand) &t.trace_);
-	assm_.movq_64m_32i(Addr(rax, rbx), (Operand) line);
+	assm_.movabsq(rax, Moffs64(&t.next_elem_));
+	assm_.movq(rbx, Imm64(sizeof(State)));
+	assm_.imulq(rbx, rax);
+	assm_.movq(rax, Imm64(&t.trace_));
+	assm_.movq(M64(rax, rbx), Imm32(line));
 
 	// Increment the trace's next elem pointer
-	assm_.movq_64r_64i(rax, (Operand) &t.next_elem_);
-	assm_.incq_64m(Addr(rax));
+	assm_.movq(rax, Imm64(&t.next_elem_));
+	assm_.incq(M64(rax));
 
 	assm_.popfq();
-	assm_.popq_64r(rbx);
-	assm_.popq_64r(rax);
+	assm_.popq(rbx);
+	assm_.popq(rax);
 }
 
 } // namespace x64

@@ -3,28 +3,37 @@ import Data.List
 import Instr
 import System.Environment
 
--- Generates a unique name for an instruction
-assm_fxn :: Instr -> String
-assm_fxn i = map toLower $ enum i
-
 -- Generates an argument list for an instruction
 assm_args :: Instr -> String
-assm_args i = concat $ intersperse "," $ (args' (operand_types i) 0)
-    where args' ("F":xs) i = ("FpReg arg"  ++ (show i)):[] ++ (args' xs (i+1))
-          args' ("L":xs) i = ("Label arg"  ++ (show i)):[] ++ (args' xs (i+1))
-          args' ("M":xs) i = ("Addr arg"   ++ (show i)):[] ++ (args' xs (i+1))
-          args' ("O":xs) i = ("Offset arg" ++ (show i)):[] ++ (args' xs (i+1))
-          args' ("R":xs) i = ("GpReg arg"  ++ (show i)):[] ++ (args' xs (i+1))
-          args' ("S":xs) i = ("XmmReg arg" ++ (show i)):[] ++ (args' xs (i+1))
-          args' ("X":xs) i = ("MmxReg arg" ++ (show i)):[] ++ (args' xs (i+1))
-          args' ("I":xs) i = ("Imm arg"    ++ (show i)):[] ++ (args' xs (i+1))
+assm_args i = concat $ intersperse "," $ (args' (operands i) 0)
+    where args' (_:"F":_:xs) i     = ("St arg"  ++ (show i)):[] ++ (args' xs (i+1))
+          args' (_:"L":_:xs) i     = ("Label arg"  ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("8":"M":_:xs) i   = ("M8 arg"   ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("16":"M":_:xs) i  = ("M16 arg"   ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("32":"M":_:xs) i  = ("M32 arg"   ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("64":"M":_:xs) i  = ("M64 arg"   ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("128":"M":_:xs) i = ("M128 arg"   ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("8":"O":_:xs) i   = ("Moffs8 arg" ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("16":"O":_:xs) i  = ("Moffs16 arg" ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("32":"O":_:xs) i  = ("Moffs32 arg" ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("64":"O":_:xs) i  = ("Moffs64 arg" ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("8":"R":_:xs) i   = ("R8 arg"  ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("16":"R":_:xs) i  = ("R16 arg"  ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("32":"R":_:xs) i  = ("R32 arg"  ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("64":"R":_:xs) i  = ("R64 arg"  ++ (show i)):[] ++ (args' xs (i+1))
+          args' (_:"S":_:xs) i     = ("Xmm arg" ++ (show i)):[] ++ (args' xs (i+1))
+          args' (_:"X":_:xs) i     = ("Mm arg" ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("8":"I":_:xs) i   = ("Imm8 arg"    ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("16":"I":_:xs) i  = ("Imm16 arg"    ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("32":"I":_:xs) i  = ("Imm32 arg"    ++ (show i)):[] ++ (args' xs (i+1))
+          args' ("64":"I":_:xs) i  = ("Imm64 arg"    ++ (show i)):[] ++ (args' xs (i+1))
 
-          args' ("AL":xs)  i = ("GpReg arg" ++ (show i)):[] ++ (args' xs (i+1))
-          args' ("AX":xs)  i = ("GpReg arg" ++ (show i)):[] ++ (args' xs (i+1))
-          args' ("EAX":xs) i = ("GpReg arg" ++ (show i)):[] ++ (args' xs (i+1))
-          args' ("RAX":xs) i = ("GpReg arg" ++ (show i)):[] ++ (args' xs (i+1))
-          args' ("CL":xs)  i = ("GpReg arg" ++ (show i)):[] ++ (args' xs (i+1))
-          args' ("ST0":xs) i = ("FpReg arg" ++ (show i)):[] ++ (args' xs (i+1))
+          args' (_:"AL":_:xs)  i = ("Al arg" ++ (show i)):[] ++ (args' xs (i+1))
+          args' (_:"AX":_:xs)  i = ("Ax arg" ++ (show i)):[] ++ (args' xs (i+1))
+          args' (_:"EAX":_:xs) i = ("Eax arg" ++ (show i)):[] ++ (args' xs (i+1))
+          args' (_:"RAX":_:xs) i = ("Rax arg" ++ (show i)):[] ++ (args' xs (i+1))
+          args' (_:"CL":_:xs)  i = ("Cl arg" ++ (show i)):[] ++ (args' xs (i+1))
+          args' (_:"ST0":_:xs) i = ("St0 arg" ++ (show i)):[] ++ (args' xs (i+1))
 
           args' (t:xs) _ = error "Unexpected operand type!"
 
@@ -33,12 +42,12 @@ assm_args i = concat $ intersperse "," $ (args' (operand_types i) 0)
 -- Generates a declaration for an instruction
 assm_decl :: [Instr] -> String
 assm_decl is = concat $ map render $ tail is
-    where render i = "void " ++ (assm_fxn i) ++ "(" ++ (assm_args i) ++ ");\n"
+    where render i = "void " ++ (att i) ++ "(" ++ (assm_args i) ++ ");\n"
 
 -- Generates a definition for an instruction		
 assm_defn :: [Instr] -> String
 assm_defn is = concat $ map render $ tail is
-    where render i = "void Assembler::" ++ (assm_fxn i) ++ "(" ++ (assm_args i) ++ "){\n" ++ (body i) ++ "}\n"		
+    where render i = "void Assembler::" ++ (att i) ++ "(" ++ (assm_args i) ++ "){\n" ++ (body i) ++ "}\n"		
           body i = (mem_pref i) ++ (pref i) ++ (rex_pref i) ++ (opc i) ++ (mod_rm i) ++ (disp i) ++ (immed i)
 
           mem_pref i = case mem_index i of
@@ -85,10 +94,10 @@ assm_defn is = concat $ map render $ tail is
           rm _ _ = ""
           rex_def "" = ",0x00"
           rex_def d  = ",0x" ++ d 
-          is_8bit ("8":"R":_:"8":"R":_) = ",GpReg(arg0|arg1)"
+          is_8bit ("8":"R":_:"8":"R":_) = ",R8(arg0|arg1)"
           is_8bit ("8":"R":_) = ",arg0"
           is_8bit (_:_:_:"8":"R":_) = ",arg1" 
-          is_8bit _ = ",gp_null"
+          is_8bit _ = ",r_null"
 
           mod_rm i = "\temit_mod_rm(" ++ (mod_rm_args i) ++ ");\n"
           mod_rm_args i = rex_pref_args i ++ (digit (reg_field i))
@@ -130,23 +139,36 @@ assm_defn is = concat $ map render $ tail is
 -- Generates a switch statement based on opcode enum
 assm_switch :: [Instr] -> String
 assm_switch is = concat $ map render $ tail is
-    where render i = "case " ++ (enum i) ++ ":\n\t" ++ (assm_fxn i) ++ "(" ++ (args i) ++ ");\n\tbreak;\n"
-          args i = concat $ intersperse "," $ (args' (operand_types i) 0)
-          args' ("F":xs) i = ("i.get_fp_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("L":xs) i = ("i.get_label(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("M":xs) i = ("i.get_addr(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("O":xs) i = ("i.get_offset(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("R":xs) i = ("i.get_gp_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("S":xs) i = ("i.get_xmm_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("X":xs) i = ("i.get_mmx_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("I":xs) i = ("i.get_imm(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+    where render i = "case " ++ (enum i) ++ ":\n\t" ++ (att i) ++ "(" ++ (args i) ++ ");\n\tbreak;\n"
+          args i = concat $ intersperse "," $ (args' (operands i) 0)
+          args' (_:"F":_:xs) i     = ("(St)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' (_:"L":_:xs) i     = ("(Label)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("8":"M":_:xs) i   = ("(M8)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("16":"M":_:xs) i  = ("(M16)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("32":"M":_:xs) i  = ("(M32)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("64":"M":_:xs) i  = ("(M64)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("128":"M":_:xs) i = ("(M128)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("8":"O":_:xs) i   = ("(Moffs8)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("16":"O":_:xs) i  = ("(Moffs16)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("32":"O":_:xs) i  = ("(Moffs32)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("64":"O":_:xs) i  = ("(Moffs64)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("8":"R":_:xs) i   = ("(R8)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("16":"R":_:xs) i  = ("(R16)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("32":"R":_:xs) i  = ("(R32)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("64":"R":_:xs) i  = ("(R64)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' (_:"S":_:xs) i     = ("(Xmm)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' (_:"X":_:xs) i     = ("(Mm)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("8":"I":_:xs) i   = ("(Imm8)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("16":"I":_:xs) i  = ("(Imm16)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("32":"I":_:xs) i  = ("(Imm32)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' ("64":"I":_:xs) i  = ("(Imm64)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
 
-          args' ("AL":xs)  i = ("i.get_gp_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("AX":xs)  i = ("i.get_gp_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("EAX":xs) i = ("i.get_gp_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("RAX":xs) i = ("i.get_gp_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("CL":xs)  i = ("i.get_gp_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
-          args' ("ST0":xs) i = ("i.get_fp_reg(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' (_:"AL":_:xs)  i = ("(Al)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' (_:"AX":_:xs)  i = ("(Ax)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' (_:"EAX":_:xs) i = ("(Eax)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' (_:"RAX":_:xs) i = ("(Rax)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' (_:"CL":_:xs)  i = ("(Cl)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
+          args' (_:"ST0":_:xs) i = ("(St0)i.get_operand(" ++ (show i) ++ ")"):[] ++ (args' xs (i+1))
 
           args' (t:xs) _ = error "Unexpected operand type!"
 

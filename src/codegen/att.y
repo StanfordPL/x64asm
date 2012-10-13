@@ -573,7 +573,9 @@ operand : ATT_FP_REG | ATT_GP_REG | ATT_IMM | ATT_LABEL | ATT_MMX_REG |
         ;
 
 mem : OPEN ATT_GP_REG CLOSE { 
-				$$ = new OperandInfo(Addr(GpReg($2->val), $2->width == DOUBLE), 
+				$$ = new OperandInfo($2->width == DOUBLE ?
+						M(R32($2->val)) :
+						M(R64($2->val)), 
 						ADDR, 
 						$2->width); 
 				delete $2; 
@@ -582,23 +584,27 @@ mem : OPEN ATT_GP_REG CLOSE {
 			if ( !is_valid_disp($1->val) )
 				is.setstate(std::ios::failbit);
 
-			$$ = new OperandInfo(Addr(GpReg($3->val), Imm($1->val), $3->width == DOUBLE), 
+			$$ = new OperandInfo($3->width == DOUBLE ?
+					M(R32($3->val), Imm32($1->val)) :
+					M(R64($3->val), Imm32($1->val)),
 					ADDR, 
 					$3->width); 
 			delete $1; 
 			delete $3; 
 		} 
     | OPEN ATT_GP_REG COMMA ATT_GP_REG CLOSE { 
-			$$ = new OperandInfo(
-					Addr(GpReg($2->val), GpReg($4->val), $2->width == DOUBLE), 
+			$$ = new OperandInfo($2->width == DOUBLE ?
+					M(R32($2->val), R32($4->val)) :
+					M(R64($2->val), R64($4->val)),
 					ADDR, 
 					$2->width); 
 			delete $2; 
 			delete $4; 
 		}
     | OPEN ATT_GP_REG COMMA ATT_GP_REG COMMA ATT_SCALE CLOSE { 
-			$$ = new OperandInfo(
-					Addr(GpReg($2->val), GpReg($4->val), Scale($6->val), $2->width == DOUBLE), 
+			$$ = new OperandInfo($2->width == DOUBLE ?
+					M(R32($2->val), R32($4->val), Scale($6->val)) :
+					M(R64($2->val), R64($4->val), Scale($6->val)), 
 					ADDR, 
 					$2->width); 
 			delete $2; 
@@ -609,8 +615,9 @@ mem : OPEN ATT_GP_REG CLOSE {
 			if ( !is_valid_disp($1->val) )
 				is.setstate(std::ios::failbit);
 
-			$$ = new OperandInfo(
-					Addr(GpReg($3->val), GpReg($5->val), Imm($1->val), $3->width == DOUBLE), 
+			$$ = new OperandInfo($3->width == DOUBLE ?
+					M(R32($3->val), R32($5->val), Imm32($1->val)) :
+					M(R64($3->val), R64($5->val), Imm32($1->val)), 
 					ADDR, 
 					$3->width); 
 			delete $1;
@@ -621,8 +628,9 @@ mem : OPEN ATT_GP_REG CLOSE {
 			if ( !is_valid_disp($1->val) )
 				is.setstate(std::ios::failbit);
 
-			$$ = new OperandInfo(
-					Addr(GpReg($3->val), GpReg($5->val), Scale($7->val), Imm($1->val), $3->width == DOUBLE), 
+			$$ = new OperandInfo($3->width == DOUBLE ?
+						M(R32($3->val), R32($5->val), Scale($7->val), Imm32($1->val)) :
+						M(R64($3->val), R64($5->val), Scale($7->val), Imm32($1->val)), 
 					ADDR, 
 					$3->width); 
 			delete $1; 

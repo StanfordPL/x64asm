@@ -4,41 +4,26 @@ using namespace std;
 
 namespace x64 {
 
-const XmmReg xmm0 = 0;
-const XmmReg xmm1 = 1;
-const XmmReg xmm2 = 2;
-const XmmReg xmm3 = 3;
-const XmmReg xmm4 = 4;
-const XmmReg xmm5 = 5;
-const XmmReg xmm6 = 6;
-const XmmReg xmm7 = 7;
-const XmmReg xmm8 = 8;
-const XmmReg xmm9 = 9;
-const XmmReg xmm10 = 10;
-const XmmReg xmm11 = 11;
-const XmmReg xmm12 = 12;
-const XmmReg xmm13 = 13;
-const XmmReg xmm14 = 14;
-const XmmReg xmm15 = 15;
-const XmmReg xmm_null = 16;
-
-const vector<XmmReg> XmmReg::domain_ {{
-	xmm0,
-	xmm1,
-	xmm2,
-	xmm3,
-	xmm4,
-	xmm5,
-	xmm6,
-	xmm7,
-	xmm8,
-	xmm9,
-	xmm10,
-	xmm11,
-	xmm12,
-	xmm13,
-	xmm14,
-	xmm15
+const vector<Xmm> Xmm::domain_ {{
+	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
 }};
+
+const Xmm xmm0 = 0;
+const Xmm xmm1 = 1;
+const Xmm xmm2 = 2;
+const Xmm xmm3 = 3;
+const Xmm xmm4 = 4;
+const Xmm xmm5 = 5;
+const Xmm xmm6 = 6;
+const Xmm xmm7 = 7;
+const Xmm xmm8 = 8;
+const Xmm xmm9 = 9;
+const Xmm xmm10 = 10;
+const Xmm xmm11 = 11;
+const Xmm xmm12 = 12;
+const Xmm xmm13 = 13;
+const Xmm xmm14 = 14;
+const Xmm xmm15 = 15;
+const Xmm xmm_null = 16;
 
 } // namespace x64

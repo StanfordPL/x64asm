@@ -9,13 +9,13 @@ namespace x64 {
 
 /** An SSE register: xmm0, ..., xmm15.
 */
-class XmmReg {
+class Xmm {
 	public:
-		inline XmmReg() 
+		inline Xmm() 
 				: x_(16) { 
 		}
 
-		inline XmmReg(Operand x) 
+		inline Xmm(Operand x) 
 				: x_(x) { 
 		}
 
@@ -27,7 +27,7 @@ class XmmReg {
 			return x_ >= 16;	
 		}
 
-		typedef const std::vector<XmmReg>::const_iterator iterator;
+		typedef const std::vector<Xmm>::const_iterator iterator;
 
 		static iterator begin() {
 			return domain_.begin();
@@ -40,26 +40,26 @@ class XmmReg {
 	private:
 		Operand x_;
 
-		static const std::vector<XmmReg> domain_;
+		static const std::vector<Xmm> domain_;
 };
 
-extern const XmmReg xmm0;
-extern const XmmReg xmm1;
-extern const XmmReg xmm2;
-extern const XmmReg xmm3;
-extern const XmmReg xmm4;
-extern const XmmReg xmm5;
-extern const XmmReg xmm6;
-extern const XmmReg xmm7;
-extern const XmmReg xmm8;
-extern const XmmReg xmm9;
-extern const XmmReg xmm10;
-extern const XmmReg xmm11;
-extern const XmmReg xmm12;
-extern const XmmReg xmm13;
-extern const XmmReg xmm14;
-extern const XmmReg xmm15;
-extern const XmmReg xmm_null;
+extern const Xmm xmm0;
+extern const Xmm xmm1;
+extern const Xmm xmm2;
+extern const Xmm xmm3;
+extern const Xmm xmm4;
+extern const Xmm xmm5;
+extern const Xmm xmm6;
+extern const Xmm xmm7;
+extern const Xmm xmm8;
+extern const Xmm xmm9;
+extern const Xmm xmm10;
+extern const Xmm xmm11;
+extern const Xmm xmm12;
+extern const Xmm xmm13;
+extern const Xmm xmm14;
+extern const Xmm xmm15;
+extern const Xmm xmm_null;
 
 } // namespace x64
 

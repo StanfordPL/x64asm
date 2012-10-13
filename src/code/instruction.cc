@@ -9,22 +9,22 @@ bool Instruction::is_null() const {
 		return true;
 	for ( size_t i = 0, ie = arity(); i < ie; ++i )
 		switch ( type(i) ) {
-			case ADDR:     if ( Addr(operands_[i]).is_null() ) return true;
+			case ADDR:     if ( ((M)operands_[i]).is_null() ) return true;
 										 break;
 			case ST0_ONLY:
-			case FP_REG:   if ( FpReg(operands_[i]).is_null() ) return true;
+			case FP_REG:   if ( ((St)operands_[i]).is_null() ) return true;
 										 break;
 			case RAX_ONLY:
 			case RCX_ONLY:
-			case GP_REG:   if ( GpReg(operands_[i]).is_null() ) return true;
+			case GP_REG:   if ( ((R)operands_[i]).is_null() ) return true;
 									   break;
-			case IMM:      if ( Imm(operands_[i]).is_null() ) return true;
+			case IMM:      if ( ((Imm)operands_[i]).is_null() ) return true;
 										 break;
-			case LABEL:    if ( Label(operands_[i]).is_null() ) return true;
+			case LABEL:    if ( ((Label)operands_[i]).is_null() ) return true;
 										 break;
-			case MMX_REG:  if ( MmxReg(operands_[i]).is_null() ) return true;
+			case MMX_REG:  if ( ((Mm)operands_[i]).is_null() ) return true;
 										 break;
-			case XMM_REG:  if ( XmmReg(operands_[i]).is_null() ) return true;
+			case XMM_REG:  if ( ((Xmm)operands_[i]).is_null() ) return true;
 										 break;
 			default:
 				assert(false);
@@ -39,23 +39,39 @@ RegSet Instruction::explicit_read_set() const {
 			case RAX_ONLY:
 			case RCX_ONLY:
 			case GP_REG: { 
-					const auto gp = get_gp_reg(i); 
-					if ( !gp.is_null() ) 
-						rs.set(gp, width(i)); 
+					const auto r = (R) get_operand(i); 
+					if ( !r.is_null() )
+						switch ( width(i) ) {
+							case LOW: rs.set((R8)r); break;
+							case HIGH: rs.set((RH)r); break;
+							case WORD: rs.set((R16)r); break;
+							case DOUBLE: rs.set((R32)r); break;
+							case QUAD: rs.set((R64)r); break;
+							default:
+												 assert(false);
+						}
 				} 
 				break;
 			case XMM_REG: 
-				rs.set(get_xmm_reg(i)); 
+				rs.set((Xmm)get_operand(i)); 
 				break;						 
 			case ADDR: { 
-					const auto a = get_addr(i); 
+					const auto a = (M)get_operand(i); 
 					const auto w = a.get_reg_width();
 					const auto b = a.get_base();
 					const auto idx = a.get_index();
-					if ( !b.is_null() )
-						rs.set(b, w);
-					if ( !idx.is_null() )
-						rs.set(idx, w);
+					if ( !b.is_null() ) {
+						if ( w == QUAD )
+							rs.set((R64)b);
+						else
+							rs.set((R32)b);
+					}
+					if ( !idx.is_null() ) {
+						if ( w == QUAD )
+							rs.set((R64)idx);
+						else
+							rs.set((R32)idx);
+					}
 				}
 			default: 
 				break;
@@ -71,14 +87,20 @@ RegSet Instruction::explicit_write_set() const {
 			case GP_REG:
 			case RAX_ONLY:
 			case RCX_ONLY: {
-				const auto gp = get_gp_reg(i);
-				const auto w = width(i);
-				assert(!gp.is_null());
-				rs.set(gp, w == DOUBLE ? QUAD : w);
-				break;
+				const auto r = (R)get_operand(i);
+				assert(!r.is_null());
+				switch ( width(i) ) {
+					case LOW: rs.set((R8)r); break;
+					case HIGH: rs.set((RH)r); break;
+					case WORD: rs.set((R16)r); break;
+					case DOUBLE: rs.set((R32)r); break;
+					case QUAD: rs.set((R64)r); break;
+					default:
+						assert(false);
+				}
 			}
 			case XMM_REG:
-				rs.set(get_xmm_reg(i));
+				rs.set((Xmm)get_operand(i));
 				break;
 
 			default:

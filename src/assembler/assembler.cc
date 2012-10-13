@@ -90,7 +90,7 @@ inline void emit(unsigned char* buf, size_t& pos, unsigned char c) {
 	buf[pos++] = c;
 }
 
-inline void emit_mem_prefix(unsigned char* buf, size_t& pos, Addr addr) {
+inline void emit_mem_prefix(unsigned char* buf, size_t& pos, M addr) {
 	if ( addr.get_size_or() )
 		emit(buf, pos, 0x67);
 }
@@ -117,7 +117,7 @@ inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c) {
 }
 
 inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c, 
-		                    GpReg delta) {
+		                    R delta) {
 	emit(buf, pos, c + (0x7 & delta));
 }
 
@@ -128,7 +128,7 @@ inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c1,
 }
 
 inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c1, 
-		                    unsigned char c2, GpReg delta) {
+		                    unsigned char c2, R delta) {
 	emit(buf, pos, c1);
 	emit(buf, pos, c2 + (0x7 & delta));
 }
@@ -141,7 +141,7 @@ inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c1,
 }
 
 inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c1, 
-		                    unsigned char c2, unsigned char c3, GpReg delta) {
+		                    unsigned char c2, unsigned char c3, R delta) {
 	emit(buf, pos, c1);
 	emit(buf, pos, c2);
 	emit(buf, pos, c3 + (0x7 & delta));
@@ -149,23 +149,23 @@ inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c1,
 
 // The following four methods are used for both immediates and displacements.
 // Integer constants are written in reverse byte order.
-inline void emit_byte(unsigned char* buf, size_t& pos, Imm imm) {
+inline void emit_byte(unsigned char* buf, size_t& pos, Imm8 imm) {
 	emit(buf, pos, imm & 0xff); 
 }
 
-inline void emit_word(unsigned char* buf, size_t& pos, Imm imm) {
+inline void emit_word(unsigned char* buf, size_t& pos, Imm16 imm) {
 	emit(buf, pos, (imm &   0xff) >> 0);
 	emit(buf, pos, (imm & 0xff00) >> 8);
 }
 
-inline void emit_double(unsigned char* buf, size_t& pos, Imm imm) {
+inline void emit_double(unsigned char* buf, size_t& pos, Imm32 imm) {
 	emit(buf, pos, (imm &       0xff) >> 0);
 	emit(buf, pos, (imm &     0xff00) >> 8);
 	emit(buf, pos, (imm &   0xff0000) >> 16);
 	emit(buf, pos, (imm & 0xff000000) >> 24);
 }
 
-inline void emit_quad(unsigned char* buf, size_t& pos, Imm imm) {
+inline void emit_quad(unsigned char* buf, size_t& pos, Imm64 imm) {
 	emit(buf, pos, (imm &               0xff) >> 0);
 	emit(buf, pos, (imm &             0xff00) >> 8);
 	emit(buf, pos, (imm &           0xff0000) >> 16);
@@ -199,7 +199,7 @@ inline void emit_mod_rm(unsigned char* buf, size_t& pos, Operand rm,
 
 // This ignores the distinction between high and low general purpose regs,
 //   It won't work correctly for AH, BH, CH, DH
-inline void emit_mod_rm(unsigned char* buf, size_t& pos, Addr rm, Operand r) {
+inline void emit_mod_rm(unsigned char* buf, size_t& pos, M rm, Operand r) {
 	auto base  = rm.get_base() & 0x7;
 	auto index = rm.get_index();
 	const auto disp  = (int32_t) rm.get_disp();
@@ -246,20 +246,20 @@ inline void emit_mod_rm(unsigned char* buf, size_t& pos, Addr rm, Operand r) {
 
 // REX nop -- Simplifies codegen.
 // Calls to this method should be inlined away.
-inline void emit_rex(unsigned char* buf, size_t& pos, GpReg low) {
+inline void emit_rex(unsigned char* buf, size_t& pos, R low) {
 }
 
 // REX nop -- Simplifies codegen.
 // Calls to this method should be inlined away.
 inline void emit_rex(unsigned char* buf, size_t& pos, unsigned char rex, 
-		                 GpReg low) {
+		                 R low) {
 }
 
 // Figure 2.7: Intel Manual Vol 2A 2-9
 // This ignores the distinction between high and low general purpose regs,
 //   but that's fine because it wouldn't get you an rex.b either way.
 inline void emit_rex(unsigned char* buf, size_t& pos, Operand rm, 
-		                 unsigned char rex, GpReg low) {
+		                 unsigned char rex, R low) {
 	if ( low >> 2 == 0x1 )
 		rex |= 0x40;
 
@@ -273,7 +273,7 @@ inline void emit_rex(unsigned char* buf, size_t& pos, Operand rm,
 // This ignores the distinction between high and low general purpose regs,
 //   but that's fine because it wouldn't get you an rex.b either way.
 inline void emit_rex(unsigned char* buf, size_t& pos, Operand rm, Operand r, 
-		                 unsigned char rex, GpReg low) {
+		                 unsigned char rex, R low) {
 	if ( low >> 2 == 0x1 )
 		rex |= 0x40;
 
@@ -288,8 +288,8 @@ inline void emit_rex(unsigned char* buf, size_t& pos, Operand rm, Operand r,
 // Figure 2.4 & 2.6: Intel Manual Vol 2A 2-8 & 2.9
 // This ignores the distinction between high and low general purpose regs,
 //   but that's fine because it wouldn't get you an rex.b either way.
-inline void emit_rex(unsigned char* buf, size_t& pos, Addr rm, Operand r, 
-		                 unsigned char rex, GpReg low) {
+inline void emit_rex(unsigned char* buf, size_t& pos, M rm, Operand r, 
+		                 unsigned char rex, R low) {
 	if ( low >> 2 == 0x1 )
 		rex |= 0x40;
 
@@ -306,8 +306,8 @@ inline void emit_rex(unsigned char* buf, size_t& pos, Addr rm, Operand r,
 
 // This is essentially identical to the case above.
 // The only difference being that there is no possibility of setting rex.b.
-inline void emit_rex(unsigned char* buf, size_t& pos, Addr rm, 
-		                 unsigned char rex, GpReg low) {
+inline void emit_rex(unsigned char* buf, size_t& pos, M rm, 
+		                 unsigned char rex, R low) {
 	// No check for is8bit since this only takes a mem argument
 	assert(low.is_null());
 

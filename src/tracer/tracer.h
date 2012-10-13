@@ -21,9 +21,9 @@ class Tracer {
 				: conds_(false) {
 		}
 
-		inline void set(GpReg gp) {
-			assert(!gp.is_null());
-			gps_.insert(gp);
+		inline void set(R64 r) {
+			assert(!r.is_null());
+			r64_.insert(r);
 		}
 
 		inline void set(CondReg cond) {
@@ -31,9 +31,9 @@ class Tracer {
 			conds_ = true;
 		}
 
-		inline void set(XmmReg xmm) {
+		inline void set(Xmm xmm) {
 			assert(!xmm.is_null());
-			xmms_.insert(xmm);
+			xmm_.insert(xmm);
 		}
 
 		inline void set_before(size_t line) {
@@ -58,9 +58,9 @@ class Tracer {
 		std::set<size_t> befores_;
 		std::set<size_t> afters_;
 
-		std::set<GpReg> gps_;
+		std::set<R64> r64_;
 		bool conds_;
-		std::set<XmmReg> xmms_;
+		std::set<Xmm> xmm_;
 
 		template <bool is_before>
 		void trace(Trace& t);

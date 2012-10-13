@@ -92,7 +92,7 @@ void ControlFlowGraph::recompute_liveness() {
 
 	// Boundary conditions
 	const auto bound = 
-		RegSet().set(rax, QUAD).set(rbp, QUAD).set(rsp, QUAD);
+		RegSet().set(rax).set(rbp).set(rsp);
 	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
 		if ( is_exit(i) )
 			live_outs_[i] = bound;
@@ -180,13 +180,15 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 
 		os << "live-ins:";
 		const auto lis = get_live_ins(location_type(i, 0));
+		/*
 		for ( int r = 0; r < 16; ++r ) {
-			const auto w = lis.get_widest_set(GpReg(r));
+			const auto w = lis.get_widest_set(R(r));
 			if ( w != BIT_WIDTH_NULL ) {
 				os << " ";
 				writer.write_att(os, GpReg(r), w);	
 			}
 		}
+		*/
 		os << "|";
 
 		for ( auto j = instr_begin(i), je = instr_end(i); j != je; ++j ) {
@@ -196,6 +198,7 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 
 		os << "|live-outs:";
 		const auto los = get_live_outs(location_type(i, num_instrs(i)-1));
+		/*
 		for ( auto r = 0; r < 16; ++r ) {
 			const auto w = los.get_widest_set(GpReg(r));
 			if ( w != BIT_WIDTH_NULL ) {
@@ -203,6 +206,7 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 				writer.write_att(os, GpReg(r), w);
 			}
 		}
+		*/
 
 		os << "}\"];" << endl;
 	}

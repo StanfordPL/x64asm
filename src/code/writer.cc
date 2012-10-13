@@ -11,7 +11,7 @@ namespace {
 
 namespace x64 {
 
-void Writer::write_att(ostream& os, Addr addr) const {
+void Writer::write_att(ostream& os, M addr) const {
 	const auto w = addr.get_size_or() ? DOUBLE : QUAD;
 	
 	const auto s = addr.get_seg();
@@ -48,7 +48,7 @@ void Writer::write_att(ostream& os, const Code& code) const {
 	}
 }
 
-void Writer::write_att(ostream& os, FpReg fp) const {
+void Writer::write_att(ostream& os, St fp) const {
 	switch ( fp ) {
 		case 0: os << "%st";    break;
 		case 1: os << "%st(1)"; break;
@@ -64,7 +64,7 @@ void Writer::write_att(ostream& os, FpReg fp) const {
 	}
 }
 
-void Writer::write_att(ostream& os, GpReg gp, BitWidth w) const {
+void Writer::write_att(ostream& os, R gp, BitWidth w) const {
 	switch ( gp ) {
 		#define ABCD(R,Q,D,W,H,L)                \
 			case R: switch ( w ) {                 \
@@ -129,7 +129,7 @@ void Writer::write_att(ostream& os, const Instruction& instr) const {
 	const auto opc = instr.get_opcode();
 
 	if ( opc.is_label_defn() ) {
-		write_att(os, instr.get_label(0));
+		write_att(os, (Label)instr.get_operand(0));
 		os << ":";
 		return;
 	}
@@ -145,19 +145,19 @@ void Writer::write_att(ostream& os, const Instruction& instr) const {
 			comma = true;
 
 		switch ( instr.type(i) ) {
-			case ADDR:     write_att(os, instr.get_addr(i));
+			case ADDR:     write_att(os, (M)instr.get_operand(i));
 										 break;
 			case GP_REG:  
 			case RAX_ONLY:
-			case RCX_ONLY: write_att(os, instr.get_gp_reg(i), instr.width(i)); 
+			case RCX_ONLY: write_att(os, (R)instr.get_operand(i), instr.width(i)); 
 										 break;
-			case IMM:      write_att(os, instr.get_imm(i), instr.width(i)); 
+			case IMM:      write_att(os, (Imm)instr.get_operand(i), instr.width(i)); 
 										 break;
-			case XMM_REG:  write_att(os, instr.get_xmm_reg(i)); 
+			case XMM_REG:  write_att(os, (Xmm)instr.get_operand(i)); 
 										 break;
-			case LABEL:    write_att(os, instr.get_label(i));
+			case LABEL:    write_att(os, (Label)instr.get_operand(i));
 										 break;
-			case OFFSET:   write_att(os, instr.get_offset(i));
+			case OFFSET:   write_att(os, (Moffs)instr.get_operand(i));
 										 break;
 
 			default:      
@@ -170,11 +170,11 @@ void Writer::write_att(ostream& os, Label l) const {
 	os << ".L" << dec << l;
 }
 
-void Writer::write_att(ostream& os, Offset o) const {
+void Writer::write_att(ostream& os, Moffs o) const {
 	os << hex << showbase << o;
 }
 
-void Writer::write_att(ostream& os, MmxReg mm) const {
+void Writer::write_att(ostream& os, Mm mm) const {
 	switch ( mm ) {
 		case 0: os << "%mm0"; break;
 		case 1: os << "%mm1"; break;
@@ -209,7 +209,7 @@ void Writer::write_att(ostream& os, Scale s) const {
 	}
 }
 
-void Writer::write_att(ostream& os, SegReg seg) const {
+void Writer::write_att(ostream& os, Sreg seg) const {
 	switch ( seg ) {
 		case 0: os << "es"; break;
 		case 1: os << "cs"; break;
@@ -223,7 +223,7 @@ void Writer::write_att(ostream& os, SegReg seg) const {
 	}
 }
 
-void Writer::write_att(ostream& os, XmmReg xmm) const {
+void Writer::write_att(ostream& os, Xmm xmm) const {
 	switch ( xmm ) {
 		case  0: os << "%xmm0";  break;
 		case  1: os << "%xmm1";  break;
