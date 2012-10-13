@@ -338,6 +338,8 @@ popfq :  : 9d :  :  :    : RSP : RSP :  :  O  S  Z  A  P  C  :
                       
 pshufd : 66 :  0f  70  :  :  :  128  S  W   128  SM  R   8  I  R  :  :  :  :  : 
                       
+pslldq : 66 :  0f  73  :  : 07 :  128  S  X   8  I  R   :  :  :  :  : 
+                      
 psrldq : 66 :  0f  73  :  : 03 :  128  S  W   8  I  R   :  :  :  :  : 
                       
 punpckldq :  :  0f  62  :  :  :  32  X  W   32  XM  R   :  :  :  :  : 
@@ -412,22 +414,22 @@ sbbw :  : 1b :  :  :  16  R  X   16  RM  R   :  :  : C :  O  S  Z  A  P  C  :
 sbbl :  : 1b :  :  :  32  R  X   32  RM  R   :  :  : C :  O  S  Z  A  P  C  : 
 sbbq :  : 1b :  :  :  64  R  X   64  RM  R   :  :  : C :  O  S  Z  A  P  C  : 
                       
-seta :  :  0f  97  :  :  :  8  RM  W    :  :  :  C  Z  :  : 
-setae :  :  0f  93  :  :  :  8  RM  W    :  :  : C :  : 
-setb :  :  0f  92  :  :  :  8  RM  W    :  :  : C :  : 
-setbe :  :  0f  96  :  :  :  8  RM  W    :  :  :  C  Z  :  : 
-sete :  :  0f  94  :  :  :  8  RM  W    :  :  : Z :  : 
-setg :  :  0f  9f  :  :  :  8  RM  W    :  :  : S :  : 
-setge :  :  0f  9d  :  :  :  8  RM  W    :  :  : S :  : 
-setl :  :  0f  9c  :  :  :  8  RM  W    :  :  :  S  O  :  : 
-setle :  :  0f  9e  :  :  :  8  RM  W    :  :  :  Z  S  O  :  : 
-setne :  :  0f  95  :  :  :  8  RM  W    :  :  : Z :  : 
-setno :  :  0f  91  :  :  :  8  RM  W    :  :  : O :  : 
-setnp :  :  0f  9b  :  :  :  8  RM  W    :  :  : P :  : 
-setns :  :  0f  99  :  :  :  8  RM  W    :  :  : S :  : 
-seto :  :  0f  90  :  :  :  8  RM  W    :  :  : O :  : 
-setp :  :  0f  9a  :  :  :  8  RM  W    :  :  : P :  : 
-sets :  :  0f  98  :  :  :  8  RM  W    :  :  : S :  : 
+seta :  :  0f  97  :  : 00 :  8  RM  W    :  :  :  C  Z  :  : 
+setae :  :  0f  93  :  : 00 :  8  RM  W    :  :  : C :  : 
+setb :  :  0f  92  :  : 00 :  8  RM  W    :  :  : C :  : 
+setbe :  :  0f  96  :  : 00 :  8  RM  W    :  :  :  C  Z  :  : 
+sete :  :  0f  94  :  : 00 :  8  RM  W    :  :  : Z :  : 
+setg :  :  0f  9f  :  : 00 :  8  RM  W    :  :  : S :  : 
+setge :  :  0f  9d  :  : 00 :  8  RM  W    :  :  : S :  : 
+setl :  :  0f  9c  :  : 00 :  8  RM  W    :  :  :  S  O  :  : 
+setle :  :  0f  9e  :  : 00 :  8  RM  W    :  :  :  Z  S  O  :  : 
+setne :  :  0f  95  :  : 00 :  8  RM  W    :  :  : Z :  : 
+setno :  :  0f  91  :  : 00 :  8  RM  W    :  :  : O :  : 
+setnp :  :  0f  9b  :  : 00 :  8  RM  W    :  :  : P :  : 
+setns :  :  0f  99  :  : 00 :  8  RM  W    :  :  : S :  : 
+seto :  :  0f  90  :  : 00 :  8  RM  W    :  :  : O :  : 
+setp :  :  0f  9a  :  : 00 :  8  RM  W    :  :  : P :  : 
+sets :  :  0f  98  :  : 00 :  8  RM  W    :  :  : S :  : 
                       
 shld :  :  0f  a4  :  :  :  16  RM  X   16  R  R   8  I  R  :  :  :  :  S  Z  P  C  :  O  A 
 shld :  :  0f  a5  :  :  :  16  RM  X   16  R  R   8  CL  R  :  :  :  :  S  Z  P  C  :  O  A 
@@ -439,6 +441,8 @@ shld :  :  0f  a5  :  :  :  64  RM  X   64  R  R   8  CL  R  :  :  :  :  S  Z  P
 shufpd : 66 :  0f  c6  :  :  :  128  S  X   128  SM  R   8  I  R  :  :  :  :  : 
                       
 shufps :  :  0f  c6  :  :  :  128  S  X   128  SM  R   8  I  R  :  :  :  :  : 
+                      
+stc :  : f9 :  :  :    :  :  :  : C : 
                       
 subb :  : 2c :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  A  P  C  : 
 subw :  : 2d :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  A  P  C  : 
@@ -472,6 +476,22 @@ testb :  : 84 :  :  :  8  RM  R   8  R  R   :  :  :  :  O  S  Z  P  C  : A
 testw :  : 85 :  :  :  16  RM  R   16  R  R   :  :  :  :  O  S  Z  P  C  : A
 testl :  : 85 :  :  :  32  RM  R   32  R  R   :  :  :  :  O  S  Z  P  C  : A
 testq :  : 85 :  :  :  64  RM  R   64  R  R   :  :  :  :  O  S  Z  P  C  : A
+                      
+xchgw :  : 90 : y :  :  16  AX  X   16  R  X   :  :  :  :  : 
+xchgw :  : 90 : y :  :  16  R  X   16  AX  X   :  :  :  :  : 
+xchgl :  : 90 : y :  :  32  EAX  X   32  R  X   :  :  :  :  : 
+xchgq :  : 90 : y :  :  64  RAX  X   64  R  X   :  :  :  :  : 
+xchgl :  : 90 : y :  :  32  R  X   32  EAX  X   :  :  :  :  : 
+xchgq :  : 90 : y :  :  64  R  X   64  RAX  X   :  :  :  :  : 
+xchgb :  : 86 :  :  :  8  RM  X   8  R  X   :  :  :  :  : 
+xchgb :  : 86 :  :  :  8  R  X   8  RM  X   :  :  :  :  : 
+xchgw :  : 87 :  :  :  16  RM  X   16  R  X   :  :  :  :  : 
+xchgw :  : 87 :  :  :  16  R  X   16  RM  X   :  :  :  :  : 
+xchgl :  : 87 :  :  :  32  RM  X   32  R  X   :  :  :  :  : 
+xchgq :  : 87 :  :  :  64  RM  X   64  R  X   :  :  :  :  : 
+xchgl :  : 87 :  :  :  32  R  X   32  RM  X   :  :  :  :  : 
+xchgq :  : 87 :  :  :  64  R  X   64  RM  X   :  :  :  :  : 
+                      
                       
 xorb :  : 34 :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A
 xorw :  : 35 :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  P  C  : A
