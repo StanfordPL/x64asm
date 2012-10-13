@@ -61,6 +61,17 @@ assm_defn is = concat $ map render $ tail is
           rm (_:"M":_) _    = ",arg1,(Operand)arg0"
           rm (_:"O":_) _    = ",(Operand)arg0"
           rm ("O":_:_) _    = ",(Operand)arg1"
+
+          rm ("R":"RAX":_) _ = ",(Operand)arg0"
+          rm ("R":"EAX":_) _ = ",(Operand)arg0"
+          rm ("R":"AX":_) _ = ",(Operand)arg0"
+          rm ("R":"AL":_) _ = ",(Operand)arg0"
+
+          rm ("AL":"R":_) _   = ",(Operand)arg1"
+          rm ("AX":"R":_) _   = ",(Operand)arg1"
+          rm ("EAX":"R":_) _  = ",(Operand)arg1"
+          rm ("RAX":"R":_) _  = ",(Operand)arg1"
+
           rm ("AL":_:_) _   = ",(Operand)arg0"
           rm ("AX":_:_) _   = ",(Operand)arg0"
           rm ("EAX":_:_) _  = ",(Operand)arg0"
@@ -93,6 +104,10 @@ assm_defn is = concat $ map render $ tail is
           opc_delta' ("ST0":_)   True = ",arg1"
           opc_delta' (_:"ST0":_) True = ",arg0"
           opc_delta' ("R":_)     True = ",arg0"
+          opc_delta' ("AL":"R":_)    True = ",arg1"
+          opc_delta' ("AX":"R":_)    True = ",arg1"
+          opc_delta' ("EAX":"R":_)    True = ",arg1"
+          opc_delta' ("RAX":"R":_)    True = ",arg1"
           opc_delta' _ _ = ""
 
           disp i = disp' (operand_types i) 

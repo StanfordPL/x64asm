@@ -351,7 +351,6 @@ pushq :  : 50 : y :  :  64  R  R    : RSP : RSP :  :  :
 pushw :  : ff :  : 06 :  16  RM  R    : RSP : RSP :  :  : 
 pushq :  : ff :  : 06 :  64  RM  R    : RSP : RSP :  :  : 
 pushq :  : 6a :  :  :  8  I  R    : RSP : RSP :  :  : 
-pushq :  : 68 :  :  :  16  I  R    : RSP : RSP :  :  : 
 pushq :  : 68 :  :  :  32  I  R    : RSP : RSP :  :  : 
                       
 pushfq :  : 9c :  :  :    : RSP : RSP :  O  S  Z  A  P  C  :  : 
