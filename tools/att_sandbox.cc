@@ -26,7 +26,8 @@ int main(int argc, char** argv) {
 	sandbox.set_max_jumps(max_jumps);
 
 	cout << "Calling function in sandbox... " << endl;
-	auto fxn = sandboxer.sandbox(sandbox, code);
+	Function fxn(256*1024);
+	fxn = sandboxer.sandbox(fxn, sandbox, code);
 	uint64_t res = 0;
 
 	switch ( argc ) {
