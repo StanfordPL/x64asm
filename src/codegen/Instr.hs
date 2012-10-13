@@ -16,6 +16,7 @@ module Instr
 	) where
 
 import Data.Char
+import Data.List
 import Data.List.Split
 
 -- Instruction Row Type
@@ -122,20 +123,25 @@ expand_instr i =
   (expand_operands "RM" "R" "M") $ 
   add_rm_info $ add_rexw_prefix $ add_66_prefix i  
 
+-- Selects the prefered implementation of a redundant instruction
+-- Note that this leaves label_defn as the first element
+remove_redundant :: [Instr] -> [Instr]
+remove_redundant is = map keep $ groupBy eq $ sortBy lt is
+    where lt i1 i2 = compare (enum i1) (enum i2)
+          eq i1 i2 = (enum i1) == (enum i2)
+          keep = head
+
 -- Read and auto-complete
 parse_instrs :: String -> [Instr]
-parse_instrs s = concat $ map expand_instr $ read_instrs s
+parse_instrs s = let is = concat $ map expand_instr $ read_instrs s in
+  (head is) : (remove_redundant $ tail is)
 
 -- Generates a unique enum value for an instruction
 enum :: Instr -> String
-enum instr = (up (att instr)) ++ 
-             (arg (operands instr)) ++ 
-             (rm_suff (rm_operand instr) (rm_offset instr))
+enum instr = (up (att instr)) ++ (arg (operands instr))
     where up xs = (map toUpper xs)
           arg (w:t:_:xs) = "_" ++ w ++ (up t) ++ (arg xs)
           arg _ = ""					
-          rm_suff True i = "_RM" ++ (show i)
-          rm_suff _ _    = ""
 
 -- Unpacks operand widths
 operand_widths :: Instr -> [String]

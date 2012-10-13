@@ -67,7 +67,7 @@ void Sandboxer::sandbox_jump(Sandbox& s) {
 
 	// Decrement counter and exit abnormally on zero
 	assm_.movabsq_64rax_64o(rax, (Operand) &s.max_jumps_);
-	assm_.decq_64r_rm0(rax);
+	assm_.decq_64r(rax);
 	assm_.je_64l(max_jump_exit_);
 
 	// Normal writebase/fixup code 
