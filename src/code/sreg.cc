@@ -1,4 +1,4 @@
-#include "src/code/seg_reg.h"
+#include "src/code/sreg.h"
 
 using namespace std;
 

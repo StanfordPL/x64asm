@@ -9,17 +9,17 @@ OBJ=build/cfg/control_flow_graph.o \
 		build/assembler/assembler.o \
 		\
 		build/code/cond_reg.o \
-		build/code/fp_reg.o \
-		build/code/gp_reg.o \
 		build/code/instruction.o \
 		build/code/opcode.o \
-		build/code/mmx_reg.o \
+		build/code/mm.o \
+		build/code/r.o \
 		build/code/reader.o \
 		build/code/reg_set.o \
 		build/code/scale.o \
-		build/code/seg_reg.o \
+		build/code/sreg.o \
+		build/code/st.o \
 		build/code/writer.o \
-		build/code/xmm_reg.o \
+		build/code/xmm.o \
 		\
 		build/sandboxer/sandboxer.o \
 		\

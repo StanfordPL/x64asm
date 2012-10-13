@@ -1,12 +1,12 @@
-#ifndef X64_SRC_CODE_ADDR_H
-#define X64_SRC_CODE_ADDR_H
+#ifndef X64_SRC_CODE_M_H
+#define X64_SRC_CODE_M_H
 
 #include <cassert>
 
-#include "src/code/gp_reg.h"
+#include "src/code/r.h"
 #include "src/code/imm.h"
 #include "src/code/operand.h"
-#include "src/code/seg_reg.h"
+#include "src/code/sreg.h"
 #include "src/code/scale.h"
 
 namespace x64 {

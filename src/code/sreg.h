@@ -1,5 +1,5 @@
-#ifndef X64_SRC_CODE_SEG_REG_H
-#define X64_SRC_CODE_SEG_REG_H
+#ifndef X64_SRC_CODE_SREG_H
+#define X64_SRC_CODE_SREG_H
 
 #include <vector>
 

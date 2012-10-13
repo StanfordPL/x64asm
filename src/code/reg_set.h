@@ -5,9 +5,9 @@
 #include <vector>
 
 #include "src/code/cond_reg.h"
-#include "src/code/gp_reg.h"
+#include "src/code/r.h"
 #include "src/code/operand.h"
-#include "src/code/xmm_reg.h"
+#include "src/code/xmm.h"
 
 namespace x64 {
 

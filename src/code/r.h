@@ -1,5 +1,5 @@
-#ifndef X64_SRC_CODE_GP_REG_H
-#define X64_SRC_CODE_GP_REG_H
+#ifndef X64_SRC_CODE_R_H
+#define X64_SRC_CODE_R_H
 
 #include <vector>
 

@@ -7,8 +7,8 @@
 #include "src/assembler/assembler.h"
 #include "src/assembler/function.h"
 #include "src/code/code.h"
-#include "src/code/gp_reg.h"
-#include "src/code/xmm_reg.h"
+#include "src/code/r.h"
+#include "src/code/xmm.h"
 #include "src/tracer/trace.h"
 
 namespace x64 {

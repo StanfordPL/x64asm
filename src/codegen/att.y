@@ -8,13 +8,13 @@
 #include <array>
 
 #include "src/code/code.h"
-#include "src/code/gp_reg.h"
 #include "src/code/imm.h"
 #include "src/code/instruction.h"
 #include "src/code/label.h"
 #include "src/code/opcode.h"
+#include "src/code/r.h"
 #include "src/code/scale.h"
-#include "src/code/xmm_reg.h"
+#include "src/code/xmm.h"
 
 using namespace std;
 using namespace x64;

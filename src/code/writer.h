@@ -3,19 +3,19 @@
 
 #include <iostream>
 
-#include "src/code/addr.h"
 #include "src/code/code.h"
-#include "src/code/fp_reg.h"
-#include "src/code/gp_reg.h"
 #include "src/code/imm.h"
 #include "src/code/label.h"
-#include "src/code/mmx_reg.h"
-#include "src/code/offset.h"
+#include "src/code/m.h"
+#include "src/code/mm.h"
+#include "src/code/moffs.h"
 #include "src/code/opcode.h"
 #include "src/code/operand.h"
+#include "src/code/r.h"
 #include "src/code/scale.h"
-#include "src/code/seg_reg.h"
-#include "src/code/xmm_reg.h"
+#include "src/code/sreg.h"
+#include "src/code/st.h"
+#include "src/code/xmm.h"
 
 namespace x64 {
 
