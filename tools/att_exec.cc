@@ -19,7 +19,8 @@ int main(int argc, char** argv) {
 	cout << endl << endl;
 
 	cout << "Calling function... " << endl;
-	auto fxn = assm.assemble(code);
+	Function fxn(256*1024);
+	fxn = assm.assemble(fxn, code);
 	uint64_t res = 0;
 
 	switch ( argc ) {
