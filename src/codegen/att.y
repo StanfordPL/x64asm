@@ -12,9 +12,13 @@
 #include "src/code/instruction.h"
 #include "src/code/label.h"
 #include "src/code/opcode.h"
+#include "src/code/m.h"
+#include "src/code/mm.h"
 #include "src/code/r.h"
 #include "src/code/scale.h"
+#include "src/code/st.h"
 #include "src/code/xmm.h"
+#include "src/code/ymm.h"
 
 using namespace std;
 using namespace x64;

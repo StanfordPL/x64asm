@@ -8,18 +8,20 @@ OBJ=build/cfg/control_flow_graph.o \
 		\
 		build/assembler/assembler.o \
 		\
+		build/att/att_reader.o \
+		build/att/att_writer.o \
+		\
 		build/code/cond_reg.o \
 		build/code/instruction.o \
 		build/code/opcode.o \
 		build/code/mm.o \
 		build/code/r.o \
-		build/code/reader.o \
 		build/code/reg_set.o \
 		build/code/scale.o \
 		build/code/sreg.o \
 		build/code/st.o \
-		build/code/writer.o \
 		build/code/xmm.o \
+		build/code/ymm.o \
 		\
 		build/sandboxer/sandboxer.o \
 		\
@@ -92,6 +94,8 @@ doc/html: doxyfile src/cfg/*.cc src/cfg/*.h src/assembler/*.cc src/assembler/*.h
 
 ##### BUILD TARGETS
 
+build/att/%.o: src/att/%.cc src/att/%.h src/gen
+	mkdir -p build/att && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/assembler/%.o: src/assembler/%.cc src/assembler/%.h src/gen
 	mkdir -p build/assembler && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/cfg/%.o: src/cfg/%.cc src/cfg/%.h src/gen

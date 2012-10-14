@@ -3,7 +3,7 @@
 #include <map>
 
 #include "src/code/label.h"
-#include "src/code/writer.h"
+#include "src/att/att_writer.h"
 
 using namespace std;
 
@@ -168,7 +168,7 @@ void ControlFlowGraph::recompute_defs() {
 }
 
 void ControlFlowGraph::write_dot(ostream& os) const {
-	Writer writer;
+	AttWriter writer;
 
 	os << "digraph g {" << endl;
 
@@ -185,14 +185,14 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 			const auto w = lis.get_widest_set(R(r));
 			if ( w != BIT_WIDTH_NULL ) {
 				os << " ";
-				writer.write_att(os, GpReg(r), w);	
+				writer.write(os, GpReg(r), w);	
 			}
 		}
 		*/
 		os << "|";
 
 		for ( auto j = instr_begin(i), je = instr_end(i); j != je; ++j ) {
-			writer.write_att(os, *j);
+			writer.write(os, *j);
 			os << "\\l";
 		}
 
@@ -203,7 +203,7 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 			const auto w = los.get_widest_set(GpReg(r));
 			if ( w != BIT_WIDTH_NULL ) {
 				os << " ";
-				writer.write_att(os, GpReg(r), w);
+				writer.write(os, GpReg(r), w);
 			}
 		}
 		*/

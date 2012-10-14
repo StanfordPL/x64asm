@@ -5,17 +5,10 @@
 #include <initializer_list>
 #include <vector>
 
-#include "src/code/imm.h"
-#include "src/code/label.h"
 #include "src/code/m.h"
-#include "src/code/mm.h"
-#include "src/code/moffs.h"
+#include "src/code/reg_set.h"
 #include "src/code/opcode.h"
 #include "src/code/operand.h"
-#include "src/code/r.h"
-#include "src/code/reg_set.h"
-#include "src/code/st.h"
-#include "src/code/xmm.h"
 
 namespace x64 {
 
@@ -43,6 +36,8 @@ class Instruction {
 				: opcode_(opcode), operands_(begin, end) {
 		}
 
+		bool is_null() const;
+
 		inline Opcode get_opcode() const { 
 			return opcode_; 
 		}
@@ -52,13 +47,6 @@ class Instruction {
 			return operands_[index];
 		}
 
-		inline void set_operand(size_t index, Operand o) {
-			assert(index < arity());
-			operands_[index] = o;
-		}
-
-		bool is_null() const;
-
 		inline size_t arity() const { 
 			return opcode_.arity(); 
 		}
@@ -67,12 +55,8 @@ class Instruction {
 			return opcode_.type(index); 
 		}
 
-		inline BitWidth width(size_t index) const { 
-			return opcode_.width(index); 
-		}
-
-		inline Modifier mod(size_t index) const {
-			return opcode_.mod(index);
+		inline Modifier modifier(size_t index) const {
+			return opcode_.modifier(index);
 		}
 
 		inline bool is_label_defn() const {
@@ -99,8 +83,8 @@ class Instruction {
 			return opcode_.touches_mem();
 		}
 
-		inline Modifier mem_mod() const {
-			return opcode_.mem_mod();
+		inline Modifier mem_modifier() const {
+			return opcode_.mem_modifier();
 		}
 
 		inline bool touches_stack() const {
@@ -110,9 +94,9 @@ class Instruction {
 			return ((M)get_operand(mi)).is_stack();
 		}
 
-		inline Modifier stack_mod() const {
+		inline Modifier stack_modifier() const {
 			assert(touches_stack());
-			return mod(opcode_.mem_index());
+			return modifier(opcode_.mem_index());
 		}
 
 		inline bool touches_heap() const {
@@ -122,9 +106,9 @@ class Instruction {
 			return ((M)get_operand(mi)).is_heap();
 		}
 
-		inline Modifier heap_mod() const {
+		inline Modifier heap_modifier() const {
 			assert(touches_heap());
-			return mod(opcode_.mem_index());
+			return modifier(opcode_.mem_index());
 		}
 
 		inline RegSet implicit_read_set() const {

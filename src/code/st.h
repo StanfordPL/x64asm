@@ -25,10 +25,6 @@ class St {
 			return f_ >= 8;	
 		}
 
-		inline bool is_top() const {
-			return f_ == 0;
-		}
-
 		typedef const std::vector<St>::const_iterator iterator;
 
 		static iterator begin() {
@@ -49,6 +45,8 @@ class St0 : public St {
 	public:
 		inline St0() : St() { }
 		inline St0(Operand o) : St(o) { }
+
+		inline bool is_null() const { return (Operand)*this != 0; }
 };
 
 extern const St0 st0;
@@ -59,6 +57,7 @@ extern const St st4;
 extern const St st5;
 extern const St st6;
 extern const St st7;
+extern const St st_null;
 
 } // namespace x64
 

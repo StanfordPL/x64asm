@@ -104,10 +104,6 @@ class M {
 			return (a_ >> 48) & 0x1;
 		}
 
-		inline BitWidth get_reg_width() const {
-			return get_size_or() ? DOUBLE : QUAD;
-		}
-
 		inline bool is_stack() const {
 			return get_base() == rsp && get_index().is_null();
 		}
@@ -205,6 +201,24 @@ class M64 : public M {
 		inline M64(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 };
 
+class M80 : public M {
+	public:
+		inline M80() : M() { }
+		inline M80(Operand o) : M(o) { }
+		inline M80(R64 b) : M(b) { }
+		inline M80(R64 b, Imm32 d) : M(b, d) { }
+		inline M80(R64 b, R64 i) : M(b, i) { }
+		inline M80(R64 b, R64 i, Scale s) : M(b, i, s) { }
+		inline M80(R64 b, R64 i, Imm32 d) : M(b, i, d) { }
+		inline M80(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
+		inline M80(R32 b) : M(b) { }
+		inline M80(R32 b, Imm32 d) : M(b, d) { }
+		inline M80(R32 b, R32 i) : M(b, i) { }
+		inline M80(R32 b, R32 i, Scale s) : M(b, i, s) { }
+		inline M80(R32 b, R32 i, Imm32 d) : M(b, i, d) { }
+		inline M80(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
+};
+
 class M128 : public M {
 	public:
 		inline M128() : M() { }
@@ -221,6 +235,24 @@ class M128 : public M {
 		inline M128(R32 b, R32 i, Scale s) : M(b, i, s) { }
 		inline M128(R32 b, R32 i, Imm32 d) : M(b, i, d) { }
 		inline M128(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
+};
+
+class M256 : public M {
+	public:
+		inline M256() : M() { }
+		inline M256(Operand o) : M(o) { }
+		inline M256(R64 b) : M(b) { }
+		inline M256(R64 b, Imm32 d) : M(b, d) { }
+		inline M256(R64 b, R64 i) : M(b, i) { }
+		inline M256(R64 b, R64 i, Scale s) : M(b, i, s) { }
+		inline M256(R64 b, R64 i, Imm32 d) : M(b, i, d) { }
+		inline M256(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
+		inline M256(R32 b) : M(b) { }
+		inline M256(R32 b, Imm32 d) : M(b, d) { }
+		inline M256(R32 b, R32 i) : M(b, i) { }
+		inline M256(R32 b, R32 i, Scale s) : M(b, i, s) { }
+		inline M256(R32 b, R32 i, Imm32 d) : M(b, i, d) { }
+		inline M256(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 };
 
 } // namespace x64

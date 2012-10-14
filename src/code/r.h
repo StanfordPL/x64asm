@@ -25,66 +25,8 @@ class R {
 			return g_ >= 16;
 		}
 
-		inline bool is_abcd() const {
-			return g_ < 4;
-		}
-
-		inline bool is_extended() const {
-			return g_ > 7 && g_ < 16;
-		}
-
-		inline bool is_pointer() const {
-			return g_ == 4 || g_ == 5;
-		}
-
-		inline bool is_index() const {
-			return g_ == 6 || g_ == 7;
-		}
-
 	private:
 		Operand g_;
-};
-
-class R64 : public R {
-	public:
-		inline R64() : R() { }
-		inline R64(Operand o) : R(o) { }
-		
-		typedef const std::vector<R64>::const_iterator iterator;
-
-		static iterator begin() { return domain_.begin(); }
-		static iterator end()   { return domain_.end(); }
-
-	private:
-		static const std::vector<R64> domain_;
-};
-
-class R32 : public R {
-	public:
-		inline R32() : R() { }
-		inline R32(Operand o) : R(o) { }
-		
-		typedef const std::vector<R32>::const_iterator iterator;
-
-		static iterator begin() { return domain_.begin(); }
-		static iterator end()   { return domain_.end(); }
-
-	private:
-		static const std::vector<R32> domain_;
-};
-
-class R16 : public R {
-	public:
-		inline R16() : R() { }
-		inline R16(Operand o) : R(o) { }
-		
-		typedef const std::vector<R16>::const_iterator iterator;
-
-		static iterator begin() { return domain_.begin(); }
-		static iterator end()   { return domain_.end(); }
-
-	private:
-		static const std::vector<R16> domain_;
 };
 
 class R8 : public R {
@@ -106,6 +48,8 @@ class RH : public R {
 		inline RH() : R() { }
 		inline RH(Operand o) : R(o) { }
 		
+		inline bool is_null() const { return (Operand)*this < 4; }
+
 		typedef const std::vector<RH>::const_iterator iterator;
 
 		static iterator begin() { return domain_.begin(); }
@@ -115,34 +59,86 @@ class RH : public R {
 		static const std::vector<RH> domain_;
 };
 
-class Rax : public R64 {
+class R16 : public R {
 	public:
-		inline Rax() : R64() { }
-		inline Rax(Operand o) : R64(o) { }
+		inline R16() : R() { }
+		inline R16(Operand o) : R(o) { }
+		
+		typedef const std::vector<R16>::const_iterator iterator;
+
+		static iterator begin() { return domain_.begin(); }
+		static iterator end()   { return domain_.end(); }
+
+	private:
+		static const std::vector<R16> domain_;
 };
 
-class Eax : public R32 {
+class R32 : public R {
 	public:
-		inline Eax() : R32() { }
-		inline Eax(Operand o) : R32(o) { }
+		inline R32() : R() { }
+		inline R32(Operand o) : R(o) { }
+		
+		typedef const std::vector<R32>::const_iterator iterator;
+
+		static iterator begin() { return domain_.begin(); }
+		static iterator end()   { return domain_.end(); }
+
+	private:
+		static const std::vector<R32> domain_;
 };
 
-class Ax : public R16 {
+class R64 : public R {
 	public:
-		inline Ax() : R16() { }
-		inline Ax(Operand o) : R16(o) { }
+		inline R64() : R() { }
+		inline R64(Operand o) : R(o) { }
+		
+		typedef const std::vector<R64>::const_iterator iterator;
+
+		static iterator begin() { return domain_.begin(); }
+		static iterator end()   { return domain_.end(); }
+
+	private:
+		static const std::vector<R64> domain_;
 };
 
 class Al : public R8 {
 	public:
 		inline Al() : R8() { }
 		inline Al(Operand o) : R8(o) { }
+
+		inline bool is_null() const { return (Operand)*this != 0; }
 };
 
 class Cl : public R8 {
 	public:
 		inline Cl() : R8() { }
 		inline Cl(Operand o) : R8(o) { }
+
+		inline bool is_null() const { return (Operand)*this != 0; }
+};
+
+class Ax : public R16 {
+	public:
+		inline Ax() : R16() { }
+		inline Ax(Operand o) : R16(o) { }
+
+		inline bool is_null() const { return (Operand)*this != 0; }
+};
+
+class Eax : public R32 {
+	public:
+		inline Eax() : R32() { }
+		inline Eax(Operand o) : R32(o) { }
+
+		inline bool is_null() const { return (Operand)*this != 0; }
+};
+
+class Rax : public R64 {
+	public:
+		inline Rax() : R64() { }
+		inline Rax(Operand o) : R64(o) { }
+
+		inline bool is_null() const { return (Operand)*this != 0; }
 };
 
 extern const Rax rax;

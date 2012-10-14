@@ -2,8 +2,8 @@
 
 #include "src/assembler/assembler.h"
 #include "src/cfg/control_flow_graph.h"
-#include "src/code/reader.h"
-#include "src/code/writer.h"
+#include "src/att/att_reader.h"
+#include "src/att/att_writer.h"
 
 using namespace std;
 using namespace x64;
@@ -34,8 +34,8 @@ ostream& operator<<(ostream& os, const format& f) {
 
 istream& operator>>(istream& is, Code& c) {
 	if ( get_format(is) == ATT ) {
-		Reader r;
-		r.read_att(is, c);
+		AttReader r;
+		r.read(is, c);
 	}
 	else
 		is.setstate(ios::failbit);
@@ -45,8 +45,8 @@ istream& operator>>(istream& is, Code& c) {
 ostream& operator<<(ostream& os, const Code& c) {
 	const auto format = get_format(os);
 	if ( format == ATT ) {
-		Writer w;
-		w.write_att(os, c);
+		AttWriter w;
+		w.write(os, c);
 	}
 	else if ( format == BIN ) {
 		Assembler assm;
@@ -68,8 +68,8 @@ ostream& operator<<(ostream& os, const Code& c) {
 
 ostream& operator<<(ostream& os, const Instruction& instr) {
 	if ( get_format(os) == ATT ) {
-		Writer w;
-		w.write_att(os, instr);
+		AttWriter w;
+		w.write(os, instr);
 	}
 	else
 		os.setstate(ios::failbit);
