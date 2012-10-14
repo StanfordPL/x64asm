@@ -42,9 +42,18 @@ class Instruction {
 			return opcode_; 
 		}
 
+		inline void set_opcode(Opcode o) {
+			opcode_ = o;
+		}
+
 		inline Operand get_operand(size_t index) const {
 			assert(index < arity());
 			return operands_[index];
+		}
+
+		inline void set_operand(size_t index, Operand o) {
+			assert(index < arity());
+			operands_[index] = o;
 		}
 
 		inline size_t arity() const { 
