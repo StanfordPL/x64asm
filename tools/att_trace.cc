@@ -91,6 +91,15 @@ int main(int argc, char** argv) {
 						break;
 		case 4: fxn(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
 						break;
+		case 5: fxn(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]),
+								atoi(argv[4]));
+						break;
+		case 6: fxn(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]),
+								atoi(argv[4]), atoi(argv[5]));
+						break;
+		case 7: fxn(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]),
+								atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+						break;
 		default: cerr << "No support for more than 3 arguments!" << endl;
 						 return 2;
 	}
