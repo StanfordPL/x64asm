@@ -68,6 +68,7 @@ void AttWriter::write(ostream& os, const Instruction& instr) const {
 			case IMM_32: write(os, (Imm32)instr.get_operand(i)); break;
 			case RAX:
 			case IMM_64: write(os, (Imm64)instr.get_operand(i)); break;
+			case LABEL: write(os, (Label)instr.get_operand(i)); break;
 			case M_8:    
 			case M_16:    
 			case M_32:    
