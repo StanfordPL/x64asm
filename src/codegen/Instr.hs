@@ -224,7 +224,7 @@ to_mod_enum _ = error "Unrecognized modifier!"
 
 -- Returns number of operands
 arity :: Instr -> Int
-arity instr = (length (operands instr)) `div` 3
+arity instr = (length (operands instr))
 
 -- Is the instruction a conditional jump?
 cond_jump :: Instr -> Bool

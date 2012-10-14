@@ -39,7 +39,16 @@ int main(int argc, char** argv) {
 						break;
 		case 4: res = fxn(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
 						break;
-		default: cerr << "No support for more than 3 arguments!" << endl;
+		case 5: res = fxn(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]),
+								      atoi(argv[4]));
+						break;
+		case 6: res = fxn(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]),
+								      atoi(argv[4]), atoi(argv[5]));
+						break;
+		case 7: res = fxn(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]),
+								      atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+						break;
+		default: cerr << "No support for more than 6 arguments!" << endl;
 						 return 2;
 	}
 
