@@ -18,7 +18,7 @@ class Instruction {
 	public:
 
 		inline Instruction() 
-				: opcode_(NOP), operands_{{0,0,0}} { 
+				: opcode_(-1), operands_{{0,0,0}} { 
 		}
 
 		inline explicit Instruction(Opcode opcode) 
