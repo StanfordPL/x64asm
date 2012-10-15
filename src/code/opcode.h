@@ -141,6 +141,8 @@ class Opcode {
 		}
 };
 
+extern const Opcode opcode_null;
+
 } // namespace x64
 
 #endif
