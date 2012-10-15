@@ -358,7 +358,6 @@ pushq :  : 68 :  :  :  32  I  R    : RSP : RSP :  :  :
                       
 pushfq :  : 9c :  :  :    : RSP : RSP :  O  S  Z  A  P  C  :  : 
                       
-ret :  : c3 :  :  :    :  :  :  :  : 
 retq :  : c3 :  :  :    :  :  :  :  : 
                       
 sahf :  : 9e :  :  :    :  :  :  :  O  S  Z  A  P  C  : 
