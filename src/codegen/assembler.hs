@@ -48,8 +48,10 @@ codegen_args i = cga (operand_types i) (flipped i)
 -- Emit mem prefix
 emit_mem_prefix :: Instr -> String
 emit_mem_prefix i = case mem_index i of
-  3 -> "\t// NO MEM PREFIX\n"
-  i -> "\temit_mem_prefix(buf_,pos_,arg" ++ (show i) ++ ");\n"
+  3   -> "\t// NO MEM PREFIX\n"
+  idx -> case (elem "O" (operand_types i)) of 
+    True  -> "\t// NO MEM PREFIX\n"
+    False -> "\temit_mem_prefix(buf_,pos_,arg" ++ (show idx) ++ ");\n"
 
 -- Emit prefix
 emit_prefix :: Instr -> String
