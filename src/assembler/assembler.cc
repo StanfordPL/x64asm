@@ -123,7 +123,7 @@ inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c) {
 }
 
 inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c, 
-		                    R delta) {
+		                    Operand delta) {
 	emit(buf, pos, c + (0x7 & delta));
 }
 
@@ -134,7 +134,7 @@ inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c1,
 }
 
 inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c1, 
-		                    unsigned char c2, R delta) {
+		                    unsigned char c2, Operand delta) {
 	emit(buf, pos, c1);
 	emit(buf, pos, c2 + (0x7 & delta));
 }
@@ -147,7 +147,7 @@ inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c1,
 }
 
 inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c1, 
-		                    unsigned char c2, unsigned char c3, R delta) {
+		                    unsigned char c2, unsigned char c3, Operand delta) {
 	emit(buf, pos, c1);
 	emit(buf, pos, c2);
 	emit(buf, pos, c3 + (0x7 & delta));

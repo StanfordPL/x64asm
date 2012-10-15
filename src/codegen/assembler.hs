@@ -27,11 +27,13 @@ codegen_args i = cga (operand_types i) (flipped i)
           cga ("R":"EAX":_) _ = ",(Operand)arg0"
           cga ("R":"AX":_) _ = ",(Operand)arg0"
           cga ("R":"AL":_) _ = ",(Operand)arg0"
+          cga ("F":"ST0":_) _ = ",(Operand)arg0"
 
           cga ("AL":"R":_) _   = ",(Operand)arg1"
           cga ("AX":"R":_) _   = ",(Operand)arg1"
           cga ("EAX":"R":_) _  = ",(Operand)arg1"
           cga ("RAX":"R":_) _  = ",(Operand)arg1"
+          cga ("ST0":"F":_) _  = ",(Operand)arg1"
 
           cga ("AL":_:_) _   = ",(Operand)arg0"
           cga ("AX":_:_) _   = ",(Operand)arg0"
@@ -42,6 +44,7 @@ codegen_args i = cga (operand_types i) (flipped i)
           cga (_:_:_) False  = ",(Operand)arg0,(Operand)arg1"
           cga ("I":_) _ = ""
           cga ("M":_) _ = ",arg0"
+
           cga (_:_) _ = ",(Operand) arg0"
           cga _ _ = ""
 
@@ -78,20 +81,21 @@ emit_rex_prefix i = "\temit_rex(buf_,pos_" ++
 -- Emit Opcode
 opcode_args :: Instr -> String
 opcode_args i = oca $ opcode i
-    where oca (x:[]) = ",0x" ++ x
-          oca (x:y:[]) = ",0x" ++ x ++ ",0x" ++ y
-          oca (x:y:z:[]) = ",0x" ++ x ++ ",0x" ++ y ++ ",0x" ++ z
+    where oca (x:[]) = arg x
+          oca (x:y:[]) = (arg x) ++ (arg y)
+          oca (x:y:z:[]) = (arg x) ++ (arg y) ++ (arg z)
           oca  _ = error "This should never happen (opcode)" 
+          arg x = ",(unsigned char)0x" ++ x
 
 opcode_delta :: Instr -> String
 opcode_delta i = ocd (operand_types i) (reg_code i)
-    where ocd ("ST0":_)     True = ",arg1"
-          ocd (_:"ST0":_)   True = ",arg0"
-          ocd ("R":_)       True = ",arg0"
-          ocd ("AL":"R":_)  True = ",arg1"
-          ocd ("AX":"R":_)  True = ",arg1"
-          ocd ("EAX":"R":_) True = ",arg1"
-          ocd ("RAX":"R":_) True = ",arg1"
+    where ocd ("ST0":_)     True = ",(Operand)arg1"
+          ocd (_:"ST0":_)   True = ",(Operand)arg0"
+          ocd ("R":_)       True = ",(Operand)arg0"
+          ocd ("AL":"R":_)  True = ",(Operand)arg1"
+          ocd ("AX":"R":_)  True = ",(Operand)arg1"
+          ocd ("EAX":"R":_) True = ",(Operand)arg1"
+          ocd ("RAX":"R":_) True = ",(Operand)arg1"
           ocd _ _ = ""
 
 emit_opcode :: Instr -> String
