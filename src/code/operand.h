@@ -89,6 +89,9 @@ enum Modifier {
 	MODIFIER_NULL
 };
 
+// TODO: This should be a const Operand
+#define operand_null 0
+
 } // namespace x64
 
 #endif
