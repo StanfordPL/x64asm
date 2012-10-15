@@ -267,6 +267,7 @@ ret i = r $ att i
 mem_index :: Instr -> Int
 mem_index i = mi (operand_types i) 0
     where mi ("M":_) i = i
+          mi ("O":_) i = i
           mi (_:xs) i = mi xs (i+1)
           mi [] _ = 3
 
