@@ -35,7 +35,8 @@ class Instruction {
 
 		template <typename InItr>
 		inline explicit Instruction(Opcode opcode, InItr begin, InItr end) 
-				: opcode_(opcode), operands_(begin, end) {
+				: opcode_(opcode) {
+			std::copy(begin, end, operands_.begin());
 		}
 
 		bool is_null() const;
