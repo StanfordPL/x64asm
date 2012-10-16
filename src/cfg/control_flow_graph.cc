@@ -111,8 +111,7 @@ void ControlFlowGraph::recompute_liveness() {
 	live_outs_.resize(num_blocks());
 
 	// Boundary conditions
-	const auto bound = 
-		RegSet().set(rbp).set(rsp);
+	const auto bound = RegSet().set(rbp).set(rsp);
 	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
 		if ( is_exit(i) )
 			live_outs_[i] = bound;
