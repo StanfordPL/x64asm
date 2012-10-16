@@ -6,6 +6,26 @@
 #include "src/att/att_writer.h"
 
 using namespace std;
+using namespace x64;
+
+namespace {
+
+void write(ostream& os, const AttWriter& w, const RegSet& rs) {
+	for ( auto i = R64::begin(), ie = R64::end(); i != ie; ++i ) {
+		if ( rs.is_set((R64)*i) )
+			w.write(os, (R64)*i);
+		else if ( rs.is_set((R32)*i) )
+			w.write(os, (R32)*i);
+		else if ( rs.is_set((R16)*i) )
+			w.write(os, (R16)*i);
+		else if ( rs.is_set((R8)*i) )
+			w.write(os, (R8)*i);
+		else if ( rs.is_set((RH)*i) )
+			w.write(os, (RH)*i);
+	}
+}
+
+} // namespace
 
 namespace x64 {
 
@@ -180,18 +200,7 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 
 		os << "live-ins:";
 		const auto lis = get_live_ins(location_type(i, 0));
-		for ( auto i = R64::begin(), ie = R64::end(); i != ie; ++i ) {
-			if ( lis.is_set((R64)*i) )
-				writer.write(os, (R64)*i);
-			else if ( lis.is_set((R32)*i) )
-				writer.write(os, (R32)*i);
-			else if ( lis.is_set((R16)*i) )
-				writer.write(os, (R16)*i);
-			else if ( lis.is_set((R8)*i) )
-				writer.write(os, (R8)*i);
-			else if ( lis.is_set((RH)*i) )
-				writer.write(os, (RH)*i);
-		}
+		write(os, writer, lis);
 		os << "|";
 
 		for ( auto j = instr_begin(i), je = instr_end(i); j != je; ++j ) {
@@ -201,18 +210,7 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 
 		os << "|live-outs:";
 		const auto los = get_live_outs(location_type(i, num_instrs(i)-1));
-		for ( auto i = R64::begin(), ie = R64::end(); i != ie; ++i ) {
-			if ( los.is_set((R64)*i) )
-				writer.write(os, (R64)*i);
-			else if ( los.is_set((R32)*i) )
-				writer.write(os, (R32)*i);
-			else if ( los.is_set((R16)*i) )
-				writer.write(os, (R16)*i);
-			else if ( los.is_set((R8)*i) )
-				writer.write(os, (R8)*i);
-			else if ( los.is_set((RH)*i) )
-				writer.write(os, (RH)*i);
-		}
+		write(os, writer, los);
 
 		os << "}\"];" << endl;
 	}
