@@ -276,7 +276,7 @@ first_read :: Instr -> Int
 first_read i = fr (operands i) 0
     where fr ((_,"M",_):_) i = i
           fr ((_,_,"R"):_) i = i
-          fr ((_,"X",_):_) i = i
+          fr ((_,_,"X"):_) i = i
           fr (_:xs) i = fr xs (i+1)
           fr [] _ = 3
 
