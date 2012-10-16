@@ -4,6 +4,9 @@
 #include "src/assembler/assembler.h"
 #include "src/assembler/function.h"
 
+#include "src/att/att_reader.h"
+#include "src/att/att_writer.h"
+
 #include "src/cfg/control_flow_graph.h"
 
 #include "src/code/code.h"

@@ -140,11 +140,11 @@ class Instruction {
 		RegSet explicit_write_set() const;
 
 		inline RegSet read_set() const {
-			return implicit_read_set() |= explicit_read_set();
+			return implicit_read_set() | explicit_read_set();
 		}
 
 		inline RegSet write_set() const {
-			return implicit_write_set() |= explicit_write_set();
+			return implicit_write_set() | explicit_write_set();
 		}
 
 		inline RegSet undef_set() const {

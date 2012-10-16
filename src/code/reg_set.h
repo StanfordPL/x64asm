@@ -247,7 +247,7 @@ class RegSet {
 		}
 
 		inline bool operator!=(const RegSet& rhs) const {
-			return r_mask_ != rhs.r_mask_ && xmm_cr_mask_ != rhs.xmm_cr_mask_;
+			return r_mask_ != rhs.r_mask_ || xmm_cr_mask_ != rhs.xmm_cr_mask_;
 		}
 
 	private:
