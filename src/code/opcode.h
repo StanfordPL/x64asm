@@ -137,7 +137,7 @@ class Opcode {
 		}
 
 		inline size_t num_writes() const {
-			return (o_ >> 1) & 0x3;
+			return (o_ >> 11) & 0x3;
 		}
 };
 
