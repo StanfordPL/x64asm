@@ -9,9 +9,9 @@ data ArgType = I | R | M | S | F | X | AL | AX | EAX | RAX | CL | CX | ECX | RCX
 data Argument = Arg Int ArgType deriving Show
 
 -- Turn a list of strings into a list of arguments
-parse_args :: [String] -> Maybe [[String]]
+parse_args :: [(String,String,String)] -> Maybe [[String]]
 parse_args [] = Just []
-parse_args (a:b:c:rest)=        let newarg = parse_arg a b c in 
+parse_args ((a,b,c):rest)=      let newarg = parse_arg a b c in 
                                 case newarg of
                                     Nothing -> Nothing
                                     Just newarg' -> case (parse_args rest) of
@@ -98,7 +98,7 @@ print_prefix_list prefix (first_list:tail_lists) = case (first_list, length tail
 --memsize_override = false -> 64-bit
 print_instruction :: Instr -> IO()
 --print_instruction i = print i
-print_instruction (Instr att _ _ _ _ _ _ _ ops _ _ _ _ _) = 
+print_instruction (Instr att _ _ _ _ _ _ ops _ _ _ _ _) = 
     let op_list = parse_args ops in
     case op_list of
         Nothing -> putStr "" --putStr ("Error in test script!  Couldn't figure out opcode " ++ att ++ " with " ++ (show ops) ++ "\n")

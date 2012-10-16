@@ -2,8 +2,8 @@
 #define X64_SRC_TRACE_STATE_H
 
 #include "src/code/cond_reg.h"
-#include "src/code/gp_reg.h"
-#include "src/code/xmm_reg.h"
+#include "src/code/r.h"
+#include "src/code/xmm.h"
 
 #include <cassert>
 #include <stdint.h>
@@ -14,22 +14,22 @@ class State {
 	friend class Tracer;
 
 	public:
-		typedef uint64_t gp_reg_val_type;
+		typedef uint64_t r64_val_type;
 		typedef bool cond_reg_val_type;
-		typedef __uint128_t xmm_reg_val_type;
+		typedef __uint128_t xmm_val_type;
 
 		inline size_t line() const {
 			return line_;
 		}
 
-		inline gp_reg_val_type gp_before(GpReg gp) const {
-			assert(!gp.is_null());
-			return gp_before_[gp];
+		inline r64_val_type gp_before(R64 r) const {
+			assert(!r.is_null());
+			return r64_before_[r];
 		}
 
-		inline gp_reg_val_type gp_after(GpReg gp) const {
-			assert(!gp.is_null());
-			return gp_after_[gp];
+		inline r64_val_type gp_after(R64 r) const {
+			assert(!r.is_null());
+			return r64_after_[r];
 		}
 
 		inline cond_reg_val_type cond_before(CondReg cond) const {
@@ -58,12 +58,12 @@ class State {
 			}
 		}
 
-		inline xmm_reg_val_type xmm_before(XmmReg xmm) const {
+		inline xmm_val_type xmm_before(Xmm xmm) const {
 			assert(!xmm.is_null());
 			return xmm_before_[xmm];
 		}
 
-		inline xmm_reg_val_type xmm_after(XmmReg xmm) const {
+		inline xmm_val_type xmm_after(Xmm xmm) const {
 			assert(!xmm.is_null());
 			return xmm_after_[xmm];
 		}
@@ -71,14 +71,14 @@ class State {
 	private:
 		size_t line_;
 
-		gp_reg_val_type gp_before_[16];
-		gp_reg_val_type gp_after_[16];
+		r64_val_type r64_before_[16];
+		r64_val_type r64_after_[16];
 
 		uint64_t cond_before_;
 		uint64_t cond_after_;
 
-		xmm_reg_val_type xmm_before_[16];
-		xmm_reg_val_type xmm_after_[16];
+		xmm_val_type xmm_before_[16];
+		xmm_val_type xmm_after_[16];
 };	
 
 } // namespace x64

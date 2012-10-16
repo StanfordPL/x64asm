@@ -5,9 +5,9 @@
 #include <vector>
 
 #include "src/code/cond_reg.h"
-#include "src/code/gp_reg.h"
+#include "src/code/r.h"
 #include "src/code/operand.h"
-#include "src/code/xmm_reg.h"
+#include "src/code/xmm.h"
 
 namespace x64 {
 
@@ -27,8 +27,12 @@ class RegSet {
 		};
 
 	public:
-		typedef std::vector<GpReg>::const_iterator gp_reg_iterator;
-		typedef std::vector<XmmReg>::const_iterator xmm_reg_iterator;
+		typedef std::vector<RH>::const_iterator  rh_iterator;
+		typedef std::vector<R8>::const_iterator  r8_iterator;
+		typedef std::vector<R16>::const_iterator r16_iterator;
+		typedef std::vector<R32>::const_iterator r32_iterator;
+		typedef std::vector<R64>::const_iterator r64_iterator;
+		typedef std::vector<Xmm>::const_iterator xmm_iterator;
 		typedef std::vector<CondReg>::const_iterator cond_reg_iterator;
 
 		inline RegSet() {
@@ -36,20 +40,42 @@ class RegSet {
 		}
 
 		inline RegSet& clear() {
-			gp_mask_ = 0;
+			r_mask_ = 0;
 			xmm_cr_mask_ = 0;
 			return *this;
 		}
 
-		inline RegSet& set(GpReg r, BitWidth w) {
-			static Mask m[5] { M_LOW, M_HIGH, M_WORD, M_DOUBLE, M_QUAD };
+		inline RegSet& set(RH r) {
 			assert(!r.is_null());
-			assert(w <= QUAD);
-			gp_mask_ |= (m[w] << r);
+			r_mask_ |= (M_HIGH << r);
 			return *this;
 		}
 
-		inline RegSet& set(XmmReg r) {
+		inline RegSet& set(R8 r) {
+			assert(!r.is_null());
+			r_mask_ |= (M_LOW << r);
+			return *this;
+		}
+
+		inline RegSet& set(R16 r) {
+			assert(!r.is_null());
+			r_mask_ |= (M_WORD << r);
+			return *this;
+		}
+
+		inline RegSet& set(R32 r) {
+			assert(!r.is_null());
+			r_mask_ |= (M_DOUBLE << r);
+			return *this;
+		}
+
+		inline RegSet& set(R64 r) {
+			assert(!r.is_null());
+			r_mask_ |= (M_QUAD << r);
+			return *this;
+		}
+
+		inline RegSet& set(Xmm r) {
 			assert(!r.is_null());
 			xmm_cr_mask_ |= (M_XMM << r);	
 			return *this;
@@ -61,16 +87,34 @@ class RegSet {
 			return *this;
 		}
 
-		inline bool is_set(GpReg r, BitWidth w) const {
-			static Mask m[5] { M_LOW, M_HIGH, M_WORD, M_DOUBLE, M_QUAD };
+		inline bool is_set(RH r) const {
 			assert(!r.is_null());
-			assert(w <= QUAD);
-			return gp_mask_ & (m[w] << r);
+			return r_mask_ & (M_HIGH << r);
 		}
 
-		BitWidth get_widest_set(GpReg r) const;
+		inline bool is_set(R8 r) const {
+			assert(!r.is_null());
+			return r_mask_ & (M_LOW << r);
+		}
 
-		inline bool is_set(XmmReg r) const {
+		inline bool is_set(R16 r) const {
+			assert(!r.is_null());
+			return r_mask_ & (M_WORD << r);
+		}
+
+		inline bool is_set(R32 r) const {
+			assert(!r.is_null());
+			return r_mask_ & (M_DOUBLE << r);
+		}
+
+		inline bool is_set(R64 r) const {
+			assert(!r.is_null());
+			return r_mask_ & (M_QUAD << r);
+		}
+
+		BitWidth get_widest_set(R r) const;
+
+		inline bool is_set(Xmm r) const {
 			assert(!r.is_null());
 			return xmm_cr_mask_ & (M_XMM << r);
 		}
@@ -80,29 +124,58 @@ class RegSet {
 			return xmm_cr_mask_ & (M_CR << r);
 		}
 
-		inline gp_reg_iterator gp_begin(BitWidth w) const {
-			switch ( w ) {
-				case LOW:    build<GpReg, M_LOW, 16>(gp_regs_, gp_mask_);    break;
-				case HIGH:   build<GpReg, M_HIGH, 16>(gp_regs_, gp_mask_);   break;
-				case WORD:   build<GpReg, M_WORD, 16>(gp_regs_, gp_mask_);   break;
-				case DOUBLE: build<GpReg, M_DOUBLE, 16>(gp_regs_, gp_mask_); break;
-				case QUAD:   build<GpReg, M_QUAD, 16>(gp_regs_, gp_mask_);   break;
-				default:     assert(false); 
-			}
-			return gp_regs_.begin();
+		inline rh_iterator rh_begin() const {
+			build<RH, M_HIGH, 16>(rh_, r_mask_);
+			return rh_.begin();
+		}
+			
+		inline rh_iterator rh_end() const {
+			return rh_.end();
 		}
 
-		inline gp_reg_iterator gp_end(BitWidth w) const {
-			return gp_regs_.end();
+		inline r8_iterator r8_begin() const {
+			build<R8, M_LOW, 16>(r8_, r_mask_);
+			return r8_.begin();
+		}
+			
+		inline r8_iterator r8_end() const {
+			return r8_.end();
 		}
 
-		inline xmm_reg_iterator xmm_begin() const {
-			build<XmmReg, M_XMM, 16>(xmm_regs_, xmm_cr_mask_);
-			return xmm_regs_.begin();
+		inline r16_iterator r16_begin() const {
+			build<R16, M_WORD, 16>(r16_, r_mask_);
+			return r16_.begin();
+		}
+			
+		inline r16_iterator r16_end() const {
+			return r16_.end();
 		}
 
-		inline xmm_reg_iterator xmm_end() const {
-			return xmm_regs_.end();
+		inline r32_iterator r32_begin() const {
+			build<R32, M_DOUBLE, 16>(r32_, r_mask_);
+			return r32_.begin();
+		}
+			
+		inline r32_iterator r32_end() const {
+			return r32_.end();
+		}
+
+		inline r64_iterator r64_begin() const {
+			build<R64, M_QUAD, 16>(r64_, r_mask_);
+			return r64_.begin();
+		}
+			
+		inline r64_iterator r64_end() const {
+			return r64_.end();
+		}
+
+		inline xmm_iterator xmm_begin() const {
+			build<Xmm, M_XMM, 16>(xmm_, xmm_cr_mask_);
+			return xmm_.begin();
+		}
+
+		inline xmm_iterator xmm_end() const {
+			return xmm_.end();
 		}
 
 		inline cond_reg_iterator cond_begin() const {
@@ -116,7 +189,7 @@ class RegSet {
 
 		inline RegSet operator~() const {
 			RegSet rs;
-			rs.gp_mask_ = ~gp_mask_;
+			rs.r_mask_ = ~r_mask_;
 			rs.xmm_cr_mask_ = ~xmm_cr_mask_;
 			return rs;
 		}
@@ -146,43 +219,47 @@ class RegSet {
 		}
 
 		inline RegSet& operator&=(const RegSet& rhs) {
-			gp_mask_ &= rhs.gp_mask_;
+			r_mask_ &= rhs.r_mask_;
 			xmm_cr_mask_ &= rhs.xmm_cr_mask_;
 			return *this;
 		}
 
 		inline RegSet& operator|=(const RegSet& rhs) {
-			gp_mask_ |= rhs.gp_mask_;
+			r_mask_ |= rhs.r_mask_;
 			xmm_cr_mask_ |= rhs.xmm_cr_mask_;
 			return *this;
 		}
 
 		inline RegSet& operator^=(const RegSet& rhs) {
-			gp_mask_ ^= rhs.gp_mask_;
+			r_mask_ ^= rhs.r_mask_;
 			xmm_cr_mask_ ^= rhs.xmm_cr_mask_;
 			return *this;
 		}
 
 		inline RegSet& operator-=(const RegSet& rhs) {
-			gp_mask_ &= ~rhs.gp_mask_;
+			r_mask_ &= ~rhs.r_mask_;
 			xmm_cr_mask_ &= ~rhs.xmm_cr_mask_;
 			return *this;
 		}
 
 		inline bool operator==(const RegSet& rhs) const {
-			return gp_mask_ == rhs.gp_mask_ && xmm_cr_mask_ == rhs.xmm_cr_mask_;
+			return r_mask_ == rhs.r_mask_ && xmm_cr_mask_ == rhs.xmm_cr_mask_;
 		}
 
 		inline bool operator!=(const RegSet& rhs) const {
-			return gp_mask_ != rhs.gp_mask_ && xmm_cr_mask_ != rhs.xmm_cr_mask_;
+			return r_mask_ != rhs.r_mask_ && xmm_cr_mask_ != rhs.xmm_cr_mask_;
 		}
 
 	private:
-		uint64_t gp_mask_;
+		uint64_t r_mask_;
 		uint64_t xmm_cr_mask_;
 
-		static std::vector<GpReg> gp_regs_;
-		static std::vector<XmmReg> xmm_regs_;
+		static std::vector<RH> rh_;
+		static std::vector<R8> r8_;
+		static std::vector<R16> r16_;
+		static std::vector<R32> r32_;
+		static std::vector<R64> r64_;
+		static std::vector<Xmm> xmm_;
 		static std::vector<CondReg> cond_regs_;
 		
 		template <typename T, Mask M, int Max>

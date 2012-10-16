@@ -20,7 +20,13 @@ class Function {
 		typedef uint64_t (*f0_type)();
 		typedef uint64_t (*f1_type)(uint64_t);
 		typedef uint64_t (*f2_type)(uint64_t, uint64_t);
-		typedef uint64_t (*f3_type)(uint64_t, uint64_t, uint64_t z);
+		typedef uint64_t (*f3_type)(uint64_t, uint64_t, uint64_t);
+		typedef uint64_t (*f4_type)(uint64_t, uint64_t, uint64_t,
+				                        uint64_t);
+		typedef uint64_t (*f5_type)(uint64_t, uint64_t, uint64_t,
+				                        uint64_t, uint64_t);
+		typedef uint64_t (*f6_type)(uint64_t, uint64_t, uint64_t,
+				                        uint64_t, uint64_t, uint64_t);
 
 	public:
 		inline Function(size_t capacity = 1024) {
@@ -39,14 +45,26 @@ class Function {
 		inline uint64_t operator()() {
 			return ((f0_type)(buffer_))();
 		}
-		inline uint64_t operator()(uint64_t x) {
-			return ((f1_type)(buffer_))(x);
+		inline uint64_t operator()(uint64_t rdi) {
+			return ((f1_type)(buffer_))(rdi);
 		}
-		inline uint64_t operator()(uint64_t x, uint64_t y) {
-			return ((f2_type)(buffer_))(x, y);
+		inline uint64_t operator()(uint64_t rdi, uint64_t rsi) {
+			return ((f2_type)(buffer_))(rdi, rsi);
 		}
-		inline uint64_t operator()(uint64_t x, uint64_t y, uint64_t z) {
-			return ((f3_type)(buffer_))(x, y, z);
+		inline uint64_t operator()(uint64_t rdi, uint64_t rsi, uint64_t rdx) {
+			return ((f3_type)(buffer_))(rdi, rsi, rdx);
+		}
+		inline uint64_t operator()(uint64_t rdi, uint64_t rsi, uint64_t rdx,
+				                       uint64_t rcx) {
+			return ((f4_type)(buffer_))(rdi, rsi, rdx, rcx);
+		}
+		inline uint64_t operator()(uint64_t rdi, uint64_t rsi, uint64_t rdx,
+				                       uint64_t rcx, uint64_t r8) {
+			return ((f5_type)(buffer_))(rdi, rsi, rdx, rcx, r8);
+		}
+		inline uint64_t operator()(uint64_t rdi, uint64_t rsi, uint64_t rdx,
+				                       uint64_t rcx, uint64_t r8,  uint64_t r9) {
+			return ((f6_type)(buffer_))(rdi, rsi, rdx, rcx, r8, r9);
 		}
 
 	private:

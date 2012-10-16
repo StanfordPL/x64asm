@@ -10,4 +10,6 @@ namespace x64 {
 // Domain declaration
 #include "src/gen/opcode.domain"
 
+const Opcode opcode_null = -1;
+
 } // namespace x64

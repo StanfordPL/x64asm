@@ -14,15 +14,14 @@ namespace x64 {
 // We have 64-bits worth of space for each opcode name.
 // That's enough room to fit the answers to most interesting queries.
 // This allows us to answer those queries using at most two arithmetic ops.
-#define DEF(idx, a, t1, t2, t3, w1, w2, w3, m1, m2, m3, r, j, uj, cj, mi, fr, nw) \
+#define DEF(idx, a, t1, t2, t3, m1, m2, m3, r, j, uj, cj, mi, fr, nw) \
   ((Operand) idx << 50) | \
 	((Operand) a   << 48) | \
-	((Operand) t3  << 44) | ((Operand) t2 << 40) | ((Operand) t1) << 36 | \
-	((Operand) w3  << 32) | ((Operand) w2 << 28) | ((Operand) w1) << 24 | \
-	((Operand) m3  << 22) | ((Operand) m2 << 20) | ((Operand) m1) << 18 | \
-	((Operand) r   << 17) | \
-	((Operand) j   << 16) | ((Operand) uj << 15) | ((Operand) cj) << 14 | \
-	((Operand) mi  << 12) | ((Operand) fr << 10) | ((Operand) nw) << 8
+	((Operand) t3  << 42) | ((Operand) t2 << 36) | ((Operand) t1) << 30 | \
+	((Operand) m3  << 27) | ((Operand) m2 << 24) | ((Operand) m1) << 21 | \
+	((Operand) r   << 20) | \
+	((Operand) j   << 19) | ((Operand) uj << 18) | ((Operand) cj) << 17 | \
+	((Operand) mi  << 15) | ((Operand) fr << 13) | ((Operand) nw) << 11
 
 /** Opcodes values.
 */	
@@ -37,7 +36,7 @@ class Opcode {
 
 	public:
 		inline Opcode() 
-				: o_(NOP) { 
+				: o_(-1) { 
 		}
 
 		inline Opcode(Operand o) 
@@ -58,17 +57,12 @@ class Opcode {
 
 		inline Type type(size_t index) const {
 			assert(index < arity());
-			return (Type) ((o_ >> (36 + index*4)) & 0xf);
+			return (Type) ((o_ >> (30 + index*6)) & 0x3f);
 		}
 
-		inline BitWidth width(size_t index) const {
+		inline Modifier modifier(size_t index) const {
 			assert(index < arity());
-			return (BitWidth) ((o_ >> (24 + index*4)) & 0xf);
-		}
-
-		inline Modifier mod(size_t index) const {
-			assert(index < arity());
-			return (Modifier) ((o_ >> (18 + index*2)) & 0x3);
+			return (Modifier) ((o_ >> (21 + index*3)) & 0x7);
 		}
 
 		inline bool is_label_defn() const {
@@ -76,28 +70,28 @@ class Opcode {
 		}
 
 		inline bool is_ret() const {
-			return o_ & ((Operand) 0x1 << 17);
+			return o_ & ((Operand) 0x1 << 20);
 		}
 
 		inline bool is_jump() const {
-			return o_ & ((Operand) 0x1 << 16);
+			return o_ & ((Operand) 0x1 << 19);
 		}
 
 		inline bool is_cond_jump() const {
-			return o_ & ((Operand) 0x1 << 15);
+			return o_ & ((Operand) 0x1 << 17);
 		}
 
 		inline bool is_uncond_jump() const {
-			return o_ & ((Operand) 0x1 << 14);
+			return o_ & ((Operand) 0x1 << 18);
 		}
 
     inline bool touches_mem() const {
 			return mem_index() != 3;
 		}
 
-		inline Modifier mem_mod() const {
+		inline Modifier mem_modifier() const {
 			assert(touches_mem());
-			return mod(mem_index());
+			return modifier(mem_index());
 		}
 
 		inline RegSet implicit_read_set() const {
@@ -135,17 +129,19 @@ class Opcode {
 		static const std::vector<Opcode> domain_;
 
 		inline size_t mem_index() const {
-			return (o_ >> 12) & 0x3;
+			return (o_ >> 15) & 0x3;
 		}
 
 		inline size_t first_read() const {
-			return (o_ >> 10) & 0x3;
+			return (o_ >> 13) & 0x3;
 		}
 
 		inline size_t num_writes() const {
-			return (o_ >> 8) & 0x3;
+			return (o_ >> 1) & 0x3;
 		}
 };
+
+extern const Opcode opcode_null;
 
 } // namespace x64
 

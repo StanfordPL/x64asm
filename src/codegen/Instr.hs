@@ -1,10 +1,13 @@
 module Instr 
 	( Instr(..)
 	, parse_instrs
-	, enum
 	, operand_widths
 	, operand_types
 	, operand_mods
+	, to_enum
+	, to_type
+	, to_type_enum
+	, to_mod_enum
 	, arity
 	, cond_jump
 	, uncond_jump
@@ -13,9 +16,13 @@ module Instr
 	, mem_index
 	, first_read
 	, num_writes
+
+	, to_type_enum_DEPRECATED
+	, to_width_enum_DEPRECATED
 	) where
 
 import Data.Char
+import Data.List
 import Data.List.Split
 
 -- Instruction Row Type
@@ -26,9 +33,8 @@ data Instr =
         , opcode          :: [String] -- opcode bytes
         , reg_code        :: Bool     -- opcode modified by operand?
         , reg_field       :: String   -- register field byte (follows opcode)
-        , rm_operand      :: Bool     -- uses an rm operand?
-        , rm_offset       :: Int      -- index for the rm operand
-        , operands        :: [String]
+        , flipped         :: Bool     -- does the r/m operand come second?
+        , operands        :: [(String,String,String)]
         , implicit_reads  :: [String]
         , implicit_writes :: [String]
         , cond_read       :: [String]
@@ -41,78 +47,95 @@ trim :: String -> String
 trim = f . f
     where f = reverse . dropWhile isSpace
      
+-- Upper/Lowercase strings
+up :: String -> String
+up s = map toUpper s
+
+low :: String -> String
+low s = map toLower s
+
+-- Groups strings into tuples, three at a time
+gather :: [String] -> [(String,String,String)]
+gather (x:y:z:xs) = (x,y,z):(gather xs)
+gather [] = []
+gather _ = error "Unable to parse operands!"
+
+-- Appends an F to a flag string and lower cases
+to_flags :: String -> [String]
+to_flags s = map low $ map (++"F") $ words s
+
+-- Lower cases register names
+to_regs :: String -> [String]
+to_regs s = map low $ words s
+
 -- Read Instructions		
 read_instrs :: String -> [Instr]
 read_instrs s = map format $ rows
     where rows = map (splitOn ":") $ filter (\x -> ':' `elem` x) (lines s)
           format (a:p:o:rc:rf:os:ir:iw:cr:cw:cu:[]) = 
             (Instr (trim a) 
-                   (words p) [] (words o) ((trim rc) == "y") (trim rf) False 0
-                   (words os) 
-                   (words ir) (words iw) 
-                   (to_flag cr) (to_flag cw) (to_flag cu) 
+                   (words p) [] (words o) ((trim rc) == "y") (trim rf) False
+                   (gather (words os))
+                   (to_regs ir) (to_regs iw) 
+                   (to_flags cr) (to_flags cw) (to_flags cu) 
                    ) 
           format _ = error $ "Unable to parse row"
-          to_flag cs = map (++ "F") $ (words cs)
 
--- 16-bit operands require a 66 override prefix
+-- Most 16-bit operands require a 66 override prefix
 add_66_prefix :: Instr -> Instr
-add_66_prefix (Instr a p r o rc rf rm rmo os ir iw cr cw cu) =
+add_66_prefix (Instr a p r o rc rf f os ir iw cr cw cu) =
     case a of
-        "fiaddl" -> (Instr a p       r o rc rf rm rmo os ir iw cr cw cu)
-        "fiadds" -> (Instr a p       r o rc rf rm rmo os ir iw cr cw cu)
+        "fiaddl" -> (Instr a p r o rc rf f os ir iw cr cw cu)
+        "fiadds" -> (Instr a p r o rc rf f os ir iw cr cw cu)
         _ -> case os of
-              ("16":"M":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
-              ("16":"R":_)  -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
-              ("16":"RM":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
-              ("16":"AX":_) -> (Instr a ("66":p) r o rc rf rm rmo os ir iw cr cw cu)
-              ("16":"CX":_) -> error "Does this ever happen?  CX Target?"
-              _             -> (Instr a p           r o rc rf rm rmo os ir iw cr cw cu)
+              ("16","M",_):_  -> (Instr a ("66":p) r o rc rf f os ir iw cr cw cu)
+              ("16","R",_):_  -> (Instr a ("66":p) r o rc rf f os ir iw cr cw cu)
+              ("16","RM",_):_ -> (Instr a ("66":p) r o rc rf f os ir iw cr cw cu)
+              ("16","AX",_):_ -> (Instr a ("66":p) r o rc rf f os ir iw cr cw cu)
+              ("16","CX",_):_ -> error "Does this ever happen?  CX Target?"
+              _ -> (Instr a p r o rc rf f os ir iw cr cw cu)
 
--- 64-bit operands require a mandator rex.w prefix
--- Sort of... it's more complicated than this.
--- I'm afraid this function is going to get ugly.
+-- Most 64-bit operands require a mandator rex.w prefix
 add_rexw_prefix :: Instr -> Instr
-add_rexw_prefix (Instr a p _ o rc rf rm rmo os ir iw cr cw cu) =
+add_rexw_prefix (Instr a p _ o rc rf f os ir iw cr cw cu) =
   case os of
-    ("64":"M":_)   -> case a of
-                        "faddl" -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
-                        _ -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
-    ("64":"O":_)   -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
-    ("64":"RM":_)  -> case a of 
-                        "pushq" -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
-                        "popq"  -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
-                        _ -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
-    ("64":"R":_)   -> case a of 
-                        "pushq" -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
-                        "popq"  -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
-                        _ -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
-    ("64":"RAX":_) -> (Instr a p "48" o rc rf rm rmo os ir iw cr cw cu)
-    _              -> (Instr a p "" o rc rf rm rmo os ir iw cr cw cu)
+    ("64","M",_):_   -> case a of
+                        "faddl" -> (Instr a p "" o rc rf f os ir iw cr cw cu)
+                        _ -> (Instr a p "48" o rc rf f os ir iw cr cw cu)
+    ("64","O",_):_   -> (Instr a p "48" o rc rf f os ir iw cr cw cu)
+    ("64","RM",_):_  -> case a of 
+                        "pushq" -> (Instr a p "" o rc rf f os ir iw cr cw cu)
+                        "popq"  -> (Instr a p "" o rc rf f os ir iw cr cw cu)
+                        _ -> (Instr a p "48" o rc rf f os ir iw cr cw cu)
+    ("64","R",_):_   -> case a of 
+                        "pushq" -> (Instr a p "" o rc rf f os ir iw cr cw cu)
+                        "popq"  -> (Instr a p "" o rc rf f os ir iw cr cw cu)
+                        _ -> (Instr a p "48" o rc rf f os ir iw cr cw cu)
+    ("64","RAX",_):_ -> (Instr a p "48" o rc rf f os ir iw cr cw cu)
+    _ -> (Instr a p "" o rc rf f os ir iw cr cw cu)
 
--- We need to distinguish the possibility and position of r/m operands
+-- Record instructions with r/m operands as second arguments
 add_rm_info :: Instr -> Instr
-add_rm_info (Instr a p r o rc rf _ _ os ir iw cr cw cu) =
-  case os of 
-    (_:"RM":_)       -> (Instr a p r o rc rf True  0 os ir iw cr cw cu)
-    (_:"SM":_)       -> (Instr a p r o rc rf True  0 os ir iw cr cw cu)
-    (_:"XM":_)       -> (Instr a p r o rc rf True  0 os ir iw cr cw cu)
-    (_:_:_:_:"RM":_) -> (Instr a p r o rc rf True  1 os ir iw cr cw cu)
-    (_:_:_:_:"SM":_) -> (Instr a p r o rc rf True  1 os ir iw cr cw cu)
-    (_:_:_:_:"XM":_) -> (Instr a p r o rc rf True  1 os ir iw cr cw cu)
-    _                -> (Instr a p r o rc rf False 0 os ir iw cr cw cu)
+add_rm_info (Instr a p r o rc rf _ os ir iw cr cw cu) =
+  let (_,ts,_) = unzip3 os in
+  case ts of 
+    _:"RM":_ -> (Instr a p r o rc rf True os ir iw cr cw cu)
+    _:"SM":_ -> (Instr a p r o rc rf True os ir iw cr cw cu)
+    _:"XM":_ -> (Instr a p r o rc rf True os ir iw cr cw cu)
+    _ -> (Instr a p r o rc rf False os ir iw cr cw cu)
 
 -- Expand instructions operands
 expand_operands :: String -> String -> String -> Instr -> [Instr]
-expand_operands key val1 val2 (Instr a p r o rc rf rm rmo os ir iw cr cw cu) =
-    case (elem key os) of 
-      True  -> (Instr a p r o rc rf rm rmo (repl key val1 os) ir iw cr cw cu) :
-               (Instr a p r o rc rf rm rmo (repl key val2 os) ir iw cr cw cu) : []
-      False -> (Instr a p r o rc rf rm rmo os                 ir iw cr cw cu) : []
+expand_operands key val1 val2 (Instr a p r o rc rf f os ir iw cr cw cu) =
+    let (_,ts,_) = unzip3 os in
+    case (elem key ts) of 
+      True  -> (Instr a p r o rc rf f (repl key val1 os) ir iw cr cw cu) :
+               (Instr a p r o rc rf f (repl key val2 os) ir iw cr cw cu) : []
+      False -> (Instr a p r o rc rf f os                 ir iw cr cw cu) : []
     where repl k v os = map (repl' k v) os
-          repl' k v o = case (o == k) of 
-            True  -> v
-            False -> o
+          repl' k v (w,t,m) = case (t == k) of 
+            True  -> (w,v,m) 
+            False -> (w,t,m)
 
 -- Applies each of the above functions in appropriate turn					
 expand_instr :: Instr -> [Instr]
@@ -122,42 +145,86 @@ expand_instr i =
   (expand_operands "RM" "R" "M") $ 
   add_rm_info $ add_rexw_prefix $ add_66_prefix i  
 
+-- Selects the prefered implementation of a redundant instruction
+-- Note that this leaves label_defn as the first element
+remove_redundant :: [Instr] -> [Instr]
+remove_redundant is = map keep $ groupBy eq $ sortBy lt is
+    where lt i1 i2 = compare (to_enum i1) (to_enum i2)
+          eq i1 i2 = (to_enum i1) == (to_enum i2)
+          keep = head
+
 -- Read and auto-complete
 parse_instrs :: String -> [Instr]
-parse_instrs s = concat $ map expand_instr $ read_instrs s
-
--- Generates a unique enum value for an instruction
-enum :: Instr -> String
-enum instr = (up (att instr)) ++ 
-             (arg (operands instr)) ++ 
-             (rm_suff (rm_operand instr) (rm_offset instr))
-    where up xs = (map toUpper xs)
-          arg (w:t:_:xs) = "_" ++ w ++ (up t) ++ (arg xs)
-          arg _ = ""					
-          rm_suff True i = "_RM" ++ (show i)
-          rm_suff _ _    = ""
+parse_instrs s = let is = concat $ map expand_instr $ read_instrs s in
+  (head is) : (remove_redundant $ tail is)
 
 -- Unpacks operand widths
 operand_widths :: Instr -> [String]
-operand_widths instr = ow $ operands instr
-    where ow (w:_:_:os) = w:(ow os)
-          ow _ = []
+operand_widths instr = let (x,_,_) = unzip3 (operands instr) in x
 
 -- Unpacks operand types
 operand_types :: Instr -> [String]
-operand_types instr = ot $ operands instr
-    where ot (_:t:_:os) = t:(ot os)
-          ot _ = []
+operand_types instr = let (_,x,_) = unzip3 (operands instr) in x
 
 -- Unpacks operand modifiers
 operand_mods :: Instr -> [String]
-operand_mods instr = om $ operands instr
-    where om (_:_:m:os) = m:(om os)
-          om _ = []
+operand_mods instr = let (_,_,x) = unzip3 (operands instr) in x
+
+-- Generates a unique enum value for an instruction
+to_enum :: Instr -> String
+to_enum instr = (up (att instr)) ++ (arg (operands instr))
+    where arg ((w,t,_):xs) = "_" ++ w ++ (up t) ++ (arg xs)
+          arg _ = ""					
+
+-- Generates the type encoded by an operand column
+to_type:: (String,String,String) -> String
+to_type (w,"M",_) = "M" ++ w
+to_type (_,"F",_) = "St"
+to_type (w,"R",_) = "R" ++ w
+to_type (w,"I",_) = "Imm" ++ w
+to_type (_,"L",_) = "Label"
+to_type (_,"X",_) = "Mm"
+to_type (w,"O",_) = "Moffs" ++ w
+to_type (_,"S",_) = "Xmm"
+to_type (_,"Y",_) = "Ymm"
+to_type (_,"AL",_) = "Al"
+to_type (_,"AX",_) = "Ax"
+to_type (_,"EAX",_) = "Eax"
+to_type (_,"RAX",_) = "Rax"
+to_type (_,"CL",_) = "Cl"
+to_type (_,"ST0",_) = "St0"
+to_type (_,_,_) = error "Unrecognized type!"
+
+-- Generates the type_enum encoded by an operand column
+to_type_enum :: (String,String,String) -> String
+to_type_enum (w,"M",_) = "M_" ++ w
+to_type_enum (_,"F",_) = "ST"
+to_type_enum (w,"R",_) = "R_" ++ w
+to_type_enum (w,"I",_) = "IMM_" ++ w
+to_type_enum (_,"L",_) = "LABEL"
+to_type_enum (_,"X",_) = "MM"
+to_type_enum (w,"O",_) = "MOFFS_" ++ w
+to_type_enum (_,"S",_) = "XMM"
+to_type_enum (_,"Y",_) = "YMM"
+to_type_enum (_,"AL",_) = "AL"
+to_type_enum (_,"AX",_) = "AX"
+to_type_enum (_,"EAX",_) = "EAX"
+to_type_enum (_,"RAX",_) = "RAX"
+to_type_enum (_,"CL",_) = "CL"
+to_type_enum (_,"ST0",_) = "ST0"
+to_type_enum (_,_,_) = error "Unrecognized type!"
+
+-- Generates the modifier enum encoded by an operand column
+to_mod_enum :: (String,String,String) -> String
+to_mod_enum (_,_,"R") = "READ"
+to_mod_enum (_,_,"W") = "WRITE"
+to_mod_enum (_,_,"X") = "READ_WRITE"
+to_mod_enum (_,_,"N") = "NONE"
+to_mod_enum _ = error "Unrecognized modifier!"
 
 -- Returns number of operands
 arity :: Instr -> Int
-arity instr = (length (operands instr)) `div` 3
+arity instr = (length (operands instr))
 
 -- Is the instruction a conditional jump?
 cond_jump :: Instr -> Bool
@@ -200,14 +267,16 @@ ret i = r $ att i
 mem_index :: Instr -> Int
 mem_index i = mi (operand_types i) 0
     where mi ("M":_) i = i
+          mi ("O":_) i = i
           mi (_:xs) i = mi xs (i+1)
           mi [] _ = 3
 
 -- What is the first operand that gets read?
 first_read :: Instr -> Int
-first_read i = fr (operand_mods i) 0
-    where fr ("R":_) i = i
-          fr ("X":_) i = i
+first_read i = fr (operands i) 0
+    where fr ((_,"M",_):_) i = i
+          fr ((_,_,"R"):_) i = i
+          fr ((_,"X",_):_) i = i
           fr (_:xs) i = fr xs (i+1)
           fr [] _ = 3
 
@@ -217,3 +286,50 @@ num_writes i = nw (operand_mods i) 0
     where nw ("W":xs) i = nw xs (i+1)
           nw ("X":xs) i = nw xs (i+1)
           nw _ i = i
+
+
+
+-- DEPRECATED METHODS
+-- Used by att parser
+
+to_type_enum_DEPRECATED :: (String,String,String) -> String
+to_type_enum_DEPRECATED (_,"M",_) = "ADDR"
+to_type_enum_DEPRECATED (_,"F",_) = "FP_REG"
+to_type_enum_DEPRECATED (_,"R",_) = "GP_REG"
+to_type_enum_DEPRECATED (_,"I",_) = "IMM"
+to_type_enum_DEPRECATED (_,"L",_) = "LABEL"
+to_type_enum_DEPRECATED (_,"X",_) = "MMX_REG"
+to_type_enum_DEPRECATED (_,"O",_) = "OFFSET"
+to_type_enum_DEPRECATED (_,"S",_) = "XMM_REG"
+to_type_enum_DEPRECATED (_,"AL",_) = "RAX_ONLY"
+to_type_enum_DEPRECATED (_,"AX",_) = "RAX_ONLY"
+to_type_enum_DEPRECATED (_,"EAX",_) = "RAX_ONLY"
+to_type_enum_DEPRECATED (_,"RAX",_) = "RAX_ONLY"
+to_type_enum_DEPRECATED (_,"CL",_) = "RCX_ONLY"
+to_type_enum_DEPRECATED (_,"ST0",_) = "ST0_ONLY"
+to_type_enum_DEPRECATED _ = error "Unrecognized type!"
+
+width :: String -> String
+width "8"   = "LOW"					
+width "16"  = "WORD"				
+width "32"  = "DOUBLE"					
+width "64"  = "QUAD"					
+width "128" = "OCT"					
+width _     = "BIT_WIDTH_VAL_NULL"
+
+to_width_enum_DEPRECATED :: (String,String,String) -> String
+to_width_enum_DEPRECATED (w,"M",_) = width w
+to_width_enum_DEPRECATED (_,"F",_) = "QUAD"
+to_width_enum_DEPRECATED (w,"R",_) = width w
+to_width_enum_DEPRECATED (w,"I",_) = width w
+to_width_enum_DEPRECATED (_,"L",_) = "FIXED"
+to_width_enum_DEPRECATED (_,"X",_) = "QUAD"
+to_width_enum_DEPRECATED (_,"O",_) = "QUAD"
+to_width_enum_DEPRECATED (_,"S",_) = "OCT"
+to_width_enum_DEPRECATED (_,"AL",_) = "LOW"
+to_width_enum_DEPRECATED (_,"AX",_) = "WORD"
+to_width_enum_DEPRECATED (_,"EAX",_) = "DOUBLE"
+to_width_enum_DEPRECATED (_,"RAX",_) = "QUAD"
+to_width_enum_DEPRECATED (_,"CL",_) = "LOW"
+to_width_enum_DEPRECATED (_,"ST0",_) = "QUAD"
+to_width_enum_DEPRECATED _ = error "Unrecognized type!"

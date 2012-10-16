@@ -1,21 +1,15 @@
 #ifndef X64_SRC_CODE_INSTRUCTION_H
 #define X64_SRC_CODE_INSTRUCTION_H
 
+#include <algorithm>
+#include <array>
 #include <cassert>
 #include <initializer_list>
-#include <vector>
 
-#include "src/code/addr.h"
-#include "src/code/fp_reg.h"
-#include "src/code/gp_reg.h"
-#include "src/code/imm.h"
-#include "src/code/label.h"
-#include "src/code/mmx_reg.h"
-#include "src/code/offset.h"
+#include "src/code/m.h"
+#include "src/code/reg_set.h"
 #include "src/code/opcode.h"
 #include "src/code/operand.h"
-#include "src/code/reg_set.h"
-#include "src/code/xmm_reg.h"
 
 namespace x64 {
 
@@ -25,7 +19,7 @@ class Instruction {
 	public:
 
 		inline Instruction() 
-				: opcode_(NOP), operands_{{0,0,0}} { 
+				: opcode_(-1), operands_{{0,0,0}} { 
 		}
 
 		inline explicit Instruction(Opcode opcode) 
@@ -35,13 +29,17 @@ class Instruction {
 
 		inline explicit Instruction(Opcode opcode, 
 				                        std::initializer_list<Operand> operands)
-				: opcode_(opcode), operands_(operands.begin(), operands.end()) {
+				: opcode_(opcode) {
+			std::copy(operands.begin(), operands.end(), operands_.begin());
 		}
 
 		template <typename InItr>
 		inline explicit Instruction(Opcode opcode, InItr begin, InItr end) 
-				: opcode_(opcode), operands_(begin, end) {
+				: opcode_(opcode) {
+			std::copy(begin, end, operands_.begin());
 		}
+
+		bool is_null() const;
 
 		inline Opcode get_opcode() const { 
 			return opcode_; 
@@ -61,88 +59,6 @@ class Instruction {
 			operands_[index] = o;
 		}
 
-		inline Addr get_addr(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_addr(size_t index, Addr a) {
-			assert(index < arity());
-			operands_[index] = a;
-		}
-
-		inline FpReg get_fp_reg(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_fp_reg(size_t index, FpReg fp) {
-			assert(index < arity());
-			operands_[index] = fp;
-		}
-
-		inline GpReg get_gp_reg(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_gp_reg(size_t index, GpReg gp) {
-			assert(index < arity());
-			operands_[index] = gp;
-		}
-
-		inline Imm get_imm(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_imm(size_t index, Imm i) {
-			assert(index < arity());
-			operands_[index] = i;
-		}
-
-		inline Label get_label(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_label(size_t index, Label l) {
-			assert(index < arity());
-			operands_[index] = l;
-		}
-
-		inline MmxReg get_mmx_reg(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_mmx_reg(size_t index, MmxReg mm) {
-			assert(index < arity());
-			operands_[index] = mm;
-		}
-
-		inline Offset get_offset(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_offset(size_t index, Offset o) {
-			assert(index < arity());
-			operands_[index] = o;
-		}
-
-		inline XmmReg get_xmm_reg(size_t index) const {
-			assert(index < arity());
-			return operands_[index];
-		}
-
-		inline void set_xmm_reg(size_t index, XmmReg x) {
-			assert(index < arity());
-			operands_[index] = x;
-		}
-
-		bool is_null() const;
-
 		inline size_t arity() const { 
 			return opcode_.arity(); 
 		}
@@ -151,12 +67,8 @@ class Instruction {
 			return opcode_.type(index); 
 		}
 
-		inline BitWidth width(size_t index) const { 
-			return opcode_.width(index); 
-		}
-
-		inline Modifier mod(size_t index) const {
-			return opcode_.mod(index);
+		inline Modifier modifier(size_t index) const {
+			return opcode_.modifier(index);
 		}
 
 		inline bool is_label_defn() const {
@@ -183,32 +95,32 @@ class Instruction {
 			return opcode_.touches_mem();
 		}
 
-		inline Modifier mem_mod() const {
-			return opcode_.mem_mod();
+		inline Modifier mem_modifier() const {
+			return opcode_.mem_modifier();
 		}
 
 		inline bool touches_stack() const {
 			const auto mi = opcode_.mem_index();
 			if ( mi == 3 )
 				return false;
-			return get_addr(mi).is_stack();
+			return ((M)get_operand(mi)).is_stack();
 		}
 
-		inline Modifier stack_mod() const {
+		inline Modifier stack_modifier() const {
 			assert(touches_stack());
-			return mod(opcode_.mem_index());
+			return modifier(opcode_.mem_index());
 		}
 
 		inline bool touches_heap() const {
 			const auto mi = opcode_.mem_index();
 			if ( mi == 3 )
 				return false;
-			return get_addr(mi).is_heap();
+			return ((M)get_operand(mi)).is_heap();
 		}
 
-		inline Modifier heap_mod() const {
+		inline Modifier heap_modifier() const {
 			assert(touches_heap());
-			return mod(opcode_.mem_index());
+			return modifier(opcode_.mem_index());
 		}
 
 		inline RegSet implicit_read_set() const {
@@ -241,7 +153,7 @@ class Instruction {
 
 	private:
 		Opcode opcode_;
-		std::vector<Operand> operands_;
+		std::array<Operand,3> operands_;
 };
 
 } // namespace x64

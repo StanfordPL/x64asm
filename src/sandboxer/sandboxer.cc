@@ -16,23 +16,23 @@ namespace x64 {
 Function& Sandboxer::sandbox(Function& fxn, Sandbox& s, const Code& code) {
 	assm_.start(fxn);
 
-	assm_.pushq_64r(rbp);
-	assm_.pushq_64r(rbx);
-	assm_.pushq_64r(r12);
-	assm_.pushq_64r(r13);
-	assm_.pushq_64r(r14);
-	assm_.pushq_64r(r15);
+	assm_.pushq(rbp);
+	assm_.pushq(rbx);
+	assm_.pushq(r12);
+	assm_.pushq(r13);
+	assm_.pushq(r14);
+	assm_.pushq(r15);
 
 	for ( const auto& instr : code ) {
 		if ( instr.is_jump() )
 			sandbox_jump(s);
 		else if ( instr.is_ret() ) {
-			assm_.popq_64r(r15);
-			assm_.popq_64r(r14);
-			assm_.popq_64r(r13);
-			assm_.popq_64r(r12);
-			assm_.popq_64r(rbx);
-			assm_.popq_64r(rbp);
+			assm_.popq(r15);
+			assm_.popq(r14);
+			assm_.popq(r13);
+			assm_.popq(r12);
+			assm_.popq(rbx);
+			assm_.popq(rbp);
 		}
 		assm_.assemble(instr);	
 	}
@@ -47,51 +47,51 @@ Function& Sandboxer::sandbox(Function& fxn, Sandbox& s, const Code& code) {
 
 void Sandboxer::sandbox_runaway(Sandbox& s) {
 	// Okay to clobber rax at this point
-	assm_.movq_64r_64i(rax, (Operand) 0x1);
-	assm_.movabsq_64o_64rax((Operand) &s.runaway_, rax);
-	assm_.popq_64r(r15);
-	assm_.popq_64r(r14);
-	assm_.popq_64r(r13);
-	assm_.popq_64r(r12);
-	assm_.popq_64r(rbx);
-	assm_.popq_64r(rbp);
+	assm_.movq(rax, Imm64(0x1));
+	assm_.movabsq(Moffs64(&s.runaway_), rax);
+	assm_.popq(r15);
+	assm_.popq(r14);
+	assm_.popq(r13);
+	assm_.popq(r12);
+	assm_.popq(rbx);
+	assm_.popq(rbp);
 	assm_.retq();
 }
 
 void Sandboxer::sandbox_jump(Sandbox& s) {
 	// Backup original rax
-	assm_.pushq_64r(rax); 
+	assm_.pushq(rax); 
 	// Backup condition regiters
 	assm_.lahf();         
-	assm_.pushw_16r(rax); 
+	assm_.pushw(ax); 
 
 	// Decrement counter and exit abnormally on zero
-	assm_.movabsq_64rax_64o(rax, (Operand) &s.max_jumps_);
-	assm_.decq_64r_rm0(rax);
-	assm_.je_64l(max_jump_exit_);
+	assm_.movabsq(rax, Moffs64(&s.max_jumps_));
+	assm_.decq(rax);
+	assm_.je(max_jump_exit_);
 
 	// Normal writebase/fixup code 
-	assm_.movabsq_64o_64rax((Operand) &s.max_jumps_, rax);
-	assm_.popw_16r(rax);
+	assm_.movabsq(Moffs64(&s.max_jumps_), rax);
+	assm_.popw(ax);
 	assm_.sahf();
-	assm_.popq_64r(rax);
+	assm_.popq(rax);
 }
 
 void Sandboxer::sandbox_jump_final(Sandbox& s) {
 	assm_.bind(max_jump_exit_);
 
 	// If control is here, it missed this writeback/fixup code
-	assm_.movabsq_64o_64rax((Operand) &s.max_jumps_, rax);
-	assm_.popw_16r(rax);
+	assm_.movabsq(Moffs64(&s.max_jumps_), rax);
+	assm_.popw(ax);
 	assm_.sahf();
-	assm_.popq_64r(rax);
+	assm_.popq(rax);
 
-	assm_.popq_64r(r15);
-	assm_.popq_64r(r14);
-	assm_.popq_64r(r13);
-	assm_.popq_64r(r12);
-	assm_.popq_64r(rbx);
-	assm_.popq_64r(rbp);
+	assm_.popq(r15);
+	assm_.popq(r14);
+	assm_.popq(r13);
+	assm_.popq(r12);
+	assm_.popq(rbx);
+	assm_.popq(rbp);
 
 	assm_.retq();
 }

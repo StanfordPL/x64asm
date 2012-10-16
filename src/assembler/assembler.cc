@@ -90,8 +90,14 @@ inline void emit(unsigned char* buf, size_t& pos, unsigned char c) {
 	buf[pos++] = c;
 }
 
-inline void emit_mem_prefix(unsigned char* buf, size_t& pos, Addr addr) {
-	if ( addr.get_size_or() )
+template <int n>
+inline void emit_zeros(unsigned char* buf, size_t& pos) {
+	for ( auto i = 0; i < n; ++i )
+		emit(buf, pos, 0x00);
+}
+
+inline void emit_mem_prefix(unsigned char* buf, size_t& pos, M m) {
+	if ( m.get_size_or() )
 		emit(buf, pos, 0x67);
 }
 
@@ -117,7 +123,7 @@ inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c) {
 }
 
 inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c, 
-		                    GpReg delta) {
+		                    Operand delta) {
 	emit(buf, pos, c + (0x7 & delta));
 }
 
@@ -128,7 +134,7 @@ inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c1,
 }
 
 inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c1, 
-		                    unsigned char c2, GpReg delta) {
+		                    unsigned char c2, Operand delta) {
 	emit(buf, pos, c1);
 	emit(buf, pos, c2 + (0x7 & delta));
 }
@@ -141,31 +147,29 @@ inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c1,
 }
 
 inline void emit_opcode(unsigned char* buf, size_t& pos, unsigned char c1, 
-		                    unsigned char c2, unsigned char c3, GpReg delta) {
+		                    unsigned char c2, unsigned char c3, Operand delta) {
 	emit(buf, pos, c1);
 	emit(buf, pos, c2);
 	emit(buf, pos, c3 + (0x7 & delta));
 }
 
-// The following four methods are used for both immediates and displacements.
-// Integer constants are written in reverse byte order.
-inline void emit_byte(unsigned char* buf, size_t& pos, Imm imm) {
+inline void emit_imm(unsigned char* buf, size_t& pos, Imm8 imm) {
 	emit(buf, pos, imm & 0xff); 
 }
 
-inline void emit_word(unsigned char* buf, size_t& pos, Imm imm) {
+inline void emit_imm(unsigned char* buf, size_t& pos, Imm16 imm) {
 	emit(buf, pos, (imm &   0xff) >> 0);
 	emit(buf, pos, (imm & 0xff00) >> 8);
 }
 
-inline void emit_double(unsigned char* buf, size_t& pos, Imm imm) {
+inline void emit_imm(unsigned char* buf, size_t& pos, Imm32 imm) {
 	emit(buf, pos, (imm &       0xff) >> 0);
 	emit(buf, pos, (imm &     0xff00) >> 8);
 	emit(buf, pos, (imm &   0xff0000) >> 16);
 	emit(buf, pos, (imm & 0xff000000) >> 24);
 }
 
-inline void emit_quad(unsigned char* buf, size_t& pos, Imm imm) {
+inline void emit_imm(unsigned char* buf, size_t& pos, Imm64 imm) {
 	emit(buf, pos, (imm &               0xff) >> 0);
 	emit(buf, pos, (imm &             0xff00) >> 8);
 	emit(buf, pos, (imm &           0xff0000) >> 16);
@@ -199,7 +203,7 @@ inline void emit_mod_rm(unsigned char* buf, size_t& pos, Operand rm,
 
 // This ignores the distinction between high and low general purpose regs,
 //   It won't work correctly for AH, BH, CH, DH
-inline void emit_mod_rm(unsigned char* buf, size_t& pos, Addr rm, Operand r) {
+inline void emit_mod_rm(unsigned char* buf, size_t& pos, M rm, Operand r) {
 	auto base  = rm.get_base() & 0x7;
 	auto index = rm.get_index();
 	const auto disp  = (int32_t) rm.get_disp();
@@ -236,30 +240,30 @@ inline void emit_mod_rm(unsigned char* buf, size_t& pos, Addr rm, Operand r) {
 	// Step 3: Emit displacement
 	if ( disp == 0 ) {
 		if ( base == 0x5 )
-			emit(buf, pos, 0x0);
+			emit_zeros<1>(buf, pos);
 	}
 	else if ( disp8 )
-		emit_byte(buf, pos, disp);
+		emit_imm(buf, pos, (Imm8)disp);
 	else
-		emit_double(buf, pos, disp);
+		emit_imm(buf, pos, (Imm32)disp);
 }
 
 // REX nop -- Simplifies codegen.
 // Calls to this method should be inlined away.
-inline void emit_rex(unsigned char* buf, size_t& pos, GpReg low) {
+inline void emit_rex(unsigned char* buf, size_t& pos, R low) {
 }
 
 // REX nop -- Simplifies codegen.
 // Calls to this method should be inlined away.
 inline void emit_rex(unsigned char* buf, size_t& pos, unsigned char rex, 
-		                 GpReg low) {
+		                 R low) {
 }
 
 // Figure 2.7: Intel Manual Vol 2A 2-9
 // This ignores the distinction between high and low general purpose regs,
 //   but that's fine because it wouldn't get you an rex.b either way.
 inline void emit_rex(unsigned char* buf, size_t& pos, Operand rm, 
-		                 unsigned char rex, GpReg low) {
+		                 unsigned char rex, R low) {
 	if ( low >> 2 == 0x1 )
 		rex |= 0x40;
 
@@ -273,7 +277,7 @@ inline void emit_rex(unsigned char* buf, size_t& pos, Operand rm,
 // This ignores the distinction between high and low general purpose regs,
 //   but that's fine because it wouldn't get you an rex.b either way.
 inline void emit_rex(unsigned char* buf, size_t& pos, Operand rm, Operand r, 
-		                 unsigned char rex, GpReg low) {
+		                 unsigned char rex, R low) {
 	if ( low >> 2 == 0x1 )
 		rex |= 0x40;
 
@@ -288,8 +292,8 @@ inline void emit_rex(unsigned char* buf, size_t& pos, Operand rm, Operand r,
 // Figure 2.4 & 2.6: Intel Manual Vol 2A 2-8 & 2.9
 // This ignores the distinction between high and low general purpose regs,
 //   but that's fine because it wouldn't get you an rex.b either way.
-inline void emit_rex(unsigned char* buf, size_t& pos, Addr rm, Operand r, 
-		                 unsigned char rex, GpReg low) {
+inline void emit_rex(unsigned char* buf, size_t& pos, M rm, Operand r, 
+		                 unsigned char rex, R low) {
 	if ( low >> 2 == 0x1 )
 		rex |= 0x40;
 
@@ -306,8 +310,8 @@ inline void emit_rex(unsigned char* buf, size_t& pos, Addr rm, Operand r,
 
 // This is essentially identical to the case above.
 // The only difference being that there is no possibility of setting rex.b.
-inline void emit_rex(unsigned char* buf, size_t& pos, Addr rm, 
-		                 unsigned char rex, GpReg low) {
+inline void emit_rex(unsigned char* buf, size_t& pos, M rm, 
+		                 unsigned char rex, R low) {
 	// No check for is8bit since this only takes a mem argument
 	assert(low.is_null());
 
@@ -345,19 +349,13 @@ void Assembler::assemble(const Instruction& i) {
 
 void Assembler::finish() {
 	for ( const auto& jump : jumps_ ) {
-		cerr << "[" << jump.first << "->" << jump.second << "]" << endl;
-
 		auto pos = jump.first;
 		const auto itr = labels_.find(jump.second);
 		
-		if ( itr == labels_.end() ) {
-			emit(buf_, pos, 0x0);
-			emit(buf_, pos, 0x0);
-			emit(buf_, pos, 0x0);
-			emit(buf_, pos, 0x0);
-		}
+		if ( itr == labels_.end() ) 
+			emit_zeros<4>(buf_,pos);
 		else
-			emit_double(buf_, pos, itr->second-pos-4);
+			emit_imm(buf_, pos, (Imm32)(itr->second-pos-4));
 	}
 }
 
@@ -365,7 +363,7 @@ void Assembler::finish() {
 #include "src/gen/assembler.defn"
 
 void Assembler::write_binary(ostream& os, const Code& code) {
-	unsigned char buffer[1024];
+	static unsigned char buffer[1024*1024];
 	start(buffer);
 
 	for ( const auto& instr : code )
@@ -377,7 +375,7 @@ void Assembler::write_binary(ostream& os, const Code& code) {
 }
 
 void Assembler::write_hex(ostream& os, const Code& code) {
-	unsigned char buffer[1024];
+	static unsigned char buffer[1024*1024];
 	start(buffer);
 
 	set<size_t> line_breaks;
@@ -401,7 +399,5 @@ void Assembler::start(unsigned char* buffer) {
 	pos_ = 0;
 	buf_ = buffer;
 }
-
-
 
 } // namespace x64

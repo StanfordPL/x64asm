@@ -1,4 +1,4 @@
-#include "src/code/reader.h"
+#include "src/att/att_reader.h"
 
 #include <sstream>
 
@@ -9,7 +9,7 @@ using namespace std;
 
 namespace x64 {
 
-void Reader::read_att(istream& is, Code& code) const {
+void AttReader::read(istream& is, Code& code) const {
 	stringstream ss;
 	ss << is.rdbuf();
 

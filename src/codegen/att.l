@@ -4,13 +4,13 @@
 #include <sstream>
 #include <string>
 
-#include "src/code/fp_reg.h"
-#include "src/code/gp_reg.h"
 #include "src/code/imm.h"
 #include "src/code/label.h"
-#include "src/code/mmx_reg.h"
+#include "src/code/mm.h"
+#include "src/code/r.h"
 #include "src/code/scale.h"
-#include "src/code/xmm_reg.h"
+#include "src/code/st.h"
+#include "src/code/xmm.h"
 #include "src/gen/att.tab.h"
 
 using namespace std;

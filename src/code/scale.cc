@@ -4,18 +4,15 @@ using namespace std;
 
 namespace x64 {
 
+const vector<Scale> domain_ {{
+	0, 1, 2, 3
+}};
+
 const Scale times_1 = 0;
 const Scale times_2 = 1;
 const Scale times_4 = 2;
 const Scale times_8 = 3;
 const Scale scale_null = 4;
-
-const vector<Scale> domain_ {{
-	times_1,
-	times_2,
-	times_4,
-	times_8
-}};
 
 } // namespace x64
 

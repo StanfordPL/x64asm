@@ -3,7 +3,7 @@
 #include <map>
 
 #include "src/code/label.h"
-#include "src/code/writer.h"
+#include "src/att/att_writer.h"
 
 using namespace std;
 
@@ -92,7 +92,7 @@ void ControlFlowGraph::recompute_liveness() {
 
 	// Boundary conditions
 	const auto bound = 
-		RegSet().set(rax, QUAD).set(rbp, QUAD).set(rsp, QUAD);
+		RegSet().set(rax).set(rbp).set(rsp);
 	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
 		if ( is_exit(i) )
 			live_outs_[i] = bound;
@@ -168,7 +168,7 @@ void ControlFlowGraph::recompute_defs() {
 }
 
 void ControlFlowGraph::write_dot(ostream& os) const {
-	Writer writer;
+	AttWriter writer;
 
 	os << "digraph g {" << endl;
 
@@ -180,28 +180,38 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 
 		os << "live-ins:";
 		const auto lis = get_live_ins(location_type(i, 0));
-		for ( int r = 0; r < 16; ++r ) {
-			const auto w = lis.get_widest_set(GpReg(r));
-			if ( w != BIT_WIDTH_NULL ) {
-				os << " ";
-				writer.write_att(os, GpReg(r), w);	
-			}
+		for ( auto i = R64::begin(), ie = R64::end(); i != ie; ++i ) {
+			if ( lis.is_set((R64)*i) )
+				writer.write(os, (R64)*i);
+			else if ( lis.is_set((R32)*i) )
+				writer.write(os, (R32)*i);
+			else if ( lis.is_set((R16)*i) )
+				writer.write(os, (R16)*i);
+			else if ( lis.is_set((R8)*i) )
+				writer.write(os, (R8)*i);
+			else if ( lis.is_set((RH)*i) )
+				writer.write(os, (RH)*i);
 		}
 		os << "|";
 
 		for ( auto j = instr_begin(i), je = instr_end(i); j != je; ++j ) {
-			writer.write_att(os, *j);
+			writer.write(os, *j);
 			os << "\\l";
 		}
 
 		os << "|live-outs:";
 		const auto los = get_live_outs(location_type(i, num_instrs(i)-1));
-		for ( auto r = 0; r < 16; ++r ) {
-			const auto w = los.get_widest_set(GpReg(r));
-			if ( w != BIT_WIDTH_NULL ) {
-				os << " ";
-				writer.write_att(os, GpReg(r), w);
-			}
+		for ( auto i = R64::begin(), ie = R64::end(); i != ie; ++i ) {
+			if ( los.is_set((R64)*i) )
+				writer.write(os, (R64)*i);
+			else if ( los.is_set((R32)*i) )
+				writer.write(os, (R32)*i);
+			else if ( los.is_set((R16)*i) )
+				writer.write(os, (R16)*i);
+			else if ( los.is_set((R8)*i) )
+				writer.write(os, (R8)*i);
+			else if ( los.is_set((RH)*i) )
+				writer.write(os, (RH)*i);
 		}
 
 		os << "}\"];" << endl;
