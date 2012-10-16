@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "src/code/code.h"
+#include "src/code/cond_reg.h"
 #include "src/code/imm.h"
 #include "src/code/label.h"
 #include "src/code/m.h"
@@ -22,10 +23,11 @@ namespace x64 {
 class AttWriter {
 	public:
 		void write(std::ostream& os, const Code& code) const;
-		void write(std::ostream& os, Imm8) const;
-		void write(std::ostream& os, Imm16) const;
-		void write(std::ostream& os, Imm32) const;
-		void write(std::ostream& os, Imm64) const;
+		void write(std::ostream& os, CondReg cr) const;
+		void write(std::ostream& os, Imm8 i) const;
+		void write(std::ostream& os, Imm16 i) const;
+		void write(std::ostream& os, Imm32 i) const;
+		void write(std::ostream& os, Imm64 i) const;
 		void write(std::ostream& os, const Instruction& instr) const;
 		void write(std::ostream& os, Label l) const;
 		void write(std::ostream& os, M m) const;

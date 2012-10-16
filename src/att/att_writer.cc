@@ -18,6 +18,20 @@ void AttWriter::write(ostream& os, const Code& code) const {
 	}
 }
 
+void AttWriter::write(ostream& os, CondReg cr) const {
+	switch ( cr ) {
+		case 0: os << "af"; break;
+		case 1: os << "cf"; break;
+		case 2: os << "of"; break;
+		case 3: os << "pf"; break;
+		case 4: os << "sf"; break;
+		case 5: os << "zf"; break;
+		
+		default:
+			os << "<null>"; 
+	}
+}
+
 void AttWriter::write(ostream& os, Imm8 i) const {
 	os << hex << showbase << "$" << (i & 0xff);
 }
