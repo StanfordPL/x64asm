@@ -12,19 +12,4 @@ vector<R64> RegSet::r64_;
 vector<Xmm> RegSet::xmm_;
 vector<CondReg> RegSet::cond_regs_;
 
-BitWidth RegSet::get_widest_set(R r) const {
-	if ( is_set((R64)r) )
-		return QUAD;
-	else if ( is_set((R32)r) )
-		return DOUBLE;
-	else if ( is_set((R16)r) )
-		return WORD;
-	else if ( is_set((R8)r) )
-		return LOW;
-	else if ( is_set((RH)r) )
-		return HIGH;
-	else
-		return BIT_WIDTH_NULL;
-}
-
 } // namespace x64

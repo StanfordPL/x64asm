@@ -102,8 +102,8 @@ void ControlFlowGraph::recompute_liveness() {
 	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
 		for ( int j = blocks_[i+1]-1, je = blocks_[i]; j >= je; --j ) {
 			const auto& instr = code_[j];
-			kill[i] = instr.write_set() | instr.undef_set();
-			gen[i]  = instr.read_set() - kill[i];
+			gen[i]  |= (instr.read_set() - kill[i]);
+			kill[i] |= (instr.write_set() | instr.undef_set());
 		}
 			
 	vector<RegSet> live_ins(num_blocks());

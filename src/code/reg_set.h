@@ -112,8 +112,6 @@ class RegSet {
 			return r_mask_ & (M_QUAD << r);
 		}
 
-		BitWidth get_widest_set(R r) const;
-
 		inline bool is_set(Xmm r) const {
 			assert(!r.is_null());
 			return xmm_cr_mask_ & (M_XMM << r);
