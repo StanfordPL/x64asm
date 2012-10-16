@@ -122,7 +122,7 @@ RegSet Instruction::explicit_write_set() const {
 			case AX:
 			case R_16: rs.set((R16)operands_[i]); break;
 			case EAX:
-			case R_32: rs.set((R32)operands_[i]); break;
+			case R_32: rs.set((R64)operands_[i]); break; // Implicit extend!!!
 			case RAX:
 			case R_64: rs.set((R64)operands_[i]); break;
 			case ST: break; // TODO 

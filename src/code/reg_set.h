@@ -125,7 +125,7 @@ class RegSet {
 		}
 
 		inline rh_iterator rh_begin() const {
-			build<RH, M_HIGH, 16>(rh_, r_mask_);
+			build<RH, M_HIGH, 4>(rh_, r_mask_);
 			return rh_.begin();
 		}
 			
