@@ -229,6 +229,7 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
             bool accept = true;
 
         
+            #ifndef NDEBUG
             cout << "\nNew Signature attempt!" << endl;
             for(int i = 0; i < len; i++) {
                 cout << "[";
@@ -237,6 +238,7 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
                 cout << " ]";
             }
             cout << "\n";
+            #endif
 
             for(int i = 0;i<len;i++) {
 
@@ -250,7 +252,6 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
                         if ( ( get<0>(sig)[i] != RAX_ONLY ) &&
                              ( get<0>(sig)[i] != GP_REG   ) ) {
-                            //cout << "X1" << endl;
                             accept = false;
                             break;
                         }
@@ -260,13 +261,11 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
                         if ( ( get<0>(sig)[i] != RCX_ONLY ) &&
                              ( get<0>(sig)[i] != GP_REG   ) ) {
-                            //cout << "X2" << endl;
                             accept = false;
                             break;
                         }
 
                     } else if ( get<0>(sig)[i] != GP_REG ) {
-                        //cout << "X3" << endl;
                         accept = false;
                         break;
                     }
@@ -290,7 +289,6 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
                 } else if (operand_info[i].type != get<0>(sig)[i] ) {
 
-                    //cout << "X5" << endl;
                     accept = false;
                     break;
 
@@ -319,29 +317,6 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
 
             if(accept) {
-                //figure out which has smallest immediate value
-                /*
-                for(int i = 0;i<3;i++)
-                    if(get<0>(sig)[i] == IMM) {
-                        if(get<1>(sig)[i] < min_immediate_size) {
-                            //cout << "signature size: " << get<1>(sig)[i] << "\n";
-                            //cout << "min imm size: " << min_immediate_size << "\n";
-                            //cout << "key imm size: " << get<2>(key)[i] << "\n";
-                            min_immediate_size = get<1>(sig)[i];
-                            min_immediate_index = index;
-
-                            //now truncate the immediate, and update the width
-                            assert(min_immediate_size >= get<2>(key)[i]);
-                            operand_info[i].width = min_immediate_size;
-                            //cout << min_immediate_size << endl;
-                            //cout << operand_info[i].val << "\n";
-                            operand_info[i].val = truncate_immediate(operand_info[i].val, 
-                                                                        min_immediate_size);
-                            //cout << operand_info[i].val << "\n";
-                        }
-                    }
-                */
-
                 /*
                 cout << "accepted possible:";
                 for(int i = 0; i < 3; i++) {
@@ -416,7 +391,6 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
                         operand_info[i].width);
             }
 
-            //cout << "Index chosen: " << max_score_index << endl;
         }
 
         //resize immediate
