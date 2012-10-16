@@ -58,30 +58,25 @@ BitWidth to_imm_width(const char* c, bool from_decimal) {
 
       _ -> QUAD
      */
-    cout << "operand: " << o << endl;
 
     if( ((o >> 8) == 0) ||
             ((o >> 8) == 0xFF) ||
             ((o >> 8) == 0xFFFFFF) ||
             ((o >> 8) == 0xFFFFFFFFFFFFFF) ) {
-        cout << "LOW\n";
         return LOW;
     }
 
     if( ((o >> 16) == 0) ||
             ((o >> 16) == 0xFFFF) ||
             ((o >> 16) == 0xFFFFFFFFFFFF)) {
-        cout << "WORD\n";
         return WORD;
     }
 
     if( ((o >> 32) == 0) ||
             ((o >> 32) == 0xFFFFFFFF) ) {
-        cout << "DOUBLE\n";
         return DOUBLE;
     }
 
-    cout << "QUAD\n";
     return QUAD;
 
 }
