@@ -180,15 +180,18 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 
 		os << "live-ins:";
 		const auto lis = get_live_ins(location_type(i, 0));
-		/*
-		for ( int r = 0; r < 16; ++r ) {
-			const auto w = lis.get_widest_set(R(r));
-			if ( w != BIT_WIDTH_NULL ) {
-				os << " ";
-				writer.write(os, GpReg(r), w);	
-			}
+		for ( auto i = R64::begin(), ie = R64::end(); i != ie; ++i ) {
+			if ( lis.is_set((R64)*i) )
+				writer.write(os, (R64)*i);
+			else if ( lis.is_set((R32)*i) )
+				writer.write(os, (R32)*i);
+			else if ( lis.is_set((R16)*i) )
+				writer.write(os, (R16)*i);
+			else if ( lis.is_set((R8)*i) )
+				writer.write(os, (R8)*i);
+			else if ( lis.is_set((RH)*i) )
+				writer.write(os, (RH)*i);
 		}
-		*/
 		os << "|";
 
 		for ( auto j = instr_begin(i), je = instr_end(i); j != je; ++j ) {
@@ -198,15 +201,18 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 
 		os << "|live-outs:";
 		const auto los = get_live_outs(location_type(i, num_instrs(i)-1));
-		/*
-		for ( auto r = 0; r < 16; ++r ) {
-			const auto w = los.get_widest_set(GpReg(r));
-			if ( w != BIT_WIDTH_NULL ) {
-				os << " ";
-				writer.write(os, GpReg(r), w);
-			}
+		for ( auto i = R64::begin(), ie = R64::end(); i != ie; ++i ) {
+			if ( los.is_set((R64)*i) )
+				writer.write(os, (R64)*i);
+			else if ( los.is_set((R32)*i) )
+				writer.write(os, (R32)*i);
+			else if ( los.is_set((R16)*i) )
+				writer.write(os, (R16)*i);
+			else if ( los.is_set((R8)*i) )
+				writer.write(os, (R8)*i);
+			else if ( los.is_set((RH)*i) )
+				writer.write(os, (RH)*i);
 		}
-		*/
 
 		os << "}\"];" << endl;
 	}
