@@ -294,13 +294,17 @@ class ControlFlowGraph {
 		/** Returns true if the underlying code performs an undefined register read.
 		*/
 		inline bool performs_undef_read() const {
-			for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
+			size_t idx = 0;
+			for ( size_t i = 0, ie = num_blocks(); i < ie; ++i ) {
+				auto di = def_ins_[i];
 				for ( size_t j = 0, je = num_instrs(i); j < je; ++j ) {
-					const auto reads = get_instr(location_type(i,j)).read_set();
-					const auto def_in = get_def_ins(location_type(i,j));
-
-					if ( (reads & def_in) != reads )
+					const auto& instr = code_[idx++];
+					const auto reads = instr.read_set();
+					if ( (reads & di) != reads )
 						return true;
+					di |= instr.write_set();
+					di -= instr.undef_set();
+				}
 			}
 			return false;
 		}
