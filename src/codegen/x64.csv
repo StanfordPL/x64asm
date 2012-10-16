@@ -103,9 +103,9 @@ btsq :  :  0f  ba  :  : 05 :  64  RM  X   8  I  R   :  :  :  : C :  O  S  Z  A  
                       
 call :  : e8 :  :  :  64  L  R    :  RAX  RBX  RCX  RDX  RDI  RSI  RBP  RSP  :  RAX  RCX  RDX  RSP  :  :  :  C  O  S  Z  A  P 
                       
-cbtw : 66 : 98 :  :  :    : AX : AL :  :  : 
-cwtl :  : 98 :  :  :    : EAX : AX :  :  : 
-cltq : 48 : 98 :  :  :    : RAX : EAX :  :  : 
+cbtw : 66 : 98 :  :  :    : AL : AX :  :  : 
+cwtl :  : 98 :  :  :    : AX : EAX :  :  : 
+cltq : 48 : 98 :  :  :    : EAX : RAX :  :  : 
                       
 clc :  : f8 :  :  :    :  :  :  : C : 
                       
