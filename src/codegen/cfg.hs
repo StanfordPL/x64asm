@@ -88,12 +88,35 @@ signatures is = "map<string, vector<tuple< array<Type,3>, array<BitWidth,3>, Opc
                       (to_enum i) ++ "}"
           classes = nub $ map att is
 
+-- To int conversions
+reg2int :: String -> String
+reg2int "al"  = "(R8)0"
+reg2int "ax"  = "(R16)0"
+reg2int "eax" = "(R32)0"
+reg2int "rax" = "(R64)0"
+reg2int "rcx" = "(R64)1"
+reg2int "dx"  = "(R16)2"
+reg2int "edx" = "(R32)2"
+reg2int "rdx" = "(R64)2"
+reg2int "rbx" = "(R64)3"
+reg2int "rsp" = "(R64)4"
+reg2int "rbp" = "(R64)5"
+reg2int "rsi" = "(R64)6"
+reg2int "rdi" = "(R64)7"
+reg2int "af"  = "(CondReg)0"
+reg2int "cf"  = "(CondReg)1"
+reg2int "of"  = "(CondReg)2"
+reg2int "pf"  = "(CondReg)3"
+reg2int "sf"  = "(CondReg)4"
+reg2int "zf"  = "(CondReg)5"
+reg2int _ = error "Unrecognized register type!"
+
 -- Functions for emitting register masks
 reg_mask :: String -> (Instr -> [String]) -> [Instr] -> String
 reg_mask name fxn = comment_array "RegSet" ("Opcode::" ++ name) render
     where render i = "RegSet()" ++ 
                      (concat (map render' (fxn i)))
-          render' r = ".set(" ++ r ++")"
+          render' r = ".set(" ++ (reg2int r) ++")"
 
 reg_mask2 :: String -> (Instr -> [String]) -> (Instr -> [String]) -> [Instr] -> String
 reg_mask2 name fxn1 fxn2 = comment_array "RegSet" ("Opcode::" ++ name) render
@@ -102,8 +125,8 @@ reg_mask2 name fxn1 fxn2 = comment_array "RegSet" ("Opcode::" ++ name) render
 										 (concat (map render_cond (fxn2 i)))
           render' "st0" = "" -- "TODO - Add floating point to reg set!"
           render' "top" = "" -- "TODO - Add floating point to reg set!"
-          render' r = ".set(" ++ r ++ ")"
-          render_cond r   = ".set(" ++ r ++ ")"
+          render' r = ".set(" ++ (reg2int r) ++ ")"
+          render_cond r   = ".set(" ++ (reg2int r) ++ ")"
 
 -- Write some code!
 main :: IO ()
