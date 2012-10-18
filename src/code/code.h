@@ -87,6 +87,10 @@ class Code {
 			instrs_.clear();
 		}
 
+		inline void erase(const iterator index) {
+			instrs_.erase(index);
+		}
+
 	private:	
 		std::vector<Instruction> instrs_;
 };
