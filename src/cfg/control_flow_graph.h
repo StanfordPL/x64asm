@@ -33,11 +33,11 @@ class ControlFlowGraph {
 				: code_(code) {
 			recompute_blocks();
 			recompute_liveness();		
-			inputs_ = get_live_ins(location_type(0, 0));
+			inputs_ = get_live_ins(location_type(1, 0));
+			recompute_defs();
 			recompute_dominators();
 			recompute_back_edges();
 			recompute_loops();
-			recompute_defs();
 		}
 
 		/** Creates a ControlFlowGraph.
@@ -62,10 +62,10 @@ class ControlFlowGraph {
 		inline void recompute() {
 			recompute_blocks();
 			recompute_liveness();
+			recompute_defs();
 			recompute_dominators();
 			recompute_back_edges();
 			recompute_loops();
-			recompute_defs();
 		}
 
 		/** Recomputes the basic block structure of the control flow graph.
@@ -288,7 +288,7 @@ class ControlFlowGraph {
 		*/
 		inline RegSet get_live_outs(const location_type& loc) const {
 			auto rs = live_outs_[loc.first];
-			for ( int i = blocks_[loc.first+1]-1, ie = get_index(loc); i > ie; --i ) {
+			for ( int i = blocks_[loc.first+1]-1, ie = blocks_[loc.first]+loc.second; i > ie; --i ) {
 				const auto& instr = code_[i];
 				rs -= instr.write_set();
 				rs -= instr.undef_set();
@@ -310,7 +310,7 @@ class ControlFlowGraph {
 		*/
 		inline RegSet get_def_ins(const location_type& loc) const {
 			auto rs = def_ins_[loc.first];
-			for ( int i = blocks_[loc.first], ie = get_index(loc); i < ie; ++i ) {
+			for ( int i = blocks_[loc.first], ie = i + loc.second; i < ie; ++i ) {
 				const auto& instr = code_[i];
 				rs |= instr.write_set();
 				rs -= instr.undef_set();
@@ -349,7 +349,7 @@ class ControlFlowGraph {
 		*/
 		inline bool performs_undef_read() const {
 			size_t idx = 0;
-			for ( size_t i = 0, ie = num_blocks(); i < ie; ++i ) {
+			for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i ) {
 				auto di = def_ins_[i];
 				for ( size_t j = 0, je = num_instrs(i); j < je; ++j ) {
 					const auto& instr = code_[idx++];

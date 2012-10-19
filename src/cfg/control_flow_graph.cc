@@ -121,16 +121,22 @@ void ControlFlowGraph::recompute_liveness() {
 	vector<RegSet> gen(num_blocks());
 	vector<RegSet> kill(num_blocks());
 
-	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
+	for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i )
 		for ( int j = blocks_[i+1]-1, je = blocks_[i]; j >= je; --j ) {
 			const auto& instr = code_[j];
-			gen[i]  |= (instr.read_set() - kill[i]);
-			kill[i] |= (instr.write_set() | instr.undef_set());
+			const auto use = instr.read_set();
+			const auto def = instr.write_set() | instr.undef_set();
+
+			kill[i] |= def;
+			kill[i] -= use;
+
+			gen[i]  -= def;
+			gen[i]  |= use;
 		}
-			
+		
 	// Boundary / Initial conditions
 	live_ins_[get_exit()] = RegSet().set(rbp).set(rsp).set(rax);
-	for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i )
+	for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i )
 		live_ins_[i] = RegSet();
 
 	// Iterate until fixed point
@@ -138,7 +144,7 @@ void ControlFlowGraph::recompute_liveness() {
 		changed = false;
 
 		// Meet operator
-		for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i ) {
+		for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i ) {
 			RegSet new_out;
 			for ( auto s = succ_begin(i), se = succ_end(i); s != se; ++s )
 				new_out |= live_ins_[*s];
@@ -148,7 +154,7 @@ void ControlFlowGraph::recompute_liveness() {
 		}
 
 		// Transfer function
-		for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i ) {
+		for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i ) {
 			RegSet new_in = live_outs_[i];
 			new_in -= kill[i];
 			new_in |= gen[i];
@@ -165,7 +171,7 @@ void ControlFlowGraph::recompute_defs() {
 
 	// Compute gen sets for blocks
 	vector<RegSet> gen(num_blocks());
-	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
+	for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i )
 		for ( auto j = instr_begin(i), je = instr_end(i); j != je; ++j ) {
 			gen[i] |= j->write_set();
 			gen[i] -= j->undef_set();
@@ -173,7 +179,7 @@ void ControlFlowGraph::recompute_defs() {
 
 	// Boundary / initial conditions
 	def_outs_[get_entry()] = get_inputs();
-	for ( size_t i = get_entry(), ie = get_exit(); i <= ie; ++i )
+	for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i )
 		def_outs_[i] = ~RegSet();
 
 	// Iterate until fixed point
@@ -181,7 +187,7 @@ void ControlFlowGraph::recompute_defs() {
 		changed = false;
 
 		// Meet operator
-		for ( size_t i = get_entry()+1, ie = get_exit(); i <= ie; ++i ) {
+		for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i ) {
 			RegSet new_in = ~RegSet();
 			for ( auto p = pred_begin(i), pe = pred_end(i); p != pe; ++p )
 				new_in &= def_outs_[*p];
@@ -191,7 +197,7 @@ void ControlFlowGraph::recompute_defs() {
 		}
 
 		// Transfer function
-		for ( size_t i = get_entry()+1, ie = get_exit(); i <= ie; ++i ) {
+		for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i ) {
 			RegSet new_out = def_ins_[i];
 			new_out |= gen[i];
 
@@ -209,7 +215,7 @@ void ControlFlowGraph::recompute_dominators() {
 
 	// Bounary / initial conditions
 	dom_outs_[get_entry()].reset().set(get_entry());
-	for ( size_t i = get_entry()+1, ie = get_exit(); i <= ie; ++i )
+	for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i )
 		dom_outs_[i].set();	
 
 	// Iterate until fixed point 
@@ -217,7 +223,7 @@ void ControlFlowGraph::recompute_dominators() {
 		changed = false;
 
 		// Meet operator
-		for ( size_t i = get_entry()+1, ie = get_exit(); i <= ie; ++i ) {
+		for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i ) {
 			bitset<64> new_in;
 			new_in.set();
 			for ( auto p = pred_begin(i), pe = pred_end(i); p != pe; ++p )
@@ -228,7 +234,7 @@ void ControlFlowGraph::recompute_dominators() {
 		}
 
 		// Transfer function
-		for ( size_t i = get_entry()+1, ie = get_exit(); i <= ie; ++i ) {
+		for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i ) {
 			auto new_out = dom_ins_[i];
 			new_out.set(i);
 
@@ -302,12 +308,17 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 
 		for ( const auto bb : n.second ) {
 			os << "bb" << dec << bb << "[shape=record, style=filled, fillcolor=white, label=\"{";
+			os << "#" << bb << "|";
 			os << "live-ins:";
 			const auto lis = get_live_ins(location_type(bb, 0));
 			write(os, writer, lis);
 			os << "|";
-			for ( auto j = instr_begin(bb), je = instr_end(bb); j != je; ++j ) {
-				writer.write(os, *j);
+			for ( size_t j = 0, je = num_instrs(bb); j < je; ++j ) {
+				const auto& instr = get_instr(location_type(bb,j));
+				//os << "LIVE IN:";
+				//write(os, writer, get_live_ins(location_type(bb,j)));
+				//os << "\\l";
+				writer.write(os, instr);
 				os << "\\l";
 			}
 			os << "|live-outs:";
