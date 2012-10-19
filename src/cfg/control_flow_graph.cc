@@ -1,6 +1,8 @@
 #include "src/cfg/control_flow_graph.h"
 
+#include <algorithm>
 #include <map>
+#include <stack>
 
 #include "src/code/label.h"
 #include "src/att/att_writer.h"
@@ -35,6 +37,9 @@ void ControlFlowGraph::recompute_blocks() {
 	succs_.clear();
 	exits_.clear();
 
+	// ENTRY Block
+	blocks_.push_back(0);
+
 	// Record block begins
 	blocks_.push_back(0);
 	for ( size_t i = 1, ie = code_.size(); i < ie; ++i ) {
@@ -52,12 +57,21 @@ void ControlFlowGraph::recompute_blocks() {
 				i++;
 		}
 	}
+
+	// EXIT / Sentinel blocks
 	blocks_.push_back(code_.size());
+	blocks_.push_back(code_.size());
+
+	// Don't count the sentinel block
 	num_blocks_ = blocks_.size()-1;
 
 	// Record label -> block mapping
 	map<Label, id_type> labels;
-	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i ) {
+	for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i ) {
+		// Don't bother checking empty blocks
+		if ( num_instrs(i) == 0 )
+			continue;
+
 		const auto& instr = *instr_begin(i);
 		if ( instr.is_label_defn() )
 			labels[instr.get_operand(0)] = i;
@@ -65,7 +79,13 @@ void ControlFlowGraph::recompute_blocks() {
 
 	// Set up successors
 	succs_.resize(num_blocks());
-	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i ) {
+	for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i ) {
+		// Empty blocks just point forward (this handles entry)
+		if ( num_instrs(i) == 0 ) {
+			succs_[i].push_back(i+1);
+			continue;
+		}
+
 		const auto& instr = *(instr_end(i)-1);
 		
 		// Unconditional jumps have non-trivial fallthrough targets.
@@ -74,9 +94,11 @@ void ControlFlowGraph::recompute_blocks() {
 			continue;
 		}
 
-		// Returns and the final instruction, have no fallthrough targets.
-		if ( instr.is_ret() || (i+1) == ie ) 
+		// Returns point to exit
+		if ( instr.is_ret() ) {
+			succs_[i].push_back(get_exit());
 			continue;
+		}
 
 		// Everything else has a fallthrough and a possible conditional target.
 		succs_[i].push_back(i+1);			
@@ -86,15 +108,15 @@ void ControlFlowGraph::recompute_blocks() {
 
 	// Set up predecessors (these have no particular order) and exits
 	preds_.resize(num_blocks());
-	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
-		if ( is_exit(i) )
-			exits_.push_back(i);
-		else
-			for ( auto s = succ_begin(i), se = succ_end(i); s != se; ++s )
-				preds_[*s].push_back(i);
+	for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i )
+		for ( auto s = succ_begin(i), se = succ_end(i); s != se; ++s )
+			preds_[*s].push_back(i);
 }
 
 void ControlFlowGraph::recompute_liveness() {
+	live_ins_.resize(num_blocks());
+	live_outs_.resize(num_blocks());
+
 	// Compute gen/kill sets for blocks
 	vector<RegSet> gen(num_blocks());
 	vector<RegSet> kill(num_blocks());
@@ -106,43 +128,41 @@ void ControlFlowGraph::recompute_liveness() {
 			kill[i] |= (instr.write_set() | instr.undef_set());
 		}
 			
-	vector<RegSet> live_ins(num_blocks());
-	live_outs_.resize(num_blocks());
-
-	// Boundary conditions
-	const auto bound = RegSet().set(rbp).set(rsp).set(rax);
-	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
-		if ( is_exit(i) )
-			live_outs_[i] = bound;
+	// Boundary / Initial conditions
+	live_ins_[get_exit()] = RegSet().set(rbp).set(rsp).set(rax);
+	for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i )
+		live_ins_[i] = RegSet();
 
 	// Iterate until fixed point
 	for ( bool changed = true; changed; ) {
 		changed = false;
 
 		// Meet operator
-		for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
-			if ( !is_exit(i) ) {
-				RegSet new_out;
-				for ( auto s = succ_begin(i), se = succ_end(i); s != se; ++s )
-					new_out |= live_ins[*s];
+		for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i ) {
+			RegSet new_out;
+			for ( auto s = succ_begin(i), se = succ_end(i); s != se; ++s )
+				new_out |= live_ins_[*s];
 
-				changed |= (live_outs_[i] != new_out);
-				live_outs_[i] = new_out;
-			}
+			changed |= (live_outs_[i] != new_out);
+			live_outs_[i] = new_out;
+		}
 
 		// Transfer function
-		for ( size_t i = 0, ie = num_blocks(); i < ie; ++i ) {
+		for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i ) {
 			RegSet new_in = live_outs_[i];
 			new_in -= kill[i];
 			new_in |= gen[i];
 
-			changed |= (live_ins[i] != new_in);
-			live_ins[i] = new_in;
+			changed |= (live_ins_[i] != new_in);
+			live_ins_[i] = new_in;
 		}
 	}
 }
 
 void ControlFlowGraph::recompute_defs() {
+	def_ins_.resize(num_blocks());
+	def_outs_.resize(num_blocks());
+
 	// Compute gen sets for blocks
 	vector<RegSet> gen(num_blocks());
 	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
@@ -151,37 +171,112 @@ void ControlFlowGraph::recompute_defs() {
 			gen[i] -= j->undef_set();
 		}
 
-	def_ins_.resize(num_blocks());
-	vector<RegSet> def_outs(num_blocks());
-
-	// Boundary conditions
-	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
-		if ( preds_[i].empty() )
-			def_ins_[i] = get_inputs();
+	// Boundary / initial conditions
+	def_outs_[get_entry()] = get_inputs();
+	for ( size_t i = get_entry(), ie = get_exit(); i <= ie; ++i )
+		def_outs_[i] = ~RegSet();
 
 	// Iterate until fixed point
 	for ( bool changed = true; changed; ) {
 		changed = false;
 
 		// Meet operator
-		for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
-			if ( !preds_[i].empty() ) {
-				RegSet new_in = ~RegSet();
-				for ( auto p = pred_begin(i), pe = pred_end(i); p != pe; ++p )
-					new_in &= def_outs[*p];
+		for ( size_t i = get_entry()+1, ie = get_exit(); i <= ie; ++i ) {
+			RegSet new_in = ~RegSet();
+			for ( auto p = pred_begin(i), pe = pred_end(i); p != pe; ++p )
+				new_in &= def_outs_[*p];
 
-				changed |= def_ins_[i] != new_in;
-				def_ins_[i] = new_in;
-			}
+			changed |= def_ins_[i] != new_in;
+			def_ins_[i] = new_in;
+		}
 
 		// Transfer function
-		for ( size_t i = 0, ie = num_blocks(); i < ie; ++i ) {
+		for ( size_t i = get_entry()+1, ie = get_exit(); i <= ie; ++i ) {
 			RegSet new_out = def_ins_[i];
 			new_out |= gen[i];
 
-			changed |= def_outs[i] != new_out;
-			def_outs[i] = new_out;
+			changed |= def_outs_[i] != new_out;
+			def_outs_[i] = new_out;
 		}
+	}
+}
+
+void ControlFlowGraph::recompute_dominators() {
+	assert(num_blocks() <= 64);
+
+	dom_ins_.resize(num_blocks());
+	dom_outs_.resize(num_blocks());
+
+	// Bounary / initial conditions
+	dom_outs_[get_entry()].reset().set(get_entry());
+	for ( size_t i = get_entry()+1, ie = get_exit(); i <= ie; ++i )
+		dom_outs_[i].set();	
+
+	// Iterate until fixed point 
+	for ( bool changed = true; changed; ) {
+		changed = false;
+
+		// Meet operator
+		for ( size_t i = get_entry()+1, ie = get_exit(); i <= ie; ++i ) {
+			bitset<64> new_in;
+			new_in.set();
+			for ( auto p = pred_begin(i), pe = pred_end(i); p != pe; ++p )
+				new_in &= dom_outs_[*p];
+
+			changed |= dom_ins_[i] != new_in;
+			dom_ins_[i] = new_in;
+		}
+
+		// Transfer function
+		for ( size_t i = get_entry()+1, ie = get_exit(); i <= ie; ++i ) {
+			auto new_out = dom_ins_[i];
+			new_out.set(i);
+
+			changed |= dom_outs_[i] != new_out;
+			dom_outs_[i] = new_out;
+		}		
+	}
+}
+
+void ControlFlowGraph::recompute_back_edges() {
+	back_edges_.clear();
+	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
+		for ( auto s = succ_begin(i), se = succ_end(i); s != se; ++s )
+			if ( dom_outs_[i].test(*s) )
+				back_edges_.push_back(make_pair(i, *s));
+}
+
+void ControlFlowGraph::recompute_loops() {
+	loops_.clear();
+	nesting_depth_.resize(num_blocks());
+	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
+		nesting_depth_[i] = 0;
+
+	for ( const auto& e : back_edges_ ) {
+		if ( e.first == e.second ) {
+			loops_[e].insert(e.first);
+			nesting_depth_[e.first]++;
+			continue;
+		}
+
+		loop_type& l = loops_[e];
+		l.insert(e.second);
+		l.insert(e.first);
+
+		stack<id_type> s;
+		s.push(e.first);
+
+		while ( !s.empty() ) {
+			const auto m = s.top();
+			s.pop();
+
+			for ( auto p = pred_begin(m), pe = pred_end(m); p != pe; ++p )
+				if ( *p != e.second && l.insert(*p).second )
+					s.push(*p);
+		}
+
+		for ( const auto bb : l )
+			nesting_depth_[bb]++;
 	}
 }
 
@@ -190,44 +285,56 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 
 	os << "digraph g {" << endl;
 
-	os << "entry [shape=box label=\"ENTRY\"];" << endl;
-	os << "exit  [shape=box label=\"EXIT\"];" << endl;
+	os << "colorscheme = blues6" << endl;
 
-	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i ) {
-		os << "bb" << dec << i << "[shape=record label=\"{";
+	os << "bb" << get_entry() << " [shape=box label=\"ENTRY\"];" << endl;
+	os << "bb" << get_exit()  << " [shape=box label=\"EXIT\"];" << endl;
 
-		os << "live-ins:";
-		const auto lis = get_live_ins(location_type(i, 0));
-		write(os, writer, lis);
-		os << "|";
+	map<size_t, vector<id_type>> nestings;
+	for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i )
+		nestings[get_nesting_depth(i)].push_back(i);
 
-		for ( auto j = instr_begin(i), je = instr_end(i); j != je; ++j ) {
-			writer.write(os, *j);
-			os << "\\l";
+	for ( const auto& n : nestings ) {
+		os << dec;
+		os << "subgraph cluster_" << n.first << " {" << endl;
+		os << "style = filled" << endl;
+		os << "color = " << (n.first+1) << endl;
+
+		for ( const auto bb : n.second ) {
+			os << "bb" << dec << bb << "[shape=record, style=filled, fillcolor=white, label=\"{";
+			os << "live-ins:";
+			const auto lis = get_live_ins(location_type(bb, 0));
+			write(os, writer, lis);
+			os << "|";
+			for ( auto j = instr_begin(bb), je = instr_end(bb); j != je; ++j ) {
+				writer.write(os, *j);
+				os << "\\l";
+			}
+			os << "|live-outs:";
+			const auto los = get_live_outs(location_type(bb, num_instrs(bb)-1));
+			write(os, writer, los);
+			os << "}\"];" << endl;
 		}
-
-		os << "|live-outs:";
-		const auto los = get_live_outs(location_type(i, num_instrs(i)-1));
-		write(os, writer, los);
-
-		os << "}\"];" << endl;
 	}
+	for ( size_t i = 0, ie = nestings.size(); i < ie; ++i )
+		os << "}" << endl;
 
-	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
+	for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i ) 
 		for ( auto s = succ_begin(i), se = succ_end(i); s != se; ++s ) {
-			os << "bb" << dec << i << "->bb" << *s << " [style="; 
+			os << "bb" << dec << i << "->bb" << *s << " [";
+			os << "style="; 
 			if ( has_fallthrough_target(i) && get_fallthrough_target(i) == *s )
 				os << "bold";
 			else
 				os << "dashed";
+			os << " color=";
+			if ( find(back_edge_begin(), back_edge_end(), edge_type(i,*s)) != 
+					back_edge_end() )
+				os << "red";
+			else
+				os << "black";
 			os << "];" << endl;
 		}
-
-	if ( num_blocks() > 0 )
-		os << "entry->bb" << get_entry() << ";" << endl;
-	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
-		if ( is_exit(i) )
-			os << "bb" << i << "->exit;" << endl;
 
 	os << "}";
 }
