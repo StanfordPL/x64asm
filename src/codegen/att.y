@@ -103,46 +103,6 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
         }
     }
 
-    BitWidth imm_width(Operand o) {
-
-        /*TABLE
-        PQ -> LOW
-        FFPQ -> LOW
-        FFFFFFPQ -> LOW
-        FFFFFFFFFFFFFFPQ -> LOW
-
-        PQRS -> WORD
-        FFFFPQRS -> WORD
-        FFFFFFFFFFFFPQRS -> WORD
-
-        PQRSTUVW -> DOUBLE
-        FFFFFFFFPQRSTUVW -> DOUBLE
-
-        _ -> QUAD
-        */
-
-        if( ((o >> 8) == 0) ||
-            ((o >> 8) == 0xFF) ||
-            ((o >> 8) == 0xFFFFFF) ||
-            ((o >> 8) == 0xFFFFFFFFFFFFFF) ) {
-            return LOW;
-        }
-
-        if( ((o >> 16) == 0) ||
-            ((o >> 16) == 0xFFFF) ||
-            ((o >> 16) == 0xFFFFFFFFFFFF)) {
-            return WORD;
-        }
-
-        if( ((o >> 32) == 0) ||
-            ((o >> 32) == 0xFFFFFFFF) ) {
-            return DOUBLE;
-        }
-
-        return QUAD;
-
-    }
-
 
     Operand truncate_immediate(Operand o, BitWidth bw) {
 
@@ -303,10 +263,10 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
                 if(operand_info[i].type == IMM) {
                     //for immediates, check that we can fit the value correctly
                     //we want value in key to be less than or equal to a valid signature
-                    if( ! (operand_info[i].width <= get<1>(sig)[i]) ) {
-                        accept=false;
-                        break;
-                    }
+                    //if( ! (operand_info[i].width <= get<1>(sig)[i]) ) {
+                    //    accept=false;
+                    //    break;
+                    //}
 
                 } else {
                     //otherwise, make sure widths match
@@ -354,7 +314,10 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
             //the smaller the width, the better
             if (immediate_index != -1) {
-                score += 10*(20 - get<1>(opt)[immediate_index]) ;
+                if(operand_info[immediate_index].width <= get<1>(opt)[immediate_index])
+                    score += 100*(20-get<1>(opt)[immediate_index]);
+                else
+                    score -= 1000*(20 - get<1>(opt)[immediate_index]) ;
             }
 
 
