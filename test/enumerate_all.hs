@@ -4,7 +4,6 @@ import Data.Char
 import Data.List
 import Data.Maybe
 import System.Environment
-
 data ArgType = I | R | M | S | F | X | AL | AX | EAX | RAX | CL | CX | ECX | RCX deriving Show
 data Argument = Arg Int ArgType deriving Show
 
@@ -56,10 +55,10 @@ gp_no_sp x = error ("Registers must have width 8/16/32/64, not " ++ (show x))
 memtest = ["", "0x00", "0x01", "-0x01", "0x80", "-0x80", "0x7f", "-0x7f", "0x7fffffff", "-0x7fffffff"]
 
 immediate :: Int -> [String]
-immediate 8 =  ["$0x0", "$0x7f", "$-0x7f" ] --"$0xff", "$0x7f", "$0x80"]
-immediate 16 = ["$0x0", "$0x7fff", "$-0x7fff" ] --"$0xffff", "$0x7fff", "$0x8000"]
-immediate 32 = ["$0x0", "$0x7fffffff", "$-0x7fffffff" ]--"$0xffffffff", "$0x7fffffff", "$0x80000000"]
-immediate 64 = ["$0x0", "$0x7fffffffffffffff", "$-0x7fffffffffffffff" ] --"$0xffffffffffffffff", "$0x7fffffffffffffff", "$0x8000000000000000"]
+immediate 8 =  ["$0x0", "$0x7f", "$-0x7f", "$0xff", "$1", "$-1"]
+immediate 16 = ["$0x0", "$0x7fff", "$-0x7fff", "$1", "$-1"] 
+immediate 32 = ["$0x0", "$0x7fffffff", "$-0x7fffffff", "$1", "$-1", "$0xffff", "$-0xffff"]
+immediate 64 = ["$0x0", "$0x7fffffffffffffff", "$-0x7fffffffffffffff", "$0x80000000", "$0xffffffff", "$-0x80000000", "$-0xffffffff"]
 
 
 arg_to_reglist :: Argument -> [String]

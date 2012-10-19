@@ -56,7 +56,7 @@ erthing: $(BIN) $(DOC) $(LIB)
 ##### TEST TARGETS
 
 test: erthing
-	cd test/stokeasm_py; python setup.py build; find -name "*.so" -print0 | xargs -0 cp -t .
+	cd test/stokeasm_py; python setup.py build; rm *.so; find -name "*.so" -print0 | xargs -0 /bin/cp -f -t .
 	cd test; ./run_tests.sh
 
 ##### CLEAN TARGETS
