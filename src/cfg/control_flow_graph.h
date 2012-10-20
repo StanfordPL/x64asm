@@ -122,7 +122,24 @@ class ControlFlowGraph {
 			return id == get_exit();
 		}
 
+		/** Returns true if normal control flow can reach this block.
+		*/
+		inline bool is_reachable(id_type id) const {
+			return reachable_.find(id) != reachable_.end();
+		}
+
+		typedef std::set<id_type>::const_iterator block_iterator;
+
+		inline block_iterator reachable_begin() const {
+			return reachable_.begin();
+		}
+
+		inline block_iterator reachable_end() const {
+			return reachable_.end();
+		}
+
 		/** Returns the number of basic blocks in the control flow graph.
+			  This includes ENTRY/EXIT and unreachable blocks!
 		*/
 		inline size_t num_blocks() const { 
 			return num_blocks_;
@@ -380,6 +397,9 @@ class ControlFlowGraph {
 		// [ENTRY][b0 begin][b0 end/b1 begin]...[bn end/EXIT][SENTINEL]
 		std::vector<size_t> blocks_;
 		size_t num_blocks_;
+
+		// Reachable blocks (doesn't include entry and exit)
+		std::set<id_type> reachable_;
 
 		std::vector<std::vector<id_type>> preds_;
 		std::vector<std::vector<id_type>> succs_;

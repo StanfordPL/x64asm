@@ -33,6 +33,7 @@ namespace x64 {
 
 void ControlFlowGraph::recompute_blocks() {
 	blocks_.clear();
+	reachable_.clear();
 	preds_.clear();
 	succs_.clear();
 	exits_.clear();
@@ -111,6 +112,18 @@ void ControlFlowGraph::recompute_blocks() {
 	for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i )
 		for ( auto s = succ_begin(i), se = succ_end(i); s != se; ++s )
 			preds_[*s].push_back(i);
+
+	// Set up reachable blocks
+	stack<id_type> r;
+	r.push(get_entry());
+
+	while ( !r.empty() ) {
+		const auto m = r.top();
+		r.pop();
+		for ( auto s = succ_begin(m), se = succ_end(m); s != se; ++s )
+			if ( !is_exit(*s) && reachable_.insert(*s).second )
+				r.push(*s);
+	}
 }
 
 void ControlFlowGraph::recompute_liveness() {
@@ -246,10 +259,10 @@ void ControlFlowGraph::recompute_dominators() {
 
 void ControlFlowGraph::recompute_back_edges() {
 	back_edges_.clear();
-	for ( size_t i = 0, ie = num_blocks(); i < ie; ++i )
-		for ( auto s = succ_begin(i), se = succ_end(i); s != se; ++s )
-			if ( dom_outs_[i].test(*s) )
-				back_edges_.push_back(make_pair(i, *s));
+	for ( auto i = reachable_begin(), ie = reachable_end(); i != ie; ++i )
+		for ( auto s = succ_begin(*i), se = succ_end(*i); s != se; ++s )
+			if ( dom_outs_[*i].test(*s) )
+				back_edges_.push_back(make_pair(*i, *s));
 }
 
 void ControlFlowGraph::recompute_loops() {
@@ -277,7 +290,7 @@ void ControlFlowGraph::recompute_loops() {
 			s.pop();
 
 			for ( auto p = pred_begin(m), pe = pred_end(m); p != pe; ++p )
-				if ( *p != e.second && l.insert(*p).second )
+				if ( is_reachable(*p) && *p != e.second && l.insert(*p).second )
 					s.push(*p);
 		}
 
@@ -307,9 +320,13 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 		os << "color = " << (n.first+1) << endl;
 
 		for ( const auto bb : n.second ) {
-			os << "bb" << dec << bb << "[shape=record, style=filled, fillcolor=white, label=\"{";
-			os << "#" << bb << "|";
-			os << "live-ins:";
+			os << "bb" << dec << bb << "[";
+			os << "shape=record, style=filled, fillcolor=white, ";
+			if ( !is_reachable(bb) )
+				os << "color = grey, ";
+			os << "label=\"{";
+			os << "#" << bb; 
+			os << "|live-ins:";
 			const auto lis = get_live_ins(location_type(bb, 0));
 			write(os, writer, lis);
 			os << "|";
@@ -342,8 +359,10 @@ void ControlFlowGraph::write_dot(ostream& os) const {
 			if ( find(back_edge_begin(), back_edge_end(), edge_type(i,*s)) != 
 					back_edge_end() )
 				os << "red";
-			else
+			else if ( is_reachable(i) || is_entry(i) )
 				os << "black";
+			else
+				os << "grey";
 			os << "];" << endl;
 		}
 
