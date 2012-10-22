@@ -70,7 +70,7 @@ void Tracer::trace(Trace& t, const Instruction& instr, size_t line,
 	// If we do this, everything (including rsp!) has to look untouched.
 	// Figure out the effective address BEFORE we compute the temp registers.
 	if ( instr.touches_mem() && instr.mem_modifier() != NONE ) {
-		assm_.addq(rsp, Imm32(24));
+		assm_.addq(rsp, Imm32(32));
 		const auto mi = instr.mem_index();
 		const auto mem_addr_disp = Imm32(offset(State, addr_));
 		const auto mem_size_disp = Imm32(offset(State, size_));
@@ -123,7 +123,7 @@ void Tracer::trace(Trace& t, const Instruction& instr, size_t line,
 			default:
 				assert(false);
 		}
-		assm_.subq(rsp, Imm32(24));
+		assm_.subq(rsp, Imm32(32));
 	}
 	// Business as usual if we don't have to worry about memory.
 	else 
@@ -131,14 +131,14 @@ void Tracer::trace(Trace& t, const Instruction& instr, size_t line,
 
 	// Write out general purpose (we'll have to special case r13 - r15)
 	// Careful!  rsp isn't correct here
-	assm_.addq(rsp, Imm32(24));
+	assm_.addq(rsp, Imm32(32));
 	for ( auto r = R64::begin(), re = R64::end()-3; r != re; ++r ) {
 		const auto r_disp = is_before ? 
 			Imm32(offset(State, r_before_) + *r * sizeof(State::r_val_type)) :
 			Imm32(offset(State, r_after_)  + *r * sizeof(State::r_val_type));
 		assm_.movq(M64(r15, r_disp), *r);
 	}
-	assm_.subq(rsp, Imm32(24));
+	assm_.subq(rsp, Imm32(32));
 	// TODO - Special case for r13 - r15
 
 	// Write out XMM Registers
