@@ -2,6 +2,9 @@
 
 #include "src/tracer/state.h"
 
+#include <iostream>
+using namespace std;
+
 using namespace x64;
 
 namespace {
@@ -27,10 +30,11 @@ inline void pop(Assembler& assm) {
 // r14 = &t.next_elem_;
 // r15 = &t.trace_[next_elem_];
 inline void recompute(Assembler& assm, void* next_elem, void* trace) {
-	assm.movq(r13, Imm64(trace));
 	assm.movq(r14, Imm64(next_elem));
 	assm.imulq(r15, M64(r14), Imm32(sizeof(State)));
-	assm.addq(r15, r13);
+	assm.movq(r14, Imm64(trace));
+	assm.addq(r15, r14);
+	assm.movq(r14, Imm64(next_elem));
 }
 
 } // namespace
@@ -123,12 +127,15 @@ void Tracer::trace(Trace& t, const Instruction& instr, size_t line,
 		recompute(assm_, &t.next_elem_, &t.trace_[0]);
 
 	// Write out general purpose (we'll have to special case r13 - r15)
+	// Careful!  rsp isn't correct here
+	assm_.addq(rsp, Imm32(32));
 	for ( auto r = R64::begin(), re = R64::end()-3; r != re; ++r ) {
 		const auto r_disp = is_before ? 
 			Imm32(offset(State, r_before_) + *r * sizeof(State::r_val_type)) :
 			Imm32(offset(State, r_after_)  + *r * sizeof(State::r_val_type));
 		assm_.movq(M64(r15, r_disp), *r);
 	}
+	assm_.subq(rsp, Imm32(32));
 	// TODO - Special case for r13 - r15
 
 	// Write out XMM Registers

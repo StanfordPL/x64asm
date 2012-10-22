@@ -22,6 +22,10 @@ class State {
 		typedef bool cond_reg_val_type;
 		typedef __uint128_t xmm_val_type;
 
+		State() 
+				: addr_(0), size_(0) {
+		}
+
 		inline size_t line() const {
 			return line_;
 		}
