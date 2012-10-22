@@ -22,7 +22,7 @@ void write(ostream& os, const AttWriter& w, const RegSet& rs) {
 			w.write(os, (R16)*i);
 		else if ( rs.is_set((R8)*i) )
 			w.write(os, (R8)*i);
-		else if ( rs.is_set((RH)*i) )
+		else if ( *i <= bh && rs.is_set((RH)*i) )
 			w.write(os, (RH)*i);
 	}
 }
