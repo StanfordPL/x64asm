@@ -25,6 +25,11 @@ class Imm {
 			return false;
 		}
 
+    friend std::ostream& operator<<(std::ostream& os, const Imm i) {
+      os << "[I " << i.i_ << "]";
+      return os;
+    }
+
 	private:
 		Operand i_;
 };

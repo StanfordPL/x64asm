@@ -133,6 +133,15 @@ emit_immed i = immed' (operands i)
 assm_defn :: [Instr] -> String
 assm_defn is = concat $ map render $ tail is
     where render i = "void Assembler::" ++ (att i) ++ "(" ++ (assm_args i) ++ "){\n" ++ 
+                     "\t#ifndef NDEBUG\n" ++
+                     "\tcout << \"" ++ (att i) ++ " \" << " ++ 
+                        (if (length (operands i)) > 0 then
+                          (intercalate " << \" \" << "
+                              (map (\p -> "arg" ++ (show p))
+                                   [0..(length (operands i))-1]))
+                         else "\" \"") ++ 
+                     " << endl;\n" ++
+                     "\t#endif\n" ++ 
                      (emit_mem_prefix i) ++
                      (emit_prefix i) ++
                      (emit_rex_prefix i) ++
