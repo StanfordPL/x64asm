@@ -112,19 +112,6 @@ class M {
 			return !is_stack();
 		}
 
-    friend std::ostream& operator<<(std::ostream& os, const M m)  {
-      Operand o = (Operand)m;
-      auto b  = ((o >> 40) & 0x1f); //base
-      auto i  = ((o >> 35) & 0x1f); //index
-      auto sc = ((o >> 32) & 0x7);  //scale
-      auto d = (o & 0xffffffff);   //disp
-      os << "0x" << std::hex << d;
-      os.copyfmt(std::ios(NULL));
-      os << "(" << R(b) << "," << R(i) << "," << sc << ")";
-      return os;
-
-    }
-
 	private:
 		// or  seg    base   index  scale  disp
 		// [48][47:45][44:40][39:35][34:32][31:0]
