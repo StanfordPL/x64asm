@@ -29,9 +29,12 @@ inline void pop(Assembler& assm) {
 // r13 holds temp values
 // r14 = &t.next_elem_;
 // r15 = &t.trace_[next_elem_];
-inline void recompute(Assembler& assm, void* next_elem, void* trace) {
+inline void recompute(Assembler& assm, void* next_elem, void* trace,
+		                  bool is_before) {
 	assm.movq(r14, Imm64(next_elem));
 	assm.imulq(r15, M64(r14), Imm32(sizeof(State)));
+	if ( !is_before )
+		assm.subq(r15, Imm32(sizeof(State)));
 	assm.movq(r14, Imm64(trace));
 	assm.addq(r15, r14);
 	assm.movq(r14, Imm64(next_elem));
@@ -67,7 +70,7 @@ void Tracer::trace(Trace& t, const Instruction& instr, size_t line,
 	// If we do this, everything (including rsp!) has to look untouched.
 	// Figure out the effective address BEFORE we compute the temp registers.
 	if ( instr.touches_mem() && instr.mem_modifier() != NONE ) {
-		assm_.addq(rsp, Imm32(32));
+		assm_.addq(rsp, Imm32(24));
 		const auto mi = instr.mem_index();
 		const auto mem_addr_disp = Imm32(offset(State, addr_));
 		const auto mem_size_disp = Imm32(offset(State, size_));
@@ -78,7 +81,7 @@ void Tracer::trace(Trace& t, const Instruction& instr, size_t line,
 		assm_.leaq(r13, (M8)instr.get_operand(mi));
 
 		// NOW recompute all our temp registers and store the trace
-		recompute(assm_, &t.next_elem_, &t.trace_[0]);
+		recompute(assm_, &t.next_elem_, &t.trace_[0], is_before);
 		assm_.movq(M64(r15, mem_addr_disp), r13);
 
 		// Size and value are type-specific
@@ -120,22 +123,22 @@ void Tracer::trace(Trace& t, const Instruction& instr, size_t line,
 			default:
 				assert(false);
 		}
-		assm_.subq(rsp, Imm32(32));
+		assm_.subq(rsp, Imm32(24));
 	}
 	// Business as usual if we don't have to worry about memory.
 	else 
-		recompute(assm_, &t.next_elem_, &t.trace_[0]);
+		recompute(assm_, &t.next_elem_, &t.trace_[0], is_before);
 
 	// Write out general purpose (we'll have to special case r13 - r15)
 	// Careful!  rsp isn't correct here
-	assm_.addq(rsp, Imm32(32));
+	assm_.addq(rsp, Imm32(24));
 	for ( auto r = R64::begin(), re = R64::end()-3; r != re; ++r ) {
 		const auto r_disp = is_before ? 
 			Imm32(offset(State, r_before_) + *r * sizeof(State::r_val_type)) :
 			Imm32(offset(State, r_after_)  + *r * sizeof(State::r_val_type));
 		assm_.movq(M64(r15, r_disp), *r);
 	}
-	assm_.subq(rsp, Imm32(32));
+	assm_.subq(rsp, Imm32(24));
 	// TODO - Special case for r13 - r15
 
 	// Write out XMM Registers
