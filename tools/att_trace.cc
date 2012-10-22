@@ -7,12 +7,13 @@ using namespace std;
 using namespace x64;
 
 void print_8(uint8_t x) {
-	cout << hex << noshowbase << setw(2) << x;
+	cout << hex << noshowbase << setfill('0') << setw(2) << (int)x;
 }
 
 void print_64(uint64_t x) {
 	for ( auto i = 3; i >= 0; --i )
-		cout << hex << noshowbase << setw(4) << ((x >> 16*i) & 0xffff) << " ";
+		cout << hex << noshowbase << setfill('0') << setw(4)
+			   << ((x >> 16*i) & 0xffff) << " ";
 }
 
 void print_128(__uint128_t x) {
@@ -23,7 +24,7 @@ void print_128(__uint128_t x) {
 void print_r(const Instruction& instr, const State& s, R64 r) {
 	AttWriter w;
 
-	cout << "  " << setfill(' ') << setw(6); w.write(cout, r); cout << ": ";
+	cout << "  " << setfill(' ') << setw(7); w.write(cout, r); cout << ": ";
 	print_64(s.r_before(r));
 	cout << "-> ";
 	if ( instr.is_jump() || instr.is_ret() )
@@ -36,7 +37,7 @@ void print_r(const Instruction& instr, const State& s, R64 r) {
 void print_cr(const Instruction& instr, const State& s, CondReg cr) {
 	AttWriter w;
 
-	cout << "  "; w.write(cout, cr); cout << ": ";
+	cout << "  " << setfill(' ') << setw(7); w.write(cout, cr); cout << ": ";
 	cout << s.cond_before(cr) << " -> ";
 	if ( instr.is_jump() || instr.is_ret() )
 		cout << "???";
@@ -48,7 +49,7 @@ void print_cr(const Instruction& instr, const State& s, CondReg cr) {
 void print_xmm(const Instruction& instr, const State& s, Xmm xmm) {
 	AttWriter w;
 
-	cout << "  "; w.write(cout, xmm); cout << ": ";
+	cout << "  " << setfill(' ') << setw(7); w.write(cout, xmm); cout << ": ";
 	print_128(s.xmm_before(xmm));
 	cout << "-> ";
 	if ( instr.is_jump() || instr.is_ret() )
@@ -62,7 +63,7 @@ void print_mem(const Instruction& instr, const State& state) {
 	if ( !state.mem_access() )
 		return;
 
-	for ( size_t i = 0, ie = state.mem_size(); i < ie; ++i ) {
+	for ( int i = state.mem_size()-1; i >= 0; --i ) {
 		cout << "  "; print_64(state.mem_addr() + i); cout << ": ";
 		print_8(state.mem_before(i)); 
 		cout << " -> ";
@@ -84,7 +85,8 @@ int main(int argc, char** argv) {
 
 	cout << "Tracing function... " << endl;
 	Tracer tracer;
-	auto trace = tracer.trace(code);
+	Trace trace;
+	tracer.trace(trace, code);
 
 	switch ( argc ) {
 		case 1: trace();
