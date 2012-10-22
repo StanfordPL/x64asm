@@ -134,14 +134,18 @@ assm_defn :: [Instr] -> String
 assm_defn is = concat $ map render $ tail is
     where render i = "void Assembler::" ++ (att i) ++ "(" ++ (assm_args i) ++ "){\n" ++ 
                      "\t#ifndef NDEBUG\n" ++
-                     "\tcout << \"" ++ (att i) ++ " \" << " ++ 
+                     "\tAttWriter w;\n" ++
+                     "\tw.write(clog, Instruction(" ++ (to_enum i) ++ 
                         (if (length (operands i)) > 0 then
-                          (intercalate " << \" \" << "
+                          ",{" ++
+                          (intercalate ","
                               (map (\p -> "arg" ++ (show p))
-                                   [0..(length (operands i))-1]))
-                         else "\" \"") ++ 
-                     " << endl;\n" ++
-                     "\t#endif\n" ++ 
+                                   [0..(length (operands i))-1])) ++
+                          "}"
+                         else "") ++ 
+                     "));\n" ++
+                     "clog << endl;\n" ++
+                     "\t#endif\n\n" ++ 
                      (emit_mem_prefix i) ++
                      (emit_prefix i) ++
                      (emit_rex_prefix i) ++

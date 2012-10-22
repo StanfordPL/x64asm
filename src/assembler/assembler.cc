@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <set>
 
+#include "src/att/att_writer.h"
+
 using namespace std;
 using namespace x64;
 

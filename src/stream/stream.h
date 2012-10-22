@@ -4,7 +4,19 @@
 #include <iostream>
 
 #include "src/code/code.h"
-#include "src/code/instruction.h"
+#include "src/code/cond_reg.h"
+#include "src/code/imm.h"
+#include "src/code/label.h"
+#include "src/code/m.h"
+#include "src/code/mm.h"
+#include "src/code/moffs.h"
+#include "src/code/opcode.h"
+#include "src/code/r.h"
+#include "src/code/scale.h"
+#include "src/code/sreg.h"
+#include "src/code/st.h"
+#include "src/code/xmm.h"
+#include "src/code/ymm.h"
 
 namespace x64 {
 
@@ -38,7 +50,27 @@ std::ostream& operator<<(std::ostream& os, const x64::format& f);
 
 std::istream& operator>>(std::istream& is, x64::Code& c);
 
-std::ostream& operator<<(std::ostream& os, const x64::Code& c);
-std::ostream& operator<<(std::ostream& os, const x64::Instruction& i);
+std::ostream& operator<<(std::ostream& os, const x64::Code& code);
+std::ostream& operator<<(std::ostream& os, x64::CondReg cr);
+std::ostream& operator<<(std::ostream& os, x64::Imm8 i);
+std::ostream& operator<<(std::ostream& os, x64::Imm16 i);
+std::ostream& operator<<(std::ostream& os, x64::Imm32 i);
+std::ostream& operator<<(std::ostream& os, x64::Imm64 i);
+std::ostream& operator<<(std::ostream& os, const x64::Instruction& instr);
+std::ostream& operator<<(std::ostream& os, x64::Label l);
+std::ostream& operator<<(std::ostream& os, x64::M m);
+std::ostream& operator<<(std::ostream& os, x64::Mm m);
+std::ostream& operator<<(std::ostream& os, x64::Moffs o);
+std::ostream& operator<<(std::ostream& os, x64::Opcode o);
+std::ostream& operator<<(std::ostream& os, x64::RH r);
+std::ostream& operator<<(std::ostream& os, x64::R8 r);
+std::ostream& operator<<(std::ostream& os, x64::R16 r);
+std::ostream& operator<<(std::ostream& os, x64::R32 r);
+std::ostream& operator<<(std::ostream& os, x64::R64 r);
+std::ostream& operator<<(std::ostream& os, x64::Scale s);
+std::ostream& operator<<(std::ostream& os, x64::Sreg s);
+std::ostream& operator<<(std::ostream& os, x64::St st);
+std::ostream& operator<<(std::ostream& os, x64::Xmm x);
+std::ostream& operator<<(std::ostream& os, x64::Ymm y);
 
 #endif
