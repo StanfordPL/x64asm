@@ -40,11 +40,11 @@ class Assembler {
 
 		void start(Function& fxn);
 
+		void assemble(const Instruction& instr);
+
 		inline void bind(Label label) {
 			labels_[label] = pos_;
 		}
-
-		void assemble(const Instruction& instr);
 
 		// void adcb(Al arg0, Imm8 arg1) ...
 		#include "src/gen/assembler.decl"

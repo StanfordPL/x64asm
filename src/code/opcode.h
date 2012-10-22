@@ -94,6 +94,10 @@ class Opcode {
 			return modifier(mem_index());
 		}
 
+		inline size_t mem_index() const {
+			return (o_ >> 15) & 0x3;
+		}
+
 		inline RegSet implicit_read_set() const {
 			assert((o_ >> 50) < implicit_read_set_.size());
 			return implicit_read_set_[o_ >> 50];
@@ -127,10 +131,6 @@ class Opcode {
 		static const std::vector<RegSet> implicit_undef_set_;
 
 		static const std::vector<Opcode> domain_;
-
-		inline size_t mem_index() const {
-			return (o_ >> 15) & 0x3;
-		}
 
 		inline size_t first_read() const {
 			return (o_ >> 13) & 0x3;

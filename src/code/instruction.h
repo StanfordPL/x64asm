@@ -99,6 +99,10 @@ class Instruction {
 			return opcode_.mem_modifier();
 		}
 
+		inline size_t mem_index() const {
+			return opcode_.mem_index();
+		}
+
 		inline bool touches_stack() const {
 			const auto mi = opcode_.mem_index();
 			if ( mi == 3 )

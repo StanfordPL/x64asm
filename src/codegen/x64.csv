@@ -233,6 +233,12 @@ movw :  : c7 :  : 00 :  16  RM  W   16  I  R   :  :  :  :  :
 movl :  : c7 :  : 00 :  32  RM  W   32  I  R   :  :  :  :  :   
 movq :  : c7 :  : 00 :  64  RM  W   32  I  R   :  :  :  :  :   
                         
+movaps :  :  0f  28  : y :  :  128  S  W   128  SM  R   :  :  :  :  :   
+movaps :  :  0f  29  : y :  :  128  SM  W   128  S  R   :  :  :  :  :   
+                        
+movups :  :  0f  10  : y :  :  128  S  W   128  SM  R   :  :  :  :  :   
+movups :  :  0f  11  : y :  :  128  SM  W   128  S  R   :  :  :  :  :   
+                        
 movd : 66 :  0f  6e  :  :  :  128  S  W   32  RM  R   :  :  :  :  :   
 movd : 66 :  0f  7e  :  :  :  32  RM  W   128  S  R   :  :  :  :  :   
                         

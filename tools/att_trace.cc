@@ -6,6 +6,10 @@
 using namespace std;
 using namespace x64;
 
+void print_8(uint8_t x) {
+	cout << hex << noshowbase << setw(2) << x;
+}
+
 void print_64(uint64_t x) {
 	for ( auto i = 3; i >= 0; --i )
 		cout << hex << noshowbase << setw(4) << ((x >> 16*i) & 0xffff) << " ";
@@ -16,33 +20,35 @@ void print_128(__uint128_t x) {
 	print_64((x >>  0) & 0xffffffffffffffff);
 }
 
-void print_gp(const Instruction& instr, 
-		          const char* name, const State& s, R64 gp) {
-	cout << "  " << name << ": ";
-	print_64(s.gp_before(gp));
+void print_r(const Instruction& instr, const State& s, R64 r) {
+	AttWriter w;
+
+	cout << "  " << setfill(' ') << setw(6); w.write(cout, r); cout << ": ";
+	print_64(s.r_before(r));
 	cout << "-> ";
 	if ( instr.is_jump() || instr.is_ret() )
 		cout << "???";
 	else
-		print_64(s.gp_after(gp));
+		print_64(s.r_after(r));
 	cout << endl;
 }
 
-void print_cond(const Instruction& instr,
-                const char* name, const State& s, CondReg cond) {
-	cout << "  " << name << ": ";
-	cout << hex << noshowbase << s.cond_before(cond);
-	cout << " -> ";
+void print_cr(const Instruction& instr, const State& s, CondReg cr) {
+	AttWriter w;
+
+	cout << "  "; w.write(cout, cr); cout << ": ";
+	cout << s.cond_before(cr) << " -> ";
 	if ( instr.is_jump() || instr.is_ret() )
 		cout << "???";
 	else
-		cout << hex << noshowbase << s.cond_after(cond);
+		cout << s.cond_after(cr);
 	cout << endl;
 }
 
-void print_xmm(const Instruction& instr, 
-		           const char* name, const State& s, Xmm xmm) {
-	cout << "  " << name << ": ";
+void print_xmm(const Instruction& instr, const State& s, Xmm xmm) {
+	AttWriter w;
+
+	cout << "  "; w.write(cout, xmm); cout << ": ";
 	print_128(s.xmm_before(xmm));
 	cout << "-> ";
 	if ( instr.is_jump() || instr.is_ret() )
@@ -50,6 +56,22 @@ void print_xmm(const Instruction& instr,
 	else
 		print_128(s.xmm_after(xmm));
 	cout << endl;
+}
+
+void print_mem(const Instruction& instr, const State& state) {
+	if ( !state.mem_access() )
+		return;
+
+	for ( size_t i = 0, ie = state.mem_size(); i < ie; ++i ) {
+		cout << "  "; print_64(state.mem_addr() + i); cout << ": ";
+		print_8(state.mem_before(i)); 
+		cout << " -> ";
+		if ( instr.is_jump() || instr.is_ret() )
+			cout << "???";
+		else
+			print_8(state.mem_after(i));
+		cout << endl;
+	}
 }
 
 int main(int argc, char** argv) {
@@ -60,102 +82,55 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-	Assembler assm;
-	cout << "Assembled Hex:" << endl;
-	assm.write_hex(cout, code);
-	cout << endl << endl;
-
-	Tracer tracer;
-	for ( auto i = R64::begin(), ie = R64::end(); i != ie; ++i )
-		tracer.set(*i);
-	for ( auto i = CondReg::begin(), ie = CondReg::end(); i != ie; ++i )
-		tracer.set(*i);
-	for ( auto i = Xmm::begin(), ie = Xmm::end(); i != ie; ++i )
-		tracer.set(*i);
-	for ( size_t i = 0, ie = code.size(); i < ie; ++i ) {
-		tracer.set_before(i);
-		tracer.set_after(i);
-	}
-
 	cout << "Tracing function... " << endl;
-	Trace trace;
-	Function fxn(256*1024);
-	fxn = tracer.trace(fxn, trace, code);
+	Tracer tracer;
+	auto trace = tracer.trace(code);
 
 	switch ( argc ) {
-		case 1: fxn();
+		case 1: trace();
 						break;
-		case 2: fxn(atoi(argv[1]));
+		case 2: trace(atoi(argv[1]));
 						break;
-		case 3: fxn(atoi(argv[1]), atoi(argv[2]));
+		case 3: trace(atoi(argv[1]), atoi(argv[2]));
 						break;
-		case 4: fxn(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+		case 4: trace(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
 						break;
-		case 5: fxn(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]),
-								atoi(argv[4]));
+		case 5: trace(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]),
+								  atoi(argv[4]));
 						break;
-		case 6: fxn(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]),
-								atoi(argv[4]), atoi(argv[5]));
+		case 6: trace(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]),
+								  atoi(argv[4]), atoi(argv[5]));
 						break;
-		case 7: fxn(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]),
-								atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+		case 7: trace(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]),
+								  atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 						break;
 		default: cerr << "No support for more than 3 arguments!" << endl;
 						 return 2;
 	}
 
 	for ( const auto& state : trace ) {
-		const auto l = state.line();
-		const auto i = code[l];
+		const auto line = state.line();
+		const auto& instr = code[line];
 
-		if ( i.is_label_defn() )
+		if ( instr.is_label_defn() )
 			continue;
 
-		cout << "Line " << dec << l << ": " << format(ATT) << i << endl;
+		cout << "Line " << dec << line << ": " << format(ATT) << instr << endl;
 		cout << endl;
 	
-		print_gp(i, "rax", state, rax);
-		print_gp(i, "rcx", state, rcx);
-		print_gp(i, "rdx", state, rdx);
-		print_gp(i, "rbx", state, rbx);
-		print_gp(i, "rsp", state, rsp);
-		print_gp(i, "rbp", state, rbp);
-		print_gp(i, "rsi", state, rsi);
-		print_gp(i, "rdi", state, rdi);
-		print_gp(i, "r8 ", state, r8);
-		print_gp(i, "r9 ", state, r9);
-		print_gp(i, "r10", state, r10);
-		print_gp(i, "r11", state, r11);
-		print_gp(i, "r12", state, r12);
-		print_gp(i, "r13", state, r13);
-		print_gp(i, "r14", state, r14);
-		print_gp(i, "r15", state, r15);
+		for ( auto r = R64::begin(), re = R64::end(); r != re; ++r )
+			print_r(instr, state, *r);
 		cout << endl;
 
-		print_cond(i, "af", state, af);
-		print_cond(i, "cf", state, cf);
-		print_cond(i, "of", state, of);
-		print_cond(i, "pf", state, pf);
-		print_cond(i, "sf", state, sf);
-		print_cond(i, "zf", state, zf);
+		for ( auto x = Xmm::begin(), xe = Xmm::end(); x != xe; ++x )
+			print_xmm(instr, state, *x);
 		cout << endl;
 
-		print_xmm(i, "xmm0 ",  state, xmm0);
-		print_xmm(i, "xmm1 ",  state, xmm1);
-		print_xmm(i, "xmm2 ",  state, xmm2);
-		print_xmm(i, "xmm3 ",  state, xmm3);
-		print_xmm(i, "xmm4 ",  state, xmm4);
-		print_xmm(i, "xmm5 ",  state, xmm5);
-		print_xmm(i, "xmm6 ",  state, xmm6);
-		print_xmm(i, "xmm7 ",  state, xmm7);
-		print_xmm(i, "xmm8 ",  state, xmm8);
-		print_xmm(i, "xmm9 ",  state, xmm9);
-		print_xmm(i, "xmm10", state, xmm10);
-		print_xmm(i, "xmm11", state, xmm11);
-		print_xmm(i, "xmm12", state, xmm12);
-		print_xmm(i, "xmm13", state, xmm13);
-		print_xmm(i, "xmm14", state, xmm14);
-		print_xmm(i, "xmm15", state, xmm15);
+		for ( auto c = CondReg::begin(), ce = CondReg::end(); c != ce; ++c )
+			print_cr(instr, state, *c);
+		cout << endl;
+
+		print_mem(instr, state);
 		cout << endl;
 	}
 
