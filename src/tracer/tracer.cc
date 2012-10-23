@@ -50,10 +50,11 @@ Trace& Tracer::trace(Trace& t, const Code& code) {
 	assm_.start(t.fxn_);
 	for ( size_t i = 0, ie = code.size(); i < ie; ++i ) {
 		const auto& instr = code[i];
-		
-		trace(t, instr, i, true);
+
+		if ( !instr.is_label_defn() )
+			trace(t, instr, i, true);
 		assm_.assemble(instr);
-		if ( !instr.is_ret() && !instr.is_jump() )
+		if ( !instr.is_label_defn() && !instr.is_ret() && !instr.is_jump() )
 			trace(t, instr, i, false);
 	}
 	assm_.finish();
@@ -126,7 +127,7 @@ void Tracer::trace(Trace& t, const Instruction& instr, size_t line,
 		assm_.subq(rsp, Imm32(32));
 	}
 	// Business as usual if we don't have to worry about memory.
-	else 
+	else
 		recompute(assm_, &t.next_elem_, &t.trace_[0], is_before);
 
 	// Write out general purpose (we'll have to special case r13 - r15)
