@@ -51,10 +51,6 @@ class Trace {
 			return next_elem_;
 		}
 
-		inline void clear() {
-			next_elem_ = 0;
-		}
-
 		inline const State& operator[](size_t index) const {
 			assert(index < size());
 			return trace_[index];
