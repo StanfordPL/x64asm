@@ -194,6 +194,9 @@ void Tracer::trace(Trace& t, const Instruction& instr, size_t line,
 	assm_.movq(r14, M64(rsp));
 	assm_.movq(M64(r15, cond_disp), r14);
 
+	// Write out line number
+	assm_.movq(M64(r15), Imm32(line));
+
 	pop(assm_);
 }
 
