@@ -158,7 +158,7 @@ assm_defn is = concat $ map render $ tail is
 -- Generates a switch statement based on opcode enum
 assm_switch :: [Instr] -> String
 assm_switch is = concat $ map render $ tail is
-    where render i = "case " ++ (to_enum i) ++ ":\n\t" ++ 
+    where render i = "case (" ++ (to_enum i) ++ ">>50):\n\t" ++ 
                         (att i) ++ "(" ++ (args i) ++ ");\n\t" ++
                         "break;\n"
           args i = concat $ intersperse "," $ 

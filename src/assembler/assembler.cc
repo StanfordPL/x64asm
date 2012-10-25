@@ -335,8 +335,8 @@ void Assembler::start(Function& fxn) {
 }
 
 void Assembler::assemble(const Instruction& i) {
-	switch ( i.get_opcode() ) {
-		case LABEL_DEFN_64L:
+	switch ( i.get_opcode() >> 50 ) {
+		case (LABEL_DEFN_64L >> 50):
 			bind(i.get_operand(0));
 			break;
 
