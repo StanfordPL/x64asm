@@ -111,18 +111,21 @@ clc :  : f8 :  :  :    :  :  :  : C :
                         
 cmc :  : f5 :  :  :    :  :  :  : C :   
                         
-cmovaew :  :  0f  43  : y :  :  16  R  X   16  RM  R   :  :  : C :  :   
-cmovael :  :  0f  43  : y :  :  32  R  X   32  RM  R   :  :  : C :  :   
-cmovaeq :  :  0f  43  : y :  :  64  R  X   64  RM  R   :  :  : C :  :   
-cmovbew :  :  0f  44  : y :  :  16  R  X   16  RM  R   :  :  :  C  Z  :  :   
-cmovbel :  :  0f  44  : y :  :  32  R  X   32  RM  R   :  :  :  C  Z  :  :   
-cmovbeq :  :  0f  44  : y :  :  64  R  X   64  RM  R   :  :  :  C  Z  :  :   
-cmovew :  :  0f  44  : y :  :  16  R  X   16  RM  R   :  :  : Z :  :   
-cmovel :  :  0f  44  : y :  :  32  R  X   32  RM  R   :  :  : Z :  :   
-cmoveq :  :  0f  44  : y :  :  64  R  X   64  RM  R   :  :  : Z :  :   
-cmovlew :  :  0f  4e  : y :  :  16  R  X   16  RM  R   :  :  :  Z  S  O  :  :   
-cmovlel :  :  0f  4e  : y :  :  32  R  X   32  RM  R   :  :  :  Z  S  O  :  :   
-cmovleq :  :  0f  4e  : y :  :  64  R  X   64  RM  R   :  :  :  Z  S  O  :  :   
+cmovaw :  :  0f  47  :  :  :  16  R  X   16  RM  R   :  :  :  C  Z  :  :   
+cmoval :  :  0f  47  :  :  :  32  R  X   32  RM  R   :  :  :  C  Z  :  :   
+cmovaq :  :  0f  47  :  :  :  64  R  X   64  RM  R   :  :  :  C  Z  :  :   
+cmovaew :  :  0f  43  :  :  :  16  R  X   16  RM  R   :  :  : C :  :   
+cmovael :  :  0f  43  :  :  :  32  R  X   32  RM  R   :  :  : C :  :   
+cmovaeq :  :  0f  43  :  :  :  64  R  X   64  RM  R   :  :  : C :  :   
+cmovbew :  :  0f  46  :  :  :  16  R  X   16  RM  R   :  :  :  C  Z  :  :   
+cmovbel :  :  0f  46  :  :  :  32  R  X   32  RM  R   :  :  :  C  Z  :  :   
+cmovbeq :  :  0f  46  :  :  :  64  R  X   64  RM  R   :  :  :  C  Z  :  :   
+cmovew :  :  0f  44  :  :  :  16  R  X   16  RM  R   :  :  : Z :  :   
+cmovel :  :  0f  44  :  :  :  32  R  X   32  RM  R   :  :  : Z :  :   
+cmoveq :  :  0f  44  :  :  :  64  R  X   64  RM  R   :  :  : Z :  :   
+cmovlew :  :  0f  4e  :  :  :  16  R  X   16  RM  R   :  :  :  Z  S  O  :  :   
+cmovlel :  :  0f  4e  :  :  :  32  R  X   32  RM  R   :  :  :  Z  S  O  :  :   
+cmovleq :  :  0f  4e  :  :  :  64  R  X   64  RM  R   :  :  :  Z  S  O  :  :   
                         
 cmpb :  : 3c :  :  :  8  AL  R   8  I  R   :  :  :  :  O  S  Z  A  P  C  :   
 cmpw :  : 3d :  :  :  16  AX  R   16  I  R   :  :  :  :  O  S  Z  A  P  C  :   
