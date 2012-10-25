@@ -112,6 +112,37 @@ class M {
 			return !is_stack();
 		}
 
+		inline void set_seg(Sreg s) {
+			a_ &= ~((Operand) 0x7 << 45);
+			a_ |= (s & 0x7) << 45;
+		}
+
+		inline void set_base(R b) {
+			a_ &= ~((Operand) 0x1f << 40);
+			a_ |= (b & 0x1f) << 40;
+		}
+
+		inline void set_index(R i) {
+			a_ &= ~((Operand) 0x1f << 35);
+			a_ |= (i & 0x1f) << 35;
+		}
+
+		inline void set_scale(Scale s) {
+			a_ &= ~((Operand) 0x7 << 32);
+			a_ |= (s & 0x7) << 32;
+		}
+
+		inline void set_disp(Imm32 d) {
+			a_ &= 0xffffffff00000000;
+			a_ |= (d & 0xffffffff);
+		}
+
+		inline void set_size_or(bool o) {
+			a_ &= ~((Operand) 0x1 << 48);
+			if ( o )
+				a_ |= (Operand) 0x1 << 48;
+		}
+			
 	private:
 		// or  seg    base   index  scale  disp
 		// [48][47:45][44:40][39:35][34:32][31:0]
