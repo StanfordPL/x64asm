@@ -76,28 +76,28 @@ class M {
 		}
 
 		inline bool is_null() const {
-			return get_base().is_null() || get_scale().is_null() || 
-				     get_index() == rsp;			     
+			return (get_base().is_null() && get_scale().is_null()) || 
+				      get_index() == rsp;			     
 		}
 
 		inline Sreg get_seg() const {
-			return (Sreg) ((a_ >> 45) & 0x7);
+			return (a_ >> 45) & 0x7;
 		}
 
 		inline R get_base() const {
-			return (R) ((a_ >> 40) & 0x1f);
+			return (a_ >> 40) & 0x1f;
 		}
 
 		inline R get_index() const {
-			return (R) ((a_ >> 35) & 0x1f);
+			return (a_ >> 35) & 0x1f;
 		}
 
 		inline Scale get_scale() const {
-			return (Scale) ((a_ >> 32)  & 0x7);
+			return (a_ >> 32) & 0x7;
 		}
 
 		inline Imm32 get_disp() const {
-			return (Operand) (a_ & 0xffffffff);
+			return a_ & 0xffffffff;
 		}
 
 		inline bool get_size_or() const {
@@ -113,22 +113,22 @@ class M {
 		}
 
 		inline void set_seg(Sreg s) {
-			a_ &= ~((Operand) 0x7 << 45);
+			a_ &= ~(0x7ull << 45);
 			a_ |= (s & 0x7) << 45;
 		}
 
 		inline void set_base(R b) {
-			a_ &= ~((Operand) 0x1f << 40);
+			a_ &= ~(0x1full << 40);
 			a_ |= (b & 0x1f) << 40;
 		}
 
 		inline void set_index(R i) {
-			a_ &= ~((Operand) 0x1f << 35);
+			a_ &= ~(0x1full << 35);
 			a_ |= (i & 0x1f) << 35;
 		}
 
 		inline void set_scale(Scale s) {
-			a_ &= ~((Operand) 0x7 << 32);
+			a_ &= ~(0x7ull << 32);
 			a_ |= (s & 0x7) << 32;
 		}
 
@@ -138,9 +138,9 @@ class M {
 		}
 
 		inline void set_size_or(bool o) {
-			a_ &= ~((Operand) 0x1 << 48);
+			a_ &= ~(0x1ull << 48);
 			if ( o )
-				a_ |= (Operand) 0x1 << 48;
+				a_ |= 0x1ull << 48;
 		}
 			
 	private:
