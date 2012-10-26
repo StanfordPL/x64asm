@@ -210,6 +210,7 @@ jo :  :  0f  80  :  :  :  64  L  R    :  :  : O :  :
 jp :  :  0f  8a  :  :  :  64  L  R    :  :  : P :  :   
 js :  :  0f  88  :  :  :  64  L  R    :  :  : S :  :   
                         
+jmpq :  : e9 :  :  :  64  L  R    :  :  :  :  :   
 jmp :  : e9 :  :  :  64  L  R    :  :  :  :  :   
                         
 lahf :  : 9f :  :  :    :  : AX :  S  Z  A  P  C  :  :   
