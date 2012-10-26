@@ -43,7 +43,7 @@ class Assembler {
 		void assemble(const Instruction& instr);
 
 		inline void bind(Label label) {
-			labels_[label] = pos_;
+			labels_[label] = buf_;
 		}
 
 		// void adcb(Al arg0, Imm8 arg1) ...
@@ -56,10 +56,10 @@ class Assembler {
 		void write_hex(std::ostream& os, const Code& code);
 
 	private:
-		std::map<Label, size_t> labels_;
-		std::map<size_t, Label> jumps_;
+		std::map<Label, unsigned char*> labels_;
+		std::map<unsigned char*, Label> jumps_;
 
-		size_t pos_;
+		unsigned char* buf_begin_;
 		unsigned char* buf_;
 
 		void start(unsigned char* buffer);
