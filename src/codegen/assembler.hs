@@ -54,19 +54,19 @@ emit_mem_prefix i = case mem_index i of
   3   -> "\t// NO MEM PREFIX\n"
   idx -> case (elem "O" (operand_types i)) of 
     True  -> "\t// NO MEM PREFIX\n"
-    False -> "\temit_mem_prefix(buf_,pos_,arg" ++ (show idx) ++ ");\n"
+    False -> "\temit_mem_prefix(buf_,arg" ++ (show idx) ++ ");\n"
 
 -- Emit prefix
 emit_prefix :: Instr -> String
 emit_prefix i = case prefix i of
-  (x:[])     -> "\temit_prefix(buf_,pos_,0x" ++ x ++ ");\n"
-  (x:y:[])   -> "\temit_prefix(buf_,pos_,0x" ++ x ++ ",0x" ++ y ++ ");\n"
-  (x:y:z:[]) -> "\temit_prefix(buf_,pos_,0x" ++ x ++ ",0x" ++ y ++ ",0x" ++ z ++ ");\n"
+  (x:[])     -> "\temit_prefix(buf_,0x" ++ x ++ ");\n"
+  (x:y:[])   -> "\temit_prefix(buf_,0x" ++ x ++ ",0x" ++ y ++ ");\n"
+  (x:y:z:[]) -> "\temit_prefix(buf_,0x" ++ x ++ ",0x" ++ y ++ ",0x" ++ z ++ ");\n"
   _ -> "\t// NO PREFIX\n"
 
 -- Emit REX Prefix
 emit_rex_prefix :: Instr -> String
-emit_rex_prefix i = "\temit_rex(buf_,pos_" ++ 
+emit_rex_prefix i = "\temit_rex(buf_" ++ 
                        (codegen_args i) ++ 
 											 (def (rex i)) ++ 
 											 (is_8bit (operands i)) ++ 
@@ -100,7 +100,7 @@ opcode_delta i = ocd (operand_types i) (reg_code i)
 
 emit_opcode :: Instr -> String
 emit_opcode i = "\temit_opcode(" ++ args ++ ");\n"
-    where args = "buf_,pos_" ++ (opcode_args i) ++ (opcode_delta i) 
+    where args = "buf_" ++ (opcode_args i) ++ (opcode_delta i) 
 
 -- EMit Mod R/M Byte
 digit :: Instr -> String
@@ -110,23 +110,23 @@ digit i = digit' $ reg_field i
 
 emit_mod_rm :: Instr -> String
 emit_mod_rm i = "\temit_mod_rm(" ++ args ++ ");\n"
-    where args = "buf_,pos_" ++ (codegen_args i) ++ (digit i)
+    where args = "buf_" ++ (codegen_args i) ++ (digit i)
           
 -- Emit Displacement
 emit_disp :: Instr -> String
 emit_disp i = disp' (operand_types i) 
-    where disp' ("L":_)   = "\tjumps_[pos_] = arg0;\n" ++
-                            "\tpos_ += 4;\n"
-          disp' (_:"O":_) = "\temit_imm(buf_,pos_,(Imm64)arg1);\n"
-          disp' ("O":_)   = "\temit_imm(buf_,pos_,(Imm64)arg0);\n"
+    where disp' ("L":_)   = "\tjumps_[buf_] = arg0;\n" ++
+                            "\tbuf_ += 4;\n"
+          disp' (_:"O":_) = "\temit_imm(buf_,(Imm64)arg1);\n"
+          disp' ("O":_)   = "\temit_imm(buf_,(Imm64)arg0);\n"
           disp' _         = "\t// NO DISPLACEMENT\n"
 
 -- Emit Immediate
 emit_immed :: Instr -> String
 emit_immed i = immed' (operands i)
-    where immed' ((w,"I",_):_) = "\temit_imm(buf_,pos_,(Imm" ++ w ++ ")arg0);\n"
-          immed' (_:(w,"I",_):_) = "\temit_imm(buf_,pos_,(Imm" ++ w ++ ")arg1);\n"
-          immed' (_:_:(w,"I",_):_) = "\temit_imm(buf_,pos_,(Imm" ++ w ++ ")arg2);\n"
+    where immed' ((w,"I",_):_) = "\temit_imm(buf_,(Imm" ++ w ++ ")arg0);\n"
+          immed' (_:(w,"I",_):_) = "\temit_imm(buf_,(Imm" ++ w ++ ")arg1);\n"
+          immed' (_:_:(w,"I",_):_) = "\temit_imm(buf_,(Imm" ++ w ++ ")arg2);\n"
           immed' _ = "\t// NO IMMEDIATE\n"
 
 -- Generates a definition for an instruction		
@@ -144,7 +144,7 @@ assm_defn is = concat $ map render $ tail is
                           "}"
                          else "") ++ 
                      "));\n" ++
-                     "clog << endl;\n" ++
+                     "\tclog << endl;\n" ++
                      "\t#endif\n\n" ++ 
                      (emit_mem_prefix i) ++
                      (emit_prefix i) ++
@@ -158,7 +158,7 @@ assm_defn is = concat $ map render $ tail is
 -- Generates a switch statement based on opcode enum
 assm_switch :: [Instr] -> String
 assm_switch is = concat $ map render $ tail is
-    where render i = "case " ++ (to_enum i) ++ ":\n\t" ++ 
+    where render i = "case (" ++ (to_enum i) ++ ">>50):\n\t" ++ 
                         (att i) ++ "(" ++ (args i) ++ ");\n\t" ++
                         "break;\n"
           args i = concat $ intersperse "," $ 
