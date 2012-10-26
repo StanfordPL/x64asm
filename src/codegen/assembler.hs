@@ -134,6 +134,8 @@ assm_defn :: [Instr] -> String
 assm_defn is = concat $ map render $ tail is
     where render i = "void Assembler::" ++ (att i) ++ "(" ++ (assm_args i) ++ "){\n" ++ 
                      "\t#ifndef NDEBUG\n" ++
+                     "\tclog << \"0x\" << hex << (uint64_t)buf_ <<" ++
+                         " \": \";" ++
                      "\tAttWriter w;\n" ++
                      "\tw.write(clog, Instruction(" ++ (to_enum i) ++ 
                         (if (length (operands i)) > 0 then

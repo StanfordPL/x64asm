@@ -243,10 +243,7 @@ void Assembler::assemble(const Instruction& i) {
 			bind(i.get_operand(0));
 			break;
         
-        #ifndef NDEBUG
-        clog << "0x" << hex << (uint64_t)buf_ << endl;
-        #endif
-		// 4000-way switch
+      	// 4000-way switch
 		#include "src/gen/assembler.switch"
 		
 		default:
