@@ -242,7 +242,10 @@ void Assembler::assemble(const Instruction& i) {
 		case (LABEL_DEFN_64L >> 50):
 			bind(i.get_operand(0));
 			break;
-
+        
+        #ifndef NDEBUG
+        clog << "0x" << hex << (uint64_t)buf_ << endl;
+        #endif
 		// 4000-way switch
 		#include "src/gen/assembler.switch"
 		
