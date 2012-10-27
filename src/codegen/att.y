@@ -121,52 +121,6 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
             vector<OperandInfo>& operand_info) {
         Instruction* instr = new Instruction();
 
-        // A nasty bit of context sensitivity with the SHL/SHR class of instructions
-        // CL in the right place is a RCX_ONLY (we can't check this until now)
-        // Ditto for the arithmetic ops and AL,AX,EAX,RAX and RAX_ONLY
-        /*
-        {
-            const auto len = opcode.length() > 3 ? 3 : opcode.length() - 1;
-            const auto base = opcode.substr(0, len);
-
-            if ( base == "sal" || base == "sar" || base == "shl" || base == "shr" )
-                if ( operand_info.size() == 2 && operand_info[1].type == GP_REG ) {
-                    if ( operand_info[1].val != rcx || operand_info[1].width != LOW )
-                        is.setstate(std::ios::failbit);
-                    get<1>(key)[1] = RCX_ONLY;
-                }
-
-            if ( base == "adc" || base == "add" || base == "and" || base == "cmp" ||
-                 base == "or"  || base == "sbb" || base == "sub" || base == "xor" ||
-                 base == "tes" )
-                if ( operand_info[0].type == GP_REG && operand_info[0].val == rax && 
-                        operand_info[1].type == IMM )
-                    if ((operand_info[0].width == QUAD && operand_info[1].width == DOUBLE) || 
-                            (operand_info[0].width == operand_info[1].width) ) 
-                        get<1>(key)[0] = RAX_ONLY;
-        }
-
-        // Similar issue related to floating point instructions which require st0
-        if ( operand_info.size() >= 1 && operand_info[0].type == FP_REG && operand_info[0].val == st0 )
-            get<1>(key)[0] = ST0_ONLY;
-        if ( operand_info.size() >= 2 && operand_info[1].type == FP_REG && operand_info[1].val == st0 )
-            get<1>(key)[1] = ST0_ONLY;
-
-        // And once again for movabs
-        {
-            const auto len = opcode.length() > 6 ? 6 : opcode.length();
-            const auto base = opcode.substr(0, len);
-            if ( base == "movabs" ) {
-                if ( operand_info[0].type == GP_REG && operand_info[0].val == rax )
-                    get<1>(key)[0] = RAX_ONLY;
-                else if ( operand_info[1].type == GP_REG && operand_info[1].val == rax )
-                    get<1>(key)[1] = RAX_ONLY;
-                else
-                    is.setstate(std::ios::failbit);
-            }
-        }
-        */
-
         // ***** PHASE 0: book keeping *****
 
         //find operand # of any immediate
@@ -179,6 +133,15 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
                 len = i;
                 break;
             }
+
+        #ifndef NDEBUG
+        cout << "Looking for a signature like this:" << endl;
+        for(int i = 0; i< len;i ++) {
+            cout << "[type: " << type2string(operand_info[i].type);
+            cout << " width: " << bw2string(operand_info[i].width);
+            cout << " ]" << endl;
+        }
+        #endif
 
 
         // ***** PHASE 1: Find all rows in spreadsheet that could plausibly work *****

@@ -40,8 +40,82 @@ Operand to_imm(const char* c, bool from_decimal) {
 	return o;
 }
 
-BitWidth to_imm_width(const char* c, bool from_decimal) {
+/* The fits_in________ functions are straight 
+from the GNU Assembler Source */
+
+bool fits_in_signed_byte (Operand num)
+{
+  int64_t snum = (int64_t) num;
+  return (snum >= -128) && (snum <= 127);
+}
+
+bool fits_in_unsigned_byte (Operand num)
+{
+  int64_t snum = (int64_t) num;
+  return (snum & 0xff) == snum;
+}
+
+bool fits_in_unsigned_word (Operand num)
+{
+  int64_t snum = (int64_t) num;
+  return (snum & 0xffff) == snum;
+}
+
+bool fits_in_signed_word (Operand num)
+{
+  int64_t snum = (int64_t) num;
+  return (-32768 <= snum) && (snum <= 32767);
+}
+
+bool fits_in_signed_long (Operand num )
+{
+  int64_t snum = (int64_t) num;
+  return (!(((Operand) -1 << 31) & snum)
+	  || (((Operand) -1 << 31) & snum) == ((Operand) -1 << 31));
+}				/* fits_in_signed_long() */
+
+bool fits_in_unsigned_long (Operand num )
+{
+  int64_t snum = (int64_t) num;
+  return (snum & (((Operand) 2 << 31) - 1)) == snum;
+}				/* fits_in_unsigned_long() */
+
+
+
+BitWidth to_imm_width(const char* c, bool from_decimal, bool negate) {
     auto o = to_imm(c, from_decimal);
+    if (negate)
+        o = -o;
+        
+    /* if operand is at most 16 bits, convert it to something signed */
+    /*
+	if ((o & (~(Operand) 0xffff)) == 0) {
+        o = ((o & 0xffff) ^ 0x8000) - 0x8000; // it's what gas does.
+    }
+    */
+    #ifndef NDEBUG
+    cout << "o = ";
+    cout << hex << o << endl;
+
+    cout << "FITS IN:" << endl;
+    cout << "unsigned byte: " << fits_in_unsigned_byte(o) << endl;
+    cout << "signed byte: " << fits_in_signed_byte(o) << endl;
+    cout << "unsigned word: " << fits_in_unsigned_word(o) << endl;
+    cout << "signed word: " << fits_in_signed_word(o) << endl;
+    cout << "unsigned long: " << fits_in_unsigned_long(o) << endl;
+    cout << "signed long: " << fits_in_signed_long(o) << endl;
+    #endif
+
+
+    if (fits_in_signed_byte(o) || fits_in_unsigned_byte(o))
+        return LOW;
+    else if (fits_in_signed_word(o))
+        return WORD;
+    else if (fits_in_signed_long(o))
+        return DOUBLE;
+    else
+        return QUAD;
+        
 
     /*TABLE
       PQ -> LOW
@@ -58,7 +132,7 @@ BitWidth to_imm_width(const char* c, bool from_decimal) {
 
       _ -> QUAD
      */
-
+     /*
     if( ((o >> 8) == 0) ||
             ((o >> 8) == 0xFF) ||
             ((o >> 8) == 0xFFFFFF) ||
@@ -78,6 +152,7 @@ BitWidth to_imm_width(const char* c, bool from_decimal) {
     }
 
     return QUAD;
+    */
 
 }
 
@@ -200,10 +275,10 @@ Operand to_label(const char* c) {
 [0-9]+           { OPERAND(to_imm(yytext, true),   OFFSET, QUAD); return ATT_OFFSET; }
 
 
-"$-0x"[0-9a-f]+ { OPERAND(-to_imm(yytext+2, false), IMM, to_imm_width(yytext+1, false)); return ATT_IMM; }
-"$-"[0-9]+      { OPERAND(-to_imm(yytext+2, true),  IMM, to_imm_width(yytext+1, true));  return ATT_IMM; }
-"$0x"[0-9a-f]+  { OPERAND(to_imm(yytext+1, false),  IMM, to_imm_width(yytext+1, false)); return ATT_IMM; }
-"$"[0-9]+       { OPERAND(to_imm(yytext+1, true),   IMM, to_imm_width(yytext+1, true));  return ATT_IMM; }
+"$-0x"[0-9a-f]+ { OPERAND(-to_imm(yytext+2, false), IMM, to_imm_width(yytext+2, false, true)); return ATT_IMM; }
+"$-"[0-9]+      { OPERAND(-to_imm(yytext+2, true),  IMM, to_imm_width(yytext+2, true, true));  return ATT_IMM; }
+"$0x"[0-9a-f]+  { OPERAND(to_imm(yytext+1, false),  IMM, to_imm_width(yytext+1, false, false)); return ATT_IMM; }
+"$"[0-9]+       { OPERAND(to_imm(yytext+1, true),   IMM, to_imm_width(yytext+1, true, false));  return ATT_IMM; }
 
 "."[a-zA-Z][0-9a-zA-Z_]* { OPERAND(to_label(yytext+1), LABEL, FIXED); return ATT_LABEL; }
 
