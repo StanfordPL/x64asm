@@ -76,12 +76,12 @@ inline void emit_imm(unsigned char*& buf, Imm8 imm) {
 }
 
 inline void emit_imm(unsigned char*& buf, Imm16 imm) {
-	*((uint64_t*) buf) = imm;
+	*((uint16_t*) buf) = imm;
 	buf += 2;
 }
 
 inline void emit_imm(unsigned char*& buf, Imm32 imm) {
-	*((uint64_t*) buf) = imm;
+	*((uint32_t*) buf) = imm;
 	buf += 4;
 }
 
