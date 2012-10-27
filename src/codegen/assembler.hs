@@ -43,6 +43,7 @@ codegen_args i = cga (operand_types i) (flipped i)
           cga (_:_:_) True   = ",(Operand)arg1,(Operand)arg0"
           cga (_:_:_) False  = ",(Operand)arg0,(Operand)arg1"
           cga ("I":_) _ = ""
+          cga ("L":_) _ = ""
           cga ("M":_) _ = ",arg0"
 
           cga (_:_) _ = ",(Operand) arg0"
