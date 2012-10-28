@@ -117,15 +117,48 @@ cmovaq :  :  0f  47  :  :  :  64  R  X   64  RM  R   :  :  :  C  Z  :  :
 cmovaew :  :  0f  43  :  :  :  16  R  X   16  RM  R   :  :  : C :  :   
 cmovael :  :  0f  43  :  :  :  32  R  X   32  RM  R   :  :  : C :  :   
 cmovaeq :  :  0f  43  :  :  :  64  R  X   64  RM  R   :  :  : C :  :   
+cmovbw :  :  0f  42  :  :  :  16  R  X   16  RM  R   :  :  : C :  :   
+cmovbl :  :  0f  42  :  :  :  32  R  X   32  RM  R   :  :  : C :  :   
+cmovbq :  :  0f  42  :  :  :  64  R  X   64  RM  R   :  :  : C :  :   
 cmovbew :  :  0f  46  :  :  :  16  R  X   16  RM  R   :  :  :  C  Z  :  :   
 cmovbel :  :  0f  46  :  :  :  32  R  X   32  RM  R   :  :  :  C  Z  :  :   
 cmovbeq :  :  0f  46  :  :  :  64  R  X   64  RM  R   :  :  :  C  Z  :  :   
 cmovew :  :  0f  44  :  :  :  16  R  X   16  RM  R   :  :  : Z :  :   
 cmovel :  :  0f  44  :  :  :  32  R  X   32  RM  R   :  :  : Z :  :   
 cmoveq :  :  0f  44  :  :  :  64  R  X   64  RM  R   :  :  : Z :  :   
-cmovlew :  :  0f  4e  :  :  :  16  R  X   16  RM  R   :  :  :  Z  S  O  :  :   
-cmovlel :  :  0f  4e  :  :  :  32  R  X   32  RM  R   :  :  :  Z  S  O  :  :   
-cmovleq :  :  0f  4e  :  :  :  64  R  X   64  RM  R   :  :  :  Z  S  O  :  :   
+cmovgw :  :  0f  4f  :  :  :  16  R  X   16  RM  R   :  :  :  O  S  Z  :  :   
+cmovgl :  :  0f  4f  :  :  :  32  R  X   32  RM  R   :  :  :  O  S  Z  :  :   
+cmovgq :  :  0f  4f  :  :  :  64  R  X   64  RM  R   :  :  :  O  S  Z  :  :   
+cmovgew :  :  0f  4d  :  :  :  16  R  X   16  RM  R   :  :  :  O  S  :  :   
+cmovgel :  :  0f  4d  :  :  :  32  R  X   32  RM  R   :  :  :  O  S  :  :   
+cmovgeq :  :  0f  4d  :  :  :  64  R  X   64  RM  R   :  :  :  O  S  :  :   
+cmovlw :  :  0f  4c  :  :  :  16  R  X   16  RM  R   :  :  :  O  S  :  :   
+cmovll :  :  0f  4c  :  :  :  32  R  X   32  RM  R   :  :  :  O  S  :  :   
+cmovlq :  :  0f  4c  :  :  :  64  R  X   64  RM  R   :  :  :  O  S  :  :   
+cmovlew :  :  0f  4e  :  :  :  16  R  X   16  RM  R   :  :  :  O  S  Z  :  :   
+cmovlel :  :  0f  4e  :  :  :  32  R  X   32  RM  R   :  :  :  O  S  Z  :  :   
+cmovleq :  :  0f  4e  :  :  :  64  R  X   64  RM  R   :  :  :  O  S  Z  :  :   
+cmovnew :  :  0f  45  :  :  :  16  R  X   16  RM  R   :  :  : Z :  :   
+cmovnel :  :  0f  45  :  :  :  32  R  X   32  RM  R   :  :  : Z :  :   
+cmovneq :  :  0f  45  :  :  :  64  R  X   64  RM  R   :  :  : Z :  :   
+cmovnow :  :  0f  41  :  :  :  16  R  X   16  RM  R   :  :  : O :  :   
+cmovnol :  :  0f  41  :  :  :  32  R  X   32  RM  R   :  :  : O :  :   
+cmovnoq :  :  0f  41  :  :  :  64  R  X   64  RM  R   :  :  : O :  :   
+cmovnpw :  :  0f  4b  :  :  :  16  R  X   16  RM  R   :  :  : P :  :   
+cmovnpl :  :  0f  4b  :  :  :  32  R  X   32  RM  R   :  :  : P :  :   
+cmovnpq :  :  0f  4b  :  :  :  64  R  X   64  RM  R   :  :  : P :  :   
+cmovnsw :  :  0f  49  :  :  :  16  R  X   16  RM  R   :  :  : S :  :   
+cmovnsl :  :  0f  49  :  :  :  32  R  X   32  RM  R   :  :  : S :  :   
+cmovnsq :  :  0f  49  :  :  :  64  R  X   64  RM  R   :  :  : S :  :   
+cmovow :  :  0f  40  :  :  :  16  R  X   16  RM  R   :  :  : O :  :   
+cmovol :  :  0f  40  :  :  :  32  R  X   32  RM  R   :  :  : O :  :   
+cmovoq :  :  0f  40  :  :  :  64  R  X   64  RM  R   :  :  : O :  :   
+cmovpw :  :  0f  4a  :  :  :  16  R  X   16  RM  R   :  :  : P :  :   
+cmovpl :  :  0f  4a  :  :  :  32  R  X   32  RM  R   :  :  : P :  :   
+cmovpq :  :  0f  4a  :  :  :  64  R  X   64  RM  R   :  :  : P :  :   
+cmovsw :  :  0f  49  :  :  :  16  R  X   16  RM  R   :  :  : S :  :   
+cmovsl :  :  0f  49  :  :  :  32  R  X   32  RM  R   :  :  : S :  :   
+cmovsq :  :  0f  49  :  :  :  64  R  X   64  RM  R   :  :  : S :  :   
                         
 cmpb :  : 3c :  :  :  8  AL  R   8  I  R   :  :  :  :  O  S  Z  A  P  C  :   
 cmpw :  : 3d :  :  :  16  AX  R   16  I  R   :  :  :  :  O  S  Z  A  P  C  :   
