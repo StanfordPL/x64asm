@@ -16,6 +16,7 @@
 using namespace std;
 using namespace x64;
 
+int yy_line_number = 1;
 static int colnum = 0;
 #define YY_USER_ACTION {        \
 	yylloc.first_line = yylineno; \
@@ -176,7 +177,7 @@ Operand to_label(const char* c) {
 ")"   { return CLOSE; }
 "\n"  { return ENDL; }
 [ \t] { ; }
-"#"[^\n]*"\n" { return ENDL; }
+"#"[^\n]*"\n" { yy_line_number++; return ENDL; }
 
 "%rax" { OPERAND(rax, GP_REG, QUAD);   return ATT_GP_REG; }
 "%eax" { OPERAND(rax, GP_REG, DOUBLE); return ATT_GP_REG; }

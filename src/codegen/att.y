@@ -24,15 +24,12 @@ using namespace std;
 using namespace x64;
 
 extern int yylex();
+extern int yy_line_number;
+
 void yyerror(std::istream& is, x64::Code& code, const char* s) { 
 	is.setstate(std::ios::failbit); 
-    cerr << "ERROR: " << s;
-/*
-    if (yylloc->first_line == yylloc->last_line)
-        cerr << " on line " << yylloc->first_line << endl;
-    else
-        cerr << " on lines " << yylloc->first_line << " to " << yylloc->last_line << endl;
-*/
+    cerr << "ERROR (" << yy_line_number << "): " << s ;
+
 }
 
 %}
@@ -144,12 +141,14 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
             }
 
         #ifndef NDEBUG
-        cout << "Looking for a signature like this:" << endl;
+        /*
+        cerr << "Looking for a signature like this:" << endl;
         for(int i = 0; i< len;i ++) {
-            cout << "[type: " << type2string(operand_info[i].type);
-            cout << " width: " << bw2string(operand_info[i].width);
-            cout << " ]" << endl;
+            cerr << "[type: " << type2string(operand_info[i].type);
+            cerr << " width: " << bw2string(operand_info[i].width);
+            cerr << " ]" << endl;
         }
+        */
         #endif
 
 
@@ -166,14 +165,16 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
         
             #ifndef NDEBUG
-            cout << "\nNew Signature attempt!" << endl;
+            /*
+            cerr << "\nNew Signature attempt!" << endl;
             for(int i = 0; i < len; i++) {
-                cout << "[";
-                cout << "type: " << type2string(get<0>(sig)[i]);
-                cout << " width: " << bw2string(get<1>(sig)[i]);
-                cout << " ]";
+                cerr << "[";
+                cerr << "type: " << type2string(get<0>(sig)[i]);
+                cerr << " width: " << bw2string(get<1>(sig)[i]);
+                cerr << " ]";
             }
-            cout << "\n";
+            cerr << "\n";
+            */
             #endif
 
             for(int i = 0;i<len;i++) {
@@ -254,14 +255,14 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
             if(accept) {
                 /*
-                cout << "accepted possible:";
+                cerr << "accepted possible:";
                 for(int i = 0; i < 3; i++) {
-                    cout << "[";
-                    cout << "type: " << type2string(get<0>(sig)[i]);
-                    cout << " width: " << bw2string(get<1>(sig)[i]);
-                    cout << " ]";
+                    cerr << "[";
+                    cerr << "type: " << type2string(get<0>(sig)[i]);
+                    cerr << " width: " << bw2string(get<1>(sig)[i]);
+                    cerr << " ]";
                 }
-                cout << "\n";
+                cerr << "\n";
                 */
 
                 options.push_back(sig);
@@ -357,7 +358,8 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
         if ( !parse_success ) {
             *instr = Instruction(NOP, ops.begin(), ops.end());
-            //is.setstate(std::ios::failbit);
+            x64::Code dumb = x64::Code();
+            yyerror(is, dumb, "Could not parse instruction. Did you use the right memonic for these operands?");
         }
         else {
             for ( const auto& i : operand_info )
@@ -383,6 +385,16 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 		// Does this value fit into 32 bits?
     inline bool is_valid_disp(Operand d) {
 			return (int64_t) d == (int32_t) d;
+    }
+
+    void invalid_disp(istream& is, Operand d) {
+        x64::Code dumb = x64::Code();
+        yyerror(is, dumb, "Could not parse instruction. Did you use the right memonic for these operands?");
+    }
+
+    void scale_for_no_index(istream& is) {
+        x64::Code dumb = x64::Code();
+        yyerror(is, dumb, "Bad scale for no index.");
     }
 }
 
@@ -495,8 +507,8 @@ mem : OPEN ATT_GP_REG CLOSE { //(%rax)
 			}
 
     | ATT_OFFSET OPEN ATT_GP_REG CLOSE { //0x10(%rax)
-			if ( !is_valid_disp($1->val) )
-				is.setstate(std::ios::failbit);
+			if ( !is_valid_disp($1->val) ) 
+                invalid_disp(is,$1->val);
 
 			$$ = new OperandInfo($3->width == DOUBLE ?
 					M(R32($3->val), Imm32($1->val)) :
@@ -507,11 +519,8 @@ mem : OPEN ATT_GP_REG CLOSE { //(%rax)
 			delete $3; 
 		} 
     | OPEN ATT_GP_REG COMMA COMMA ATT_SCALE CLOSE { //(%rax,,1)
-                if ( $5->val != times_1 ) {
-                    cerr << "Bad scale for no index";
-                    show_line();
-                    is.setstate(std::ios::failbit); 
-                }
+                if ( $5->val != times_1 ) 
+                    scale_for_no_index(is);
 
 				$$ = new OperandInfo($2->width == DOUBLE ?
 						M(R32($2->val)) :
@@ -522,16 +531,10 @@ mem : OPEN ATT_GP_REG CLOSE { //(%rax)
 			}
 
     | ATT_OFFSET OPEN ATT_GP_REG COMMA COMMA ATT_SCALE CLOSE { //0x10(%rax,,1)
-			if ( !is_valid_disp($1->val) ) {
-                cerr << "Bad displacement";
-                show_line();
-				is.setstate(std::ios::failbit);
-            }
-            if ( $6->val != times_1 ) {
-                cerr << "Bad scale for no index";
-                show_line();
-                is.setstate(std::ios::failbit); 
-            }
+			if ( !is_valid_disp($1->val) ) 
+                invalid_disp(is, $1->val);
+            if ( $6->val != times_1 ) 
+                scale_for_no_index(is);
 
 			$$ = new OperandInfo($3->width == DOUBLE ?
 					M(R32($3->val), Imm32($1->val)) :
@@ -552,7 +555,7 @@ mem : OPEN ATT_GP_REG CLOSE { //(%rax)
 		}
     | ATT_OFFSET OPEN ATT_GP_REG COMMA ATT_GP_REG CLOSE { //0x10(%rax, %rax)
 			if ( !is_valid_disp($1->val) )
-				is.setstate(std::ios::failbit);
+                invalid_disp(is,$1->val);
 
 			$$ = new OperandInfo($3->width == DOUBLE ?
 					M(R32($3->val), R32($5->val), Scale(times_1), Imm32($1->val)) :
@@ -574,11 +577,8 @@ mem : OPEN ATT_GP_REG CLOSE { //(%rax)
 			delete $6; 
 		}
     | ATT_OFFSET OPEN ATT_GP_REG COMMA ATT_GP_REG COMMA ATT_SCALE CLOSE {  //0x10(%rax,%rax,2)
-			if ( !is_valid_disp($1->val) ) {
-                cerr << "Bad displacement value: " << $1->val;
-                show_line();
-				is.setstate(std::ios::failbit);
-            }
+			if ( !is_valid_disp($1->val) ) 
+                invalid_disp(is,$1->val);
 
 			$$ = new OperandInfo($3->width == DOUBLE ?
 						M(R32($3->val), R32($5->val), Scale($7->val), Imm32($1->val)) :
