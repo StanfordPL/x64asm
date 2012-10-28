@@ -224,7 +224,7 @@ inline void emit_mod_rm(unsigned char*& buf, M rm, Operand r) {
 		mod = 2;
 
 	// Emit both mod/rm and sib
-	if ( base_null || !index_null || b == 0x4 ) {
+	if ( base_null || !index_null || ((b & 0x7) == 0x4) ) {
 		emit(buf, mod_rm(mod, 0x4, r));
 		emit(buf, sib(rm.get_scale(), index_null ? rsp : i, base_null ? rbp : b));
 	}
