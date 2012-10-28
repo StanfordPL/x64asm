@@ -26,7 +26,13 @@ using namespace x64;
 extern int yylex();
 void yyerror(std::istream& is, x64::Code& code, const char* s) { 
 	is.setstate(std::ios::failbit); 
-	printf("ERROR: %s\n", s); 
+    cerr << "ERROR: " << s;
+/*
+    if (yylloc->first_line == yylloc->last_line)
+        cerr << " on line " << yylloc->first_line << endl;
+    else
+        cerr << " on lines " << yylloc->first_line << " to " << yylloc->last_line << endl;
+*/
 }
 
 %}
@@ -103,6 +109,9 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
         }
     }
 
+    void show_line() {
+    
+    }
 
     Operand truncate_immediate(Operand o, BitWidth bw) {
 
@@ -476,7 +485,7 @@ operand : ATT_FP_REG | ATT_GP_REG | ATT_IMM | ATT_LABEL | ATT_MMX_REG |
           ATT_OFFSET | ATT_SCALE  | ATT_XMM_REG | mem
         ;
 
-mem : OPEN ATT_GP_REG CLOSE { 
+mem : OPEN ATT_GP_REG CLOSE { //(%rax)
 				$$ = new OperandInfo($2->width == DOUBLE ?
 						M(R32($2->val)) :
 						M(R64($2->val)), 
@@ -484,7 +493,8 @@ mem : OPEN ATT_GP_REG CLOSE {
 						$2->width); 
 				delete $2; 
 			}
-    | ATT_OFFSET OPEN ATT_GP_REG CLOSE { 
+
+    | ATT_OFFSET OPEN ATT_GP_REG CLOSE { //0x10(%rax)
 			if ( !is_valid_disp($1->val) )
 				is.setstate(std::ios::failbit);
 
@@ -496,16 +506,64 @@ mem : OPEN ATT_GP_REG CLOSE {
 			delete $1; 
 			delete $3; 
 		} 
-    | OPEN ATT_GP_REG COMMA ATT_GP_REG CLOSE { 
+    | OPEN ATT_GP_REG COMMA COMMA ATT_SCALE CLOSE { //(%rax,,1)
+                if ( $5->val != times_1 ) {
+                    cerr << "Bad scale for no index";
+                    show_line();
+                    is.setstate(std::ios::failbit); 
+                }
+
+				$$ = new OperandInfo($2->width == DOUBLE ?
+						M(R32($2->val)) :
+						M(R64($2->val)), 
+						ADDR, 
+						$2->width); 
+				delete $2; 
+			}
+
+    | ATT_OFFSET OPEN ATT_GP_REG COMMA COMMA ATT_SCALE CLOSE { //0x10(%rax,,1)
+			if ( !is_valid_disp($1->val) ) {
+                cerr << "Bad displacement";
+                show_line();
+				is.setstate(std::ios::failbit);
+            }
+            if ( $6->val != times_1 ) {
+                cerr << "Bad scale for no index";
+                show_line();
+                is.setstate(std::ios::failbit); 
+            }
+
+			$$ = new OperandInfo($3->width == DOUBLE ?
+					M(R32($3->val), Imm32($1->val)) :
+					M(R64($3->val), Imm32($1->val)),
+					ADDR, 
+					$3->width); 
+			delete $1; 
+			delete $3; 
+		} 
+    | OPEN ATT_GP_REG COMMA ATT_GP_REG CLOSE { //(%rax,%rax)
 			$$ = new OperandInfo($2->width == DOUBLE ?
-					M(R32($2->val), R32($4->val)) :
-					M(R64($2->val), R64($4->val)),
+					M(R32($2->val), R32($4->val), Scale(times_1)) :
+					M(R64($2->val), R64($4->val), Scale(times_1)),
 					ADDR, 
 					$2->width); 
 			delete $2; 
 			delete $4; 
 		}
-    | OPEN ATT_GP_REG COMMA ATT_GP_REG COMMA ATT_SCALE CLOSE { 
+    | ATT_OFFSET OPEN ATT_GP_REG COMMA ATT_GP_REG CLOSE { //0x10(%rax, %rax)
+			if ( !is_valid_disp($1->val) )
+				is.setstate(std::ios::failbit);
+
+			$$ = new OperandInfo($3->width == DOUBLE ?
+					M(R32($3->val), R32($5->val), Scale(times_1), Imm32($1->val)) :
+					M(R64($3->val), R64($5->val), Scale(times_1), Imm32($1->val)), 
+					ADDR, 
+					$3->width); 
+			delete $1;
+			delete $3; 
+			delete $5; 
+		}
+    | OPEN ATT_GP_REG COMMA ATT_GP_REG COMMA ATT_SCALE CLOSE { //(%rax, %rax, 2)
 			$$ = new OperandInfo($2->width == DOUBLE ?
 					M(R32($2->val), R32($4->val), Scale($6->val)) :
 					M(R64($2->val), R64($4->val), Scale($6->val)), 
@@ -515,22 +573,12 @@ mem : OPEN ATT_GP_REG CLOSE {
 			delete $4; 
 			delete $6; 
 		}
-    | ATT_OFFSET OPEN ATT_GP_REG COMMA ATT_GP_REG CLOSE { 
-			if ( !is_valid_disp($1->val) )
+    | ATT_OFFSET OPEN ATT_GP_REG COMMA ATT_GP_REG COMMA ATT_SCALE CLOSE {  //0x10(%rax,%rax,2)
+			if ( !is_valid_disp($1->val) ) {
+                cerr << "Bad displacement value: " << $1->val;
+                show_line();
 				is.setstate(std::ios::failbit);
-
-			$$ = new OperandInfo($3->width == DOUBLE ?
-					M(R32($3->val), R32($5->val), Imm32($1->val)) :
-					M(R64($3->val), R64($5->val), Imm32($1->val)), 
-					ADDR, 
-					$3->width); 
-			delete $1;
-			delete $3; 
-			delete $5; 
-		}
-    | ATT_OFFSET OPEN ATT_GP_REG COMMA ATT_GP_REG COMMA ATT_SCALE CLOSE { 
-			if ( !is_valid_disp($1->val) )
-				is.setstate(std::ios::failbit);
+            }
 
 			$$ = new OperandInfo($3->width == DOUBLE ?
 						M(R32($3->val), R32($5->val), Scale($7->val), Imm32($1->val)) :
@@ -542,6 +590,42 @@ mem : OPEN ATT_GP_REG CLOSE {
 			delete $5; 
 			delete $7; 
 		}
+    | OPEN COMMA ATT_GP_REG COMMA ATT_SCALE CLOSE { //(,%rax,2)
+            $$ = new OperandInfo($3->width == DOUBLE ?
+                        M(R32($3->val), Scale($5->val)) :
+                        M(R64($3->val), Scale($5->val)),
+                    ADDR,
+                    $3->width);
+            delete $3;
+            delete $5;
+    }
+    | ATT_OFFSET OPEN COMMA ATT_GP_REG COMMA ATT_SCALE CLOSE { //0x10(,%rax,2)
+            $$ = new OperandInfo($4->width == DOUBLE ?
+                        M(R32($4->val), Scale($6->val), Imm32($1->val)) :
+                        M(R64($4->val), Scale($6->val), Imm32($1->val)),
+                    ADDR,
+                    $4->width);
+            delete $1;
+            delete $4;
+            delete $6;
+    }
+    | OPEN COMMA ATT_GP_REG CLOSE { //(,%rax)
+            $$ = new OperandInfo($3->width == DOUBLE ?
+                        M(R32($3->val), Scale(times_1)) :
+                        M(R64($3->val), Scale(times_1)),
+                    ADDR,
+                    $3->width);
+            delete $3;
+    }
+    | ATT_OFFSET OPEN COMMA ATT_GP_REG CLOSE { //0x10(,%rax)
+            $$ = new OperandInfo($4->width == DOUBLE ?
+                        M(R32($4->val), Scale(times_1), Imm32($1->val)) :
+                        M(R64($4->val), Scale(times_1), Imm32($1->val)),
+                    ADDR,
+                    $4->width);
+            delete $1;
+            delete $4;
+    }
     ;
 
 %% 
