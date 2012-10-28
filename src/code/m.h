@@ -77,7 +77,8 @@ class M {
 
 		inline bool is_null() const {
 			return (get_base().is_null() && get_scale().is_null()) || 
-				      get_index() == rsp;			     
+				      get_index() == rsp ||
+							get_scale() == scale_null;			     
 		}
 
 		inline Sreg get_seg() const {
