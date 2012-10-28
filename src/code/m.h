@@ -31,16 +31,16 @@ class M {
 			set_all(sreg_null, b, r_null, times_1, d, false);
 		}
 
-		inline M(R64 b, R64 i) {
-			set_all(sreg_null, b, i, times_1, 0, false);	
+		inline M(R64 i, Scale s) {
+			set_all(sreg_null, r_null, i, s, 0, false);
+		}
+
+		inline M(R64 i, Scale s, Imm32 d) {
+			set_all(sreg_null, r_null, i, s, d, false);
 		}
 
 		inline M(R64 b, R64 i, Scale s) {
 			set_all(sreg_null, b, i, s, 0, false);
-		}
-
-		inline M(R64 b, R64 i, Imm32 d) {
-			set_all(sreg_null, b, i, times_1, d, false);
 		}
 
 		inline M(R64 b, R64 i, Scale s, Imm32 d) {
@@ -55,16 +55,16 @@ class M {
 			set_all(sreg_null, b, r_null, times_1, d, true);
 		}
 
-		inline M(R32 b, R32 i) {
-			set_all(sreg_null, b, i, times_1, 0, true);	
+		inline M(R32 i, Scale s) {
+			set_all(sreg_null, r_null, i, s, 0, true);
+		}
+
+		inline M(R32 i, Scale s, Imm32 d) {
+			set_all(sreg_null, r_null, i, s, d, true);
 		}
 
 		inline M(R32 b, R32 i, Scale s) {
 			set_all(sreg_null, b, i, s, 0, true);
-		}
-
-		inline M(R32 b, R32 i, Imm32 d) {
-			set_all(sreg_null, b, i, times_1, d, true);
 		}
 
 		inline M(R32 b, R32 i, Scale s, Imm32 d) {
@@ -166,15 +166,15 @@ class M8 : public M {
 		inline M8(Operand o) : M(o) { }
 		inline M8(R64 b) : M(b) { }
 		inline M8(R64 b, Imm32 d) : M(b, d) { }
-		inline M8(R64 b, R64 i) : M(b, i) { }
+		inline M8(R64 i, Scale s) : M(i, s) { }
+		inline M8(R64 i, Scale s, Imm32 d) : M(i, s, d) { }
 		inline M8(R64 b, R64 i, Scale s) : M(b, i, s) { }
-		inline M8(R64 b, R64 i, Imm32 d) : M(b, i, d) { }
 		inline M8(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 		inline M8(R32 b) : M(b) { }
 		inline M8(R32 b, Imm32 d) : M(b, d) { }
-		inline M8(R32 b, R32 i) : M(b, i) { }
+		inline M8(R32 i, Scale s) : M(i, s) { }
+		inline M8(R32 i, Scale s, Imm32 d) : M(i, s, d) { }
 		inline M8(R32 b, R32 i, Scale s) : M(b, i, s) { }
-		inline M8(R32 b, R32 i, Imm32 d) : M(b, i, d) { }
 		inline M8(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 };
 
@@ -184,15 +184,15 @@ class M16 : public M {
 		inline M16(Operand o) : M(o) { }
 		inline M16(R64 b) : M(b) { }
 		inline M16(R64 b, Imm32 d) : M(b, d) { }
-		inline M16(R64 b, R64 i) : M(b, i) { }
+		inline M16(R64 i, Scale s) : M(i, s) { }
+		inline M16(R64 i, Scale s, Imm32 d) : M(i, s, d) { }
 		inline M16(R64 b, R64 i, Scale s) : M(b, i, s) { }
-		inline M16(R64 b, R64 i, Imm32 d) : M(b, i, d) { }
 		inline M16(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 		inline M16(R32 b) : M(b) { }
 		inline M16(R32 b, Imm32 d) : M(b, d) { }
-		inline M16(R32 b, R32 i) : M(b, i) { }
+		inline M16(R32 i, Scale s) : M(i, s) { }
+		inline M16(R32 i, Scale s, Imm32 d) : M(i, s, d) { }
 		inline M16(R32 b, R32 i, Scale s) : M(b, i, s) { }
-		inline M16(R32 b, R32 i, Imm32 d) : M(b, i, d) { }
 		inline M16(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 };
 
@@ -202,15 +202,15 @@ class M32 : public M {
 		inline M32(Operand o) : M(o) { }
 		inline M32(R64 b) : M(b) { }
 		inline M32(R64 b, Imm32 d) : M(b, d) { }
-		inline M32(R64 b, R64 i) : M(b, i) { }
+		inline M32(R64 i, Scale s) : M(i, s) { }
+		inline M32(R64 i, Scale s, Imm32 d) : M(i, s, d) { }
 		inline M32(R64 b, R64 i, Scale s) : M(b, i, s) { }
-		inline M32(R64 b, R64 i, Imm32 d) : M(b, i, d) { }
 		inline M32(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 		inline M32(R32 b) : M(b) { }
 		inline M32(R32 b, Imm32 d) : M(b, d) { }
-		inline M32(R32 b, R32 i) : M(b, i) { }
+		inline M32(R32 i, Scale s) : M(i, s) { }
+		inline M32(R32 i, Scale s, Imm32 d) : M(i, s, d) { }
 		inline M32(R32 b, R32 i, Scale s) : M(b, i, s) { }
-		inline M32(R32 b, R32 i, Imm32 d) : M(b, i, d) { }
 		inline M32(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 };
 
@@ -220,15 +220,15 @@ class M64 : public M {
 		inline M64(Operand o) : M(o) { }
 		inline M64(R64 b) : M(b) { }
 		inline M64(R64 b, Imm32 d) : M(b, d) { }
-		inline M64(R64 b, R64 i) : M(b, i) { }
+		inline M64(R64 i, Scale s) : M(i, s) { }
+		inline M64(R64 i, Scale s, Imm32 d) : M(i, s, d) { }
 		inline M64(R64 b, R64 i, Scale s) : M(b, i, s) { }
-		inline M64(R64 b, R64 i, Imm32 d) : M(b, i, d) { }
 		inline M64(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 		inline M64(R32 b) : M(b) { }
 		inline M64(R32 b, Imm32 d) : M(b, d) { }
-		inline M64(R32 b, R32 i) : M(b, i) { }
+		inline M64(R32 i, Scale s) : M(i, s) { }
+		inline M64(R32 i, Scale s, Imm32 d) : M(i, s, d) { }
 		inline M64(R32 b, R32 i, Scale s) : M(b, i, s) { }
-		inline M64(R32 b, R32 i, Imm32 d) : M(b, i, d) { }
 		inline M64(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 };
 
@@ -238,15 +238,15 @@ class M80 : public M {
 		inline M80(Operand o) : M(o) { }
 		inline M80(R64 b) : M(b) { }
 		inline M80(R64 b, Imm32 d) : M(b, d) { }
-		inline M80(R64 b, R64 i) : M(b, i) { }
+		inline M80(R64 i, Scale s) : M(i, s) { }
+		inline M80(R64 i, Scale s, Imm32 d) : M(i, s, d) { }
 		inline M80(R64 b, R64 i, Scale s) : M(b, i, s) { }
-		inline M80(R64 b, R64 i, Imm32 d) : M(b, i, d) { }
 		inline M80(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 		inline M80(R32 b) : M(b) { }
 		inline M80(R32 b, Imm32 d) : M(b, d) { }
-		inline M80(R32 b, R32 i) : M(b, i) { }
+		inline M80(R32 i, Scale s) : M(i, s) { }
+		inline M80(R32 i, Scale s, Imm32 d) : M(i, s, d) { }
 		inline M80(R32 b, R32 i, Scale s) : M(b, i, s) { }
-		inline M80(R32 b, R32 i, Imm32 d) : M(b, i, d) { }
 		inline M80(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 };
 
@@ -256,15 +256,15 @@ class M128 : public M {
 		inline M128(Operand o) : M(o) { }
 		inline M128(R64 b) : M(b) { }
 		inline M128(R64 b, Imm32 d) : M(b, d) { }
-		inline M128(R64 b, R64 i) : M(b, i) { }
+		inline M128(R64 i, Scale s) : M(i, s) { }
+		inline M128(R64 i, Scale s, Imm32 d) : M(i, s, d) { }
 		inline M128(R64 b, R64 i, Scale s) : M(b, i, s) { }
-		inline M128(R64 b, R64 i, Imm32 d) : M(b, i, d) { }
 		inline M128(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 		inline M128(R32 b) : M(b) { }
 		inline M128(R32 b, Imm32 d) : M(b, d) { }
-		inline M128(R32 b, R32 i) : M(b, i) { }
+		inline M128(R32 i, Scale s) : M(i, s) { }
+		inline M128(R32 i, Scale s, Imm32 d) : M(i, s, d) { }
 		inline M128(R32 b, R32 i, Scale s) : M(b, i, s) { }
-		inline M128(R32 b, R32 i, Imm32 d) : M(b, i, d) { }
 		inline M128(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 };
 
@@ -274,15 +274,15 @@ class M256 : public M {
 		inline M256(Operand o) : M(o) { }
 		inline M256(R64 b) : M(b) { }
 		inline M256(R64 b, Imm32 d) : M(b, d) { }
-		inline M256(R64 b, R64 i) : M(b, i) { }
+		inline M256(R64 i, Scale s) : M(i, s) { }
+		inline M256(R64 i, Scale s, Imm32 d) : M(i, s, d) { }
 		inline M256(R64 b, R64 i, Scale s) : M(b, i, s) { }
-		inline M256(R64 b, R64 i, Imm32 d) : M(b, i, d) { }
 		inline M256(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 		inline M256(R32 b) : M(b) { }
 		inline M256(R32 b, Imm32 d) : M(b, d) { }
-		inline M256(R32 b, R32 i) : M(b, i) { }
+		inline M256(R32 i, Scale s) : M(i, s) { }
+		inline M256(R32 i, Scale s, Imm32 d) : M(i, s, d) { }
 		inline M256(R32 b, R32 i, Scale s) : M(b, i, s) { }
-		inline M256(R32 b, R32 i, Imm32 d) : M(b, i, d) { }
 		inline M256(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
 };
 
