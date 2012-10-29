@@ -47,6 +47,7 @@ enum Type {
 	ST0,
 	ST,
 	XMM,
+	XMM0,
 	YMM,
 
 	// DEPRECATED -- But required by parser

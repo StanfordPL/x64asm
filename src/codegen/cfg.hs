@@ -93,6 +93,8 @@ reg2int :: String -> String
 reg2int "al"  = "(R8)0"
 reg2int "ax"  = "(R16)0"
 reg2int "eax" = "(R32)0"
+reg2int "ebx" = "(R32)3"
+reg2int "ecx" = "(R32)1"
 reg2int "rax" = "(R64)0"
 reg2int "rcx" = "(R64)1"
 reg2int "dx"  = "(R16)2"
@@ -109,7 +111,7 @@ reg2int "of"  = "(CondReg)2"
 reg2int "pf"  = "(CondReg)3"
 reg2int "sf"  = "(CondReg)4"
 reg2int "zf"  = "(CondReg)5"
-reg2int _ = error "Unrecognized register type!"
+reg2int t = error $ "Unrecognized register: " ++ t
 
 -- Functions for emitting register masks
 reg_mask :: String -> (Instr -> [String]) -> [Instr] -> String

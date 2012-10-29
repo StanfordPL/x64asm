@@ -71,65 +71,6 @@ class R16 : public R {
 		static iterator begin() { return domain_.begin(); }
 		static iterator end()   { return domain_.end(); }
 
-    friend std::ostream& operator<<(std::ostream& os, const R16 r) {
-      switch ((Operand)r) {
-        case 0:
-          os << "ax";
-          return os;
-        case 1:
-          os << "cx";
-          return os;
-        case 2:
-          os << "dx";
-          return os;
-        case 3:
-          os << "bx";
-          return os;
-        case 4:
-          os << "sp";
-          return os;
-        case 5:
-          os << "bp";
-          return os;
-        case 6:
-          os << "si";
-          return os;
-        case 7:
-          os << "di";
-          return os;
-        case 8:
-          os << "r8w";
-          return os;
-        case 9:
-          os << "r9w";
-          return os;
-        case 10:
-          os << "r10w";
-          return os;
-        case 11:
-          os << "r11w";
-          return os;
-        case 12:
-          os << "r12w";
-          return os;
-        case 13:
-          os << "r13w";
-          return os;
-        case 14:
-          os << "r14w";
-          return os;
-        case 15:
-          os << "r15w";
-          return os;
-
-        default:
-          os << "R16??";
-          return os;
-      }
-    }
-
-
-
 	private:
 		static const std::vector<R16> domain_;
 };
@@ -144,63 +85,6 @@ class R32 : public R {
 		static iterator begin() { return domain_.begin(); }
 		static iterator end()   { return domain_.end(); }
 
-    friend std::ostream& operator<<(std::ostream& os, const R32 r) {
-      switch ((Operand)r) {
-        case 0:
-          os << "eax";
-          return os;
-        case 1:
-          os << "ecx";
-          return os;
-        case 2:
-          os << "edx";
-          return os;
-        case 3:
-          os << "ebx";
-          return os;
-        case 4:
-          os << "esp";
-          return os;
-        case 5:
-          os << "ebp";
-          return os;
-        case 6:
-          os << "esi";
-          return os;
-        case 7:
-          os << "edi";
-          return os;
-        case 8:
-          os << "r8d";
-          return os;
-        case 9:
-          os << "r9d";
-          return os;
-        case 10:
-          os << "r10d";
-          return os;
-        case 11:
-          os << "r11d";
-          return os;
-        case 12:
-          os << "r12d";
-          return os;
-        case 13:
-          os << "r13d";
-          return os;
-        case 14:
-          os << "r14d";
-          return os;
-        case 15:
-          os << "r15d";
-          return os;
-
-        default:
-          os << "R32??";
-          return os;
-      }
-    }
-
 	private:
 		static const std::vector<R32> domain_;
 };
@@ -214,63 +98,6 @@ class R64 : public R {
 
 		static iterator begin() { return domain_.begin(); }
 		static iterator end()   { return domain_.end(); }
-
-    friend std::ostream& operator<<(std::ostream& os, const R64 r) {
-      switch ((Operand)r) {
-        case 0:
-          os << "rax";
-          return os;
-        case 1:
-          os << "rcx";
-          return os;
-        case 2:
-          os << "rdx";
-          return os;
-        case 3:
-          os << "rbx";
-          return os;
-        case 4:
-          os << "rsp";
-          return os;
-        case 5:
-          os << "rbp";
-          return os;
-        case 6:
-          os << "rsi";
-          return os;
-        case 7:
-          os << "rdi";
-          return os;
-        case 8:
-          os << "r8";
-          return os;
-        case 9:
-          os << "r9";
-          return os;
-        case 10:
-          os << "r10";
-          return os;
-        case 11:
-          os << "r11";
-          return os;
-        case 12:
-          os << "r12";
-          return os;
-        case 13:
-          os << "r13";
-          return os;
-        case 14:
-          os << "r14";
-          return os;
-        case 15:
-          os << "r15";
-          return os;
-
-        default:
-          os << "R64??";
-          return os;
-      }
-    }
 
 	private:
 		static const std::vector<R64> domain_;
