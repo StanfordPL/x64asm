@@ -75,10 +75,11 @@ arg_to_reglist (Arg w F) = [ "%st0" , "%st7"  ]
 arg_to_reglist (Arg w X) = [ "%mm0", "%mm7" ]
 arg_to_reglist (Arg w R) = gp w
 arg_to_reglist (Arg w I) = immediate w
-arg_to_reglist (Arg w M) = [ disp ++ "(" ++ base ++ ")" | base <- gp 32, disp <- memtest ] ++
-                           [ disp ++ "(" ++ base ++ "," ++ index ++ ")" | base <- gp 32, disp <- memtest, index <- gp_no_sp 32] ++ 
-                           [ disp ++ "(" ++ base ++ "," ++ index ++ "," ++ scale ++ ")" | 
-                               base <- "":(gp 32), disp <- memtest, index <- gp_no_sp 32, scale <- ["1", "2", "4", "8"] ]
+arg_to_reglist (Arg w M) = (arg_to_reglist' (Arg w M) 32) ++  (arg_to_reglist' (Arg w M) 64)
+arg_to_reglist' (Arg w M) m = [ disp ++ "(" ++ base ++ ")" | base <- gp m, disp <- memtest ] ++
+                              [ disp ++ "(" ++ base ++ "," ++ index ++ ")" | base <- gp m, disp <- memtest, index <- gp_no_sp m] ++ 
+                              [ disp ++ "(" ++ base ++ "," ++ index ++ "," ++ scale ++ ")" | 
+                                 base <- "":(gp m), disp <- memtest, index <- gp_no_sp m, scale <- ["1", "2", "4", "8"] ]
 
 -- Print one instruction
 
