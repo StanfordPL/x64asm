@@ -8,7 +8,7 @@ const vector<Xmm> Xmm::domain_ {{
 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
 }};
 
-const Xmm xmm0 = 0;
+const Xmm0 xmm0 = 0;
 const Xmm xmm1 = 1;
 const Xmm xmm2 = 2;
 const Xmm xmm3 = 3;

@@ -193,7 +193,8 @@ to_type (_,"EAX",_) = "Eax"
 to_type (_,"RAX",_) = "Rax"
 to_type (_,"CL",_) = "Cl"
 to_type (_,"ST0",_) = "St0"
-to_type (_,_,_) = error "Unrecognized type!"
+to_type (_,"XMM0",_) = "Xmm0"
+to_type (_,t,_) = error $ "Unrecognized type: " ++ t
 
 -- Generates the type_enum encoded by an operand column
 to_type_enum :: (String,String,String) -> String
@@ -212,7 +213,8 @@ to_type_enum (_,"EAX",_) = "EAX"
 to_type_enum (_,"RAX",_) = "RAX"
 to_type_enum (_,"CL",_) = "CL"
 to_type_enum (_,"ST0",_) = "ST0"
-to_type_enum (_,_,_) = error "Unrecognized type!"
+to_type_enum (_,"XMM0",_) = "XMM0"
+to_type_enum (_,t,_) = error $ "Unrecognized type: " ++ t
 
 -- Generates the modifier enum encoded by an operand column
 to_mod_enum :: (String,String,String) -> String
@@ -220,7 +222,7 @@ to_mod_enum (_,_,"R") = "READ"
 to_mod_enum (_,_,"W") = "WRITE"
 to_mod_enum (_,_,"X") = "READ_WRITE"
 to_mod_enum (_,_,"N") = "NONE"
-to_mod_enum _ = error "Unrecognized modifier!"
+to_mod_enum (_,_,m) = error $ "Unrecognized modifier:" ++ m
 
 -- Returns number of operands
 arity :: Instr -> Int
@@ -307,7 +309,8 @@ to_type_enum_DEPRECATED (_,"EAX",_) = "RAX_ONLY"
 to_type_enum_DEPRECATED (_,"RAX",_) = "RAX_ONLY"
 to_type_enum_DEPRECATED (_,"CL",_) = "RCX_ONLY"
 to_type_enum_DEPRECATED (_,"ST0",_) = "ST0_ONLY"
-to_type_enum_DEPRECATED _ = error "Unrecognized type!"
+to_type_enum_DEPRECATED (_,"XMM0",_) = "XMM_REG"
+to_type_enum_DEPRECATED (_,t,_) = error $ "Unrecognized type: " ++ t
 
 width :: String -> String
 width "8"   = "LOW"					
@@ -332,4 +335,5 @@ to_width_enum_DEPRECATED (_,"EAX",_) = "DOUBLE"
 to_width_enum_DEPRECATED (_,"RAX",_) = "QUAD"
 to_width_enum_DEPRECATED (_,"CL",_) = "LOW"
 to_width_enum_DEPRECATED (_,"ST0",_) = "QUAD"
-to_width_enum_DEPRECATED _ = error "Unrecognized type!"
+to_width_enum_DEPRECATED (_,"XMM0",_) = "OCT"
+to_width_enum_DEPRECATED (_,t,_) = error $ "Unrecognized type: " ++ t

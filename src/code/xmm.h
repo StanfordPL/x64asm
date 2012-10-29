@@ -43,7 +43,15 @@ class Xmm {
 		static const std::vector<Xmm> domain_;
 };
 
-extern const Xmm xmm0;
+class Xmm0 : public Xmm {
+	public:
+		inline Xmm0() : Xmm() { }
+		inline Xmm0(Operand o) : Xmm(o) { }
+
+		inline bool is_null() const { return (Operand)*this != 0; }
+};
+
+extern const Xmm0 xmm0;
 extern const Xmm xmm1;
 extern const Xmm xmm2;
 extern const Xmm xmm3;

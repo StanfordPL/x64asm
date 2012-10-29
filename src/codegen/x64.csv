@@ -42,6 +42,30 @@ addw :  : 03 :  :  :  16  R  X   16  RM  R   :  :  :  :  O  S  Z  A  P  C  :
 addl :  : 03 :  :  :  32  R  X   32  RM  R   :  :  :  :  O  S  Z  A  P  C  :   
 addq :  : 03 :  :  :  64  R  X   64  RM  R   :  :  :  :  O  S  Z  A  P  C  :   
                         
+addpd : 66 :  0f  58  :  :  :  128  S  X   128  SM  R   :  :  :  :  :   
+                        
+addps :  :  0f  58  :  :  :  128  S  X   128  SM  R   :  :  :  :  :   
+                        
+addsd : f2 :  0f  58  :  :  :  128  S  X   64  SM  R   :  :  :  :  :   
+                        
+addss : f3 :  0f  58  :  :  :  128  S  X   32  SM  R   :  :  :  :  :   
+                        
+addsubpd : 66 :  0f  d0  :  :  :  128  S  X   128  SM  R   :  :  :  :  :   
+                        
+addsubps : f2 :  0f  d0  :  :  :  128  S  X   128  SM  R   :  :  :  :  :   
+                        
+aesdec : 66 :  0f  38  de  :  :  :  128  S  X   128  SM  R   :  :  :  :  :   
+                        
+aesdeclast : 66 :  0f  38  df  :  :  :  128  S  X   128  SM  R   :  :  :  :  :   
+                        
+aesenc : 66 :  0f  38  dc  :  :  :  128  S  X   128  SM  R   :  :  :  :  :   
+                        
+aesenclast : 66 :  0f  38  dd  :  :  :  128  S  X   128  SM  R   :  :  :  :  :   
+                        
+aesimc : 66 :  0f  38  db  :  :  :  128  S  X   128  SM  R   :  :  :  :  :   
+                        
+aeskeygenassist : 66 :  0f  3a  df  :  :  :  128  S  X   128  SM  R   8  I  R  :  :  :  :  :   
+                        
 andb :  : 24 :  :  :  8  AL  X   8  I  R   :  :  :  :  O  S  Z  P  C  : A  
 andw :  : 25 :  :  :  16  AX  X   16  I  R   :  :  :  :  O  S  Z  P  C  : A  
 andl :  : 25 :  :  :  32  EAX  X   32  I  R   :  :  :  :  O  S  Z  P  C  : A  
@@ -61,6 +85,22 @@ andb :  : 22 :  :  :  8  R  X   8  RM  R   :  :  :  :  O  S  Z  P  C  : A
 andw :  : 23 :  :  :  16  R  X   16  RM  R   :  :  :  :  O  S  Z  P  C  : A  
 andl :  : 23 :  :  :  32  R  X   32  RM  R   :  :  :  :  O  S  Z  P  C  : A  
 andq :  : 23 :  :  :  64  R  X   64  RM  R   :  :  :  :  O  S  Z  P  C  : A  
+                        
+andpd : 66 :  0f  54  :  :  :  128  S  X   128  SM  R   :  :  :  :  :   
+                        
+andps :  :  0f  54  :  :  :  128  S  X   128  SM  R   :  :  :  :  :   
+                        
+andnpd : 66 :  0f  55  :  :  :  128  S  X   128  SM  R   :  :  :  :  :   
+                        
+andnps :  :  0f  55  :  :  :  128  S  X   128  SM  R   :  :  :  :  :   
+                        
+blendpd : 66 :  0f  3a  0d  :  :  :  128  S  X   128  SM  R   8  I  R  :  :  :  :  :   
+                        
+blendps : 66 :  0f  3a  0c  :  :  :  128  S  X   128  SM  R   8  I  R  :  :  :  :  :   
+                        
+blendvpd : 66 :  0f  38  15  :  :  :  128  S  X   128  SM  R   128  XMM0  R  :  :  :  :  :   
+                        
+blendvps : 66 :  0f  38  14  :  :  :  128  S  X   128  SM  R   128  XMM0  R  :  :  :  :  :   
                         
 bsfw :  :  0f  bc  :  :  :  16  R  X   16  RM  R   :  :  :  : Z :  O  S  A  P  C   
 bsfl :  :  0f  bc  :  :  :  32  R  X   32  RM  R   :  :  :  : Z :  O  S  A  P  C   
@@ -108,6 +148,14 @@ cwtl :  : 98 :  :  :    : AX : EAX :  :  :
 cltq : 48 : 98 :  :  :    : EAX : RAX :  :  :   
                         
 clc :  : f8 :  :  :    :  :  :  : C :   
+                        
+cld :  : fc :  :  :    :  :  :  :  :   
+                        
+clflush :  :  0f  ae  :  : 07 :    :  :  :  :  :   
+                        
+cli :  : fa :  :  :    :  :  :  :  :   
+                        
+clts :  :  0f  06  :  :  :    :  :  :  :  :   
                         
 cmc :  : f5 :  :  :    :  :  :  : C :   
                         
@@ -179,6 +227,16 @@ cmpb :  : 3a :  :  :  8  R  R   8  RM  R   :  :  :  :  O  S  Z  A  P  C  :
 cmpw :  : 3b :  :  :  16  R  R   16  RM  R   :  :  :  :  O  S  Z  A  P  C  :   
 cmpl :  : 3b :  :  :  32  R  R   32  RM  R   :  :  :  :  O  S  Z  A  P  C  :   
 cmpq :  : 3b :  :  :  64  R  R   64  RM  R   :  :  :  :  O  S  Z  A  P  C  :   
+                        
+cmppd : 66 :  0f  c2  :  :  :  128  S  X   128  SM  R   8  I  R  :  :  :  :  :   
+                        
+cmpps :  :  0f  c2  :  :  :  128  S  X   128  SM  R   8  I  R  :  :  :  :  :   
+                        
+cmpsd : f2 :  0f  c2  :  :  :  128  S  X   64  SM  R   8  I  R  :  :  :  :  :   
+                        
+cmpss : f3 :  0f  c2  :  :  :  128  S  X   32  SM  R   8  I  R  :  :  :  :  :   
+                        
+cpuid :  :  0f  a2  :  :  :    :  EAX  ECX  :  EAX  EBX  ECX  EDX  :  :  :   
                         
 decb :  : fe :  : 01 :  8  RM  X    :  :  :  :  O  S  Z  A  P  :   
 decw :  : ff :  : 01 :  16  RM  X    :  :  :  :  O  S  Z  A  P  :   
@@ -404,6 +462,18 @@ pushq :  : 68 :  :  :  32  I  R    : RSP : RSP :  :  :
                         
 pushfq :  : 9c :  :  :    : RSP : RSP :  O  S  Z  A  P  C  :  :   
                         
+rdmsr :  :  0f  32  :  :  :    : ECX :  EAX  EDX  :  :  :   
+                        
+rdpmc :  :  0f  33  :  :  :    : ECX :  EAX  EDX  :  :  :   
+                        
+rdrand :  :  0f  c7  :  : 06 :  16  R  W    :  :  :  :  O  S  Z  A  P  C  :   
+rdrand :  :  0f  c7  :  : 06 :  32  R  W    :  :  :  :  O  S  Z  A  P  C  :   
+rdrand :  :  0f  c7  :  : 06 :  64  R  W    :  :  :  :  O  S  Z  A  P  C  :   
+                        
+rdtsc :  :  0f  31  :  :  :    :  :  EAX  EDX  :  :  :   
+                        
+rdtscp :  :  0f  01  f9  :  :  :    :  :  EAX  ECX  EDX  :  :  :   
+                        
 retq :  : c3 :  :  :    :  :  :  :  :   
                         
 sahf :  : 9e :  :  :    :  :  :  :  S  Z  A  P  C  :   
@@ -523,6 +593,8 @@ testb :  : 84 :  :  :  8  RM  R   8  R  R   :  :  :  :  O  S  Z  P  C  : A
 testw :  : 85 :  :  :  16  RM  R   16  R  R   :  :  :  :  O  S  Z  P  C  : A  
 testl :  : 85 :  :  :  32  RM  R   32  R  R   :  :  :  :  O  S  Z  P  C  : A  
 testq :  : 85 :  :  :  64  RM  R   64  R  R   :  :  :  :  O  S  Z  P  C  : A  
+                        
+ud2 :  :  0f  0b  :  :  :    :  :  :  :  :   
                         
 xchgw :  : 90 : y :  :  16  AX  X   16  R  X   :  :  :  :  :   
 xchgw :  : 90 : y :  :  16  R  X   16  AX  X   :  :  :  :  :   
