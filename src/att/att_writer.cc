@@ -249,14 +249,14 @@ void AttWriter::write(ostream& os, R32 r) const {
 		case 5:  os << "%ebp"; break;
 		case 6:  os << "%esi"; break;
 		case 7:  os << "%edi"; break;
-		case 8:  os << "%r8w"; break;
-		case 9:  os << "%r9w"; break;
-		case 10: os << "%r10w"; break;
-		case 11: os << "%r11w"; break;
-		case 12: os << "%r12w"; break;
-		case 13: os << "%r13w"; break;
-		case 14: os << "%r14w"; break;
-		case 15: os << "%r15w"; break;
+		case 8:  os << "%r8d"; break;
+		case 9:  os << "%r9d"; break;
+		case 10: os << "%r10d"; break;
+		case 11: os << "%r11d"; break;
+		case 12: os << "%r12d"; break;
+		case 13: os << "%r13d"; break;
+		case 14: os << "%r14d"; break;
+		case 15: os << "%r15d"; break;
 
 		default:
 			os << "<null>";
