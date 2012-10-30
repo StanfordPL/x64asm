@@ -109,7 +109,9 @@ inline void emit_mod_rm(unsigned char*& buf, Operand ignore) {
 inline void emit_mod_rm(unsigned char*& buf, Operand rm, Operand r) {
 	assert(!((R64)rm).is_null());
 	assert(!((R64)r).is_null());
-	emit(buf, mod_rm(3, rm, r));
+
+	auto mod_byte = 0xc0 | ((rm << 3) & 0x38) | (r & 0x7);
+	emit(buf, mod_byte);
 }
 
 // This ignores the distinction between high and low general purpose regs,
