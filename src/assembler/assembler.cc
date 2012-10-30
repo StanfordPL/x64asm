@@ -110,7 +110,7 @@ inline void emit_mod_rm(unsigned char*& buf, Operand rm, Operand r) {
 	assert(!((R64)rm).is_null());
 	assert(!((R64)r).is_null());
 
-	auto mod_byte = 0xc0 | ((rm << 3) & 0x38) | (r & 0x7);
+	auto mod_byte = 0xc0 | ((r << 3) & 0x38) | (rm & 0x7);
 	emit(buf, mod_byte);
 }
 
