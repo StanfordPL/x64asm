@@ -116,7 +116,7 @@ emit_mod_rm i = "\temit_mod_rm(" ++ args ++ ");\n"
 -- Emit Displacement
 emit_disp :: Instr -> String
 emit_disp i = disp' (operand_types i) 
-    where disp' ("L":_)   = "\tjumps_[buf_] = arg0;\n" ++
+    where disp' ("L":_)   = "\tjumps_.push_back(make_pair(buf_,arg0));\n" ++
                             "\tbuf_ += 4;\n"
           disp' (_:"O":_) = "\temit_imm(buf_,(Imm64)arg1);\n"
           disp' ("O":_)   = "\temit_imm(buf_,(Imm64)arg0);\n"

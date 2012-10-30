@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <map>
+#include <vector>
 
 #include "src/assembler/function.h"
 #include "src/code/code.h"
@@ -57,7 +58,7 @@ class Assembler {
 
 	private:
 		std::map<Label, unsigned char*> labels_;
-		std::map<unsigned char*, Label> jumps_;
+		std::vector<std::pair<unsigned char*, Label>> jumps_;
 
 		unsigned char* buf_begin_;
 		unsigned char* buf_;
