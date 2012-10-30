@@ -283,13 +283,13 @@ void Assembler::assemble(const Instruction& i) {
 
 void Assembler::finish() {
 	for ( const auto& jump : jumps_ ) {
-		auto pos = jump.first;
-		const auto itr = labels_.find(jump.second);
-		
+		const auto pos = jump.first;
+		const auto itr = labels_.find((Operand) jump.second);
+
 		if ( itr == labels_.end() ) 
-			emit_imm(pos, Imm32(0));
+			*((uint32_t*) pos) = 0;
 		else
-			emit_imm(pos, (Imm32)(itr->second-pos-4));
+			*((uint32_t*) pos) = itr->second-pos-4;
 	}
 }
 

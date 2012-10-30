@@ -2,7 +2,7 @@
 #define X64_SRC_ASSEMBLER_ASSEMBLER_H
 
 #include <iostream>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 #include "src/assembler/function.h"
@@ -57,8 +57,8 @@ class Assembler {
 		void write_hex(std::ostream& os, const Code& code);
 
 	private:
-		std::map<Label, unsigned char*> labels_;
-		std::vector<std::pair<unsigned char*, Label>> jumps_;
+		std::unordered_map<Operand, unsigned char*> labels_;
+		std::vector<std::pair<unsigned char*, Operand>> jumps_;
 
 		unsigned char* buf_begin_;
 		unsigned char* buf_;
