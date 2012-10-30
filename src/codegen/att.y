@@ -28,7 +28,7 @@ extern int yy_line_number;
 
 void yyerror(std::istream& is, x64::Code& code, const char* s) { 
 	is.setstate(std::ios::failbit); 
-    cerr << "ERROR (" << yy_line_number << "): " << s ;
+    cerr << "ERROR (line " << yy_line_number << "): " << s << endl;
 
 }
 
@@ -360,6 +360,7 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
             *instr = Instruction(NOP, ops.begin(), ops.end());
             x64::Code dumb = x64::Code();
             yyerror(is, dumb, "Could not parse instruction. Did you use the right memonic for these operands?");
+            cerr << "memonic: " << opcode << endl;
         }
         else {
             for ( const auto& i : operand_info )
@@ -389,7 +390,7 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
     void invalid_disp(istream& is, Operand d) {
         x64::Code dumb = x64::Code();
-        yyerror(is, dumb, "Could not parse instruction. Did you use the right memonic for these operands?");
+        yyerror(is, dumb, "Bad displacement for memory argument.");
     }
 
     void scale_for_no_index(istream& is) {

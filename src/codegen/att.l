@@ -175,7 +175,7 @@ Operand to_label(const char* c) {
 ":"   { return COLON; }
 "("   { return OPEN; }
 ")"   { return CLOSE; }
-"\n"  { return ENDL; }
+"\n"  { yy_line_number++; return ENDL; }
 [ \t] { ; }
 "#"[^\n]*"\n" { yy_line_number++; return ENDL; }
 
