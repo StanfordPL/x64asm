@@ -15,7 +15,7 @@ namespace x64 {
 */
 class RegSet {
 	private:
-		enum Mask {
+		enum Mask : uint64_t {
 			M_NULL   = 0x0000000000000000,
 			M_LOW    = 0x0000000000000001,
 			M_HIGH   = 0x0000000000010000,
@@ -99,17 +99,17 @@ class RegSet {
 
 		inline bool is_set(R16 r) const {
 			assert(!r.is_null());
-			return r_mask_ & (M_WORD << r);
+			return (r_mask_ & (M_WORD << r)) == (M_WORD << r);
 		}
 
 		inline bool is_set(R32 r) const {
 			assert(!r.is_null());
-			return r_mask_ & (M_DOUBLE << r);
+			return (r_mask_ & (M_DOUBLE << r)) == (M_DOUBLE << r);
 		}
 
 		inline bool is_set(R64 r) const {
 			assert(!r.is_null());
-			return r_mask_ & (M_QUAD << r);
+			return (r_mask_ & (M_QUAD << r)) == (M_QUAD << r);
 		}
 
 		inline bool is_set(Xmm r) const {
