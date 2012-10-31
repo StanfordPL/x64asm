@@ -18,6 +18,7 @@ assm_decl is = concat $ map render $ tail is
 codegen_args :: Instr -> String
 codegen_args i = cga (operand_types i) (flipped i)
     where cga ("M":"I":_) _  = ",arg0"
+          cga ("M":"CL":_) _ = ",arg0"
           cga ("M":_:_) _    = ",arg0,(Operand)arg1"
           cga (_:"M":_) _    = ",arg1,(Operand)arg0"
           cga (_:"O":_) _    = ",(Operand)arg0"
@@ -27,6 +28,7 @@ codegen_args i = cga (operand_types i) (flipped i)
           cga ("R":"EAX":_) _ = ",(Operand)arg0"
           cga ("R":"AX":_) _ = ",(Operand)arg0"
           cga ("R":"AL":_) _ = ",(Operand)arg0"
+          cga ("R":"CL":_) _  = ",(Operand)arg0"
           cga ("F":"ST0":_) _ = ",(Operand)arg0"
 
           cga ("AL":"R":_) _   = ",(Operand)arg1"
