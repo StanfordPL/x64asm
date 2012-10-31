@@ -151,7 +151,7 @@ clc :  : f8 :  :  :    :  :  :  : C :
                         
 cld :  : fc :  :  :    :  :  :  :  :   
                         
-clflush :  :  0f  ae  :  : 07 :  8  R  R    :  :  :  :  :   
+clflush :  :  0f  ae  :  : 07 :  8  M  R    :  :  :  :  :   
                         
 cli :  : fa :  :  :    :  :  :  :  :   
                         
