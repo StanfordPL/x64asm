@@ -151,7 +151,7 @@ clc :  : f8 :  :  :    :  :  :  : C :
                         
 cld :  : fc :  :  :    :  :  :  :  :   
                         
-clflush :  :  0f  ae  :  : 07 :  8  M  R    :  :  :  :  :   
+clflush :  :  0f  ae  :  : 07 :  8  R  R    :  :  :  :  :   
                         
 cli :  : fa :  :  :    :  :  :  :  :   
                         
@@ -463,20 +463,28 @@ pushq :  : 68 :  :  :  32  I  R    : RSP : RSP :  :  :
 pushfq :  : 9c :  :  :    : RSP : RSP :  O  S  Z  A  P  C  :  :   
                         
 rclb :  : d0 :  : 02 :  8  RM  X    :  :  : C :  O  C  :   
+rclb :  : d2 :  : 02 :  8  RM  X   8  CL  R   :  :  : C : C : O  
 rclb :  : c0 :  : 02 :  8  RM  X   8  I  R   :  :  : C : C : O  
 rclw :  : d1 :  : 02 :  16  RM  X    :  :  : C :  O  C  :   
+rclw :  : d3 :  : 02 :  16  RM  X   8  CL  R   :  :  : C : C : O  
 rclw :  : c1 :  : 02 :  16  RM  X   8  I  R   :  :  : C : C : O  
 rcll :  : d1 :  : 02 :  32  RM  X    :  :  : C :  O  C  :   
 rclq :  : d1 :  : 02 :  64  RM  X    :  :  : C :  O  C  :   
+rcll :  : d3 :  : 02 :  32  RM  X   8  CL  R   :  :  : C : C : O  
+rclq :  : d3 :  : 02 :  64  RM  X   8  CL  R   :  :  : C : C : O  
 rcll :  : c1 :  : 02 :  32  RM  X   8  I  R   :  :  : C : C : O  
 rclq :  : c1 :  : 02 :  64  RM  X   8  I  R   :  :  : C : C : O  
                         
 rcrb :  : d0 :  : 03 :  8  RM  X    :  :  : C :  O  C  :   
+rcrb :  : d2 :  : 03 :  8  RM  X   8  CL  R   :  :  : C : C : O  
 rcrb :  : c0 :  : 03 :  8  RM  X   8  I  R   :  :  : C : C : O  
 rcrw :  : d1 :  : 03 :  16  RM  X    :  :  : C :  O  C  :   
+rcrw :  : d3 :  : 03 :  16  RM  X   8  CL  R   :  :  : C : C : O  
 rcrw :  : c1 :  : 03 :  16  RM  X   8  I  R   :  :  : C : C : O  
 rcrl :  : d1 :  : 03 :  32  RM  X    :  :  : C :  O  C  :   
 rcrq :  : d1 :  : 03 :  64  RM  X    :  :  : C :  O  C  :   
+rcrl :  : d3 :  : 03 :  32  RM  X   8  CL  R   :  :  : C : C : O  
+rcrq :  : d3 :  : 03 :  64  RM  X   8  CL  R   :  :  : C : C : O  
 rcrl :  : c1 :  : 03 :  32  RM  X   8  I  R   :  :  : C : C : O  
 rcrq :  : c1 :  : 03 :  64  RM  X   8  I  R   :  :  : C : C : O  
                         
@@ -495,56 +503,80 @@ rdtscp :  :  0f  01  f9  :  :  :    :  :  EAX  ECX  EDX  :  :  :
 retq :  : c3 :  :  :    :  :  :  :  :   
                         
 rolb :  : d0 :  : 00 :  8  RM  X    :  :  :  :  O  C  :   
+rolb :  : d2 :  : 00 :  8  RM  X   8  CL  R   :  :  :  : C : O  
 rolb :  : c0 :  : 00 :  8  RM  X   8  I  R   :  :  :  : C : O  
 rolw :  : d1 :  : 00 :  16  RM  X    :  :  :  :  O  C  :   
+rolw :  : d3 :  : 00 :  16  RM  X   8  CL  R   :  :  :  : C : O  
 rolw :  : c1 :  : 00 :  16  RM  X   8  I  R   :  :  :  : C : O  
 roll :  : d1 :  : 00 :  32  RM  X    :  :  :  :  O  C  :   
 rolq :  : d1 :  : 00 :  64  RM  X    :  :  :  :  O  C  :   
+roll :  : d3 :  : 00 :  32  RM  X   8  CL  R   :  :  :  : C : O  
+rolq :  : d3 :  : 00 :  64  RM  X   8  CL  R   :  :  :  : C : O  
 roll :  : c1 :  : 00 :  32  RM  X   8  I  R   :  :  :  : C : O  
 rolq :  : c1 :  : 00 :  64  RM  X   8  I  R   :  :  :  : C : O  
                         
 rorb :  : d0 :  : 01 :  8  RM  X    :  :  :  :  O  C  :   
+rorb :  : d2 :  : 01 :  8  RM  X   8  CL  R   :  :  :  : C : O  
 rorb :  : c0 :  : 01 :  8  RM  X   8  I  R   :  :  :  : C : O  
 rorw :  : d1 :  : 01 :  16  RM  X    :  :  :  :  O  C  :   
+rorw :  : d3 :  : 01 :  16  RM  X   8  CL  R   :  :  :  : C : O  
 rorw :  : c1 :  : 01 :  16  RM  X   8  I  R   :  :  :  : C : O  
 rorl :  : d1 :  : 01 :  32  RM  X    :  :  :  :  O  C  :   
 rorq :  : d1 :  : 01 :  64  RM  X    :  :  :  :  O  C  :   
+rorl :  : d3 :  : 01 :  32  RM  X   8  CL  R   :  :  :  : C : O  
+rorq :  : d3 :  : 01 :  64  RM  X   8  CL  R   :  :  :  : C : O  
 rorl :  : c1 :  : 01 :  32  RM  X   8  I  R   :  :  :  : C : O  
 rorq :  : c1 :  : 01 :  64  RM  X   8  I  R   :  :  :  : C : O  
                         
 sahf :  : 9e :  :  :    :  :  :  :  S  Z  A  P  C  :   
                         
 salb :  : d0 :  : 04 :  8  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+salb :  : d2 :  : 04 :  8  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 salb :  : c0 :  : 04 :  8  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 salw :  : d1 :  : 04 :  16  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+salw :  : d3 :  : 04 :  16  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 salw :  : c1 :  : 04 :  16  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 sall :  : d1 :  : 04 :  32  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+sall :  : d3 :  : 04 :  32  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 sall :  : c1 :  : 04 :  32  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 salq :  : d1 :  : 04 :  64  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+salq :  : d3 :  : 04 :  64  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 salq :  : c1 :  : 04 :  64  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 sarb :  : d0 :  : 07 :  8  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+sarb :  : d2 :  : 07 :  8  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 sarb :  : c0 :  : 07 :  8  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 sarw :  : d1 :  : 07 :  16  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+sarw :  : d3 :  : 07 :  16  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 sarw :  : c1 :  : 07 :  16  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 sarl :  : d1 :  : 07 :  32  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+sarl :  : d3 :  : 07 :  32  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 sarl :  : c1 :  : 07 :  32  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 sarq :  : d1 :  : 07 :  64  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+sarq :  : d3 :  : 07 :  64  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 sarq :  : c1 :  : 07 :  64  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 shlb :  : d0 :  : 04 :  8  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+shlb :  : d2 :  : 04 :  8  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 shlb :  : c0 :  : 04 :  8  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 shlw :  : d1 :  : 04 :  16  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+shlw :  : d3 :  : 04 :  16  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 shlw :  : c1 :  : 04 :  16  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 shll :  : d1 :  : 04 :  32  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+shll :  : d3 :  : 04 :  32  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 shll :  : c1 :  : 04 :  32  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 shlq :  : d1 :  : 04 :  64  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+shlq :  : d3 :  : 04 :  64  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 shlq :  : c1 :  : 04 :  64  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 shrb :  : d0 :  : 05 :  8  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+shrb :  : d2 :  : 05 :  8  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 shrb :  : c0 :  : 05 :  8  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 shrw :  : d1 :  : 05 :  16  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+shrw :  : d3 :  : 05 :  16  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 shrw :  : c1 :  : 05 :  16  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 shrl :  : d1 :  : 05 :  32  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+shrl :  : d3 :  : 05 :  32  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 shrl :  : c1 :  : 05 :  32  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
 shrq :  : d1 :  : 05 :  64  RM  X    :  :  :  :  S  Z  P  :  C  O  A   
+shrq :  : d3 :  : 05 :  64  RM  X   8  CL  R   :  :  :  :  S  Z  P  :  C  O  A   
 shrq :  : c1 :  : 05 :  64  RM  X   8  I  R   :  :  :  :  S  Z  P  :  C  O  A   
                         
 sbbb :  : 1c :  :  :  8  AL  X   8  I  R   :  :  : C :  O  S  Z  A  P  C  :   
