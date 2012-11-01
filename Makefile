@@ -72,12 +72,12 @@ clean:
 src/gen: src/codegen/*.hs src/codegen/*.csv src/codegen/att.l src/codegen/att.y
 	mkdir -p build/codegen
 	cd src/codegen && \
-		ghc -W cfg.hs Instr.hs -o ../../build/codegen/cfg && \
+		ghc -W cfg.hs Instr.hs Latency.hs -o ../../build/codegen/cfg && \
 		ghc assembler.hs Instr.hs -o ../../build/codegen/assembler && \
 		rm *.hi *.o
 	mkdir -p src/gen
 	cd build/codegen && \
-		./cfg ../../src/codegen/x64.csv && \
+		./cfg ../../src/codegen/x64.csv ../../src/codegen/latencies.csv && \
 		./assembler ../../src/codegen/x64.csv && \
 		mv assembler.* ../../src/gen/ && \
 		mv opcode.* ../../src/gen/
