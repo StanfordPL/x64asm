@@ -50,7 +50,7 @@ opcode_enum is = "enum OpcodeVal : Operand {\n  " ++
 opcode_latency :: [LatencyRecord] -> [Instr] -> String
 opcode_latency lt is = "unsigned short opcode_latencies [] = {\n  " ++
   (concat (intersperse ",\n  " (map
-    (\t -> show $ latency_for_instruction lt t)  is))) ++ "\n};"
+    (\t -> (show $ latency_for_instruction lt t) ++ " ,//" ++ (att t))  is))) ++ "\n};"
 
 -- Writes out the att encoding for each instruction
 opcodes :: [Instr] -> String
