@@ -254,6 +254,7 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
 
             if(accept) {
+                #ifndef NDEBUG
                 /*
                 cerr << "accepted possible:";
                 for(int i = 0; i < 3; i++) {
@@ -264,6 +265,7 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
                 }
                 cerr << "\n";
                 */
+                #endif
 
                 options.push_back(sig);
             }
@@ -275,7 +277,7 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
         //  (2) have small immediate fields whenever possible.
 
         //when we loop through options, we'll use these to figure out the right one to pick.
-        int max_score  = -10000;
+        int max_score  = -10000000;
         int max_score_index = -1;
         int index = 0;
 
