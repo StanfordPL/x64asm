@@ -6,6 +6,7 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include <unordered_set>
 #include <vector>
 
 #include "src/code/code.h"
@@ -128,7 +129,7 @@ class ControlFlowGraph {
 			return reachable_.find(id) != reachable_.end();
 		}
 
-		typedef std::set<id_type>::const_iterator block_iterator;
+		typedef std::unordered_set<id_type>::const_iterator block_iterator;
 
 		inline block_iterator reachable_begin() const {
 			return reachable_.begin();
@@ -399,7 +400,7 @@ class ControlFlowGraph {
 		size_t num_blocks_;
 
 		// Reachable blocks (doesn't include entry and exit)
-		std::set<id_type> reachable_;
+		std::unordered_set<id_type> reachable_;
 
 		std::vector<std::vector<id_type>> preds_;
 		std::vector<std::vector<id_type>> succs_;
