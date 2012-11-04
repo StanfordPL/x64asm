@@ -532,7 +532,17 @@ mem : OPEN ATT_GP_REG CLOSE { //(%rax)
 						$2->width); 
 				delete $2; 
 			}
+    | OPEN ATT_GP_REG COMMA ATT_SCALE CLOSE { //(%rax,1)
+        if ( $4->val != times_1 ) 
+          scale_for_no_index(is);
 
+				$$ = new OperandInfo($2->width == DOUBLE ?
+						M(R32($2->val)) :
+						M(R64($2->val)), 
+						ADDR, 
+						$2->width); 
+				delete $2; 
+			}
     | ATT_OFFSET OPEN ATT_GP_REG COMMA COMMA ATT_SCALE CLOSE { //0x10(%rax,,1)
 			if ( !is_valid_disp($1->val) ) 
                 invalid_disp(is, $1->val);
