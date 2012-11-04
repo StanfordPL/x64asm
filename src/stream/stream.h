@@ -29,6 +29,12 @@ enum FormatVal {
 	HEX
 };
 
+enum CodeFormatVal {
+  ALL = 0,
+  NOP_REMOVED,
+  DEAD_REMOVED
+};
+
 /** iostream formatting manipulator.
 */
 class format {
@@ -43,10 +49,25 @@ class format {
 		FormatVal f_;
 };
 
+class code_format {
+  	public:
+		inline explicit code_format(CodeFormatVal f)
+				: f_(f) {
+		}
+		inline operator CodeFormatVal() const {
+			return f_;
+		}
+	private:
+		CodeFormatVal f_;
+
+};
+
 } // namespace x64
 
 std::istream& operator>>(std::istream& is, const x64::format& f);
 std::ostream& operator<<(std::ostream& os, const x64::format& f);
+
+std::ostream& operator<<(std::ostream& os, const x64::code_format& f);
 
 std::istream& operator>>(std::istream& is, x64::Code& c);
 
