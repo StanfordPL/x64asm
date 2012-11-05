@@ -12,6 +12,7 @@
 #include "src/code/code.h"
 #include "src/code/instruction.h"
 #include "src/code/reg_set.h"
+#include "src/stream/stream.h"
 
 namespace x64 {
 
@@ -366,9 +367,9 @@ class ControlFlowGraph {
 		/** Returns true if the underlying code performs an undefined register read.
 		*/
 		inline bool performs_undef_read() const {
-			size_t idx = 0;
 			for ( auto i = reachable_begin(), ie = reachable_end(); i != ie; ++i ) {
 				auto di = def_ins_[*i];
+				auto idx = blocks_[*i];
 				for ( size_t j = 0, je = num_instrs(*i); j < je; ++j ) {
 					const auto& instr = code_[idx++];
 					const auto reads = instr.read_set();
