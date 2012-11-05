@@ -367,9 +367,9 @@ class ControlFlowGraph {
 		*/
 		inline bool performs_undef_read() const {
 			size_t idx = 0;
-			for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i ) {
-				auto di = def_ins_[i];
-				for ( size_t j = 0, je = num_instrs(i); j < je; ++j ) {
+			for ( auto i = reachable_begin(), ie = reachable_end(); i != ie; ++i ) {
+				auto di = def_ins_[*i];
+				for ( size_t j = 0, je = num_instrs(*i); j < je; ++j ) {
 					const auto& instr = code_[idx++];
 					const auto reads = instr.read_set();
 					if ( (reads & di) != reads )
