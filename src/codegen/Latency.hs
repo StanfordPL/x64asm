@@ -9,7 +9,7 @@ import Data.Char
 import Instr
 
 data LatencyOperand = LReg (Maybe String) | LMem (Maybe String) | LImm | LCl | LUnknown | LAx 
-                        | LXmm | Lmm | LYmm | LXmm0 | LST0 | Lmmx | LLabel deriving (Show)
+                        | LXmm | Lmm | LYmm | LXmm0 | LST0 | LMmx | LLabel deriving (Show)
 data LatencyRecord = Mk_lr String [LatencyOperand] Float deriving (Show)
 
 operands_match::[(String,String,String)] -> [LatencyOperand] -> Bool
@@ -26,7 +26,7 @@ operands_match' (_,"M",_) (LMem Nothing) = True
 operands_match' (w,"M",_) (LMem (Just w')) = (w == w')
 operands_match' (_,"S",_) (LXmm)         = True
 operands_match' (_,"Y",_) (LYmm)         = True
-operands_match' (_,"X",_) (Lmmx)         = True
+operands_match' (_,"X",_) (LMmx)         = True
 operands_match' (_,"F",_) (Lmm)          = True
 operands_match' (_,"AL",_) (LReg (Just "8"))   = True
 operands_match' (_,"AX",_) (LReg (Just"16"))   = True
@@ -106,12 +106,12 @@ parseOperand' "m80" = [LMem (Just "80")]
 parseOperand' "m128" = [LMem (Just "64")]
 parseOperand' "m256" = [LMem (Just "64")]
 
-parseOperand' "mm" = [Lmm]
+parseOperand' "mm" = [LMmx]
 parseOperand' "x" = [LXmm]
 parseOperand' "xmm" = [LXmm]
 parseOperand' "xmm0" = [LXmm0]
 parseOperand' "ymm" = [LYmm]
-parseOperand' "(x)mm" = [LXmm, Lmm]
+parseOperand' "(x)mm" = [LXmm, LMmx]
 
 parseOperand' "short" = [LLabel]
 parseOperand' "near" = [LLabel]
