@@ -23,9 +23,9 @@ inline void set_mem(RegSet& rs, M m) {
 	}
 	else {
 		if ( !b.is_null() )
-			rs.set((R32)b);
+			rs.set((R64)b);
 		if ( !i.is_null() )
-			rs.set((R32)i);
+			rs.set((R64)i);
 	}
 }
 

@@ -6,11 +6,13 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include <unordered_set>
 #include <vector>
 
 #include "src/code/code.h"
 #include "src/code/instruction.h"
 #include "src/code/reg_set.h"
+#include "src/stream/stream.h"
 
 namespace x64 {
 
@@ -128,7 +130,7 @@ class ControlFlowGraph {
 			return reachable_.find(id) != reachable_.end();
 		}
 
-		typedef std::set<id_type>::const_iterator block_iterator;
+		typedef std::unordered_set<id_type>::const_iterator block_iterator;
 
 		inline block_iterator reachable_begin() const {
 			return reachable_.begin();
@@ -365,10 +367,10 @@ class ControlFlowGraph {
 		/** Returns true if the underlying code performs an undefined register read.
 		*/
 		inline bool performs_undef_read() const {
-			size_t idx = 0;
-			for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i ) {
-				auto di = def_ins_[i];
-				for ( size_t j = 0, je = num_instrs(i); j < je; ++j ) {
+			for ( auto i = reachable_begin(), ie = reachable_end(); i != ie; ++i ) {
+				auto di = def_ins_[*i];
+				auto idx = blocks_[*i];
+				for ( size_t j = 0, je = num_instrs(*i); j < je; ++j ) {
 					const auto& instr = code_[idx++];
 					const auto reads = instr.read_set();
 					if ( (reads & di) != reads )
@@ -399,7 +401,7 @@ class ControlFlowGraph {
 		size_t num_blocks_;
 
 		// Reachable blocks (doesn't include entry and exit)
-		std::set<id_type> reachable_;
+		std::unordered_set<id_type> reachable_;
 
 		std::vector<std::vector<id_type>> preds_;
 		std::vector<std::vector<id_type>> succs_;

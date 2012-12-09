@@ -1,6 +1,7 @@
 import Data.Char
 import Data.List
 import Instr
+import Latency
 import System.Environment
 
 -- Writes an array
@@ -44,6 +45,12 @@ opcode_enum is = "enum OpcodeVal : Operand {\n  " ++
 
           tf True = "1"
           tf False = "0"
+
+-- Write out latencies
+opcode_latency :: [LatencyRecord] -> [Instr] -> String
+opcode_latency lt is = "unsigned short opcode_latencies [] = {\n  " ++
+  (concat (intersperse ",\n  " (map
+    (\t -> (show $ latency_for_instruction lt t) ++ " ,//" ++ (att t))  is))) ++ "\n};"
 
 -- Writes out the att encoding for each instruction
 opcodes :: [Instr] -> String
@@ -134,12 +141,16 @@ reg_mask2 name fxn1 fxn2 = comment_array "RegSet" ("Opcode::" ++ name) render
 main :: IO ()
 main = do args <- getArgs
           instrs_file <- readFile $ head args
+          latencies_file <- readFile $ head (tail args)
           let instrs = parse_instrs instrs_file
+          let latency_table = latency_lookup latencies_file
 
-          writeFile  "opcode.enum"   $ opcode_enum   instrs
-          writeFile  "opcode.sigs"   $ signatures    instrs
-          writeFile  "opcode.char"   $ opcodes       instrs
-          writeFile  "opcode.domain" $ opcode_domain instrs
+          writeFile  "opcode.enum"    $ opcode_enum   instrs
+          writeFile  "opcode.sigs"    $ signatures    instrs
+          writeFile  "opcode.char"    $ opcodes       instrs
+          writeFile  "opcode.domain"  $ opcode_domain instrs
+          writeFile  "opcode.latency" $ opcode_latency 
+                                          latency_table instrs
 
           writeFile  "opcode.implicit" $ reg_mask2 "implicit_read_set_"  
 					           implicit_reads cond_read instrs

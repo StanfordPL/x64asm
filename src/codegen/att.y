@@ -254,6 +254,7 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
 
 
             if(accept) {
+                #ifndef NDEBUG
                 /*
                 cerr << "accepted possible:";
                 for(int i = 0; i < 3; i++) {
@@ -264,6 +265,7 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
                 }
                 cerr << "\n";
                 */
+                #endif
 
                 options.push_back(sig);
             }
@@ -275,7 +277,7 @@ void yyerror(std::istream& is, x64::Code& code, const char* s) {
         //  (2) have small immediate fields whenever possible.
 
         //when we loop through options, we'll use these to figure out the right one to pick.
-        int max_score  = -10000;
+        int max_score  = -10000000;
         int max_score_index = -1;
         int index = 0;
 
@@ -530,12 +532,37 @@ mem : OPEN ATT_GP_REG CLOSE { //(%rax)
 						$2->width); 
 				delete $2; 
 			}
+    | OPEN ATT_GP_REG COMMA ATT_SCALE CLOSE { //(%rax,1)
+        if ( $4->val != times_1 ) 
+          scale_for_no_index(is);
+
+				$$ = new OperandInfo($2->width == DOUBLE ?
+						M(R32($2->val)) :
+						M(R64($2->val)), 
+						ADDR, 
+						$2->width); 
+				delete $2; 
+			}
+    | ATT_OFFSET OPEN ATT_GP_REG COMMA ATT_SCALE CLOSE { //0x10(%rax,,1)
+			if ( !is_valid_disp($1->val) ) 
+                invalid_disp(is, $1->val);
+      if ( $5->val != times_1 ) 
+          scale_for_no_index(is);
+
+			$$ = new OperandInfo($3->width == DOUBLE ?
+					M(R32($3->val), Imm32($1->val)) :
+					M(R64($3->val), Imm32($1->val)),
+					ADDR, 
+					$3->width); 
+			delete $1; 
+			delete $3; 
+		} 
 
     | ATT_OFFSET OPEN ATT_GP_REG COMMA COMMA ATT_SCALE CLOSE { //0x10(%rax,,1)
 			if ( !is_valid_disp($1->val) ) 
                 invalid_disp(is, $1->val);
-            if ( $6->val != times_1 ) 
-                scale_for_no_index(is);
+      if ( $6->val != times_1 ) 
+          scale_for_no_index(is);
 
 			$$ = new OperandInfo($3->width == DOUBLE ?
 					M(R32($3->val), Imm32($1->val)) :

@@ -10,14 +10,24 @@ using namespace x64;
 
 namespace {
 
-inline int state_i() {
+inline int format_state() {
 	static int i = ios_base::xalloc();
 	return i;
 }
 
 template <typename T>
 inline FormatVal get_format(T& ios) {
-	return (FormatVal) ios.iword(state_i());
+	return (FormatVal) ios.iword(format_state());
+}
+
+inline int code_format_state() {
+	static int i = ios_base::xalloc();
+	return i;
+}
+
+template <typename T>
+inline CodeFormatVal get_code_format(T& ios) {
+	return (CodeFormatVal) ios.iword(code_format_state());
 }
 
 template <typename T>
@@ -34,14 +44,21 @@ ostream& generic_write(ostream& os, const T t) {
 }
 
 istream& operator>>(istream& is, const format& f) {
-	is.iword(state_i()) = f;
+	is.iword(format_state()) = f;
 	return is;
 }
 
 ostream& operator<<(ostream& os, const format& f) {
-	os.iword(state_i()) = f;
+	os.iword(format_state()) = f;
 	return os;
 }
+
+
+ostream& operator<<(ostream& os, const code_format& f) {
+	os.iword(code_format_state()) = f;
+	return os;
+}
+
 
 istream& operator>>(istream& is, Code& c) {
 	if ( get_format(is) == ATT ) {
@@ -55,27 +72,61 @@ istream& operator>>(istream& is, Code& c) {
 
 ostream& operator<<(ostream& os, const Code& c) {
 	const auto format = get_format(os);
+  const auto code_format = get_code_format(os);
+
+  Code d;
+
+  if ( code_format == ALL ) {
+    d = c;
+  } else if (code_format == NOP_REMOVED) {
+    for ( const auto& line : c )
+      if (line.get_opcode() != NOP)
+        d.push_back(line);
+  } else if (code_format == DEAD_REMOVED) {
+
+    ControlFlowGraph cfg(c);
+
+    for ( size_t i = cfg.get_entry(); i != cfg.get_exit(); ++i ) {
+      if (cfg.is_reachable(i)) {
+        for( size_t j = 0; j < cfg.num_instrs(i); j++) {
+          const auto& instr = cfg.get_instr(
+                  ControlFlowGraph::location_type(i,j));
+          if (instr.get_opcode() != NOP)
+            d.push_back(instr);
+        }
+      }
+    }
+
+  } else {
+    os.setstate(ios::failbit);
+  }
+    
+
+
 	if ( format == ATT ) {
 		AttWriter w;
-		w.write(os, c);
+		w.write(os, d);
 	}
 	else if ( format == BIN ) {
 		Assembler assm;
-		assm.write_binary(os, c);
+		assm.write_binary(os, d);
 	}
 	else if ( format == DOT ) {
-		ControlFlowGraph cfg(c);
+		ControlFlowGraph cfg(d);
 		cfg.write_dot(os);
 	}
 	else if ( format == HEX ) {
 		Assembler assm;
-		assm.write_hex(os, c);
+		assm.write_hex(os, d);
 	}
 	else
 		os.setstate(ios::failbit);
 
 	return os;
 }
+
+
+
 
 ostream& operator<<(ostream& os, x64::CondReg cr) {
 	return generic_write(os, cr);
