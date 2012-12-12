@@ -1,0 +1,59 @@
+1. Some instruction (ex?) require a fully specified memory width type for disambiguation.
+   Otherwise, we would simplify all memory operands to the base type M.
+	
+2. LAHF and SAHF are conditionally invalid in 64-bit mode (I've opted to keep them valid).
+
+4. Added underscores to naming convention for rep instructions:
+
+5. Any instruction prefixed with REX+ is referring to 8bit operands.
+   Basically, if you use ABCD-H as an 8-bit operand, you can only use ABCD-H or ABCD-L as the other (if you can at all).
+
+
+
+
+
+ISA Notes:
+
+CMPS/CMPSB/CMPSW/CMPSD/CMPSQ:
+	Memory argument for CMPS is for documentation, disambiguates to later cases.
+	The word case requires an implicit 66 prefix.
+	*A 67 prefix can be used to demote addresses to 32 bits.
+
+CWD/CDQ/CQO
+	CWD requires an implicit 66 prefix to distinguish it from CDQ
+
+INS/INSB/INSW/INSD:
+	Memory argument is for documentation, disambiguates to later cases.A
+	They word case requires an implicit 66 prefix.
+	* A 67 prefix can be used to demote addresses to 32 bits.
+
+IRET/IRETD/IRETQ
+	You would THINK that you'd need a 66 prefix to disambiguate IRET and IRETD, but they're the same.
+
+LEAVE:
+	The word case requires an implicit 66 prefix.
+	There's no way to distinguish this by mnemonic so we add an override argument
+
+LODS/LODSB/LODSW/LODSD/LODSQ
+	Memory argument for LODS disambiguates to later cases.
+	The word case requires an implicit 66 prefix.
+	* The manual makes no mention of downgrading to 32 bit addresses here.
+	* I'm assuming that this is a typo.
+
+MOV
+	A rex prefix is allowed on movabs al [mem]/movabs [mem] al.
+	No idea what it does or how to get it with gcc, but the mnemonic can't disambiguate this case.
+	Add an override argument.
+
+MOVS/MOVSB/MOVSW/MOVSD/MOVSQ
+	Memory arugment is for documentation, disambiguates to later cases.
+	The word care requires an implicit 66 prefix.
+	* A 67 prefix can be used to downgrade to 32 bit addresses.
+
+TODO:
+	Add support for implicit 67 prefix to string instructions.
+	Note that in the documentation argument mode, you get this out of the memory operand.
+	I think my official policy is that if you want this behavior, you should use the explicit operand version.
+
+	REMEMBER: You will need 66 prefixes for ALL 16-bit operand instructions.
+	          r16/m16/AX/... more?

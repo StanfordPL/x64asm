@@ -43,12 +43,22 @@ read_instr s = let (o:i:m64:m32:d:[]) = splitOn "\t" s in
 
 -- Read all rows
 read_instrs :: String -> [Instr]
-read_instrs s = map read_instr $ rows
-    where rows = filter (\x -> '\t' `elem` x) $ lines s
+read_instrs s = map read_instr $ lines s
 
 -------------------------------------------------------------------------------
 -- Data Correction (transforms into canonical form)
 -------------------------------------------------------------------------------
+
+-- Remove title row and empty rows		
+remove_format :: [Instr] -> [Instr]
+remove_format is = filter (\x -> keep x) is
+    where keep i = (opcode i) /= "" && 
+                   (opcode i) /= "Opcode" &&
+                   (instruction i) /= "(No mnemonic)"
+
+-- Filters out valid 64-bit mode instructions
+x64 :: [Instr] -> [Instr]
+x64 is = filter (\x -> (mode64 x) == "V") is
 
 -- Split a disjunct operand into two parts
 split_op :: String -> (String,String)
@@ -67,12 +77,8 @@ split_op s = let (x1:x2:[]) = splitOn "/" s in (x1,x2)
 flatten_instr :: Instr -> [Instr]
 flatten_instr i = case findIndex (\x -> '/' `elem` x) (operands i) of
   Nothing    -> [i]
-  (Just idx) -> [(Instr o inst1 m64 m32 d), (Instr o inst2 m64 m32 d)]
-    where o = opcode i
-          d = description i					
-          m64 = mode64 i
-          m32 = mode32 i
-          op = (operands i) !! idx
+  (Just idx) -> [i{instruction=inst1}, i{instruction=inst2}]
+    where op = (operands i) !! idx
           op1 = fst $ split_op op
           op2 = snd $ split_op op				
           inst = instruction i	
@@ -83,16 +89,33 @@ flatten_instr i = case findIndex (\x -> '/' `elem` x) (operands i) of
 flatten_instrs :: [Instr] -> [Instr]
 flatten_instrs is = concat $ map flatten_instr is
 
--- Remove title row and empty rows		
-remove_format :: [Instr] -> [Instr]
-remove_format is = filter (\x -> keep x) is
-    where keep i = (opcode i) /= "" && 
-                   (opcode i) /= "Opcode" &&
-                   (instruction i) /= "(No mnemonic)"
+-- Remove rows with REX+ prefix and no r8 operands
+remove_no_reg_rex :: [Instr] -> [Instr]
+remove_no_reg_rex is = filter keep is
+  where keep i = ("REX+" `notElem` (opcode_terms i)) ||
+                 ("r8" `elem` (operands i))
 
--- Filters out valid 64-bit mode instructions
-x64 :: [Instr] -> [Instr]
-x64 is = filter (\x -> (mode64 x) == "V") is
+-- Remove REX+ from opcode terms
+remove_rex :: Instr -> Instr
+remove_rex i = i{opcode=o}
+  where o = intercalate " " $ filter (\x -> x /= "REX+") (opcode_terms i)
+
+-- Expand REX+ instruction based on operand types
+-- TODO: For now this is just adding disambiguation
+expand_rex :: Instr -> [Instr]
+expand_rex i = [i{instruction=i1}, i{instruction=i2}]
+  where i1 = (instruction i) ++ ", FS"
+        i2 = (instruction i) ++ ", GS"
+
+-- Rename operands for REX+ prefix instructions
+fix_rex_row :: Instr -> [Instr]
+fix_rex_row i = case "REX+" `elem` (opcode_terms i) of
+  True  -> map remove_rex $ expand_rex i
+  False -> [remove_rex i]
+
+-- Fix all rex rows
+fix_rex_rows :: [Instr] -> [Instr]
+fix_rex_rows is = concat $ map fix_rex_row is
 
 -------------------------------------------------------------------------------
 -- Debugging
@@ -106,9 +129,30 @@ uniq_mnemonics is = nub $ map mnemonic is
 uniq_operands :: [Instr] -> [String]
 uniq_operands is = nub $ concat $ map nub $ map operands is 
 
+-- Debugging: Generate a list of unique opcode terms
+uniq_opc_terms :: [Instr] -> [String]
+uniq_opc_terms is = nub $ concat $ map opcode_terms is
+
+-- Debugging: Generate a list of ambiguous declarations
+ambig_decls :: [Instr] -> [[Instr]]
+ambig_decls is = filter ambig $ groupBy eq $ sortBy srt is
+  where srt x y = compare (assm_decl x) (assm_decl y)
+        eq x y = (assm_decl x) == (assm_decl y)	
+        ambig x = (length x) > 1
+
+-- Debugging: Pretty print version of ambig_decls
+ambig_decls_pretty :: [Instr] -> [String]
+ambig_decls_pretty is = map pretty $ ambig_decls is
+  where pretty xs = (instruction (head xs)) ++ ":" ++ (concat (map elem xs))
+        elem x = "\n\t" ++ (opcode x)
+
 -------------------------------------------------------------------------------
 -- Views (transformations on row data into usable forms)
 -------------------------------------------------------------------------------
+
+-- Separate opcode terms
+opcode_terms :: Instr -> [String]
+opcode_terms i = splitOn " " (opcode i)
 
 -- Extract mnemonic from instruction
 mnemonic :: Instr -> String
@@ -197,9 +241,9 @@ op2type "moffs8"   = "Moffs8"
 op2type "moffs16"  = "Moffs16"
 op2type "moffs32"  = "Moffs32"
 op2type "moffs64"  = "Moffs64"
-op2type "CR0-CR7"  = "R" -- "CR" -- error "?"
-op2type "CR8"      = "R" -- "CR" -- error "?"
-op2type "DR0-DR7"  = "R" -- "DR" -- error "?"
+op2type "CR0-CR7"  = "Cr0234" -- CR 0 2 3 4
+op2type "CR8"      = "Cr8" 
+op2type "DR0-DR7"  = "Dr" -- DR 0 - 7
 op2type "Sreg"     = "Sreg"
 op2type "FS"       = "Fs"
 op2type "GS"       = "Gs"
@@ -251,11 +295,14 @@ assm_src_defns is = intercalate "\n\n" $ map assm_src_defn is
 main :: IO ()		
 main = do args <- getArgs
           file <- readFile $ head args
-          let is = x64 $
+          let is = fix_rex_rows $
+                   remove_no_reg_rex $ 
+                   x64 $
                    flatten_instrs $ 
                    remove_format $ 
                    read_instrs file
 
           writeFile "assembler.decl" $ assm_header_decls is
           writeFile "assembler.defn" $ assm_src_defns is
-          mapM_ print $ uniq_operands is
+          writeFile "blah" $ intercalate "\n" $  ambig_decls_pretty is
+          mapM_ print $ uniq_opc_terms is
