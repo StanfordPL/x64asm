@@ -206,9 +206,9 @@ FF /3	CALL m16:16	V	V	Call far, absolute indirect address given in m16:16. In 32
 FF /3	CALL m16:32	V	V	In 64-bit mode: If selector points to a gate, then RIP = 64-bit displacement taken from gate; else RIP = zero extended 32-bit offset from far pointer referenced in the instruction.
 REX.W+ FF /3	CALL m16:64	V	NE	In 64-bit mode: If selector points to a gate, then RIP = 64-bit displacement taken from gate; else RIP = 64-bit offset from far pointer referenced in the instruction.
 				
-98	CBW	V	V	AX ← sign-extend of AL.
-98	CWDE	V	V	EAX ← sign-extend of AX.
-REX.W+ 98	CDQE	V	NE	RAX ← sign-extend of EAX.
+98	CBW	V	V	AX = sign-extend of AL.
+98	CWDE	V	V	EAX = sign-extend of AX.
+REX.W+ 98	CDQE	V	NE	RAX = sign-extend of EAX.
 				
 F8	CLC	V	V	Clear CF flag.
 				
@@ -246,12 +246,12 @@ REX.W+ 0F 4F /r 	CMOVG r64, r/m64 	V	NE	Move if greater (ZF=0 and SF=OF).
 0F 4D /r	CMOVGE r16, r/m16 	V	V	Move if greater or equal (SF=OF).
 0F 4D /r 	CMOVGE r32, r/m32 	V	V	Move if greater or equal (SF=OF).
 REX.W+ 0F 4D /r 	CMOVGE r64, r/m64 	V	NE	Move if greater or equal (SF=OF).
-0F 4C /r	CMOVL r16, r/m16 	V	V	Move if less (SF≠ OF).
-0F 4C /r 	CMOVL r32, r/m32 	V	V	Move if less (SF≠ OF).
-REX.W+ 0F 4C /r 	CMOVL r64, r/m64 	V	NE	Move if less (SF≠ OF).
-0F 4E /r	CMOVLE r16, r/m16 	V	V	Move if less or equal (ZF=1 or SF≠ OF).
-0F 4E /r 	CMOVLE r32, r/m32 	V	V	Move if less or equal (ZF=1 or SF≠ OF).
-REX.W+ 0F 4E /r 	CMOVLE r64, r/m64 	V	NE	Move if less or equal (ZF=1 or SF≠ OF).
+0F 4C /r	CMOVL r16, r/m16 	V	V	Move if less (SF != OF).
+0F 4C /r 	CMOVL r32, r/m32 	V	V	Move if less (SF!= OF).
+REX.W+ 0F 4C /r 	CMOVL r64, r/m64 	V	NE	Move if less (SF!= OF).
+0F 4E /r	CMOVLE r16, r/m16 	V	V	Move if less or equal (ZF=1 or SF!= OF).
+0F 4E /r 	CMOVLE r32, r/m32 	V	V	Move if less or equal (ZF=1 or SF!= OF).
+REX.W+ 0F 4E /r 	CMOVLE r64, r/m64 	V	NE	Move if less or equal (ZF=1 or SF!= OF).
 0F 46 /r	CMOVNA r16, r/m16 	V	V	Move if not above (CF=1 or ZF=1).
 0F 46 /r 	CMOVNA r32, r/m32 	V	V	Move if not above (CF=1 or ZF=1).
 REX.W+ 0F 46 /r	CMOVNA r64, r/m64 	V	NE	Move if not above (CF=1 or ZF=1).
@@ -270,12 +270,12 @@ REX.W+ 0F 43 /r 	CMOVNC r64, r/m64 	V	NE	Move if not carry (CF=0).
 0F 45 /r	CMOVNE r16, r/m16 	V	V	Move if not equal (ZF=0).
 0F 45 /r 	CMOVNE r32, r/m32 	V	V	Move if not equal (ZF=0).
 REX.W+ 0F 45 /r 	CMOVNE r64, r/m64 	V	NE	Move if not equal (ZF=0).
-0F 4E /r	CMOVNG r16, r/m16 	V	V	Move if not greater (ZF=1 or SF≠ OF).
-0F 4E /r 	CMOVNG r32, r/m32 	V	V	Move if not greater (ZF=1 or SF≠ OF).
-REX.W+ 0F 4E /r 	CMOVNG r64, r/m64 	V	NE	Move if not greater (ZF=1 or SF≠ OF).
-0F 4C /r	CMOVNGE r16, r/m16 	V	V	Move if not greater or equal (SF≠ OF).
-0F 4C /r 	CMOVNGE r32, r/m32 	V	V	Move if not greater or equal (SF≠ OF).
-REX.W+ 0F 4C /r 	CMOVNGE r64, r/m64 	V	NE	Move if not greater or equal (SF≠ OF).
+0F 4E /r	CMOVNG r16, r/m16 	V	V	Move if not greater (ZF=1 or SF!= OF).
+0F 4E /r 	CMOVNG r32, r/m32 	V	V	Move if not greater (ZF=1 or SF!= OF).
+REX.W+ 0F 4E /r 	CMOVNG r64, r/m64 	V	NE	Move if not greater (ZF=1 or SF!= OF).
+0F 4C /r	CMOVNGE r16, r/m16 	V	V	Move if not greater or equal (SF!= OF).
+0F 4C /r 	CMOVNGE r32, r/m32 	V	V	Move if not greater or equal (SF!= OF).
+REX.W+ 0F 4C /r 	CMOVNGE r64, r/m64 	V	NE	Move if not greater or equal (SF!= OF).
 0F 4D /r	CMOVNL r16, r/m16 	V	V	Move if not less (SF=OF).
 0F 4D /r 	CMOVNL r32, r/m32 	V	V	Move if not less (SF=OF).
 REX.W+ 0F 4D /r 	CMOVNL r64, r/m64 	V	NE	Move if not less (SF=OF).
@@ -349,7 +349,7 @@ A7	CMPS m16, m16	V	V	For legacy mode, compare word at address DS:(E)SI with word
 A7	CMPS m32, m32	V	V	For legacy mode, compare dword at address DS:(E)SI at dword at address ES:(E)DI; For 64-bit mode compare dword at address (R|E)SI at dword at address (R|E)DI. The status flags are set accordingly.
 REX.W+ A7 	CMPS m64, m64 	V	NE	Compares quadword at address (R|E)SI with quadword at address (R|E)DI and sets the status flags accordingly.
 A6	CMPSB	V	V	For legacy mode, compare byte at address DS:(E)SI with byte at address ES:(E)DI; For 64- bit mode compare byte at address (R|E)SI with byte at address (R|E)DI. The status flags are set accordingly.
-A7	CMPSW	V	V	For legacy mode, compare word at address DS:(E)SI with word at address ES:(E)DI; For 64- bit mode compare word at address (R|E)SI with word at address (R|E)DI. The status flags are set accordingly.
+PREF.66+ A7	CMPSW	V	V	For legacy mode, compare word at address DS:(E)SI with word at address ES:(E)DI; For 64- bit mode compare word at address (R|E)SI with word at address (R|E)DI. The status flags are set accordingly.
 A7	CMPSD	V	V	For legacy mode, compare dword at address DS:(E)SI with dword at address ES:(E)DI; For 64-bit mode compare dword at address (R|E)SI with dword at address (R|E)DI. The status flags are set accordingly.
 REX.W+ A7	CMPSQ	V	NE	Compares quadword at address (R|E)SI with quadword at address (R|E)DI and sets the status flags accordingly.
 				
@@ -463,9 +463,9 @@ F3 REX.w+ 0F 2C /r	CVTTSS2SI r64, xmm/m32	V	NE	Convert one single-precision floa
 VEX.LIG.F3.0F.W0 2C /r	VCVTTSS2SI r32, xmm1/m32	V	V	Convert one single-precision floating-point value from xmm1/m32 to one signed doubleword integer in r32 using truncation.
 VEX.LIG.F3.0F.W1 2C /r	VCVTTSS2SI r64, xmm1/m32	V	NE	Convert one single-precision floating-point value from xmm1/m32 to one signed quadword integer in r64 using truncation.
 				
-99	CWD	V	V	DX:AX ← sign-extend of AX.
-99	CDQ	V	V	EDX:EAX ← sign-extend of EAX.
-REX.W+ 99	CQO	V	NE	RDX:RAX← sign-extend of RAX.
+PREF.66+ 99	CWD	V	V	DX:AX = sign-extend of AX.
+99	CDQ	V	V	EDX:EAX = sign-extend of EAX.
+REX.W+ 99	CQO	V	NE	RDX:RAX = sign-extend of RAX.
 				
 27	DAA	I	V	Decimal adjust AL after addition.
 				
@@ -479,11 +479,11 @@ REX.W+ FF /1	DEC r/m64 	V	NE	Decrement r/m64 by 1.
 48 +rw	DEC r16 	NE	V	Decrement r16 by 1.
 48 +rd	DEC r32	NE	V	Decrement r32 by 1.
 				
-F6 /6	DIV r/m8	V	V	Unsigned divide AX by r/m8, with result stored in AL ← Quotient, AH ← Remainder.
-REX+ F6 /6	DIV r/m8	V	NE	Unsigned divide AX by r/m8, with result stored in AL ← Quotient, AH ← Remainder.
-F7 /6	DIV r/m16 	V	V	Unsigned divide DX:AX by r/m16, with result stored in AX ← Quotient, DX ← Remainder.
-F7 /6	DIV r/m32	V	V	Unsigned divide EDX:EAX by r/m32, with result stored in EAX ← Quotient, EDX ← Remainder.
-REX.W+ F7 /6	DIV r/m64	V	NE	Unsigned divide RDX:RAX by r/m64, with result stored in RAX ← Quotient, RDX ← Remainder.
+F6 /6	DIV r/m8	V	V	Unsigned divide AX by r/m8, with result stored in AL = Quotient, AH = Remainder.
+REX+ F6 /6	DIV r/m8	V	NE	Unsigned divide AX by r/m8, with result stored in AL = Quotient, AH = Remainder.
+F7 /6	DIV r/m16 	V	V	Unsigned divide DX:AX by r/m16, with result stored in AX = Quotient, DX = Remainder.
+F7 /6	DIV r/m32	V	V	Unsigned divide EDX:EAX by r/m32, with result stored in EAX = Quotient, EDX = Remainder.
+REX.W+ F7 /6	DIV r/m64	V	NE	Unsigned divide RDX:RAX by r/m64, with result stored in RAX = Quotient, RDX = Remainder.
 				
 66 0F 5E /r	DIVPD xmm1, xmm2/m128	V	V	Divide packed double-precision floating-point values in xmm1 by packed double-precision floating-point values xmm2/m128.
 VEX.NDS.128.66.0F.WIG 5E /r	VDIVPD xmm1, xmm2, xmm3/m128	V	V	Divide packed double-precision floating-point values in xmm2 by packed double-precision floating-point values in xmm3/mem.
@@ -509,13 +509,13 @@ VEX.NDS.256.66.0F3A.WIG 40 /r ib	VDPPS ymm1, ymm2, ymm3/m256, imm8	V	V	Multiply 
 0F 77	EMMS	V	V	Set the x87 FPU tag word to empty.
 				
 C8 iw 00 	ENTER imm16, 0	V	V	Create a stack frame for a procedure.
-C8 iw 01	ENTER imm16,1 	V	V	Create a nested stack frame for a procedure.
+C8 iw 01	ENTER imm16, 1 	V	V	Create a nested stack frame for a procedure.
 C8 iw ib	ENTER imm16, imm8	V	V	Create a nested stack frame for a procedure.
 				
 66 0F 3A 17 /r ib	EXTRACTPS reg/m32, xmm2, imm8	V	V	Extract a single-precision floating-point value from xmm2 at the source offset specified by imm8 and store the result to reg or m32. The upper 32 bits of r64 is zeroed if reg is r64.
 VEX.128.66.0F3A.WIG 17 /r ib	VEXTRACTPS r/m32, xmm1, imm8	V	V	Extract one single-precision floating-point value from xmm1 at the offset specified by imm8 and store the result in reg or m32. Zero extend the results in 64-bit register if applicable.
 				
-D9 F0	F2XM1	V	V	Replace ST(0) with (2ST(0) – 1).
+D9 F0	F2XM1	V	V	Replace ST(0) with (2^(ST(0)) – 1).
 				
 D9 E1	FABS	V	V	Replace ST with its absolute value.
 				
@@ -740,25 +740,25 @@ F2 0F 7D /r 	HSUBPS xmm1, xmm2/m128	V	V	Horizontal subtract packed single-precis
 VEX.NDS.128.F2.0F.WIG 7D /r	VHSUBPS xmm1, xmm2, xmm3/m128	V	V	Horizontal subtract packed single-precision floating-point values from xmm2 and xmm3/mem.
 VEX.NDS.256.F2.0F.WIG 7D /r	VHSUBPS ymm1, ymm2, ymm3/m256	V	V	Horizontal subtract packed single-precision floating-point values from ymm2 and ymm3/mem.
 				
-F6 /7 	IDIV r/m8 	V	V	Signed divide AX by r/m8, with result stored in: AL ← Quotient, AH ← Remainder.
-REX+ F6 /7 	IDIV r/m8	V	NE	Signed divide AX by r/m8, with result stored in AL ← Quotient, AH ← Remainder.
-F7 /7 	IDIV r/m16 	V	V	Signed divide DX:AX by r/m16, with result stored in AX ← Quotient, DX ← Remainder.
-F7 /7 	IDIV r/m32 	V	V	Signed divide EDX:EAX by r/m32, with result stored in EAX ← Quotient, EDX ← Remainder.
-REX.W+ F7 /7 	IDIV r/m64 	V	NE	Signed divide RDX:RAX by r/m64, with result stored in RAX ← Quotient, RDX ← Remainder.
+F6 /7 	IDIV r/m8 	V	V	Signed divide AX by r/m8, with result stored in: AL = Quotient, AH = Remainder.
+REX+ F6 /7 	IDIV r/m8	V	NE	Signed divide AX by r/m8, with result stored in AL = Quotient, AH = Remainder.
+F7 /7 	IDIV r/m16 	V	V	Signed divide DX:AX by r/m16, with result stored in AX = Quotient, DX = Remainder.
+F7 /7 	IDIV r/m32 	V	V	Signed divide EDX:EAX by r/m32, with result stored in EAX = Quotient, EDX = Remainder.
+REX.W+ F7 /7 	IDIV r/m64 	V	NE	Signed divide RDX:RAX by r/m64, with result stored in RAX = Quotient, RDX = Remainder.
 				
-F6 /5	IMUL r/m8	V	V	AX← AL ∗ r/m byte.
-F7 /5 	IMUL r/m16 	V	V	DX:AX ← AX ∗ r/m word.
-F7 /5 	IMUL r/m32 	V	V	EDX:EAX ← EAX ∗ r/m32.
-REX.W+ F7 /5 	IMUL r/m64 	V	NE	RDX:RAX ← RAX ∗ r/m64.
-0F AF /r 	IMUL r16, r/m16 	V	V	word register ← word register ∗ r/m16.
-0F AF /r 	IMUL r32, r/m32 	V	V	doubleword register ← doubleword register ∗  r/m32.
-REX.W+ 0F AF /r 	IMUL r64, r/m64 	V	NE	Quadword register ← Quadword register ∗  r/m64.
-6B /r ib 	IMUL r16, r/m16, imm8 	V	V	word register ← r/m16 ∗ sign-extended immediate byte.
-6B /r ib 	IMUL r32, r/m32, imm8 	V	V	doubleword register ← r/m32 ∗ sign- extended immediate byte.
-REX.W+ 6B /r ib 	IMUL r64, r/m64, imm8 	V	NE	Quadword register ← r/m64 ∗ sign-extended  immediate byte.
-69 /r iw 	IMUL r16, r/m16, imm16 	V	V	word register ← r/m16 ∗ immediate word.
-69 /r id 	IMUL r32, r/m32, imm32 	V	V	doubleword register ← r/m32 ∗ immediate doubleword.
-REX.W+ 69 /r id 	IMUL r64, r/m64, imm32 	V	NE	Quadword register ← r/m64 ∗ immediate doubleword.
+F6 /5	IMUL r/m8	V	V	AX= AL ∗ r/m byte.
+F7 /5 	IMUL r/m16 	V	V	DX:AX = AX ∗ r/m word.
+F7 /5 	IMUL r/m32 	V	V	EDX:EAX = EAX ∗ r/m32.
+REX.W+ F7 /5 	IMUL r/m64 	V	NE	RDX:RAX = RAX ∗ r/m64.
+0F AF /r 	IMUL r16, r/m16 	V	V	word register = word register ∗ r/m16.
+0F AF /r 	IMUL r32, r/m32 	V	V	doubleword register = doubleword register ∗  r/m32.
+REX.W+ 0F AF /r 	IMUL r64, r/m64 	V	NE	Quadword register = Quadword register ∗  r/m64.
+6B /r ib 	IMUL r16, r/m16, imm8 	V	V	word register = r/m16 ∗ sign-extended immediate byte.
+6B /r ib 	IMUL r32, r/m32, imm8 	V	V	doubleword register = r/m32 ∗ sign- extended immediate byte.
+REX.W+ 6B /r ib 	IMUL r64, r/m64, imm8 	V	NE	Quadword register = r/m64 ∗ sign-extended  immediate byte.
+69 /r iw 	IMUL r16, r/m16, imm16 	V	V	word register = r/m16 ∗ immediate word.
+69 /r id 	IMUL r32, r/m32, imm32 	V	V	doubleword register = r/m32 ∗ immediate doubleword.
+REX.W+ 69 /r id 	IMUL r64, r/m64, imm32 	V	NE	Quadword register = r/m64 ∗ immediate doubleword.
 				
 E4 ib 	IN AL, imm8 	V	V	Input byte from imm8 I/O port address into AL.
 E5 ib 	IN AX, imm8 	V	V	Input word from imm8 I/O port address into AX.
@@ -779,7 +779,7 @@ REX.W+ FF /0	INC r/m64 	V	NE	Increment r/m quadword by 1.
 6D 	INS m16, DX 	V	V	Input word from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.1
 6D 	INS m32, DX 	V	V	Input doubleword from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.1
 6C 	INSB 	V	V	Input byte from I/O port specified in DX into memory location specified with ES:(E)DI or RDI.1
-6D 	INSW 	V	V	Input word from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.1
+PREF.66+ 6D 	INSW 	V	V	Input word from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.1
 6D 	INSD 	V	V	Input doubleword from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.1
 				
 66 0F 3A 21 /r ib 	INSERTPS xmm1, xmm2/m32, imm8	V	V	Insert a single precision floating-point value selected by imm8 from xmm2/m32 into xmm1 at the specified destination element specified by imm8 and zero out destination elements in xmm1 as indicated in imm8.
@@ -811,16 +811,16 @@ E3 cb 	JRCXZ rel8 	V	NE	Jump short if RCX register is 0.
 74 cb 	JE rel8 	V	V	Jump short if equal (ZF=1).
 7F cb 	JG rel8 	V	V	Jump short if greater (ZF=0 and SF=OF).
 7D cb 	JGE rel8 	V	V	Jump short if greater or equal (SF=OF).
-7C cb 	JL rel8 	V	V	Jump short if less (SF≠ OF).
-7E cb 	JLE rel8 	V	V	Jump short if less or equal (ZF=1 or SF≠ OF).
+7C cb 	JL rel8 	V	V	Jump short if less (SF!= OF).
+7E cb 	JLE rel8 	V	V	Jump short if less or equal (ZF=1 or SF!= OF).
 76 cb 	JNA rel8 	V	V	Jump short if not above (CF=1 or ZF=1).
 72 cb 	JNAE rel8 	V	V	Jump short if not above or equal (CF=1).
 73 cb 	JNB rel8 	V	V	Jump short if not below (CF=0).
 77 cb 	JNBE rel8 	V	V	Jump short if not below or equal (CF=0 and ZF=0).
 73 cb 	JNC rel8 	V	V	Jump short if not carry (CF=0).
 75 cb 	JNE rel8 	V	V	Jump short if not equal (ZF=0).
-7E cb 	JNG rel8 	V	V	Jump short if not greater (ZF=1 or SF≠ OF).
-7C cb 	JNGE rel8 	V	V	Jump short if not greater or equal (SF≠ OF).
+7E cb 	JNG rel8 	V	V	Jump short if not greater (ZF=1 or SF!= OF).
+7C cb 	JNGE rel8 	V	V	Jump short if not greater or equal (SF!= OF).
 7D cb 	JNL rel8 	V	V	Jump short if not less (SF=OF).
 7F cb 	JNLE rel8 	V	V	Jump short if not less or equal (ZF=0 and SF=OF).
 71 cb 	JNO rel8 	V	V	Jump short if not overflow (OF=0).
@@ -832,7 +832,7 @@ E3 cb 	JRCXZ rel8 	V	NE	Jump short if RCX register is 0.
 7A cb 	JPE rel8 	V	V	Jump short if parity even (PF=1).
 7B cb 	JPO rel8 	V	V	Jump short if parity odd (PF=0).
 78 cb 	JS rel8 	V	V	Jump short if sign (SF=1).
-74 cb 	JZ rel8 	V	V	Jump short if zero (ZF ← 1).
+74 cb 	JZ rel8 	V	V	Jump short if zero (ZF = 1).
 0F 87 cw 	JA rel16 	NS	V	Jump near if above (CF=0 and ZF=0). Not supported in 64-bit mode.
 0F 87 cd 	JA rel32 	V	V	Jump near if above (CF=0 and ZF=0).
 0F 83 cw 	JAE rel16 	NS	V	Jump near if above or equal (CF=0). Not supported in 64-bit mode.
@@ -849,10 +849,10 @@ E3 cb 	JRCXZ rel8 	V	NE	Jump short if RCX register is 0.
 0F 8F cd 	JG rel32 	V	V	Jump near if greater (ZF=0 and SF=OF).
 0F 8D cw 	JGE rel16 	NS	V	Jump near if greater or equal (SF=OF). Not supported in 64-bit mode.
 0F 8D cd 	JGE rel32 	V	V	Jump near if greater or equal (SF=OF).
-0F 8C cw 	JL rel16 	NS	V	Jump near if less (SF≠ OF). Not supported in  64-bit mode.
-0F 8C cd 	JL rel32 	V	V	Jump near if less (SF≠ OF).
-0F 8E cw 	JLE rel16 	NS	V	Jump near if less or equal (ZF=1 or SF≠ OF).  Not supported in 64-bit mode.
-0F 8E cd 	JLE rel32 	V	V	Jump near if less or equal (ZF=1 or SF≠ OF).
+0F 8C cw 	JL rel16 	NS	V	Jump near if less (SF!= OF). Not supported in  64-bit mode.
+0F 8C cd 	JL rel32 	V	V	Jump near if less (SF!= OF).
+0F 8E cw 	JLE rel16 	NS	V	Jump near if less or equal (ZF=1 or SF!= OF).  Not supported in 64-bit mode.
+0F 8E cd 	JLE rel32 	V	V	Jump near if less or equal (ZF=1 or SF!= OF).
 0F 86 cw 	JNA rel16 	NS	V	Jump near if not above (CF=1 or ZF=1). Not supported in 64-bit mode.
 0F 86 cd 	JNA rel32 	V	V	Jump near if not above (CF=1 or ZF=1).
 0F 82 cw 	JNAE rel16 	NS	V	Jump near if not above or equal (CF=1). Not supported in 64-bit mode.
@@ -865,10 +865,10 @@ E3 cb 	JRCXZ rel8 	V	NE	Jump short if RCX register is 0.
 0F 83 cd 	JNC rel32 	V	V	Jump near if not carry (CF=0).
 0F 85 cw 	JNE rel16 	NS	V	Jump near if not equal (ZF=0). Not supported in 64-bit mode.
 0F 85 cd 	JNE rel32 	V	V	Jump near if not equal (ZF=0).
-0F 8E cw 	JNG rel16 	NS	V	Jump near if not greater (ZF=1 or SF≠ OF). Not supported in 64-bit mode.
-0F 8E cd 	JNG rel32 	V	V	Jump near if not greater (ZF=1 or SF≠ OF).
-0F 8C cw 	JNGE rel16 	NS	V	Jump near if not greater or equal (SF≠ OF). Not supported in 64-bit mode.
-0F 8C cd 	JNGE rel32 	V	V	Jump near if not greater or equal (SF≠ OF).
+0F 8E cw 	JNG rel16 	NS	V	Jump near if not greater (ZF=1 or SF != OF). Not supported in 64-bit mode.
+0F 8E cd 	JNG rel32 	V	V	Jump near if not greater (ZF=1 or SF != OF).
+0F 8C cw 	JNGE rel16 	NS	V	Jump near if not greater or equal (SF != OF). Not supported in 64-bit mode.
+0F 8C cd 	JNGE rel32 	V	V	Jump near if not greater or equal (SF != OF).
 0F 8D cw 	JNL rel16 	NS	V	Jump near if not less (SF=OF). Not supported in 64-bit mode.
 0F 8D cd 	JNL rel32 	V	V	Jump near if not less (SF=OF).
 0F 8F cw 	JNLE rel16 	NS	V	Jump near if not less or equal (ZF=0 and SF=OF). Not supported in 64-bit mode.
@@ -904,10 +904,10 @@ FF /5 	JMP m16:16 	V	V	Jump far, absolute indirect, address given in m16:16
 FF /5 	JMP m16:32 	V	V	Jump far, absolute indirect, address given in m16:32.
 REX.W+ FF /5 	JMP m16:64 	V	NE	Jump far, absolute indirect, address given in m16:64.
 				
-9F 	LAHF 	V	V	Load: AH ← EFLAGS(SF:ZF:0:AF:0:PF:1:CF).
+9F 	LAHF 	V	V	Load: AH = EFLAGS(SF:ZF:0:AF:0:PF:1:CF).
 				
-0F 02 /r 	LAR r16, r16/m16 	V	V	r16 ← access rights referenced by r16/m16
-0F 02 /r 	LAR reg, r32/m16	V	V	reg ← access rights referenced by r32/m16
+0F 02 /r 	LAR r16, r16/m16 	V	V	r16 = access rights referenced by r16/m16
+0F 02 /r 	LAR reg, r32/m16	V	V	reg = access rights referenced by r32/m16
 				
 F2 0F F0 /r 	LDDQU xmm1, mem	V	V	Load unaligned data from mem and return double quadword in xmm1.
 VEX.128.F2.0F.WIG F0 /r	VLDDQU xmm1, m128	V	V	Load unaligned packed integer values from mem to xmm1.
@@ -934,7 +934,7 @@ REX+ 0F B5 /r 	LGS r64, m16:64 	V	NE	Load GS:r64 with far pointer from memory.
 8D /r 	LEA r32, m 	V	V	Store effective address for m in register r32.
 REX.W+ 8D /r 	LEA r64, m 	V	NE	Store effective address for m in register r64.
 				
-C9 	LEAVE 	V	V	Set SP to BP, then pop BP.
+PREF.66+ C9 	LEAVE p66	V	V	Set SP to BP, then pop BP.
 C9 	LEAVE 	NE	V	Set ESP to EBP, then pop EBP.
 C9 	LEAVE 	V	NE	Set RSP to RBP, then pop RBP.
 				
@@ -956,17 +956,17 @@ AD 	LODS m16 	V	V	For legacy mode, Load word at address DS:(E)SI into AX. For 64
 AD 	LODS m32 	V	V	For legacy mode, Load dword at address DS:(E)SI into EAX. For 64-bit mode load dword at address (R)SI into EAX.
 REX.W+ AD 	LODS m64 	V	NE	Load qword at address (R)SI into RAX.
 AC 	LODSB 	V	V	For legacy mode, Load byte at address DS:(E)SI into AL. For 64-bit mode load byte at address (R)SI into AL.
-AD 	LODSW 	V	V	For legacy mode, Load word at address DS:(E)SI into AX. For 64-bit mode load word at address (R)SI into AX.
+PREF.66+ AD 	LODSW 	V	V	For legacy mode, Load word at address DS:(E)SI into AX. For 64-bit mode load word at address (R)SI into AX.
 AD 	LODSD 	V	V	For legacy mode, Load dword at address DS:(E)SI into EAX. For 64-bit mode load dword at address (R)SI into EAX.
 REX.W+ AD 	LODSQ 	V	NE	Load qword at address (R)SI into RAX.
 				
-E2 cb 	LOOP rel8 	V	V	Decrement count; jump short if count ≠ 0.
-E1 cb 	LOOPE rel8 	V	V	Decrement count; jump short if count ≠ 0 and  ZF = 1.
-E0 cb 	LOOPNE rel8 	V	V	Decrement count; jump short if count ≠ 0 and  ZF = 0.
+E2 cb 	LOOP rel8 	V	V	Decrement count; jump short if count != 0.
+E1 cb 	LOOPE rel8 	V	V	Decrement count; jump short if count != 0 and  ZF = 1.
+E0 cb 	LOOPNE rel8 	V	V	Decrement count; jump short if count != 0 and  ZF = 0.
 				
-0F 03 /r 	LSL r16, r16/m16 	V	V	Load: r16 ← segment limit, selector r16/m16.
-0F 03 /r 	LSL r32, r32/m16	V	V	Load: r32 ← segment limit, selector r32/m16.
-REX.W+ 0F 03 /r	LSL r64, r32/m16	V	V	Load: r64 ← segment limit, selector r32/m16
+0F 03 /r 	LSL r16, r16/m16 	V	V	Load: r16 = segment limit, selector r16/m16.
+0F 03 /r 	LSL r32, r32/m16	V	V	Load: r32 = segment limit, selector r32/m16.
+REX.W+ 0F 03 /r	LSL r64, r32/m16	V	V	Load: r64 = segment limit, selector r32/m16
 				
 0F 00 /3 	LTR r/m16 	V	V	Load r/m16 into task register.
 				
@@ -1022,12 +1022,12 @@ REX.W+ 8C /r 	MOV r/m64, Sreg	V	V	Move zero extended 16-bit segment register to 
 8E /r 	MOV Sreg, r/m16	V	V	Move r/m16 to segment register.
 REX.W+ 8E /r 	MOV Sreg, r/m64	V	V	Move lower 16 bits of r/m64 to segment register.
 A0 	MOV AL, moffs8	V	V	Move byte at (seg:offset) to AL.
-REX.W+ A0 	MOV AL, moffs8	V	NE	Move byte at (offset) to AL.
+REX.W+ A0 	MOV AL, moffs8, pw	V	NE	Move byte at (offset) to AL.
 A1 	MOV AX, moffs16	V	V	Move word at (seg:offset) to AX.
 A1 	MOV EAX, moffs32	V	V	Move doubleword at (seg:offset) to EAX.
 REX.W+ A1 	MOV RAX, moffs64	V	NE	Move quadword at (offset) to RAX.
 A2 	MOV moffs8, AL 	V	V	Move AL to (seg:offset).
-REX.W+ A2 	MOV moffs8, AL 	V	NE	Move AL to (offset).
+REX.W+ A2 	MOV moffs8, AL, pw 	V	NE	Move AL to (offset).
 A3 	MOV moffs16, AX 	V	V	Move AX to (seg:offset).
 A3 	MOV moffs32, EAX 	V	V	Move EAX to (seg:offset).
 REX.W+ A3 	MOV moffs64, RAX 	V	NE	Move RAX to (offset).
@@ -1177,7 +1177,7 @@ A5 	MOVS m16, m16 	V	V	For legacy mode, move word from address DS:(E)SI to ES:(E
 A5 	MOVS m32, m32 	V	V	For legacy mode, move dword from address DS:(E)SI to ES:(E)DI. For 64-bit mode move dword from address (R|E)SI to (R|E)DI.
 REX.W+ A5 	MOVS m64, m64 	V	NE	Move qword from address (R|E)SI to (R|E)DI.
 A4 	MOVSB 	V	V	For legacy mode, Move byte from address DS:(E)SI to ES:(E)DI. For 64-bit mode move byte from address (R|E)SI to (R|E)DI.
-A5 	MOVSW 	V	V	For legacy mode, move word from address DS:(E)SI to ES:(E)DI. For 64-bit mode move word at address (R|E)SI to (R|E)DI.
+PREF.66+ A5 	MOVSW 	V	V	For legacy mode, move word from address DS:(E)SI to ES:(E)DI. For 64-bit mode move word at address (R|E)SI to (R|E)DI.
 A5 	MOVSD 	V	V	For legacy mode, move dword from address DS:(E)SI to ES:(E)DI. For 64-bit mode move dword from address (R|E)SI to (R|E)DI.
 REX.W+ A5 	MOVSQ 	V	NE	Move qword from address (R|E)SI to (R|E)DI.
 				
@@ -1233,11 +1233,11 @@ REX.W+ 0F B7 /r 	MOVZX r64, r/m16 	V	NE	Move word to quadword, zero-extension.
 66 0F 3A 42 /r ib 	MPSADBW xmm1, xmm2/m128, imm8	V	V	Sums absolute 8-bit integer difference of adjacent groups of 4 byte integers in xmm1 and xmm2/m128 and writes the results in xmm1. Starting offsets within xmm1 and xmm2/m128 are determined by imm8.
 VEX.NDS.128.66.0F3A.WIG 42 /r ib	VMPSADBW xmm1, xmm2, xmm3/m128, imm8	V	V	Sums absolute 8-bit integer difference of adjacent groups of 4 byte integers in xmm2 and xmm3/m128 and writes the results in xmm1. Starting offsets within xmm2 and xmm3/m128 are determined by imm8.
 				
-F6 /4 	MUL r/m8 	V	V	Unsigned multiply (AX ← AL ∗ r/m8).
-REX+ F6 /4 	MUL r/m8	V	NE	Unsigned multiply (AX ← AL ∗ r/m8).
-F7 /4 	MUL r/m16 	V	V	Unsigned multiply (DX:AX ← AX ∗ r/m16).
-F7 /4 	MUL r/m32 	V	V	Unsigned multiply (EDX:EAX ← EAX ∗ r/m32).
-REX.W+ F7 /4 	MUL r/m64 	V	NE	Unsigned multiply (RDX:RAX ← RAX ∗ r/m64.
+F6 /4 	MUL r/m8 	V	V	Unsigned multiply (AX = AL ∗ r/m8).
+REX+ F6 /4 	MUL r/m8	V	NE	Unsigned multiply (AX = AL ∗ r/m8).
+F7 /4 	MUL r/m16 	V	V	Unsigned multiply (DX:AX = AX ∗ r/m16).
+F7 /4 	MUL r/m32 	V	V	Unsigned multiply (EDX:EAX = EAX ∗ r/m32).
+REX.W+ F7 /4 	MUL r/m64 	V	NE	Unsigned multiply (RDX:RAX = RAX ∗ r/m64.
 				
 66 0F 59 /r 	MULPD xmm1, xmm2/m128	V	V	Multiply packed double-precision floating-point values in xmm2/m128 by xmm1.
 VEX.NDS.128.66.0F.WIG 59 /r	VMULPD xmm1, xmm2, xmm3/m128	V	V	Multiply packed double-precision floating-point values from xmm3/mem to xmm2 and stores result in xmm1.
@@ -1313,7 +1313,7 @@ EF 	OUT DX, EAX 	V	V	Output doubleword in EAX to I/O port address in DX.
 6F 	OUTS DX, m16 	V	V	Output word from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 6F 	OUTS DX, m32 	V	V	Output doubleword from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 6E 	OUTSB 	V	V	Output byte from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
-6F 	OUTSW 	V	V	Output word from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
+PREF.66+ 6F 	OUTSW 	V	V	Output word from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 6F 	OUTSD 	V	V	Output doubleword from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 				
 0F 38 1C /r 	PABSB mm1, mm2/m64	V	V	Compute the absolute value of bytes in mm2/m64 and store UNSIGNED result in mm1.
@@ -1598,10 +1598,10 @@ VEX.NDS.128.66.0F.WIG F4 /r	VPMULUDQ xmm1, xmm2, xmm3/m128	V	V	Multiply packed u
 1F 	POP DS 	I	V	Pop top of stack into DS; increment stack pointer.
 07	POP ES 	I	V	Pop top of stack into ES; increment stack pointer.
 17	POP SS 	I	V	Pop top of stack into SS; increment stack pointer.
-0F A1 	POP FS 	V	V	Pop top of stack into FS; increment stack pointer by 16 bits.
+PREF.66+ 0F A1 	POP FS, p66	V	V	Pop top of stack into FS; increment stack pointer by 16 bits.
 0F A1 	POP FS 	NE	V	Pop top of stack into FS; increment stack pointer by 32 bits.
 0F A1 	POP FS 	V	NE	Pop top of stack into FS; increment stack pointer by 64 bits.
-0F A9 	POP GS 	V	V	Pop top of stack into GS; increment stack pointer by 16 bits.
+PREF.66+ 0F A9 	POP GS, p66	V	V	Pop top of stack into GS; increment stack pointer by 16 bits.
 0F A9 	POP GS 	NE	V	Pop top of stack into GS; increment stack pointer by 32 bits.
 0F A9 	POP GS 	V	NE	Pop top of stack into GS; increment stack pointer by 64 bits.
 				
@@ -1612,7 +1612,7 @@ F3 0F B8 /r 	POPCNT r16, r/m16 	V	V	POPCNT on r/m16
 F3 0F B8 /r 	POPCNT r32, r/m32 	V	V	POPCNT on r/m32
 F3 REX.W+ 0F B8 /r 	POPCNT r64, r/m64 	V	NE	POPCNT on r/m64
 				
-9D 	POPF 	V	V	Pop top of stack into lower 16 bits of EFLAGS.
+PREF.66+ 9D 	POPF 	V	V	Pop top of stack into lower 16 bits of EFLAGS.
 9D 	POPFD 	NE	V	Pop top of stack into EFLAGS.
 REX.W+ 9D 	POPFQ 	V	NE	Pop top of stack and zero-extend into RFLAGS.
 				
@@ -1786,7 +1786,7 @@ FF /6	PUSH r/m64	V	NE	Push r/m64.
 60	PUSHA	I	V	Push AX, CX, DX, BX, original SP, BP, SI, and DI.
 60	PUSHAD	I	V	Push EAX, ECX, EDX, EBX, original ESP, EBP, ESI, and EDI.
 				
-9C	PUSHF	V	V	Push lower 16 bits of EFLAGS.
+PREF.66+ 9C	PUSHF	V	V	Push lower 16 bits of EFLAGS.
 9C	PUSHFD	NE	V	Push EFLAGS.
 9C	PUSHFQ	V	NE	Push RFLAGS.
 				
@@ -1880,20 +1880,20 @@ REX.W+ 0F C7 /6	RDRAND r64	V	I	Read a 64-bit random number and store in the dest
 0F 01 F9	RDTSCP	V	V	Read 64-bit time-stamp counter and 32-bit IA32_TSC_AUX value into EDX:EAX and ECX.
 				
 F3 6C	REP_INS m8, DX 	V	V	Input (E)CX bytes from port DX into ES:[(E)DI].
-F3 6C	REP_INS m8, DX	V	NE	Input RCX bytes from port DX into [RDI].
+F3 REX.w+ 6C	REP_INS m8, DX	V	NE	Input RCX bytes from port DX into [RDI].
 F3 6D	REP_INS m16, DX	V	V	Input (E)CX words from port DX into ES:[(E)DI.]
 F3 6D	REP_INS m32, DX	V	V	Input (E)CX doublewords from port DX into ES:[(E)DI].
-F3 6D	REP_INS r/m32, DX	V	NE	Input RCX default size from port DX into [RDI].
+F3 REX.w+ 6D	REP_INS m32, DX	V	NE	Input RCX default size from port DX into [RDI].
 F3 A4	REP_MOVS m8, m8	V	V	Move (E)CX bytes from DS:[(E)SI] to ES:[(E)DI].
 F3 REX.w+ A4	REP_MOVS m8, m8	V	NE	Move RCX bytes from [RSI] to [RDI].
 F3 A5	REP_MOVS m16, m16	V	V	Move (E)CX words from DS:[(E)SI] to ES:[(E)DI].
 F3 A5	REP_MOVS m32, m32	V	V	Move (E)CX doublewords from DS:[(E)SI] to ES:[(E)DI].
 F3 REX.w+ A5	REP_MOVS m64, m64	V	NE	Move RCX quadwords from [RSI] to [RDI].
-F3 6E	REP_OUTS DX, r/m8	V	V	Output (E)CX bytes from DS:[(E)SI] to port DX.
-F3 REX.w+ 6E	REP_OUTS DX, r/m8	V	NE	Output RCX bytes from [RSI] to port DX.
-F3 6F	REP_OUTS DX, r/m16	V	V	Output (E)CX words from DS:[(E)SI] to port DX.
-F3 6F	REP_OUTS DX, r/m32	V	V	Output (E)CX doublewords from DS:[(E)SI] to port DX.
-F3 REX.w+ 6F	REP_OUTS DX, r/m32	V	NE	Output RCX default size from [RSI] to port DX.
+F3 6E	REP_OUTS DX, m8	V	V	Output (E)CX bytes from DS:[(E)SI] to port DX.
+F3 REX.w+ 6E	REP_OUTS DX, m8	V	NE	Output RCX bytes from [RSI] to port DX.
+F3 6F	REP_OUTS DX, m16	V	V	Output (E)CX words from DS:[(E)SI] to port DX.
+F3 6F	REP_OUTS DX, m32	V	V	Output (E)CX doublewords from DS:[(E)SI] to port DX.
+F3 REX.w+ 6F	REP_OUTS DX, m32	V	NE	Output RCX default size from [RSI] to port DX.
 F3 AC	REP_LODS AL	V	V	Load (E)CX bytes from DS:[(E)SI] to AL.
 F3 REX.w+ AC	REP_LODS AL	V	NE	Load RCX bytes from [RSI] to AL.
 F3 AD	REP_LODS AX	V	V	Load (E)CX words from DS:[(E)SI] to AX.
@@ -1926,9 +1926,9 @@ F2 AF	REPNE_SCAS m32	V	V	Find EAX, starting at ES:[(E)DI].
 F2 REX.w+ AF	REPNE_SCAS m64	V	NE	Find RAX, starting at [RDI].
 				
 C3	RET	V	V	Near return to calling procedure.
-CB	RET	V	V	Far return to calling procedure.
+CB	RET far	V	V	Far return to calling procedure.
 C2 iw	RET imm16	V	V	Near return to calling procedure and pop imm16 bytes from stack.
-CA iw	RET imm16	V	V	Far return to calling procedure and pop imm16 bytes from stack.
+CA iw	RET imm16, far	V	V	Far return to calling procedure and pop imm16 bytes from stack.
 				
 66 0F 3A 09 /r ib	ROUNDPD xmm1, xmm2/m128, imm8	V	V	Round packed double precision floating-point values in xmm2/m128 and place the result in xmm1. The rounding mode is determined by imm8.
 VEX.128.66.0F3A.WIG 09 /r ib	VROUNDPD xmm1, xmm2/m128, imm8	V	V	Round packed double-precision floating-point values in xmm2/m128 and place the result in xmm1. The rounding mode is determined by imm8.
@@ -2044,7 +2044,7 @@ AF	SCAS m16	V	V	Compare AX with word at ES:(E)DI or RDI, then set status flags.
 AF	SCAS m32	V	V	Compare EAX with doubleword at ES(E)DI or RDI then set status flags.
 REX.W+ AF	SCAS m64	V	NE	Compare RAX with quadword at RDI or EDI then set status flags.
 AE	SCASB	V	V	Compare AL with byte at ES:(E)DI or RDI then set status flags.
-AF	SCASW	V	V	Compare AX with word at ES:(E)DI or RDI then set status flags.
+PREF.66+ AF	SCASW	V	V	Compare AX with word at ES:(E)DI or RDI then set status flags.
 AF	SCASD	V	V	Compare EAX with doubleword at ES:(E)DI or RDI then set status flags.
 REX.W+ AF	SCASQ	V	NE	Compare RAX with quadword at RDI or EDI then set status flags.
 				
@@ -2064,10 +2064,10 @@ REX+ 0F 94	SETE r/m8	V	NE	Set byte if equal (ZF=1).
 REX+ 0F 9F	SETG r/m8	V	NE	Set byte if greater (ZF=0 and SF=OF).
 0F 9D	SETGE r/m8	V	V	Set byte if greater or equal (SF=OF).
 REX+ 0F 9D	SETGE r/m8	V	NE	Set byte if greater or equal (SF=OF).
-0F 9C	SETL r/m8	V	V	Set byte if less (SF≠ OF).
-REX+ 0F 9C	SETL r/m8	V	NE	Set byte if less (SF≠ OF).
-0F 9E	SETLE r/m8	V	V	Set byte if less or equal (ZF=1 or SF≠ OF).
-REX+ 0F 9E	SETLE r/m8	V	NE	Set byte if less or equal (ZF=1 or SF≠ OF).
+0F 9C	SETL r/m8	V	V	Set byte if less (SF!= OF).
+REX+ 0F 9C	SETL r/m8	V	NE	Set byte if less (SF!= OF).
+0F 9E	SETLE r/m8	V	V	Set byte if less or equal (ZF=1 or SF!= OF).
+REX+ 0F 9E	SETLE r/m8	V	NE	Set byte if less or equal (ZF=1 or SF!= OF).
 0F 96	SETNA r/m8	V	V	Set byte if not above (CF=1 or ZF=1).
 REX+ 0F 96	SETNA r/m8	V	NE	Set byte if not above (CF=1 or ZF=1).
 0F 92	SETNAE r/m8	V	V	Set byte if not above or equal (CF=1).
@@ -2080,10 +2080,10 @@ REX+ 0F 97	SETNBE r/m8	V	NE	Set byte if not below or equal (CF=0 and ZF=0).
 REX+ 0F 93	SETNC r/m8	V	NE	Set byte if not carry (CF=0).
 0F 95	SETNE r/m8	V	V	Set byte if not equal (ZF=0).
 REX+ 0F 95	SETNE r/m8	V	NE	Set byte if not equal (ZF=0).
-0F 9E	SETNG r/m8	V	V	Set byte if not greater (ZF=1 or SF≠ OF)
-REX+ 0F 9E	SETNG r/m8	V	NE	Set byte if not greater (ZF=1 or SF≠ OF)
-0F 9C	SETNGE r/m8	V	V	Set byte if not greater or equal (SF≠ OF).
-REX+ 0F 9C	SETNGE r/m8	V	NE	Set byte if not greater or equal (SF≠ OF).
+0F 9E	SETNG r/m8	V	V	Set byte if not greater (ZF=1 or SF!= OF)
+REX+ 0F 9E	SETNG r/m8	V	NE	Set byte if not greater (ZF=1 or SF!= OF)
+0F 9C	SETNGE r/m8	V	V	Set byte if not greater or equal (SF!= OF).
+REX+ 0F 9C	SETNGE r/m8	V	NE	Set byte if not greater or equal (SF!= OF).
 0F 9D	SETNL r/m8	V	V	Set byte if not less (SF=OF).
 REX+ 0F 9D	SETNL r/m8	V	NE	Set byte if not less (SF=OF).
 0F 9F	SETNLE r/m8	V	V	Set byte if not less or equal (ZF=0 and SF=OF).
@@ -2172,7 +2172,7 @@ AB	STOS m16	V	V	For legacy mode, store AX at address ES:(E)DI; For 64-bit mode s
 AB	STOS m32	V	V	For legacy mode, store EAX at address ES:(E)DI; For 64-bit mode store EAX at address RDI or EDI.
 REX.W+ AB	STOS m64	V	NE	Store RAX at address RDI or EDI.
 AA	STOSB	V	V	For legacy mode, store AL at address ES:(E)DI; For 64-bit mode store AL at address RDI or EDI.
-AB	STOSW	V	V	For legacy mode, store AX at address ES:(E)DI; For 64-bit mode store AX at address RDI or EDI.
+PREF.66+ AB	STOSW	V	V	For legacy mode, store AX at address ES:(E)DI; For 64-bit mode store AX at address RDI or EDI.
 AB	STOSD	V	V	For legacy mode, store EAX at address ES:(E)DI; For 64-bit mode store EAX at address RDI or EDI.
 REX.W+ AB	STOSQ	V	NE	Store RAX at address RDI or EDI.
 				
@@ -2222,10 +2222,10 @@ VEX.NDS.LIG.F3.0F.WIG 5C /r	VSUBSS xmm1, xmm2, xmm3/m32	V	V	Subtract the low sin
 0F 34	SYSENTER	V	V	Fast call to privilege level 0 system procedures.
 				
 0F 35	SYSEXIT	V	V	Fast return to privilege level 3 user code.
-REX.W+ 0F 35	SYSEXIT	V	V	Fast return to 64-bit mode privilege level 3 user code.
+REX.W+ 0F 35	SYSEXIT pw	V	V	Fast return to 64-bit mode privilege level 3 user code.
 				
 0F 07	SYSRET	V	I	Return to compatibility mode from fast system call
-REX.W+ 0F 07	SYSRET	V	I	Return to 64-bit mode from fast system call
+REX.W+ 0F 07	SYSRET pw	V	I	Return to 64-bit mode from fast system call
 				
 A8 ib	TEST AL, imm8	V	V	AND imm8 with AL; set SF, ZF, PF according to result.
 A9 iw	TEST AX, imm16	V	V	AND imm16 with AX; set SF, ZF, PF according to result.

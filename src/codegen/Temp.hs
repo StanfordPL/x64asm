@@ -100,22 +100,33 @@ remove_rex :: Instr -> Instr
 remove_rex i = i{opcode=o}
   where o = intercalate " " $ filter (\x -> x /= "REX+") (opcode_terms i)
 
--- Expand REX+ instruction based on operand types
+-- Rewrite REX+ instructions to use different r8 type
 -- TODO: For now this is just adding disambiguation
-expand_rex :: Instr -> [Instr]
-expand_rex i = [i{instruction=i1}, i{instruction=i2}]
+rewrite_rex :: Instr -> Instr
+rewrite_rex i = i{instruction=i1}
   where i1 = (instruction i) ++ ", FS"
-        i2 = (instruction i) ++ ", GS"
 
 -- Rename operands for REX+ prefix instructions
-fix_rex_row :: Instr -> [Instr]
+fix_rex_row :: Instr -> Instr
 fix_rex_row i = case "REX+" `elem` (opcode_terms i) of
-  True  -> map remove_rex $ expand_rex i
-  False -> [remove_rex i]
+  True  -> remove_rex $ rewrite_rex i
+  False -> remove_rex i
 
 -- Fix all rex rows
 fix_rex_rows :: [Instr] -> [Instr]
-fix_rex_rows is = concat $ map fix_rex_row is
+fix_rex_rows is = map fix_rex_row is
+
+-- Returns the instruction with the shortest encoding
+shortest :: [Instr] -> Instr
+shortest is = minimumBy encoding is
+  where encoding i1 i2 = compare (len i1) (len i2)
+        len i = (length (opcode_terms i))
+
+-- Remove ambiguity by prefering the shortest encoding
+remove_ambiguity :: [Instr] -> [Instr]
+remove_ambiguity is = map shortest $ groupBy eq $ sortBy srt is
+  where srt x y = compare (assm_decl x) (assm_decl y)
+        eq x y = (assm_decl x) == (assm_decl y)	
 
 -------------------------------------------------------------------------------
 -- Debugging
@@ -247,6 +258,9 @@ op2type "DR0-DR7"  = "Dr" -- DR 0 - 7
 op2type "Sreg"     = "Sreg"
 op2type "FS"       = "Fs"
 op2type "GS"       = "Gs"
+op2type "p66"      = "Pref66"
+op2type "pw"       = "PrefRexW"
+op2type "far"      = "Far"
 op2type o = error $ "Unrecognized operand type: " ++ o
 
 -------------------------------------------------------------------------------
@@ -295,7 +309,8 @@ assm_src_defns is = intercalate "\n\n" $ map assm_src_defn is
 main :: IO ()		
 main = do args <- getArgs
           file <- readFile $ head args
-          let is = fix_rex_rows $
+          let is = remove_ambiguity $
+                   fix_rex_rows $
                    remove_no_reg_rex $ 
                    x64 $
                    flatten_instrs $ 
@@ -304,5 +319,3 @@ main = do args <- getArgs
 
           writeFile "assembler.decl" $ assm_header_decls is
           writeFile "assembler.defn" $ assm_src_defns is
-          writeFile "blah" $ intercalate "\n" $  ambig_decls_pretty is
-          mapM_ print $ uniq_opc_terms is
