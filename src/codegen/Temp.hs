@@ -100,17 +100,16 @@ remove_rex :: Instr -> Instr
 remove_rex i = i{opcode=o}
   where o = intercalate " " $ filter (\x -> x /= "REX+") (opcode_terms i)
 
--- Rewrite REX+ instructions to use different r8 type
--- TODO: For now this is just adding disambiguation
+-- Rewrite REX+ instructions to use different NoRexR8 instead of R8
 rewrite_rex :: Instr -> Instr
 rewrite_rex i = i{instruction=i1}
-  where i1 = (instruction i) ++ ", FS"
+  where i1 = subRegex (mkRegex "r8") (instruction i) "norexr8"
 
 -- Rename operands for REX+ prefix instructions
 fix_rex_row :: Instr -> Instr
 fix_rex_row i = case "REX+" `elem` (opcode_terms i) of
   True  -> remove_rex $ rewrite_rex i
-  False -> remove_rex i
+  False -> i
 
 -- Fix all rex rows
 fix_rex_rows :: [Instr] -> [Instr]
@@ -252,15 +251,16 @@ op2type "moffs8"   = "Moffs8"
 op2type "moffs16"  = "Moffs16"
 op2type "moffs32"  = "Moffs32"
 op2type "moffs64"  = "Moffs64"
-op2type "CR0-CR7"  = "Cr0234" -- CR 0 2 3 4
-op2type "CR8"      = "Cr8" 
-op2type "DR0-DR7"  = "Dr" -- DR 0 - 7
+op2type "CR0-CR7"  = "Cr0234" 
+op2type "CR8"      = "Cr8"
+op2type "DR0-DR7"  = "Dr" 
 op2type "Sreg"     = "Sreg"
 op2type "FS"       = "Fs"
 op2type "GS"       = "Gs"
 op2type "p66"      = "Pref66"
 op2type "pw"       = "PrefRexW"
 op2type "far"      = "Far"
+op2type "norexr8"  = "NoRexR8"
 op2type o = error $ "Unrecognized operand type: " ++ o
 
 -------------------------------------------------------------------------------

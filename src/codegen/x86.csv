@@ -23,7 +23,7 @@ REX.W+ 81 /2 id	ADC r/m64, imm32	V	NE	Add with CF imm32 sign extended to 64-bits
 83 /2 ib	ADC r/m32, imm8	V	V	Add with CF sign-extended imm8 into r/m32.
 REX.W+ 83 /2 ib	ADC r/m64, imm8	V	NE	Add with CF sign-extended imm8 into r/m64.
 10 /r	ADC r/m8, r8	V	V	Add with carry byte register to r/m8.
-REX+ 10 /r	ADC r/m8, r8	V	NE	Add with carry byte register to r/m64.
+REX+ 10 /r	ADC r/m8, r8	V	NE	Add with carry byte register to r/m8.
 11 /r	ADC r/m16, r16	V	V	Add with carry r16 to r/m16.
 11 /r	ADC r/m32, r32	V	V	Add with CF r32 to r/m32.
 REX.W+ 11 /r	ADC r/m64, r64	V	NE	Add with CF r64 to r/m64.
