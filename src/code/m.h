@@ -1,291 +1,421 @@
 #ifndef X64_SRC_CODE_M_H
 #define X64_SRC_CODE_M_H
 
-#include <cassert>
-
 #include "src/code/r.h"
 #include "src/code/imm.h"
 #include "src/code/operand.h"
 #include "src/code/sreg.h"
-#include "src/code/scale.h"
 
 namespace x64 {
 
-/** An address in memory.
-*/
-class M {
-	public:
-		inline M() {
-			set_all(sreg_null, r_null, r_null, scale_null, 0, false); 
-		}
-
-		inline M(Operand a) 
-				: a_(a) {
-		}
-
-		inline M(R64 b) {
-			set_all(sreg_null, b, r_null, times_1, 0, false);
-		}
-
-		inline M(R64 b, Imm32 d) {
-			set_all(sreg_null, b, r_null, times_1, d, false);
-		}
-
-		inline M(R64 i, Scale s) {
-			set_all(sreg_null, r_null, i, s, 0, false);
-		}
-
-		inline M(R64 i, Scale s, Imm32 d) {
-			set_all(sreg_null, r_null, i, s, d, false);
-		}
-
-		inline M(R64 b, R64 i, Scale s) {
-			set_all(sreg_null, b, i, s, 0, false);
-		}
-
-		inline M(R64 b, R64 i, Scale s, Imm32 d) {
-			set_all(sreg_null, b, i, s, d, false);
-		}
-
-		inline M(R32 b) {
-			set_all(sreg_null, b, r_null, times_1, 0, true);
-		}
-
-		inline M(R32 b, Imm32 d) {
-			set_all(sreg_null, b, r_null, times_1, d, true);
-		}
-
-		inline M(R32 i, Scale s) {
-			set_all(sreg_null, r_null, i, s, 0, true);
-		}
-
-		inline M(R32 i, Scale s, Imm32 d) {
-			set_all(sreg_null, r_null, i, s, d, true);
-		}
-
-		inline M(R32 b, R32 i, Scale s) {
-			set_all(sreg_null, b, i, s, 0, true);
-		}
-
-		inline M(R32 b, R32 i, Scale s, Imm32 d) {
-			set_all(sreg_null, b, i, s, d, true);
-		}
-
-		inline operator Operand() const {
-			return a_;
-		}
-
+	/*  NULL CONDITION
 		inline bool is_null() const {
 			return (get_base().is_null() && get_scale().is_null()) || 
 				      get_index() == rsp ||
 							get_scale() == scale_null;			     
 		}
+	*/
+
+/** An operand in memory. */
+class M {
+	private:
+		enum Null {
+			NULL_R = 0x10, NULL_SREG = 0x8
+		};
+
+	public:
+		enum Scale {
+			TIMES_1 = 0, TIMES_2,	TIMES_4, TIMES_8
+		};
+
+		inline M(R64 b) {
+			set_all(NULL_SREG, b, NULL_R, TIMES_1, 0, 0);
+		}
+
+		inline M(Sreg s, R64 b) {
+			set_all(s, b, NULL_R, TIMES_1, 0, 0);
+		}
+
+		inline M(R64 b, Imm32 d) {
+			set_all(NULL_SREG, b, NULL_R, TIMES_1, d, 0);
+		}
+
+		inline M(Sreg s, R64 b, Imm32 d) {
+			set_all(s, b, NULL_R, TIMES_1, d, 0);
+		}
+
+		inline M(R64 i, Scale s) {
+			set_all(NULL_SREG, NULL_R, i, s, 0, 0);
+		}
+
+		inline M(Sreg s, R64 i, Scale sc) {
+			set_all(s, NULL_R, i, sc, 0, 0);
+		}
+
+		inline M(R64 i, Scale s, Imm32 d) {
+			set_all(NULL_SREG, NULL_R, i, s, d, 0);
+		}
+
+		inline M(Sreg s, R64 i, Scale sc, Imm32 d) {
+			set_all(s, NULL_R, i, sc, d, 0);
+		}
+
+		inline M(R64 b, R64 i, Scale s) {
+			set_all(NULL_SREG, b, i, s, 0, 0);
+		}
+
+		inline M(Sreg s, R64 b, R64 i, Scale sc) {
+			set_all(s, b, i, sc, 0, 0);
+		}
+
+		inline M(R64 b, R64 i, Scale s, Imm32 d) {
+			set_all(NULL_SREG, b, i, s, d, 0);
+		}
+
+		inline M(Sreg s, R64 b, R64 i, Scale sc, Imm32 d) {
+			set_all(s, b, i, sc, d, 0);
+		}
+
+		inline M(R32 b) {
+			set_all(NULL_SREG, b, NULL_R, TIMES_1, 0, 1);
+		}
+
+		inline M(Sreg s, R32 b) {
+			set_all(s, b, NULL_R, TIMES_1, 0, 1);
+		}
+
+		inline M(R32 b, Imm32 d) {
+			set_all(NULL_SREG, b, NULL_R, TIMES_1, d, 1);
+		}
+
+		inline M(Sreg s, R32 b, Imm32 d) {
+			set_all(s, b, NULL_R, TIMES_1, d, 1);
+		}
+
+		inline M(R32 i, Scale s) {
+			set_all(NULL_SREG, NULL_R, i, s, 0, 1);
+		}
+
+		inline M(Sreg s, R32 i, Scale sc) {
+			set_all(s, NULL_R, i, sc, 0, 1);
+		}
+
+		inline M(R32 i, Scale s, Imm32 d) {
+			set_all(NULLS_REG, NULL_R, i, s, d, 1);
+		}
+
+		inline M(Sreg s, R32 i, Scale sc, Imm32 d) {
+			set_all(s, NULL_R, i, sc, d, 1);
+		}
+
+		inline M(R32 b, R32 i, Scale s) {
+			set_all(NULL_SREG, b, i, s, 0, 1);
+		}
+
+		inline M(Sreg s, R32 b, R32 i, Scale sc) {
+			set_all(s, b, i, sc, 0, 1);
+		}
+
+		inline M(R32 b, R32 i, Scale s, Imm32 d) {
+			set_all(NULL_SREG, b, i, s, d, 1);
+		}
+
+		inline M(Sreg s, R32 b, R32 i, Scale sc, Imm32 d) {
+			set_all(s, b, i, sc, d, 1);
+		}
+
+		inline M(Operand m) 
+				: m_(m) {
+		}
+
+		inline operator Operand() const {
+			return m_;
+		}
+
+		inline bool null_seg() const {
+			return m_ & (0x1ull << 47);
+		}
+
+		inline bool null_base() const {
+			return m_ & (0x1ull << 43);
+		}
+
+		inline bool null_index() const {
+			return m_ & (0x1ull << 38);
+		}
 
 		inline Sreg get_seg() const {
-			return (a_ >> 45) & 0x7;
+			return (m_ >> 44) & 0x7;
 		}
 
 		inline R get_base() const {
-			return (a_ >> 40) & 0x1f;
+			return (m_ >> 39) & 0xf;
 		}
 
 		inline R get_index() const {
-			return (a_ >> 35) & 0x1f;
+			return (m_ >> 34) & 0xf;
 		}
 
 		inline Scale get_scale() const {
-			return (a_ >> 32) & 0x7;
+			return (m_ >> 32) & 0x3;
 		}
 
 		inline Imm32 get_disp() const {
-			return a_ & 0xffffffff;
+			return m_ & 0xffffffff;
 		}
 
-		inline bool get_size_or() const {
+		inline bool get_addr_or() const {
 			return (a_ >> 48) & 0x1;
 		}
 
-		inline bool is_stack() const {
-			return get_base() == rsp && get_index().is_null();
-		}
-
-		inline bool is_heap() const {
-			return !is_stack();
-		}
-
 		inline void set_seg(Sreg s) {
-			a_ &= ~(0x7ull << 45);
-			a_ |= (s & 0x7) << 45;
+			m_ &= ~(0xfull << 44);
+			m_ |= (s & 0x7) << 45;
+		}
+
+		inline void clear_seg() {
+			m_ |= (0x1 << 47);
 		}
 
 		inline void set_base(R b) {
-			a_ &= ~(0x1full << 40);
-			a_ |= (b & 0x1f) << 40;
+			m_ &= ~(0x1full << 39);
+			m_ |= (b & 0xf) << 39;
+		}
+
+		inline void clear_base() {
+			m_ |= (0x1 << 43);
 		}
 
 		inline void set_index(R i) {
-			a_ &= ~(0x1full << 35);
-			a_ |= (i & 0x1f) << 35;
+			m_ &= ~(0x1full << 34);
+			m_ |= (i & 0xf) << 34;
+		}
+
+		inline void clear_index() {
+			m_ |= (0x1 << 38);
 		}
 
 		inline void set_scale(Scale s) {
-			a_ &= ~(0x7ull << 32);
-			a_ |= (s & 0x7) << 32;
+			m_ &= ~(0x3ull << 32);
+			m_ |= (s & 0x3) << 32;
 		}
 
 		inline void set_disp(Imm32 d) {
-			a_ &= 0xffffffff00000000;
-			a_ |= (d & 0xffffffff);
+			m_ &= 0xffffffff00000000;
+			m_ |= (d & 0xffffffff);
 		}
 
-		inline void set_size_or(bool o) {
-			a_ &= ~(0x1ull << 48);
-			if ( o )
-				a_ |= 0x1ull << 48;
+		inline void set_addr_or() {
+			m_ |= (0x1ull << 48);
+		}
+
+		inline void clear_addr_or() {
+			m_ &= ~(0x1ull << 48);
 		}
 			
 	private:
-		// or  seg    base   index  scale  disp
-		// [48][47:45][44:40][39:35][34:32][31:0]
+		Operand m_;
 
-		Operand a_;
+		// addr (1=32)     [48]
+		// segment? (1=no) [47]
+		// segment         [46:44]
+		// base? (1=no)    [43]
+		// base            [42:39]
+		// index? (1=no)   [38]
+		// index           [37:34]
+		// scale           [33:32]
+		// displacement    [31:0]
 
-		inline void set_all(Sreg s, R b, R i, Scale sc, Imm32 d, bool so) {
-			a_ = 0x0;
-			a_ = ((Operand) (so ? 0x1 : 0x0) << 48) |
-					 ((Operand) (s & 0x7) << 45)  | 
-					 ((Operand) (b & 0x1f) << 40) | 
-					 ((Operand) (i & 0x1f) << 35) | 
-		  		 ((Operand) (sc & 0x7) << 32) | 
-					 ((Operand) (d & 0xffffffff));
+		inline void set_all(Operand s, Operand b, Operand i, Operand sc, 
+				                Operand d, Operand ao) {
+			m_ = d | (sc << 32) | (i << 34) | (b << 39) | (s << 44) | (ao << 48);
 		}
 };
 
-class M8 : public M {
-	public:
-		inline M8() : M() { }
-		inline M8(Operand o) : M(o) { }
-		inline M8(R64 b) : M(b) { }
-		inline M8(R64 b, Imm32 d) : M(b, d) { }
-		inline M8(R64 i, Scale s) : M(i, s) { }
-		inline M8(R64 i, Scale s, Imm32 d) : M(i, s, d) { }
-		inline M8(R64 b, R64 i, Scale s) : M(b, i, s) { }
-		inline M8(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
-		inline M8(R32 b) : M(b) { }
-		inline M8(R32 b, Imm32 d) : M(b, d) { }
-		inline M8(R32 i, Scale s) : M(i, s) { }
-		inline M8(R32 i, Scale s, Imm32 d) : M(i, s, d) { }
-		inline M8(R32 b, R32 i, Scale s) : M(b, i, s) { }
-		inline M8(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
+// NOTE: This ugliness can be replaced using inherited constructors come gcc 4.8
+#define CONSTRUCTORS(T) \
+	inline T(R64 b) : M{b} { } \
+	inline T(Sreg s, R64 b) : M{s, b} { } \
+	inline T(R64 b, Imm32 d) : M{b, d} { } \
+	inline T(Sreg s, R64 b, Imm32 d) : M{s, b, d} { } \
+	inline T(R64 i, Scale s) : M{i, s} { } \
+	inline T(Sreg s, R64 i, Scale sc) : M{s, i, sc} { } \
+	inline T(R64 i, Scale s, Imm32 d) : M{i, s, d} { } \
+	inline T(Sreg s, R64 i, Scale sc, Imm32 d) : M{s, i, sc, d} { } \
+	inline T(R64 b, R64 i, Scale s) : M{b, i, s} { } \
+	inline T(Sreg s, R64 b, R64 i, Scale sc) : M{s, b, i, sc} { } \
+	inline T(R64 b, R64 i, Scale s, Imm32 d) : M{b, i, s, d} { } \
+	inline T(Sreg s, R64 b, R64 i, Scale sc, Imm32 d) : M{s, b, i, sc, d} { } \
+	inline T(R32 b) : M{b} { } \
+	inline T(Sreg s, R32 b) : M{s, b} { } \
+	inline T(R32 b, Imm32 d) : M{b, d} { } \
+	inline T(Sreg s, R32 b, Imm32 d) : M{s, b, d} { } \
+	inline T(R32 i, Scale s) : M{i, s} { } \
+	inline T(Sreg s, R32 i, Scale sc) : M{s, i, sc} { } \
+	inline T(R32 i, Scale s, Imm32 d) : M{i, s, d} { } \
+	inline T(Sreg s, R32 i, Scale sc, Imm32 d) : M{s, i, sc, d} { } \
+	inline T(R32 b, R32 i, Scale s) : M{b, i, s} { } \
+	inline T(Sreg s, R32 b, R32 i, Scale sc) : M{s, b, i, sc} { } \
+	inline T(R32 b, R32 i, Scale s, Imm32 d) : M{b, i, s, d} { } \
+	inline T(Sreg s, R32 b, R32 i, Scale sc, Imm32 d) : M{s, b, i, sc, d} { } \
+	inline T(Operand o) : M{o} { } 
+
+/** A byte operand in memory, usually expressed as a variable or array name, 
+	  but pointed to by the DS:(E)SI or ES:(E)DI registers. 
+		In 64-bit mode, it is pointed to by the RSI or RDI registers.
+*/		
+struct M8 : public M {
+	CONSTRUCTORS(M8)
 };
 
-class M16 : public M {
-	public:
-		inline M16() : M() { }
-		inline M16(Operand o) : M(o) { }
-		inline M16(R64 b) : M(b) { }
-		inline M16(R64 b, Imm32 d) : M(b, d) { }
-		inline M16(R64 i, Scale s) : M(i, s) { }
-		inline M16(R64 i, Scale s, Imm32 d) : M(i, s, d) { }
-		inline M16(R64 b, R64 i, Scale s) : M(b, i, s) { }
-		inline M16(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
-		inline M16(R32 b) : M(b) { }
-		inline M16(R32 b, Imm32 d) : M(b, d) { }
-		inline M16(R32 i, Scale s) : M(i, s) { }
-		inline M16(R32 i, Scale s, Imm32 d) : M(i, s, d) { }
-		inline M16(R32 b, R32 i, Scale s) : M(b, i, s) { }
-		inline M16(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
+/** A word operand in memory, usually expressed as a variable or array name, 
+	  but pointed to by the DS:(E)SI or ES:(E)DI registers. This nomenclature is 
+		used only with the string instructions.
+*/
+struct M16 : public M {
+	CONSTRUCTORS(M16)
 };
 
-class M32 : public M {
-	public:
-		inline M32() : M() { }
-		inline M32(Operand o) : M(o) { }
-		inline M32(R64 b) : M(b) { }
-		inline M32(R64 b, Imm32 d) : M(b, d) { }
-		inline M32(R64 i, Scale s) : M(i, s) { }
-		inline M32(R64 i, Scale s, Imm32 d) : M(i, s, d) { }
-		inline M32(R64 b, R64 i, Scale s) : M(b, i, s) { }
-		inline M32(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
-		inline M32(R32 b) : M(b) { }
-		inline M32(R32 b, Imm32 d) : M(b, d) { }
-		inline M32(R32 i, Scale s) : M(i, s) { }
-		inline M32(R32 i, Scale s, Imm32 d) : M(i, s, d) { }
-		inline M32(R32 b, R32 i, Scale s) : M(b, i, s) { }
-		inline M32(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
+/** A doubleword operand in memory, usually expressed as a variable or array 
+		name, but pointed to by the DS:(E)SI or ES:(E)DI registers. This 
+		nomenclature is used only with the string instructions.
+*/
+struct M32 : public M {
+	CONSTRUCTORS(M32)
 };
 
-class M64 : public M {
-	public:
-		inline M64() : M() { }
-		inline M64(Operand o) : M(o) { }
-		inline M64(R64 b) : M(b) { }
-		inline M64(R64 b, Imm32 d) : M(b, d) { }
-		inline M64(R64 i, Scale s) : M(i, s) { }
-		inline M64(R64 i, Scale s, Imm32 d) : M(i, s, d) { }
-		inline M64(R64 b, R64 i, Scale s) : M(b, i, s) { }
-		inline M64(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
-		inline M64(R32 b) : M(b) { }
-		inline M64(R32 b, Imm32 d) : M(b, d) { }
-		inline M64(R32 i, Scale s) : M(i, s) { }
-		inline M64(R32 i, Scale s, Imm32 d) : M(i, s, d) { }
-		inline M64(R32 b, R32 i, Scale s) : M(b, i, s) { }
-		inline M64(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
+/** A memory quadword operand in memory. */
+struct M64 : public M {
+	CONSTRUCTORS(M64)
 };
 
-class M80 : public M {
-	public:
-		inline M80() : M() { }
-		inline M80(Operand o) : M(o) { }
-		inline M80(R64 b) : M(b) { }
-		inline M80(R64 b, Imm32 d) : M(b, d) { }
-		inline M80(R64 i, Scale s) : M(i, s) { }
-		inline M80(R64 i, Scale s, Imm32 d) : M(i, s, d) { }
-		inline M80(R64 b, R64 i, Scale s) : M(b, i, s) { }
-		inline M80(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
-		inline M80(R32 b) : M(b) { }
-		inline M80(R32 b, Imm32 d) : M(b, d) { }
-		inline M80(R32 i, Scale s) : M(i, s) { }
-		inline M80(R32 i, Scale s, Imm32 d) : M(i, s, d) { }
-		inline M80(R32 b, R32 i, Scale s) : M(b, i, s) { }
-		inline M80(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
+/** A memory double quadword operand in memory. */
+struct M128 : public M {
+	CONSTRUCTORS(M128)
 };
 
-class M128 : public M {
-	public:
-		inline M128() : M() { }
-		inline M128(Operand o) : M(o) { }
-		inline M128(R64 b) : M(b) { }
-		inline M128(R64 b, Imm32 d) : M(b, d) { }
-		inline M128(R64 i, Scale s) : M(i, s) { }
-		inline M128(R64 i, Scale s, Imm32 d) : M(i, s, d) { }
-		inline M128(R64 b, R64 i, Scale s) : M(b, i, s) { }
-		inline M128(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
-		inline M128(R32 b) : M(b) { }
-		inline M128(R32 b, Imm32 d) : M(b, d) { }
-		inline M128(R32 i, Scale s) : M(i, s) { }
-		inline M128(R32 i, Scale s, Imm32 d) : M(i, s, d) { }
-		inline M128(R32 b, R32 i, Scale s) : M(b, i, s) { }
-		inline M128(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
+/** A 32-byte operand in memory. This nomenclature is used only with AVX 
+	  instructions.
+*/		
+struct M256 : public M {
+	CONSTRUCTORS(M256)
 };
 
-class M256 : public M {
-	public:
-		inline M256() : M() { }
-		inline M256(Operand o) : M(o) { }
-		inline M256(R64 b) : M(b) { }
-		inline M256(R64 b, Imm32 d) : M(b, d) { }
-		inline M256(R64 i, Scale s) : M(i, s) { }
-		inline M256(R64 i, Scale s, Imm32 d) : M(i, s, d) { }
-		inline M256(R64 b, R64 i, Scale s) : M(b, i, s) { }
-		inline M256(R64 b, R64 i, Scale s, Imm32 d) : M(b, i, s, d) { }
-		inline M256(R32 b) : M(b) { }
-		inline M256(R32 b, Imm32 d) : M(b, d) { }
-		inline M256(R32 i, Scale s) : M(i, s) { }
-		inline M256(R32 i, Scale s, Imm32 d) : M(i, s, d) { }
-		inline M256(R32 b, R32 i, Scale s) : M(b, i, s) { }
-		inline M256(R32 b, R32 i, Scale s, Imm32 d) : M(b, i, s, d) { }
+/** A memory operand consisting of data item pairs whose sizes are indicated on 
+	  the left and the right side of the ampersand. All memory addressing modes 
+		are allowed. The m16&64 operand is used by LIDT and LGDT in 64-bit mode to 
+		provide a word with which to load the limit field, and a quadword with 
+		which to load the base field of the corresponding GDTR and IDTR registers.
+*/
+struct MPair1664 : public M {
+	CONSTRUCTORS(MPair1664)
 };
+
+/** A memory operand containing a far pointer composed of two numbers. The
+		number to the left of the colon corresponds to the pointer's segment 
+		selector. The number to the right corresponds to its offset.
+*/
+struct MPtr1616 : public M {
+	CONSTRUCTORS(MPtr1616)
+};
+
+/** A memory operand containing a far pointer composed of two numbers. The
+		number to the left of the colon corresponds to the pointer's segment 
+		selector. The number to the right corresponds to its offset.
+*/
+struct MPtr1632 : public M {
+	CONSTRUCTORS(MPtr1632)
+};
+
+/** A memory operand containing a far pointer composed of two numbers. The
+		number to the left of the colon corresponds to the pointer's segment 
+		selector. The number to the right corresponds to its offset.
+*/
+struct MPtr1664 : public M {
+	CONSTRUCTORS(MPtr1664)
+};
+
+/** A word integer operand in memory. This symbol designates integers that are 
+	  used as operands for x87 FPU integer instructions.
+*/
+struct M16Int : public M {
+	CONSTRUCTORS(M16Int)
+};
+
+/** A doubleword integer operand in memory. This symbol designates integers 
+	  that are used as operands for x87 FPU integer instructions.
+*/
+struct M32Int : public M {
+	CONSTRUCTORS(M32Int)
+};
+
+/** A quadword integer operand in memory. This symbol designates integers 
+	  that are used as operands for x87 FPU integer instructions.
+*/
+struct M64Int : public M {
+	CONSTRUCTORS(M64Int)
+};
+
+/** A single-precision floating-point operand in memory. This symbol designates 
+		floating-point values that are used as operands for x87 FPU floating-point 
+		instructions.
+*/
+struct M32Fp : public M {
+	CONSTRUCTORS(M32Fp)
+};
+
+/** A double-precision floating-point operand in memory. This symbol designates 
+		floating-point values that are used as operands for x87 FPU floating-point 
+		instructions.
+*/
+struct M64Fp : public M {
+	CONSTRUCTORS(M64Fp)
+};
+
+/** A double extended-precision floating-point operand in memory. This symbol 
+		designates floating-point values that are used as operands for x87 FPU 
+		floating-point instructions.
+*/
+struct M80Fp : public M {
+	CONSTRUCTORS(M80Fp)
+};
+
+/** A double extended-precision binary-coded-decimaly operand in memory. */
+struct M80Bcd : public M {
+	CONSTRUCTORS(M80Bcd)
+};
+
+/** A 2 byte operand in memory. */
+struct M2Byte : public M {
+	CONSTRUCTORS(M2Byte)
+};
+
+/** A 14 byte operand in memory. */
+struct M14Byte : public M {
+	CONSTRUCTORS(M14Byte)
+};
+
+/** A 28 byte operand in memory. */
+struct M28Byte : public M {
+	CONSTRUCTORS(M28Byte)
+};
+
+/** A 94 byte operand in memory. */
+struct M94Byte : public M {
+	CONSTRUCTORS(M94Byte)
+};
+
+/** A 108 byte operand in memory. */
+struct M108Byte : public M {
+	CONSTRUCTORS(M108Byte)
+};
+
+/** A 5122 byte operand in memory. */
+struct M512Byte : public M {
+	CONSTRUCTORS(M512Byte)
+};
+
+#undef CONSTRUCTORS
 
 } // namespace x64
 

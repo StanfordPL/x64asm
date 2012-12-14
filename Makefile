@@ -19,7 +19,6 @@ OBJ=build/code/cond_reg.o \
 		build/code/modifier.o \
 		build/code/mm.o \
 		build/code/r.o \
-		build/code/scale.o \
 		build/code/sreg.o \
 		build/code/st.o \
 		build/code/xmm.o \

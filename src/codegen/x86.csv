@@ -528,7 +528,7 @@ DE C1	FADDP	V	V	Add ST(0) to ST(1), store result in ST(1), and pop the register 
 DA /0	FIADD m32int	V	V	Add m32int to ST(0) and store result in ST(0).
 DE /0	FIADD m16int	V	V	Add m16int to ST(0) and store result in ST(0).
 				
-DF /4	FBLD m80 dec	V	V	Convert BCD value to floating-point and push onto the FPU stack.
+DF /4	FBLD m80bcd	V	V	Convert BCD value to floating-point and push onto the FPU stack.
 				
 DF /6	FBSTP m80bcd	V	V	Store ST(0) in m80bcd and pop ST(0).
 				

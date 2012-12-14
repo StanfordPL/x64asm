@@ -42,7 +42,7 @@ struct RexR8 : public virtual R {
 
 /** One of the byte general-purpose registers: AH, CH, DH, BH. */
 struct Rh : public NoRexR8 {
-	inline Rh() : R{} { }
+	inline Rh() : R{4} { }
 	inline Rh(Operand o) : R{o} { }
 };
 
@@ -56,7 +56,7 @@ struct Rl : public NoRexR8, public RexR8 {
 	  the byte registers (R8B - R15B) available when using REX.R and 64-bit mode.
 */
 struct Rb : public RexR8 {
-	inline Rb() : R{} { }
+	inline Rb() : R{4} { }
 	inline Rb(Operand o) : R{o} { }
 };
 

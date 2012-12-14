@@ -4,10 +4,10 @@ using namespace std;
 
 namespace x64 {
 
-const Rh ah;
-const Rh ch;
-const Rh dh{2};
-const Rh bh{3};
+const Rh ah{4};
+const Rh ch{5};
+const Rh dh{6};
+const Rh bh{7};
 
 const Rhs rhs {{
 	ah, ch, dh, bh
