@@ -9,6 +9,8 @@ namespace x64 {
 
 /** A scaling constant for use in forming addresses.
 */
+
+// This moves into the memory class.
 class Scale {
 	public:
 		inline Scale() 

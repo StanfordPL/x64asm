@@ -7,40 +7,23 @@
 
 namespace x64 {
 
-/** An MMX register: mm0, ..., mm7.
-*/
+/** An MMX register. The 64-bit MMX registers are: MM0 through MM7. */
 class Mm {
 	public:
 		inline Mm() 
-				: m_(8) { 
+				: m_{0} { 
 		}
 
 		inline Mm(Operand m) 
-				: m_(m) { 
+				: m_{m} { 
 		}
 
 		inline operator Operand() const {
 			return m_;
 		}
 
-		inline bool is_null() const {
-			return m_ >= 8;	
-		}
-
-		typedef const std::vector<Mm>::const_iterator iterator;
-
-		static iterator begin() {
-			return domain_.begin();
-		}
-
-		static iterator end() {
-			return domain_.end();
-		}
-
 	private:
 		Operand m_;
-
-		static const std::vector<Mm> domain_;
 };
 
 extern const Mm mm0;
@@ -51,7 +34,9 @@ extern const Mm mm4;
 extern const Mm mm5;
 extern const Mm mm6;
 extern const Mm mm7;
-extern const Mm mm_null;
+
+typedef std::vector<Mm> Mms;
+extern const Mms mms;
 
 } // namespace x64
 

@@ -4,24 +4,29 @@ GCC=ccache g++
 
 INC=-I./
 
-OBJ=build/cfg/control_flow_graph.o \
+#OBJ=build/cfg/control_flow_graph.o \
 		\
 		build/assembler/assembler.o \
 		\
 		build/att/att_reader.o \
 		build/att/att_writer.o \
 		\
-		build/code/cond_reg.o \
-		build/code/instruction.o \
-		build/code/opcode.o \
+
+OBJ=build/code/cond_reg.o \
+		build/code/cr.o \
+		build/code/dr.o \
+		build/code/imm.o \
+		build/code/modifier.o \
 		build/code/mm.o \
 		build/code/r.o \
-		build/code/reg_set.o \
 		build/code/scale.o \
 		build/code/sreg.o \
 		build/code/st.o \
 		build/code/xmm.o \
-		build/code/ymm.o \
+		build/code/ymm.o #\
+		build/code/opcode.o \
+		build/code/instruction.o \
+		build/code/reg_set.o \
 		\
 		build/sandboxer/sandboxer.o \
 		\
@@ -29,7 +34,7 @@ OBJ=build/cfg/control_flow_graph.o \
 		\
 		build/tracer/tracer.o
 
-BIN=bin/att_exec \
+BIN=#bin/att_exec \
 		bin/att_sandbox \
 		bin/att_trace \
 		bin/att2dot \

@@ -7,38 +7,25 @@
 
 namespace x64 {
 
+/** A YMM register. The 256-bit YMM registers are: YMM0 through YMM7; YMM8 
+	  through YMM15 are available in 64-bit mode.
+*/
 class Ymm {
 	public:
 		inline Ymm() 
-				: x_(16) { 
+				: x_{0} { 
 		}
 
 		inline Ymm(Operand x) 
-				: x_(x) { 
+				: x_{x} { 
 		}
 
 		inline operator Operand() const {
 			return x_;
 		}
 
-		inline bool is_null() const {
-			return x_ >= 16;	
-		}
-
-		typedef const std::vector<Ymm>::const_iterator iterator;
-
-		static iterator begin() {
-			return domain_.begin();
-		}
-
-		static iterator end() {
-			return domain_.end();
-		}
-
 	private:
 		Operand x_;
-
-		static const std::vector<Ymm> domain_;
 };
 
 extern const Ymm ymm0;
@@ -57,7 +44,9 @@ extern const Ymm ymm12;
 extern const Ymm ymm13;
 extern const Ymm ymm14;
 extern const Ymm ymm15;
-extern const Ymm ymm_null;
+
+typedef std::vector<Ymm> Ymms;
+extern const Ymms ymms;
 
 } // namespace x64
 

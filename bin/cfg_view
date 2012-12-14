@@ -9,6 +9,6 @@ then
 fi
 
 dot -Tpdf .x64.cfg.dot > .x64.cfg.pdf
-evince .x64.cfg.pdf
+open .x64.cfg.pdf
 
 rm -rf .x64.cfg.dot .x64.cfg.pdf

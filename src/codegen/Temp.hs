@@ -2,7 +2,6 @@ import Data.Char
 import Data.List
 import Data.List.Split
 import System.Environment
-import System.IO -- Debugging
 import Text.Regex
 import Text.Regex.TDFA
 
@@ -127,6 +126,38 @@ remove_ambiguity is = map shortest $ groupBy eq $ sortBy srt is
   where srt x y = compare (assm_decl x) (assm_decl y)
         eq x y = (assm_decl x) == (assm_decl y)	
 
+-- Inserts PREF.66+ for instructions with 16-bit operands
+-- This ignores DX which I think is always an implicit operand (CHECK THIS)
+insert_pref66 :: Instr -> Instr
+insert_pref66 i = case r16 || m16 || ax || imm16 of
+  True  -> i{opcode=("PREF.66+ " ++ (opcode i))}
+  False -> i
+  where r16   = "r16"   `elem` (opcode_terms i)
+        m16   = "m16"   `elem` (opcode_terms i)
+        ax    = "AX"    `elem` (opcode_terms i)
+        imm16 = "imm16" `elem` (opcode_terms i)
+
+-- Inserts PREF.66+ for all instructions with 16-bit operands
+insert_pref66s :: [Instr] -> [Instr]
+insert_pref66s is = map insert_pref66 is
+
+-- Inserts a label variant for instructions that take rel operands
+insert_label_variant :: Instr -> [Instr]
+insert_label_variant i
+  | "rel8" `elem` (operands i) = 
+    [i
+    ,i{instruction=(subRegex (mkRegex "rel8") (instruction i) "label8")
+      ,opcode=(subRegex (mkRegex "cb") (opcode i) "0b")}]
+  | "rel32" `elem` (operands i) =
+    [i
+    ,i{instruction=(subRegex (mkRegex "rel32") (instruction i) "label32")
+      ,opcode=(subRegex (mkRegex "cd") (opcode i) "0d")}]	
+	| otherwise = [i]
+
+-- Inserts a label variant for all instruction that take rel operands
+insert_label_variants :: [Instr] -> [Instr]
+insert_label_variants is = concat $ map insert_label_variant is
+
 -------------------------------------------------------------------------------
 -- Debugging
 -------------------------------------------------------------------------------
@@ -186,7 +217,7 @@ operands i = let x = (splitOn ",") $ concat $ tail $ words (instruction i) in
 -- Transform operand notion into type
 op2type :: String -> String
 op2type "reg"      = "R" -- TODO: This shouble be a general purpose register (32 or 64 bits depending on mode, I thik)
-op2type "r8"       = "R8"
+op2type "r8"       = "RexR8"
 op2type "r16"      = "R16"
 op2type "r32"      = "R32"
 op2type "r64"      = "R64"
@@ -257,10 +288,13 @@ op2type "DR0-DR7"  = "Dr"
 op2type "Sreg"     = "Sreg"
 op2type "FS"       = "Fs"
 op2type "GS"       = "Gs"
+-- Below this point are operand types we have introduced
 op2type "p66"      = "Pref66"
 op2type "pw"       = "PrefRexW"
 op2type "far"      = "Far"
 op2type "norexr8"  = "NoRexR8"
+op2type "label8"   = "Label8"
+op2type "label32"  = "Label32"
 op2type o = error $ "Unrecognized operand type: " ++ o
 
 -------------------------------------------------------------------------------
@@ -309,7 +343,9 @@ assm_src_defns is = intercalate "\n\n" $ map assm_src_defn is
 main :: IO ()		
 main = do args <- getArgs
           file <- readFile $ head args
-          let is = remove_ambiguity $
+          let is = insert_label_variants $
+                   insert_pref66s $ 
+                   remove_ambiguity $
                    fix_rex_rows $
                    remove_no_reg_rex $ 
                    x64 $
@@ -319,3 +355,4 @@ main = do args <- getArgs
 
           writeFile "assembler.decl" $ assm_header_decls is
           writeFile "assembler.defn" $ assm_src_defns is
+          mapM_ print $ map opcode_terms is					

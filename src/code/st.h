@@ -7,10 +7,13 @@
 
 namespace x64 {
 
+/** The ith element from the top of the FPU register stack 
+	  (i = 0 through 7). 
+*/
 class St {
 	public:
 		inline St() 
-				: f_(8) { 
+				: f_(0) { 
 		}
 
 		inline St(Operand f) 
@@ -21,32 +24,13 @@ class St {
 			return f_;
 		}
 
-		inline bool is_null() const {
-			return f_ >= 8;	
-		}
-
-		typedef const std::vector<St>::const_iterator iterator;
-
-		static iterator begin() {
-			return domain_.begin();
-		}
-
-		static iterator end() {
-			return domain_.end();
-		}
-
 	private:
 		Operand f_;
-
-		static const std::vector<St> domain_;
 };
 
-class St0 : public St {
-	public:
-		inline St0() : St() { }
-		inline St0(Operand o) : St(o) { }
-
-		inline bool is_null() const { return (Operand)*this != 0; }
+/** The top element of the FPU register stack. */
+struct St0 : public St {
+	inline St0() : St{0} { }
 };
 
 extern const St0 st0;
@@ -57,10 +41,10 @@ extern const St st4;
 extern const St st5;
 extern const St st6;
 extern const St st7;
-extern const St st_null;
+
+typedef std::vector<St> Sts;
+extern const Sts sts;
 
 } // namespace x64
 
 #endif
-
-
