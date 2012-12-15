@@ -12,7 +12,6 @@ INC=-I./
 
 OBJ=build/assembler/assembler.o \
 		\
-		build/code/cond_reg.o \
 		build/code/cr.o \
 		build/code/dr.o \
 		build/code/imm.o \
@@ -23,7 +22,6 @@ OBJ=build/assembler/assembler.o \
 		build/code/st.o \
 		build/code/xmm.o \
 		build/code/ymm.o #\
-		build/code/instruction.o \
 		build/code/reg_set.o \
 		\
 		build/sandboxer/sandboxer.o \

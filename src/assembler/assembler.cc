@@ -14,7 +14,7 @@ inline void emit(unsigned char*& buf, unsigned char c) {
 }
 
 inline void emit_mem_prefix(unsigned char*& buf, M m) {
-	if ( m.get_size_or() )
+	if ( m.get_addr_or() )
 		emit(buf, 0x67);
 }
 
@@ -265,8 +265,8 @@ void Assembler::start(Function& fxn) {
 }
 
 void Assembler::assemble(const Instruction& i) {
-	switch ( i.get_opcode() >> 50 ) {
-		case (LABEL_DEFN_64L >> 50):
+	switch ( i.get_opcode() ) {
+		case LABEL_DEFN:
 			bind(i.get_operand(0));
 			break;
         
