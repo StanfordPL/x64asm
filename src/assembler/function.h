@@ -11,8 +11,7 @@
 
 namespace x64 {
 
-/** An executable Function.
-*/
+/** A JIT-assembled function. */
 class Function {
 	friend class Assembler;
 
