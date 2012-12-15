@@ -4,64 +4,54 @@
 #include "src/code/r.h"
 #include "src/code/imm.h"
 #include "src/code/operand.h"
+#include "src/code/scale.h"
 #include "src/code/sreg.h"
 
 namespace x64 {
 
-	/*  NULL CONDITION
-		inline bool is_null() const {
-			return (get_base().is_null() && get_scale().is_null()) || 
-				      get_index() == rsp ||
-							get_scale() == scale_null;			     
-		}
-	*/
-
 /** An operand in memory. */
 class M {
 	private:
-		enum Null {
-			NULL_R = 0x10, NULL_SREG = 0x8
+		enum class Null {
+			R = 0x10, 
+			SREG = 0x8
 		};
 
 	public:
-		enum Scale {
-			TIMES_1 = 0, TIMES_2,	TIMES_4, TIMES_8
-		};
-
 		inline M(R64 b) {
-			set_all(NULL_SREG, b, NULL_R, TIMES_1, 0, 0);
+			set_all(Null::SREG, b, Null::R, TIMES_1, 0, 0);
 		}
 
 		inline M(Sreg s, R64 b) {
-			set_all(s, b, NULL_R, TIMES_1, 0, 0);
+			set_all(s, b, Null::R, TIMES_1, 0, 0);
 		}
 
 		inline M(R64 b, Imm32 d) {
-			set_all(NULL_SREG, b, NULL_R, TIMES_1, d, 0);
+			set_all(Null::SREG, b, Null::R, TIMES_1, d, 0);
 		}
 
 		inline M(Sreg s, R64 b, Imm32 d) {
-			set_all(s, b, NULL_R, TIMES_1, d, 0);
+			set_all(s, b, Null::R, TIMES_1, d, 0);
 		}
 
 		inline M(R64 i, Scale s) {
-			set_all(NULL_SREG, NULL_R, i, s, 0, 0);
+			set_all(Null::SREG, Null::R, i, s, 0, 0);
 		}
 
 		inline M(Sreg s, R64 i, Scale sc) {
-			set_all(s, NULL_R, i, sc, 0, 0);
+			set_all(s, Null::R, i, sc, 0, 0);
 		}
 
 		inline M(R64 i, Scale s, Imm32 d) {
-			set_all(NULL_SREG, NULL_R, i, s, d, 0);
+			set_all(Null::SREG, Null::R, i, s, d, 0);
 		}
 
 		inline M(Sreg s, R64 i, Scale sc, Imm32 d) {
-			set_all(s, NULL_R, i, sc, d, 0);
+			set_all(s, Null::R, i, sc, d, 0);
 		}
 
 		inline M(R64 b, R64 i, Scale s) {
-			set_all(NULL_SREG, b, i, s, 0, 0);
+			set_all(Null::SREG, b, i, s, 0, 0);
 		}
 
 		inline M(Sreg s, R64 b, R64 i, Scale sc) {
@@ -69,7 +59,7 @@ class M {
 		}
 
 		inline M(R64 b, R64 i, Scale s, Imm32 d) {
-			set_all(NULL_SREG, b, i, s, d, 0);
+			set_all(Null::SREG, b, i, s, d, 0);
 		}
 
 		inline M(Sreg s, R64 b, R64 i, Scale sc, Imm32 d) {
@@ -77,39 +67,39 @@ class M {
 		}
 
 		inline M(R32 b) {
-			set_all(NULL_SREG, b, NULL_R, TIMES_1, 0, 1);
+			set_all(Null::SREG, b, Null::R, TIMES_1, 0, 1);
 		}
 
 		inline M(Sreg s, R32 b) {
-			set_all(s, b, NULL_R, TIMES_1, 0, 1);
+			set_all(s, b, Null::R, TIMES_1, 0, 1);
 		}
 
 		inline M(R32 b, Imm32 d) {
-			set_all(NULL_SREG, b, NULL_R, TIMES_1, d, 1);
+			set_all(Null::SREG, b, Null::R, TIMES_1, d, 1);
 		}
 
 		inline M(Sreg s, R32 b, Imm32 d) {
-			set_all(s, b, NULL_R, TIMES_1, d, 1);
+			set_all(s, b, Null::R, TIMES_1, d, 1);
 		}
 
 		inline M(R32 i, Scale s) {
-			set_all(NULL_SREG, NULL_R, i, s, 0, 1);
+			set_all(Null::SREG, Null::R, i, s, 0, 1);
 		}
 
 		inline M(Sreg s, R32 i, Scale sc) {
-			set_all(s, NULL_R, i, sc, 0, 1);
+			set_all(s, Null::R, i, sc, 0, 1);
 		}
 
 		inline M(R32 i, Scale s, Imm32 d) {
-			set_all(NULL_SREG, NULL_R, i, s, d, 1);
+			set_all(Null::SREG, Null::R, i, s, d, 1);
 		}
 
 		inline M(Sreg s, R32 i, Scale sc, Imm32 d) {
-			set_all(s, NULL_R, i, sc, d, 1);
+			set_all(s, Null::R, i, sc, d, 1);
 		}
 
 		inline M(R32 b, R32 i, Scale s) {
-			set_all(NULL_SREG, b, i, s, 0, 1);
+			set_all(Null::SREG, b, i, s, 0, 1);
 		}
 
 		inline M(Sreg s, R32 b, R32 i, Scale sc) {
@@ -117,7 +107,7 @@ class M {
 		}
 
 		inline M(R32 b, R32 i, Scale s, Imm32 d) {
-			set_all(NULL_SREG, b, i, s, d, 1);
+			set_all(Null::SREG, b, i, s, d, 1);
 		}
 
 		inline M(Sreg s, R32 b, R32 i, Scale sc, Imm32 d) {
