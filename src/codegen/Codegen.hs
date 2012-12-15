@@ -343,8 +343,11 @@ assm_header_decls is = intercalate "\n\n" $ map assm_header_decl is
 
 -- Assembler src definition
 assm_src_defn :: Instr -> String
-assm_src_defn i = (assm_decl i) ++ 
-                  " {\n" ++
+assm_src_defn i = "void Assembler::" ++
+                  (low (mnemonic i)) ++
+                  "(" ++
+                  (assm_arg_list i) ++
+                  ") {\n" ++
                   "}"
 
 -- Assembler src definitions
