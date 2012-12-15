@@ -4,8 +4,6 @@
 #include <iomanip>
 #include <set>
 
-#include "src/att/att_writer.h"
-
 using namespace std;
 using namespace x64;
 
@@ -272,8 +270,8 @@ void Assembler::assemble(const Instruction& i) {
 			bind(i.get_operand(0));
 			break;
         
-      	// 4000-way switch
-		#include "src/gen/assembler.switch"
+   	// 4000-way switch
+		//#include "src/gen/assembler.switch"
 		
 		default:
 			assert(false);
@@ -294,7 +292,7 @@ void Assembler::finish() {
 }
 
 // void Assembler::adcb(Imm arg0) { } ...
-#include "src/gen/assembler.defn"
+#include "src/assembler/assembler.defn"
 
 void Assembler::write_binary(ostream& os, const Code& code) {
 	static unsigned char buffer[1024*1024];

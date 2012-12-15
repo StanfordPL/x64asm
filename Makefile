@@ -6,13 +6,13 @@ INC=-I./
 
 #OBJ=build/cfg/control_flow_graph.o \
 		\
-		build/assembler/assembler.o \
-		\
 		build/att/att_reader.o \
 		build/att/att_writer.o \
 		\
 
-OBJ=build/code/cond_reg.o \
+OBJ=build/assembler/assembler.o \
+		\
+		build/code/cond_reg.o \
 		build/code/cr.o \
 		build/code/dr.o \
 		build/code/imm.o \
@@ -23,7 +23,6 @@ OBJ=build/code/cond_reg.o \
 		build/code/st.o \
 		build/code/xmm.o \
 		build/code/ymm.o #\
-		build/code/opcode.o \
 		build/code/instruction.o \
 		build/code/reg_set.o \
 		\
@@ -55,7 +54,7 @@ release:
 profile:
 	make -C . erthing OPT="-std=c++0x -Wall -fPIC -DNDEBUG -O3 -funroll-all-loops -pg"
 
-erthing: $(BIN) $(DOC) $(LIB)
+erthing: $(LIB) $(BIN) $(DOC)
 
 ##### TEST TARGETS
 
@@ -66,51 +65,60 @@ test: erthing
 ##### CLEAN TARGETS
 
 clean:
-	rm -rf $(BIN) $(DOC) $(LIB) build/* src/gen
+	rm -rf $(BIN) $(DOC) $(LIB) build/* 
+	rm -f src/assembler/assembler.defn src/assembler/assembler.decl
+	rm -f src/code/opcode.enum
 	rm -rf test/enumerate_all.hi test/enumerate_all.o test/tmp/* test/enumerate_all
 	rm -f test/stokeasm_py/*.so
 	rm -rf test/stokeasm_py/build
 
-##### EXTERNAL AND CODEGEN TARGETS
+##### CODEGEN TARGETS
 
-src/gen: src/codegen/*.hs src/codegen/*.csv src/codegen/att.l src/codegen/att.y
+codegen: src/assembler/assembler.defn
+
+src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv 
 	mkdir -p build/codegen
 	cd src/codegen && \
-		ghc -W cfg.hs Instr.hs Latency.hs -o ../../build/codegen/cfg && \
-		ghc assembler.hs Instr.hs -o ../../build/codegen/assembler && \
-		rm *.hi *.o
-	mkdir -p src/gen
-	cd build/codegen && \
+		ghc Codegen.hs && \
+		./Codegen x86.csv && \
+		mv assembler.defn ../assembler && \
+		mv assembler.decl ../assembler && \
+		mv opcode.enum ../code && \
+		rm -f *.hi *.o Codegen
+
+#	cd build/codegen && \
 		./cfg ../../src/codegen/x64.csv ../../src/codegen/latencies.csv && \
 		./assembler ../../src/codegen/x64.csv && \
 		mv assembler.* ../../src/gen/ && \
 		mv opcode.* ../../src/gen/
-	flex $(FLEXOPS) -Patt src/codegen/att.l && \
+#	flex $(FLEXOPS) -Patt src/codegen/att.l && \
 		mv lex.att.c src/gen
-	bison $(BISONOPS) -batt -patt --defines src/codegen/att.y && \
+#	bison $(BISONOPS) -batt -patt --defines src/codegen/att.y && \
 		mv att.tab.h src/gen && \
 		mv att.tab.c src/gen
 		
 ##### DOCUMENTATION TARGETS
 
-doc/html: doxyfile src/cfg/*.cc src/cfg/*.h src/assembler/*.cc src/assembler/*.h src/code/*.h src/code/*.cc
+doc/html: doxyfile src/cfg/*.cc src/cfg/*.h \
+          src/assembler/*.cc src/assembler/*.h \
+					src/code/*.h src/code/*.cc
 	doxygen doxyfile
 
 ##### BUILD TARGETS
 
-build/att/%.o: src/att/%.cc src/att/%.h src/gen
+build/att/%.o: src/att/%.cc src/att/%.h codegen
 	mkdir -p build/att && $(GCC) $(OPT) $(INC) -c $< -o $@
-build/assembler/%.o: src/assembler/%.cc src/assembler/%.h src/gen
+build/assembler/%.o: src/assembler/%.cc src/assembler/%.h codegen
 	mkdir -p build/assembler && $(GCC) $(OPT) $(INC) -c $< -o $@
-build/cfg/%.o: src/cfg/%.cc src/cfg/%.h src/gen
+build/cfg/%.o: src/cfg/%.cc src/cfg/%.h codegen
 	mkdir -p build/cfg && $(GCC) $(OPT) $(INC) -c $< -o $@
-build/code/%.o: src/code/%.cc src/code/%.h src/gen
+build/code/%.o: src/code/%.cc src/code/%.h codegen
 	mkdir -p build/code && $(GCC) $(OPT) $(INC) -c $< -o $@
-build/sandboxer/%.o: src/sandboxer/%.cc src/sandboxer/%.h src/gen
+build/sandboxer/%.o: src/sandboxer/%.cc src/sandboxer/%.h codegen
 	mkdir -p build/sandboxer && $(GCC) $(OPT) $(INC) -c $< -o $@
-build/stream/%.o: src/stream/%.cc src/stream/%.h src/gen
+build/stream/%.o: src/stream/%.cc src/stream/%.h codegen
 	mkdir -p build/stream && $(GCC) $(OPT) $(INC) -c $< -o $@
-build/tracer/%.o: src/tracer/%.cc src/tracer/%.h src/gen
+build/tracer/%.o: src/tracer/%.cc src/tracer/%.h codegen
 	mkdir -p build/tracer && $(GCC) $(OPT) $(INC) -c $< -o $@
 
 ##### LIBRARY TARGET

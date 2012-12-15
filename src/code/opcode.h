@@ -1,14 +1,20 @@
 #ifndef X64_SRC_CODE_OPCODE_H
 #define X64_SRC_CODE_OPCODE_H
 
-#include <cassert>
-#include <cstddef>
-#include <vector>
-
-#include "src/code/operand.h"
-#include "src/code/reg_set.h"
-
 namespace x64 {
+
+enum Opcode {
+	// Internal mnemonics
+	LABEL_DEFN = 0
+
+	// Auto-generated Intel mnemonics
+	#include "src/code/opcode.enum"
+};
+
+#if 0
+
+None of this really belongs here, I don't feel.
+Push all this (and even then, only parts of it, out to Instruction).
 
 // What's going on here?
 // We have 64-bits worth of space for each opcode name.
@@ -142,6 +148,7 @@ class Opcode {
 };
 
 extern const Opcode opcode_null;
+#endif
 
 } // namespace x64
 

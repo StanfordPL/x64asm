@@ -31,6 +31,10 @@ trim = f . f
 low :: String -> String
 low s = map toLower s
 
+-- To upper case
+up :: String -> String
+up s = map toUpper s
+
 -------------------------------------------------------------------------------
 -- Read Input File
 -------------------------------------------------------------------------------
@@ -210,9 +214,7 @@ mnemonic i = let m = head $ words $ (instruction i) in
 -- Extract operands from instruction
 operands :: Instr -> [String]
 operands i = let x = (splitOn ",") $ concat $ tail $ words (instruction i) in
-  case x of
-    [""] -> []
-    _    -> x
+	filter (\o -> o /= "") x
 
 -- Transform operand notion into type
 op2type :: String -> String
@@ -297,6 +299,20 @@ op2type "label32"  = "Label32"
 op2type o = error $ "Unrecognized operand type: " ++ o
 
 -------------------------------------------------------------------------------
+-- Opcode codegen
+-------------------------------------------------------------------------------
+
+-- Converts an instruction into an Opcode enum value
+opcode_enum :: Instr -> String
+opcode_enum i = intercalate "_" $ (mnem i) : (ops i)
+  where mnem i = head $ words $ instruction i
+        ops i = map (up . op2type) (operands i)
+
+-- Converts all instructions to Opcode enum values
+opcode_enums :: [Instr] -> String
+opcode_enums is = intercalate "\n" $ map (", "++) $ map opcode_enum is
+
+-------------------------------------------------------------------------------
 -- Assembler codegen
 -------------------------------------------------------------------------------
 
@@ -354,4 +370,5 @@ main = do args <- getArgs
 
           writeFile "assembler.decl" $ assm_header_decls is
           writeFile "assembler.defn" $ assm_src_defns is
-          mapM_ print $ map opcode_terms is					
+          writeFile "opcode.enum"    $ opcode_enums is
+          mapM_ print $ map operands is					

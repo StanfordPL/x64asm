@@ -81,6 +81,7 @@ enum BitWidth {
 
 /** Operand modifiers.
 */
+/*
 enum Modifier {
 	READ = 0,
 	WRITE,
@@ -89,6 +90,7 @@ enum Modifier {
 
 	MODIFIER_NULL
 };
+*/
 
 } // namespace x64
 

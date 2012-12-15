@@ -101,7 +101,7 @@ class M {
 		}
 
 		inline M(R32 i, Scale s, Imm32 d) {
-			set_all(NULLS_REG, NULL_R, i, s, d, 1);
+			set_all(NULL_SREG, NULL_R, i, s, d, 1);
 		}
 
 		inline M(Sreg s, R32 i, Scale sc, Imm32 d) {
@@ -157,7 +157,7 @@ class M {
 		}
 
 		inline Scale get_scale() const {
-			return (m_ >> 32) & 0x3;
+			return (Scale) ((m_ >> 32) & 0x3);
 		}
 
 		inline Imm32 get_disp() const {
@@ -165,7 +165,7 @@ class M {
 		}
 
 		inline bool get_addr_or() const {
-			return (a_ >> 48) & 0x1;
+			return (m_ >> 48) & 0x1;
 		}
 
 		inline void set_seg(Sreg s) {
@@ -174,7 +174,7 @@ class M {
 		}
 
 		inline void clear_seg() {
-			m_ |= (0x1 << 47);
+			m_ |= (0x1ull << 47);
 		}
 
 		inline void set_base(R b) {
@@ -183,7 +183,7 @@ class M {
 		}
 
 		inline void clear_base() {
-			m_ |= (0x1 << 43);
+			m_ |= (0x1ull << 43);
 		}
 
 		inline void set_index(R i) {
@@ -192,12 +192,12 @@ class M {
 		}
 
 		inline void clear_index() {
-			m_ |= (0x1 << 38);
+			m_ |= (0x1ull << 38);
 		}
 
 		inline void set_scale(Scale s) {
 			m_ &= ~(0x3ull << 32);
-			m_ |= (s & 0x3) << 32;
+			m_ |= (s & 0x3ull) << 32;
 		}
 
 		inline void set_disp(Imm32 d) {
