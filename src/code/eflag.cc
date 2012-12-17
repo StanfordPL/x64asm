@@ -24,7 +24,7 @@ const Eflag id{21};
 
 const Eflags eflags {{
 	cf, pf,   af, zf, sf, tf, if_, df, 
-	of, iopl, nt, rf, vm, ac, vif, cip, 
+	of, iopl, nt, rf, vm, ac, vif, vip, 
 	id
 }};
 

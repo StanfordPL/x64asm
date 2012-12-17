@@ -92,7 +92,7 @@ enum class OpType {
 	// Relatives Addresses (rel.h)
 	REL,
 	REL_8,
-	REL_32
+	REL_32,
 
 	// Segment Registers (sreg.h)
 	SREG,

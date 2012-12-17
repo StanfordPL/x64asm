@@ -12,8 +12,12 @@ INC=-I./
 
 OBJ=build/assembler/assembler.o \
 		\
+		build/attributes/attributes.o \
+		build/attributes/op_set.o \
+		\
 		build/code/cr.o \
 		build/code/dr.o \
+		build/code/eflag.o \
 		build/code/imm.o \
 		build/code/modifier.o \
 		build/code/mm.o \
@@ -21,14 +25,12 @@ OBJ=build/assembler/assembler.o \
 		build/code/sreg.o \
 		build/code/st.o \
 		build/code/xmm.o \
-		build/code/ymm.o #\
+		build/code/ymm.o
+
+#\
 		build/code/reg_set.o \
 		\
-		build/sandboxer/sandboxer.o \
-		\
-		build/stream/stream.o \
-		\
-		build/tracer/tracer.o
+		build/stream/stream.o
 
 BIN=#bin/att_exec \
 		bin/att_sandbox \
@@ -108,6 +110,8 @@ build/att/%.o: src/att/%.cc src/att/%.h codegen
 	mkdir -p build/att && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/assembler/%.o: src/assembler/%.cc src/assembler/%.h codegen
 	mkdir -p build/assembler && $(GCC) $(OPT) $(INC) -c $< -o $@
+build/attributes/%.o: src/attributes/%.cc src/attributes/%.h codegen
+	mkdir -p build/attributes && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/cfg/%.o: src/cfg/%.cc src/cfg/%.h codegen
 	mkdir -p build/cfg && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/code/%.o: src/code/%.cc src/code/%.h codegen

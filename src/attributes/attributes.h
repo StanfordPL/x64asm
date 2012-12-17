@@ -30,7 +30,7 @@ class Attributes {
 			return arity(i.get_opcode());
 		}
 
-		static inline OpAccessor accessor(const Instruction& i, size_index) {
+		static inline OpAccessor accessor(const Instruction& i, size_t index) {
 			return accessor(i.get_opcode(), index);
 		}
 
@@ -55,7 +55,7 @@ class Attributes {
 		}
 
 		static inline size_t is_uncond_jump(const Instruction& i) {
-			return is_uncond_jump(i.is_uncond_jump());
+			return is_uncond_jump(i.get_opcode());
 		}
 
 		static inline OpSet implicit_read_set(const Instruction& i) {

@@ -12,6 +12,52 @@ namespace x64 {
 class OpSet {
 	public:
 
+
+		// TODO
+		inline OpSet operator~() const {
+			return *this;
+		}
+
+		inline OpSet operator&(const OpSet& os) const {
+			return *this;
+		}
+
+		inline OpSet operator|(const OpSet& os) const {
+			return *this;
+		}
+
+		inline OpSet operator^(const OpSet& os) const {
+			return *this;
+		}
+
+		inline OpSet operator-(const OpSet& os) const {
+			return *this;
+		}
+
+		inline OpSet& operator&=(const OpSet& os) {
+			return *this;
+		}
+
+		inline OpSet& operator|=(const OpSet& os) {
+			return *this;
+		}
+
+		inline OpSet& operator^=(const OpSet& os) {
+			return *this;
+		}
+
+		inline OpSet& operator-=(const OpSet& os) {
+			return *this;
+		}
+
+		inline bool operator==(const OpSet& os) {
+			return true;
+		}
+
+		inline bool operator!=(const OpSet& os) {
+			return true;
+		}
+
 	private:
 		int x_;
 };
