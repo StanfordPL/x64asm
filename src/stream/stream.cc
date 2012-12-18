@@ -1,5 +1,22 @@
 #include "src/stream/stream.h"
 
+#include "src/writer/att_writer.h"
+
+using namespace std;
+using namespace x64;
+
+ostream& operator<<(ostream& os, Cr c) {
+	AttWriter::write(os, c);
+	return os;
+}
+
+ostream& operator<<(ostream& os, Dr d) {
+	AttWriter::write(os, d);
+	return os;
+}
+
+#if 0
+
 #include "src/assembler/assembler.h"
 #include "src/cfg/control_flow_graph.h"
 #include "src/att/att_reader.h"
@@ -211,4 +228,6 @@ ostream& operator<<(ostream& os, x64::Xmm x) {
 ostream& operator<<(ostream& os, x64::Ymm y) {
 	return generic_write(os, y);
 }
+
+#endif
 

@@ -1,7 +1,21 @@
-#include "src/att/att_writer.h"
+#include "src/writer/att_writer.h"
 
 using namespace std;
 
+namespace x64 {
+
+void AttWriter::write(ostream& os, Cr c) {
+	os << "%cr" << c.val_;
+}
+
+void AttWriter::write(ostream& os, Dr d) {
+	os << "%dr" << d.val_;
+}
+
+} // namespace x64
+
+
+#if 0
 namespace {
 
 // const char* opcodes_[] {{ ... }}
@@ -376,5 +390,5 @@ void AttWriter::write(ostream& os, Ymm ymm) const {
 			os << "<null>";
 	}
 }
+#endif
 
-} // namespace std

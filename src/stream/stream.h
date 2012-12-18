@@ -3,6 +3,17 @@
 
 #include <iostream>
 
+#include "src/code/cr.h"
+#include "src/code/dr.h"
+
+std::ostream& operator<<(std::ostream& os, const x64::Cr c);
+std::ostream& operator<<(std::ostream& os, const x64::Dr d);
+
+
+
+#if 0
+#include <iostream>
+
 #include "src/code/code.h"
 #include "src/code/cond_reg.h"
 #include "src/code/imm.h"
@@ -93,5 +104,6 @@ std::ostream& operator<<(std::ostream& os, x64::Sreg s);
 std::ostream& operator<<(std::ostream& os, x64::St st);
 std::ostream& operator<<(std::ostream& os, x64::Xmm x);
 std::ostream& operator<<(std::ostream& os, x64::Ymm y);
+#endif
 
 #endif

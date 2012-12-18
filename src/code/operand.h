@@ -6,7 +6,15 @@
 namespace x64 {
 
 /** Base operand type. */
-typedef uint64_t Operand;
+class Operand {
+	friend class AttWriter;
+	protected:
+		inline Operand(uint64_t val)
+				: val_(val) {
+		}		
+
+	uint64_t val_;	
+};
 
 } // namespace x64
 

@@ -1,50 +1,35 @@
 #ifndef X64_SRC_CODE_CR_H
 #define X64_SRC_CODE_CR_H
 
-#include <vector>
-
 #include "src/code/operand.h"
 
 namespace x64 {
 
 /** A control register. */
-class Cr {
-	public:
-		inline Cr()
-				: c_{0} {
-		}
-
-		inline Cr(Operand o)
-				: c_{o} {
-		}
-
-		inline operator Operand() const {
-			return c_;
-		}
-
-	private:
-		Operand c_;	
+class Cr : public Operand {
+	protected:
+		inline Cr(uint64_t val) : Operand{val} { }
 };
 
 /** One of the control reigsters: CR0, CR2, CR3, CR4. */
-struct Cr0234 : public Cr {
-	inline Cr0234() : Cr{} { }
-	inline Cr0234(Operand o) : Cr{o} { }
+class Cr0234 : public Cr {
+	friend class Constants;
+	private:
+		inline Cr0234(uint64_t val) : Cr{val} { }
+	public:	
+		inline Cr0234(const Cr0234& c) = default;
+		inline Cr0234& operator=(const Cr0234& c) = default;
 };
 
 /** The control register CR8 */
-struct Cr8 : public Cr {
-	inline Cr8() : Cr{8} { }
+class Cr8 : public Cr {
+	friend class Constants;
+	private:
+		inline Cr8() : Cr{8} { }
+	public:	
+		inline Cr8(const Cr8& c) = default;
+		inline Cr8& operator=(const Cr8& c) = default;
 };
-
-extern const Cr0234 cr0;
-extern const Cr0234 cr2;
-extern const Cr0234 cr3;
-extern const Cr0234 cr4;
-extern const Cr8 cr8;
-
-typedef std::vector<Cr> Crs;
-extern const Crs crs;
 
 } // namespace x64
 

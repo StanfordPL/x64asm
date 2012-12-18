@@ -10,7 +10,13 @@ INC=-I./
 		build/att/att_writer.o \
 		\
 
-OBJ=build/assembler/assembler.o \
+OBJ=build/code/constants.o \
+		\
+		build/stream/stream.o \
+		\
+		build/writer/att_writer.o
+
+#build/assembler/assembler.o \
 		\
 		build/attributes/attributes.o \
 		build/attributes/op_set.o \
@@ -32,6 +38,10 @@ OBJ=build/assembler/assembler.o \
 		\
 		build/stream/stream.o
 
+LIB=lib/libx64.a
+
+TEST=test/constants
+
 BIN=#bin/att_exec \
 		bin/att_sandbox \
 		bin/att_trace \
@@ -40,8 +50,6 @@ BIN=#bin/att_exec \
 		bin/att2bin
 
 DOC=doc/html
-
-LIB=lib/libx64.a
 
 ##### TOP LEVEL TARGETS (release is default)
 
@@ -54,7 +62,7 @@ release:
 profile:
 	make -C . erthing OPT="-std=c++0x -Wall -fPIC -DNDEBUG -O3 -funroll-all-loops -pg"
 
-erthing: $(LIB) $(BIN) $(DOC)
+erthing: $(LIB) $(TEST) $(BIN) $(DOC)
 
 ##### TEST TARGETS
 
@@ -65,7 +73,7 @@ test: erthing
 ##### CLEAN TARGETS
 
 clean:
-	rm -rf $(BIN) $(DOC) $(LIB) build/* 
+	rm -rf build/* $(LIB) $(TEST) $(BIN) $(DOC)
 	rm -f src/assembler/assembler.defn src/assembler/assembler.decl
 	rm -f src/code/opcode.enum
 	rm -rf test/enumerate_all.hi test/enumerate_all.o test/tmp/* test/enumerate_all
@@ -106,8 +114,6 @@ doc/html: doxyfile src/cfg/*.cc src/cfg/*.h \
 
 ##### BUILD TARGETS
 
-build/att/%.o: src/att/%.cc src/att/%.h codegen
-	mkdir -p build/att && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/assembler/%.o: src/assembler/%.cc src/assembler/%.h codegen
 	mkdir -p build/assembler && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/attributes/%.o: src/attributes/%.cc src/attributes/%.h codegen
@@ -116,17 +122,20 @@ build/cfg/%.o: src/cfg/%.cc src/cfg/%.h codegen
 	mkdir -p build/cfg && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/code/%.o: src/code/%.cc src/code/%.h codegen
 	mkdir -p build/code && $(GCC) $(OPT) $(INC) -c $< -o $@
-build/sandboxer/%.o: src/sandboxer/%.cc src/sandboxer/%.h codegen
-	mkdir -p build/sandboxer && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/stream/%.o: src/stream/%.cc src/stream/%.h codegen
 	mkdir -p build/stream && $(GCC) $(OPT) $(INC) -c $< -o $@
-build/tracer/%.o: src/tracer/%.cc src/tracer/%.h codegen
-	mkdir -p build/tracer && $(GCC) $(OPT) $(INC) -c $< -o $@
+build/writer/%.o: src/writer/%.cc src/writer/%.h codegen
+	mkdir -p build/writer && $(GCC) $(OPT) $(INC) -c $< -o $@
 
 ##### LIBRARY TARGET
 
 $(LIB): $(OBJ)
 	ar rcs $@ $(OBJ)
+
+##### TEST TARGET
+
+test/constants: test/constants.cc $(LIB)
+	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
 
 ##### BINARY TARGET
 
