@@ -17,31 +17,35 @@ class Moffs : public Operand {
 };
 
 /** A simple memory variable (memory offset) of type byte. */
-struct Moffs8 : public Moffs {
-	inline Moffs8(uint64_t o) : Moffs{o} { }
-	template <typename T>
-	inline Moffs8(T* t) : Moffs{t} { }
+class Moffs8 : public Moffs {
+	public:
+		inline Moffs8(uint64_t o) : Moffs{o} { }
+		template <typename T>
+		inline Moffs8(T* t) : Moffs{t} { }
 };
 
 /** A simple memory variable (memory offset) of type word. */
-struct Moffs16 : public Moffs {
-	inline Moffs16(uint64_t o) : Moffs{o} { }
-	template <typename T>
-	inline Moffs16(T* t) : Moffs{t} { }
+class Moffs16 : public Moffs {
+	public:
+		inline Moffs16(uint64_t o) : Moffs{o} { }
+		template <typename T>
+		inline Moffs16(T* t) : Moffs{t} { }
 };
 
 /** A simple memory variable (memory offset) of type doubleword. */
-struct Moffs32 : public Moffs {
-	inline Moffs32(uint64_t o) : Moffs{o} { }
-	template <typename T>
-	inline Moffs32(T* t) : Moffs{t} { }
+class Moffs32 : public Moffs {
+	public:
+		inline Moffs32(uint64_t o) : Moffs{o} { }
+		template <typename T>
+		inline Moffs32(T* t) : Moffs{t} { }
 };
 
 /** A simple memory variable (memory offset) of type quadword. */
-struct Moffs64 : public Moffs {
-	inline Moffs64(uint64_t o) : Moffs{o} { }
-	template <typename T>
-	inline Moffs64(T* t) : Moffs{t} { }
+class Moffs64 : public Moffs {
+	public:
+		inline Moffs64(uint64_t o) : Moffs{o} { }
+		template <typename T>
+		inline Moffs64(T* t) : Moffs{t} { }
 };
 
 }

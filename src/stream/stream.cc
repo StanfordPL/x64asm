@@ -15,32 +15,76 @@ ostream& generic_write(ostream& os, const T t) {
 
 } // namespace
 
-ostream& operator<<(ostream& os, Cr c) {
+ostream& operator<<(ostream& os, const Cr c) {
 	return generic_write(os, c);
 }
 
-ostream& operator<<(ostream& os, Dr d) {
+ostream& operator<<(ostream& os, const Dr d) {
 	return generic_write(os, d);
 }
 
-ostream& operator<<(ostream& os, Eflag e) {
+ostream& operator<<(ostream& os, const Eflag e) {
 	return generic_write(os, e);
 }
 
-ostream& operator<<(ostream& os, Imm i) {
+ostream& operator<<(ostream& os, const Imm i) {
 	return generic_write(os, i);
 }
 
-ostream& operator<<(ostream& os, Label l) {
+ostream& operator<<(ostream& os, const Label l) {
 	return generic_write(os, l);
 }
 
-ostream& operator<<(ostream& os, Mm m) {
+ostream& operator<<(ostream& os, const Mm m) {
 	return generic_write(os, m);
 }
 
-ostream& operator<<(ostream& os, Moffs m) {
+ostream& operator<<(ostream& os, const Moffs m) {
 	return generic_write(os, m);
+}
+
+ostream& operator<<(ostream& os, const Rl r) {
+	return generic_write(os, r);
+}
+
+ostream& operator<<(ostream& os, const Rh r) {
+	return generic_write(os, r);
+}
+
+ostream& operator<<(ostream& os, const Rb r) {
+	return generic_write(os, r);
+}
+
+ostream& operator<<(ostream& os, const R16 r) {
+	return generic_write(os, r);
+}
+
+ostream& operator<<(ostream& os, const R32 r) {
+	return generic_write(os, r);
+}
+
+ostream& operator<<(ostream& os, const R64 r) {
+	return generic_write(os, r);
+}
+
+ostream& operator<<(ostream& os, const Rel r) {
+	return generic_write(os, r);
+}
+
+ostream& operator<<(ostream& os, const Sreg s) {
+	return generic_write(os, s);
+}
+
+ostream& operator<<(ostream& os, const St s) {
+	return generic_write(os, s);
+}
+
+ostream& operator<<(ostream& os, const Xmm x) {
+	return generic_write(os, x);
+}
+
+ostream& operator<<(ostream& os, const Ymm y) {
+	return generic_write(os, y);
 }
 
 #if 0

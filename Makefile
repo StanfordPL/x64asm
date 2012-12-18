@@ -20,17 +20,6 @@ OBJ=build/code/constants.o \
 		\
 		build/attributes/attributes.o \
 		build/attributes/op_set.o \
-		\
-		build/code/r.o \
-		build/code/sreg.o \
-		build/code/st.o \
-		build/code/xmm.o \
-		build/code/ymm.o
-
-#\
-		build/code/reg_set.o \
-		\
-		build/stream/stream.o
 
 LIB=lib/libx64.a
 

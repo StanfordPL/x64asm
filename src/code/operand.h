@@ -9,9 +9,7 @@ namespace x64 {
 class Operand {
 	friend class AttWriter;
 	protected:
-		inline Operand(uint64_t val)
-				: val_(val) {
-		}		
+		inline Operand(uint64_t val) : val_{val} { }
 
 	uint64_t val_;	
 };

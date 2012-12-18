@@ -17,34 +17,38 @@ class Imm : public Operand {
 		a word or doubleword. The upper byte of the word is filled with the topmost 
 		bit of the immediate value. 
 */
-struct Imm8 : public Imm {
-	inline Imm8(uint8_t i) : Imm{i} { }
+class Imm8 : public Imm {
+	public:
+		inline Imm8(uint8_t i) : Imm{i} { }
 };
 
 /** An immediate word value used for instructions whose operand-size attribute 
 	  is 16 bits. This is a number between -32,768 and +32,767 inclusive.
 */
-struct Imm16 : public Imm {
-	inline Imm16(uint16_t i) : Imm{i} { }
+class Imm16 : public Imm {
+	public:
+		inline Imm16(uint16_t i) : Imm{i} { }
 };
 
 /** An immediate doubleword value used for instructions whose operand-size 
 	  attribute is 32 bits. It allows the use of a number between 
 		+2,147,483,647 and -2,147,483,648 inclusive.
 */
-struct Imm32 : public Imm {
-	inline Imm32(uint32_t i) : Imm{i} { }
+class Imm32 : public Imm {
+	public:
+		inline Imm32(uint32_t i) : Imm{i} { }
 };
 
 /** An immediate quadword value used for instructions whose operand-size 
 	  attribute is 64 bits. The value allows the use of a number between 
 		+9,223,372,036,854,775,807 and -9,223,372,036,854,775,808 inclusive.
 */
-struct Imm64 : public Imm {
-	inline Imm64(uint64_t i) : Imm{i} { }
+class Imm64 : public Imm {
+	public:
+		inline Imm64(uint64_t i) : Imm{i} { }
 
-	template <typename T>
-	inline Imm64(T* t) : Imm{(Operand) t} { }
+		template <typename T>
+		inline Imm64(T* t) : Imm{(Operand) t} { }
 };
 
 /** The immediate constant value zero */

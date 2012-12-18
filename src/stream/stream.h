@@ -10,6 +10,12 @@
 #include "src/code/label.h"
 #include "src/code/mm.h"
 #include "src/code/moffs.h"
+#include "src/code/r.h"
+#include "src/code/rel.h"
+#include "src/code/sreg.h"
+#include "src/code/st.h"
+#include "src/code/xmm.h"
+#include "src/code/ymm.h"
 
 std::ostream& operator<<(std::ostream& os, const x64::Cr c);
 std::ostream& operator<<(std::ostream& os, const x64::Dr d);
@@ -18,8 +24,17 @@ std::ostream& operator<<(std::ostream& os, const x64::Imm i);
 std::ostream& operator<<(std::ostream& os, const x64::Label l);
 std::ostream& operator<<(std::ostream& os, const x64::Mm m);
 std::ostream& operator<<(std::ostream& os, const x64::Moffs m);
-
-
+std::ostream& operator<<(std::ostream& os, const x64::Rl r);
+std::ostream& operator<<(std::ostream& os, const x64::Rh r);
+std::ostream& operator<<(std::ostream& os, const x64::Rb r);
+std::ostream& operator<<(std::ostream& os, const x64::R16 r);
+std::ostream& operator<<(std::ostream& os, const x64::R32 r);
+std::ostream& operator<<(std::ostream& os, const x64::R64 r);
+std::ostream& operator<<(std::ostream& os, const x64::Rel r);
+std::ostream& operator<<(std::ostream& os, const x64::Sreg s);
+std::ostream& operator<<(std::ostream& os, const x64::St s);
+std::ostream& operator<<(std::ostream& os, const x64::Xmm x);
+std::ostream& operator<<(std::ostream& os, const x64::Ymm y);
 
 #if 0
 #include <iostream>

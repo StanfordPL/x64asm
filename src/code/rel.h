@@ -6,39 +6,26 @@
 namespace x64 {
 
 /** A relative address. */
-class Rel {
-	public:
-		inline Rel()
-				: r_{0} {
-		}
-
-		inline Rel(Operand r)
-				: r_{r} {
-		}
-
-		inline operator Operand() const {
-			return r_;
-		}
-
-	private:
-		Operand r_;
+class Rel : public Operand {
+	protected:
+		inline Rel(uint64_t val) : Operand{val} { }
 };
 
 /** A relative address in the range from 128 bytes before the end of the 
 	  instruction to 127 bytes after the end of the instruction.
 */
-struct Rel8 : public Rel {
-	inline Rel8() : Rel{} { }
-	inline Rel8(Operand r) : Rel{r} { }
+class Rel8 : public Rel {
+	public:
+		inline Rel8(uint64_t val) : Rel{val} { }
 };
 
 /** A relative address within the same code segment as the instruction 
 	  assembled. The rel32 symbol applies to instructions with an 
 		operand-size attribute of 32 bits.
 */
-struct Rel32 : public Rel {
-	inline Rel32() : Rel{} { }
-	inline Rel32(Operand r) : Rel{r} { }
+class Rel32 : public Rel {
+	public:
+		inline Rel32(uint64_t val) : Rel{val} { }
 };
 
 } // namespace x64
