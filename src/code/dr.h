@@ -10,9 +10,6 @@ class Dr : public Operand {
 	friend class Constants;
 	private:
 		inline Dr(uint64_t val) : Operand{val} { }
-	public:
-		inline Dr(const Dr& d) = default;
-		inline Dr& operator=(const Dr& d) = default;	
 };
 
 } // namespace x64

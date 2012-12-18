@@ -13,14 +13,11 @@ void all(const vector<T>& ts) {
 }
 
 int main() {
-	// Condition Registers (cr.h)
-	all(vector<Cr>{{cr0,cr2,cr3,cr4,cr8}});
 	all(crs);
 	all(cr0234s);
-
-	// Debug Registers (dr.h)
-	all(vector<Dr>{{dr0,dr1,dr2,dr3,dr4,dr5,dr6,dr7}});
 	all(drs);
+	all(eflags);
+	all(vector<Imm>{{zero, one, three}});
 
 	return 0;
 }

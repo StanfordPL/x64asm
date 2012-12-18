@@ -5,9 +5,13 @@
 
 #include "src/code/cr.h"
 #include "src/code/dr.h"
+#include "src/code/eflag.h"
+#include "src/code/imm.h"
 
 std::ostream& operator<<(std::ostream& os, const x64::Cr c);
 std::ostream& operator<<(std::ostream& os, const x64::Dr d);
+std::ostream& operator<<(std::ostream& os, const x64::Eflag e);
+std::ostream& operator<<(std::ostream& os, const x64::Imm i);
 
 
 

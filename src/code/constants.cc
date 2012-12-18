@@ -33,4 +33,35 @@ const vector<Dr> drs {{
 	dr0, dr1, dr2, dr3, dr4, dr5, dr6, dr7 
 }};
 
+// Eflags (eflag.h)
+const Eflag cf{Constants::cf()};
+const Eflag pf{Constants::pf()};
+const Eflag af{Constants::af()};
+const Eflag zf{Constants::zf()};
+const Eflag sf{Constants::sf()};
+const Eflag tf{Constants::tf()};
+const Eflag if_{Constants::if_()};
+const Eflag df{Constants::df()};
+const Eflag of{Constants::of()};
+const Eflag iopl0{Constants::iopl0()};
+const Eflag iopl1{Constants::iopl1()};
+const Eflag nt{Constants::nt()};
+const Eflag rf{Constants::rf()};
+const Eflag vm{Constants::vm()};
+const Eflag ac{Constants::ac()};
+const Eflag vif{Constants::vif()};
+const Eflag vip{Constants::vip()};
+const Eflag id{Constants::id()};
+
+const vector<Eflag> eflags {{
+	cf, pf, af, zf, sf, tf, if_, df, 
+	of, iopl0, iopl1, nt, rf, vm, ac, vif, 
+	vip, id
+}};
+
+// Immediates (imm.h)
+const Zero zero{Constants::zero()};
+const One one{Constants::one()};
+const Three three{Constants::three()};
+
 } // namespace x64

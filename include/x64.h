@@ -4,6 +4,8 @@
 #include "src/code/constants.h"
 #include "src/code/cr.h"
 #include "src/code/dr.h"
+#include "src/code/eflag.h"
+#include "src/code/imm.h"
 
 #include "src/stream/stream.h"
 

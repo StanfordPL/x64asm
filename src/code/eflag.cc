@@ -22,10 +22,5 @@ const Eflag vif{19};
 const Eflag vip{20};
 const Eflag id{21};
 
-const Eflags eflags {{
-	cf, pf,   af, zf, sf, tf, if_, df, 
-	of, iopl, nt, rf, vm, ac, vif, vip, 
-	id
-}};
 
 } // namespace x64

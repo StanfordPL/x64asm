@@ -5,14 +5,30 @@
 using namespace std;
 using namespace x64;
 
-ostream& operator<<(ostream& os, Cr c) {
-	AttWriter::write(os, c);
+namespace {
+
+template <typename T>
+ostream& generic_write(ostream& os, const T t) {
+	AttWriter::write(os, t);
 	return os;
 }
 
+} // namespace
+
+ostream& operator<<(ostream& os, Cr c) {
+	return generic_write(os, c);
+}
+
 ostream& operator<<(ostream& os, Dr d) {
-	AttWriter::write(os, d);
-	return os;
+	return generic_write(os, d);
+}
+
+ostream& operator<<(ostream& os, Eflag e) {
+	return generic_write(os, e);
+}
+
+ostream& operator<<(ostream& os, Imm i) {
+	return generic_write(os, i);
 }
 
 #if 0
