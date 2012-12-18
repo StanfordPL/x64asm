@@ -6,7 +6,7 @@
 namespace x64 {
 
 /** An immediate value. */
-class Imm : public Operand{
+class Imm : public Operand {
 	protected:
 		inline Imm(uint64_t val) : Operand{val} { }
 };

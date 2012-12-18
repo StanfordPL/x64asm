@@ -18,6 +18,7 @@ int main() {
 	all(drs);
 	all(eflags);
 	all(vector<Imm>{{zero, one, three}});
+	all(mms);
 
 	return 0;
 }

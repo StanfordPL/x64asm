@@ -11,61 +11,35 @@ namespace x64 {
 		byte is used in the instruction. The number shown with moffs indicates its 
 		size, which is determined by the address-size attribute of the instruction.
 */
-class Moffs {
-	public:
-		inline Moffs()
-				: o_{0} {
-		}
-
-		inline Moffs(Operand o)
-				: o_{o} {
-		}
-
-		template <typename T>
-		inline Moffs(T* t)
-				: o_{(Operand) t} {
-		}
-
-		inline operator Operand() const {
-			return o_;
-		}
-
-	private:
-		Operand o_;
+class Moffs : public Operand {
+	protected:
+		inline Moffs(uint64_t val) : Operand{val} { }
 };
 
 /** A simple memory variable (memory offset) of type byte. */
 struct Moffs8 : public Moffs {
-	inline Moffs8() : Moffs{} { }
-	inline Moffs8(Operand o) : Moffs{o} { }
-
+	inline Moffs8(uint64_t o) : Moffs{o} { }
 	template <typename T>
 	inline Moffs8(T* t) : Moffs{t} { }
 };
 
 /** A simple memory variable (memory offset) of type word. */
 struct Moffs16 : public Moffs {
-	inline Moffs16() : Moffs{} { }
-	inline Moffs16(Operand o) : Moffs{o} { }
-
+	inline Moffs16(uint64_t o) : Moffs{o} { }
 	template <typename T>
 	inline Moffs16(T* t) : Moffs{t} { }
 };
 
 /** A simple memory variable (memory offset) of type doubleword. */
 struct Moffs32 : public Moffs {
-	inline Moffs32() : Moffs{} { }
-	inline Moffs32(Operand o) : Moffs{o} { }
-
+	inline Moffs32(uint64_t o) : Moffs{o} { }
 	template <typename T>
 	inline Moffs32(T* t) : Moffs{t} { }
 };
 
 /** A simple memory variable (memory offset) of type quadword. */
 struct Moffs64 : public Moffs {
-	inline Moffs64() : Moffs{} { }
-	inline Moffs64(Operand o) : Moffs{o} { }
-
+	inline Moffs64(uint64_t o) : Moffs{o} { }
 	template <typename T>
 	inline Moffs64(T* t) : Moffs{t} { }
 };

@@ -7,11 +7,17 @@
 #include "src/code/dr.h"
 #include "src/code/eflag.h"
 #include "src/code/imm.h"
+#include "src/code/label.h"
+#include "src/code/mm.h"
+#include "src/code/moffs.h"
 
 std::ostream& operator<<(std::ostream& os, const x64::Cr c);
 std::ostream& operator<<(std::ostream& os, const x64::Dr d);
 std::ostream& operator<<(std::ostream& os, const x64::Eflag e);
 std::ostream& operator<<(std::ostream& os, const x64::Imm i);
+std::ostream& operator<<(std::ostream& os, const x64::Label l);
+std::ostream& operator<<(std::ostream& os, const x64::Mm m);
+std::ostream& operator<<(std::ostream& os, const x64::Moffs m);
 
 
 

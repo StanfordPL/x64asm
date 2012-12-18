@@ -7,6 +7,8 @@
 #include "src/code/dr.h"
 #include "src/code/eflag.h"
 #include "src/code/imm.h"
+#include "src/code/mm.h"
+#include "src/code/modifier.h"
 
 namespace x64 {
 
@@ -52,6 +54,21 @@ struct Constants {
 	static inline Zero zero() { return Zero(); }
 	static inline One one() { return One(); }
 	static inline Three three() { return Three(); }
+
+	// MMX Registers (mm.h)
+	static inline Mm mm0() { return Mm{0}; }
+	static inline Mm mm1() { return Mm{1}; }
+	static inline Mm mm2() { return Mm{2}; }
+	static inline Mm mm3() { return Mm{3}; }
+	static inline Mm mm4() { return Mm{4}; }
+	static inline Mm mm5() { return Mm{5}; }
+	static inline Mm mm6() { return Mm{6}; }
+	static inline Mm mm7() { return Mm{7}; }
+
+	// Modifiers (modifier.h)
+	static inline Pref66 pref_66() { return Pref66(); }
+	static inline PrefRexW pref_rex_w() { return PrefRexW(); }
+	static inline Far far() { return Far(); }
 };
 
 // Condition Registers (cr.h)
@@ -102,6 +119,23 @@ extern const std::vector<Eflag> eflags;
 extern const Zero zero;
 extern const One one;
 extern const Three three;
+
+// MMX Registers (mm.h)
+extern const Mm mm0;
+extern const Mm mm1;
+extern const Mm mm2;
+extern const Mm mm3;
+extern const Mm mm4;
+extern const Mm mm5;
+extern const Mm mm6;
+extern const Mm mm7;
+
+extern const std::vector<Mm> mms;
+
+// Modifiers (modifier.h)
+extern const Pref66 pref_66;
+extern const PrefRexW pref_rexw;
+extern const Far far;
 
 } // namespace x64
 

@@ -64,4 +64,23 @@ const Zero zero{Constants::zero()};
 const One one{Constants::one()};
 const Three three{Constants::three()};
 
+// MMX Registers (mm.h)
+const Mm mm0{Constants::mm0()};
+const Mm mm1{Constants::mm1()};
+const Mm mm2{Constants::mm2()};
+const Mm mm3{Constants::mm3()};
+const Mm mm4{Constants::mm4()};
+const Mm mm5{Constants::mm5()};
+const Mm mm6{Constants::mm6()};
+const Mm mm7{Constants::mm7()};
+
+const vector<Mm> mms {{
+	mm0, mm1, mm2, mm3, mm4, mm5, mm6, mm7
+}};
+
+// Modifiers (modifier.h)
+const Pref66 pref_66{Constants::pref_66()};
+const PrefRexW pref_rex_w{Constants::pref_rex_w()};
+const Far far{Constants::far()};
+
 } // namespace x64

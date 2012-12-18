@@ -31,6 +31,18 @@ ostream& operator<<(ostream& os, Imm i) {
 	return generic_write(os, i);
 }
 
+ostream& operator<<(ostream& os, Label l) {
+	return generic_write(os, l);
+}
+
+ostream& operator<<(ostream& os, Mm m) {
+	return generic_write(os, m);
+}
+
+ostream& operator<<(ostream& os, Moffs m) {
+	return generic_write(os, m);
+}
+
 #if 0
 
 #include "src/assembler/assembler.h"

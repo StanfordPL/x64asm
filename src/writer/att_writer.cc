@@ -7,11 +7,11 @@ using namespace std;
 namespace x64 {
 
 void AttWriter::write(ostream& os, Cr c) {
-	os << "%cr" << c.val_;
+	os << "%cr" << dec << c.val_;
 }
 
 void AttWriter::write(ostream& os, Dr d) {
-	os << "%dr" << d.val_;
+	os << "%dr" << dec << d.val_;
 }
 
 void AttWriter::write(ostream& os, Eflag e) {
@@ -42,6 +42,18 @@ void AttWriter::write(ostream& os, Eflag e) {
 
 void AttWriter::write(ostream& os, Imm i) {
 	os << "$" << hex << i.val_;
+}
+
+void AttWriter::write(ostream& os, Label l) {
+	os << ".LABEL_" << dec << l.val_;
+}
+
+void AttWriter::write(ostream& os, Mm m) {
+	os << "%mm" << dec << m.val_;
+}
+
+void AttWriter::write(ostream& os, Moffs m) {
+	os << hex << showbase << m.val_;
 }
 
 } // namespace x64

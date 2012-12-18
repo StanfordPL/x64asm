@@ -108,14 +108,6 @@ class M {
 			set_all(s, b, i, sc, d, 1);
 		}
 
-		inline M(Operand m) 
-				: m_(m) {
-		}
-
-		inline operator Operand() const {
-			return m_;
-		}
-
 		inline bool null_seg() const {
 			return m_ & (0x1ull << 47);
 		}
