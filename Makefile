@@ -21,10 +21,6 @@ OBJ=build/code/constants.o \
 		build/attributes/attributes.o \
 		build/attributes/op_set.o \
 		\
-		build/code/cr.o \
-		build/code/dr.o \
-		build/code/eflag.o \
-		build/code/imm.o \
 		build/code/modifier.o \
 		build/code/mm.o \
 		build/code/r.o \
