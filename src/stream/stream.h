@@ -2,7 +2,11 @@
 #define X64_SRC_STREAM_STREAM_H
 
 #include <iostream>
+#include <stdint.h>
 
+#include "src/code/code.h"
+#include "src/code/instruction.h"
+#include "src/code/opcode.h"
 #include "src/operands/cr.h"
 #include "src/operands/dr.h"
 #include "src/operands/eflag.h"
@@ -18,11 +22,72 @@
 #include "src/operands/xmm.h"
 #include "src/operands/ymm.h"
 
+namespace x64 {
+
+/** I/O format for iostreams. */
+enum class IO : uint32_t {
+	ATT = 0,
+	ELF,
+	HEX,
+	INTEL
+};
+
+/** Transforms for iostreams. */
+enum class Transform : uint32_t {
+	ALL                = 0xffffffff,
+	REMOVE_NOP         = 0x00000001,
+	REMOVE_UNREACHABLE = 0x00000002
+};
+
+/** IO manipulator. */
+class set_io {
+	public:
+		inline explicit set_io(IO io) : io_{io} { }
+		inline operator IO() const { return io_; }
+	private:
+		const IO io_;
+};
+
+/** Transform activating manipulator. */
+class set_transform {
+ 	public:
+		inline explicit set_transform(Transform t) : t_{t} { }
+		inline operator Transform() const { return t_; }
+	private:
+		const Transform f_;
+};
+
+/** Transform deactivating manipulator. */
+class unset_transform {
+ 	public:
+		inline explicit unset_transform(Transform t) : t_{t} { }
+		inline operator Transform() const { return t_; }
+	private:
+		const Transform f_;
+};
+
+} // namespace x64
+
+std::istream& operator>>(std::istream& is, const x64::set_io& m);
+std::istream& operator>>(std::istream& is, const x64::set_transform& m);
+std::istream& operator>>(std::istream& is, const x64::unset_transform& m);
+
+std::ostream& operator<<(std::ostream& os, const x64::set_io& m);
+std::ostream& operator<<(std::ostream& os, const x64::set_transform& m);
+std::ostream& operator<<(std::ostream& os, const x64::unset_transform& m);
+
+std::istream& operator>>(std::istream& is, x64::Code& c);
+
+std::ostream& operator<<(std::ostream& os, const x64::Code& c);
+std::ostream& operator<<(std::ostream& os, const x64::Instruction& i);
+std::ostream& operator<<(std::ostream& os, const x64::Opcode o);
+
 std::ostream& operator<<(std::ostream& os, const x64::Cr c);
 std::ostream& operator<<(std::ostream& os, const x64::Dr d);
 std::ostream& operator<<(std::ostream& os, const x64::Eflag e);
 std::ostream& operator<<(std::ostream& os, const x64::Imm i);
 std::ostream& operator<<(std::ostream& os, const x64::Label l);
+std::ostream& operator<<(std::ostream& os, const x64::M m);
 std::ostream& operator<<(std::ostream& os, const x64::Mm m);
 std::ostream& operator<<(std::ostream& os, const x64::Moffs m);
 std::ostream& operator<<(std::ostream& os, const x64::Rl r);
@@ -36,100 +101,5 @@ std::ostream& operator<<(std::ostream& os, const x64::Sreg s);
 std::ostream& operator<<(std::ostream& os, const x64::St s);
 std::ostream& operator<<(std::ostream& os, const x64::Xmm x);
 std::ostream& operator<<(std::ostream& os, const x64::Ymm y);
-
-#if 0
-#include <iostream>
-
-#include "src/code/code.h"
-#include "src/code/cond_reg.h"
-#include "src/code/imm.h"
-#include "src/code/label.h"
-#include "src/code/m.h"
-#include "src/code/mm.h"
-#include "src/code/moffs.h"
-#include "src/code/opcode.h"
-#include "src/code/r.h"
-#include "src/code/scale.h"
-#include "src/code/sreg.h"
-#include "src/code/st.h"
-#include "src/code/xmm.h"
-#include "src/code/ymm.h"
-
-namespace x64 {
-
-/** iostream input/output formats.
-*/
-enum FormatVal {
-	ATT = 0,
-	BIN,
-	DOT,
-	HEX
-};
-
-enum CodeFormatVal {
-  ALL = 0,
-  NOP_REMOVED,
-  DEAD_REMOVED
-};
-
-/** iostream formatting manipulator.
-*/
-class format {
-	public:
-		inline explicit format(FormatVal f)
-				: f_(f) {
-		}
-		inline operator FormatVal() const {
-			return f_;
-		}
-	private:
-		FormatVal f_;
-};
-
-class code_format {
-  	public:
-		inline explicit code_format(CodeFormatVal f)
-				: f_(f) {
-		}
-		inline operator CodeFormatVal() const {
-			return f_;
-		}
-	private:
-		CodeFormatVal f_;
-
-};
-
-} // namespace x64
-
-std::istream& operator>>(std::istream& is, const x64::format& f);
-std::ostream& operator<<(std::ostream& os, const x64::format& f);
-
-std::ostream& operator<<(std::ostream& os, const x64::code_format& f);
-
-std::istream& operator>>(std::istream& is, x64::Code& c);
-
-std::ostream& operator<<(std::ostream& os, const x64::Code& code);
-std::ostream& operator<<(std::ostream& os, x64::CondReg cr);
-std::ostream& operator<<(std::ostream& os, x64::Imm8 i);
-std::ostream& operator<<(std::ostream& os, x64::Imm16 i);
-std::ostream& operator<<(std::ostream& os, x64::Imm32 i);
-std::ostream& operator<<(std::ostream& os, x64::Imm64 i);
-std::ostream& operator<<(std::ostream& os, const x64::Instruction& instr);
-std::ostream& operator<<(std::ostream& os, x64::Label l);
-std::ostream& operator<<(std::ostream& os, x64::M m);
-std::ostream& operator<<(std::ostream& os, x64::Mm m);
-std::ostream& operator<<(std::ostream& os, x64::Moffs o);
-std::ostream& operator<<(std::ostream& os, x64::Opcode o);
-std::ostream& operator<<(std::ostream& os, x64::RH r);
-std::ostream& operator<<(std::ostream& os, x64::R8 r);
-std::ostream& operator<<(std::ostream& os, x64::R16 r);
-std::ostream& operator<<(std::ostream& os, x64::R32 r);
-std::ostream& operator<<(std::ostream& os, x64::R64 r);
-std::ostream& operator<<(std::ostream& os, x64::Scale s);
-std::ostream& operator<<(std::ostream& os, x64::Sreg s);
-std::ostream& operator<<(std::ostream& os, x64::St st);
-std::ostream& operator<<(std::ostream& os, x64::Xmm x);
-std::ostream& operator<<(std::ostream& os, x64::Ymm y);
-#endif
 
 #endif
