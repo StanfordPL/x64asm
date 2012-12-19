@@ -3,6 +3,7 @@
 
 namespace x64 {
 
+/** An x64 mnemonic. */
 enum Opcode {
 	// Internal mnemonics
 	LABEL_DEFN = 0

@@ -12,12 +12,13 @@
 namespace x64 {
 
 /** A single hardware instruction.
+	  Use of this representation is not typesafe and should be verified
+		using a Checker.
 */
 class Instruction {
 	public:
-
 		inline Instruction(Opcode opcode) 
-				: opcode_(opcode), operands_{{0,0,0}} { 
+				: opcode_(opcode), operands_{{0,0,0,0}} { 
 		}
 
 		inline Instruction(Opcode opcode, 
@@ -38,16 +39,13 @@ class Instruction {
 			return opcode_;
 		}
 
-		inline Operand get_operand(size_t index) const {
-			assert(index < operands_.size());
-			return operands_[index];
-		}
+		// TODO... getters
 
 		inline void set_opcode(Opcode o) {
 			opcode_ = o;
 		}
 
-		inline void set_operand(size_t index, Operand o) {
+		inline void set_operand(Operand o, size_t index) {
 			assert(index < operands_.size());
 			operands_[index] = o;
 		}	
