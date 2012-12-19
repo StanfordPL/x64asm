@@ -4,22 +4,13 @@ GCC=ccache g++
 
 INC=-I./
 
-#OBJ=build/cfg/control_flow_graph.o \
+OBJ=build/assembler/assembler.o \
 		\
-		build/att/att_reader.o \
-		build/att/att_writer.o \
+		build/io/att_writer.o \
 		\
-
-OBJ=build/code/constants.o \
+		build/operands/constants.o \
 		\
-		build/stream/stream.o \
-		\
-		build/writer/att_writer.o
-
-#build/assembler/assembler.o \
-		\
-		build/attributes/attributes.o \
-		build/attributes/op_set.o \
+		build/stream/stream.o
 
 LIB=lib/libx64.a
 
@@ -65,7 +56,7 @@ clean:
 
 ##### CODEGEN TARGETS
 
-codegen: src/assembler/assembler.defn
+codegen: src/assembler/assembler.defn src/codegen/Codegen.hs src/codegen/x86.csv
 
 src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv 
 	mkdir -p build/codegen
@@ -77,11 +68,6 @@ src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv
 		mv opcode.enum ../code && \
 		rm -f *.hi *.o Codegen
 
-#	cd build/codegen && \
-		./cfg ../../src/codegen/x64.csv ../../src/codegen/latencies.csv && \
-		./assembler ../../src/codegen/x64.csv && \
-		mv assembler.* ../../src/gen/ && \
-		mv opcode.* ../../src/gen/
 #	flex $(FLEXOPS) -Patt src/codegen/att.l && \
 		mv lex.att.c src/gen
 #	bison $(BISONOPS) -batt -patt --defines src/codegen/att.y && \
@@ -90,25 +76,23 @@ src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv
 		
 ##### DOCUMENTATION TARGETS
 
-doc/html: doxyfile src/cfg/*.cc src/cfg/*.h \
-          src/assembler/*.cc src/assembler/*.h \
-					src/code/*.h src/code/*.cc
+doc/html: doxyfile src/assembler/* src/cfg/* src/code/* src/io/* src/operands/* src/stream/*
 	doxygen doxyfile
 
 ##### BUILD TARGETS
 
 build/assembler/%.o: src/assembler/%.cc src/assembler/%.h codegen
 	mkdir -p build/assembler && $(GCC) $(OPT) $(INC) -c $< -o $@
-build/attributes/%.o: src/attributes/%.cc src/attributes/%.h codegen
-	mkdir -p build/attributes && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/cfg/%.o: src/cfg/%.cc src/cfg/%.h codegen
 	mkdir -p build/cfg && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/code/%.o: src/code/%.cc src/code/%.h codegen
 	mkdir -p build/code && $(GCC) $(OPT) $(INC) -c $< -o $@
+build/io/%.o: src/io/%.cc src/io/%.h codegen
+	mkdir -p build/io && $(GCC) $(OPT) $(INC) -c $< -o $@
+build/operands/%.o: src/operands/%.cc src/operands/%.h codegen
+	mkdir -p build/operands && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/stream/%.o: src/stream/%.cc src/stream/%.h codegen
 	mkdir -p build/stream && $(GCC) $(OPT) $(INC) -c $< -o $@
-build/writer/%.o: src/writer/%.cc src/writer/%.h codegen
-	mkdir -p build/writer && $(GCC) $(OPT) $(INC) -c $< -o $@
 
 ##### LIBRARY TARGET
 

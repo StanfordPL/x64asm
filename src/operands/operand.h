@@ -1,5 +1,5 @@
-#ifndef X64_SRC_CODE_OPERAND_H
-#define X64_SRC_CODE_OPERAND_H
+#ifndef X64_SRC_OPERANDS_OPERAND_H
+#define X64_SRC_OPERANDS_OPERAND_H
 
 #include <stdint.h>
 

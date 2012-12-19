@@ -14,7 +14,6 @@ namespace x64 {
 /** A JIT-assembled function. */
 class Function {
 	friend class Assembler;
-
 	private:
 		typedef uint64_t (*f0_type)();
 		typedef uint64_t (*f1_type)(uint64_t);

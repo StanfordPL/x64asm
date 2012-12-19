@@ -1,5 +1,5 @@
-#ifndef X64_SRC_CODE_SCALE_H
-#define X64_SRC_CODE_SCALE_H
+#ifndef X64_SRC_OPERANDS_SCALE_H
+#define X64_SRC_OPERANDS_SCALE_H
 
 namespace x64 {
 

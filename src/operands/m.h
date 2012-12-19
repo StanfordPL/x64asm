@@ -1,11 +1,11 @@
-#ifndef X64_SRC_CODE_M_H
-#define X64_SRC_CODE_M_H
+#ifndef X64_SRC_OPERANDS_M_H
+#define X64_SRC_OPERANDS_M_H
 
-#include "src/code/r.h"
-#include "src/code/imm.h"
-#include "src/code/operand.h"
-#include "src/code/scale.h"
-#include "src/code/sreg.h"
+#include "src/operands/r.h"
+#include "src/operands/imm.h"
+#include "src/operands/operand.h"
+#include "src/operands/scale.h"
+#include "src/operands/sreg.h"
 
 namespace x64 {
 

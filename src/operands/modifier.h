@@ -1,7 +1,7 @@
-#ifndef X64_SRC_CODE_MODIFIER_H
-#define X64_SRC_CODE_MODIFIER_H
+#ifndef X64_SRC_OPERANDS_MODIFIER_H
+#define X64_SRC_OPERANDS_MODIFIER_H
 
-#include "src/code/operand.h"
+#include "src/operands/operand.h"
 
 namespace x64 {
 

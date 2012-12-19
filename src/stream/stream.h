@@ -3,19 +3,19 @@
 
 #include <iostream>
 
-#include "src/code/cr.h"
-#include "src/code/dr.h"
-#include "src/code/eflag.h"
-#include "src/code/imm.h"
-#include "src/code/label.h"
-#include "src/code/mm.h"
-#include "src/code/moffs.h"
-#include "src/code/r.h"
-#include "src/code/rel.h"
-#include "src/code/sreg.h"
-#include "src/code/st.h"
-#include "src/code/xmm.h"
-#include "src/code/ymm.h"
+#include "src/operands/cr.h"
+#include "src/operands/dr.h"
+#include "src/operands/eflag.h"
+#include "src/operands/imm.h"
+#include "src/operands/label.h"
+#include "src/operands/mm.h"
+#include "src/operands/moffs.h"
+#include "src/operands/r.h"
+#include "src/operands/rel.h"
+#include "src/operands/sreg.h"
+#include "src/operands/st.h"
+#include "src/operands/xmm.h"
+#include "src/operands/ymm.h"
 
 std::ostream& operator<<(std::ostream& os, const x64::Cr c);
 std::ostream& operator<<(std::ostream& os, const x64::Dr d);
