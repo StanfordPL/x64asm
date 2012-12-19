@@ -1,10 +1,10 @@
-#ifndef X64_SRC_ATTRIBUTES_ATTRIBUTES_H
-#define X64_SRC_ATTRIBUTES_ATTRIBUTES_H
+#ifndef X64_SRC_CODE_ATTRIBUTES_H
+#define X64_SRC_CODE_ATTRIBUTES_H
 
-#include "src/attributes/op_accessor.h"
-#include "src/attributes/op_set.h"
-#include "src/attributes/op_type.h"
 #include "src/code/instruction.h"
+#include "src/code/op_accessor.h"
+#include "src/code/op_set.h"
+#include "src/code/op_type.h"
 #include "src/code/opcode.h"
 
 namespace x64 {

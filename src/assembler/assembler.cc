@@ -8,7 +8,7 @@ using namespace std;
 using namespace x64;
 
 namespace {
-
+#if 0
 inline void emit(unsigned char*& buf, unsigned char c) {
 	(*buf++) = c;
 }
@@ -255,11 +255,12 @@ inline void emit_rex(unsigned char*& buf, M rm,
 	if ( rex )
 		emit(buf, rex | 0x40);
 }
-
+#endif
 } // namespace
 
 namespace x64 {
 
+	/*
 void Assembler::start(Function& fxn) {
 	start(fxn.buffer_);
 }
@@ -330,5 +331,6 @@ void Assembler::start(unsigned char* buffer) {
 
 	buf_ = buf_begin_ = buffer;
 }
+*/
 
 } // namespace x64

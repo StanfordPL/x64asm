@@ -6,61 +6,61 @@
 #include <vector>
 
 #include "src/assembler/function.h"
-#include "src/assembler/code.h"
-#include "src/assembler/cr.h"
-#include "src/assembler/dr.h"
-#include "src/assembler/imm.h"
-#include "src/assembler/instruction.h"
-#include "src/assembler/label.h"
-#include "src/assembler/m.h"
-#include "src/assembler/mm.h"
-#include "src/assembler/modifier.h"
-#include "src/assembler/moffs.h"
-#include "src/assembler/r.h"
-#include "src/assembler/rel.h"
-#include "src/assembler/sreg.h"
-#include "src/assembler/st.h"
-#include "src/assembler/xmm.h"
-#include "src/assembler/ymm.h"
+#include "src/code/code.h"
+#include "src/code/instruction.h"
+#include "src/operands/cr.h"
+#include "src/operands/dr.h"
+#include "src/operands/imm.h"
+#include "src/operands/label.h"
+#include "src/operands/m.h"
+#include "src/operands/mm.h"
+#include "src/operands/modifier.h"
+#include "src/operands/moffs.h"
+#include "src/operands/r.h"
+#include "src/operands/rel.h"
+#include "src/operands/sreg.h"
+#include "src/operands/st.h"
+#include "src/operands/xmm.h"
+#include "src/operands/ymm.h"
 
 namespace x64 {
 
-/** A JIT assembler. */
+/** An x64 assembler. */
 class Assembler {
 	public:
-		inline Function assemble(const Code& code) {
-			Function fxn;
-			assemble(fxn, code);
-			return fxn;
-		}
+		// State methods
+		void start_jit(Function& fxn) { /* TODO */ }
+		void finish_jit(Function& fxn) { /* TODO */ }
 
-		inline Function& assemble(Function& fxn, const Code& code) {
-			start(fxn);
-			for ( const auto& instr : code )
-				assemble(instr);
-			finish();
+		void start_hex(std::ostream& os) { /* TODO */ }
+		void finish_hex(std::ostream& os) { /* TODO */ }
 
-			return fxn;
-		}
+		void start_elf(std::ostream& os) { /* TODO */ }
+		void finish_elf(std::ostream& os) { /* TODO */ }
 
-		void start(Function& fxn);
+		// .. add additional output methods here
 
-		void assemble(const Instruction& instr);
-
-		inline void bind(Label label) {
-			labels_[label] = buf_;
-		}
-
-		// void adcb(Al arg0, Imm8 arg1) ...
+		// Type-safe Interface
 		#include "src/assembler/assembler.decl"
 
-		void finish();
+		inline void bind(Label8 label) {
+			// TODO...
+		}
 
-		void write_binary(std::ostream& os, const Code& code);
+		inline void bind(Label32 label) {
+			// TODO...
+		}
 
-		void write_hex(std::ostream& os, const Code& code);
+		// Type-unsafe Interface
+		void assemble(const Instruction& instr) { /* TODO */ }
+
+		inline void assemble(const Code& code) {
+			for ( const auto& instr : code )
+				assembler(instr);
+		}
 
 	private:
+		/*
 		std::unordered_map<Operand, unsigned char*> labels_;
 		std::vector<std::pair<unsigned char*, Operand>> jumps_;
 
@@ -68,6 +68,7 @@ class Assembler {
 		unsigned char* buf_;
 
 		void start(unsigned char* buffer);
+		*/
 };
 
 } // namespace x64

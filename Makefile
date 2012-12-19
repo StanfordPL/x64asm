@@ -6,7 +6,17 @@ INC=-I./
 
 OBJ=build/assembler/assembler.o \
 		\
+		build/cfg/cfg.o \
+		\
+		build/code/attributes.o \
+		build/code/checker.o \
+		build/code/instruction.o \
+		build/code/op_set.o \
+		\
+		build/io/att_reader.o \
 		build/io/att_writer.o \
+		build/io/intel_reader.o \
+		build/io/intel_writer.o \
 		\
 		build/operands/constants.o \
 		\

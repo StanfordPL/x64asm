@@ -8,6 +8,7 @@
 #include "src/operands/eflag.h"
 #include "src/operands/imm.h"
 #include "src/operands/label.h"
+#include "src/operands/m.h"
 #include "src/operands/mm.h"
 #include "src/operands/moffs.h"
 #include "src/operands/r.h"

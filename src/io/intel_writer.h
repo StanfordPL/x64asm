@@ -1,5 +1,5 @@
-#ifndef X64_SRC_IO_ATT_WRITER_H
-#define X64_SRC_IO_ATT_WRITER_H
+#ifndef X64_SRC_IO_INTEL_WRITER_H
+#define X64_SRC_IO_INTEL_WRITER_H
 
 #include <iostream>
 
@@ -23,7 +23,7 @@
 
 namespace x64 {
 
-class AttWriter {
+class IntelWriter {
 	public:
 		static void write(std::ostream& os, const Code& c);
 		static void write(std::ostream& os, const Instruction& i);

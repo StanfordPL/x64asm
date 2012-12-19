@@ -6,6 +6,21 @@ using namespace std;
 
 namespace x64 {
 
+void AttWriter::write(ostream& os, const Code& c) {
+	for ( const auto& instr : c ) {
+		write(os, instr);
+		os << endl;
+	}
+}
+
+void AttWriter::write(ostream& os, const Instruction& i) {
+	// TODO...
+}	
+
+void AttWriter::write(ostream& os, const Opcode o) {
+	// TODO...
+}
+
 void AttWriter::write(ostream& os, Cr c) {
 	switch ( c.val_ ) {
 		case 0: os << "%cr0"; break;
@@ -54,6 +69,10 @@ void AttWriter::write(ostream& os, Imm i) {
 
 void AttWriter::write(ostream& os, Label l) {
 	os << ".LABEL_" << dec << l.val_;
+}
+
+void AttWriter::write(ostream& os, M m) {
+	// TODO...
 }
 
 void AttWriter::write(ostream& os, Mm m) {

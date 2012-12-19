@@ -7,7 +7,9 @@ namespace x64 {
 
 /** Base operand type. */
 class Operand {
+	friend class Assembler;
 	friend class AttWriter;
+	friend class Checker;
 	protected:
 		inline Operand(uint64_t val) : val_{val} { }
 

@@ -1,80 +1,220 @@
-#ifndef X64_SRC_CHECKER_CHECKER_H
-#define X64_SRC_CHECKER_CHECKER_H
+#ifndef X64_SRC_CODE_CHECKER_H
+#define X64_SRC_CODE_CHECKER_H
 
 #include "src/code/code.h"
-#include "src/code/cr.h"
-#include "src/code/dr.h"
-#include "src/code/eflag.h"
-#include "src/code/imm.h"
 #include "src/code/instruction.h"
-#include "src/code/label.h"
-#include "src/code/m.h"
-#include "src/code/mm.h"
-#include "src/code/modifier.h"
-#include "src/code/moffs.h"
-#include "src/code/opcode.h"
-#include "src/code/operand.h"
-#include "src/code/r.h"
-#include "src/code/rel.h"
-#include "src/code/sreg.h"
-#include "src/code/st.h"
-#include "src/code/xmm.h"
-#include "src/code/ymm.h"
+#include "src/operands/cr.h"
+#include "src/operands/dr.h"
+#include "src/operands/eflag.h"
+#include "src/operands/imm.h"
+#include "src/operands/label.h"
+#include "src/operands/m.h"
+#include "src/operands/mm.h"
+#include "src/operands/modifier.h"
+#include "src/operands/moffs.h"
+#include "src/operands/operand.h"
+#include "src/operands/r.h"
+#include "src/operands/rel.h"
+#include "src/operands/sreg.h"
+#include "src/operands/st.h"
+#include "src/operands/xmm.h"
+#include "src/operands/ymm.h"
 
 namespace x64 {
 
-struct Checker {
-	static bool check(Cr c);
-	static bool check(Cr0234 c);
-	static bool check(Cr8 c);
+class Checker {
+	public:
+		// Type-safe Operands:
+		static inline bool check(const Cr0234 c) {
+			if ( c.val_ == 0 ) return true;
+			if ( c.val_ == 2 ) return true;
+			if ( c.val_ == 3 ) return true;
+			if ( c.val_ == 4 ) return true;
+			return false;
+		}
 
-	static bool check(Dr d);
+		static inline bool check(const Cr8 c) {
+			return c.val_ == 8;
+		}
 
-	static bool check(Eflag e);
+		static inline bool check(const Dr d) {
+			return c.val_ < 8;
+		}
 
-	static bool check(Imm i);
-	static bool check(Imm8 i);
-	static bool check(Imm16 i);
-	static bool check(Imm32 i);
-	static bool check(Imm64 i);
-	static bool check(Zero z);
-	static bool check(One o);
-	static bool check(Three t);
+		static inline bool check(const Eflag e) {
+			if ( e.val_ > 21 ) return false;
+			if ( e.val_ == 1 ) return false;
+			if ( e.val_ == 3 ) return false;
+			if ( e.val_ == 5 ) return false;
+			return true;
+		}
 
-	static bool check(Instruction i);
+		static inline bool check(const Imm8 i) {
+			const auto val = (int64_t) i.val_;
+			return val >= -128 && val <= 127;
+		}
 
-	static bool check(Label l);
+		static inline bool check(const Imm16 i) {
+			const auto val = (int64_t) i.val_;
+			return val >= -32768 && val <= 32767;
+		}
 
-	static bool check(M m);
+		static inline bool check(const Imm32 i) {
+			const auto val = (int64_t) i.val_;
+			return val >= -2147483648 && val <= 2147483647;
+		}
 
-	static bool check(Mm m);
+		static inline bool check(const Imm64 i) {
+			return true;
+		}
 
-	static bool check(Pref66 p);
-	static bool check(PrefRexW p);
-	static bool check(Far f);
+		static inline bool check(const Zero z) {
+			return z.val_ == 0;
+		}
 
-	static bool check(Moffs m);
+		static inline bool check(const One o) {
+			return o.val_ == 1;
+		}
 
-	static bool check(NoRex8 r);
-	static bool check(Rex8 r);
-	static bool check(Rh r);
-	static bool check(Rl r);
-	static bool check(Rb r);
-	static bool check(Al r);
-	static bool check(Cl r);
-	static bool check(R16 r);
-	static bool check(Ax r);
-	static bool check(Dx r);
-	static bool check(R32 r);
-	static bool check(Eax r);
-	static bool check(R64 r);
-	static bool check(Rax r);
+		static inline bool check(const Three t) {
+			return t.val_ == 3;
+		}
 
-	static bool check(Rel r);
-	static bool check(Rel8 r);
-	static bool check(Rel32 r);
+		static inline bool check(const Label l) {
+			return true;
+		}
 
-	static bool 
+		static inline bool check(const M m) {
+			// Both base and index can't both be null
+			if ( m.null_base() && m.null_index() ) 
+				return false;
+			// Check non-null bases
+			if ( !m.null_base() && m.get_base().val_ >= 16 )
+				return false;
+			// Check non-null indices
+			if ( !m.null_index() && m.get_index().val_ >= 16 )
+				return false;
+			// Index cannot be rsp/esp
+			if ( !m.null_index() && m.get_index().val_ == rsp.val_ )
+				return false;
+			return true;
+		}
+
+		static inline bool check(const Mm m) {
+			return m.val_ < 8;
+		}
+
+		static inline bool check(const Pref66 p) {
+			return p.val_ == 0;
+		}
+
+		static inline bool check(const PrefRexW p) {
+			return p.val_ == 0;
+		}
+
+		static inline bool check(const Far f) {
+			return f.val_ == 0;
+		}
+
+		static inline bool check(const Moffs m) {
+			return true;
+		}
+
+		static inline bool check(const NoRex8 r) {
+			return r.val_ < 16;
+		}
+
+		static inline bool check(const Rex8 r) {
+			return r.val < 8;
+		}
+
+		static inline bool check(const Al r) {
+			return r.val_ == 0;
+		}
+
+		static inline bool check(const Cl r) {
+			return r.val_ == 1;
+		}
+
+		static inline bool check(const R16 r) {
+			return r.val_ < 16;
+		}
+
+		static inline bool check(const Ax r) {
+			return r.val_ == 0;
+		}
+
+		static inline bool check(const Dx r) {
+			return r.val_ == 2;
+		}
+
+		static inline bool check(const R32 r) {
+			return r.val_ < 16; 
+		}
+
+		static inline bool check(const Eax r) {
+			return r.val_ == 0;
+		}
+
+		static inline bool check(const R64 r) {
+			return r.val_ < 16;
+		}
+
+		static inline bool check(const Rax r) {
+			return r.val_ < 16;
+		}
+
+		static inline bool check(const Rel8 r) {
+			const auto val = (int64_t) r.val_;
+			return val >= -128 && val <= 127;
+		}
+
+		static inline bool check(const Rel32 r) {
+			const auto val = (int64_t) r.val_;
+			return val >= -2147483648 && val <= 2147483647;
+		}
+
+		static inline bool check(const Sreg s) {
+			return s.val_ < 6;
+		}
+
+		static inline bool check(const Fs f) {
+			return f.val_ == 4;
+		}
+
+		static inline bool check(const Gs g) {
+			return g.val_ == 5;
+		}
+
+		static inline bool check(const St s) {
+			return s.val_ < 8;
+		}
+
+		static inline bool check(const St0 s) {
+			return s.val_ == 0;
+		}
+
+		static inline bool check(const Xmm x) {
+			return x.val_ < 16;
+		}
+
+		static inline bool check(const Xmm0 x) {
+			return x.val_ == 0;
+		}
+
+		static inline bool check(const Ymm y) {
+			return y.val_ == 0;
+		}
+
+		// Type-unsafe code
+		static bool check(const Instruction& i);
+
+		static inline bool check(const Code& c) {
+			for ( const auto& instr : c )
+				if ( !check(instr) )
+					return false;
+			return true;
+		}
 };
 
 } // namespace x64

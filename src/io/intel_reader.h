@@ -1,5 +1,5 @@
-#ifndef X64_SRC_IO_ATT_READER_H
-#define X64_SRC_IO_ATT_READER_H
+#ifndef X64_SRC_IO_INTEL_READER_H
+#define X64_SRC_IO_INTEL_READER_H
 
 #include <iostream>
 
@@ -7,7 +7,7 @@
 
 namespace x64 {
 
-class AttReader {
+class IntelReader {
 	public:
 		void read(std::istream& is, Code& code) const;
 };

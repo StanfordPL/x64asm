@@ -100,7 +100,7 @@ class Constants {
 
 		static inline Ax ax() { return Ax{}; }
 		static inline R16 cx() { return R16{1}; }
-		static inline R16 dx() { return R16{2}; }
+		static inline Dx dx() { return Dx{}; }
 		static inline R16 bx() { return R16{3}; }
 		static inline R16 sp() { return R16{4}; }
 		static inline R16 bp() { return R16{5}; }
@@ -287,7 +287,7 @@ extern const Rb r15b;
 
 extern const Ax ax;
 extern const R16 cx;
-extern const R16 dx;
+extern const Dx dx;
 extern const R16 bx;
 extern const R16 sp;
 extern const R16 bp;

@@ -7,13 +7,13 @@
 #include <initializer_list>
 
 #include "src/code/opcode.h"
-#include "src/code/operand.h"
+#include "src/operands/operand.h"
 
 namespace x64 {
 
 /** A single hardware instruction.
-	  Use of this representation is not typesafe and should be verified
-		using a Checker.
+		This representation is not typesafe and should be verified
+			prior to assembly.
 */
 class Instruction {
 	public:
