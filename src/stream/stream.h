@@ -43,7 +43,7 @@ enum class Transform : uint32_t {
 class set_io {
 	public:
 		inline explicit set_io(IO io) : io_{io} { }
-		inline operator IO() const { return io_; }
+		inline operator int() const { return (int)io_; }
 	private:
 		const IO io_;
 };
@@ -52,7 +52,7 @@ class set_io {
 class set_transform {
  	public:
 		inline explicit set_transform(Transform t) : t_{t} { }
-		inline operator Transform() const { return t_; }
+		inline operator int() const { return (int)t_; }
 	private:
 		const Transform f_;
 };
@@ -61,7 +61,7 @@ class set_transform {
 class unset_transform {
  	public:
 		inline explicit unset_transform(Transform t) : t_{t} { }
-		inline operator Transform() const { return t_; }
+		inline operator int() const { return (int)t_; }
 	private:
 		const Transform f_;
 };

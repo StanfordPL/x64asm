@@ -88,34 +88,39 @@ ostream& extended_generic_write(ostream& os, const T t) {
 
 } // namespace
 
-#if 0
-istream& operator>>(istream& is, const format& f) {
-	is.iword(format_state()) = f;
+istream& operator>>(istream& is, const set_io& m) {
+	is.iword(io_state()) = m;
 	return is;
 }
 
-ostream& operator<<(ostream& os, const format& f) {
-	os.iword(format_state()) = f;
+istream& operator>>(istream& is, const set_transform& m) {
+	is.iword(transform_state()) |= m;
+	return is;
+}
+
+istream& operator>>(istream& is, const unset_transform& m) {
+	is.iword(transform_state()) &= ~m;
+	return is;
+}
+
+ostream& operator<<(ostream& os, const set_io& m) {
+	os.iword(io_state()) = m;
 	return os;
 }
 
-
-ostream& operator<<(ostream& os, const code_format& f) {
-	os.iword(code_format_state()) = f;
+ostream& operator<<(ostream& os, const set_transform& m) {
+	os.iword(transform_state()) |= m;
 	return os;
 }
 
+ostream& operator<<(ostream& os, const unset_transform& m) {
+	os.iword(transform_state()) &= ~m;
+	return os;
+}
 
 istream& operator>>(istream& is, Code& c) {
-	if ( get_format(is) == ATT ) {
-		AttReader r;
-		r.read(is, c);
-	}
-	else
-		is.setstate(ios::failbit);
-	return is;
-}
-
+	// TODO...
+#if 0
 ostream& operator<<(ostream& os, const Code& c) {
 	const auto format = get_format(os);
   const auto code_format = get_code_format(os);
@@ -147,8 +152,6 @@ ostream& operator<<(ostream& os, const Code& c) {
     os.setstate(ios::failbit);
   }
     
-
-
 	if ( format == ATT ) {
 		AttWriter w;
 		w.write(os, d);
@@ -171,9 +174,12 @@ ostream& operator<<(ostream& os, const Code& c) {
 	return os;
 }
 #endif
+	return is;
+}
 
 ostream& operator<<(ostream& os, const Code& c) {
 	return extended_generic_write(os, c);
+	// TODO; need to switch on transformation state before returning.
 }
 
 ostream& operator<<(ostream& os, const Instruction& i) {
