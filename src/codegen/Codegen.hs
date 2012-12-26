@@ -168,7 +168,7 @@ insert_label_variants is = concat $ map insert_label_variant is
 
 -- Debugging: Generate a list of unique mnemonics
 uniq_mnemonics :: [Instr] -> [String]
-uniq_mnemonics is = nub $ map mnemonic is
+uniq_mnemonics is = nub $ map raw_mnemonic is
 
 -- Debugging: Generate a list of unique operands
 uniq_operands :: [Instr] -> [String]
@@ -199,17 +199,17 @@ ambig_decls_pretty is = map pretty $ ambig_decls is
 opcode_terms :: Instr -> [String]
 opcode_terms i = splitOn " " (opcode i)
 
--- Extract mnemonic from instruction
-mnemonic :: Instr -> String
-mnemonic i = let m = head $ words $ (instruction i) in
+-- Extracts raw mnemonic from instruction
+raw_mnemonic :: Instr -> String
+raw_mnemonic i = head $ words $ instruction i
+
+-- Extracts gcc mnemonic from instruction
+gcc_mnemonic :: Instr -> String
+gcc_mnemonic i = let m = raw_mnemonic i in
   case m of
-    "AND" -> "AND_"
-    "INT" -> "INT_"
-    "NOT" -> "NOT_"
-    "OR"  -> "OR_"
-    "STD" -> "STD_"
-    "XOR" -> "XOR_"
-    _     -> m
+    "CMOVPE" -> "cmovp"
+    "CMOVPO" -> "cmovnp"
+    _        -> low m
 
 -- Extract operands from instruction
 operands :: Instr -> [String]
@@ -305,7 +305,7 @@ op2type o = error $ "Unrecognized operand type: " ++ o
 -- Converts an instruction into an Opcode enum value
 opcode_enum :: Instr -> String
 opcode_enum i = intercalate "_" $ (mnem i) : (ops i)
-  where mnem i = head $ words $ instruction i
+  where mnem i = raw_mnemonic i
         ops i = map (up . op2type) (operands i)
 
 -- Converts all instructions to Opcode enum values
@@ -315,6 +315,18 @@ opcode_enums is = intercalate "\n" $ map (", "++) $ map opcode_enum is
 -------------------------------------------------------------------------------
 -- Assembler codegen
 -------------------------------------------------------------------------------
+
+-- Assembler mnemonic
+assm_mnemonic :: Instr -> String
+assm_mnemonic i = let m = raw_mnemonic i in
+  case m of
+    "AND" -> "and_"
+    "INT" -> "int_"
+    "NOT" -> "not_"
+    "OR"  -> "or_"
+    "STD" -> "std_"
+    "XOR" -> "xor_"
+    _     -> (low m)
 
 -- Assembler doxygen comment
 assm_doxy :: Instr -> String
@@ -328,7 +340,7 @@ assm_arg_list i = intercalate ", " $ map arg $ zip [0..] (operands i)
 -- Assembler declaration
 assm_decl :: Instr -> String
 assm_decl i = "void " ++
-              (low (mnemonic i)) ++
+              (assm_mnemonic i) ++
               "(" ++
               (assm_arg_list i) ++
               ")"
@@ -344,7 +356,7 @@ assm_header_decls is = intercalate "\n\n" $ map assm_header_decl is
 -- Assembler src definition
 assm_src_defn :: Instr -> String
 assm_src_defn i = "void Assembler::" ++
-                  (low (mnemonic i)) ++
+                  (assm_mnemonic i) ++
                   "(" ++
                   (assm_arg_list i) ++
                   ") {\n" ++
@@ -353,6 +365,106 @@ assm_src_defn i = "void Assembler::" ++
 -- Assembler src definitions
 assm_src_defns :: [Instr] -> String
 assm_src_defns is = intercalate "\n\n" $ map assm_src_defn is
+
+-------------------------------------------------------------------------------
+-- Assembler Test codegen
+-------------------------------------------------------------------------------
+
+-- Representative values for each operand type
+test_operand :: String -> [String]
+test_operand "reg"      = ["%eax"] 
+test_operand "r8"       = ["%al","%spl"]
+test_operand "r16"      = ["%ax"]
+test_operand "r32"      = ["%eax"]
+test_operand "r64"      = ["%rax"]
+test_operand "AL"       = ["%al"]
+test_operand "CL"       = ["%cl"]
+test_operand "AX"       = ["%ax"]
+test_operand "DX"       = ["%dx"]
+test_operand "EAX"      = ["%eax"]
+test_operand "RAX"      = ["%rax"]
+test_operand "mem"      = ["(%eax)"]
+test_operand "m"        = ["(%eax)"]
+test_operand "m8"       = ["(%eax)"]
+test_operand "m16"      = ["(%eax)"]
+test_operand "m32"      = ["(%eax)"]
+test_operand "m64"      = ["(%eax)"]
+test_operand "m128"     = ["(%eax)"]
+test_operand "m256"     = ["(%eax)"]
+test_operand "m16&64"   = ["(%eax)"]
+test_operand "m16:16"   = ["*(%eax)"]
+test_operand "m16:32"   = ["*(%eax)"]
+test_operand "m16:64"   = ["*(%eax)"]
+test_operand "m16int"   = ["(%eax)"]
+test_operand "m32int"   = ["(%eax)"]
+test_operand "m64int"   = ["(%eax)"]
+test_operand "m80bcd"   = ["(%eax)"]
+test_operand "m32fp"    = ["(%eax)"]
+test_operand "m64fp"    = ["(%eax)"]
+test_operand "m80fp"    = ["(%eax)"]
+test_operand "m2byte"   = ["(%eax)"]
+test_operand "m14byte"  = ["(%eax)"]
+test_operand "m28byte"  = ["(%eax)"]
+test_operand "m94byte"  = ["(%eax)"]
+test_operand "m108byte" = ["(%eax)"]
+test_operand "m512byte" = ["(%eax)"]
+test_operand "imm8"     = ["$0x1"]
+test_operand "imm16"    = ["$0x1"]
+test_operand "imm32"    = ["$0x1"]
+test_operand "imm64"    = ["$0x1"]
+test_operand "0"        = ["$0x0"]
+test_operand "1"        = ["$0x1"]
+test_operand "3"        = ["$0x3"]
+test_operand "mm"       = ["%mm0","%mm7"]
+test_operand "mm1"      = ["%mm0","%mm7"]
+test_operand "mm2"      = ["%mm0","%mm7"]
+test_operand "xmm"      = ["%xmm0"]
+test_operand "xmm1"     = ["%xmm0"]
+test_operand "xmm2"     = ["%xmm0"]
+test_operand "xmm3"     = ["%xmm0"]
+test_operand "xmm4"     = ["%xmm0"]
+test_operand "<XMM0>"   = ["%xmm0"]
+test_operand "ymm1"     = ["%ymm0"]
+test_operand "ymm2"     = ["%ymm0"]
+test_operand "ymm3"     = ["%ymm0"]
+test_operand "ymm4"     = ["%ymm0"]
+test_operand "ST"       = ["%st(0)"]
+test_operand "ST(0)"    = ["%st(0)"]
+test_operand "ST(i)"    = ["%st(1)"]
+test_operand "rel8"     = ["0x1"]
+test_operand "rel32"    = ["0x1"]
+test_operand "moffs8"   = ["0x1"]
+test_operand "moffs16"  = ["0x1"]
+test_operand "moffs32"  = ["0x1"]
+test_operand "moffs64"  = ["0x1"]
+test_operand "CR0-CR7"  = ["%cr0"]
+test_operand "CR8"      = ["%cr8"]
+test_operand "DR0-DR7"  = ["%cr0"]
+test_operand "Sreg"     = ["%cs"]
+test_operand "FS"       = ["%fs"]
+test_operand "GS"       = ["%gs"]
+-- Below this point are operand types we have introduced
+test_operand "p66"      = []
+test_operand "pw"       = []
+test_operand "far"      = []
+test_operand "norexr8"  = []
+test_operand "label8"   = [".L0"]
+test_operand "label32"  = [".L0"]
+test_operand o = error $ "Unrecognized operand type: " ++ o
+
+-- Generates a list of test operands for an instruction
+test_operands :: Instr -> [String]
+test_operands i = map (intercalate ",") $ cp i
+  where cp i = sequence $ map test_operand $ reverse $ operands i
+
+-- Convert an instruction into a list of instances for compilation
+test_instr :: Instr -> [String]
+test_instr i = map (mn ++) $ test_operands i
+  where mn = (gcc_mnemonic i ++ " ")
+
+-- Convert all instructions into a list of instances for compilation
+test_instrs :: [Instr] -> String
+test_instrs is = intercalate "\n" $ concat $ map test_instr is
 
 -------------------------------------------------------------------------------
 -- Main (read the spreadsheet and write some code)
@@ -374,4 +486,4 @@ main = do args <- getArgs
           writeFile "assembler.decl" $ assm_header_decls is
           writeFile "assembler.defn" $ assm_src_defns is
           writeFile "opcode.enum"    $ opcode_enums is
-          mapM_ print $ map operands is					
+          writeFile "test.s"         $ test_instrs is					

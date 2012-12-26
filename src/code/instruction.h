@@ -1,10 +1,9 @@
 #ifndef X64_SRC_CODE_INSTRUCTION_H
 #define X64_SRC_CODE_INSTRUCTION_H
 
-#include <algorithm>
-#include <array>
 #include <cassert>
 #include <initializer_list>
+#include <vector>
 
 #include "src/code/opcode.h"
 #include "src/operands/operand.h"
@@ -23,15 +22,14 @@ class Instruction {
 
 		inline Instruction(Opcode opcode, 
 				               std::initializer_list<Operand> operands)
-				: opcode_(opcode) {
-			assert(operands.size() < operands_.size());
-			std::copy(operands.begin(), operands.end(), operands_.begin());
+				: opcode_(opcode), operands_(operands.begin(), operands.end()) {
+			assert(operands.size() <= 4);
 		}
 
 		template <typename InItr>
 		inline Instruction(Opcode opcode, InItr begin, InItr end) 
-				: opcode_(opcode) {
-			assert(end-begin < operands_.size());		
+				: opcode_(opcode), operands_(begin, end) {
+			assert(end-begin <= 4);		
 			std::copy(begin, end, operands_.begin());
 		}
 
@@ -52,7 +50,7 @@ class Instruction {
 
 	private:
 		Opcode opcode_;
-		std::array<Operand,4> operands_;
+		std::vector<Operand> operands_;
 };
 
 } // namespace x64

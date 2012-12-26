@@ -10,6 +10,7 @@ class Operand {
 	friend class Assembler;
 	friend class AttWriter;
 	friend class Checker;
+	friend class Instruction;
 	protected:
 		inline Operand(uint64_t val) : val_{val} { }
 
