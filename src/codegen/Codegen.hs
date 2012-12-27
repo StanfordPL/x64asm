@@ -15,6 +15,7 @@ data Instr =
         , instruction :: String
         , mode64      :: String
         , mode32      :: String				
+        , att         :: String
         , description :: String
         } deriving (Show)
 
@@ -41,8 +42,9 @@ up s = map toUpper s
 
 -- Read a row
 read_instr :: String -> Instr
-read_instr s = let (o:i:m64:m32:d:[]) = splitOn "\t" s in 
-                   (Instr (trim o) (trim i) (trim m64) (trim m32) (trim d))
+read_instr s = let (o:i:m64:m32:a:d:[]) = splitOn "\t" s in 
+                   (Instr (trim o) (trim i) (trim m64) (trim m32) 
+                          (trim a) (trim d))
 
 -- Read all rows
 read_instrs :: String -> [Instr]
@@ -202,14 +204,6 @@ opcode_terms i = splitOn " " (opcode i)
 -- Extracts raw mnemonic from instruction
 raw_mnemonic :: Instr -> String
 raw_mnemonic i = head $ words $ instruction i
-
--- Extracts gcc mnemonic from instruction
-gcc_mnemonic :: Instr -> String
-gcc_mnemonic i = let m = raw_mnemonic i in
-  case m of
-    "CMOVPE" -> "cmovp"
-    "CMOVPO" -> "cmovnp"
-    _        -> low m
 
 -- Extract operands from instruction
 operands :: Instr -> [String]
@@ -460,7 +454,7 @@ test_operands i = map (intercalate ",") $ cp i
 -- Convert an instruction into a list of instances for compilation
 test_instr :: Instr -> [String]
 test_instr i = map (mn ++) $ test_operands i
-  where mn = (gcc_mnemonic i ++ " ")
+  where mn = (att i ++ " ")
 
 -- Convert all instructions into a list of instances for compilation
 test_instrs :: [Instr] -> String
