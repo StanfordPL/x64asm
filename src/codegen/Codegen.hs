@@ -293,7 +293,7 @@ op2type "label32"  = "Label32"
 op2type o = error $ "Unrecognized operand type: " ++ o
 
 -------------------------------------------------------------------------------
--- Opcode codegen
+-- code/ codegen
 -------------------------------------------------------------------------------
 
 -- Converts an instruction into an Opcode enum value
@@ -307,7 +307,19 @@ opcode_enums :: [Instr] -> String
 opcode_enums is = intercalate "\n" $ map (", "++) $ map opcode_enum is
 
 -------------------------------------------------------------------------------
--- Assembler codegen
+-- io/ codegen
+-------------------------------------------------------------------------------
+
+-- Converts an instruction to a printable at&t mnemonic
+att_mnemonic :: Instr -> String
+att_mnemonic i = "\"" ++ (att i) ++ "\""
+
+-- Converts all instructions to printable at&t mnemonics
+att_mnemonics :: [Instr] -> String
+att_mnemonics is = intercalate "\n" $ map (", "++) $ map att_mnemonic is
+
+-------------------------------------------------------------------------------
+-- assembler/ codegen
 -------------------------------------------------------------------------------
 
 -- Assembler mnemonic
@@ -361,7 +373,7 @@ assm_src_defns :: [Instr] -> String
 assm_src_defns is = intercalate "\n\n" $ map assm_src_defn is
 
 -------------------------------------------------------------------------------
--- Assembler Test codegen
+-- test/ codegen
 -------------------------------------------------------------------------------
 
 -- Representative values for each operand type
@@ -480,4 +492,5 @@ main = do args <- getArgs
           writeFile "assembler.decl" $ assm_header_decls is
           writeFile "assembler.defn" $ assm_src_defns is
           writeFile "opcode.enum"    $ opcode_enums is
+          writeFile "opcode.att"     $ att_mnemonics is
           writeFile "test.s"         $ test_instrs is					

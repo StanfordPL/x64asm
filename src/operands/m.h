@@ -10,188 +10,185 @@
 namespace x64 {
 
 /** An operand in memory. */
-class M {
+class M : public Operand {
 	public:
-		inline M(R64 b) {
-			set_all(Sreg{0x8}, b, R{0x10}, Scale::TIMES_1, 0, 0);
+		inline M(R64 b)
+				: Operand(concat(0x8, b.val_, 0x10, Scale::TIMES_1, 0, 0)) {
 		}
 
-		inline M(Sreg s, R64 b) {
-			set_all(s, b, R{0x10}, Scale::TIMES_1, 0, 0);
+		inline M(Sreg s, R64 b)
+				: Operand(concat(s.val_, b.val_, 0x10, Scale::TIMES_1, 0, 0)) {
 		}
 
-		inline M(R64 b, Imm32 d) {
-			set_all(Sreg{0x8}, b, R{0x10}, Scale::TIMES_1, d, 0);
+		inline M(R64 b, Imm32 d)
+				: Operand(concat(0x8, b.val_, 0x10, Scale::TIMES_1, d.val_, 0)) {
 		}
 
-		inline M(Sreg s, R64 b, Imm32 d) {
-			set_all(s, b, R{0x10}, Scale::TIMES_1, d, 0);
+		inline M(Sreg s, R64 b, Imm32 d)
+				: Operand(concat(s.val_, b.val_, 0x10, Scale::TIMES_1, d.val_, 0)) {
 		}
 
-		inline M(R64 i, Scale s) {
-			set_all(Sreg{0x8}, R{0x10}, i, s, 0, 0);
+		inline M(R64 i, Scale sc)
+				: Operand(concat(0x8, 0x10, i.val_, sc, 0, 0)) {
 		}
 
-		inline M(Sreg s, R64 i, Scale sc) {
-			set_all(s, R{0x10}, i, sc, 0, 0);
+		inline M(Sreg s, R64 i, Scale sc)
+				: Operand(concat(s.val_, 0x10, i.val_, sc, 0, 0)) {
 		}
 
-		inline M(R64 i, Scale s, Imm32 d) {
-			set_all(Sreg{0x8}, R{0x10}, i, s, d, 0);
+		inline M(R64 i, Scale sc, Imm32 d) 
+				: Operand(concat(0x8, 0x10, i.val_, sc, d.val_, 0)) {
 		}
 
-		inline M(Sreg s, R64 i, Scale sc, Imm32 d) {
-			set_all(s, R{0x10}, i, sc, d, 0);
+		inline M(Sreg s, R64 i, Scale sc, Imm32 d)
+				: Operand(concat(s.val_, 0x10, i.val_, sc, d.val_, 0)) {
 		}
 
-		inline M(R64 b, R64 i, Scale s) {
-			set_all(Sreg{0x8}, b, i, s, 0, 0);
+		inline M(R64 b, R64 i, Scale sc)
+				: Operand(concat(0x8, b.val_, i.val_, sc, 0, 0)) {
 		}
 
-		inline M(Sreg s, R64 b, R64 i, Scale sc) {
-			set_all(s, b, i, sc, 0, 0);
+		inline M(Sreg s, R64 b, R64 i, Scale sc)
+				: Operand(concat(s.val_, b.val_, i.val_, sc, 0, 0)) {
 		}
 
-		inline M(R64 b, R64 i, Scale s, Imm32 d) {
-			set_all(Sreg{0x8}, b, i, s, d, 0);
+		inline M(R64 b, R64 i, Scale sc, Imm32 d)
+				: Operand(concat(0x8, b.val_, i.val_, sc, d.val_, 0)) {
 		}
 
-		inline M(Sreg s, R64 b, R64 i, Scale sc, Imm32 d) {
-			set_all(s, b, i, sc, d, 0);
+		inline M(Sreg s, R64 b, R64 i, Scale sc, Imm32 d)
+				: Operand(concat(s.val_, b.val_, i.val_, sc, d.val_, 0)) {
 		}
 
-		inline M(R32 b) {
-			set_all(Sreg{0x8}, b, R{0x10}, Scale::TIMES_1, 0, 1);
+		inline M(R32 b)
+				: Operand(concat(0x8, b.val_, 0x10, Scale::TIMES_1, 0, 1)) {
 		}
 
-		inline M(Sreg s, R32 b) {
-			set_all(s, b, R{0x10}, Scale::TIMES_1, 0, 1);
+		inline M(Sreg s, R32 b)
+				: Operand(concat(s.val_, b.val_, 0x10, Scale::TIMES_1, 0, 1)) {
 		}
 
-		inline M(R32 b, Imm32 d) {
-			set_all(Sreg{0x8}, b, R{0x10}, Scale::TIMES_1, d, 1);
+		inline M(R32 b, Imm32 d)
+				: Operand(concat(0x8, b.val_, 0x10, Scale::TIMES_1, d.val_, 1)) {
 		}
 
-		inline M(Sreg s, R32 b, Imm32 d) {
-			set_all(s, b, R{0x10}, Scale::TIMES_1, d, 1);
+		inline M(Sreg s, R32 b, Imm32 d)
+				: Operand(concat(s.val_, b.val_, 0x10, Scale::TIMES_1, d.val_, 1)) {
 		}
 
-		inline M(R32 i, Scale s) {
-			set_all(Sreg{0x8}, R{0x10}, i, s, 0, 1);
+		inline M(R32 i, Scale sc)
+				: Operand(concat(0x8, 0x10, i.val_, sc, 0, 1)) {
 		}
 
-		inline M(Sreg s, R32 i, Scale sc) {
-			set_all(s, R{0x10}, i, sc, 0, 1);
+		inline M(Sreg s, R32 i, Scale sc) 
+				: Operand(concat(s.val_, 0x10, i.val_, sc, 0, 1)) {
 		}
 
-		inline M(R32 i, Scale s, Imm32 d) {
-			set_all(Sreg{0x8}, R{0x10}, i, s, d, 1);
+		inline M(R32 i, Scale sc, Imm32 d)
+				: Operand(concat(0x8, 0x10, i.val_, sc, d.val_, 1)) {
 		}
 
-		inline M(Sreg s, R32 i, Scale sc, Imm32 d) {
-			set_all(s, R{0x10}, i, sc, d, 1);
+		inline M(Sreg s, R32 i, Scale sc, Imm32 d)
+				: Operand(concat(s.val_, 0x10, i.val_, sc, d.val_, 1)) {
 		}
 
-		inline M(R32 b, R32 i, Scale s) {
-			set_all(Sreg{0x8}, b, i, s, 0, 1);
+		inline M(R32 b, R32 i, Scale sc)
+				: Operand(concat(0x8, b.val_, i.val_, sc, 0, 1)) {
 		}
 
-		inline M(Sreg s, R32 b, R32 i, Scale sc) {
-			set_all(s, b, i, sc, 0, 1);
+		inline M(Sreg s, R32 b, R32 i, Scale sc)
+				: Operand(concat(s.val_, b.val_, i.val_, sc, 0, 1)) {
 		}
 
-		inline M(R32 b, R32 i, Scale s, Imm32 d) {
-			set_all(Sreg{0x8}, b, i, s, d, 1);
+		inline M(R32 b, R32 i, Scale sc, Imm32 d)
+				: Operand(concat(0x8, b.val_, i.val_, sc, d.val_, 1)) {
 		}
 
-		inline M(Sreg s, R32 b, R32 i, Scale sc, Imm32 d) {
-			set_all(s, b, i, sc, d, 1);
+		inline M(Sreg s, R32 b, R32 i, Scale sc, Imm32 d)
+				: Operand(concat(s.val_, b.val_, i.val_, sc, d.val_, 1)) {
 		}
 
 		inline bool null_seg() const {
-			return m_ & (0x1ull << 47);
+			return val_ & (0x1ull << 47);
 		}
 
 		inline bool null_base() const {
-			return m_ & (0x1ull << 43);
+			return val_ & (0x1ull << 43);
 		}
 
 		inline bool null_index() const {
-			return m_ & (0x1ull << 38);
+			return val_ & (0x1ull << 38);
 		}
 
 		inline Sreg get_seg() const {
-			return (m_ >> 44) & 0x7;
+			return (val_ >> 44) & 0x7;
 		}
 
 		inline R get_base() const {
-			return (m_ >> 39) & 0xf;
+			return (val_ >> 39) & 0xf;
 		}
 
 		inline R get_index() const {
-			return (m_ >> 34) & 0xf;
+			return (val_ >> 34) & 0xf;
 		}
 
 		inline Scale get_scale() const {
-			return (Scale) ((m_ >> 32) & 0x3);
+			return (Scale) ((val_ >> 32) & 0x3);
 		}
 
 		inline Imm32 get_disp() const {
-			return m_ & 0xffffffff;
+			return val_ & 0xffffffff;
 		}
 
 		inline bool get_addr_or() const {
-			return (m_ >> 48) & 0x1;
+			return (val_ >> 48) & 0x1;
 		}
 
 		inline void set_seg(Sreg s) {
-			m_ &= ~(0xfull << 44);
-			m_ |= (s & 0x7) << 45;
+			val_ &= ~(0xfull << 44);
+			val_ |= (s.val_ & 0x7) << 45;
 		}
 
 		inline void clear_seg() {
-			m_ |= (0x1ull << 47);
+			val_ |= (0x1ull << 47);
 		}
 
 		inline void set_base(R b) {
-			m_ &= ~(0x1full << 39);
-			m_ |= (b & 0xf) << 39;
+			val_ &= ~(0x1full << 39);
+			val_ |= (b.val_ & 0xf) << 39;
 		}
 
 		inline void clear_base() {
-			m_ |= (0x1ull << 43);
+			val_ |= (0x1ull << 43);
 		}
 
 		inline void set_index(R i) {
-			m_ &= ~(0x1full << 34);
-			m_ |= (i & 0xf) << 34;
+			val_ &= ~(0x1full << 34);
+			val_ |= (i.val_ & 0xf) << 34;
 		}
 
 		inline void clear_index() {
-			m_ |= (0x1ull << 38);
+			val_ |= (0x1ull << 38);
 		}
 
 		inline void set_scale(Scale s) {
-			m_ &= ~(0x3ull << 32);
-			m_ |= ((Operand)s & 0x3ull) << 32;
+			val_ &= ~(0x3ull << 32);
+			val_ |= ((uint64_t) s & 0x3ull) << 32;
 		}
 
 		inline void set_disp(Imm32 d) {
-			m_ &= 0xffffffff00000000;
-			m_ |= (d & 0xffffffff);
+			val_ &= 0xffffffff00000000;
+			val_ |= (d.val_ & 0xffffffff);
 		}
 
 		inline void set_addr_or() {
-			m_ |= (0x1ull << 48);
+			val_ |= (0x1ull << 48);
 		}
 
 		inline void clear_addr_or() {
-			m_ &= ~(0x1ull << 48);
+			val_ &= ~(0x1ull << 48);
 		}
 			
-	private:
-		Operand m_;
-
 		// addr (1=32)     [48]
 		// segment? (1=no) [47]
 		// segment         [46:44]
@@ -202,9 +199,10 @@ class M {
 		// scale           [33:32]
 		// displacement    [31:0]
 
-		inline void set_all(Sreg s, R b, R i, Scale sc, Imm d, int ao) {
-			m_ = d | ((Operand) sc << 32) | (i << 34) | (b << 39) | (s << 44) | 
-				   ((Operand) ao << 48);
+		inline uint64_t concat(uint64_t s, uint64_t b, uint64_t i, Scale sc, 
+				                   uint64_t d, uint64_t ao) {
+			return d | (s << 32) | (i << 34) | (b << 39) | ((uint64_t) sc << 44) | 
+				     (ao << 48);
 		}
 };
 
@@ -234,47 +232,52 @@ class M {
 	inline T(Sreg s, R32 b, R32 i, Scale sc) : M{s, b, i, sc} { } \
 	inline T(R32 b, R32 i, Scale s, Imm32 d) : M{b, i, s, d} { } \
 	inline T(Sreg s, R32 b, R32 i, Scale sc, Imm32 d) : M{s, b, i, sc, d} { } \
-	inline T(Operand o) : M{o} { } 
 
 /** A byte operand in memory, usually expressed as a variable or array name, 
 	  but pointed to by the DS:(E)SI or ES:(E)DI registers. 
 		In 64-bit mode, it is pointed to by the RSI or RDI registers.
 */		
-struct M8 : public M {
-	CONSTRUCTORS(M8)
+class M8 : public M {
+	public:
+		CONSTRUCTORS(M8)
 };
 
 /** A word operand in memory, usually expressed as a variable or array name, 
 	  but pointed to by the DS:(E)SI or ES:(E)DI registers. This nomenclature is 
 		used only with the string instructions.
 */
-struct M16 : public M {
-	CONSTRUCTORS(M16)
+class M16 : public M {
+	public:
+		CONSTRUCTORS(M16)
 };
 
 /** A doubleword operand in memory, usually expressed as a variable or array 
 		name, but pointed to by the DS:(E)SI or ES:(E)DI registers. This 
 		nomenclature is used only with the string instructions.
 */
-struct M32 : public M {
-	CONSTRUCTORS(M32)
+class M32 : public M {
+	public:
+		CONSTRUCTORS(M32)
 };
 
 /** A memory quadword operand in memory. */
-struct M64 : public M {
-	CONSTRUCTORS(M64)
+class M64 : public M {
+	public:
+		CONSTRUCTORS(M64)
 };
 
 /** A memory double quadword operand in memory. */
-struct M128 : public M {
-	CONSTRUCTORS(M128)
+class M128 : public M {
+	public:
+		CONSTRUCTORS(M128)
 };
 
 /** A 32-byte operand in memory. This nomenclature is used only with AVX 
 	  instructions.
 */		
-struct M256 : public M {
-	CONSTRUCTORS(M256)
+class M256 : public M {
+	public:
+		CONSTRUCTORS(M256)
 };
 
 /** A memory operand consisting of data item pairs whose sizes are indicated on 
@@ -283,112 +286,129 @@ struct M256 : public M {
 		provide a word with which to load the limit field, and a quadword with 
 		which to load the base field of the corresponding GDTR and IDTR registers.
 */
-struct MPair1664 : public M {
-	CONSTRUCTORS(MPair1664)
+class MPair1664 : public M {
+	public:
+		CONSTRUCTORS(MPair1664)
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
 		number to the left of the colon corresponds to the pointer's segment 
 		selector. The number to the right corresponds to its offset.
 */
-struct MPtr1616 : public M {
-	CONSTRUCTORS(MPtr1616)
+class MPtr1616 : public M {
+	public:
+		CONSTRUCTORS(MPtr1616)
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
 		number to the left of the colon corresponds to the pointer's segment 
 		selector. The number to the right corresponds to its offset.
 */
-struct MPtr1632 : public M {
-	CONSTRUCTORS(MPtr1632)
+class MPtr1632 : public M {
+	public:
+		CONSTRUCTORS(MPtr1632)
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
 		number to the left of the colon corresponds to the pointer's segment 
 		selector. The number to the right corresponds to its offset.
 */
-struct MPtr1664 : public M {
-	CONSTRUCTORS(MPtr1664)
+class MPtr1664 : public M {
+	public:
+		CONSTRUCTORS(MPtr1664)
 };
 
 /** A word integer operand in memory. This symbol designates integers that are 
 	  used as operands for x87 FPU integer instructions.
 */
-struct M16Int : public M {
-	CONSTRUCTORS(M16Int)
+class M16Int : public M {
+	public:
+		CONSTRUCTORS(M16Int)
 };
 
 /** A doubleword integer operand in memory. This symbol designates integers 
 	  that are used as operands for x87 FPU integer instructions.
 */
-struct M32Int : public M {
-	CONSTRUCTORS(M32Int)
+class M32Int : public M {
+	public:
+		CONSTRUCTORS(M32Int)
 };
 
 /** A quadword integer operand in memory. This symbol designates integers 
 	  that are used as operands for x87 FPU integer instructions.
 */
-struct M64Int : public M {
-	CONSTRUCTORS(M64Int)
+class M64Int : public M {
+	public:
+		CONSTRUCTORS(M64Int)
 };
 
 /** A single-precision floating-point operand in memory. This symbol designates 
 		floating-point values that are used as operands for x87 FPU floating-point 
 		instructions.
 */
-struct M32Fp : public M {
-	CONSTRUCTORS(M32Fp)
+class M32Fp : public M {
+	public:
+		CONSTRUCTORS(M32Fp)
 };
 
 /** A double-precision floating-point operand in memory. This symbol designates 
 		floating-point values that are used as operands for x87 FPU floating-point 
 		instructions.
 */
-struct M64Fp : public M {
-	CONSTRUCTORS(M64Fp)
+class M64Fp : public M {
+	public:
+		CONSTRUCTORS(M64Fp)
 };
 
 /** A double extended-precision floating-point operand in memory. This symbol 
 		designates floating-point values that are used as operands for x87 FPU 
 		floating-point instructions.
 */
-struct M80Fp : public M {
-	CONSTRUCTORS(M80Fp)
+class M80Fp : public M {
+	public:
+		CONSTRUCTORS(M80Fp)
 };
 
 /** A double extended-precision binary-coded-decimaly operand in memory. */
-struct M80Bcd : public M {
-	CONSTRUCTORS(M80Bcd)
+class M80Bcd : public M {
+	public:
+		CONSTRUCTORS(M80Bcd)
 };
 
 /** A 2 byte operand in memory. */
-struct M2Byte : public M {
-	CONSTRUCTORS(M2Byte)
+class M2Byte : public M {
+	public:
+		CONSTRUCTORS(M2Byte)
 };
 
 /** A 14 byte operand in memory. */
-struct M14Byte : public M {
-	CONSTRUCTORS(M14Byte)
+class M14Byte : public M {
+	public:
+		CONSTRUCTORS(M14Byte)
 };
 
 /** A 28 byte operand in memory. */
-struct M28Byte : public M {
-	CONSTRUCTORS(M28Byte)
+class M28Byte : public M {
+	public:
+		CONSTRUCTORS(M28Byte)
 };
 
 /** A 94 byte operand in memory. */
-struct M94Byte : public M {
-	CONSTRUCTORS(M94Byte)
+class M94Byte : public M {
+	public:
+		CONSTRUCTORS(M94Byte)
 };
 
 /** A 108 byte operand in memory. */
-struct M108Byte : public M {
-	CONSTRUCTORS(M108Byte)
+class M108Byte : public M {
+	public:
+		CONSTRUCTORS(M108Byte)
 };
 
 /** A 5122 byte operand in memory. */
-struct M512Byte : public M {
-	CONSTRUCTORS(M512Byte)
+class M512Byte : public M {
+	public:
+		CONSTRUCTORS(M512Byte)
 };
 
 #undef CONSTRUCTORS

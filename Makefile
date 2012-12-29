@@ -4,13 +4,13 @@ GCC=ccache g++
 
 INC=-I./
 
+#build/cfg/cfg.o \
+
 OBJ=build/assembler/assembler.o \
 		\
-		build/cfg/cfg.o \
 		\
 		build/code/attributes.o \
 		build/code/checker.o \
-		build/code/instruction.o \
 		build/code/op_set.o \
 		\
 		build/io/att_reader.o \
@@ -60,6 +60,7 @@ clean:
 	rm -rf build/* $(LIB) $(TEST) $(BIN) $(DOC)
 	rm -f src/assembler/assembler.defn src/assembler/assembler.decl
 	rm -f src/code/opcode.enum
+	rm -f src/io/opcode.att	
 	rm -rf test/enumerate_all.hi test/enumerate_all.o test/tmp/* test/enumerate_all
 	rm -f test/stokeasm_py/*.so
 	rm -rf test/stokeasm_py/build
@@ -69,13 +70,13 @@ clean:
 codegen: src/assembler/assembler.defn src/codegen/Codegen.hs src/codegen/x86.csv
 
 src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv 
-	mkdir -p build/codegen
 	cd src/codegen && \
 		ghc Codegen.hs && \
 		./Codegen x86.csv && \
 		mv assembler.defn ../assembler && \
 		mv assembler.decl ../assembler && \
 		mv opcode.enum ../code && \
+		mv opcode.att ../io && \
 		rm -f *.hi *.o Codegen
 
 #	flex $(FLEXOPS) -Patt src/codegen/att.l && \

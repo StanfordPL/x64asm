@@ -3,6 +3,7 @@
 
 #include "src/code/code.h"
 #include "src/code/instruction.h"
+#include "src/operands/constants.h"
 #include "src/operands/cr.h"
 #include "src/operands/dr.h"
 #include "src/operands/eflag.h"
@@ -38,7 +39,7 @@ class Checker {
 		}
 
 		static inline bool check(const Dr d) {
-			return c.val_ < 8;
+			return d.val_ < 8;
 		}
 
 		static inline bool check(const Eflag e) {
@@ -120,12 +121,24 @@ class Checker {
 			return true;
 		}
 
-		static inline bool check(const NoRex8 r) {
-			return r.val_ < 16;
+		static inline bool check(const NoRexR8 r) {
+			return ((Rl*)&r)->val_ < 16;
 		}
 
-		static inline bool check(const Rex8 r) {
-			return r.val < 8;
+		static inline bool check(const RexR8 r) {
+			return ((Rl*)&r)->val_ < 8;
+		}
+
+		static inline bool check(const Rl r) {
+			return r.val_ < 4;
+		}
+
+		static inline bool check(const Rh r) {
+			return r.val_ >= 4 && r.val_ < 8;
+		}
+
+		static inline bool check(const Rb r) {
+			return r.val_ >= 8 && r.val_ < 16;
 		}
 
 		static inline bool check(const Al r) {

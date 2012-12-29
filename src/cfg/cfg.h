@@ -15,7 +15,7 @@
 #include "src/stream/stream.h"
 
 namespace x64 {
-
+#if 0
 /** A read-only data structure that presents the ControlFlowGraph 
 	  represented by Code.
 */
@@ -426,6 +426,6 @@ class ControlFlowGraph {
 		std::vector<size_t> nesting_depth_;
 };
 
+#endif
 } // namespace x64
-
 #endif

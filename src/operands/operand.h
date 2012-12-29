@@ -11,10 +11,10 @@ class Operand {
 	friend class AttWriter;
 	friend class Checker;
 	friend class Instruction;
+	friend class M;
 	protected:
 		inline Operand(uint64_t val) : val_{val} { }
-
-	uint64_t val_;	
+		uint64_t val_;	
 };
 
 } // namespace x64

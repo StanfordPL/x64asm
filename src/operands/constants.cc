@@ -1,4 +1,4 @@
-#include "src/assembler/constants.h"
+#include "src/operands/constants.h"
 
 using namespace std;
 
@@ -87,7 +87,7 @@ const Rb r15b{Constants::r15b()};
 
 const Ax ax{Constants::ax()};
 const R16 cx{Constants::cx()};
-const R16 dx{Constants::dx()};
+const Dx dx{Constants::dx()};
 const R16 bx{Constants::bx()};
 const R16 sp{Constants::sp()};
 const R16 bp{Constants::bp()};

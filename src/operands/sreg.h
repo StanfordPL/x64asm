@@ -10,6 +10,7 @@ namespace x64 {
 */
 class Sreg : public Operand {
 	friend class Constants;
+	friend class M;
 	protected:
 		inline Sreg(uint64_t val) : Operand{val} { }
 };

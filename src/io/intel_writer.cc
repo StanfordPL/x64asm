@@ -98,5 +98,3 @@ void IntelWriter::write(ostream& os, Ymm y) {
 }
 
 } // namespace x64
-
-#endif

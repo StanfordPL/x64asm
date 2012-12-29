@@ -56,7 +56,7 @@ class Assembler {
 
 		inline void assemble(const Code& code) {
 			for ( const auto& instr : code )
-				assembler(instr);
+				assemble(instr);
 		}
 
 	private:

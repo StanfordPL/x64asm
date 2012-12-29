@@ -7,6 +7,7 @@ namespace x64 {
 
 /** A general-purpose register. */
 class R : public Operand {
+	friend class M;
 	protected:
 		inline R(uint64_t val) : Operand{val} { } 
 };

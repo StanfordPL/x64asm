@@ -34,15 +34,18 @@ inline Transform get_transform(T& ios) {
 }
 
 template <typename T>
-ostream& generic_write(ostream& os, const T t) {
+inline void check(ostream& os, const T t) {
 	if ( !Checker::check(t) )
 		os.setstate(ios::failbit);
+}
 
+template <typename T>
+ostream& generic_write(ostream& os, const T t) {
 	switch ( get_io(os) ) {
-		case ATT:
+		case IO::ATT:
 			AttWriter::write(os, t);
 			break;
-		case INTEL:
+		case IO::INTEL:
 			IntelWriter::write(os, t);
 			break;
 
@@ -55,26 +58,23 @@ ostream& generic_write(ostream& os, const T t) {
 }
 
 template <typename T>
-ostream& extended_generic_write(ostream& os, const T t) {
-	if ( !Checker::check(t) )
-		os.setstate(ios::failbit);
-
+ostream& extended_generic_write(ostream& os, const T& t) {
 	Assembler assm;
 	switch ( get_io(os) ) {
-		case ATT:
+		case IO::ATT:
 			AttWriter::write(os, t);
 			break;
-		case ELF:
+		case IO::ELF:
 			assm.start_elf(os);
 			assm.assemble(t);
 			assm.finish_elf(os);
 			break;
-		case HEX:
+		case IO::HEX:
 			assm.start_hex(os);
 			assm.assemble(t);
 			assm.finish_hex(os);
 			break;
-		case INTEL:
+		case IO::INTEL:
 			IntelWriter::write(os, t);
 			break;
 
@@ -178,11 +178,13 @@ ostream& operator<<(ostream& os, const Code& c) {
 }
 
 ostream& operator<<(ostream& os, const Code& c) {
+	check(os, c);
 	return extended_generic_write(os, c);
 	// TODO; need to switch on transformation state before returning.
 }
 
 ostream& operator<<(ostream& os, const Instruction& i) {
+	check(os, i);
 	return extended_generic_write(os, i);
 }
 
@@ -190,78 +192,122 @@ ostream& operator<<(ostream& os, const Opcode o) {
 	return generic_write(os, o);
 }
 
-ostream& operator<<(ostream& os, const Cr c) {
+ostream& operator<<(ostream& os, const Cr0234 c) {
+	check(os, c);
+	return generic_write(os, c);
+}
+
+ostream& operator<<(ostream& os, const Cr8 c) {
+	check(os, c);
 	return generic_write(os, c);
 }
 
 ostream& operator<<(ostream& os, const Dr d) {
+	check(os, d);
 	return generic_write(os, d);
 }
 
 ostream& operator<<(ostream& os, const Eflag e) {
+	check(os, e);
 	return generic_write(os, e);
 }
 
-ostream& operator<<(ostream& os, const Imm i) {
+ostream& operator<<(ostream& os, const Imm8 i) {
+	check(os, i);
+	return generic_write(os, i);
+}
+
+ostream& operator<<(ostream& os, const Imm16 i) {
+	check(os, i);
+	return generic_write(os, i);
+}
+
+ostream& operator<<(ostream& os, const Imm32 i) {
+	check(os, i);
+	return generic_write(os, i);
+}
+
+ostream& operator<<(ostream& os, const Imm64 i) {
+	check(os, i);
 	return generic_write(os, i);
 }
 
 ostream& operator<<(ostream& os, const Label l) {
+	check(os, l);
 	return generic_write(os, l);
 }
 
 ostream& operator<<(ostream& os, const M m) {
+	check(os, m);
 	return generic_write(os, m);
 }
 
 ostream& operator<<(ostream& os, const Mm m) {
+	check(os, m);
 	return generic_write(os, m);
 }
 
 ostream& operator<<(ostream& os, const Moffs m) {
+	check(os, m);
 	return generic_write(os, m);
 }
 
 ostream& operator<<(ostream& os, const Rl r) {
+	check(os, r);
 	return generic_write(os, r);
 }
 
 ostream& operator<<(ostream& os, const Rh r) {
+	check(os, r);
 	return generic_write(os, r);
 }
 
 ostream& operator<<(ostream& os, const Rb r) {
+	check(os, r);
 	return generic_write(os, r);
 }
 
 ostream& operator<<(ostream& os, const R16 r) {
+	check(os, r);
 	return generic_write(os, r);
 }
 
 ostream& operator<<(ostream& os, const R32 r) {
+	check(os, r);
 	return generic_write(os, r);
 }
 
 ostream& operator<<(ostream& os, const R64 r) {
+	check(os, r);
 	return generic_write(os, r);
 }
 
-ostream& operator<<(ostream& os, const Rel r) {
+ostream& operator<<(ostream& os, const Rel8 r) {
+	check(os, r);
+	return generic_write(os, r);
+}
+
+ostream& operator<<(ostream& os, const Rel32 r) {
+	check(os, r);
 	return generic_write(os, r);
 }
 
 ostream& operator<<(ostream& os, const Sreg s) {
+	check(os, s);
 	return generic_write(os, s);
 }
 
 ostream& operator<<(ostream& os, const St s) {
+	check(os, s);
 	return generic_write(os, s);
 }
 
 ostream& operator<<(ostream& os, const Xmm x) {
+	check(os, x);
 	return generic_write(os, x);
 }
 
 ostream& operator<<(ostream& os, const Ymm y) {
+	check(os, y);
 	return generic_write(os, y);
 }

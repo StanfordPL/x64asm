@@ -7,8 +7,7 @@ namespace x64 {
 enum Opcode {
 	// Internal mnemonics
 	LABEL_DEFN = 0
-
-	// Auto-generated Intel mnemonics
+	// Auto-generated mnemonics
 	#include "src/code/opcode.enum"
 };
 

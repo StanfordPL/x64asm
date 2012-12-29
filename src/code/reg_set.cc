@@ -1,5 +1,6 @@
 #include "src/code/reg_set.h"
 
+#if 0
 using namespace std;
 
 namespace x64 {
@@ -13,3 +14,4 @@ vector<Xmm> RegSet::xmm_;
 vector<CondReg> RegSet::cond_regs_;
 
 } // namespace x64
+#endif

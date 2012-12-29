@@ -9,12 +9,13 @@ using namespace std;
 template <typename T>
 void all(const vector<T>& ts) {
 	for ( const auto t : ts )
-		cout << t << " ";
+		cout << set_io(IO::ATT) << t << " ";
 	cout << endl;
 }
 
 int main() {
-	all(vector<Cr>{{cr0,cr2,cr3,cr4,cr8}});
+	all(vector<Cr0234>{{cr0,cr2,cr3,cr4}});
+	all(vector<Cr8>{{cr8}});
 	all(vector<Dr>{{dr0,dr1,dr2,dr3,dr4,dr5,dr6,dr7}});
 	all(vector<Eflag>{{cf,pf,af,zf,sf,tf,if_,df,of,iopl0,iopl1,nt,rf,vm,ac,vif,vip,id}});
 	all(vector<Mm>{{mm0,mm1,mm2,mm3,mm4,mm5,mm6,mm7}});

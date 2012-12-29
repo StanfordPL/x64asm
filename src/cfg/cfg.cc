@@ -1,4 +1,4 @@
-#include "src/cfg/control_flow_graph.h"
+#include "src/cfg/cfg.h"
 
 #include <algorithm>
 #include <map>

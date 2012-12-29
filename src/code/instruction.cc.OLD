@@ -1,5 +1,6 @@
 #include "src/code/instruction.h"
 
+#if 0
 #include "src/code/mm.h"
 #include "src/code/moffs.h"
 #include "src/code/st.h"
@@ -137,3 +138,5 @@ RegSet Instruction::explicit_write_set() const {
 }
 
 } // namespace x64
+
+#endif

@@ -1,5 +1,6 @@
 #ifndef X64_SRC_CODE_REG_SET_H
 #define X64_SRC_CODE_REG_SET_H
+#if 0
 
 #include <cassert>
 #include <vector>
@@ -273,4 +274,5 @@ class RegSet {
 
 } // namespace x64
 
+#endif
 #endif
