@@ -10,10 +10,24 @@
 namespace x64 {
 
 class OpSet {
-	public:
-
+	private:
+		OpSet() {
+			// TODO -- This should be an empty opset
+		}
 
 		// TODO
+
+	public:	
+		static inline OpSet empty() {
+			// TODO
+			return OpSet();
+		}
+
+		static inline OpSet universe() {
+			// TODO
+			return OpSet();	
+		}
+
 		inline OpSet operator~() const {
 			return *this;
 		}

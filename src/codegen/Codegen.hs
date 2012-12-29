@@ -36,6 +36,11 @@ low s = map toLower s
 up :: String -> String
 up s = map toUpper s
 
+-- Transforms a list of instructions into a comma separated table
+to_table :: [Instr] -> (Instr -> String) -> String
+to_table is f = intercalate "\n" $ map elem is
+  where elem i = ", " ++ (f i) ++ " // " ++ instruction i
+
 -------------------------------------------------------------------------------
 -- Read Input File
 -------------------------------------------------------------------------------
@@ -292,6 +297,15 @@ op2type "label8"   = "Label8"
 op2type "label32"  = "Label32"
 op2type o = error $ "Unrecognized operand type: " ++ o
 
+-- Is this a conditional jump?
+is_cond_jump :: Instr -> Bool
+is_cond_jump i = let mn = raw_mnemonic i in
+  head mn == 'J' && mn /= "JMP"
+
+-- Is this an unconditional jump?
+is_uncond_jump :: Instr -> Bool
+is_uncond_jump i = raw_mnemonic i == "JMP"
+
 -------------------------------------------------------------------------------
 -- code/ codegen
 -------------------------------------------------------------------------------
@@ -304,7 +318,106 @@ opcode_enum i = intercalate "_" $ (mnem i) : (ops i)
 
 -- Converts all instructions to Opcode enum values
 opcode_enums :: [Instr] -> String
-opcode_enums is = intercalate "\n" $ map (", "++) $ map opcode_enum is
+opcode_enums is = to_table is opcode_enum
+
+-- Converts an instruction to arity table row
+arity_row :: Instr -> String
+arity_row i = show $ length $ operands i
+
+-- Converts all instructions to arity table
+arity_table :: [Instr] -> String
+arity_table is = to_table is arity_row
+
+-- Converts an instruction to accessor table row
+accessor_row :: Instr -> String
+accessor_row i = "{{" ++ intercalate "," [] ++ "}}"
+
+-- Converts all instruction to accessor table
+accessor_table is = to_table is accessor_row 
+
+-- Converts an instruction to type table row
+type_row :: Instr -> String
+type_row i = "{{" ++ intercalate "," [] ++ "}}"
+
+-- Converts all instruction to type table
+type_table is = to_table is type_row 
+
+-- Converts an instruction to return table row
+return_row :: Instr -> String
+return_row i = case raw_mnemonic i of
+  "IRET" -> "true"
+  "IRETD" -> "true"
+  "IRETQ" -> "true"
+  "RET" -> "true"
+  "SYSEXIT" -> "true"
+  "SYSRET" -> "true"
+  _ -> "false"
+
+-- Converts all instructions to return table
+return_table :: [Instr] -> String
+return_table is = to_table is return_row 
+
+-- Converts an instruction to jump table row
+jump_row :: Instr -> String
+jump_row i = case (is_cond_jump i) || (is_uncond_jump i) of
+  True -> "true"
+  False -> "false"
+
+-- Converts all instructions to jump table
+jump_table :: [Instr] -> String
+jump_table is = to_table is jump_row 
+
+-- Converts an instruction to cond_jump table row
+cond_jump_row :: Instr -> String
+cond_jump_row i = case is_cond_jump i of
+  True -> "true"
+  False -> "false"
+
+-- Converts all instructions to cond_jump table
+cond_jump_table :: [Instr] -> String
+cond_jump_table is = to_table is cond_jump_row 
+
+-- Converts an instruction to uncond_jump table row
+uncond_jump_row :: Instr -> String
+uncond_jump_row i = case is_uncond_jump i of
+  True -> "true"
+  False -> "false"
+
+-- Converts all instructions to uncond_jump table
+uncond_jump_table :: [Instr] -> String
+uncond_jump_table is = to_table is uncond_jump_row 
+
+-- Converts an instruction to implicit_read table row
+read_row :: Instr -> String
+read_row i = "OpSet::empty()"
+
+-- Converts all instructions to implicit_read table
+read_table :: [Instr] -> String
+read_table is = to_table is read_row 
+
+-- Converts an instruction to implicit_write table row
+write_row :: Instr -> String
+write_row i = "OpSet::empty()"
+
+-- Converts all instructions to implicit_write table
+write_table :: [Instr] -> String
+write_table is = to_table is write_row
+
+-- Converts an instruction to implicit_def table row
+def_row :: Instr -> String
+def_row i = "OpSet::empty()"
+
+-- Converts all instructions to implicit_def table
+def_table :: [Instr] -> String
+def_table is = to_table is def_row 
+
+-- Converts an instruction to implicit_undef table row
+undef_row :: Instr -> String
+undef_row i = "OpSet::empty()"
+
+-- Converts all instructions to implicit_undef table
+undef_table :: [Instr] -> String
+undef_table is = to_table is undef_row
 
 -------------------------------------------------------------------------------
 -- io/ codegen
@@ -489,8 +602,19 @@ main = do args <- getArgs
                    remove_format $ 
                    read_instrs file
 
-          writeFile "assembler.decl" $ assm_header_decls is
-          writeFile "assembler.defn" $ assm_src_defns is
-          writeFile "opcode.enum"    $ opcode_enums is
-          writeFile "opcode.att"     $ att_mnemonics is
-          writeFile "test.s"         $ test_instrs is					
+          writeFile "assembler.decl"    $ assm_header_decls is
+          writeFile "assembler.defn"    $ assm_src_defns is
+          writeFile "arity.table"       $ arity_table is
+          writeFile "accessor.table"    $ accessor_table is
+          writeFile "type.table"        $ type_table is
+          writeFile "return.table"      $ return_table is
+          writeFile "jump.table"        $ jump_table is
+          writeFile "cond_jump.table"   $ cond_jump_table is
+          writeFile "uncond_jump.table" $ uncond_jump_table is
+          writeFile "read.table"        $ read_table is
+          writeFile "write.table"       $ write_table is
+          writeFile "def.table"         $ def_table is
+          writeFile "undef.table"       $ undef_table is
+          writeFile "opcode.enum"       $ opcode_enums is
+          writeFile "opcode.att"        $ att_mnemonics is
+          writeFile "test.s"            $ test_instrs is					

@@ -59,7 +59,7 @@ test: erthing
 clean:
 	rm -rf build/* $(LIB) $(TEST) $(BIN) $(DOC)
 	rm -f src/assembler/assembler.defn src/assembler/assembler.decl
-	rm -f src/code/opcode.enum
+	rm -f src/code/opcode.enum src/code/*.table
 	rm -f src/io/opcode.att	
 	rm -rf test/enumerate_all.hi test/enumerate_all.o test/tmp/* test/enumerate_all
 	rm -f test/stokeasm_py/*.so
@@ -73,9 +73,8 @@ src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv
 	cd src/codegen && \
 		ghc Codegen.hs && \
 		./Codegen x86.csv && \
-		mv assembler.defn ../assembler && \
-		mv assembler.decl ../assembler && \
-		mv opcode.enum ../code && \
+		mv assembler.defn assembler.decl ../assembler && \
+		mv opcode.enum *.table ../code && \
 		mv opcode.att ../io && \
 		rm -f *.hi *.o Codegen
 
