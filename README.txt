@@ -4,25 +4,23 @@ Build Instructions:
 
 1. Dependency hell!
 
-$ sudo apt-get install svn
-$ sudo apt-get install cabal
+$ sudo apt-get install ccache
 $ sudo apt-get install g++
 $ sudo apt-get install g++-multilib
 $ sudo apt-get install doxygen
 $ sudo apt-get install ghc
-$ sudo apt-get install graphviz
+$ sudo apt-get install cabal
 $ sudo apt-get install libghc-split-dev
-$ sudo apt-get install ccache
+$ sudo apt-get install graphviz
 
+TODO: Add more dependencies here as we discover them.
 
-Note that there are almost certainly more that I'm unaware of.
-
-2. (Be connected to the internet and) type make.
+2. Type make.
    You can optionally specify a build type.
 
 $ make (release|profile|debug)
 
-3. Browse the woefully incomplete documentation.
+3. Browse the (no longer totally) woefully incomplete documentation.
 
 $ <browser> doc/html/index.html
 
