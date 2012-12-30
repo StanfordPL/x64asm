@@ -1,11 +1,11 @@
-#ifndef X64_SRC_ATTRIBUTES_OP_SET_H
-#define X64_SRC_ATTRIBUTES_OP_SET_H
+#ifndef X64_SRC_CODE_OP_SET_H
+#define X64_SRC_CODE_OP_SET_H
 
-#include "src/operands/eflag.h"
-#include "src/operands/r.h"
-#include "src/operands/sreg.h"
-#include "src/operands/xmm.h"
-#include "src/operands/ymm.h"
+#include "src/code/eflag.h"
+#include "src/code/r.h"
+#include "src/code/sreg.h"
+#include "src/code/xmm.h"
+#include "src/code/ymm.h"
 
 namespace x64 {
 

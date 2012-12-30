@@ -183,15 +183,6 @@ ostream& operator<<(ostream& os, const Code& c) {
 	// TODO; need to switch on transformation state before returning.
 }
 
-ostream& operator<<(ostream& os, const Instruction& i) {
-	check(os, i);
-	return extended_generic_write(os, i);
-}
-
-ostream& operator<<(ostream& os, const Opcode o) {
-	return generic_write(os, o);
-}
-
 ostream& operator<<(ostream& os, const Cr0234 c) {
 	check(os, c);
 	return generic_write(os, c);
@@ -232,6 +223,11 @@ ostream& operator<<(ostream& os, const Imm64 i) {
 	return generic_write(os, i);
 }
 
+ostream& operator<<(ostream& os, const Instruction& i) {
+	check(os, i);
+	return extended_generic_write(os, i);
+}
+
 ostream& operator<<(ostream& os, const Label l) {
 	check(os, l);
 	return generic_write(os, l);
@@ -250,6 +246,10 @@ ostream& operator<<(ostream& os, const Mm m) {
 ostream& operator<<(ostream& os, const Moffs m) {
 	check(os, m);
 	return generic_write(os, m);
+}
+
+ostream& operator<<(ostream& os, const Opcode o) {
+	return generic_write(os, o);
 }
 
 ostream& operator<<(ostream& os, const Rl r) {

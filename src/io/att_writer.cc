@@ -27,6 +27,52 @@ void AttWriter::write(ostream& os, const Code& c) {
 	}
 }
 
+void AttWriter::write(ostream& os, Cr c) {
+	switch ( c.val_ ) {
+		case 0: os << "%cr0"; break;
+		case 2: os << "%cr2"; break;
+		case 3: os << "%cr3"; break;
+		case 4: os << "%cr4"; break;
+		case 8: os << "%cr8"; break;
+
+		default: assert(false);
+	}				 
+}
+
+void AttWriter::write(ostream& os, Dr d) {
+	assert(d.val_ < 8);
+	os << "%dr" << dec << d.val_;
+}
+
+void AttWriter::write(ostream& os, Eflag e) {
+	switch ( e.val_ ) {
+		case 0: os << "%cf"; break;
+		case 2: os << "%pf"; break;
+		case 4: os << "%af"; break;
+		case 6: os << "%zf"; break;
+		case 7: os << "%sf"; break;
+		case 8: os << "%tf"; break;
+		case 9: os << "%if"; break;
+		case 10: os << "%dr"; break;
+		case 11: os << "%of"; break;
+		case 12: os << "%iopl[0]"; break;
+		case 13: os << "%iopl[1]"; break;
+		case 14: os << "%nt"; break;
+		case 16: os << "%rf"; break;
+		case 17: os << "%vm"; break;
+		case 18: os << "%ac"; break;
+		case 19: os << "%vif"; break;
+		case 20: os << "%vip"; break;
+		case 21: os << "%id"; break;
+
+		default: assert(false);
+	}
+}
+
+void AttWriter::write(ostream& os, Imm i) {
+	os << "$" << hex << i.val_;
+}
+
 void AttWriter::write(ostream& os, const Instruction& instr) {
 	write(os, instr.get_opcode());
 	os << " ";
@@ -116,59 +162,7 @@ void AttWriter::write(ostream& os, const Instruction& instr) {
 		if ( i != 0 )
 			os << ", ";
 	}
-
 }	
-
-void AttWriter::write(ostream& os, const Opcode o) {
-	assert(o < opcode_.size());
-	os << opcode_[o];
-}
-
-void AttWriter::write(ostream& os, Cr c) {
-	switch ( c.val_ ) {
-		case 0: os << "%cr0"; break;
-		case 2: os << "%cr2"; break;
-		case 3: os << "%cr3"; break;
-		case 4: os << "%cr4"; break;
-		case 8: os << "%cr8"; break;
-
-		default: assert(false);
-	}				 
-}
-
-void AttWriter::write(ostream& os, Dr d) {
-	assert(d.val_ < 8);
-	os << "%dr" << dec << d.val_;
-}
-
-void AttWriter::write(ostream& os, Eflag e) {
-	switch ( e.val_ ) {
-		case 0: os << "%cf"; break;
-		case 2: os << "%pf"; break;
-		case 4: os << "%af"; break;
-		case 6: os << "%zf"; break;
-		case 7: os << "%sf"; break;
-		case 8: os << "%tf"; break;
-		case 9: os << "%if"; break;
-		case 10: os << "%dr"; break;
-		case 11: os << "%of"; break;
-		case 12: os << "%iopl[0]"; break;
-		case 13: os << "%iopl[1]"; break;
-		case 14: os << "%nt"; break;
-		case 16: os << "%rf"; break;
-		case 17: os << "%vm"; break;
-		case 18: os << "%ac"; break;
-		case 19: os << "%vif"; break;
-		case 20: os << "%vip"; break;
-		case 21: os << "%id"; break;
-
-		default: assert(false);
-	}
-}
-
-void AttWriter::write(ostream& os, Imm i) {
-	os << "$" << hex << i.val_;
-}
 
 void AttWriter::write(ostream& os, Label l) {
 	os << ".LABEL_" << dec << l.val_;
@@ -218,6 +212,11 @@ void AttWriter::write(ostream& os, Moffs m) {
 
 void AttWriter::write(ostream& os, NoRexR8 r) {
 	// TODO...
+}
+
+void AttWriter::write(ostream& os, const Opcode o) {
+	assert(o < opcode_.size());
+	os << opcode_[o];
 }
 
 void AttWriter::write(ostream& os, RexR8 r) {

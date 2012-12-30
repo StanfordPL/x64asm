@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "src/code/opcode.h"
-#include "src/operands/operand.h"
+#include "src/code/operand.h"
 
 namespace x64 {
 

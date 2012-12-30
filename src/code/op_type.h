@@ -1,5 +1,5 @@
-#ifndef X64_SRC_ATTRIBUTES_OP_TYPE_H
-#define X64_SRC_ATTRIBUTES_OP_TYPE_H
+#ifndef X64_SRC_CODE_OP_TYPE_H
+#define X64_SRC_CODE_OP_TYPE_H
 
 namespace x64 {
 

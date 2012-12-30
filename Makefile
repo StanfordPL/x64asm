@@ -11,14 +11,13 @@ OBJ=build/assembler/assembler.o \
 		\
 		build/code/attributes.o \
 		build/code/checker.o \
+		build/code/constants.o \
 		build/code/op_set.o \
 		\
 		build/io/att_reader.o \
 		build/io/att_writer.o \
 		build/io/intel_reader.o \
 		build/io/intel_writer.o \
-		\
-		build/operands/constants.o \
 		\
 		build/stream/stream.o
 
@@ -86,7 +85,7 @@ src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv
 		
 ##### DOCUMENTATION TARGETS
 
-doc/html: doxyfile src/assembler/* src/cfg/* src/code/* src/io/* src/operands/* src/stream/*
+doc/html: doxyfile src/assembler/* src/cfg/* src/code/* src/io/* src/stream/*
 	doxygen doxyfile
 
 ##### BUILD TARGETS
@@ -99,8 +98,6 @@ build/code/%.o: src/code/%.cc src/code/%.h codegen
 	mkdir -p build/code && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/io/%.o: src/io/%.cc src/io/%.h codegen
 	mkdir -p build/io && $(GCC) $(OPT) $(INC) -c $< -o $@
-build/operands/%.o: src/operands/%.cc src/operands/%.h codegen
-	mkdir -p build/operands && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/stream/%.o: src/stream/%.cc src/stream/%.h codegen
 	mkdir -p build/stream && $(GCC) $(OPT) $(INC) -c $< -o $@
 

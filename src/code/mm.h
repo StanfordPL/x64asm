@@ -1,7 +1,7 @@
-#ifndef X64_SRC_OPERANDS_MM_REG_H
-#define X64_SRC_OPERANDS_MM_REG_H
+#ifndef X64_SRC_CODE_MM_REG_H
+#define X64_SRC_CODE_MM_REG_H
 
-#include "src/operands/operand.h"
+#include "src/code/operand.h"
 
 namespace x64 {
 
