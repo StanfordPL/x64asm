@@ -22,7 +22,9 @@ int main() {
 	all(vector<Imm8>{{zero,one,three}});
 	all(vector<Rh>{{ah,ch,dh,bh}});
 	all(vector<Rl>{{al,cl,dl,bl}});
+	/*
 	all(vector<Rb>{{spl,bpl,sil,dil,r8b,r9b,r10b,r11b,r12b,r13b,r14b,r15b}});
+*/
 	all(vector<R16>{{ax,cx,dx,bx,sp,bp,si,di,r8w,r9w,r10w,r11w,r12w,r13w,r14w,r15w}});
 	all(vector<R32>{{eax,ecx,edx,ebx,esp,ebp,esi,edi,r8d,r9d,r10d,r11d,r12d,r13d,r14d,r15d}});
 	all(vector<R64>{{rax,rcx,rdx,rbx,rsp,rbp,rsi,rdi,r8,r9,r10,r11,r12,r13,r14,r15}});
@@ -30,6 +32,12 @@ int main() {
 	all(vector<St>{{st0,st1,st2,st3,st4,st5,st6,st7}});
 	all(vector<Xmm>{{xmm0,xmm1,xmm2,xmm3,xmm4,xmm5,xmm6,xmm7,xmm8,xmm9,xmm10,xmm11,xmm12,xmm13,xmm14,xmm15}});
 	all(vector<Ymm>{{ymm0,ymm1,ymm2,ymm3,ymm4,ymm5,ymm6,ymm7,ymm8,ymm9,ymm10,ymm11,ymm12,ymm13,ymm14,ymm15}});
+
+	cout << "NOW THIS!" << endl;
+	AttWriter::write(cout, rax);
+	cout << endl;
+	AttWriter::write(cout, M128(rax, rbp, Scale::TIMES_8));
+	cout << endl;
 
 	return 0;
 }

@@ -186,8 +186,9 @@ void AttWriter::write(ostream& os, M m) {
 			write(os, (R32)b);
 		else
 			write(os, (R64)b);
-		os << ",";
 	}
+	if ( !m.null_base() && !m.null_index() )
+		os << ",";
 	if ( !m.null_index() ) {
 		const auto i = m.get_index();
 		if ( m.get_addr_or() )
