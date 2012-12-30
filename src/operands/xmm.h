@@ -9,16 +9,15 @@ namespace x64 {
 	  through XMM15 are available using REX.R in 64-bit mode.
 */
 class Xmm : public Operand {
-	friend class Constants;
-	protected:
+	public:
 		inline Xmm(uint64_t val) : Operand{val} { } 
 };
 
 /** The XMM register XMM0. */
 class Xmm0 : public Xmm {
-	friend class Constants;
-	private:
+	public:
 		inline Xmm0() : Xmm{0} { }
+		inline Xmm0(uint64_t ignore) : Xmm{0} { }
 };
 
 } // namespace x64

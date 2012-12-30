@@ -12,7 +12,7 @@ namespace x64 {
 		size, which is determined by the address-size attribute of the instruction.
 */
 class Moffs : public Operand {
-	protected:
+	public:
 		inline Moffs(uint64_t val) : Operand{val} { }
 };
 

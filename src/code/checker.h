@@ -25,7 +25,10 @@ namespace x64 {
 
 class Checker {
 	public:
-		// Type-safe Operands:
+		static inline bool check(const Cr c) {
+			return check((Cr0234)c) || check((Cr8)c);
+		}
+
 		static inline bool check(const Cr0234 c) {
 			if ( c.val_ == 0 ) return true;
 			if ( c.val_ == 2 ) return true;
@@ -48,6 +51,11 @@ class Checker {
 			if ( e.val_ == 3 ) return false;
 			if ( e.val_ == 5 ) return false;
 			return true;
+		}
+
+		static inline bool check(const Imm i) {
+			// The check for Imm64 subsumed every other Imm.
+			return check((Imm64)i);
 		}
 
 		static inline bool check(const Imm8 i) {
@@ -105,6 +113,11 @@ class Checker {
 			return m.val_ < 8;
 		}
 
+		static inline bool check(const Modifier m) {
+			// All three modifiers share the same correctness check.
+			return check((Pref66)m);
+		}
+
 		static inline bool check(const Pref66 p) {
 			return p.val_ == 0;
 		}
@@ -119,6 +132,10 @@ class Checker {
 
 		static inline bool check(const Moffs m) {
 			return true;
+		}
+
+		static inline bool check(const R r) {
+			return r.val_ < 16;
 		}
 
 		static inline bool check(const NoRexR8 r) {
@@ -177,6 +194,11 @@ class Checker {
 			return r.val_ < 16;
 		}
 
+		static inline bool check(const Rel r) {
+			// The check for Rel32 subsumes the check for Rel8
+			return check((Rel32)r);
+		}
+
 		static inline bool check(const Rel8 r) {
 			const auto val = (int64_t) r.val_;
 			return val >= -128 && val <= 127;
@@ -219,7 +241,6 @@ class Checker {
 			return y.val_ == 0;
 		}
 
-		// Type-unsafe code
 		static bool check(const Instruction& i);
 
 		static inline bool check(const Code& c) {

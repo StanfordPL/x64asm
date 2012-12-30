@@ -8,7 +8,7 @@ namespace x64 {
 /** A symbolic representation of a Rel.
 */
 class Label : public Operand {
-	protected:
+	public:
 		inline Label(uint64_t val) : Operand{val} { } 
 };
 

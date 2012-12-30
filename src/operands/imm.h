@@ -7,7 +7,7 @@ namespace x64 {
 
 /** An immediate value. */
 class Imm : public Operand {
-	protected:
+	public:
 		inline Imm(uint64_t val) : Operand{val} { }
 };
 
@@ -53,23 +53,23 @@ class Imm64 : public Imm {
 
 /** The immediate constant value zero */
 class Zero : public Imm8 {
-	friend class Constants;
-	private:
+	public:
 		inline Zero() : Imm8{0} { }
+		inline Zero(uint64_t ignore) : Imm8{0} { }
 };
 
 /** The immediate constant value one */
 class One : public Imm8 {
-	friend class Constants;
-	private:
+	public:
 		inline One() : Imm8{1} { }
+		inline One(uint64_t ignore) : Imm8{0} { }
 };
 
 /** The immediate constant value three */
 class Three : public Imm8 {
-	friend class Constants;
-	private:
+	public:
 		inline Three() : Imm8{3} { }
+		inline Three(uint64_t ignore) : Imm8{0} { }
 };
 
 } // namespace x64

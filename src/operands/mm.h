@@ -7,8 +7,7 @@ namespace x64 {
 
 /** An MMX register. The 64-bit MMX registers are: MM0 through MM7. */
 class Mm : public Operand {
-	friend class Constants;
-	private:
+	public:
 		inline Mm(uint64_t val) : Operand{val} { }
 };
 

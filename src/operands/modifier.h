@@ -9,29 +9,29 @@ namespace x64 {
 	  instruction signatures.
 */
 class Modifier : public Operand {
-	protected:
+	public:
 		inline Modifier(uint64_t val) : Operand{val} { }
 };
 
 /** The 32-bit memory address override prefix: 0x66. */
 class Pref66 : public Modifier {
-	friend class Constants;
-	private:
-		Pref66() : Modifier{0} { }
+	public:
+		inline Pref66() : Modifier{0} { }
+		inline Pref66(uint64_t ignore) : Modifier{0} { }
 };
 
 /** The REX.w prefix: 0x48. */
 class PrefRexW : public Modifier {
-	friend class Constants;
-	private:
-		PrefRexW() : Modifier{0} { }
+	public:
+		inline PrefRexW() : Modifier{0} { }
+		inline PrefRexW(uint64_t ignore) : Modifier{0} { }
 };
 
 /** Far instruction variant. */
 class Far : public Modifier {
-	friend class Constants;
-	private:
-		Far() : Modifier{0} { }
+	public:
+		inline Far() : Modifier{0} { }
+		inline Far(uint64_t ignore) : Modifier{0} { }
 };
 
 } // namespace x64

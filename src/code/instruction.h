@@ -37,8 +37,6 @@ class Instruction {
 			return opcode_;
 		}
 
-		// TODO... getters
-
 		inline void set_opcode(Opcode o) {
 			opcode_ = o;
 		}
@@ -47,6 +45,11 @@ class Instruction {
 			assert(index < operands_.size());
 			operands_[index] = o;
 		}	
+
+		inline Operand get_operand(size_t index) const {
+			assert(index < operands_.size());
+			return operands_[index];
+		}
 
 	private:
 		Opcode opcode_;

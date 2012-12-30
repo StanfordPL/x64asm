@@ -7,8 +7,7 @@ namespace x64 {
 
 /** A debug register. */
 class Dr : public Operand {
-	friend class Constants;
-	private:
+	public:
 		inline Dr(uint64_t val) : Operand{val} { }
 };
 

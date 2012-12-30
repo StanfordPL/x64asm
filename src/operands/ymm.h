@@ -9,8 +9,7 @@ namespace x64 {
 	  through YMM15 are available in 64-bit mode.
 */
 class Ymm : public Operand {
-	friend class Constants;
-	private:
+	public:
 		inline Ymm(uint64_t val) : Operand{val} { } 
 };
 

@@ -7,7 +7,7 @@ namespace x64 {
 
 /** A relative address. */
 class Rel : public Operand {
-	protected:
+	public:
 		inline Rel(uint64_t val) : Operand{val} { }
 };
 

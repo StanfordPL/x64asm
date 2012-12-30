@@ -12,6 +12,8 @@ namespace x64 {
 /** An operand in memory. */
 class M : public Operand {
 	public:
+		inline M(uint64_t val) : Operand{val} { }
+
 		inline M(R64 b)
 				: Operand(concat(0x8, b.val_, 0x10, Scale::TIMES_1, 0, 0)) {
 		}
@@ -208,6 +210,7 @@ class M : public Operand {
 
 // NOTE: This ugliness can be replaced using inherited constructors come gcc 4.8
 #define CONSTRUCTORS(T) \
+	inline T(uint64_t val) : M{val} { } \
 	inline T(R64 b) : M{b} { } \
 	inline T(Sreg s, R64 b) : M{s, b} { } \
 	inline T(R64 b, Imm32 d) : M{b, d} { } \

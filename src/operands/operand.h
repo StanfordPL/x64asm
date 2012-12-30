@@ -7,13 +7,9 @@ namespace x64 {
 
 /** Base operand type. */
 class Operand {
-	friend class Assembler;
-	friend class AttWriter;
-	friend class Checker;
-	friend class Instruction;
-	friend class M;
-	protected:
+	public:
 		inline Operand(uint64_t val) : val_{val} { }
+		inline operator uint64_t() const { return val_; }
 		uint64_t val_;	
 };
 

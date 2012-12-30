@@ -7,8 +7,7 @@ namespace x64 {
 
 /** An EFLAGS register bit. */
 class Eflag : public Operand {
-	friend class Constants;
-	private:
+	public:
 		inline Eflag(uint64_t val) : Operand{val} { }
 };
 
