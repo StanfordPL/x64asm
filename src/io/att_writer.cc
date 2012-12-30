@@ -3,6 +3,8 @@
 #include <cassert>
 #include <vector>
 
+#include "src/code/attributes.h"
+
 using namespace std;
 
 namespace {
@@ -25,8 +27,96 @@ void AttWriter::write(ostream& os, const Code& c) {
 	}
 }
 
-void AttWriter::write(ostream& os, const Instruction& i) {
-	// TODO...
+void AttWriter::write(ostream& os, const Instruction& instr) {
+	write(os, instr.get_opcode());
+	os << " ";
+
+	for ( size_t i = Attributes::arity(instr)-1; i >= 0; ++i ) {
+		const auto o = instr.get_operand(i);
+
+		#define WRITE(T) write(os, (T)o);
+		switch ( Attributes::type(instr, i) ) {
+			case OpType::CR:         
+			case OpType::CR_0234:    
+			case OpType::CR_8:       WRITE(Cr);
+			case OpType::DR:         WRITE(Dr);
+			case OpType::EFLAG:      WRITE(Eflag);
+			case OpType::IMM:        
+			case OpType::IMM_8:      
+			case OpType::IMM_16:     
+			case OpType::IMM_32:     
+			case OpType::IMM_64:     
+			case OpType::ZERO:       
+			case OpType::ONE:        
+			case OpType::THREE:      WRITE(Imm);
+			case OpType::LABEL:   	
+			case OpType::LABEL_8:
+			case OpType::LABEL_32:   WRITE(Label);
+			case OpType::M:
+			case OpType::M_8:
+			case OpType::M_16:
+			case OpType::M_32:
+			case OpType::M_64:
+			case OpType::M_128:
+			case OpType::M_256:
+			case OpType::M_PAIR_16_64:
+			case OpType::M_PTR_16_16:
+			case OpType::M_PTR_16_32:
+			case OpType::M_PTR_16_64:
+			case OpType::M_16_INT:
+			case OpType::M_32_INT:
+			case OpType::M_64_INT:
+			case OpType::M_32_FP:
+			case OpType::M_64_FP:
+			case OpType::M_80_FP:
+			case OpType::M_2_BYTE:
+			case OpType::M_14_BYTE:
+			case OpType::M_28_BYTE:
+			case OpType::M_94_BYTE:
+			case OpType::M_108_BYTE:
+			case OpType::M_512_BYTE: WRITE(M);
+			case OpType::MM:         WRITE(Mm);
+			case OpType::MODIFIER:   
+			case OpType::PREF_66:    
+			case OpType::PREF_REX_W: 
+			case OpType::FAR:        continue;
+			case OpType::MOFFS:      
+			case OpType::MOFFS_8:
+			case OpType::MOFFS_16:
+			case OpType::MOFFS_32:
+			case OpType::MOFFS_64:   WRITE(Moffs);
+			case OpType::R:          assert(false);
+			case OpType::NO_REX_R8:  WRITE(NoRexR8);
+			case OpType::REX_R8:     WRITE(RexR8);
+			case OpType::RH:         WRITE(Rh);
+			case OpType::RL:         
+			case OpType::AL:         
+			case OpType::CL:         WRITE(Rl);
+			case OpType::RB:         WRITE(Rb);
+			case OpType::R_16:       
+			case OpType::AX:         
+			case OpType::DX:         WRITE(R16);
+			case OpType::R_32:       
+			case OpType::EAX:        WRITE(R32);
+			case OpType::R_64:       
+			case OpType::RAX:        WRITE(R64);
+			case OpType::REL:        
+			case OpType::REL_8:      
+			case OpType::REL_32:     WRITE(Rel);
+			case OpType::SREG:       
+			case OpType::FS:         
+			case OpType::GS:         WRITE(Sreg);
+			case OpType::XMM:        
+			case OpType::XMM_0:      WRITE(Xmm);
+			case OpType::YMM:        WRITE(Ymm);
+			default: assert(false);
+		}
+		#undef WRITE
+
+		if ( i != 0 )
+			os << ", ";
+	}
+
 }	
 
 void AttWriter::write(ostream& os, const Opcode o) {
@@ -85,7 +175,35 @@ void AttWriter::write(ostream& os, Label l) {
 }
 
 void AttWriter::write(ostream& os, M m) {
-	// TODO...
+	if ( !m.null_seg() ) {
+		write(os, m.get_seg());
+		os << ":";
+	}
+	os << "(";
+	if ( !m.null_base() ) {
+		const auto b = m.get_base();
+		if ( m.get_addr_or() )
+			write(os, (R32)b);
+		else
+			write(os, (R64)b);
+		os << ",";
+	}
+	if ( !m.null_index() ) {
+		const auto i = m.get_index();
+		if ( m.get_addr_or() )
+			write(os, (R32)i);
+		else
+			write(os, (R64)i);
+		os << ",";
+		switch ( m.get_scale() ) {
+			case Scale::TIMES_1: os << "1"; break;
+			case Scale::TIMES_2: os << "2"; break;
+			case Scale::TIMES_4: os << "4"; break;
+			case Scale::TIMES_8: os << "8"; break;
+			default: assert(false);
+		}
+	}
+	os << ")";
 }
 
 void AttWriter::write(ostream& os, Mm m) {
@@ -95,6 +213,14 @@ void AttWriter::write(ostream& os, Mm m) {
 
 void AttWriter::write(ostream& os, Moffs m) {
 	os << hex << showbase << m.val_;
+}
+
+void AttWriter::write(ostream& os, NoRexR8 r) {
+	// TODO...
+}
+
+void AttWriter::write(ostream& os, RexR8 r) {
+	// TODO...
 }
 
 void AttWriter::write(ostream& os, Rl r) {

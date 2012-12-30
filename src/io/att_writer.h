@@ -37,6 +37,8 @@ class AttWriter {
 		static void write(std::ostream& os, const M m);
 		static void write(std::ostream& os, const Mm m);
 		static void write(std::ostream& os, const Moffs m);
+		static void write(std::ostream& os, const NoRexR8 r);
+		static void write(std::ostream& os, const RexR8 r);
 		static void write(std::ostream& os, const Rl r);
 		static void write(std::ostream& os, const Rh r);
 		static void write(std::ostream& os, const Rb r);

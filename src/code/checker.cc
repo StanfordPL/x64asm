@@ -64,9 +64,9 @@ bool Checker::check(const Instruction& instr) {
 			case OpType::REX_R8:     CHECK(RexR8);
 			case OpType::RH:         CHECK(Rh);
 			case OpType::RL:         CHECK(Rl);
-			case OpType::RB:         CHECK(Rb);
 			case OpType::AL:         CHECK(Al);
 			case OpType::CL:         CHECK(Cl);
+			case OpType::RB:         CHECK(Rb);
 			case OpType::R_16:       CHECK(R16); 
 			case OpType::AX:         CHECK(Ax);
 			case OpType::DX:         CHECK(Dx);
