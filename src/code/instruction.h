@@ -11,8 +11,6 @@
 namespace x64 {
 
 /** A single hardware instruction.
-		This representation is not typesafe and should be verified
-			prior to assembly.
 */
 class Instruction {
 	public:

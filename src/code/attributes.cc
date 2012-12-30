@@ -3,6 +3,87 @@
 using namespace std;
 
 namespace x64 {
+#if 0
+inline void set_mem(RegSet& rs, M m) {
+	const auto b = m.get_base();
+	const auto i = m.get_index();
+	
+	if ( m.get_size_or() ) {
+		if ( !b.is_null() )
+			rs.set((R32)b);
+		if ( !i.is_null() )
+			rs.set((R32)i);
+	}
+	else {
+		if ( !b.is_null() )
+			rs.set((R64)b);
+		if ( !i.is_null() )
+			rs.set((R64)i);
+	}
+}
+
+} // namespace
+
+namespace x64 {
+
+RegSet Instruction::explicit_read_set() const {
+	RegSet rs;
+	for ( size_t i = opcode_.first_read(), ie = arity(); i < ie; ++i )
+		switch ( type(i) ) {
+			case R_H: rs.set((RH)operands_[i]); break;
+			case AL:
+			case CL:
+			case R_8: rs.set((R8)operands_[i]); break;
+			case AX:
+			case R_16: rs.set((R16)operands_[i]); break;
+			case EAX:
+			case R_32: rs.set((R32)operands_[i]); break;
+			case RAX:
+			case R_64: rs.set((R64)operands_[i]); break;
+			case M_8:    
+			case M_16:    
+			case M_32:    
+			case M_64:    
+			case M_80:    
+			case M_128:    
+			case M_256: set_mem(rs, (M)operands_[i]); break;
+			case ST0:
+			case ST: break; // TODO 
+			case MM: break; // TODO
+			case XMM: rs.set((Xmm)operands_[i]); break;
+			case YMM: break; // TODO
+
+			default: 
+				break;
+		}
+	return rs;
+}
+
+RegSet Instruction::explicit_write_set() const {
+	RegSet rs;
+	for ( size_t i = 0, ie = opcode_.num_writes(); i < ie; ++i )
+		switch ( type(i) ) {
+			case R_H: rs.set((RH)operands_[i]); break;
+			case AL:
+			case CL:
+			case R_8: rs.set((R8)operands_[i]); break;
+			case AX:
+			case R_16: rs.set((R16)operands_[i]); break;
+			case EAX:
+			case R_32: rs.set((R64)operands_[i]); break; // Implicit extend!!!
+			case RAX:
+			case R_64: rs.set((R64)operands_[i]); break;
+			case ST: break; // TODO 
+			case MM: break; // TODO
+			case XMM: rs.set((Xmm)operands_[i]); break;
+			case YMM: break; // TODO
+
+			default: 
+				break;
+		}
+	return rs;
+}
+#endif
 
 OpSet Attributes::explicit_read_set(const Instruction& i) {
 	// TODO

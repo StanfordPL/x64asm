@@ -25,6 +25,13 @@ namespace x64 {
 
 class Checker {
 	public:
+		static inline bool check(const Code& c) {
+			for ( const auto& instr : c )
+				if ( !check(instr) )
+					return false;
+			return true;
+		}
+
 		static inline bool check(const Cr c) {
 			return check((Cr0234)c) || check((Cr8)c);
 		}
@@ -88,6 +95,8 @@ class Checker {
 		static inline bool check(const Three t) {
 			return t.val_ == 3;
 		}
+
+		static bool check(const Instruction& i);
 
 		static inline bool check(const Label l) {
 			return true;
@@ -239,15 +248,6 @@ class Checker {
 
 		static inline bool check(const Ymm y) {
 			return y.val_ == 0;
-		}
-
-		static bool check(const Instruction& i);
-
-		static inline bool check(const Code& c) {
-			for ( const auto& instr : c )
-				if ( !check(instr) )
-					return false;
-			return true;
 		}
 };
 
