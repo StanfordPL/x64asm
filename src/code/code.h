@@ -8,8 +8,6 @@
 namespace x64 {
 
 /** A sequence of Instructions. 
-		This representation is not typesafe and should be verified
-	 		prior to assembly.	
 */
 typedef std::vector<Instruction> Code;
 
