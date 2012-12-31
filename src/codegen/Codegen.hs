@@ -289,6 +289,7 @@ is_register_coded i
   | "+RW" `elem` opcode_suffix i = True
   | "+RD" `elem` opcode_suffix i = True
   | "+RO" `elem` opcode_suffix i = True
+  | "+I"  `elem` opcode_suffix i = True
   | otherwise = False
 
 -- Extracts raw mnemonic from instruction
