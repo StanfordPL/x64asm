@@ -4,10 +4,10 @@ GCC=ccache g++
 
 INC=-I./
 
-#build/cfg/cfg.o \
 
 OBJ=build/assembler/assembler.o \
 		\
+		build/cfg/cfg.o \
 		\
 		build/code/attributes.o \
 		build/code/checker.o \

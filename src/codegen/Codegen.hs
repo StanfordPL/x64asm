@@ -15,6 +15,7 @@ data Instr =
         , instruction :: String
         , mode64      :: String
         , mode32      :: String				
+        , flag        :: String
         , att         :: String
         , description :: String
         } deriving (Show)
@@ -47,9 +48,9 @@ to_table is f = intercalate "\n" $ map elem is
 
 -- Read a row
 read_instr :: String -> Instr
-read_instr s = let (o:i:m64:m32:a:d:[]) = splitOn "\t" s in 
+read_instr s = let (o:i:m64:m32:f:a:d:[]) = splitOn "\t" s in 
                    (Instr (trim o) (trim i) (trim m64) (trim m32) 
-                          (trim a) (trim d))
+                          (trim f) (trim a) (trim d))
 
 -- Read all rows
 read_instrs :: String -> [Instr]
