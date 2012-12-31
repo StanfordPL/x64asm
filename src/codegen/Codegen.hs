@@ -377,6 +377,11 @@ op2type o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
 flags :: Instr -> [String]
 flags i = splitOn " " $ flag i
 
+-- Is this instruction VEX encoded?
+is_vex_encoded :: Instr -> Bool
+is_vex_encoded i = ("AVX" `elem` fs) || ("F16C" `elem` fs)
+  where fs = flags i
+
 -- Is this a conditional jump?
 is_cond_jump :: Instr -> Bool
 is_cond_jump i = let mn = raw_mnemonic i in
@@ -593,18 +598,18 @@ assm_src_defn i = "void Assembler::" ++
                   ") {\n" ++
                   body i ++ 
                   "}"
-  where body i = case elem "AVX" (flags i) of
-                      True  -> assm_avx_defn i
+  where body i = case is_vex_encoded i of
+                      True  -> assm_vex_defn i
                       False -> assm_oth_defn i
 
--- AVX instruction definition
-assm_avx_defn :: Instr -> String
-assm_avx_defn i = "// AVX Instruction: \n" ++
+-- VEX encoded instruction definition
+assm_vex_defn :: Instr -> String
+assm_vex_defn i = "// VEX-Encoded Instruction: \n" ++
                   "// TODO...\n"
 
 -- Other instruction definition
 assm_oth_defn :: Instr -> String
-assm_oth_defn i = "// Non-AVX Instruction: \n" ++
+assm_oth_defn i = "// Non-VEX-Encoded Instruction: \n" ++
                   pref1 i ++
                   pref2 i ++ 
                   pref3 i ++
@@ -650,11 +655,10 @@ rex i = "// TODO - REX Prefix\n"
 
 -- Emits code for opcode bytes
 opc :: Instr -> String
-opc i = "opcode(" ++ (size i) ++ "," ++ (bytes i) ++ (code i) ++ ");\n"
-  where size i = show $ length (opcode_bytes i)
-        bytes i = "0x" ++ (concat (map low (opcode_bytes i)))
+opc i = "opcode(" ++ (bytes i) ++ (code i) ++ ");\n"
+  where bytes i = intercalate "," $ map (("0x"++).low) (opcode_bytes i)
         code i = case is_register_coded i of
-                      True -> ",\"TODO\""
+                      True -> ",Operand(100)"
                       False -> ""
 
 -- Emits code for mod/rm and sib bytes
@@ -794,5 +798,5 @@ main = do args <- getArgs
           writeFile "opcode.enum"       $ opcode_enums is
           writeFile "opcode.att"        $ att_mnemonics is
           writeFile "test.s"            $ test_instrs is					
-          mapM_ print $ map opcode_terms is
+          mapM_ print $ map opcode_bytes is
 

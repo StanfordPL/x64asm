@@ -9,16 +9,18 @@ using namespace x64;
 
 namespace {
 
-inline void emit(unsigned char c) {
+typedef unsigned char byte;
+
+inline void emit(byte c) {
 	// TODO
 }
 
-inline void pref_group1(unsigned char c) {
+inline void pref_group1(byte c) {
 	emit(c);
 }
 
 inline void pref_group2(const M m) {
-	static unsigned char pref[6] {0x26, 0x2e, 0x36, 0x3e, 0x64, 0x65};
+	static byte pref[6] {0x26, 0x2e, 0x36, 0x3e, 0x64, 0x65};
 	if ( !m.null_seg() )
 		emit(pref[m.get_seg().val_]);
 }
@@ -36,15 +38,24 @@ inline void pref_group4(const M m) {
 		emit(0x67);
 }
 
-inline void opcode(size_t size, unsigned long bytes) {
-	assert(size > 0 && size < 4);
-	// Emit bytes
+inline void opcode(byte o1) {
+	emit(o1);
 }
 
-inline void opcode(size_t size, unsigned long bytes, uint64_t code) {
-	assert(size > 0 && size < 4);
-	// Add code to bytes
-	// Emit bytes
+inline void opcode(byte o1, Operand rcode) {
+	const auto delta = rcode.val_ & 0x7;
+	emit(o1 + delta);
+}
+
+inline void opcode(byte o1, byte o2) {
+	emit(o1);
+	emit(o2);
+}
+
+inline void opcode(byte o1, byte o2, byte o3) {
+	emit(o1);
+	emit(o2);
+	emit(o3);
 }
 
 #if 0

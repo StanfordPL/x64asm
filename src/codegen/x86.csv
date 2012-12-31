@@ -985,10 +985,10 @@ VEX.NDS.256.0F.WIG 5F /r	VMAXPS ymm1, ymm2, ymm3/m256	V	V	AVX	vmaxps	Return the 
 						
 F2 0F 5F /r 	MAXSD xmm1, xmm2/m64	V	V	SSE2	maxsd	Return the maximum scalar double-precision floating-point value between xmm2/mem64 and xmm1.
 VEX.NDS.LIG.F2.0F.WIG 5F /r	VMAXSD xmm1, xmm2, xmm3/m64	V	V	AVX	vmaxsd	Return the maximum scalar double-precision floating-point value between xmm3/mem64 and xmm2.
-				AVX		
-F3 0F 5F /r 	MAXSS xmm1, xmm2/m32	V	V		maxss	Return the maximum scalar single-precision floating-point value between xmm2/mem32 and xmm1.
-VEX.NDS.LIG.F3.0F.WIG 5F /r	VMAXSS xmm1, xmm2, xmm3/m32	V	V	SSE	vmaxss	Return the maximum scalar single-precision floating-point value between xmm3/mem32 and xmm2.
-				AVX		
+						
+F3 0F 5F /r 	MAXSS xmm1, xmm2/m32	V	V	SSE	maxss	Return the maximum scalar single-precision floating-point value between xmm2/mem32 and xmm1.
+VEX.NDS.LIG.F3.0F.WIG 5F /r	VMAXSS xmm1, xmm2, xmm3/m32	V	V	AVX	vmaxss	Return the maximum scalar single-precision floating-point value between xmm3/mem32 and xmm2.
+						
 0F AE /6 	MFENCE 	V	V		mfence	Serializes load and store operations.
 						
 66 0F 5D /r 	MINPD xmm1, xmm2/m128	V	V	SSE2	minpd	Return the minimum double-precision floating-point values between xmm2/m128 and xmm1.
@@ -1383,7 +1383,7 @@ VEX.NDS.128.66.0F.WIG DF /r	VPANDN xmm1, xmm2, xmm3/m128	V	V	AVX	vpandn	Bitwise 
 F3 90 	PAUSE 	V	V		pause	Gives hint to processor that improves performance of spin-wait loops.
 						
 0F E0 /r 	PAVGB mm1, mm2/m64	V	V	SSE	pavgb	Average packed unsigned byte integers from mm2/m64 and mm1 with rounding.
-66 0F E0, /r	PAVGB xmm1, xmm2/m128	V	V	SSE2	pavgb	Average packed unsigned byte integers from xmm2/m128 and xmm1 with rounding.
+66 0F E0 /r	PAVGB xmm1, xmm2/m128	V	V	SSE2	pavgb	Average packed unsigned byte integers from xmm2/m128 and xmm1 with rounding.
 0F E3 /r	PAVGW mm1, mm2/m64	V	V	SSE	pavgw	Average packed unsigned word integers from mm2/m64 and mm1 with rounding.
 66 0F E3 /r	PAVGW xmm1, xmm2/m128	V	V	SSE2	pavgw	Average packed unsigned word integers from xmm2/m128 and xmm1 with rounding.
 VEX.NDS.128.66.0F.WIG E0 /r	VPAVGB xmm1, xmm2, xmm3/m128	V	V	AVX	vpavgb	Average packed unsigned byte integers from xmm3/m128 and xmm2 with rounding.
@@ -1616,10 +1616,10 @@ PREF.66+ 9D 	POPF 	V	V		popf	Pop top of stack into lower 16 bits of EFLAGS.
 9D 	POPFD 	NE	V			Pop top of stack into EFLAGS.
 REX.W+ 9D 	POPFQ 	V	NE		popfq	Pop top of stack and zero-extend into RFLAGS.
 						
-0F EB /r 	POR mm, mm/m64	V	V		por	Bitwise OR of mm/m64 and mm.
-66 0F EB /r	POR xmm1, xmm2/m128	V	V	MMX	por	Bitwise OR of xmm2/m128 and xmm1.
-VEX.NDS.128.66.0F.WIG EB /r	VPOR xmm1, xmm2, xmm3/m128	V	V	SSE2	vpor	Bitwise OR of xmm2/m128 and xmm3.
-				AVX		
+0F EB /r 	POR mm, mm/m64	V	V	MMX	por	Bitwise OR of mm/m64 and mm.
+66 0F EB /r	POR xmm1, xmm2/m128	V	V	SSE2	por	Bitwise OR of xmm2/m128 and xmm1.
+VEX.NDS.128.66.0F.WIG EB /r	VPOR xmm1, xmm2, xmm3/m128	V	V	AVX	vpor	Bitwise OR of xmm2/m128 and xmm3.
+						
 0F 18 /1 	PREFETCHT0 m8 	V	V		prefetcht0	Move data from m8 closer to the processor using T0 hint.
 0F 18 /2 	PREFETCHT1 m8 	V	V		prefetcht1	Move data from m8 closer to the processor using T1 hint.
 0F 18 /3 	PREFETCHT2 m8 	V	V		prefetcht2	Move data from m8 closer to the processor using T2 hint.
