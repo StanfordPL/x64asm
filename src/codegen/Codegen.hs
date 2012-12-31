@@ -298,6 +298,10 @@ op2type "label8"   = "Label8"
 op2type "label32"  = "Label32"
 op2type o = error $ "Unrecognized operand type: " ++ o
 
+-- Separate cpuid feature flags
+flags :: Instr -> [String]
+flags i = splitOn " " $ flag i
+
 -- Is this a conditional jump?
 is_cond_jump :: Instr -> Bool
 is_cond_jump i = let mn = raw_mnemonic i in
@@ -480,7 +484,20 @@ assm_src_defn i = "void Assembler::" ++
                   "(" ++
                   (assm_arg_list i) ++
                   ") {\n" ++
+                  body i ++ 
                   "}"
+  where body i = case elem "AVX" (flags i) of
+                      True  -> assm_avx_defn i
+                      False -> assm_oth_defn i
+
+-- AVX instruction definition
+assm_avx_defn :: Instr -> String
+assm_avx_defn i = "// AVX Instruction\n" ++
+                  "// TODO...\n"
+
+-- Other instruction definition
+assm_oth_defn :: Instr -> String
+assm_oth_defn i = "// Non-AVX Instruction\n"
 
 -- Assembler src definitions
 assm_src_defns :: [Instr] -> String
