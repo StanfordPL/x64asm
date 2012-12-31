@@ -8,6 +8,30 @@ using namespace std;
 using namespace x64;
 
 namespace {
+
+inline void emit(unsigned char c) {
+	// TODO
+}
+
+inline void pref_group2(const M m) {
+	static unsigned char pref[6] {0x26, 0x2e, 0x36, 0x3e, 0x64, 0x65};
+	if ( !m.null_seg() )
+		emit(pref[m.get_seg().val_]);
+}
+
+inline void pref_group2(const Hint h) {
+	emit(h == Hint::TAKEN ? 0x3e : 0x2e);
+}
+
+inline void pref_group3() {
+	emit(0x66);
+}
+
+inline void pref_group4(const M m) {
+	if ( m.get_addr_or() )
+		emit(0x67);
+}
+
 #if 0
 inline void emit(unsigned char*& buf, unsigned char c) {
 	(*buf++) = c;
@@ -260,7 +284,10 @@ inline void emit_rex(unsigned char*& buf, M rm,
 
 namespace x64 {
 
-	/*
+// void Assembler::adcb(Imm arg0) { } ...
+#include "src/assembler/assembler.defn"
+
+/*
 void Assembler::start(Function& fxn) {
 	start(fxn.buffer_);
 }
@@ -291,9 +318,6 @@ void Assembler::finish() {
 			*((uint32_t*) pos) = itr->second-pos-4;
 	}
 }
-
-// void Assembler::adcb(Imm arg0) { } ...
-#include "src/assembler/assembler.defn"
 
 void Assembler::write_binary(ostream& os, const Code& code) {
 	static unsigned char buffer[1024*1024];

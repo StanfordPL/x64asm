@@ -100,6 +100,33 @@ flatten_instr i = case findIndex (\x -> '/' `elem` x) (operands i) of
 flatten_instrs :: [Instr] -> [Instr]
 flatten_instrs is = concat $ map flatten_instr is
 
+-- Canonical operand version where synonyms are used
+canonical_op :: String -> String
+canonical_op "mem"   = "m" -- Mem (this only appears in LDDQU
+canonical_op "mm1"   = "mm"
+canonical_op "mm2"   = "mm"
+canonical_op "xmm1"  = "xmm"
+canonical_op "xmm2"  = "xmm"
+canonical_op "xmm3"  = "xmm"
+canonical_op "xmm4"  = "xmm"
+canonical_op "ymm1"  = "ymm"
+canonical_op "ymm2"  = "ymm"
+canonical_op "ymm3"  = "ymm"
+canonical_op "ymm4"  = "ymm"
+canonical_op "ST(0)" = "ST"
+canonical_op "ST(i)" = "ST(i)"
+canonical_op o = o
+
+-- Canonicalize operands where synonyms were used
+fix_op :: Instr -> Instr
+fix_op i = i{instruction=inst}
+  where inst = (raw_mnemonic i) ++ " " ++ (intercalate ", " (ops i))
+        ops i = map canonical_op $ operands i	
+
+-- Canonicalize operands for all instructions
+fix_ops :: [Instr] -> [Instr]
+fix_ops is = map fix_op is
+
 -- Remove rows with REX+ prefix and no r8 operands
 remove_no_reg_rex :: [Instr] -> [Instr]
 remove_no_reg_rex is = filter keep is
@@ -140,14 +167,15 @@ remove_ambiguity is = map shortest $ groupBy eq $ sortBy srt is
 
 -- Inserts PREF.66+ for instructions with 16-bit operands
 -- This ignores DX which I think is always an implicit operand (CHECK THIS)
+-- NOTE: This is unnecessary for the p66 operand which comes with PREF.66+
 insert_pref66 :: Instr -> Instr
 insert_pref66 i = case r16 || m16 || ax || imm16 of
   True  -> i{opcode=("PREF.66+ " ++ (opcode i))}
   False -> i
-  where r16   = "r16"   `elem` (opcode_terms i)
-        m16   = "m16"   `elem` (opcode_terms i)
-        ax    = "AX"    `elem` (opcode_terms i)
-        imm16 = "imm16" `elem` (opcode_terms i)
+  where r16   = "r16"   `elem` (operands i)
+        m16   = "m16"   `elem` (operands i)
+        ax    = "AX"    `elem` (operands i)
+        imm16 = "imm16" `elem` (operands i)
 
 -- Inserts PREF.66+ for all instructions with 16-bit operands
 insert_pref66s :: [Instr] -> [Instr]
@@ -169,6 +197,16 @@ insert_label_variant i
 -- Inserts a label variant for all instruction that take rel operands
 insert_label_variants :: [Instr] -> [Instr]
 insert_label_variants is = concat $ map insert_label_variant is
+
+-- Inserts a hint variant for conditional jumps
+insert_hint_variant :: Instr -> [Instr]
+insert_hint_variant i = case is_cond_jump i of
+  True -> [i,i{instruction=(instruction i ++ ", hint")}]
+  False -> [i]
+
+-- Inserts a hint variant for all conditional jumps
+insert_hint_variants :: [Instr] -> [Instr]
+insert_hint_variants is = concat $ map insert_hint_variant is
 
 -------------------------------------------------------------------------------
 -- Debugging
@@ -229,7 +267,6 @@ op2type "AX"       = "Ax"
 op2type "DX"       = "Dx"
 op2type "EAX"      = "Eax" 
 op2type "RAX"      = "Rax"
-op2type "mem"      = "M" -- Mem (this only appears in LDDQU
 op2type "m"        = "M" -- error "?" -- 16 32 or 64 mem
 op2type "m8"       = "M8"
 op2type "m16"      = "M16"
@@ -262,20 +299,10 @@ op2type "0"        = "Zero"
 op2type "1"        = "One"
 op2type "3"        = "Three"
 op2type "mm"       = "Mm"
-op2type "mm1"      = "Mm"
-op2type "mm2"      = "Mm"
 op2type "xmm"      = "Xmm"
-op2type "xmm1"     = "Xmm"
-op2type "xmm2"     = "Xmm"
-op2type "xmm3"     = "Xmm"
-op2type "xmm4"     = "Xmm"
 op2type "<XMM0>"   = "Xmm0"
-op2type "ymm1"     = "Ymm"
-op2type "ymm2"     = "Ymm"
-op2type "ymm3"     = "Ymm"
-op2type "ymm4"     = "Ymm"
+op2type "ymm"      = "Ymm"
 op2type "ST"       = "St0"
-op2type "ST(0)"    = "St0"
 op2type "ST(i)"    = "St"
 op2type "rel8"     = "Rel8"
 op2type "rel32"    = "Rel32"
@@ -296,7 +323,8 @@ op2type "far"      = "Far"
 op2type "norexr8"  = "NoRexR8"
 op2type "label8"   = "Label8"
 op2type "label32"  = "Label32"
-op2type o = error $ "Unrecognized operand type: " ++ o
+op2type "hint"     = "Hint"
+op2type o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
 
 -- Separate cpuid feature flags
 flags :: Instr -> [String]
@@ -310,6 +338,38 @@ is_cond_jump i = let mn = raw_mnemonic i in
 -- Is this an unconditional jump?
 is_uncond_jump :: Instr -> Bool
 is_uncond_jump i = raw_mnemonic i == "JMP"
+
+-- Returns true for memory operands
+mem_op :: String -> Bool
+mem_op "m"        = True
+mem_op "m8"       = True
+mem_op "m16"      = True
+mem_op "m32"      = True
+mem_op "m64"      = True
+mem_op "m128"     = True
+mem_op "m256"     = True
+mem_op "m16&64"   = True
+mem_op "m16:16"   = True
+mem_op "m16:32"   = True
+mem_op "m16:64"   = True
+mem_op "m16int"   = True
+mem_op "m32int"   = True
+mem_op "m64int"   = True
+mem_op "m80bcd"   = True
+mem_op "m32fp"    = True
+mem_op "m64fp"    = True
+mem_op "m80fp"    = True
+mem_op "m2byte"   = True
+mem_op "m14byte"  = True
+mem_op "m28byte"  = True
+mem_op "m94byte"  = True
+mem_op "m108byte" = True
+mem_op "m512byte" = True
+mem_op _ = False
+
+-- Does this instruction have a memory operands?
+mem_index :: Instr -> Maybe Int
+mem_index i = findIndex mem_op (operands i) 
 
 -------------------------------------------------------------------------------
 -- code/ codegen
@@ -492,12 +552,44 @@ assm_src_defn i = "void Assembler::" ++
 
 -- AVX instruction definition
 assm_avx_defn :: Instr -> String
-assm_avx_defn i = "// AVX Instruction\n" ++
+assm_avx_defn i = "// AVX Instruction: \n" ++
                   "// TODO...\n"
 
 -- Other instruction definition
 assm_oth_defn :: Instr -> String
-assm_oth_defn i = "// Non-AVX Instruction\n"
+assm_oth_defn i = "// Non-AVX Instruction: \n" ++
+                  pref1 i ++
+                  pref2_seg i ++ pref2_hint i ++
+                  pref3 i ++
+                  pref4 i 
+
+-- Emits code for Prefix Group 1 (does nothing -- these are encoded explicitly)
+pref1 :: Instr -> String
+pref1 i = "// No Prefix Group 1\n"
+
+-- Emits code for Prefix Group 2 (segment overrides)
+pref2_seg :: Instr -> String
+pref2_seg i = case mem_index i of
+  (Just idx) -> "pref_group2(arg" ++ (show idx) ++ ");\n"
+  Nothing -> "// No Prefix Group 2 (segment override)\n"
+
+-- Emits code for Prefix Group 2 (hint)
+pref2_hint :: Instr -> String
+pref2_hint i = case "hint" `elem` (operands i) of
+  True -> "pref_group2(arg1);\n"
+  False -> "// No Prefix Group 2 (hint)\n"
+
+-- Emits code for Prefix Group 3 (operand size override)
+pref3 :: Instr -> String
+pref3 i = case "PREF.66+" `elem` (opcode_terms i) of
+  True -> "pref_group3();\n"
+  False -> "// No Prefix Group 3\n"
+
+-- Emits code for Prefix Group 4 (address size override)
+pref4 :: Instr -> String
+pref4 i = case mem_index i of
+  (Just idx) -> "pref_group4(arg" ++ (show idx) ++ ");\n"
+  Nothing -> "// No Prefix Group 4\n"
 
 -- Assembler src definitions
 assm_src_defns :: [Instr] -> String
@@ -520,7 +612,6 @@ test_operand "AX"       = ["%ax"]
 test_operand "DX"       = ["%dx"]
 test_operand "EAX"      = ["%eax"]
 test_operand "RAX"      = ["%rax"]
-test_operand "mem"      = ["(%eax)"]
 test_operand "m"        = ["(%eax)"]
 test_operand "m8"       = ["(%eax)"]
 test_operand "m16"      = ["(%eax)"]
@@ -553,20 +644,10 @@ test_operand "0"        = ["$0x0"]
 test_operand "1"        = ["$0x1"]
 test_operand "3"        = ["$0x3"]
 test_operand "mm"       = ["%mm0","%mm7"]
-test_operand "mm1"      = ["%mm0","%mm7"]
-test_operand "mm2"      = ["%mm0","%mm7"]
 test_operand "xmm"      = ["%xmm0"]
-test_operand "xmm1"     = ["%xmm0"]
-test_operand "xmm2"     = ["%xmm0"]
-test_operand "xmm3"     = ["%xmm0"]
-test_operand "xmm4"     = ["%xmm0"]
 test_operand "<XMM0>"   = ["%xmm0"]
-test_operand "ymm1"     = ["%ymm0"]
-test_operand "ymm2"     = ["%ymm0"]
-test_operand "ymm3"     = ["%ymm0"]
-test_operand "ymm4"     = ["%ymm0"]
+test_operand "ymm"     = ["%ymm0"]
 test_operand "ST"       = ["%st(0)"]
-test_operand "ST(0)"    = ["%st(0)"]
 test_operand "ST(i)"    = ["%st(1)"]
 test_operand "rel8"     = ["0x1"]
 test_operand "rel32"    = ["0x1"]
@@ -587,7 +668,8 @@ test_operand "far"      = []
 test_operand "norexr8"  = []
 test_operand "label8"   = [".L0"]
 test_operand "label32"  = [".L0"]
-test_operand o = error $ "Unrecognized operand type: " ++ o
+test_operand "hint"     = []
+test_operand o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
 
 -- Generates a list of test operands for an instruction
 test_operands :: Instr -> [String]
@@ -610,12 +692,14 @@ test_instrs is = intercalate "\n" $ concat $ map test_instr is
 main :: IO ()		
 main = do args <- getArgs
           file <- readFile $ head args
-          let is = insert_label_variants $
+          let is = insert_hint_variants $
+                   insert_label_variants $
                    insert_pref66s $ 
                    remove_ambiguity $
                    fix_rex_rows $
                    remove_no_reg_rex $ 
                    x64 $
+                   fix_ops $ 
                    flatten_instrs $ 
                    remove_format $ 
                    read_instrs file
@@ -636,3 +720,5 @@ main = do args <- getArgs
           writeFile "opcode.enum"       $ opcode_enums is
           writeFile "opcode.att"        $ att_mnemonics is
           writeFile "test.s"            $ test_instrs is					
+          mapM_ print $ uniq_opc_terms is
+

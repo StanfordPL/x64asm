@@ -9,6 +9,7 @@
 #include "src/code/code.h"
 #include "src/code/cr.h"
 #include "src/code/dr.h"
+#include "src/code/hint.h"
 #include "src/code/imm.h"
 #include "src/code/instruction.h"
 #include "src/code/label.h"
@@ -40,7 +41,6 @@ class Assembler {
 
 		// .. add additional output methods here
 
-		// Type-safe Interface
 		#include "src/assembler/assembler.decl"
 
 		inline void bind(Label8 label) {
@@ -51,7 +51,6 @@ class Assembler {
 			// TODO...
 		}
 
-		// Type-unsafe Interface
 		void assemble(const Instruction& instr) { /* TODO */ }
 
 		inline void assemble(const Code& code) {

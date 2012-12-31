@@ -13,6 +13,7 @@
 #include "src/code/cr.h"
 #include "src/code/dr.h"
 #include "src/code/eflag.h"
+#include "src/code/hint.h"
 #include "src/code/imm.h"
 #include "src/code/instruction.h"
 #include "src/code/label.h"
