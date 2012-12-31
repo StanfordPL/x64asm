@@ -13,6 +13,10 @@ inline void emit(unsigned char c) {
 	// TODO
 }
 
+inline void pref_group1(unsigned char c) {
+	emit(c);
+}
+
 inline void pref_group2(const M m) {
 	static unsigned char pref[6] {0x26, 0x2e, 0x36, 0x3e, 0x64, 0x65};
 	if ( !m.null_seg() )
@@ -30,6 +34,17 @@ inline void pref_group3() {
 inline void pref_group4(const M m) {
 	if ( m.get_addr_or() )
 		emit(0x67);
+}
+
+inline void opcode(size_t size, unsigned long bytes) {
+	assert(size > 0 && size < 4);
+	// Emit bytes
+}
+
+inline void opcode(size_t size, unsigned long bytes, uint64_t code) {
+	assert(size > 0 && size < 4);
+	// Add code to bytes
+	// Emit bytes
 }
 
 #if 0

@@ -134,6 +134,7 @@ remove_no_reg_rex is = filter keep is
                  ("r8" `elem` (operands i))
 
 -- Remove REX+ from opcode terms
+-- TODO -- Should I be doing this?
 remove_rex :: Instr -> Instr
 remove_rex i = i{opcode=o}
   where o = intercalate " " $ filter (\x -> x /= "REX+") (opcode_terms i)
@@ -243,7 +244,52 @@ ambig_decls_pretty is = map pretty $ ambig_decls is
 
 -- Separate opcode terms
 opcode_terms :: Instr -> [String]
-opcode_terms i = splitOn " " (opcode i)
+opcode_terms i = map up $ splitOn " " (opcode i)
+
+-- Is this opcode term a prefix?
+-- Does it refer to bytes which must appear before the rex prefix?
+-- 66 is a mandatory prefix with different semantics from PREF.66+.
+-- Ditto for F2 and F3 which are otherwise REP prefixes.
+is_prefix :: String -> Bool
+is_prefix "PREF.66+" = True
+is_prefix "REX.W+" = True
+is_prefix "REX.R+" = True
+is_prefix "66" = True
+is_prefix "F2" = True
+is_prefix "F3" = True
+is_prefix _ = False
+
+-- Is this opcode term a suffix?
+is_suffix :: String -> Bool
+is_suffix ('+':_) = True
+is_suffix ('/':_) = True
+is_suffix ('I':_) = True
+is_suffix _ = False
+
+-- Extracts opcode prefix bytes
+opcode_prefix :: Instr -> [String]
+opcode_prefix i = takeWhile is_prefix $ opcode_terms i
+
+-- Extracts opcode bytes (non rex prefix or suffix terms) from opcode terms
+opcode_bytes :: Instr -> [String]
+opcode_bytes i = (dropWhile is_prefix) . (takeWhile not_suffix) $ ts
+  where not_suffix t = not $ is_suffix t
+        ts = opcode_terms i
+
+-- Extracts opcode suffix bytes
+opcode_suffix :: Instr -> [String]
+opcode_suffix i = (dropWhile is_prefix) . (dropWhile not_suffix) $ ts
+  where not_suffix t = not $ is_suffix t
+        ts = opcode_terms i
+
+-- Is this a register coded opcode instruction?
+is_register_coded :: Instr -> Bool
+is_register_coded i
+  | "+RB" `elem` opcode_suffix i = True
+  | "+RW" `elem` opcode_suffix i = True
+  | "+RD" `elem` opcode_suffix i = True
+  | "+RO" `elem` opcode_suffix i = True
+  | otherwise = False
 
 -- Extracts raw mnemonic from instruction
 raw_mnemonic :: Instr -> String
@@ -559,37 +605,64 @@ assm_avx_defn i = "// AVX Instruction: \n" ++
 assm_oth_defn :: Instr -> String
 assm_oth_defn i = "// Non-AVX Instruction: \n" ++
                   pref1 i ++
-                  pref2_seg i ++ pref2_hint i ++
+                  pref2 i ++ 
                   pref3 i ++
-                  pref4 i 
+                  pref4 i ++
+                  rex i ++
+                  opc i ++
+                  modrm_sib i ++
+                  disp_imm i
 
--- Emits code for Prefix Group 1 (does nothing -- these are encoded explicitly)
+-- Emits code for Prefix Group 1
+-- This doesn't check for the lock prefix which we treat as an opcode
 pref1 :: Instr -> String
-pref1 i = "// No Prefix Group 1\n"
+pref1 i 
+  | "F2" `elem` opcode_terms i = "pref_group1(0xf2);\n"
+  | "F3" `elem` opcode_terms i = "pref_group1(0xf3);\n"
+	| otherwise = "// No Prefix Group 1\n"
 
--- Emits code for Prefix Group 2 (segment overrides)
-pref2_seg :: Instr -> String
-pref2_seg i = case mem_index i of
-  (Just idx) -> "pref_group2(arg" ++ (show idx) ++ ");\n"
-  Nothing -> "// No Prefix Group 2 (segment override)\n"
-
--- Emits code for Prefix Group 2 (hint)
-pref2_hint :: Instr -> String
-pref2_hint i = case "hint" `elem` (operands i) of
-  True -> "pref_group2(arg1);\n"
-  False -> "// No Prefix Group 2 (hint)\n"
+-- Emits code for Prefix Group 2
+pref2 :: Instr -> String
+pref2 i
+  | "hint" `elem` operands i = "pref_group2(arg1);\n"
+	| otherwise = case mem_index i of
+                     (Just idx) -> "pref_group2(arg" ++ (show idx) ++ ");\n"
+                     Nothing -> "// No Prefix Group 2\n"
 
 -- Emits code for Prefix Group 3 (operand size override)
 pref3 :: Instr -> String
-pref3 i = case "PREF.66+" `elem` (opcode_terms i) of
-  True -> "pref_group3();\n"
-  False -> "// No Prefix Group 3\n"
+pref3 i 
+  | "PREF.66+" `elem` opcode_terms i = "pref_group3();\n"
+  | "66" `elem` opcode_terms i = "pref_group3();\n"
+  | otherwise = "// No Prefix Group 3\n"
 
 -- Emits code for Prefix Group 4 (address size override)
 pref4 :: Instr -> String
 pref4 i = case mem_index i of
   (Just idx) -> "pref_group4(arg" ++ (show idx) ++ ");\n"
   Nothing -> "// No Prefix Group 4\n"
+
+-- Emits code for REX Prefix 
+-- TODO -- Finish this!
+rex :: Instr -> String
+rex i = "// TODO - REX Prefix\n"
+
+-- Emits code for opcode bytes
+opc :: Instr -> String
+opc i = "opcode(" ++ (size i) ++ "," ++ (bytes i) ++ (code i) ++ ");\n"
+  where size i = show $ length (opcode_bytes i)
+        bytes i = "0x" ++ (concat (map low (opcode_bytes i)))
+        code i = case is_register_coded i of
+                      True -> ",\"TODO\""
+                      False -> ""
+
+-- Emits code for mod/rm and sib bytes
+modrm_sib :: Instr -> String
+modrm_sib i = "// TODO - mod r/m sib bytes\n"
+
+-- Emits code for displacement or immediate bytes
+disp_imm :: Instr -> String
+disp_imm i = "// TODO - Displacement/Immediate bytes\n"
 
 -- Assembler src definitions
 assm_src_defns :: [Instr] -> String
@@ -720,5 +793,5 @@ main = do args <- getArgs
           writeFile "opcode.enum"       $ opcode_enums is
           writeFile "opcode.att"        $ att_mnemonics is
           writeFile "test.s"            $ test_instrs is					
-          mapM_ print $ uniq_opc_terms is
+          mapM_ print $ map opcode_terms is
 
