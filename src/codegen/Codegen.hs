@@ -292,6 +292,16 @@ is_register_coded i
   | "+I"  `elem` opcode_suffix i = True
   | otherwise = False
 
+-- Returns true for an operand which is a register code parameter
+is_register_code_arg :: String -> Bool
+is_register_code_arg "rexr8" = True
+is_register_code_arg "norexr8" = True
+is_register_code_arg "r16" = True
+is_register_code_arg "r32" = True
+is_register_code_arg "r64" = True
+is_register_code_arg "ST(i)" = True
+is_register_code_arg _ = False
+
 -- Extracts raw mnemonic from instruction
 raw_mnemonic :: Instr -> String
 raw_mnemonic i = head $ words $ instruction i
@@ -657,8 +667,11 @@ rex i = "// TODO - REX Prefix\n"
 opc :: Instr -> String
 opc i = "opcode(" ++ (bytes i) ++ (code i) ++ ");\n"
   where bytes i = intercalate "," $ map (("0x"++).low) (opcode_bytes i)
+        idx i = case findIndex is_register_code_arg (operands i) of
+                     (Just n) -> show n
+                     Nothing -> "[" ++ (intercalate "," (operands i)) ++ "]"
         code i = case is_register_coded i of
-                      True -> ",Operand(100)"
+                      True -> ",arg" ++ idx i
                       False -> ""
 
 -- Emits code for mod/rm and sib bytes
@@ -798,5 +811,5 @@ main = do args <- getArgs
           writeFile "opcode.enum"       $ opcode_enums is
           writeFile "opcode.att"        $ att_mnemonics is
           writeFile "test.s"            $ test_instrs is					
-          mapM_ print $ map opcode_bytes is
+          mapM_ print $ map operands is
 

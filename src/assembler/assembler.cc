@@ -63,62 +63,6 @@ inline void emit(unsigned char*& buf, unsigned char c) {
 	(*buf++) = c;
 }
 
-inline void emit_mem_prefix(unsigned char*& buf, M m) {
-	if ( m.get_addr_or() )
-		emit(buf, 0x67);
-}
-
-inline void emit_prefix(unsigned char*& buf, unsigned char c) {
-	emit(buf, c);
-}
-
-inline void emit_prefix(unsigned char*& buf, unsigned char c1,
-		                    unsigned char c2) {
-	emit(buf, c1);
-	emit(buf, c2);
-}
-
-inline void emit_prefix(unsigned char*& buf, unsigned char c1,
-		                    unsigned char c2, unsigned char c3) {
-	emit(buf, c1);
-	emit(buf, c2);
-	emit(buf, c3);
-}
-
-inline void emit_opcode(unsigned char*& buf, unsigned char c) {
-	emit(buf, c);
-}
-
-inline void emit_opcode(unsigned char*& buf, unsigned char c, Operand delta) {
-	emit(buf, c + (0x7 & delta));
-}
-
-inline void emit_opcode(unsigned char*& buf, unsigned char c1, 
-		                    unsigned char c2) {
-	emit(buf, c1);
-	emit(buf, c2);
-}
-
-inline void emit_opcode(unsigned char*& buf, unsigned char c1, 
-		                    unsigned char c2, Operand delta) {
-	emit(buf, c1);
-	emit(buf, c2 + (0x7 & delta));
-}
-
-inline void emit_opcode(unsigned char*& buf, unsigned char c1, 
-												unsigned char c2, unsigned char c3) {
-	emit(buf, c1);
-	emit(buf, c2);
-	emit(buf, c3);
-}
-
-inline void emit_opcode(unsigned char*& buf, unsigned char c1, 
-		                    unsigned char c2, unsigned char c3, Operand delta) {
-	emit(buf, c1);
-	emit(buf, c2);
-	emit(buf, c3 + (0x7 & delta));
-}
-
 inline void emit_imm(unsigned char*& buf, Imm8 imm) {
 	emit(buf, imm & 0xff); 
 }
