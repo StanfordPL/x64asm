@@ -58,6 +58,44 @@ inline void opcode(byte o1, byte o2, byte o3) {
 	emit(o3);
 }
 
+inline void disp_imm(Imm8 i) {
+}
+
+inline void disp_imm(Imm16 i) {
+}
+
+inline void disp_imm(Imm32 i) {
+}
+
+inline void disp_imm(Imm64 i) {
+}
+
+inline void disp_imm(Moffs8 m) {
+}
+
+inline void disp_imm(Moffs16 m) {
+}
+
+inline void disp_imm(Moffs32 m) {
+}
+
+inline void disp_imm(Moffs64 m) {
+}
+
+inline void disp_imm(Rel8 r) {
+}
+
+inline void disp_imm(Rel32 r) {
+}
+
+inline void disp_imm(Label8 l) {
+}
+
+inline void disp_imm(Label32 l) {
+}
+
+
+
 #if 0
 inline void emit(unsigned char*& buf, unsigned char c) {
 	(*buf++) = c;

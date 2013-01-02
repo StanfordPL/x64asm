@@ -401,9 +401,45 @@ mem_op "m108byte" = True
 mem_op "m512byte" = True
 mem_op _ = False
 
+-- Returns true for immediate operands
+imm_op :: String -> Bool
+imm_op "imm8" = True
+imm_op "imm16" = True
+imm_op "imm32" = True
+imm_op "imm64" = True
+imm_op _ = False
+
+-- Returns true for moffs operands
+moffs_op :: String -> Bool
+moffs_op "moffs8" = True
+moffs_op "moffs16" = True
+moffs_op "moffs32" = True
+moffs_op "moffs64" = True
+moffs_op _ = False
+
+-- Returns true for rel operands
+rel_op :: String -> Bool
+rel_op "rel8" = True
+rel_op "rel32" = True
+rel_op _ = False
+
+-- Returns true for label operands
+label_op :: String -> Bool
+label_op "label8" = True
+label_op "label32" = True
+label_op _ = False
+
+-- Returns true for any form of displacement or immediate operand
+disp_imm_op :: String -> Bool
+disp_imm_op o = imm_op o || moffs_op o || rel_op o || label_op o
+
 -- Does this instruction have a memory operands?
 mem_index :: Instr -> Maybe Int
 mem_index i = findIndex mem_op (operands i) 
+
+-- Does this instruction have a displacement or immediate operand
+disp_imm_index :: Instr -> Maybe Int
+disp_imm_index i = findIndex disp_imm_op (operands i)
 
 -------------------------------------------------------------------------------
 -- Debugging
@@ -681,7 +717,9 @@ modrm_sib i = "// TODO - mod r/m sib bytes\n"
 
 -- Emits code for displacement or immediate bytes
 disp_imm :: Instr -> String
-disp_imm i = "// TODO - Displacement/Immediate bytes\n"
+disp_imm i = case disp_imm_index i of
+  (Just idx) -> "disp_imm(arg" ++ (show idx) ++ ");\n"
+  Nothing -> "// No Displacement/Immediate\n"
 
 -- Assembler src definitions
 assm_src_defns :: [Instr] -> String
