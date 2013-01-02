@@ -36,7 +36,9 @@ int main() {
 	cout << "NOW THIS!" << endl;
 	AttWriter::write(cout, rax);
 	cout << endl;
-	AttWriter::write(cout, M128(rax, rbp, Scale::TIMES_8));
+	M128 m(rax, rdi, Scale::TIMES_2);
+	cout << m << endl;
+	cout << hex << m.val_ << endl;
 	cout << endl;
 
 	return 0;

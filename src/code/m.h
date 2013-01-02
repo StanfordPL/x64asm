@@ -203,7 +203,7 @@ class M : public Operand {
 
 		inline uint64_t concat(uint64_t s, uint64_t b, uint64_t i, Scale sc, 
 				                   uint64_t d, uint64_t ao) {
-			return d | (s << 32) | (i << 34) | (b << 39) | ((uint64_t) sc << 44) | 
+			return d | ((uint64_t) sc << 32) | (i << 34) | (b << 39) | (s << 44) | 
 				     (ao << 48);
 		}
 };
