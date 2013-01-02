@@ -215,7 +215,7 @@ insert_hint_variants is = concat $ map insert_hint_variant is
 
 -- Separate opcode terms
 opcode_terms :: Instr -> [String]
-opcode_terms i = map up $ splitOn " " (opcode i)
+opcode_terms i = splitOn " " (opcode i)
 
 -- Is this opcode term a prefix?
 -- Does it refer to bytes which must appear before the rex prefix?
@@ -234,7 +234,8 @@ is_prefix _ = False
 is_suffix :: String -> Bool
 is_suffix ('+':_) = True
 is_suffix ('/':_) = True
-is_suffix ('I':_) = True
+is_suffix ('i':_) = True
+is_suffix ('c':_) = True
 is_suffix _ = False
 
 -- Extracts opcode prefix bytes
@@ -811,5 +812,5 @@ main = do args <- getArgs
           writeFile "opcode.enum"       $ opcode_enums is
           writeFile "opcode.att"        $ att_mnemonics is
           writeFile "test.s"            $ test_instrs is					
-          mapM_ print $ map operands is
+          mapM_ print $ uniq_opc_terms is
 

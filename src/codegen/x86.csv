@@ -416,7 +416,7 @@ VEX.256.0F.WIG 5A /r	VCVTPS2PD ymm1, xmm2/m128	V	V	AVX	vcvtps2pd	Convert four pa
 0F 2D /r	CVTPS2PI mm, xmm/m64	V	V		cvtps2pi	Convert two packed single-precision floating- point values from xmm/m64 to two packed signed doubleword integers in mm.
 						
 F2 0F 2D /r	CVTSD2SI r32, xmm/m64	V	V	SSE2	cvtsd2si	Convert one double-precision floating-point value from xmm/m64 to one signed doubleword integer r32.
-F2 REX.w+ 0F 2D /r	CVTSD2SI r64, xmm/m64	V	NE	SSE2	cvtsd2si	Convert one double-precision floating-point value from xmm/m64 to one signed quadword integer sign-extended into r64.
+F2 REX.W+ 0F 2D /r	CVTSD2SI r64, xmm/m64	V	NE	SSE2	cvtsd2si	Convert one double-precision floating-point value from xmm/m64 to one signed quadword integer sign-extended into r64.
 VEX.LIG.F2.0F.W0 2D /r	VCVTSD2SI r32, xmm1/m64	V	V	AVX	vcvtsd2si	Convert one double precision floating-point value from xmm1/m64 to one signed doubleword integer r32.
 VEX.LIG.F2.0F.W1 2D /r	VCVTSD2SI r64, xmm1/m64	V	NE	AVX	vcvtsd2si	Convert one double precision floating-point value from xmm1/m64 to one signed quadword integer sign-extended into r64.
 						
@@ -424,12 +424,12 @@ F2 0F 5A /r	CVTSD2SS xmm1, xmm2/m64	V	V	SSE2	cvtsd2ss	Convert one double-precisi
 VEX.NDS.LIG.F2.0F.WIG 5A /r	VCVTSD2SS xmm1,xmm2, xmm3/m64	V	V	AVX	vcvtsd2ss	Convert one double-precision floating-point value in xmm3/m64 to one single-precision floating-point value and merge with high bits in xmm2.
 						
 F2 0F 2A /r	CVTSI2SD xmm, r/m32	V	V	SSE2	cvtsi2sd	Convert one signed doubleword integer from r/m32 to one double-precision floating-point value in xmm.
-F2 REX.w+ 0F 2A /r	CVTSI2SD xmm, r/m64	V	NE	SSE2	cvtsi2sd	Convert one signed quadword integer from r/m64 to one double-precision floating-point value in xmm.
+F2 REX.W+ 0F 2A /r	CVTSI2SD xmm, r/m64	V	NE	SSE2	cvtsi2sd	Convert one signed quadword integer from r/m64 to one double-precision floating-point value in xmm.
 VEX.NDS.LIG.F2.0F.W0 2A /r	VCVTSI2SD xmm1, xmm2, r/m32	V	V	AVX	vcvtsi2sd	Convert one signed doubleword integer from r/m32 to one double-precision floating-point value in xmm1.
 VEX.NDS.LIG.F2.0F.W1 2A /r	VCVTSI2SD xmm1, xmm2, r/m64	V	NE	AVX	vcvtsi2sd	Convert one signed quadword integer from r/m64 to one double-precision floating-point value in xmm1.
 						
 F3 0F 2A /r	CVTSI2SS xmm, r/m32	V	V	SSE	cvtsi2ss	Convert one signed doubleword integer from r/m32 to one single-precision floating-point value in xmm.
-F3 REX.w+ 0F 2A /r	CVTSI2SS xmm, r/m64	V	NE	SSE	cvtsi2ss	Convert one signed quadword integer from r/m64 to one single-precision floating-point value in xmm.
+F3 REX.W+ 0F 2A /r	CVTSI2SS xmm, r/m64	V	NE	SSE	cvtsi2ss	Convert one signed quadword integer from r/m64 to one single-precision floating-point value in xmm.
 VEX.NDS.LIG.F3.0F.W0 2A /r	VCVTSI2SS xmm1, xmm2, r/m32	V	V	AVX	vcvtsi2ss	Convert one signed doubleword integer from r/m32 to one single-precision floating-point value in xmm1.
 VEX.NDS.LIG.F3.0F.W1 2A /r	VCVTSI2SS xmm1, xmm2, r/m64	V	NE	AVX	vcvtsi2ss	Convert one signed quadword integer from r/m64 to one single-precision floating-point value in xmm1.
 						
@@ -437,7 +437,7 @@ F3 0F 5A /r	CVTSS2SD xmm1, xmm2/m32	V	V	SSE2	cvtss2sd	Convert one single-precisi
 VEX.NDS.LIG.F3.0F.WIG 5A /r	VCVTSS2SD xmm1, xmm2, xmm3/m32	V	V	AVX	vcvtss2sd	Convert one single-precision floating-point value in xmm3/m32 to one double-precision floating-point value and merge with high bits of xmm2.
 						
 F3 0F 2D /r	CVTSS2SI r32, xmm/m32	V	V	SSE	cvtss2si	Convert one single-precision floating-point value from xmm/m32 to one signed doubleword integer in r32.
-F3 REX.w+ 0F 2D /r	CVTSS2SI r64, xmm/m32	V	NE	SSE	cvtss2si	Convert one single-precision floating-point value from xmm/m32 to one signed quadword integer in r64.
+F3 REX.W+ 0F 2D /r	CVTSS2SI r64, xmm/m32	V	NE	SSE	cvtss2si	Convert one single-precision floating-point value from xmm/m32 to one signed quadword integer in r64.
 VEX.LIG.F3.0F.W0 2D /r	VCVTSS2SI r32, xmm1/m32	V	V	AVX	vcvtss2si	Convert one single-precision floating-point value from xmm1/m32 to one signed doubleword integer in r32.
 VEX.LIG.F3.0F.W1 2D /r	VCVTSS2SI r64, xmm1/m32	V	NE	AVX	vcvtss2si	Convert one single-precision floating-point value from xmm1/m32 to one signed quadword integer in r64.
 						
@@ -454,12 +454,12 @@ VEX.256.F3.0F.WIG 5B /r	VCVTTPS2DQ ymm1, ymm2/m256	V	V	AVX	vcvttps2dq	Convert ei
 0F 2C /r	CVTTPS2PI mm, xmm/m64	V	V		cvttps2pi	Convert two single-precision floating-point values from xmm/m64 to two signed doubleword signed integers in mm using truncation.
 						
 F2 0F 2C /r	CVTTSD2SI r32, xmm/m64	V	V	SSE2	cvttsd2si	Convert one double-precision floating-point value from xmm/m64 to one signed doubleword integer in r32 using truncation.
-F2 REX.w+ 0F 2C /r	CVTTSD2SI r64, xmm/m64	V	NE	SSE2	cvttsd2si	Convert one double precision floating-point value from xmm/m64 to one signedquadword integer in r64 using truncation.
+F2 REX.W+ 0F 2C /r	CVTTSD2SI r64, xmm/m64	V	NE	SSE2	cvttsd2si	Convert one double precision floating-point value from xmm/m64 to one signedquadword integer in r64 using truncation.
 VEX.LIG.F2.0F.W0 2C /r	VCVTTSD2SI r32, xmm1/m64	V	V	AVX	vcvttsd2si	Convert one double-precision floating-point value from xmm1/m64 to one signed doubleword integer in r32 using truncation.
 VEX.LIG.F2.0F.W1 2C /r	VCVTTSD2SI r64, xmm1/m64	V	NE	AVX	vcvttsd2si	Convert one double precision floating-point value from xmm1/m64 to one signed quadword integer in r64 using truncation.
 						
 F3 0F 2C /r	CVTTSS2SI r32, xmm/m32	V	V	SSE	cvttss2si	Convert one single-precision floating-point value from xmm/m32 to one signed doubleword integer in r32 using truncation.
-F3 REX.w+ 0F 2C /r	CVTTSS2SI r64, xmm/m32	V	NE	SSE	cvttss2si	Convert one single-precision floating-point value from xmm/m32 to one signed quadword integer in r64 using truncation.
+F3 REX.W+ 0F 2C /r	CVTTSS2SI r64, xmm/m32	V	NE	SSE	cvttss2si	Convert one single-precision floating-point value from xmm/m32 to one signed quadword integer in r64 using truncation.
 VEX.LIG.F3.0F.W0 2C /r	VCVTTSS2SI r32, xmm1/m32	V	V	AVX	vcvttss2si	Convert one single-precision floating-point value from xmm1/m32 to one signed doubleword integer in r32 using truncation.
 VEX.LIG.F3.0F.W1 2C /r	VCVTTSS2SI r64, xmm1/m32	V	NE	AVX	vcvttss2si	Convert one single-precision floating-point value from xmm1/m32 to one signed quadword integer in r64 using truncation.
 						
@@ -1880,50 +1880,50 @@ REX.W+ 0F C7 /6	RDRAND r64	V	I	RDRAND	rdrand	Read a 64-bit random number and sto
 0F 01 F9	RDTSCP	V	V		rdtscp	Read 64-bit time-stamp counter and 32-bit IA32_TSC_AUX value into EDX:EAX and ECX.
 						
 F3 6C	REP_INS m8, DX 	V	V		rep ins	Input (E)CX bytes from port DX into ES:[(E)DI].
-F3 REX.w+ 6C	REP_INS m8, DX	V	NE		rep ins	Input RCX bytes from port DX into [RDI].
+F3 REX.W+ 6C	REP_INS m8, DX	V	NE		rep ins	Input RCX bytes from port DX into [RDI].
 F3 6D	REP_INS m16, DX	V	V		rep ins	Input (E)CX words from port DX into ES:[(E)DI.]
 F3 6D	REP_INS m32, DX	V	V		rep ins	Input (E)CX doublewords from port DX into ES:[(E)DI].
-F3 REX.w+ 6D	REP_INS m32, DX	V	NE		rep ins	Input RCX default size from port DX into [RDI].
+F3 REX.W+ 6D	REP_INS m32, DX	V	NE		rep ins	Input RCX default size from port DX into [RDI].
 F3 A4	REP_MOVS m8, m8	V	V		rep movs	Move (E)CX bytes from DS:[(E)SI] to ES:[(E)DI].
-F3 REX.w+ A4	REP_MOVS m8, m8	V	NE		rep movs	Move RCX bytes from [RSI] to [RDI].
+F3 REX.W+ A4	REP_MOVS m8, m8	V	NE		rep movs	Move RCX bytes from [RSI] to [RDI].
 F3 A5	REP_MOVS m16, m16	V	V		rep movs	Move (E)CX words from DS:[(E)SI] to ES:[(E)DI].
 F3 A5	REP_MOVS m32, m32	V	V		rep movs	Move (E)CX doublewords from DS:[(E)SI] to ES:[(E)DI].
-F3 REX.w+ A5	REP_MOVS m64, m64	V	NE		rep movs	Move RCX quadwords from [RSI] to [RDI].
+F3 REX.W+ A5	REP_MOVS m64, m64	V	NE		rep movs	Move RCX quadwords from [RSI] to [RDI].
 F3 6E	REP_OUTS DX, m8	V	V		rep outs	Output (E)CX bytes from DS:[(E)SI] to port DX.
-F3 REX.w+ 6E	REP_OUTS DX, m8	V	NE		rep outs	Output RCX bytes from [RSI] to port DX.
+F3 REX.W+ 6E	REP_OUTS DX, m8	V	NE		rep outs	Output RCX bytes from [RSI] to port DX.
 F3 6F	REP_OUTS DX, m16	V	V		rep outs	Output (E)CX words from DS:[(E)SI] to port DX.
 F3 6F	REP_OUTS DX, m32	V	V		rep outs	Output (E)CX doublewords from DS:[(E)SI] to port DX.
-F3 REX.w+ 6F	REP_OUTS DX, m32	V	NE		rep outs	Output RCX default size from [RSI] to port DX.
+F3 REX.W+ 6F	REP_OUTS DX, m32	V	NE		rep outs	Output RCX default size from [RSI] to port DX.
 F3 AC	REP_LODS AL	V	V		rep lods	Load (E)CX bytes from DS:[(E)SI] to AL.
-F3 REX.w+ AC	REP_LODS AL	V	NE		rep lods	Load RCX bytes from [RSI] to AL.
+F3 REX.W+ AC	REP_LODS AL	V	NE		rep lods	Load RCX bytes from [RSI] to AL.
 F3 AD	REP_LODS AX	V	V		rep lods	Load (E)CX words from DS:[(E)SI] to AX.
 F3 AD	REP_LODS EAX	V	V		rep lods	Load (E)CX doublewords from DS:[(E)SI] to EAX.
-F3 REX.w+ AD	REP_LODS RAX	V	NE		rep lods	Load RCX quadwords from [RSI] to RAX.
+F3 REX.W+ AD	REP_LODS RAX	V	NE		rep lods	Load RCX quadwords from [RSI] to RAX.
 F3 AA	REP_STOS m8	V	V		rep stos	Fill (E)CX bytes at ES:[(E)DI] with AL.
-F3 REX.w+ AA	REP_STOS m8	V	NE		rep stos	Fill RCX bytes at [RDI] with AL.
+F3 REX.W+ AA	REP_STOS m8	V	NE		rep stos	Fill RCX bytes at [RDI] with AL.
 F3 AB	REP_STOS m16	V	V		rep stos	Fill (E)CX words at ES:[(E)DI] with AX.
 F3 AB	REP_STOS m32	V	V		rep stos	Fill (E)CX doublewords at ES:[(E)DI] with EAX.
-F3 REX.w+ AB	REP_STOS m64	V	NE		rep stos	Fill RCX quadwords at [RDI] with RAX.
+F3 REX.W+ AB	REP_STOS m64	V	NE		rep stos	Fill RCX quadwords at [RDI] with RAX.
 F3 A6	REPE_CMPS m8, m8	V	V		repe cmps	Find nonmatching bytes in ES:[(E)DI] and DS:[(E)SI].
-F3 REX.w+ A6	REPE_CMPS m8, m8	V	NE		repe cmps	Find non-matching bytes in [RDI] and [RSI].
+F3 REX.W+ A6	REPE_CMPS m8, m8	V	NE		repe cmps	Find non-matching bytes in [RDI] and [RSI].
 F3 A7	REPE_CMPS m16, m16	V	V		repe cmps	Find nonmatching words in ES:[(E)DI] and DS:[(E)SI].
 F3 A7	REPE_CMPS m32, m32	V	V		repe cmps	Find nonmatching doublewords in ES:[(E)DI] and DS:[(E)SI].
-F3 REX.w+ A7	REPE_CMPS m64, m64	V	NE		repe cmps	Find non-matching quadwords in [RDI] and [RSI].
+F3 REX.W+ A7	REPE_CMPS m64, m64	V	NE		repe cmps	Find non-matching quadwords in [RDI] and [RSI].
 F3 AE	REPE_SCAS m8	V	V		repe scas	Find non-AL byte starting at ES:[(E)DI].
-F3 REX.w+ AE	REPE_SCAS m8	V	NE		repe scas	Find non-AL byte starting at [RDI].
+F3 REX.W+ AE	REPE_SCAS m8	V	NE		repe scas	Find non-AL byte starting at [RDI].
 F3 AF	REPE_SCAS m16	V	V		repe scas	Find non-AX word starting at ES:[(E)DI].
 F3 AF	REPE_SCAS m32	V	V		repe scas	Find non-EAX doubleword starting at ES:[(E)DI].
-F3 REX.w+ AF	REPE_SCAS m64	V	NE		repe scas	Find non-RAX quadword starting at [RDI].
+F3 REX.W+ AF	REPE_SCAS m64	V	NE		repe scas	Find non-RAX quadword starting at [RDI].
 F2 A6	REPNE_CMPS m8, m8	V	V		repne cmps	Find matching bytes in ES:[(E)DI] and DS:[(E)SI].
-F2 REX.w+ A6	REPNE_CMPS m8, m8	V	NE		repne cmps	Find matching bytes in [RDI] and [RSI].
+F2 REX.W+ A6	REPNE_CMPS m8, m8	V	NE		repne cmps	Find matching bytes in [RDI] and [RSI].
 F2 A7	REPNE_CMPS m16, m16	V	V		repne cmps	Find matching words in ES:[(E)DI] and DS:[(E)SI].
 F2 A7	REPNE_CMPS m32, m32	V	V		repne cmps	Find matching doublewords in ES:[(E)DI] and DS:[(E)SI].
-F2 REX.w+ A7	REPNE_CMPS m64, m64	V	NE		repne cmps	Find matching doublewords in [RDI] and [RSI].
+F2 REX.W+ A7	REPNE_CMPS m64, m64	V	NE		repne cmps	Find matching doublewords in [RDI] and [RSI].
 F2 AE	REPNE_SCAS m8	V	V		repne scas	Find AL, starting at ES:[(E)DI].
-F2 REX.w+ AE	REPNE_SCAS m8	V	NE		repne scas	Find AL, starting at [RDI].
+F2 REX.W+ AE	REPNE_SCAS m8	V	NE		repne scas	Find AL, starting at [RDI].
 F2 AF	REPNE_SCAS m16	V	V		repne scas	Find AX, starting at ES:[(E)DI].
 F2 AF	REPNE_SCAS m32	V	V		repne scas	Find EAX, starting at ES:[(E)DI].
-F2 REX.w+ AF	REPNE_SCAS m64	V	NE		repne scas	Find RAX, starting at [RDI].
+F2 REX.W+ AF	REPNE_SCAS m64	V	NE		repne scas	Find RAX, starting at [RDI].
 						
 C3	RET	V	V		retq	Near return to calling procedure.
 CB	RET far	V	V		lretl	Far return to calling procedure.
