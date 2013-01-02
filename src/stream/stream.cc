@@ -252,6 +252,16 @@ ostream& operator<<(ostream& os, const Opcode o) {
 	return generic_write(os, o);
 }
 
+ostream& operator<<(ostream& os, const NoRexR8 r) {
+	check(os, r);
+	return generic_write(os, r);
+}
+
+ostream& operator<<(ostream& os, const RexR8 r) {
+	check(os, r);
+	return generic_write(os, r);
+}
+
 ostream& operator<<(ostream& os, const Rl r) {
 	check(os, r);
 	return generic_write(os, r);

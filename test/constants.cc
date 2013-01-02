@@ -20,11 +20,11 @@ int main() {
 	all(vector<Eflag>{{cf,pf,af,zf,sf,tf,if_,df,of,iopl0,iopl1,nt,rf,vm,ac,vif,vip,id}});
 	all(vector<Mm>{{mm0,mm1,mm2,mm3,mm4,mm5,mm6,mm7}});
 	all(vector<Imm8>{{zero,one,three}});
+	all(vector<NoRexR8>{{al,cl,dl,bl,ah,ch,dh,bh}});
+	all(vector<RexR8>{{al,cl,dl,bl,spl,bpl,sil,dil,r8b,r9b,r10b,r11b,r12b,r13b,r14b,r15b}});
 	all(vector<Rh>{{ah,ch,dh,bh}});
 	all(vector<Rl>{{al,cl,dl,bl}});
-	/*
 	all(vector<Rb>{{spl,bpl,sil,dil,r8b,r9b,r10b,r11b,r12b,r13b,r14b,r15b}});
-*/
 	all(vector<R16>{{ax,cx,dx,bx,sp,bp,si,di,r8w,r9w,r10w,r11w,r12w,r13w,r14w,r15w}});
 	all(vector<R32>{{eax,ecx,edx,ebx,esp,ebp,esi,edi,r8d,r9d,r10d,r11d,r12d,r13d,r14d,r15d}});
 	all(vector<R64>{{rax,rcx,rdx,rbx,rsp,rbp,rsi,rdi,r8,r9,r10,r11,r12,r13,r14,r15}});

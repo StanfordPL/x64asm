@@ -79,6 +79,9 @@ std::ostream& operator<<(std::ostream& os, const x64::unset_transform& m);
 std::istream& operator>>(std::istream& is, x64::Code& c);
 
 std::ostream& operator<<(std::ostream& os, const x64::Code& c);
+std::ostream& operator<<(std::ostream& os, const x64::Instruction& i);
+std::ostream& operator<<(std::ostream& os, const x64::Opcode o);
+
 std::ostream& operator<<(std::ostream& os, const x64::Cr0234 c);
 std::ostream& operator<<(std::ostream& os, const x64::Cr8 c);
 std::ostream& operator<<(std::ostream& os, const x64::Dr d);
@@ -87,12 +90,12 @@ std::ostream& operator<<(std::ostream& os, const x64::Imm8 i);
 std::ostream& operator<<(std::ostream& os, const x64::Imm16 i);
 std::ostream& operator<<(std::ostream& os, const x64::Imm32 i);
 std::ostream& operator<<(std::ostream& os, const x64::Imm64 i);
-std::ostream& operator<<(std::ostream& os, const x64::Instruction& i);
 std::ostream& operator<<(std::ostream& os, const x64::Label l);
 std::ostream& operator<<(std::ostream& os, const x64::M m);
 std::ostream& operator<<(std::ostream& os, const x64::Mm m);
 std::ostream& operator<<(std::ostream& os, const x64::Moffs m);
-std::ostream& operator<<(std::ostream& os, const x64::Opcode o);
+std::ostream& operator<<(std::ostream& os, const x64::NoRexR8 r);
+std::ostream& operator<<(std::ostream& os, const x64::RexR8 r);
 std::ostream& operator<<(std::ostream& os, const x64::Rl r);
 std::ostream& operator<<(std::ostream& os, const x64::Rh r);
 std::ostream& operator<<(std::ostream& os, const x64::Rb r);

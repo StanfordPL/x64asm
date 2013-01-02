@@ -148,11 +148,11 @@ class Checker {
 		}
 
 		static inline bool check(const NoRexR8 r) {
-			return ((Rl*)&r)->val_ < 16;
+			return check((Rl)r) || check((Rh)r);
 		}
 
 		static inline bool check(const RexR8 r) {
-			return ((Rl*)&r)->val_ < 8;
+			return check((Rl)r) || check((Rb)r);
 		}
 
 		static inline bool check(const Rl r) {
@@ -164,7 +164,7 @@ class Checker {
 		}
 
 		static inline bool check(const Rb r) {
-			return r.val_ >= 8 && r.val_ < 16;
+			return r.val_ >= 4 && r.val_ < 16;
 		}
 
 		static inline bool check(const Al r) {
@@ -247,7 +247,7 @@ class Checker {
 		}
 
 		static inline bool check(const Ymm y) {
-			return y.val_ == 0;
+			return y.val_ < 16;
 		}
 };
 
