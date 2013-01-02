@@ -210,35 +210,6 @@ insert_hint_variants :: [Instr] -> [Instr]
 insert_hint_variants is = concat $ map insert_hint_variant is
 
 -------------------------------------------------------------------------------
--- Debugging
--------------------------------------------------------------------------------
-
--- Debugging: Generate a list of unique mnemonics
-uniq_mnemonics :: [Instr] -> [String]
-uniq_mnemonics is = nub $ map raw_mnemonic is
-
--- Debugging: Generate a list of unique operands
-uniq_operands :: [Instr] -> [String]
-uniq_operands is = nub $ concat $ map nub $ map operands is 
-
--- Debugging: Generate a list of unique opcode terms
-uniq_opc_terms :: [Instr] -> [String]
-uniq_opc_terms is = nub $ concat $ map opcode_terms is
-
--- Debugging: Generate a list of ambiguous declarations
-ambig_decls :: [Instr] -> [[Instr]]
-ambig_decls is = filter ambig $ groupBy eq $ sortBy srt is
-  where srt x y = compare (assm_decl x) (assm_decl y)
-        eq x y = (assm_decl x) == (assm_decl y)	
-        ambig x = (length x) > 1
-
--- Debugging: Pretty print version of ambig_decls
-ambig_decls_pretty :: [Instr] -> [String]
-ambig_decls_pretty is = map pretty $ ambig_decls is
-  where pretty xs = (instruction (head xs)) ++ ":" ++ (concat (map elem xs))
-        elem x = "\n\t" ++ (opcode x)
-
--------------------------------------------------------------------------------
 -- Views (transformations on row data into usable forms)
 -------------------------------------------------------------------------------
 
@@ -294,7 +265,7 @@ is_register_coded i
 
 -- Returns true for an operand which is a register code parameter
 is_register_code_arg :: String -> Bool
-is_register_code_arg "rexr8" = True
+is_register_code_arg "r8" = True
 is_register_code_arg "norexr8" = True
 is_register_code_arg "r16" = True
 is_register_code_arg "r32" = True
@@ -432,6 +403,35 @@ mem_op _ = False
 -- Does this instruction have a memory operands?
 mem_index :: Instr -> Maybe Int
 mem_index i = findIndex mem_op (operands i) 
+
+-------------------------------------------------------------------------------
+-- Debugging
+-------------------------------------------------------------------------------
+
+-- Debugging: Generate a list of unique mnemonics
+uniq_mnemonics :: [Instr] -> [String]
+uniq_mnemonics is = nub $ map raw_mnemonic is
+
+-- Debugging: Generate a list of unique operands
+uniq_operands :: [Instr] -> [String]
+uniq_operands is = nub $ concat $ map nub $ map operands is 
+
+-- Debugging: Generate a list of unique opcode terms
+uniq_opc_terms :: [Instr] -> [String]
+uniq_opc_terms is = nub $ concat $ map opcode_terms is
+
+-- Debugging: Generate a list of ambiguous declarations
+ambig_decls :: [Instr] -> [[Instr]]
+ambig_decls is = filter ambig $ groupBy eq $ sortBy srt is
+  where srt x y = compare (assm_decl x) (assm_decl y)
+        eq x y = (assm_decl x) == (assm_decl y)	
+        ambig x = (length x) > 1
+
+-- Debugging: Pretty print version of ambig_decls
+ambig_decls_pretty :: [Instr] -> [String]
+ambig_decls_pretty is = map pretty $ ambig_decls is
+  where pretty xs = (instruction (head xs)) ++ ":" ++ (concat (map elem xs))
+        elem x = "\n\t" ++ (opcode x)
 
 -------------------------------------------------------------------------------
 -- code/ codegen

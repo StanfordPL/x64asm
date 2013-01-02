@@ -5,9 +5,8 @@ GCC=ccache g++
 INC=-I./
 
 
-#OBJ=build/assembler/assembler.o \
 
-OBJ=\
+OBJ=build/assembler/assembler.o \
 		\
 		build/cfg/cfg.o \
 		\
