@@ -664,35 +664,36 @@ assm_oth_defn i = "// Non-VEX-Encoded Instruction: \n" ++
                   rex i ++
                   opc i ++
                   modrm_sib i ++
-                  disp_imm i
+                  disp_imm i ++
+                  "resize(fxn_);\n"
 
 -- Emits code for Prefix Group 1
 -- This doesn't check for the lock prefix which we treat as an opcode
 pref1 :: Instr -> String
 pref1 i 
-  | "F2" `elem` opcode_terms i = "pref_group1(0xf2);\n"
-  | "F3" `elem` opcode_terms i = "pref_group1(0xf3);\n"
+  | "F2" `elem` opcode_terms i = "pref_group1(fxn_, 0xf2);\n"
+  | "F3" `elem` opcode_terms i = "pref_group1(fxn_, 0xf3);\n"
 	| otherwise = "// No Prefix Group 1\n"
 
 -- Emits code for Prefix Group 2
 pref2 :: Instr -> String
 pref2 i
-  | "hint" `elem` operands i = "pref_group2(arg1);\n"
+  | "hint" `elem` operands i = "pref_group2(fxn_, arg1);\n"
 	| otherwise = case mem_index i of
-                     (Just idx) -> "pref_group2(arg" ++ (show idx) ++ ");\n"
+                     (Just idx) -> "pref_group2(fxn_, arg" ++ (show idx) ++ ");\n"
                      Nothing -> "// No Prefix Group 2\n"
 
 -- Emits code for Prefix Group 3 (operand size override)
 pref3 :: Instr -> String
 pref3 i 
-  | "PREF.66+" `elem` opcode_terms i = "pref_group3();\n"
-  | "66" `elem` opcode_terms i = "pref_group3();\n"
+  | "PREF.66+" `elem` opcode_terms i = "pref_group3(fxn_);\n"
+  | "66" `elem` opcode_terms i = "pref_group3(fxn_);\n"
   | otherwise = "// No Prefix Group 3\n"
 
 -- Emits code for Prefix Group 4 (address size override)
 pref4 :: Instr -> String
 pref4 i = case mem_index i of
-  (Just idx) -> "pref_group4(arg" ++ (show idx) ++ ");\n"
+  (Just idx) -> "pref_group4(fxn_, arg" ++ (show idx) ++ ");\n"
   Nothing -> "// No Prefix Group 4\n"
 
 -- Emits code for REX Prefix 
@@ -702,7 +703,7 @@ rex i = "// TODO - REX Prefix\n"
 
 -- Emits code for opcode bytes
 opc :: Instr -> String
-opc i = "opcode(" ++ (bytes i) ++ (code i) ++ ");\n"
+opc i = "opcode(fxn_, " ++ (bytes i) ++ (code i) ++ ");\n"
   where bytes i = intercalate "," $ map (("0x"++).low) (opcode_bytes i)
         idx i = case findIndex is_register_code_arg (operands i) of
                      (Just n) -> show n
@@ -718,7 +719,7 @@ modrm_sib i = "// TODO - mod r/m sib bytes\n"
 -- Emits code for displacement or immediate bytes
 disp_imm :: Instr -> String
 disp_imm i = case disp_imm_index i of
-  (Just idx) -> "disp_imm(arg" ++ (show idx) ++ ");\n"
+  (Just idx) -> "disp_imm(fxn_, arg" ++ (show idx) ++ ");\n"
   Nothing -> "// No Displacement/Immediate\n"
 
 -- Assembler src definitions

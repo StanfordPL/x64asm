@@ -29,17 +29,21 @@ namespace x64 {
 /** An x64 assembler. */
 class Assembler {
 	public:
-		// State methods
-		void start_jit(Function& fxn) { /* TODO */ }
-		void finish_jit(Function& fxn) { /* TODO */ }
+		inline void assemble(Function& fxn, const Code& code) {
+			start(fxn);
+			for ( const auto& instr : code )
+				assemble(instr);
+			finish();
+		}
 
-		void start_hex(std::ostream& os) { /* TODO */ }
-		void finish_hex(std::ostream& os) { /* TODO */ }
+		void assemble(const Instruction& instr);
 
-		void start_elf(std::ostream& os) { /* TODO */ }
-		void finish_elf(std::ostream& os) { /* TODO */ }
+		void start(Function& fxn) {
+			fxn_ = &fxn;
+		}	
 
-		// .. add additional output methods here
+		void finish() { 
+		}
 
 		#include "src/assembler/assembler.decl"
 
@@ -51,22 +55,11 @@ class Assembler {
 			// TODO...
 		}
 
-		void assemble(const Instruction& instr) { /* TODO */ }
-
-		inline void assemble(const Code& code) {
-			for ( const auto& instr : code )
-				assemble(instr);
-		}
-
 	private:
+		Function* fxn_;
 		/*
 		std::unordered_map<Operand, unsigned char*> labels_;
 		std::vector<std::pair<unsigned char*, Operand>> jumps_;
-
-		unsigned char* buf_begin_;
-		unsigned char* buf_;
-
-		void start(unsigned char* buffer);
 		*/
 };
 

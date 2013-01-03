@@ -9,131 +9,87 @@ using namespace x64;
 
 namespace {
 
-typedef unsigned char byte;
-
-inline void emit(byte c) {
-	// TODO
+inline void pref_group1(Function* fxn, uint8_t c) {
+	fxn->emit_byte(c);
 }
 
-inline void pref_group1(byte c) {
-	emit(c);
-}
-
-inline void pref_group2(const M m) {
-	static byte pref[6] {0x26, 0x2e, 0x36, 0x3e, 0x64, 0x65};
+inline void pref_group2(Function* fxn, const M m) {
+	static uint8_t pref[6] {0x26, 0x2e, 0x36, 0x3e, 0x64, 0x65};
 	if ( !m.null_seg() )
-		emit(pref[m.get_seg().val_]);
+		fxn->emit_byte(pref[m.get_seg().val_]);
 }
 
-inline void pref_group2(const Hint h) {
-	emit(h == Hint::TAKEN ? 0x3e : 0x2e);
+inline void pref_group2(Function* fxn, const Hint h) {
+	fxn->emit_byte((uint8_t)(h == Hint::TAKEN ? 0x3e : 0x2e));
 }
 
-inline void pref_group3() {
-	emit(0x66);
+inline void pref_group3(Function* fxn) {
+	fxn->emit_byte((uint8_t) 0x66);
 }
 
-inline void pref_group4(const M m) {
+inline void pref_group4(Function* fxn, const M m) {
 	if ( m.get_addr_or() )
-		emit(0x67);
+		fxn->emit_byte((uint8_t) 0x67);
 }
 
-inline void opcode(byte o1) {
-	emit(o1);
+inline void opcode(Function* fxn, uint8_t o1) {
+	fxn->emit_byte(o1);
 }
 
-inline void opcode(byte o1, Operand rcode) {
+inline void opcode(Function* fxn, uint8_t o1, Operand rcode) {
 	const auto delta = rcode.val_ & 0x7;
-	emit(o1 + delta);
+	fxn->emit_byte(o1 + delta);
 }
 
-inline void opcode(byte o1, byte o2) {
-	emit(o1);
-	emit(o2);
+inline void opcode(Function* fxn, uint8_t o1, uint8_t o2) {
+	fxn->emit_byte(o1);
+	fxn->emit_byte(o2);
 }
 
-inline void opcode(byte o1, byte o2, byte o3) {
-	emit(o1);
-	emit(o2);
-	emit(o3);
+inline void opcode(Function* fxn, uint8_t o1, uint8_t o2, uint8_t o3) {
+	fxn->emit_byte(o1);
+	fxn->emit_byte(o2);
+	fxn->emit_byte(o3);
 }
 
-inline void disp_imm(Imm8 i) {
+inline void disp_imm(Function* fxn, Imm8 i) {
+	fxn->emit_byte(i.val_);
 }
 
-inline void disp_imm(Imm16 i) {
+inline void disp_imm(Function* fxn, Imm16 i) {
+	fxn->emit_word(i.val_);
 }
 
-inline void disp_imm(Imm32 i) {
+inline void disp_imm(Function* fxn, Imm32 i) {
+	fxn->emit_long(i.val_);
 }
 
-inline void disp_imm(Imm64 i) {
+inline void disp_imm(Function* fxn, Imm64 i) {
+	fxn->emit_quad(i.val_);
 }
 
-inline void disp_imm(Moffs8 m) {
+inline void disp_imm(Function* fxn, Moffs m) {
+	fxn->emit_quad(m.val_);
 }
 
-inline void disp_imm(Moffs16 m) {
+inline void disp_imm(Function* fxn, Rel r) {
+	fxn->emit_quad(r.val_);
 }
 
-inline void disp_imm(Moffs32 m) {
+inline void disp_imm(Function* fxn, Label8 l) {
+	fxn->advance_byte();
 }
 
-inline void disp_imm(Moffs64 m) {
+inline void disp_imm(Function* fxn, Label32 l) {
+	fxn->advance_long();
 }
 
-inline void disp_imm(Rel8 r) {
+inline void resize(Function* fxn) {
+	if ( fxn->capacity() - fxn->size() < 15 ) 
+		fxn->resize(fxn->capacity()*2);
 }
-
-inline void disp_imm(Rel32 r) {
-}
-
-inline void disp_imm(Label8 l) {
-}
-
-inline void disp_imm(Label32 l) {
-}
-
-
 
 #if 0
-inline void emit(unsigned char*& buf, unsigned char c) {
-	(*buf++) = c;
-}
-
-inline void emit_imm(unsigned char*& buf, Imm8 imm) {
-	emit(buf, imm & 0xff); 
-}
-
-inline void emit_imm(unsigned char*& buf, Imm16 imm) {
-	*((uint16_t*) buf) = imm;
-	buf += 2;
-}
-
-inline void emit_imm(unsigned char*& buf, Imm32 imm) {
-	*((uint32_t*) buf) = imm;
-	buf += 4;
-}
-
-inline void emit_imm(unsigned char*& buf, Imm64 imm) {
-	*((uint64_t*) buf) = imm;
-	buf += 8;
-}
-
-// MOD R/M nop -- Simplifies codegen.
-// This corresponds to instructions without any explicit operands.
-// Calls to this method should be inlined away.
-inline void emit_mod_rm(unsigned char*& buf) {
-}
-
-// MOD R/M nop -- Simplifies codegen.
-// This corresponds to instructions with a single operand and no digit bit.
-// This is the class of instructions that encode operand directly in opcode.
-// See bswap for example.
-// Calls to this method should be inlined away.
-inline void emit_mod_rm(unsigned char*& buf, Operand ignore) {
-}
-
 // This ignores the distinction between high and low general purpose regs,
 //   It won't work correctly for AH, BH, CH, DH
 inline void emit_mod_rm(unsigned char*& buf, Operand rm, Operand r) {
@@ -219,16 +175,6 @@ inline void emit_mod_rm(unsigned char*& buf, M rm, Operand r) {
 	}
 }
 
-// REX nop -- Simplifies codegen.
-// Calls to this method should be inlined away.
-inline void emit_rex(unsigned char*& buf, R low) {
-}
-
-// REX nop -- Simplifies codegen.
-// Calls to this method should be inlined away.
-inline void emit_rex(unsigned char*& buf, unsigned char rex, R low) {
-}
-
 // Figure 2.7: Intel Manual Vol 2A 2-9
 // This ignores the distinction between high and low general purpose regs,
 //   but that's fine because it wouldn't get you an rex.b either way.
@@ -294,6 +240,10 @@ namespace x64 {
 
 // void Assembler::adcb(Imm arg0) { } ...
 #include "src/assembler/assembler.defn"
+
+void Assembler::assemble(const Instruction& instr) {
+
+}
 
 /*
 void Assembler::start(Function& fxn) {

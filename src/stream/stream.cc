@@ -57,35 +57,6 @@ ostream& generic_write(ostream& os, const T t) {
 	return os;
 }
 
-template <typename T>
-ostream& extended_generic_write(ostream& os, const T& t) {
-	Assembler assm;
-	switch ( get_io(os) ) {
-		case IO::ATT:
-			AttWriter::write(os, t);
-			break;
-		case IO::ELF:
-			assm.start_elf(os);
-			assm.assemble(t);
-			assm.finish_elf(os);
-			break;
-		case IO::HEX:
-			assm.start_hex(os);
-			assm.assemble(t);
-			assm.finish_hex(os);
-			break;
-		case IO::INTEL:
-			IntelWriter::write(os, t);
-			break;
-
-		default:
-			os.setstate(ios::failbit);
-			break;
-	}
-
-	return os;
-}
-
 } // namespace
 
 istream& operator>>(istream& is, const set_io& m) {
@@ -179,7 +150,32 @@ ostream& operator<<(ostream& os, const Code& c) {
 
 ostream& operator<<(ostream& os, const Code& c) {
 	check(os, c);
-	return extended_generic_write(os, c);
+
+	Assembler assm;
+	Function fxn;
+
+	switch ( get_io(os) ) {
+		case IO::ATT:
+			AttWriter::write(os, c);
+			break;
+		case IO::ELF:
+			assm.assemble(fxn, c);
+			fxn.write_elf(os);
+			break;
+		case IO::HEX:
+			assm.assemble(fxn, c);
+			fxn.write_hex(os);
+			break;
+		case IO::INTEL:
+			IntelWriter::write(os, c);
+			break;
+
+		default:
+			os.setstate(ios::failbit);
+			break;
+	}
+
+	return os;
 	// TODO; need to switch on transformation state before returning.
 }
 
@@ -225,7 +221,7 @@ ostream& operator<<(ostream& os, const Imm64 i) {
 
 ostream& operator<<(ostream& os, const Instruction& i) {
 	check(os, i);
-	return extended_generic_write(os, i);
+	return generic_write(os, i);
 }
 
 ostream& operator<<(ostream& os, const Label l) {

@@ -6,6 +6,10 @@
 using namespace x64;
 using namespace std;
 
+void foo() {
+	cout << "Hello world!  You called this from assembly!" << endl;
+}
+
 template <typename T>
 void all(const vector<T>& ts) {
 	for ( const auto t : ts )
@@ -40,6 +44,29 @@ int main() {
 	cout << m << endl;
 	cout << hex << m.val_ << endl;
 	cout << endl;
+
+	Assembler assm;
+	Function f;
+
+	assm.start(f);
+	assm.ret();
+	assm.ret();
+	assm.ret();
+	assm.ret();
+	assm.ret();
+	assm.ret();
+	assm.ret();
+	assm.ret();
+	assm.ret();
+	assm.ret();
+	assm.finish();
+
+	cout << f.size() << " " << f.capacity() << endl;
+	f.write_hex(cout);
+
+
+	Function f2 = f;
+	f2();
 
 	return 0;
 }
