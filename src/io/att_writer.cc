@@ -49,9 +49,7 @@ void AttWriter::write(ostream& os, const Instruction& instr) {
 			case OpType::ZERO:       
 			case OpType::ONE:        
 			case OpType::THREE:      WRITE(Imm);
-			case OpType::LABEL:   	
-			case OpType::LABEL_8:
-			case OpType::LABEL_32:   WRITE(Label);
+			case OpType::LABEL:      WRITE(Label);
 			case OpType::M:
 			case OpType::M_8:
 			case OpType::M_16:

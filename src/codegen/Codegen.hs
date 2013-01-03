@@ -185,13 +185,9 @@ insert_pref66s is = map insert_pref66 is
 -- Inserts a label variant for instructions that take rel operands
 insert_label_variant :: Instr -> [Instr]
 insert_label_variant i
-  | "rel8" `elem` (operands i) = 
-    [i
-    ,i{instruction=(subRegex (mkRegex "rel8") (instruction i) "label8")
-      ,opcode=(subRegex (mkRegex "cb") (opcode i) "0b")}]
   | "rel32" `elem` (operands i) =
     [i
-    ,i{instruction=(subRegex (mkRegex "rel32") (instruction i) "label32")
+    ,i{instruction=(subRegex (mkRegex "rel32") (instruction i) "label")
       ,opcode=(subRegex (mkRegex "cd") (opcode i) "0d")}]	
 	| otherwise = [i]
 
@@ -350,8 +346,7 @@ op2type "p66"      = "Pref66"
 op2type "pw"       = "PrefRexW"
 op2type "far"      = "Far"
 op2type "norexr8"  = "NoRexR8"
-op2type "label8"   = "Label8"
-op2type "label32"  = "Label32"
+op2type "label"    = "Label"
 op2type "hint"     = "Hint"
 op2type o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
 
@@ -425,8 +420,7 @@ rel_op _ = False
 
 -- Returns true for label operands
 label_op :: String -> Bool
-label_op "label8" = True
-label_op "label32" = True
+label_op "label" = True
 label_op _ = False
 
 -- Returns true for any form of displacement or immediate operand
@@ -676,35 +670,35 @@ assm_oth_defn i = "// Non-VEX-Encoded Instruction: \n" ++
                   opc i ++
                   modrm_sib i ++
                   disp_imm i ++
-                  "resize(fxn_);\n"
+                  "resize();\n"
 
 -- Emits code for Prefix Group 1
 -- This doesn't check for the lock prefix which we treat as an opcode
 pref1 :: Instr -> String
 pref1 i 
-  | "F2" `elem` opcode_terms i = "pref_group1(fxn_, 0xf2);\n"
-  | "F3" `elem` opcode_terms i = "pref_group1(fxn_, 0xf3);\n"
+  | "F2" `elem` opcode_terms i = "pref_group1(0xf2);\n"
+  | "F3" `elem` opcode_terms i = "pref_group1(0xf3);\n"
 	| otherwise = "// No Prefix Group 1\n"
 
 -- Emits code for Prefix Group 2
 pref2 :: Instr -> String
 pref2 i
-  | "hint" `elem` operands i = "pref_group2(fxn_, arg1);\n"
+  | "hint" `elem` operands i = "pref_group2(arg1);\n"
 	| otherwise = case mem_index i of
-                     (Just idx) -> "pref_group2(fxn_, arg" ++ (show idx) ++ ");\n"
+                     (Just idx) -> "pref_group2(arg" ++ (show idx) ++ ");\n"
                      Nothing -> "// No Prefix Group 2\n"
 
 -- Emits code for Prefix Group 3 (operand size override)
 pref3 :: Instr -> String
 pref3 i 
-  | "PREF.66+" `elem` opcode_terms i = "pref_group3(fxn_);\n"
-  | "66" `elem` opcode_terms i = "pref_group3(fxn_);\n"
+  | "PREF.66+" `elem` opcode_terms i = "pref_group3();\n"
+  | "66" `elem` opcode_terms i = "pref_group3();\n"
   | otherwise = "// No Prefix Group 3\n"
 
 -- Emits code for Prefix Group 4 (address size override)
 pref4 :: Instr -> String
 pref4 i = case mem_index i of
-  (Just idx) -> "pref_group4(fxn_, arg" ++ (show idx) ++ ");\n"
+  (Just idx) -> "pref_group4(arg" ++ (show idx) ++ ");\n"
   Nothing -> "// No Prefix Group 4\n"
 
 -- Emits code for REX Prefix 
@@ -714,7 +708,7 @@ rex i = "// TODO - REX Prefix\n"
 
 -- Emits code for opcode bytes
 opc :: Instr -> String
-opc i = "opcode(fxn_, " ++ (bytes i) ++ (code i) ++ ");\n"
+opc i = "opcode(" ++ (bytes i) ++ (code i) ++ ");\n"
   where bytes i = intercalate "," $ map (("0x"++).low) (opcode_bytes i)
         idx i = case findIndex is_register_code_arg (operands i) of
                      (Just n) -> show n
@@ -730,7 +724,7 @@ modrm_sib i = "// TODO - mod r/m sib bytes\n"
 -- Emits code for displacement or immediate bytes
 disp_imm :: Instr -> String
 disp_imm i = case disp_imm_index i of
-  (Just idx) -> "disp_imm(fxn_, arg" ++ (show idx) ++ ");\n"
+  (Just idx) -> "disp_imm(arg" ++ (show idx) ++ ");\n"
   Nothing -> "// No Displacement/Immediate\n"
 
 -- Assembler src definitions
@@ -808,8 +802,7 @@ test_operand "p66"      = []
 test_operand "pw"       = []
 test_operand "far"      = []
 test_operand "norexr8"  = []
-test_operand "label8"   = [".L0"]
-test_operand "label32"  = [".L0"]
+test_operand "label"    = [".L0"]
 test_operand "hint"     = []
 test_operand o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
 

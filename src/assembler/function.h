@@ -163,9 +163,19 @@ class Function {
 			head_++;
 		}
 
+		inline void advance_word() {
+			assert(remaining() >= 2);
+			head_ += 2;
+		}
+
 		inline void advance_long() {
 			assert(remaining() >= 4);
 			head_ += 4;
+		}
+
+		inline void advance_quad() {
+			assert(remaining() >= 8);
+			head_ += 8;
 		}
 
 		inline void write_hex(std::ostream& os) const {

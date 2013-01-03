@@ -23,9 +23,7 @@ bool Checker::check(const Instruction& instr) {
 			case OpType::ZERO:       CHECK(Zero);
 			case OpType::ONE:        CHECK(One);
 			case OpType::THREE:      CHECK(Three);
-			case OpType::LABEL:   	
-			case OpType::LABEL_8:
-			case OpType::LABEL_32:   CHECK(Label);
+			case OpType::LABEL:      CHECK(Label);
 			case OpType::M:
 			case OpType::M_8:
 			case OpType::M_16:

@@ -27,8 +27,6 @@ enum class OpType {
 
 	// Labels (label.h)
 	LABEL,
-	LABEL_8,
-	LABEL_32,
 
 	// Memory (m.h)
 	M,
