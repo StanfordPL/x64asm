@@ -521,6 +521,17 @@ return_row i = case raw_mnemonic i of
 return_table :: [Instr] -> String
 return_table is = to_table is return_row 
 
+-- Converts an instruction to nop table row
+nop_row :: Instr -> String
+nop_row i = case raw_mnemonic i of
+  "NOP" -> "true"
+  "FNOP" -> "true"
+  _ -> "false"
+
+-- Converts all instruction to nop table
+nop_table :: [Instr] -> String
+nop_table is = to_table is nop_row
+
 -- Converts an instruction to jump table row
 jump_row :: Instr -> String
 jump_row i = case (is_cond_jump i) || (is_uncond_jump i) of
@@ -841,6 +852,7 @@ main = do args <- getArgs
           writeFile "accessor.table"    $ accessor_table is
           writeFile "type.table"        $ type_table is
           writeFile "return.table"      $ return_table is
+          writeFile "nop.table"         $ nop_table is
           writeFile "jump.table"        $ jump_table is
           writeFile "cond_jump.table"   $ cond_jump_table is
           writeFile "uncond_jump.table" $ uncond_jump_table is

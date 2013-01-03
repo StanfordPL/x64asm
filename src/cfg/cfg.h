@@ -1,20 +1,24 @@
-#ifndef X64_SRC_CFG_CONTROL_FLOW_GRAPH_H
-#define X64_SRC_CFG_CONTROL_FLOW_GRAPH_H
-
-#include <bitset>
-#include <cassert>
-#include <iostream>
-#include <map>
-#include <set>
-#include <unordered_set>
-#include <vector>
+#ifndef X64_SRC_CFG_CFG_H
+#define X64_SRC_CFG_CFG_H
 
 #include "src/code/code.h"
 #include "src/code/instruction.h"
-#include "src/code/reg_set.h"
-#include "src/stream/stream.h"
 
 namespace x64 {
+
+/** A Control Flow Graph. */
+class Cfg {
+	public:
+		Cfg(const Code& code) : code_{code} { }
+
+		inline const Code& get_code() const {
+			return code_;
+		}
+
+	private:
+		const Code& code_;
+};
+
 #if 0
 /** A read-only data structure that presents the ControlFlowGraph 
 	  represented by Code.
@@ -50,12 +54,6 @@ class ControlFlowGraph {
 		inline explicit ControlFlowGraph(const Code& code, const RegSet& inputs)
 				: code_(code), inputs_(inputs) {
 			recompute();
-		}
-
-		/** Returns the underlying Code represented by the control flow graph.
-		*/
-		inline const Code& get_code() const {
-			return code_;
 		}
 
 		/** Recomputes the entire control flow graph structure.
@@ -425,7 +423,6 @@ class ControlFlowGraph {
 		// Nesting Depths
 		std::vector<size_t> nesting_depth_;
 };
-
 #endif
 } // namespace x64
 #endif

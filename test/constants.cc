@@ -59,11 +59,8 @@ int main() {
 	assm.ret();
 	assm.ret();
 	assm.ret();
+
 	assm.finish();
-
-	cout << f.size() << " " << f.capacity() << endl;
-	f.write_hex(cout);
-
 
 	Function f2 = f;
 	f2();

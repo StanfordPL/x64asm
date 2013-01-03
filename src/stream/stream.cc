@@ -2,6 +2,8 @@
 
 #include "src/assembler/assembler.h"
 #include "src/cfg/cfg.h"
+#include "src/cfg/remove_nop.h"
+#include "src/cfg/remove_unreachable.h"
 #include "src/code/checker.h"
 #include "src/io/att_reader.h"
 #include "src/io/att_writer.h"
@@ -90,61 +92,36 @@ ostream& operator<<(ostream& os, const unset_transform& m) {
 }
 
 istream& operator>>(istream& is, Code& c) {
-	// TODO...
-#if 0
-ostream& operator<<(ostream& os, const Code& c) {
-	const auto format = get_format(os);
-  const auto code_format = get_code_format(os);
+	switch ( get_io(is) ) {
+		case IO::ATT:
+			AttReader::read(is, c);
+			break;
+		case IO::INTEL:
+			IntelReader::read(is, c);
+			break;
 
-  Code d;
-
-  if ( code_format == ALL ) {
-    d = c;
-  } else if (code_format == NOP_REMOVED) {
-    for ( const auto& line : c )
-      if (line.get_opcode() != NOP)
-        d.push_back(line);
-  } else if (code_format == DEAD_REMOVED) {
-
-    ControlFlowGraph cfg(c);
-
-    for ( size_t i = cfg.get_entry(); i != cfg.get_exit(); ++i ) {
-      if (cfg.is_reachable(i)) {
-        for( size_t j = 0; j < cfg.num_instrs(i); j++) {
-          const auto& instr = cfg.get_instr(
-                  ControlFlowGraph::location_type(i,j));
-          if (instr.get_opcode() != NOP)
-            d.push_back(instr);
-        }
-      }
-    }
-
-  } else {
-    os.setstate(ios::failbit);
-  }
-    
-	if ( format == ATT ) {
-		AttWriter w;
-		w.write(os, d);
+		default:
+			is.setstate(ios::failbit);
+			break;
 	}
-	else if ( format == BIN ) {
-		Assembler assm;
-		assm.write_binary(os, d);
-	}
-	else if ( format == DOT ) {
-		ControlFlowGraph cfg(d);
-		cfg.write_dot(os);
-	}
-	else if ( format == HEX ) {
-		Assembler assm;
-		assm.write_hex(os, d);
-	}
-	else
-		os.setstate(ios::failbit);
 
-	return os;
-}
-#endif
+	switch ( get_transform(is) ) {
+		case Transform::ALL:
+			c = RemoveNop::run(c);
+			c = RemoveUnreachable::run(c);
+			break;
+		case Transform::REMOVE_NOP:
+			c = RemoveNop::run(c);
+			break;
+		case Transform::REMOVE_UNREACHABLE:
+			c = RemoveUnreachable::run(c);
+			break;
+
+		default:
+			is.setstate(ios::failbit);
+			break;
+	}
+
 	return is;
 }
 
@@ -153,21 +130,39 @@ ostream& operator<<(ostream& os, const Code& c) {
 
 	Assembler assm;
 	Function fxn;
+	Code code;
+
+	switch ( get_transform(os) ) {
+		case Transform::ALL:
+			code = RemoveNop::run(code);
+			code = RemoveUnreachable::run(code);
+			break;
+		case Transform::REMOVE_NOP:
+			code = RemoveNop::run(code);
+			break;
+		case Transform::REMOVE_UNREACHABLE:
+			code = RemoveUnreachable::run(code);
+			break;
+
+		default:
+			os.setstate(ios::failbit);
+			break;
+	}
 
 	switch ( get_io(os) ) {
 		case IO::ATT:
-			AttWriter::write(os, c);
+			AttWriter::write(os, code);
 			break;
 		case IO::ELF:
-			assm.assemble(fxn, c);
+			assm.assemble(fxn, code);
 			fxn.write_elf(os);
 			break;
 		case IO::HEX:
-			assm.assemble(fxn, c);
+			assm.assemble(fxn, code);
 			fxn.write_hex(os);
 			break;
 		case IO::INTEL:
-			IntelWriter::write(os, c);
+			IntelWriter::write(os, code);
 			break;
 
 		default:
@@ -176,7 +171,6 @@ ostream& operator<<(ostream& os, const Code& c) {
 	}
 
 	return os;
-	// TODO; need to switch on transformation state before returning.
 }
 
 ostream& operator<<(ostream& os, const Cr0234 c) {

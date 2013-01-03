@@ -9,7 +9,7 @@ namespace x64 {
 
 class IntelReader {
 	public:
-		void read(std::istream& is, Code& code) const;
+		static void read(std::istream& is, Code& code);
 };
 
 } // namespace x64

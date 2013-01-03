@@ -39,6 +39,11 @@ class Attributes {
 			return is_return_[o];
 		}
 
+		static bool is_nop(const Opcode o) {
+			assert(o < is_nop_.size());
+			return is_nop_[o];
+		}
+
 		static bool is_jump(const Opcode o) {
 			assert(o < is_jump_.size());
 			return is_jump_[o];
@@ -92,6 +97,10 @@ class Attributes {
 
 		static inline bool is_return(const Instruction& i) {
 			return is_return(i.get_opcode());
+		}
+
+		static inline bool is_nop(const Instruction& i) {
+			return is_nop(i.get_opcode());
 		}
 
 		static inline bool is_jump(const Instruction& i) {
@@ -148,6 +157,7 @@ class Attributes {
 		static std::vector<std::vector<OpAccessor>> accessor_;
 		static std::vector<std::vector<OpType>> type_;
 		static std::vector<bool> is_return_;
+		static std::vector<bool> is_nop_;
 		static std::vector<bool> is_jump_;
 		static std::vector<bool> is_cond_jump_;
 		static std::vector<bool> is_uncond_jump_;

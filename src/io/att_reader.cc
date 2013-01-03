@@ -4,7 +4,7 @@ using namespace std;
 
 namespace x64 {
 
-void AttReader::read(istream& is, Code& code) const {
+void AttReader::read(istream& is, Code& code) {
 	/* TODO...
 	stringstream ss;
 	ss << is.rdbuf();

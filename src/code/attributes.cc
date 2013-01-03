@@ -133,6 +133,13 @@ vector<bool> Attributes::is_return_ {{
 	#include "src/code/return.table"
 }};
 
+vector<bool> Attributes::is_nop_ {{
+	// Internal mnemonics
+	false
+	// Auto-generated mnemonics
+	#include "src/code/nop.table"
+}};
+
 vector<bool> Attributes::is_jump_ {{
 	// Internal mnemonics
 	false
