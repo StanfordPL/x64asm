@@ -17,6 +17,9 @@ OBJ=build/assembler/assembler.o \
 		\
 		build/io/att_reader.o \
 		build/io/att_writer.o \
+		build/io/dot_writer.o \
+		build/io/elf_writer.o \
+		build/io/hex_writer.o \
 		build/io/intel_reader.o \
 		build/io/intel_writer.o \
 		\

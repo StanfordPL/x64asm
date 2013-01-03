@@ -1,6 +1,11 @@
 #ifndef X64_SRC_CFG_CFG_H
 #define X64_SRC_CFG_CFG_H
 
+#include <cassert>
+#include <iostream>
+#include <utility>
+#include <vector>
+
 #include "src/code/code.h"
 #include "src/code/instruction.h"
 
@@ -9,14 +14,120 @@ namespace x64 {
 /** A Control Flow Graph. */
 class Cfg {
 	public:
-		Cfg(const Code& code) : code_{code} { }
+		typedef size_t id_type;
+		typedef std::pair<id_type, size_t> location_type;
+
+		Cfg(const Code& code) : code_{code} { 
+			recompute();
+		}
+
+		void recompute();
 
 		inline const Code& get_code() const {
 			return code_;
 		}
 
+		inline size_t num_blocks() const {
+			return blocks_.size() - 1;
+		}
+
+		inline size_t num_instrs(id_type id) const {
+			assert(id < num_blocks());
+			return blocks_[id+1] - blocks_[id];
+		}
+
+		inline id_type get_entry() const {
+			return 0;
+		}
+
+		inline bool is_entry(id_type id) const {
+			return id == get_entry();
+		}
+
+		inline id_type get_exit() const {
+			return num_blocks()-1;
+		}
+
+		inline bool is_exit(id_type id) const {
+			return id == get_exit();
+		}
+
+		inline const Instruction& get_instr(const location_type& loc) const {
+			assert(get_index(loc) < code_.size());
+			return code_[get_index(loc)];
+		}
+
+		typedef Code::const_iterator instr_iterator;
+
+		inline instr_iterator instr_begin(id_type id) const {
+			assert(id < num_blocks());
+			return code_.begin() + blocks_[id];
+		}
+
+		inline instr_iterator instr_end(id_type id) const {
+			assert(id < num_blocks());
+			return code_.begin() + blocks_[id+1];
+		}	
+
+		typedef std::vector<id_type>::const_iterator pred_iterator;
+
+		inline pred_iterator pred_begin(id_type id) const {
+			assert(id < num_blocks());
+			return preds_[id].begin();
+		}
+
+		inline pred_iterator pred_end(id_type id) const {
+			assert(id < num_blocks());
+			return preds_[id].end();
+		}
+
+		typedef std::vector<id_type>::const_iterator succ_iterator;
+
+		inline succ_iterator succ_begin(id_type id) const {
+			assert(id < num_blocks());
+			return succs_[id].begin();
+		}
+
+		inline succ_iterator succ_end(id_type id) const {
+			assert(id < num_blocks());
+			return succs_[id].end();
+		}
+
+		inline bool has_fallthrough_target(id_type id) const {
+			assert(id < num_blocks());
+			return !succs_[id].empty();
+		}
+
+		inline id_type get_fallthrough_target(id_type id) const {
+			assert(has_fallthrough_target(id));
+			return succs_[id][0];
+		}
+
+		inline bool has_conditional_target(id_type id) const {
+			assert(id < num_blocks());
+			return succs_[id].size() == 2;
+		}
+
+		inline id_type get_conditional_target(id_type id) const {
+			assert(has_conditional_target(id));
+			return succs_[id][1];
+		}
+
+		void write_dot(std::ostream& os) const;
+
 	private:
 		const Code& code_;
+
+		// [ENTRY][b0 begin][b0 end/b1 begin]...[bn end/EXIT][SENTINEL]
+		std::vector<size_t> blocks_;
+		std::vector<std::vector<id_type>> preds_;
+		std::vector<std::vector<id_type>> succs_;
+
+		inline size_t get_index(const location_type& loc) const {
+			assert(loc.first < num_blocks());
+			assert(loc.second < num_instrs(loc.first));
+			return blocks_[loc.first] + loc.second;
+		}
 };
 
 #if 0
@@ -25,11 +136,6 @@ class Cfg {
 */
 class ControlFlowGraph {
 	public:
-		typedef size_t id_type;
-		typedef std::pair<id_type, size_t> location_type;
-		typedef std::pair<id_type, id_type> edge_type;
-		typedef std::set<id_type> loop_type;
-
 		/** Creates a ControlFlowGraph.
 			  This constructor will use liveness to determine inputs.
 			  Use this only when your code has come from a reliable source.
@@ -56,72 +162,6 @@ class ControlFlowGraph {
 			recompute();
 		}
 
-		/** Recomputes the entire control flow graph structure.
-			  Computes live inputs using get_inputs().
-		*/
-		inline void recompute() {
-			recompute_blocks();
-			recompute_liveness();
-			recompute_defs();
-			recompute_dominators();
-			recompute_back_edges();
-			recompute_loops();
-		}
-
-		/** Recomputes the basic block structure of the control flow graph.
-		*/
-		void recompute_blocks();
-
-		/** Reomputes liveness for the control flow graph.
-		*/
-		void recompute_liveness();
-
-		/** Recomputes the registers defined at every program point.
-		*/
-		void recompute_defs();
-
-		/** Recomputes dominators.
-		*/
-		void recompute_dominators();
-
-		/** Recomputes back edges.
-		*/
-		void recompute_back_edges();
-
-		/** Recomputes loops.
-		*/
-		void recompute_loops();
-
-		/** Returns the inputs to the control flow graph.
-		*/
-		inline const RegSet& get_inputs() const {
-			return inputs_;
-		}	
-
-		/** Returns the entry point to the control flow graph.
-		*/
-		inline id_type get_entry() const {
-			return 0;
-		}
-
-		/** Returns true for the entry block
-		*/
-		inline bool is_entry(id_type id) const {
-			return id == get_entry();
-		}
-
-		/** Returns the exit point from the control flow graph.
-		*/
-		inline id_type get_exit() const {
-			return num_blocks()-1;
-		}
-
-		/** Returns true for the exit block
-		*/
-		inline bool is_exit(id_type id) const {
-			return id == get_exit();
-		}
-
 		/** Returns true if normal control flow can reach this block.
 		*/
 		inline bool is_reachable(id_type id) const {
@@ -138,21 +178,6 @@ class ControlFlowGraph {
 			return reachable_.end();
 		}
 
-		/** Returns the number of basic blocks in the control flow graph.
-			  This includes ENTRY/EXIT and unreachable blocks!
-		*/
-		inline size_t num_blocks() const { 
-			return num_blocks_;
-		}
-
-		/** Returns the number of instructions in a basic block.
-			  @param id Block id, asserts if out of range.
-		*/
-		inline size_t num_instrs(id_type id) const {
-			assert(id < num_blocks());
-			return blocks_[id+1] - blocks_[id];
-		}
-
 		/** Returns an instruction's location in the ControlFlowGraph.
 		*/
 		inline location_type get_location(size_t idx) const {
@@ -164,91 +189,6 @@ class ControlFlowGraph {
 
 			assert(false);
 			return std::make_pair(0,0);
-		}
-
-		/** Maps a location back to a code index 
-		*/
-		inline size_t get_index(const location_type& loc) const {
-			// This should be fine with empty blocks
-			assert(loc.first < num_blocks());
-			assert(loc.second < num_instrs(loc.first));
-			return blocks_[loc.first] + loc.second;
-		}
-
-		/** Returns an instruction at a location in the control flow graph.
-			  @param loc Location in the ControlFlowGraph, asserts if out of range.
-		*/
-		inline const Instruction& get_instr(const location_type& loc) const {
-			assert(get_index(loc) < code_.size());
-			return code_[get_index(loc)];
-		}
-
-		typedef Code::const_iterator instr_iterator;
-
-		inline instr_iterator instr_begin(id_type id) const {
-			assert(id < num_blocks());
-			return code_.begin() + blocks_[id];
-		}
-
-		inline instr_iterator instr_end(id_type id) const {
-			assert(id < num_blocks());
-			return code_.begin() + blocks_[id+1];
-		}	
-
-		/** Returns true if a basic block has a fallthrough target.
-			  @param id Block id, asserts if out of range.
-		*/
-		inline bool has_fallthrough_target(id_type id) const {
-			assert(id < num_blocks());
-			return !succs_[id].empty();
-		}
-
-		/** Returns the fallthrough target for a basic block.
-			  @param id Block id, asserts if has_fallthrough_target(id) == false.
-		*/
-		inline id_type get_fallthrough_target(id_type id) const {
-			assert(has_fallthrough_target(id));
-			return succs_[id][0];
-		}
-
-		/** Returns true if a basic block ends in a conditional jump.
-			  @param id Block id, asserts if out of range.
-		*/
-		inline bool has_conditional_target(id_type id) const {
-			assert(id < num_blocks());
-			return succs_[id].size() == 2;
-		}
-
-		/** Returns the conditional jump target for a basic block.
-			  @param id Block id, asserts if has_conditional_target() == false.
-		*/
-		inline id_type get_conditional_target(id_type id) const {
-			assert(has_conditional_target(id));
-			return succs_[id][1];
-		}
-
-		typedef std::vector<id_type>::const_iterator pred_iterator;
-
-		inline pred_iterator pred_begin(id_type id) const {
-			assert(id < num_blocks());
-			return preds_[id].begin();
-		}
-
-		inline pred_iterator pred_end(id_type id) const {
-			assert(id < num_blocks());
-			return preds_[id].end();
-		}
-
-		typedef std::vector<id_type>::const_iterator succ_iterator;
-
-		inline succ_iterator succ_begin(id_type id) const {
-			assert(id < num_blocks());
-			return succs_[id].begin();
-		}
-
-		inline succ_iterator succ_end(id_type id) const {
-			assert(id < num_blocks());
-			return succs_[id].end();
 		}
 
 		typedef std::vector<edge_type>::const_iterator back_edge_iterator;
@@ -386,24 +326,11 @@ class ControlFlowGraph {
 			return !performs_undef_read();
 		}
 
-		void write_dot(std::ostream& os) const;
-
 	private:
-		const Code& code_;
 		RegSet inputs_;
-
-		// This array records block begin/ends.
-		// There are two empty blocks on either end and a sentinel value.
-		// [ENTRY][b0 begin][b0 end/b1 begin]...[bn end/EXIT][SENTINEL]
-		std::vector<size_t> blocks_;
-		size_t num_blocks_;
 
 		// Reachable blocks (doesn't include entry and exit)
 		std::unordered_set<id_type> reachable_;
-
-		std::vector<std::vector<id_type>> preds_;
-		std::vector<std::vector<id_type>> succs_;
-		std::vector<id_type> exits_;
 
 		// Dataflow values for each block
 		std::vector<RegSet> live_ins_;

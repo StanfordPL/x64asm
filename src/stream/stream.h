@@ -27,6 +27,7 @@ namespace x64 {
 /** I/O format for iostreams. */
 enum class IO : uint32_t {
 	ATT = 0,
+	DOT,
 	ELF,
 	HEX,
 	INTEL

@@ -80,16 +80,16 @@ class Assembler {
 		}
 
 		inline void pref_group2(const Hint h) {
-			fxn_->emit_byte((uint8_t)(h == Hint::TAKEN ? 0x3e : 0x2e));
+			fxn_->emit_byte(h == Hint::TAKEN ? 0x3e : 0x2e);
 		}
 
 		inline void pref_group3() {
-			fxn_->emit_byte((uint8_t) 0x66);
+			fxn_->emit_byte(0x66);
 		}
 
 		inline void pref_group4(const M m) {
 			if ( m.get_addr_or() )
-				fxn_->emit_byte((uint8_t) 0x67);
+				fxn_->emit_byte(0x67);
 		}
 
 		inline void opcode(uint8_t o1) {

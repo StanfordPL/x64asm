@@ -1,4 +1,93 @@
 #include "src/cfg/cfg.h"
+
+#include <map>
+
+#include "src/code/attributes.h"
+
+using namespace std;
+
+namespace x64 {
+
+void Cfg::recompute() {
+	blocks_.clear();
+	preds_.clear();
+	succs_.clear();
+
+	// ENTRY Block
+	blocks_.push_back(0);
+
+	// Record block begins
+	blocks_.push_back(0);
+	for ( size_t i = 1, ie = code_.size(); i < ie; ++i ) {
+		const auto& instr = code_[i];
+
+		// Labels or the first instruction define the beginning of a block
+		if ( Attributes::is_label_defn(instr) )
+			blocks_.push_back(i);
+
+		// Jumps, returns, and last instructions end blocks.
+		// We increment i to avoid double counts for labels. 
+		else if ( (Attributes::is_jump(instr) || Attributes::is_return(instr)) && (i+1 != ie) ) {
+			blocks_.push_back(i+1);
+			if ( Attributes::is_label_defn(code_[i+1]) )
+				i++;
+		}
+	}
+
+	// EXIT / Sentinel blocks
+	blocks_.push_back(code_.size());
+	blocks_.push_back(code_.size());
+
+	// Record label -> block mapping
+	map<uint64_t, id_type> labels;
+	for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i ) {
+		// Don't bother checking empty blocks
+		if ( num_instrs(i) == 0 )
+			continue;
+
+		const auto& instr = *instr_begin(i);
+		if ( Attributes::is_label_defn(instr) )
+			labels[instr.get_operand(0).val_] = i;
+	}
+
+	// Set up successors
+	succs_.resize(num_blocks());
+	for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i ) {
+		// Empty blocks just point forward (this handles entry)
+		if ( num_instrs(i) == 0 ) {
+			succs_[i].push_back(i+1);
+			continue;
+		}
+
+		const auto& instr = *(instr_end(i)-1);
+		
+		// Unconditional jumps have non-trivial fallthrough targets.
+		if ( Attributes::is_uncond_jump(instr) ) {
+			succs_[i].push_back(labels[instr.get_operand(0)]);
+			continue;
+		}
+
+		// Returns point to exit
+		if ( Attributes::is_return(instr) ) {
+			succs_[i].push_back(get_exit());
+			continue;
+		}
+
+		// Everything else has a fallthrough and a possible conditional target.
+		succs_[i].push_back(i+1);			
+		if ( Attributes::is_cond_jump(instr) )
+			succs_[i].push_back(labels[instr.get_operand(0)]);
+	}
+
+	// Set up predecessors (these have no particular order) and exits
+	preds_.resize(num_blocks());
+	for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i )
+		for ( auto s = succ_begin(i), se = succ_end(i); s != se; ++s )
+			preds_[*s].push_back(i);
+}
+
+} // namespace x64
+
 #if 0
 #include <algorithm>
 #include <map>
@@ -36,7 +125,6 @@ void ControlFlowGraph::recompute_blocks() {
 	reachable_.clear();
 	preds_.clear();
 	succs_.clear();
-	exits_.clear();
 
 	// ENTRY Block
 	blocks_.push_back(0);

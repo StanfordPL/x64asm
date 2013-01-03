@@ -36,6 +36,9 @@
 
 #include "src/io/att_reader.h"
 #include "src/io/att_writer.h"
+#include "src/io/dot_writer.h"
+#include "src/io/elf_writer.h"
+#include "src/io/hex_writer.h"
 #include "src/io/intel_reader.h"
 #include "src/io/intel_writer.h"
 

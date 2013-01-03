@@ -105,19 +105,10 @@ class Function {
 			head_ = buffer_;
 		}
 
-		inline void emit_byte(uint8_t b) {
-			assert(remaining() >= 1);
-			*head_++ = b;
-		}
-
-		inline void emit_byte(uint8_t b, size_t index) {
-			assert(index < size());
-			buffer_[index] = b;
-		}
-
 		inline void emit_byte(uint64_t b) {
 			assert(remaining() >= 1);
-			*head_++ = b & 0xff;
+			*((uint8_t*) head_) = b;
+			head_++;
 		}
 
 		inline void emit_byte(uint64_t b, size_t index) {
@@ -178,21 +169,23 @@ class Function {
 			head_ += 8;
 		}
 
-		inline void write_hex(std::ostream& os) const {
-			size_t i;
-			for ( i = 0; i < size(); ++i ) {
-				if ( i % 8 == 0 )
-					os << std::hex << std::showbase << (uint64_t)&buffer_[i] << ": ";
-				os << std::hex << std::noshowbase << (int) buffer_[i] << " ";
-				if ( i % 8 == 7 )
-					os << std::endl;
-			}
-			if ( i % 8 != 0 )
-				os << std::endl;
+		inline unsigned char& operator[](size_t index) {
+			assert(index < size());
+			return buffer_[index];
 		}
 
-		inline void write_elf(std::ostream& os) const {
-			// TODO...
+		inline const unsigned char& operator[](size_t index) const {
+			assert(index < size());
+			return buffer_[index];
+		}
+
+		typedef const unsigned char* const_iterator;
+		inline const_iterator begin() const {
+			return buffer_;
+		}
+
+		inline const_iterator end() const {
+			return head_;
 		}
 
 	private:

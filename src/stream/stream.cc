@@ -7,6 +7,9 @@
 #include "src/code/checker.h"
 #include "src/io/att_reader.h"
 #include "src/io/att_writer.h"
+#include "src/io/dot_writer.h"
+#include "src/io/elf_writer.h"
+#include "src/io/hex_writer.h"
 #include "src/io/intel_reader.h"
 #include "src/io/intel_writer.h"
 
@@ -128,10 +131,7 @@ istream& operator>>(istream& is, Code& c) {
 ostream& operator<<(ostream& os, const Code& c) {
 	check(os, c);
 
-	Assembler assm;
-	Function fxn;
 	Code code;
-
 	switch ( get_transform(os) ) {
 		case Transform::ALL:
 			code = RemoveNop::run(code);
@@ -153,13 +153,14 @@ ostream& operator<<(ostream& os, const Code& c) {
 		case IO::ATT:
 			AttWriter::write(os, code);
 			break;
+		case IO::DOT:
+			DotWriter::write(os, code);
+			break;
 		case IO::ELF:
-			assm.assemble(fxn, code);
-			fxn.write_elf(os);
+			ElfWriter::write(os, code);
 			break;
 		case IO::HEX:
-			assm.assemble(fxn, code);
-			fxn.write_hex(os);
+			HexWriter::write(os, code);
 			break;
 		case IO::INTEL:
 			IntelWriter::write(os, code);
