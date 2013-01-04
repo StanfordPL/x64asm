@@ -10,7 +10,7 @@ namespace x64 {
 
 void Cfg::recompute() {
 	// Quick exit for corner case of empty code
-	if ( code_->empty() ) {
+	if ( code_.empty() ) {
 		blocks_ = vector<size_t>{{ 0, 0, 0 }};
 		preds_ = vector<vector<size_t>>{{ {{}}, {{0}} }};
 		succs_ = vector<vector<size_t>>{{ {{1}}, {{}} }};
@@ -30,13 +30,13 @@ void Cfg::recompute() {
 	blocks_.push_back(0);
 
 	// Check whether the first instruction is a label, we skip it below.
-	const auto& first = (*code_)[0];
+	const auto& first = code_[0];
 	if ( Attributes::is_label_defn(first) )
 		labels[first.get_operand(0).val_] = 1;
 
 	// Iterate over the remaining instructions
-	for ( size_t i = 1, ie = code_->size(); i < ie; ++i ) {
-		const auto& instr = (*code_)[i];
+	for ( size_t i = 1, ie = code_.size(); i < ie; ++i ) {
+		const auto& instr = code_[i];
 
 		// Labels begin blocks (watch out for double counting; see below)
 		if ( Attributes::is_label_defn(instr) ) {
@@ -51,9 +51,9 @@ void Cfg::recompute() {
 	}
 
 	// Push the EXIT and sentinel indices (we may already have caught the exit)
-	if ( blocks_.back() != code_->size() )
-		blocks_.push_back(code_->size());
-	blocks_.push_back(code_->size());
+	if ( blocks_.back() != code_.size() )
+		blocks_.push_back(code_.size());
+	blocks_.push_back(code_.size());
 
 	// Successors
 	succs_.resize(num_blocks());
@@ -65,7 +65,7 @@ void Cfg::recompute() {
 		}
 
 		// Grab the last instruction in the block
-		const auto& instr = (*code_)[blocks_[i+1]-1];
+		const auto& instr = code_[blocks_[i+1]-1];
 
 		// Unconditional jumps have non-trivial fallthrough targets.
 		if ( Attributes::is_uncond_jump(instr) ) {

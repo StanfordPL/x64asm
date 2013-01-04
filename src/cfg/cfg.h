@@ -17,14 +17,14 @@ class Cfg {
 		typedef size_t id_type;
 		typedef std::pair<id_type, size_t> location_type;
 
-		Cfg(Code* code) : code_{code} { 
+		Cfg(const Code& code) : code_{code} { 
 			recompute();
 		}
 
 		void recompute();
 
-		inline Code& get_code() const {
-			return *code_;
+		inline const Code& get_code() const {
+			return code_;
 		}
 
 		inline size_t num_blocks() const {
@@ -53,20 +53,20 @@ class Cfg {
 		}
 
 		inline const Instruction& get_instr(const location_type& loc) const {
-			assert(get_index(loc) < code_->size());
-			return (*code_)[get_index(loc)];
+			assert(get_index(loc) < code_.size());
+			return code_[get_index(loc)];
 		}
 
 		typedef Code::const_iterator instr_iterator;
 
 		inline instr_iterator instr_begin(id_type id) const {
 			assert(id < num_blocks());
-			return code_->begin() + blocks_[id];
+			return code_.begin() + blocks_[id];
 		}
 
 		inline instr_iterator instr_end(id_type id) const {
 			assert(id < num_blocks());
-			return code_->begin() + blocks_[id+1];
+			return code_.begin() + blocks_[id+1];
 		}	
 
 		typedef std::vector<id_type>::const_iterator pred_iterator;
@@ -114,7 +114,7 @@ class Cfg {
 		}
 
 	private:
-		Code* code_;
+		const Code& code_;
 
 		// [ENTRY][b0 begin][b0 end/b1 begin]...[bn end/EXIT][SENTINEL]
 		std::vector<size_t> blocks_;

@@ -49,11 +49,6 @@ class Loops {
 			return itr->second.end();
 		}
 
-		inline size_t get_nesting_depth(Cfg::id_type id) const {
-			assert(id < num_blocks());
-			return nesting_depth_[id];
-		}
-
 		inline size_t nesting_depth(Cfg::id_type id) const {
 			assert(id < cfg_.num_blocks());
 			return nesting_depth_[id];
