@@ -1,0 +1,25 @@
+assembler/
+
+- Emit Mod R/M
+- Emit Rex Prefix
+- Emit Vex Instructions
+
+code/
+
+- Implicit / Explicit read/write/undef/def
+
+cfg/
+
+- Live Variable
+- Defined Variable
+
+io/
+
+- ElfWriter
+- IntelWriter
+- AttReader
+- IntelReader
+
+Testbench
+
+- ...
