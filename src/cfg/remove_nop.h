@@ -9,17 +9,17 @@ namespace x64 {
 
 class RemoveNop {
 	public:
-		static inline Code run(const Cfg& cfg) {
-			return run(cfg.get_code());
+		static inline void remove(Code& c) {
+			remove(Cfg(&c));
 		}
 
-		static inline Code run(const Code& c) {
+		static inline void remove(const Cfg& cfg) {
 			Code code;
-			for ( const auto& instr : c )
+			for ( const auto& instr : cfg.get_code() )
 				if ( !Attributes::is_nop(instr) )
 					code.push_back(instr);
 
-			return code;
+			cfg.get_code() = code;
 		}
 };
 

@@ -5,6 +5,11 @@
 #include "src/assembler/function.h"
 
 #include "src/cfg/cfg.h"
+#include "src/cfg/dominators.h"
+#include "src/cfg/loops.h"
+#include "src/cfg/reachable.h"
+#include "src/cfg/remove_nop.h"
+#include "src/cfg/remove_unreachable.h"
 
 #include "src/code/attributes.h"
 #include "src/code/checker.h"

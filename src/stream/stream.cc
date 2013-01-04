@@ -110,14 +110,14 @@ istream& operator>>(istream& is, Code& c) {
 
 	switch ( get_transform(is) ) {
 		case Transform::ALL:
-			c = RemoveNop::run(c);
-			c = RemoveUnreachable::run(c);
+			RemoveNop::remove(c);
+			RemoveUnreachable::remove(c);
 			break;
 		case Transform::REMOVE_NOP:
-			c = RemoveNop::run(c);
+			RemoveNop::remove(c);
 			break;
 		case Transform::REMOVE_UNREACHABLE:
-			c = RemoveUnreachable::run(c);
+			RemoveUnreachable::remove(c);
 			break;
 
 		default:
@@ -131,17 +131,17 @@ istream& operator>>(istream& is, Code& c) {
 ostream& operator<<(ostream& os, const Code& c) {
 	check(os, c);
 
-	Code code;
+	Code code = c;
 	switch ( get_transform(os) ) {
 		case Transform::ALL:
-			code = RemoveNop::run(code);
-			code = RemoveUnreachable::run(code);
+			RemoveNop::remove(code);
+			RemoveUnreachable::remove(code);
 			break;
 		case Transform::REMOVE_NOP:
-			code = RemoveNop::run(code);
+			RemoveNop::remove(code);
 			break;
 		case Transform::REMOVE_UNREACHABLE:
-			code = RemoveUnreachable::run(code);
+			RemoveUnreachable::remove(code);
 			break;
 
 		default:
