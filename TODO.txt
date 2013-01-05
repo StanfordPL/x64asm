@@ -1,3 +1,5 @@
+TODO Items; organized by src directory.
+
 assembler/
 
 - Emit Mod R/M
@@ -6,12 +8,15 @@ assembler/
 
 code/
 
-- Implicit / Explicit read/write/undef/def
+- OpSet
+- Rename OpSet -> RegSet
+- implicit/explicit read/write/undef/def
 
 cfg/
 
-- Live Variable
-- Defined Variable
+- Cfg::reverse_iterators
+- live in/out for locs
+- def in/out for locs
 
 io/
 

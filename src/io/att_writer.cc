@@ -121,7 +121,7 @@ void AttWriter::write(ostream& os, const Opcode o) {
 	os << opcode_[o];
 }
 
-void AttWriter::write(ostream& os, Cr c) {
+void AttWriter::write(ostream& os, const Cr c) {
 	switch ( c.val_ ) {
 		case 0: os << "%cr0"; break;
 		case 2: os << "%cr2"; break;
@@ -133,12 +133,12 @@ void AttWriter::write(ostream& os, Cr c) {
 	}				 
 }
 
-void AttWriter::write(ostream& os, Dr d) {
+void AttWriter::write(ostream& os, const Dr d) {
 	assert(d.val_ < 8);
 	os << "%dr" << dec << d.val_;
 }
 
-void AttWriter::write(ostream& os, Eflag e) {
+void AttWriter::write(ostream& os, const Eflag e) {
 	switch ( e.val_ ) {
 		case 0: os << "%cf"; break;
 		case 2: os << "%pf"; break;
@@ -163,15 +163,15 @@ void AttWriter::write(ostream& os, Eflag e) {
 	}
 }
 
-void AttWriter::write(ostream& os, Imm i) {
+void AttWriter::write(ostream& os, const Imm i) {
 	os << "$" << hex << i.val_;
 }
 
-void AttWriter::write(ostream& os, Label l) {
+void AttWriter::write(ostream& os, const Label l) {
 	os << ".LABEL_" << dec << l.val_;
 }
 
-void AttWriter::write(ostream& os, M m) {
+void AttWriter::write(ostream& os, const M m) {
 	if ( !m.null_seg() ) {
 		write(os, m.get_seg());
 		os << ":";
@@ -204,16 +204,16 @@ void AttWriter::write(ostream& os, M m) {
 	os << ")";
 }
 
-void AttWriter::write(ostream& os, Mm m) {
+void AttWriter::write(ostream& os, const Mm m) {
 	assert(m.val_ < 8);
 	os << "%mm" << dec << m.val_;
 }
 
-void AttWriter::write(ostream& os, Moffs m) {
+void AttWriter::write(ostream& os, const Moffs m) {
 	os << hex << showbase << m.val_;
 }
 
-void AttWriter::write(ostream& os, NoRexR8 r) {
+void AttWriter::write(ostream& os, const NoRexR8 r) {
 	if ( r.val_ < 4 )
 		write(os, (Rl)r);
 	else if ( r.val_ < 8 )
@@ -222,7 +222,7 @@ void AttWriter::write(ostream& os, NoRexR8 r) {
 		assert(false);
 }
 
-void AttWriter::write(ostream& os, RexR8 r) {
+void AttWriter::write(ostream& os, const RexR8 r) {
 	if ( r.val_ < 4 )
 		write(os, (Rl)r);
 	else if ( r.val_ < 16 )
@@ -231,7 +231,7 @@ void AttWriter::write(ostream& os, RexR8 r) {
 		assert(false);
 }
 
-void AttWriter::write(ostream& os, Rl r) {
+void AttWriter::write(ostream& os, const Rl r) {
 	switch ( r.val_ ) {
 		case 0:  os << "%al"; break;
 		case 1:  os << "%cl"; break;
@@ -242,7 +242,7 @@ void AttWriter::write(ostream& os, Rl r) {
 	}
 }
 
-void AttWriter::write(ostream& os, Rh r) {
+void AttWriter::write(ostream& os, const Rh r) {
 	switch ( r.val_ ) {
 		case 4:  os << "%ah"; break;
 		case 5:  os << "%ch"; break;
@@ -253,7 +253,7 @@ void AttWriter::write(ostream& os, Rh r) {
 	}
 }
 
-void AttWriter::write(ostream& os, Rb r) {
+void AttWriter::write(ostream& os, const Rb r) {
 	switch ( r.val_ ) {
 		case 4:  os << "%spl"; break;
 		case 5:  os << "%bpl"; break;
@@ -272,7 +272,7 @@ void AttWriter::write(ostream& os, Rb r) {
 	}
 }
 
-void AttWriter::write(ostream& os, R16 r) {
+void AttWriter::write(ostream& os, const R16 r) {
 	switch ( r.val_ ) {
 		case 0:  os << "%ax"; break;
 		case 1:  os << "%cx"; break;
@@ -295,7 +295,7 @@ void AttWriter::write(ostream& os, R16 r) {
 	}
 }
 
-void AttWriter::write(ostream& os, R32 r) {
+void AttWriter::write(ostream& os, const R32 r) {
 	switch ( r.val_ ) {
 		case 0:  os << "%eax"; break;
 		case 1:  os << "%ecx"; break;
@@ -318,7 +318,7 @@ void AttWriter::write(ostream& os, R32 r) {
 	}
 }
 
-void AttWriter::write(ostream& os, R64 r) {
+void AttWriter::write(ostream& os, const R64 r) {
 	switch ( r.val_ ) {
 		case 0:  os << "%rax"; break;
 		case 1:  os << "%rcx"; break;
@@ -341,11 +341,11 @@ void AttWriter::write(ostream& os, R64 r) {
 	}
 }
 
-void AttWriter::write(ostream& os, Rel r) {
+void AttWriter::write(ostream& os, const Rel r) {
 	os << hex << showbase << r.val_;
 }
 
-void AttWriter::write(ostream& os, Sreg s) {
+void AttWriter::write(ostream& os, const Sreg s) {
 	switch ( s.val_ ) {
 		case 0: os << "%es"; break;
 		case 1: os << "%cs"; break;
@@ -358,7 +358,7 @@ void AttWriter::write(ostream& os, Sreg s) {
 	}
 }
 
-void AttWriter::write(ostream& os, St s) {
+void AttWriter::write(ostream& os, const St s) {
 	assert(s.val_ < 8);
 	if ( s.val_ == 0 )
 		os << "%st";	
@@ -366,14 +366,56 @@ void AttWriter::write(ostream& os, St s) {
 		os << "%st(" << dec << s.val_ << ")";
 }
 
-void AttWriter::write(ostream& os, Xmm x) {
+void AttWriter::write(ostream& os, const Xmm x) {
 	assert(x.val_ < 16);
 	os << "%xmm" << dec << x.val_;
 }
 
-void AttWriter::write(ostream& os, Ymm y) {
+void AttWriter::write(ostream& os, const Ymm y) {
 	assert(y.val_ < 16);
 	os << "%ymm" << dec << y.val_;
+}
+
+void AttWriter::write(ostream& os, const OpSet& o) {
+	os << "{ ";
+	for ( uint64_t r = 0; r < 16; ++r ) {
+		if ( o.contains((R64)r) )
+			write(os, (R64)r);
+		else if ( o.contains((R32)r) )
+			write(os, (R32)r);
+		else if ( o.contains((R16)r) )
+			write(os, (R16)r);
+		else if ( r < 4 && o.contains((Rh)(r+4)) )
+				write(os, (Rh)r);
+		else if ( o.contains((Rl)r) )
+			write(os, (Rl)r);
+		else 
+			os << ".";
+		os << " ";
+	}
+	os << "}" << endl;
+
+	os << "{ ";
+	for ( uint64_t x = 0; x < 16; ++x ) {
+		if ( o.contains((Ymm)x) )
+			write(os, (Ymm)x);
+		else if ( o.contains((Xmm)x) )
+			write(os, (Xmm)x);
+		else
+			os << ".";
+		os << " ";
+	}
+	os << "}" << endl;
+
+	os << "{ ";
+	for ( uint64_t m = 0; m < 8; ++m ) {
+		if ( o.contains((Mm)m) ) 
+			write(os, (Mm)m);
+		else
+			os << ".";
+		os << " ";
+	}
+	os << "}";
 }
 
 } // namespace x64

@@ -65,5 +65,8 @@ int main() {
 	Function f2 = f;
 	f2();
 
+	cout << OpSet::empty() << endl;
+	cout << OpSet::universe() << endl;
+
 	return 0;
 }

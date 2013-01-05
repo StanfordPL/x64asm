@@ -69,6 +69,20 @@ class Cfg {
 			return code_.begin() + blocks_[id+1];
 		}	
 
+		typedef Code::const_reverse_iterator instr_reverse_iterator;
+
+		inline instr_reverse_iterator instr_rbegin(id_type id) const {
+			assert(id < num_blocks());
+			// TODO... FINISH THIS
+			return code_.rbegin();
+		}
+
+		inline instr_reverse_iterator instr_rend(id_type id) const {
+			assert(id < num_blocks());
+			// TODO... FINISH THIS
+			return code_.rend();
+		}	
+
 		typedef std::vector<id_type>::const_iterator pred_iterator;
 
 		inline pred_iterator pred_begin(id_type id) const {

@@ -16,7 +16,7 @@ void Dominators::recompute() {
 	unordered_set<Cfg::id_type> top;
 	for ( size_t i = cfg_.get_entry(), ie = cfg_.get_exit(); i < ie; ++i )
 		top.insert(i);
-	for ( size_t i = cfg_.get_entry()+1, ie = cfg_.get_exit(); i < ie; ++i )
+	for ( size_t i = cfg_.get_entry()+1, ie = cfg_.get_exit(); i <= ie; ++i )
 		outs_[i] = top;
 
 	// Iterate until fixed point 
@@ -24,7 +24,7 @@ void Dominators::recompute() {
 		changed = false;
 
 		// Meet operator
-		for ( size_t i = cfg_.get_entry()+1, ie = cfg_.get_exit(); i < ie; ++i ) {
+		for ( size_t i = cfg_.get_entry()+1, ie = cfg_.get_exit(); i <= ie; ++i ) {
 			auto new_in = top;
 			for ( auto p = cfg_.pred_begin(i), pe = cfg_.pred_end(i); p != pe; ++p )
 				new_in.erase(outs_[*p].begin(), outs_[*p].end());
@@ -34,7 +34,7 @@ void Dominators::recompute() {
 		}
 
 		// Transfer function
-		for ( size_t i = cfg_.get_entry()+1, ie = cfg_.get_exit(); i < ie; ++i ) {
+		for ( size_t i = cfg_.get_entry()+1, ie = cfg_.get_exit(); i <= ie; ++i ) {
 			auto new_out = ins_[i];
 			new_out.insert(i);
 

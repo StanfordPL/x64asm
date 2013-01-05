@@ -5,7 +5,9 @@
 #include "src/assembler/function.h"
 
 #include "src/cfg/cfg.h"
+#include "src/cfg/defined_register.h"
 #include "src/cfg/dominators.h"
+#include "src/cfg/live_register.h"
 #include "src/cfg/loops.h"
 #include "src/cfg/reachable.h"
 #include "src/cfg/remove_nop.h"

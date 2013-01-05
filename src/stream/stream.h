@@ -15,6 +15,7 @@
 #include "src/code/mm.h"
 #include "src/code/moffs.h"
 #include "src/code/opcode.h"
+#include "src/code/op_set.h"
 #include "src/code/r.h"
 #include "src/code/rel.h"
 #include "src/code/sreg.h"
@@ -109,5 +110,7 @@ std::ostream& operator<<(std::ostream& os, const x64::Sreg s);
 std::ostream& operator<<(std::ostream& os, const x64::St s);
 std::ostream& operator<<(std::ostream& os, const x64::Xmm x);
 std::ostream& operator<<(std::ostream& os, const x64::Ymm y);
+
+std::ostream& operator<<(std::ostream& os, const x64::OpSet& o);
 
 #endif

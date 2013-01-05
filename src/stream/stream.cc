@@ -312,3 +312,7 @@ ostream& operator<<(ostream& os, const Ymm y) {
 	check(os, y);
 	return generic_write(os, y);
 }
+
+ostream& operator<<(ostream& os, const OpSet& o) {
+	return generic_write(os, o);
+}

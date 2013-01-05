@@ -14,6 +14,7 @@
 #include "src/code/mm.h"
 #include "src/code/moffs.h"
 #include "src/code/opcode.h"
+#include "src/code/op_set.h"
 #include "src/code/r.h"
 #include "src/code/rel.h"
 #include "src/code/sreg.h"
@@ -50,6 +51,8 @@ class AttWriter {
 		static void write(std::ostream& os, const St s);
 		static void write(std::ostream& os, const Xmm x);
 		static void write(std::ostream& os, const Ymm y);
+
+		static void write(std::ostream& os, const OpSet& o);
 };
 
 } // namespace x64
