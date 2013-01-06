@@ -213,55 +213,55 @@ class OpSet {
 
 		inline bool contains(Rh rhs) const {
 			assert(Checker::check(rhs));
-			return (gp_regs_ & ((uint64_t) Mask::HIGH << (rhs.val_-4))) == 
+			return ((gp_regs_ >> (rhs.val_-4)) & (uint64_t)Mask::HIGH) == 
 				     (uint64_t)Mask::HIGH;
 		}
 
 		inline bool contains(Rl rhs) const {
 			assert(Checker::check(rhs));
-			return (gp_regs_ & ((uint64_t) Mask::LOW << rhs.val_)) == 
+			return ((gp_regs_ >> rhs.val_) & (uint64_t)Mask::LOW) == 
 				     (uint64_t)Mask::LOW;
 		}
 
 		inline bool contains(Rb rhs) const {
 			assert(Checker::check(rhs));
-			return (gp_regs_ & ((uint64_t) Mask::LOW << rhs.val_)) == 
+			return ((gp_regs_ >> rhs.val_) & (uint64_t)Mask::LOW) == 
 				     (uint64_t)Mask::LOW;
 		}
 
 		inline bool contains(R16 rhs) const {
 			assert(Checker::check(rhs));
-			return (gp_regs_ & ((uint64_t) Mask::WORD << rhs.val_)) == 
+			return ((gp_regs_ >> rhs.val_) & (uint64_t)Mask::WORD) == 
 				     (uint64_t)Mask::WORD;
 		}
 
 		inline bool contains(R32 rhs) const {
 			assert(Checker::check(rhs));
-			return (gp_regs_ & ((uint64_t) Mask::DOUBLE << rhs.val_)) == 
+			return ((gp_regs_ >> rhs.val_) & (uint64_t)Mask::DOUBLE) == 
 				     (uint64_t)Mask::DOUBLE;
 		}
 
 		inline bool contains(R64 rhs) const {
 			assert(Checker::check(rhs));
-			return (gp_regs_ & ((uint64_t) Mask::QUAD << rhs.val_)) == 
+			return ((gp_regs_ >> rhs.val_) & (uint64_t)Mask::QUAD) == 
 				     (uint64_t)Mask::QUAD;
 		}
 
 		inline bool contains(Xmm rhs) const {
 			assert(Checker::check(rhs));
-			return (other_regs_ & ((uint64_t) Mask::XMM << rhs.val_)) == 
+			return ((other_regs_ >> rhs.val_) & (uint64_t)Mask::XMM) == 
 				     (uint64_t)Mask::XMM;
 		}
 
 		inline bool contains(Ymm rhs) const {
 			assert(Checker::check(rhs));
-			return (other_regs_ & ((uint64_t) Mask::YMM << rhs.val_)) == 
+			return ((other_regs_ >> rhs.val_) & (uint64_t)Mask::YMM) == 
 				     (uint64_t)Mask::YMM;
 		}
 
 		inline bool contains(Mm rhs) const {
 			assert(Checker::check(rhs));
-			return (other_regs_ & ((uint64_t) Mask::MM << rhs.val_)) == 
+			return ((other_regs_ >> rhs.val_) & (uint64_t)Mask::MM) == 
 				     (uint64_t)Mask::MM;
 		}
 

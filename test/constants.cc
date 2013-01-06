@@ -66,7 +66,16 @@ int main() {
 	f2();
 
 	cout << OpSet::empty() << endl;
-	cout << OpSet::universe() << endl;
+	cout << (OpSet::universe()+=rbx) << endl;
+
+	OpSet o = OpSet::empty();
+	o += ah;
+	o += al;
+	o += rax;
+	o += sp;
+	o += r15d;
+	o += rbp;
+	cout << o << endl;
 
 	return 0;
 }
