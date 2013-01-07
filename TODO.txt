@@ -8,13 +8,12 @@ assembler/
 
 code/
 
-- OpSet
+- OpSet (eflags and some others maybe?)
 - Rename OpSet -> RegSet
 - implicit/explicit read/write/undef/def
 
 cfg/
 
-- Cfg::reverse_iterators
 - live in/out for locs
 - def in/out for locs
 
