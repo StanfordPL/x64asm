@@ -4,10 +4,10 @@
 #include <cassert>
 
 #include "src/code/instruction.h"
-#include "src/code/op_accessor.h"
 #include "src/code/op_set.h"
 #include "src/code/op_type.h"
 #include "src/code/opcode.h"
+#include "src/code/properties.h"
 
 namespace x64 {
 
@@ -18,15 +18,15 @@ class Attributes {
 			return arity_[o];
 		}
 
-		static OpAccessor accessor(const Opcode o, size_t index) {
-			assert(o < accessor_.size());
-			assert(index < accessor_[o].size());
-			return accessor_[o][index];
+		static Properties properties(const Opcode o, size_t index) {
+			assert(o < properties_.size());
+			assert(index < properties_[o].size());
+			return properties_[o][index];
 		}
 
 		static OpType type(const Opcode o, size_t index) {
-			assert(o < accessor_.size());
-			assert(index < accessor_[o].size());
+			assert(o < type_.size());
+			assert(index < type_[o].size());
 			return type_[o][index];
 		}
 
@@ -83,8 +83,8 @@ class Attributes {
 			return arity(i.get_opcode());
 		}
 
-		static inline OpAccessor accessor(const Instruction& i, size_t index) {
-			return accessor(i.get_opcode(), index);
+		static inline Properties properties(const Instruction& i, size_t index) {
+			return properties(i.get_opcode(), index);
 		}
 
 		static inline OpType type(const Instruction& i, size_t index) {
@@ -154,7 +154,7 @@ class Attributes {
 
 	private:
 		static std::vector<size_t> arity_;
-		static std::vector<std::vector<OpAccessor>> accessor_;
+		static std::vector<std::vector<Properties>> properties_;
 		static std::vector<std::vector<OpType>> type_;
 		static std::vector<bool> is_return_;
 		static std::vector<bool> is_nop_;

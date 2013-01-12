@@ -1,4 +1,4 @@
-Opcode	Instruction	Accessors	64-bit Mode	Compat/32-bit-Legacy Mode	CPUID Feature Flags	AT&T Mnemonic	Description
+Opcode	Instruction	Properties	64-bit Mode	Compat/32-bit-Legacy Mode	CPUID Feature Flags	AT&T Mnemonic	Description
 							
 37	AAA		I	V			ASCII adjust AL after addition.
 							
@@ -91,7 +91,7 @@ VEX.NDS.128.66.0F38.WIG DC /r	VAESENC xmm1, xmm2, xmm3/m128	Z, R, R	V	V	AES AVX	
 VEX.NDS.128.66.0F38.WIG DD /r	VAESENCLAST xmm1, xmm2, xmm3/m128	Z, R, R	V	V	AES AVX	vaesenclast	Perform the last round of an AES encryption flow, operating on a 128-bit data (state) from xmm2 with a 128 bit round key from xmm3/m128; store the result in xmm1.
 							
 66 0F 38 DB /r	AESIMC xmm1, xmm2/m128	RW, R	V	V	AES	aesimc	Perform the InvMixColumn transformation on a 128-bit round key from xmm2/m128 and store the result in xmm1.
-VEX.128.66.0F38.WIG DB /r	VAESIMC xmm1, xmm2/m128	Z, R, R	V	V	AES AVX	vaesimc	Perform the InvMixColumn transformation on a 128-bit round key from xmm2/m128 and store the result in xmm1.
+VEX.128.66.0F38.WIG DB /r	VAESIMC xmm1, xmm2/m128	ZW, R	V	V	AES AVX	vaesimc	Perform the InvMixColumn transformation on a 128-bit round key from xmm2/m128 and store the result in xmm1.
 							
 66 0F 3A DF /r ib	AESKEYGENASSIST xmm1, xmm2/m128, imm8	W, R, R	V	V	AES	aeskeygenassist	Assist in AES round key generation using an 8 bits Round Constant (RCON) specified in the immediate byte, operating on 128 bits of data specified in xmm2/m128 and stores the result in xmm1.
 VEX.128.66.0F3A.WIG DF /r ib	VAESKEYGENASSIST xmm1, xmm2/m128, imm8	Z, R, R	V	V	AES AVX	vaeskeygenassist	Assist in AES round key generation using 8 bits Round Constant (RCON) specified in the immediate byte, operating on 128 bits of data specified in xmm2/m128 and stores the result in xmm1.
@@ -156,13 +156,13 @@ VEX.NDS.256.66.0F3A.W0 4A /r /is4	VBLENDVPS ymm1, ymm2, ymm3/m256, ymm4	W, R, R,
 62 /r	BOUND r16, m16&16		I	V			Check if r16 (array index) is within bounds specified by m16&16.
 62 /r	BOUND r32, m32&32		I	V			Check if r32 (array index) is within bounds specified by m16&16.
 							
-0F BC /r	BSF r16, r/m16	wuR, R	V	V		bsfw	Bit scan forward on r/m16.
-0F BC /r	BSF r32, r/m32	wuR, R	V	V		bsfl	Bit scan forward on r/m32.
-REX.W+ 0F BC	BSF r64, r/m64	wuR, R	V	NE		bsfq	Bit scan forward on r/m64.
+0F BC /r	BSF r16, r/m16	Ruw, R	V	V		bsfw	Bit scan forward on r/m16.
+0F BC /r	BSF r32, r/m32	Ruw, R	V	V		bsfl	Bit scan forward on r/m32.
+REX.W+ 0F BC	BSF r64, r/m64	Ruw, R	V	NE		bsfq	Bit scan forward on r/m64.
 							
-0F BD /r	BSR r16, r/m16	wuR, R	V	V		bsrw	Bit scan reverse on r/m16.
-0F BD /r	BSR r32, r/m32	wuR, R	V	V		bsrl	Bit scan reverse on r/m32.
-REX.W+ 0F BD	BSR r64, r/m64	wuR, R	V	NE		bsrq	Bit scan reverse on r/m64.
+0F BD /r	BSR r16, r/m16	Ruw, R	V	V		bsrw	Bit scan reverse on r/m16.
+0F BD /r	BSR r32, r/m32	Ruw, R	V	V		bsrl	Bit scan reverse on r/m32.
+REX.W+ 0F BD	BSR r64, r/m64	Ruw, R	V	NE		bsrq	Bit scan reverse on r/m64.
 							
 0F C8 +rd	BSWAP r32	RW	V	V		bswap	Reverses the byte order of a 32-bit register.
 REX.W+ 0F C8 +rd	BSWAP r64	RW	V	NE		bswap	Reverses the byte order of a 64-bit register.
@@ -421,7 +421,7 @@ VEX.LIG.F2.0F.W0 2D /r	VCVTSD2SI r32, xmm1/m64	W, R	V	V	AVX	vcvtsd2si	Convert on
 VEX.LIG.F2.0F.W1 2D /r	VCVTSD2SI r64, xmm1/m64	W, R	V	NE	AVX	vcvtsd2si	Convert one double precision floating-point value from xmm1/m64 to one signed quadword integer sign-extended into r64.
 							
 F2 0F 5A /r	CVTSD2SS xmm1, xmm2/m64	W, R	V	V	SSE2	cvtsd2ss	Convert one double-precision floating-point value in xmm2/m64 to one single-precision floating-point value in xmm1.
-VEX.NDS.LIG.F2.0F.WIG 5A /r	VCVTSD2SS xmm1,xmm2, xmm3/m64	Z, R	V	V	AVX	vcvtsd2ss	Convert one double-precision floating-point value in xmm3/m64 to one single-precision floating-point value and merge with high bits in xmm2.
+VEX.NDS.LIG.F2.0F.WIG 5A /r	VCVTSD2SS xmm1,xmm2, xmm3/m64	Z, R, R	V	V	AVX	vcvtsd2ss	Convert one double-precision floating-point value in xmm3/m64 to one single-precision floating-point value and merge with high bits in xmm2.
 							
 F2 0F 2A /r	CVTSI2SD xmm, r/m32	W, R	V	V	SSE2	cvtsi2sd	Convert one signed doubleword integer from r/m32 to one double-precision floating-point value in xmm.
 F2 REX.W+ 0F 2A /r	CVTSI2SD xmm, r/m64	W, R	V	NE	SSE2	cvtsi2sd	Convert one signed quadword integer from r/m64 to one double-precision floating-point value in xmm.
@@ -583,7 +583,7 @@ DE F1 	FDIVRP 		V	V		fdivrp	Divide ST(0) by ST(1), store result in ST(1), and po
 DA /7 	FIDIVR m32int 	R	V	V		fidivrl	Divide m32int by ST(0) and store result in ST(0).
 DE /7 	FIDIVR m16int 	R	V	V		fidivr	Divide m16int by ST(0) and store result in ST(0).
 							
-DD C0 +i 	FFREE ST(i) 		V	V		ffree	Sets tag for ST(i) to empty.
+DD C0 +i 	FFREE ST(i) 	I	V	V		ffree	Sets tag for ST(i) to empty.
 							
 DE /2 	FICOM m16int 	R	V	V		ficom	Compare ST(0) with m16int.
 DA /2 	FICOM m32int 	R	V	V		ficoml	Compare ST(0) with m32int.
@@ -1401,7 +1401,7 @@ VEX.NDS.128.66.0F3A.WIG 44 /r ib 	VPCLMULQDQ xmm1, xmm2, xmm3/m128, imm8 	Z, R, 
 0F 74 /r 	PCMPEQB mm, mm/m64	RW, R	V	V	MMX	pcmpeqb	Compare packed bytes in mm/m64 and mm for equality.
 66 0F 74 /r	PCMPEQB xmm1, xmm2/m128	RW, R	V	V	SSE2	pcmpeqb	Compare packed bytes in xmm2/m128 and xmm1 for equality.
 0F 75 /r	PCMPEQW mm, mm/m64	RW, R	V	V	MMX	pcmpeqw	Compare packed words in mm/m64 and mm for equality.
-66 0F 75 /r	PCMPEQW xmm1, xmm2/m128	RW< R	V	V	SSE2	pcmpeqw	Compare packed words in xmm2/m128 and xmm1 for equality.
+66 0F 75 /r	PCMPEQW xmm1, xmm2/m128	RW, R	V	V	SSE2	pcmpeqw	Compare packed words in xmm2/m128 and xmm1 for equality.
 0F 76 /r	PCMPEQD mm, mm/m64	RW, R	V	V	MMX	pcmpeqd	Compare packed doublewords in mm/m64 and mm for equality.
 66 0F 76 /r	PCMPEQD xmm1, xmm2/m128	RW, R	V	V	SSE2	pcmpeqd	Compare packed doublewords in xmm2/m128 and xmm1 for equality.
 VEX.NDS.128.66.0F.WIG 74 /r	VPCMPEQB xmm1, xmm2, xmm3/m128	Z, R, R	V	V	AVX	vpcmpeqb	Compare packed bytes in xmm3/m128 and xmm2 for equality.
@@ -1575,7 +1575,7 @@ VEX.NDS.128.66.0F38.WIG 0B /r	VPMULHRSW xmm1, xmm2, xmm3/m128	Z, R, R	V	V	AVX	vp
 VEX.NDS.128.66.0F.WIG E4 /r	VPMULHUW xmm1, xmm2, xmm3/m128	Z, R, R	V	V	AVX	vpmulhuw	Multiply the packed unsigned word integers in xmm2 and xmm3/m128, and store the high 16 bits of the results in xmm1.
 							
 0F E5 /r 	PMULHW mm, mm/m64	RW, R	V	V	MMX	pmulhw	Multiply the packed signed word integers in mm1 register and mm2/m64, and store the high 16 bits of the results in mm1.
-66 0F E5 /r	PMULHW xmm1, xmm2/m128	RW, R, R	V	V	SSE2	pmulhw	Multiply the packed signed word integers in xmm1 and xmm2/m128, and store the high 16 bits of the results in xmm1.
+66 0F E5 /r	PMULHW xmm1, xmm2/m128	RW, R	V	V	SSE2	pmulhw	Multiply the packed signed word integers in xmm1 and xmm2/m128, and store the high 16 bits of the results in xmm1.
 VEX.NDS.128.66.0F.WIG E5 /r	VPMULHW xmm1, xmm2, xmm3/m128	Z, R, R	V	V	AVX	vpmulhw	Multiply the packed signed word integers in xmm2 and xmm3/m128, and store the high 16 bits of the results in xmm1.
 							
 66 0F 38 40 /r 	PMULLD xmm1, xmm2/m128 	RW, R	V	V	SSE4_1	pmulld	Multiply the packed dword signed integers in xmm1 and xmm2/m128 and store the low 32 bits of each product in xmm1.

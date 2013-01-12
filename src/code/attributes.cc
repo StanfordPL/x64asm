@@ -112,11 +112,11 @@ vector<size_t> Attributes::arity_ {{
 	#include "src/code/arity.table"
 }};
 
-vector<vector<OpAccessor>> Attributes::accessor_ {{
+vector<vector<Properties>> Attributes::properties_ {{
 	// Internal mnemonics
 	{{}}
 	// Auto-generated mnemonics
-	#include "src/code/accessor.table"
+	#include "src/code/properties.table"
 }};
 
 vector<vector<OpType>> Attributes::type_ {{

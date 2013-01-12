@@ -13,7 +13,7 @@ import Text.Regex.TDFA
 data Instr =
   Instr { opcode      :: String
         , instruction :: String
-        , accessor    :: String
+        , property    :: String
         , mode64      :: String
         , mode32      :: String				
         , flag        :: String
@@ -49,9 +49,9 @@ to_table is f = intercalate "\n" $ map elem is
 
 -- Read a row
 read_instr :: String -> Instr
-read_instr s = let (o:i:at:m64:m32:f:a:d:[]) = splitOn "\t" s in 
+read_instr s = let (o:i:p:m64:m32:f:a:d:[]) = splitOn "\t" s in 
                    (Instr (trim o) (trim i) 
-                          (trim at)
+                          (trim p)
                           (trim m64) (trim m32) 
                           (trim f) 
                           (trim a) (trim d))
@@ -202,7 +202,8 @@ insert_label_variants is = concat $ map insert_label_variant is
 -- Inserts a hint variant for conditional jumps
 insert_hint_variant :: Instr -> [Instr]
 insert_hint_variant i = case is_cond_jump i of
-  True -> [i,i{instruction=(instruction i ++ ", hint")}]
+  True -> [i,i{instruction=(instruction i ++ ", hint"),
+               property=(property i ++ ", I")}]
   False -> [i]
 
 -- Inserts a hint variant for all conditional jumps
@@ -282,6 +283,11 @@ raw_mnemonic i = head $ words $ instruction i
 operands :: Instr -> [String]
 operands i = let x = (splitOn ",") $ concat $ tail $ words (instruction i) in
 	filter (\o -> o /= "") x
+
+-- Extract properties from property
+properties :: Instr -> [String]
+properties i = let x = map trim $ (splitOn ",") $ property i in
+  filter (\p -> p /= "") x
 
 -- Transform operand notion into type
 op2type :: String -> String
@@ -371,6 +377,12 @@ is_cond_jump i = let mn = raw_mnemonic i in
 -- Is this an unconditional jump?
 is_uncond_jump :: Instr -> Bool
 is_uncond_jump i = raw_mnemonic i == "JMP"
+
+-- Returns true for 32-bit register operands
+reg32_op :: String -> Bool
+reg32_op "r32" = True
+reg32_op "EAX" = True
+reg32_op _ = False
 
 -- Returns true for memory operands
 mem_op :: String -> Bool
@@ -468,6 +480,13 @@ ambig_decls_pretty is = map pretty $ ambig_decls is
   where pretty xs = (instruction (head xs)) ++ ":" ++ (concat (map elem xs))
         elem x = "\n\t" ++ (opcode x)
 
+-- Debugging: Do operand and property arities always match?
+property_arity_check :: [Instr] -> IO ()
+property_arity_check is = sequence_ $ map check is
+  where check i = case (length (operands i)) == (length (properties i)) of
+                       True -> return ()
+                       False -> error $ "Property error for " ++ (opcode i)
+
 -------------------------------------------------------------------------------
 -- code/ codegen
 -------------------------------------------------------------------------------
@@ -490,12 +509,30 @@ arity_row i = show $ length $ operands i
 arity_table :: [Instr] -> String
 arity_table is = to_table is arity_row
 
--- Converts an instruction to accessor table row
-accessor_row :: Instr -> String
-accessor_row i = "{{" ++ intercalate "," [] ++ "}}"
+-- Creates an entry for a property element
+property_elem :: (String, String) -> String
+property_elem (t,p) = "Properties::none()" ++ (concat (map (elem t) p))
+  where elem _ 'R' = "+Property::MUST_READ"
+        elem _ 'r' = "+Property::MAYBE_READ"
+        elem t 'Z' = case mem_op t of 
+                          True ->  "+Property::MUST_WRITE"
+                          False -> "+Property::MUST_WRITE_ZX"
+        elem t 'W' = case reg32_op t of 
+                          True ->  "+Property::MUST_WRITE_ZX"
+                          False -> "+Property::MUST_WRITE"
+        elem _ 'w' = "+Property::MAYBE_WRITE"
+        elem _ 'U' = "+Property::MUST_UNDEF"
+        elem _ 'u' = "+Property::MAYBE_UNDEF"
+        elem _ 'I' = ""
+        elem t c = error $ "Undefined property type " ++ t ++ ":" ++ [c]
 
--- Converts all instruction to accessor table
-accessor_table is = to_table is accessor_row 
+-- Converts an instruction to properties table row
+properties_row :: Instr -> String
+properties_row i = "{{" ++ intercalate "," ps ++ "}}"
+  where ps = map property_elem $ zip (operands i) (properties i)
+
+-- Converts all instruction to properties table
+properties_table is = to_table is properties_row
 
 -- Converts an instruction to type table row
 type_row :: Instr -> String
@@ -843,10 +880,14 @@ main = do args <- getArgs
                    remove_format $ 
                    read_instrs file
 
+          -- Check Inputs
+          property_arity_check is 
+
+          -- Write Code
           writeFile "assembler.decl"    $ assm_header_decls is
           writeFile "assembler.defn"    $ assm_src_defns is
           writeFile "arity.table"       $ arity_table is
-          writeFile "accessor.table"    $ accessor_table is
+          writeFile "properties.table"  $ properties_table is
           writeFile "type.table"        $ type_table is
           writeFile "return.table"      $ return_table is
           writeFile "nop.table"         $ nop_table is
@@ -860,5 +901,3 @@ main = do args <- getArgs
           writeFile "opcode.enum"       $ opcode_enums is
           writeFile "opcode.att"        $ att_mnemonics is
           writeFile "test.s"            $ test_instrs is					
-          mapM_ print $ uniq_opc_terms is
-
