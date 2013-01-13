@@ -128,7 +128,19 @@ class Assembler {
 			fxn_->emit_quad(i.val_);
 		}
 
-		inline void disp_imm(Moffs m) {
+		inline void disp_imm(Moffs8 m) {
+			fxn_->emit_quad(m.val_);
+		}
+
+		inline void disp_imm(Moffs16 m) {
+			fxn_->emit_quad(m.val_);
+		}
+
+		inline void disp_imm(Moffs32 m) {
+			fxn_->emit_quad(m.val_);
+		}
+
+		inline void disp_imm(Moffs64 m) {
 			fxn_->emit_quad(m.val_);
 		}
 

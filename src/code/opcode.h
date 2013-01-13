@@ -4,7 +4,7 @@
 namespace x64 {
 
 /** An x64 mnemonic. */
-enum Opcode {
+enum Opcode : int32_t {
 	// Internal mnemonics
 	LABEL_DEFN = 0
 	// Auto-generated mnemonics

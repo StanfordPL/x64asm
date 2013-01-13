@@ -22,7 +22,7 @@ data Instr =
         } deriving (Show)
 
 -------------------------------------------------------------------------------
--- Helper Formatting Methods
+-- Helper Methods
 -------------------------------------------------------------------------------
 
 -- Remove leading/trailing whitespace
@@ -38,6 +38,21 @@ low s = map toLower s
 up :: String -> String
 up s = map toUpper s
 
+-- Replace all occurrences of an operand
+repl_op :: Instr -> String -> String -> Instr
+repl_op i op val = i{instruction=inst'}
+  where inst = instruction i
+        inst' = subRegex (mkRegex op) inst (val)
+
+-- Replace first occurrence of an operand
+repl_first_op :: Instr -> String -> String -> Instr
+repl_first_op i op val = i{instruction=inst'}
+  where inst' = (raw_mnemonic i) ++ " " ++ (intercalate ", " ops)
+        os = operands i
+        ops = case findIndex (==op) os of
+                   (Just idx) -> (take idx os) ++ [val] ++ (drop (idx+1) os)
+                   Nothing -> os
+
 -- Transforms a list of instructions into a comma separated table
 to_table :: [Instr] -> (Instr -> String) -> String
 to_table is f = intercalate "\n" $ map elem is
@@ -45,6 +60,9 @@ to_table is f = intercalate "\n" $ map elem is
 
 -------------------------------------------------------------------------------
 -- Read Input File
+-------------------------------------------------------------------------------
+
+-- Step 0: Read input file
 -------------------------------------------------------------------------------
 
 -- Read a row
@@ -60,8 +78,7 @@ read_instr s = let (o:i:p:m64:m32:f:a:d:[]) = splitOn "\t" s in
 read_instrs :: String -> [Instr]
 read_instrs s = map read_instr $ lines s
 
--------------------------------------------------------------------------------
--- Data Correction (transforms into canonical form)
+-- Step 1: Remove formatting
 -------------------------------------------------------------------------------
 
 -- Remove title row and empty rows		
@@ -71,42 +88,58 @@ remove_format is = filter (\x -> keep x) is
                    (opcode i) /= "Opcode" &&
                    (instruction i) /= "(No mnemonic)"
 
+-- Step 2: Remove instructions which are invalid in 64-bit mode
+-------------------------------------------------------------------------------
+
 -- Filters out valid 64-bit mode instructions
 x64 :: [Instr] -> [Instr]
 x64 is = filter (\x -> (mode64 x) == "V") is
 
--- Split a disjunct operand into two parts
-split_op :: String -> (String,String)
-split_op "r/m8" = ("r8","m8")
-split_op "r/m16" = ("r16","m16")
-split_op "r/m32" = ("r32","m32")
-split_op "r/m64" = ("r64","m64")
-split_op "reg/m32" = ("r32","m32")
-split_op "m14/28byte" = ("m14byte","m28byte")
-split_op "m94/108byte" = ("m94byte","m108byte")
-split_op "reg/m8" = ("r8","m8")
-split_op "reg/m16" = ("r16","m16")
-split_op s = let (x1:x2:[]) = splitOn "/" s in (x1,x2)
+-- Step 3: Split instructions with implicit or explicit disjunct operands
+-------------------------------------------------------------------------------
+
+-- Identifies a disjunct operand
+disjunct_idx :: Instr -> Maybe Int
+disjunct_idx i = findIndex d $ operands i
+  where d o = ('/' `elem` o) || (o == "reg") || (o == "m") || (o == "mem")
+
+-- Split a disjunct operand into parts
+split_op :: String -> [String]
+split_op "r/m8" = ["r8","m8"]
+split_op "r/m16" = ["r16","m16"]
+split_op "r/m32" = ["r32","m32"]
+split_op "r/m64" = ["r64","m64"]
+split_op "reg/m32" = ["r32","r64","m32"]
+split_op "m14/28byte" = ["m14byte","m28byte"]
+split_op "m94/108byte" = ["m94byte","m108byte"]
+split_op "reg/m8" = ["r32","r64","m8"]
+split_op "reg/m16" = ["r32","r64","m16"]
+split_op "reg" = ["r32","r64"]
+split_op "m" = ["m16","m32","m64"]
+split_op "mem" = ["m16","m32","m64"]
+split_op o
+  | '/' `elem` o = splitOn "/" o
+  | otherwise = error $ "Can't split non-disjunct operand " ++ o
 
 -- Flatten instructions with disjunct operands
 flatten_instr :: Instr -> [Instr]
-flatten_instr i = case findIndex (\x -> '/' `elem` x) (operands i) of
+flatten_instr i = case disjunct_idx i of
   Nothing    -> [i]
-  (Just idx) -> [i{instruction=inst1}, i{instruction=inst2}]
+  (Just idx) -> map (repl_op i op) vals
     where op = (operands i) !! idx
-          op1 = fst $ split_op op
-          op2 = snd $ split_op op				
-          inst = instruction i	
-          inst1 = subRegex (mkRegex op) inst op1
-          inst2 = subRegex (mkRegex op) inst op2
+          vals = split_op op
 
 -- Flatten all instructions
+-- Instructions can have up to two disjucnt operands (thus the double call)
 flatten_instrs :: [Instr] -> [Instr]
-flatten_instrs is = concat $ map flatten_instr is
+flatten_instrs is = concat $ map flatten_instr $ 
+                    concat $ map flatten_instr is
 
--- Canonical operand version where synonyms are used
+-- Step 4: Canonicalize operand symbols
+-------------------------------------------------------------------------------
+
+-- Canonical operand symbols
 canonical_op :: String -> String
-canonical_op "mem"   = "m" -- Mem (this only appears in LDDQU
 canonical_op "mm1"   = "mm"
 canonical_op "mm2"   = "mm"
 canonical_op "xmm1"  = "xmm"
@@ -131,32 +164,52 @@ fix_op i = i{instruction=inst}
 fix_ops :: [Instr] -> [Instr]
 fix_ops is = map fix_op is
 
--- Remove rows with REX+ prefix and no r8 operands
-remove_no_reg_rex :: [Instr] -> [Instr]
-remove_no_reg_rex is = filter keep is
-  where keep i = ("REX+" `notElem` (opcode_terms i)) ||
-                 ("r8" `elem` (operands i))
+-- Step 5: Fix up REX rows
+-------------------------------------------------------------------------------
 
--- Remove REX+ from opcode terms
--- TODO -- Should I be doing this?
-remove_rex :: Instr -> Instr
-remove_rex i = i{opcode=o}
-  where o = intercalate " " $ filter (\x -> x /= "REX+") (opcode_terms i)
+-- Split a row with an r8 operand into two alternatives
+split_r8 :: String -> String -> Instr -> [Instr]
+split_r8 alt1 alt2 i = case "r8" `elem` (operands i) of
+  True ->  [(repl_first_op i "r8" alt1), (repl_first_op i "r8" alt2)]
+  False -> [i]
 
--- Rewrite REX+ instructions to use different NoRexR8 instead of R8
-rewrite_rex :: Instr -> Instr
-rewrite_rex i = i{instruction=i1}
-  where i1 = subRegex (mkRegex "r8") (instruction i) "norexr8"
+-- Replace r8 in rew rows by rl and rb
+fix_rex_r8 :: Instr -> [Instr]
+fix_rex_r8 i = case "REX+" `elem` (opcode_terms i) of
+  True  -> concat $ map (split_r8 "rl" "rb") $ split_r8 "rl" "rb" i
+  False -> [i]
 
--- Rename operands for REX+ prefix instructions
-fix_rex_row :: Instr -> Instr
-fix_rex_row i = case "REX+" `elem` (opcode_terms i) of
-  True  -> remove_rex $ rewrite_rex i
-  False -> i
+-- Replace r8 in non-rex rows by rl and rh
+fix_norex_r8 :: Instr -> [Instr]
+fix_norex_r8 i = case "REX+" `notElem` (opcode_terms i) of
+  True  -> concat $ map (split_r8 "rl" "rh") $ split_r8 "rl" "rh" i
+  False -> [i]
+
+-- Replace an r8 in a rex row if necessary
+fix_rex_row :: Instr -> [Instr]
+fix_rex_row i = concat $ map fix_norex_r8 $ fix_rex_r8 i
+
+-- Does this row have r8 operands?
+r8_row :: Instr -> Bool
+r8_row i = "rl" `elem` os || "rh" `elem` os || "rb" `elem` os
+  where os = operands i
+
+-- Is this one of three instructions that require REX+ no matter what
+needs_rex :: Instr -> Bool
+needs_rex i = mn == "LSS" || mn == "LFS" || mn == "LGS"
+  where mn = raw_mnemonic i
+
+-- Remove REX+ rows which correspond to r/m8 splits
+remove_m8_rex :: [Instr] -> [Instr]
+remove_m8_rex is = filter keep is
+  where keep i = "REX+" `notElem` (opcode_terms i) || r8_row i || needs_rex i
 
 -- Fix all rex rows
 fix_rex_rows :: [Instr] -> [Instr]
-fix_rex_rows is = map fix_rex_row is
+fix_rex_rows is = remove_m8_rex $ concat $ map fix_rex_row is
+
+-- Step 6: Remove duplicate rows by prefering shortest encoding
+-------------------------------------------------------------------------------
 
 -- Returns the instruction with the shortest encoding
 shortest :: [Instr] -> Instr
@@ -170,6 +223,9 @@ remove_ambiguity is = map shortest $ groupBy eq $ sortBy srt is
   where srt x y = compare (assm_decl x) (assm_decl y)
         eq x y = (assm_decl x) == (assm_decl y)	
 
+-- Step 7: Insert prefixes and operands
+-------------------------------------------------------------------------------
+
 -- Inserts PREF.66+ for instructions with 16-bit operands
 -- This ignores DX which I think is always an implicit operand (CHECK THIS)
 -- NOTE: This is unnecessary for the p66 operand which comes with PREF.66+
@@ -182,10 +238,6 @@ insert_pref66 i = case r16 || m16 || ax || imm16 of
         ax    = "AX"    `elem` (operands i)
         imm16 = "imm16" `elem` (operands i)
 
--- Inserts PREF.66+ for all instructions with 16-bit operands
-insert_pref66s :: [Instr] -> [Instr]
-insert_pref66s is = map insert_pref66 is
-
 -- Inserts a label variant for instructions that take rel operands
 insert_label_variant :: Instr -> [Instr]
 insert_label_variant i
@@ -195,10 +247,6 @@ insert_label_variant i
       ,opcode=(subRegex (mkRegex "cd") (opcode i) "0d")}]	
 	| otherwise = [i]
 
--- Inserts a label variant for all instruction that take rel operands
-insert_label_variants :: [Instr] -> [Instr]
-insert_label_variants is = concat $ map insert_label_variant is
-
 -- Inserts a hint variant for conditional jumps
 insert_hint_variant :: Instr -> [Instr]
 insert_hint_variant i = case is_cond_jump i of
@@ -206,9 +254,51 @@ insert_hint_variant i = case is_cond_jump i of
                property=(property i ++ ", I")}]
   False -> [i]
 
--- Inserts a hint variant for all conditional jumps
-insert_hint_variants :: [Instr] -> [Instr]
-insert_hint_variants is = concat $ map insert_hint_variant is
+-- Inserts everything that's missing
+insert_missing :: [Instr] -> [Instr]
+insert_missing is = concat $ map insert_label_variant $
+                    concat $ map insert_hint_variant $
+                    map insert_pref66 is
+
+-------------------------------------------------------------------------------
+-- Debugging
+-------------------------------------------------------------------------------
+
+-- Generate a list of unique mnemonics
+uniq_mnemonics :: [Instr] -> [String]
+uniq_mnemonics is = nub $ map raw_mnemonic is
+
+-- Generate a list of unique operands
+uniq_operands :: [Instr] -> [String]
+uniq_operands is = nub $ concat $ map nub $ map operands is 
+
+-- Generate a list of unique operand types
+uniq_operand_types :: [Instr] -> [String]
+uniq_operand_types is = map op2type $ uniq_operands is
+
+-- Generate a list of unique opcode terms
+uniq_opc_terms :: [Instr] -> [String]
+uniq_opc_terms is = nub $ concat $ map opcode_terms is
+
+-- Generate a list of ambiguous declarations
+ambig_decls :: [Instr] -> [[Instr]]
+ambig_decls is = filter ambig $ groupBy eq $ sortBy srt is
+  where srt x y = compare (assm_decl x) (assm_decl y)
+        eq x y = (assm_decl x) == (assm_decl y)	
+        ambig x = (length x) > 1
+
+-- Pretty print version of ambig_decls
+ambig_decls_pretty :: [Instr] -> [String]
+ambig_decls_pretty is = map pretty $ ambig_decls is
+  where pretty xs = (instruction (head xs)) ++ ":" ++ (concat (map elem xs))
+        elem x = "\n\t" ++ (opcode x)
+
+-- Do operand and property arities always match?
+property_arity_check :: [Instr] -> IO ()
+property_arity_check is = sequence_ $ map check is
+  where check i = case (length (operands i)) == (length (properties i)) of
+                       True -> return ()
+                       False -> error $ "Property error for " ++ (opcode i)
 
 -------------------------------------------------------------------------------
 -- Views (transformations on row data into usable forms)
@@ -226,6 +316,7 @@ is_prefix :: String -> Bool
 is_prefix "PREF.66+" = True
 is_prefix "REX.W+" = True
 is_prefix "REX.R+" = True
+is_prefix "REX+" = True
 is_prefix "66" = True
 is_prefix "F2" = True
 is_prefix "F3" = True
@@ -267,8 +358,9 @@ is_register_coded i
 
 -- Returns true for an operand which is a register code parameter
 is_register_code_arg :: String -> Bool
-is_register_code_arg "r8" = True
-is_register_code_arg "norexr8" = True
+is_register_code_arg "rl" = True
+is_register_code_arg "rh" = True
+is_register_code_arg "rb" = True
 is_register_code_arg "r16" = True
 is_register_code_arg "r32" = True
 is_register_code_arg "r64" = True
@@ -289,10 +381,11 @@ properties :: Instr -> [String]
 properties i = let x = map trim $ (splitOn ",") $ property i in
   filter (\p -> p /= "") x
 
--- Transform operand notion into type
+-- Transform operand notation into type
 op2type :: String -> String
-op2type "reg"      = "R" -- TODO: This shouble be a general purpose register (32 or 64 bits depending on mode, I thik)
-op2type "r8"       = "RexR8"
+op2type "rl"       = "Rl"
+op2type "rh"       = "Rh"
+op2type "rb"       = "Rb"
 op2type "r16"      = "R16"
 op2type "r32"      = "R32"
 op2type "r64"      = "R64"
@@ -302,7 +395,6 @@ op2type "AX"       = "Ax"
 op2type "DX"       = "Dx"
 op2type "EAX"      = "Eax" 
 op2type "RAX"      = "Rax"
-op2type "m"        = "M" -- error "?" -- 16 32 or 64 mem
 op2type "m8"       = "M8"
 op2type "m16"      = "M16"
 op2type "m32"      = "M32"
@@ -386,7 +478,6 @@ reg32_op _ = False
 
 -- Returns true for memory operands
 mem_op :: String -> Bool
-mem_op "m"        = True
 mem_op "m8"       = True
 mem_op "m16"      = True
 mem_op "m32"      = True
@@ -450,42 +541,6 @@ mem_index i = findIndex mem_op (operands i)
 -- Does this instruction have a displacement or immediate operand
 disp_imm_index :: Instr -> Maybe Int
 disp_imm_index i = findIndex disp_imm_op (operands i)
-
--------------------------------------------------------------------------------
--- Debugging
--------------------------------------------------------------------------------
-
--- Debugging: Generate a list of unique mnemonics
-uniq_mnemonics :: [Instr] -> [String]
-uniq_mnemonics is = nub $ map raw_mnemonic is
-
--- Debugging: Generate a list of unique operands
-uniq_operands :: [Instr] -> [String]
-uniq_operands is = nub $ concat $ map nub $ map operands is 
-
--- Debugging: Generate a list of unique opcode terms
-uniq_opc_terms :: [Instr] -> [String]
-uniq_opc_terms is = nub $ concat $ map opcode_terms is
-
--- Debugging: Generate a list of ambiguous declarations
-ambig_decls :: [Instr] -> [[Instr]]
-ambig_decls is = filter ambig $ groupBy eq $ sortBy srt is
-  where srt x y = compare (assm_decl x) (assm_decl y)
-        eq x y = (assm_decl x) == (assm_decl y)	
-        ambig x = (length x) > 1
-
--- Debugging: Pretty print version of ambig_decls
-ambig_decls_pretty :: [Instr] -> [String]
-ambig_decls_pretty is = map pretty $ ambig_decls is
-  where pretty xs = (instruction (head xs)) ++ ":" ++ (concat (map elem xs))
-        elem x = "\n\t" ++ (opcode x)
-
--- Debugging: Do operand and property arities always match?
-property_arity_check :: [Instr] -> IO ()
-property_arity_check is = sequence_ $ map check is
-  where check i = case (length (operands i)) == (length (properties i)) of
-                       True -> return ()
-                       False -> error $ "Property error for " ++ (opcode i)
 
 -------------------------------------------------------------------------------
 -- code/ codegen
@@ -598,36 +653,52 @@ uncond_jump_table :: [Instr] -> String
 uncond_jump_table is = to_table is uncond_jump_row 
 
 -- Converts an instruction to implicit_read table row
-read_row :: Instr -> String
-read_row i = "OpSet::empty()"
+must_read_row :: Instr -> String
+must_read_row i = "OpSet::empty()"
 
 -- Converts all instructions to implicit_read table
-read_table :: [Instr] -> String
-read_table is = to_table is read_row 
+must_read_table :: [Instr] -> String
+must_read_table is = to_table is must_read_row 
+
+-- Converts an instruction to implicit_read table row
+maybe_read_row :: Instr -> String
+maybe_read_row i = "OpSet::empty()"
+
+-- Converts all instructions to implicit_read table
+maybe_read_table :: [Instr] -> String
+maybe_read_table is = to_table is maybe_read_row 
 
 -- Converts an instruction to implicit_write table row
-write_row :: Instr -> String
-write_row i = "OpSet::empty()"
+must_write_row :: Instr -> String
+must_write_row i = "OpSet::empty()"
 
 -- Converts all instructions to implicit_write table
-write_table :: [Instr] -> String
-write_table is = to_table is write_row
+must_write_table :: [Instr] -> String
+must_write_table is = to_table is must_write_row
 
--- Converts an instruction to implicit_def table row
-def_row :: Instr -> String
-def_row i = "OpSet::empty()"
+-- Converts an instruction to implicit_write table row
+maybe_write_row :: Instr -> String
+maybe_write_row i = "OpSet::empty()"
 
--- Converts all instructions to implicit_def table
-def_table :: [Instr] -> String
-def_table is = to_table is def_row 
+-- Converts all instructions to implicit_write table
+maybe_write_table :: [Instr] -> String
+maybe_write_table is = to_table is maybe_write_row
 
 -- Converts an instruction to implicit_undef table row
-undef_row :: Instr -> String
-undef_row i = "OpSet::empty()"
+must_undef_row :: Instr -> String
+must_undef_row i = "OpSet::empty()"
 
 -- Converts all instructions to implicit_undef table
-undef_table :: [Instr] -> String
-undef_table is = to_table is undef_row
+must_undef_table :: [Instr] -> String
+must_undef_table is = to_table is must_undef_row
+
+-- Converts an instruction to implicit_undef table row
+maybe_undef_row :: Instr -> String
+maybe_undef_row i = "OpSet::empty()"
+
+-- Converts all instructions to implicit_undef table
+maybe_undef_table :: [Instr] -> String
+maybe_undef_table is = to_table is maybe_undef_row
 
 -------------------------------------------------------------------------------
 -- io/ codegen
@@ -778,8 +849,9 @@ assm_src_defns is = intercalate "\n\n" $ map assm_src_defn is
 
 -- Representative values for each operand type
 test_operand :: String -> [String]
-test_operand "reg"      = ["%eax"] 
-test_operand "r8"       = ["%al","%spl"]
+test_operand "rl"      = ["%al"] 
+test_operand "rh"      = ["%ah"] 
+test_operand "rb"      = ["%spl"] 
 test_operand "r16"      = ["%ax"]
 test_operand "r32"      = ["%eax"]
 test_operand "r64"      = ["%rax"]
@@ -789,7 +861,6 @@ test_operand "AX"       = ["%ax"]
 test_operand "DX"       = ["%dx"]
 test_operand "EAX"      = ["%eax"]
 test_operand "RAX"      = ["%rax"]
-test_operand "m"        = ["(%eax)"]
 test_operand "m8"       = ["(%eax)"]
 test_operand "m16"      = ["(%eax)"]
 test_operand "m32"      = ["(%eax)"]
@@ -845,7 +916,7 @@ test_operand "far"      = []
 test_operand "norexr8"  = []
 test_operand "label"    = [".L0"]
 test_operand "hint"     = []
-test_operand o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
+test_operand o = error $ "Unrecognized test operand type: \"" ++ o ++ "\""
 
 -- Generates a list of test operands for an instruction
 test_operands :: Instr -> [String]
@@ -868,19 +939,18 @@ test_instrs is = intercalate "\n" $ concat $ map test_instr is
 main :: IO ()		
 main = do args <- getArgs
           file <- readFile $ head args
-          let is = insert_hint_variants $
-                   insert_label_variants $
-                   insert_pref66s $ 
+
+          -- Read Inputs
+          let is = insert_missing $
                    remove_ambiguity $
                    fix_rex_rows $
-                   remove_no_reg_rex $ 
-                   x64 $
                    fix_ops $ 
                    flatten_instrs $ 
+                   x64 $
                    remove_format $ 
                    read_instrs file
 
-          -- Check Inputs
+          -- Debugging: Check Inputs
           property_arity_check is 
 
           -- Write Code
@@ -894,10 +964,14 @@ main = do args <- getArgs
           writeFile "jump.table"        $ jump_table is
           writeFile "cond_jump.table"   $ cond_jump_table is
           writeFile "uncond_jump.table" $ uncond_jump_table is
-          writeFile "read.table"        $ read_table is
-          writeFile "write.table"       $ write_table is
-          writeFile "def.table"         $ def_table is
-          writeFile "undef.table"       $ undef_table is
+          writeFile "must_read.table"   $ must_read_table is
+          writeFile "maybe_read.table"  $ maybe_read_table is
+          writeFile "must_write.table"  $ must_write_table is
+          writeFile "maybe_write.table" $ maybe_write_table is
+          writeFile "must_undef.table"  $ must_undef_table is
+          writeFile "maybe_undef.table" $ maybe_undef_table is
           writeFile "opcode.enum"       $ opcode_enums is
           writeFile "opcode.att"        $ att_mnemonics is
           writeFile "test.s"            $ test_instrs is					
+
+          mapM_ print $ map (\x -> (opcode x) ++ " " ++ (instruction x)) is

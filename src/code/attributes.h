@@ -59,24 +59,34 @@ class Attributes {
 			return is_uncond_jump_[o];
 		}
 
-		static OpSet implicit_read_set(const Opcode o) {
+		static OpSet implicit_must_read_set(const Opcode o) {
 			assert(o < implicit_read_set_.size());
-			return implicit_read_set_[o];
+			return implicit_must_read_set_[o];
 		}
 
-		static OpSet implicit_write_set(const Opcode o) {
+		static OpSet implicit_maybe_read_set(const Opcode o) {
+			assert(o < implicit_read_set_.size());
+			return implicit_maybe_read_set_[o];
+		}
+
+		static OpSet implicit_must_write_set(const Opcode o) {
 			assert(o < implicit_write_set_.size());
-			return implicit_write_set_[o];
+			return implicit_must_write_set_[o];
 		}
 
-		static OpSet implicit_def_set(const Opcode o) {
-			assert(o < implicit_def_set_.size());
-			return implicit_def_set_[o];
+		static OpSet implicit_maybe_write_set(const Opcode o) {
+			assert(o < implicit_write_set_.size());
+			return implicit_maybe_write_set_[o];
 		}
 
-		static OpSet implicit_undef_set(const Opcode o) {
+		static OpSet implicit_must_undef_set(const Opcode o) {
 			assert(o < implicit_undef_set_.size());
-			return implicit_undef_set_[o];
+			return implicit_must_undef_set_[o];
+		}
+
+		static OpSet implicit_maybe_undef_set(const Opcode o) {
+			assert(o < implicit_undef_set_.size());
+			return implicit_maybe_undef_set_[o];
 		}
 
 		static inline size_t arity(const Instruction& i) {
@@ -115,41 +125,59 @@ class Attributes {
 			return is_uncond_jump(i.get_opcode());
 		}
 
-		static inline OpSet implicit_read_set(const Instruction& i) {
-			return implicit_read_set(i.get_opcode());
+		static inline OpSet implicit_must_read_set(const Instruction& i) {
+			return implicit_must_read_set(i.get_opcode());
 		}
 
-		static inline OpSet implicit_write_set(const Instruction& i) {
-			return implicit_write_set(i.get_opcode());
+		static inline OpSet implicit_maybe_read_set(const Instruction& i) {
+			return implicit_maybe_read_set(i.get_opcode());
 		}
 
-		static inline OpSet implicit_def_set(const Instruction& i) {
-			return implicit_def_set(i.get_opcode());
+		static inline OpSet implicit_must_write_set(const Instruction& i) {
+			return implicit_must_write_set(i.get_opcode());
 		}
 
-		static inline OpSet implicit_undef_set(const Instruction& i) {
-			return implicit_undef_set(i.get_opcode());
+		static inline OpSet implicit_maybe_write_set(const Instruction& i) {
+			return implicit_maybe_write_set(i.get_opcode());
 		}
 
-		static OpSet explicit_read_set(const Instruction& i);
-		static OpSet explicit_write_set(const Instruction& i);
-		static OpSet explicit_def_set(const Instruction& i);
-		static OpSet explicit_undef_set(const Instruction& i);
-
-		static inline OpSet read_set(const Instruction& i) {
-			return implicit_read_set(i) | explicit_read_set(i);
+		static inline OpSet implicit_must_undef_set(const Instruction& i) {
+			return implicit_must_undef_set(i.get_opcode());
 		}
 
-		static inline OpSet write_set(const Instruction& i) {
-			return implicit_write_set(i) | explicit_write_set(i);
+		static inline OpSet implicit_maybe_undef_set(const Instruction& i) {
+			return implicit_maybe_undef_set(i.get_opcode());
 		}
 
-		static inline OpSet def_set(const Instruction& i) {
-			return implicit_def_set(i) | explicit_def_set(i);
+		static OpSet explicit_must_read_set(const Instruction& i);
+		static OpSet explicit_maybe_read_set(const Instruction& i);
+		static OpSet explicit_must_write_set(const Instruction& i);
+		static OpSet explicit_maybe_write_set(const Instruction& i);
+		static OpSet explicit_must_undef_set(const Instruction& i);
+		static OpSet explicit_maybe_undef_set(const Instruction& i);
+
+		static inline OpSet must_read_set(const Instruction& i) {
+			return implicit_must_read_set(i) | explicit_must_read_set(i);
 		}
 
-		static inline OpSet undef_set(const Instruction& i) {
-			return implicit_undef_set(i) | explicit_undef_set(i);
+		static inline OpSet maybe_read_set(const Instruction& i) {
+			return implicit_maybe_read_set(i) | explicit_maybe_read_set(i);
+		}
+
+		static inline OpSet must_write_set(const Instruction& i) {
+			return implicit_must_write_set(i) | explicit_must_write_set(i);
+		}
+
+		static inline OpSet maybe_write_set(const Instruction& i) {
+			return implicit_maybe_write_set(i) | explicit_maybe_write_set(i);
+		}
+
+		static inline OpSet must_undef_set(const Instruction& i) {
+			return implicit_must_undef_set(i) | explicit_must_undef_set(i);
+		}
+
+		static inline OpSet maybe_undef_set(const Instruction& i) {
+			return implicit_maybe_undef_set(i) | explicit_maybe_undef_set(i);
 		}
 
 	private:
@@ -161,10 +189,12 @@ class Attributes {
 		static std::vector<bool> is_jump_;
 		static std::vector<bool> is_cond_jump_;
 		static std::vector<bool> is_uncond_jump_;
-		static std::vector<OpSet> implicit_read_set_;
-		static std::vector<OpSet> implicit_write_set_;
-		static std::vector<OpSet> implicit_def_set_;
-		static std::vector<OpSet> implicit_undef_set_;
+		static std::vector<OpSet> implicit_must_read_set_;
+		static std::vector<OpSet> implicit_maybe_read_set_;
+		static std::vector<OpSet> implicit_must_write_set_;
+		static std::vector<OpSet> implicit_maybe_write_set_;
+		static std::vector<OpSet> implicit_must_undef_set_;
+		static std::vector<OpSet> implicit_maybe_undef_set_;
 };
 
 } // namespace x64

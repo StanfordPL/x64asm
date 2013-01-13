@@ -11,6 +11,10 @@ namespace x64 {
 class Xmm : public Operand {
 	public:
 		inline Xmm(uint64_t val) : Operand{val} { } 
+
+		inline bool check() const {
+			return val_ < 16;
+		}
 };
 
 /** The XMM register XMM0. */
@@ -18,6 +22,10 @@ class Xmm0 : public Xmm {
 	public:
 		inline Xmm0() : Xmm{0} { }
 		inline Xmm0(uint64_t ignore) : Xmm{0} { }
+
+		inline bool check() const {
+			return val_ == 0;
+		}
 };
 
 } // namespace x64

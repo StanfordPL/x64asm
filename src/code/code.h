@@ -7,9 +7,22 @@
 
 namespace x64 {
 
-/** A sequence of Instructions. 
-*/
-typedef std::vector<Instruction> Code;
+/** A sequence of Instructions. */
+class Code {
+	public:
+		// Put some constructors here...
+		// Put some vector stuff here...
+
+		inline bool check() const {
+			for ( const auto& i : code_ )
+				if ( !i.check() )
+					return false;
+			return true;
+		}
+
+	private:
+		std::vector<Instruction> code_;
+};
 
 } // namespace x64
 

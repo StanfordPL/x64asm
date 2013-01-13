@@ -9,6 +9,10 @@ namespace x64 {
 class Dr : public Operand {
 	public:
 		inline Dr(uint64_t val) : Operand{val} { }
+
+		inline bool check() const {
+			return val_ < 8;
+		}
 };
 
 } // namespace x64

@@ -126,11 +126,11 @@ class M : public Operand {
 			return (val_ >> 44) & 0x7;
 		}
 
-		inline R get_base() const {
+		inline AddrR get_base() const {
 			return (val_ >> 39) & 0xf;
 		}
 
-		inline R get_index() const {
+		inline AddrR get_index() const {
 			return (val_ >> 34) & 0xf;
 		}
 
@@ -155,7 +155,7 @@ class M : public Operand {
 			val_ |= (0x1ull << 47);
 		}
 
-		inline void set_base(R b) {
+		inline void set_base(AddrR b) {
 			val_ &= ~(0x1full << 39);
 			val_ |= (b.val_ & 0xf) << 39;
 		}
@@ -164,7 +164,7 @@ class M : public Operand {
 			val_ |= (0x1ull << 43);
 		}
 
-		inline void set_index(R i) {
+		inline void set_index(AddrR i) {
 			val_ &= ~(0x1full << 34);
 			val_ |= (i.val_ & 0xf) << 34;
 		}
@@ -191,6 +191,24 @@ class M : public Operand {
 			val_ &= ~(0x1ull << 48);
 		}
 			
+		inline bool check() const {
+			// Both base and index can't both be null
+			if ( null_base() && null_index() ) 
+				return false;
+			// Check non-null bases
+			if ( null_base() && !get_base().check() )
+				return false;
+			// Check non-null indices
+			if ( !null_index() && !get_index().check() )
+				return false;
+			// Index cannot be rsp/esp
+			if ( !null_index() && (R64)get_index() == rsp )
+				return false;
+			return true;
+		}
+
+	private:	
+
 		// addr (1=32)     [48]
 		// segment? (1=no) [47]
 		// segment         [46:44]

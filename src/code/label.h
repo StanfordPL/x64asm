@@ -11,6 +11,10 @@ namespace x64 {
 class Label : public Operand {
 	public:
 		inline Label(uint64_t val) : Operand{val} { } 
+
+		inline bool check() const {
+			return true;
+		}
 };
 
 } // namespace x64

@@ -1,106 +1,89 @@
 #include "src/code/attributes.h"
 
+using namespace x64;
 using namespace std;
 
-namespace x64 {
-#if 0
-inline void set_mem(RegSet& rs, M m) {
-	const auto b = m.get_base();
-	const auto i = m.get_index();
-	
-	if ( m.get_size_or() ) {
-		if ( !b.is_null() )
-			rs.set((R32)b);
-		if ( !i.is_null() )
-			rs.set((R32)i);
+namespace {
+
+template <Property P>
+inline OpSet read_set(const Instruction& instr) {
+	auto rs = OpSet::empty();
+	for ( size_t i = 0, ie = Attributes::arity(instr); i < ie; ++i ) {
+		const auto p = Attributes::properties(instr, i);
+		const auto o = instr.get_operand(i);
+
+		switch ( Attributes::type(instr, i) ) {
+			case OpType::M_8:
+			case OpType::M_16:
+			case OpType::M_32:
+			case OpType::M_64:
+			case OpType::M_128:
+			case OpType::M_256:
+			case OpType::M_PAIR_16_64:
+			case OpType::M_PTR_16_16:
+			case OpType::M_PTR_16_32:
+			case OpType::M_PTR_16_64:
+			case OpType::M_16_INT:
+			case OpType::M_32_INT:
+			case OpType::M_64_INT:
+			case OpType::M_32_FP:
+			case OpType::M_64_FP:
+			case OpType::M_80_FP:
+			case OpType::M_2_BYTE:
+			case OpType::M_14_BYTE:
+			case OpType::M_28_BYTE:
+			case OpType::M_94_BYTE:
+			case OpType::M_108_BYTE:
+			case OpType::M_512_BYTE: rs += (M)o; break;
+			case OpType::RH:         if ( p.contains(P) ) rs += (Rh)o; break;
+			case OpType::RL:         
+			case OpType::AL:         
+			case OpType::CL:         if ( p.contains(P) ) rs += (Rl)o; break;
+			case OpType::RB:         if ( p.contains(P) ) rs += (Rb)o; break;
+			case OpType::R_16:      
+			case OpType::AX:         
+			case OpType::DX:         if ( p.contains(P) ) rs += (R16)o; break;
+			case OpType::R_32:       
+			case OpType::EAX:        if ( p.contains(P) ) rs += (R32)o; break;
+			case OpType::R_64:       
+			case OpType::RAX:        if ( p.contains(P) ) rs += (R64)o; break;
+			case OpType::XMM:        
+			case OpType::XMM_0:      if ( p.contains(P) ) rs += (Xmm)o; break;
+			case OpType::YMM:        if ( p.contains(P) ) rs += (Ymm)o; break;
+			default: assert(false);
+		}
 	}
-	else {
-		if ( !b.is_null() )
-			rs.set((R64)b);
-		if ( !i.is_null() )
-			rs.set((R64)i);
-	}
+	return rs;
 }
 
 } // namespace
 
 namespace x64 {
 
-RegSet Instruction::explicit_read_set() const {
-	RegSet rs;
-	for ( size_t i = opcode_.first_read(), ie = arity(); i < ie; ++i )
-		switch ( type(i) ) {
-			case R_H: rs.set((RH)operands_[i]); break;
-			case AL:
-			case CL:
-			case R_8: rs.set((R8)operands_[i]); break;
-			case AX:
-			case R_16: rs.set((R16)operands_[i]); break;
-			case EAX:
-			case R_32: rs.set((R32)operands_[i]); break;
-			case RAX:
-			case R_64: rs.set((R64)operands_[i]); break;
-			case M_8:    
-			case M_16:    
-			case M_32:    
-			case M_64:    
-			case M_80:    
-			case M_128:    
-			case M_256: set_mem(rs, (M)operands_[i]); break;
-			case ST0:
-			case ST: break; // TODO 
-			case MM: break; // TODO
-			case XMM: rs.set((Xmm)operands_[i]); break;
-			case YMM: break; // TODO
-
-			default: 
-				break;
-		}
-	return rs;
+OpSet Attributes::explicit_must_read_set(const Instruction& instr) {
+	return read_set<Property::MUST_READ>(instr);
 }
 
-RegSet Instruction::explicit_write_set() const {
-	RegSet rs;
-	for ( size_t i = 0, ie = opcode_.num_writes(); i < ie; ++i )
-		switch ( type(i) ) {
-			case R_H: rs.set((RH)operands_[i]); break;
-			case AL:
-			case CL:
-			case R_8: rs.set((R8)operands_[i]); break;
-			case AX:
-			case R_16: rs.set((R16)operands_[i]); break;
-			case EAX:
-			case R_32: rs.set((R64)operands_[i]); break; // Implicit extend!!!
-			case RAX:
-			case R_64: rs.set((R64)operands_[i]); break;
-			case ST: break; // TODO 
-			case MM: break; // TODO
-			case XMM: rs.set((Xmm)operands_[i]); break;
-			case YMM: break; // TODO
-
-			default: 
-				break;
-		}
-	return rs;
+OpSet Attributes::explicit_maybe_read_set(const Instruction& instr) {
+	return read_set<Property::MAYBE_READ>(instr);
 }
-#endif
 
-OpSet Attributes::explicit_read_set(const Instruction& i) {
+OpSet Attributes::explicit_must_write_set(const Instruction& i) {
 	// TODO
 	return OpSet::empty();
 }
 
-OpSet Attributes::explicit_write_set(const Instruction& i) {
+OpSet Attributes::explicit_maybe_write_set(const Instruction& i) {
 	// TODO
 	return OpSet::empty();
 }
 
-OpSet Attributes::explicit_def_set(const Instruction& i) {
+OpSet Attributes::explicit_must_undef_set(const Instruction& i) {
 	// TODO
 	return OpSet::empty();
 }
 
-OpSet Attributes::explicit_undef_set(const Instruction& i) {
+OpSet Attributes::explicit_maybe_undef_set(const Instruction& i) {
 	// TODO
 	return OpSet::empty();
 }
@@ -161,32 +144,46 @@ vector<bool> Attributes::is_uncond_jump_ {{
 	#include "src/code/uncond_jump.table"
 }};
 
-vector<OpSet> Attributes::implicit_read_set_ {{
+vector<OpSet> Attributes::implicit_must_read_set_ {{
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-	#include "src/code/read.table"
+	#include "src/code/must_read.table"
 }};
 
-vector<OpSet> Attributes::implicit_write_set_ {{
+vector<OpSet> Attributes::implicit_maybe_read_set_ {{
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-	#include "src/code/write.table"
+	#include "src/code/maybe_read.table"
 }};
 
-vector<OpSet> Attributes::implicit_def_set_ {{
+vector<OpSet> Attributes::implicit_must_write_set_ {{
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-	#include "src/code/def.table"
+	#include "src/code/must_write.table"
 }};
 
-vector<OpSet> Attributes::implicit_undef_set_ {{
+vector<OpSet> Attributes::implicit_maybe_write_set_ {{
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-	#include "src/code/undef.table"
+	#include "src/code/maybe_write.table"
+}};
+
+vector<OpSet> Attributes::implicit_must_undef_set_ {{
+	// Internal mnemonics
+	OpSet::empty()
+	// Auto-generated mnemonics
+	#include "src/code/must_undef.table"
+}};
+
+vector<OpSet> Attributes::implicit_maybe_undef_set_ {{
+	// Internal mnemonics
+	OpSet::empty()
+	// Auto-generated mnemonics
+	#include "src/code/maybe_undef.table"
 }};
 
 } // namespace x64

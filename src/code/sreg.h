@@ -11,6 +11,10 @@ namespace x64 {
 class Sreg : public Operand {
 	public:
 		inline Sreg(uint64_t val) : Operand{val} { }
+
+		inline bool check() const {
+			return val_ < 6;
+		}
 };
 
 /** The segment register FS. */
@@ -18,6 +22,10 @@ class Fs : public Sreg {
 	public:
 		inline Fs() : Sreg{4} { }
 		inline Fs(uint64_t ignore) : Sreg{4} { }
+
+		inline bool check() const {
+			return val_ == 4;
+		}
 };
 
 /** The segment register GS. */
@@ -25,6 +33,10 @@ class Gs : public Sreg {
 	public:
 		inline Gs() : Sreg{5} { }
 		inline Gs(uint64_t ignore) : Sreg{5} { }
+
+		inline bool check() const {
+			return val_ == 5;
+		}
 };
 
 } // namespace x64

@@ -11,6 +11,10 @@ namespace x64 {
 class Ymm : public Operand {
 	public:
 		inline Ymm(uint64_t val) : Operand{val} { } 
+
+		inline bool check() const {
+			return val_ < 16;
+		}
 };
 
 } // namespace x64

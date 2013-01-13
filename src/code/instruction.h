@@ -49,6 +49,8 @@ class Instruction {
 			return operands_[index];
 		}
 
+		bool check() const;
+
 	private:
 		Opcode opcode_;
 		std::vector<Operand> operands_;

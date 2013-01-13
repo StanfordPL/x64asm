@@ -5,33 +5,37 @@
 
 namespace x64 {
 
-/** An instruction modifier. Used to disambiguate otherwise identical
-	  instruction signatures.
-*/
-class Modifier : public Operand {
-	public:
-		inline Modifier(uint64_t val) : Operand{val} { }
-};
-
 /** The 32-bit memory address override prefix: 0x66. */
-class Pref66 : public Modifier {
+class Pref66 : public Operand {
 	public:
-		inline Pref66() : Modifier{0} { }
-		inline Pref66(uint64_t ignore) : Modifier{0} { }
+		inline Pref66() : Operand{0} { }
+		inline Pref66(uint64_t ignore) : Operand{0} { }
+
+		inline bool check() const {
+			return val_ == 0;
+		}
 };
 
 /** The REX.w prefix: 0x48. */
-class PrefRexW : public Modifier {
+class PrefRexW : public Operand {
 	public:
-		inline PrefRexW() : Modifier{0} { }
-		inline PrefRexW(uint64_t ignore) : Modifier{0} { }
+		inline PrefRexW() : Operand{0} { }
+		inline PrefRexW(uint64_t ignore) : Operand{0} { }
+
+		inline bool check() const {
+			return val_ == 0;
+		}
 };
 
 /** Far instruction variant. */
-class Far : public Modifier {
+class Far : public Operand {
 	public:
-		inline Far() : Modifier{0} { }
-		inline Far(uint64_t ignore) : Modifier{0} { }
+		inline Far() : Operand{0} { }
+		inline Far(uint64_t ignore) : Operand{0} { }
+
+		inline bool check() const {
+			return val_ == 0;
+		}
 };
 
 } // namespace x64
