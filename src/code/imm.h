@@ -15,8 +15,8 @@ class Imm8 : public Operand {
 	public:
 		inline Imm8(uint8_t i) : Operand{i} { }
 
-		inline bool check() const {
-			return val_ >= -128 && val_ <= 127;
+		inline virtual bool check() const {
+			return (int64_t)val_ >= -128 && (int64_t)val_ <= 127;
 		}
 };
 
@@ -27,8 +27,8 @@ class Imm16 : public Operand {
 	public:
 		inline Imm16(uint16_t i) : Operand{i} { }
 
-		inline bool check() const {
-			return val_ >= -32768 && val_ <= 32767;
+		inline virtual bool check() const {
+			return (int64_t)val_ >= -32768 && (int64_t)val_ <= 32767;
 		}
 };
 
@@ -40,8 +40,8 @@ class Imm32 : public Operand {
 	public:
 		inline Imm32(uint32_t i) : Operand{i} { }
 
-		inline bool check() const {
-			return val_ >= -2147483648 && val_ <= 2147483647;
+		inline virtual bool check() const {
+			return (int64_t)val_ >= -2147483648 && (int64_t)val_ <= 2147483647;
 		}
 };
 
@@ -56,7 +56,7 @@ class Imm64 : public Operand {
 		template <typename T>
 		inline Imm64(T* t) : Operand{(Operand) t} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return true;
 		}
 };
@@ -67,7 +67,7 @@ class Zero : public Imm8 {
 		inline Zero() : Imm8{0} { }
 		inline Zero(uint64_t ignore) : Imm8{0} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 0;
 		}
 };
@@ -78,7 +78,7 @@ class One : public Imm8 {
 		inline One() : Imm8{1} { }
 		inline One(uint64_t ignore) : Imm8{0} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 1;
 		}
 };
@@ -89,7 +89,7 @@ class Three : public Imm8 {
 		inline Three() : Imm8{3} { }
 		inline Three(uint64_t ignore) : Imm8{0} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 3;
 		}
 };

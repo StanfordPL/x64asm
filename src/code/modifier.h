@@ -11,7 +11,7 @@ class Pref66 : public Operand {
 		inline Pref66() : Operand{0} { }
 		inline Pref66(uint64_t ignore) : Operand{0} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 0;
 		}
 };
@@ -22,7 +22,7 @@ class PrefRexW : public Operand {
 		inline PrefRexW() : Operand{0} { }
 		inline PrefRexW(uint64_t ignore) : Operand{0} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 0;
 		}
 };
@@ -33,7 +33,7 @@ class Far : public Operand {
 		inline Far() : Operand{0} { }
 		inline Far(uint64_t ignore) : Operand{0} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 0;
 		}
 };

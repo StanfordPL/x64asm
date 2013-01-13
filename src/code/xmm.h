@@ -12,7 +12,7 @@ class Xmm : public Operand {
 	public:
 		inline Xmm(uint64_t val) : Operand{val} { } 
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ < 16;
 		}
 };
@@ -23,7 +23,7 @@ class Xmm0 : public Xmm {
 		inline Xmm0() : Xmm{0} { }
 		inline Xmm0(uint64_t ignore) : Xmm{0} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 0;
 		}
 };

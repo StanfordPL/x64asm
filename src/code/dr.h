@@ -10,7 +10,7 @@ class Dr : public Operand {
 	public:
 		inline Dr(uint64_t val) : Operand{val} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ < 8;
 		}
 };

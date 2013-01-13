@@ -12,7 +12,7 @@ class Label : public Operand {
 	public:
 		inline Label(uint64_t val) : Operand{val} { } 
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return true;
 		}
 };

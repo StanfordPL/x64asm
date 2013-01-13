@@ -14,7 +14,6 @@ OBJ=build/assembler/assembler.o \
 		build/cfg/reachable.o \
 		\
 		build/code/attributes.o \
-		build/code/checker.o \
 		build/code/constants.o \
 		build/code/op_set.o \
 		\

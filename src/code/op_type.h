@@ -25,7 +25,6 @@ enum class OpType {
 	LABEL,
 
 	// Memory (m.h)
-	M,
 	M_8,
 	M_16,
 	M_32,

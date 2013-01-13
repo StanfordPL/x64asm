@@ -12,7 +12,7 @@ class Ymm : public Operand {
 	public:
 		inline Ymm(uint64_t val) : Operand{val} { } 
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ < 16;
 		}
 };

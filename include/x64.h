@@ -14,7 +14,6 @@
 #include "src/cfg/remove_unreachable.h"
 
 #include "src/code/attributes.h"
-#include "src/code/checker.h"
 #include "src/code/code.h"
 #include "src/code/constants.h"
 #include "src/code/cr.h"

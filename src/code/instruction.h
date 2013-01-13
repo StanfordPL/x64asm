@@ -19,7 +19,7 @@ class Instruction {
 		}
 
 		inline Instruction(Opcode opcode, 
-				               std::initializer_list<Operand> operands)
+				               std::initializer_list<Operand*> operands)
 				: opcode_(opcode), operands_(operands.begin(), operands.end()) {
 			assert(operands.size() <= 4);
 		}
@@ -39,21 +39,26 @@ class Instruction {
 			opcode_ = o;
 		}
 
-		inline void set_operand(Operand o, size_t index) {
+		inline void set_operand(Operand* o, size_t index) {
 			assert(index < operands_.size());
 			operands_[index] = o;
 		}	
 
-		inline Operand get_operand(size_t index) const {
+		inline Operand* get_operand(size_t index) const {
 			assert(index < operands_.size());
 			return operands_[index];
 		}
 
-		bool check() const;
+		inline bool check() const {
+			for ( const auto o : operands_ )
+				if ( !o->check() )
+					return false;
+			return true;
+		}
 
 	private:
 		Opcode opcode_;
-		std::vector<Operand> operands_;
+		std::vector<Operand*> operands_;
 };
 
 } // namespace x64

@@ -12,7 +12,7 @@ class Sreg : public Operand {
 	public:
 		inline Sreg(uint64_t val) : Operand{val} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ < 6;
 		}
 };
@@ -23,7 +23,7 @@ class Fs : public Sreg {
 		inline Fs() : Sreg{4} { }
 		inline Fs(uint64_t ignore) : Sreg{4} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 4;
 		}
 };
@@ -34,7 +34,7 @@ class Gs : public Sreg {
 		inline Gs() : Sreg{5} { }
 		inline Gs(uint64_t ignore) : Sreg{5} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 5;
 		}
 };

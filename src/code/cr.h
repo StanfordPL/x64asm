@@ -10,7 +10,7 @@ class Cr0234 : public Operand {
 	public:
 		inline Cr0234(uint64_t val) : Operand{val} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 0 ||
 				     val_ == 2 ||
 						 val_ == 3 ||
@@ -24,7 +24,7 @@ class Cr8 : public Operand {
 		inline Cr8() : Operand{8} { }
 		inline Cr8(uint64_t ignore) : Operand{8} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 8;
 		}
 };

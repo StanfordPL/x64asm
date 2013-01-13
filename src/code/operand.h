@@ -9,8 +9,13 @@ namespace x64 {
 class Operand {
 	public:
 		inline Operand(uint64_t val) : val_{val} { }
-		inline operator uint64_t() const { return val_; }
+		virtual inline ~Operand() { }
+
+		virtual inline bool check() const = 0;
+
 		uint64_t val_;	
+
+
 };
 
 } // namespace x64

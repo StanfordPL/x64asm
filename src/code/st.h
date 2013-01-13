@@ -12,7 +12,7 @@ class St : public Operand {
 	public:
 		inline St(uint64_t val) : Operand{val} { } 
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ < 8;
 		}
 };
@@ -23,7 +23,7 @@ class St0 : public St {
 		inline St0() : St{0} { }
 		inline St0(uint64_t ignore) : St{0} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 0;
 		}
 };

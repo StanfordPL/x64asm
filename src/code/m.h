@@ -1,6 +1,8 @@
 #ifndef X64_SRC_CODE_M_H
 #define X64_SRC_CODE_M_H
 
+#include <cassert>
+
 #include "src/code/r.h"
 #include "src/code/imm.h"
 #include "src/code/operand.h"
@@ -9,250 +11,204 @@
 
 namespace x64 {
 
+enum class Scale {
+	TIMES_1 = 0,
+	TIMES_2,
+	TIMES_4,
+	TIMES_8
+};
+
 /** An operand in memory. */
 class M : public Operand {
 	public:
-		inline M(uint64_t val) : Operand{val} { }
-
-		inline M(R64 b)
-				: Operand(concat(0x8, b.val_, 0x10, Scale::TIMES_1, 0, 0)) {
+		inline M(const AddrR* b, bool addr_or = false)
+				: seg_(0), base_(b), index_(0), scale_(Scale::TIMES_1), disp_(0),
+				  addr_or_(addr_or) {
 		}
 
-		inline M(Sreg s, R64 b)
-				: Operand(concat(s.val_, b.val_, 0x10, Scale::TIMES_1, 0, 0)) {
+		inline M(const Sreg* s, const AddrR* b, bool addr_or = false)
+				: seg_(s), base_(b), index_(0), scale_(Scale::TIMES_1), disp_(0),
+				  addr_or_(addr_or) {
 		}
 
-		inline M(R64 b, Imm32 d)
-				: Operand(concat(0x8, b.val_, 0x10, Scale::TIMES_1, d.val_, 0)) {
+		inline M(const AddrR* b, const Imm32* d, bool addr_or = false)
+				: seg_(0), base_(b), index_(0), scale_(Scale::TIMES_1), disp_(d),
+				  addr_or_(addr_or) {
 		}
 
-		inline M(Sreg s, R64 b, Imm32 d)
-				: Operand(concat(s.val_, b.val_, 0x10, Scale::TIMES_1, d.val_, 0)) {
+		inline M(const Sreg* s, const AddrR* b, const Imm32* d, 
+				     bool addr_or = false)
+				: seg_(s), base_(b), index_(0), scale_(Scale::TIMES_1), disp_(d),
+				  addr_or_(addr_or) {
 		}
 
-		inline M(R64 i, Scale sc)
-				: Operand(concat(0x8, 0x10, i.val_, sc, 0, 0)) {
+		inline M(const AddrR* i, Scale sc, bool addr_or = false)
+				: seg_(0), base_(0), index_(i), scale_(sc), disp_(0), 
+				  addr_or_(addr_or) {
 		}
 
-		inline M(Sreg s, R64 i, Scale sc)
-				: Operand(concat(s.val_, 0x10, i.val_, sc, 0, 0)) {
+		inline M(const Sreg* s, const AddrR* i, Scale sc, bool addr_or = false)
+				: seg_(s), base_(0), index_(i), scale_(sc), disp_(0), 
+				  addr_or_(addr_or) {
 		}
 
-		inline M(R64 i, Scale sc, Imm32 d) 
-				: Operand(concat(0x8, 0x10, i.val_, sc, d.val_, 0)) {
+		inline M(const AddrR* i, Scale sc, const Imm32* d, bool addr_or = false) 
+				: seg_(0), base_(0), index_(i), scale_(sc), disp_(d), 
+				  addr_or_(addr_or) {
 		}
 
-		inline M(Sreg s, R64 i, Scale sc, Imm32 d)
-				: Operand(concat(s.val_, 0x10, i.val_, sc, d.val_, 0)) {
+		inline M(const Sreg* s, const AddrR* i, Scale sc, const Imm32* d, 
+				     bool addr_or = false)
+				: seg_(s), base_(0), index_(i), scale_(sc), disp_(d), 
+				  addr_or_(addr_or) {
 		}
 
-		inline M(R64 b, R64 i, Scale sc)
-				: Operand(concat(0x8, b.val_, i.val_, sc, 0, 0)) {
+		inline M(const AddrR* b, const AddrR* i, Scale sc, bool addr_or = false)
+				: seg_(0), base_(b), index_(i), scale_(sc), disp_(0), 
+				  addr_or_(addr_or) {
 		}
 
-		inline M(Sreg s, R64 b, R64 i, Scale sc)
-				: Operand(concat(s.val_, b.val_, i.val_, sc, 0, 0)) {
+		inline M(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, 
+				     bool addr_or = false)
+				: seg_(s), base_(b), index_(i), scale_(sc), disp_(0), 
+				  addr_or_(addr_or) {
 		}
 
-		inline M(R64 b, R64 i, Scale sc, Imm32 d)
-				: Operand(concat(0x8, b.val_, i.val_, sc, d.val_, 0)) {
+		inline M(const AddrR* b, const AddrR* i, Scale sc, const Imm32* d, 
+				     bool addr_or = false)
+				: seg_(0), base_(b), index_(i), scale_(sc), disp_(d), 
+				  addr_or_(addr_or) {
 		}
 
-		inline M(Sreg s, R64 b, R64 i, Scale sc, Imm32 d)
-				: Operand(concat(s.val_, b.val_, i.val_, sc, d.val_, 0)) {
+		inline M(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, 
+				     const Imm32* d, bool addr_or = false)
+				: seg_(s), base_(b), index_(i), scale_(sc), disp_(d), 
+				  addr_or_(addr_or) {
 		}
 
-		inline M(R32 b)
-				: Operand(concat(0x8, b.val_, 0x10, Scale::TIMES_1, 0, 1)) {
+		inline bool contains_seg() const {
+			return seg_ != 0;
 		}
 
-		inline M(Sreg s, R32 b)
-				: Operand(concat(s.val_, b.val_, 0x10, Scale::TIMES_1, 0, 1)) {
+		inline bool contains_base() const {
+			return base_ != 0;
 		}
 
-		inline M(R32 b, Imm32 d)
-				: Operand(concat(0x8, b.val_, 0x10, Scale::TIMES_1, d.val_, 1)) {
+		inline bool contains_index() const {
+			return index_ != 0;
 		}
 
-		inline M(Sreg s, R32 b, Imm32 d)
-				: Operand(concat(s.val_, b.val_, 0x10, Scale::TIMES_1, d.val_, 1)) {
+		inline bool contains_disp() const {
+			return disp_ != 0;
 		}
 
-		inline M(R32 i, Scale sc)
-				: Operand(concat(0x8, 0x10, i.val_, sc, 0, 1)) {
+		inline const Sreg* get_seg() const {
+			assert(contains_seg());
+			return seg_;
 		}
 
-		inline M(Sreg s, R32 i, Scale sc) 
-				: Operand(concat(s.val_, 0x10, i.val_, sc, 0, 1)) {
+		inline const AddrR* get_base() const {
+			assert(constains_base());
+			return base_;
 		}
 
-		inline M(R32 i, Scale sc, Imm32 d)
-				: Operand(concat(0x8, 0x10, i.val_, sc, d.val_, 1)) {
-		}
-
-		inline M(Sreg s, R32 i, Scale sc, Imm32 d)
-				: Operand(concat(s.val_, 0x10, i.val_, sc, d.val_, 1)) {
-		}
-
-		inline M(R32 b, R32 i, Scale sc)
-				: Operand(concat(0x8, b.val_, i.val_, sc, 0, 1)) {
-		}
-
-		inline M(Sreg s, R32 b, R32 i, Scale sc)
-				: Operand(concat(s.val_, b.val_, i.val_, sc, 0, 1)) {
-		}
-
-		inline M(R32 b, R32 i, Scale sc, Imm32 d)
-				: Operand(concat(0x8, b.val_, i.val_, sc, d.val_, 1)) {
-		}
-
-		inline M(Sreg s, R32 b, R32 i, Scale sc, Imm32 d)
-				: Operand(concat(s.val_, b.val_, i.val_, sc, d.val_, 1)) {
-		}
-
-		inline bool null_seg() const {
-			return val_ & (0x1ull << 47);
-		}
-
-		inline bool null_base() const {
-			return val_ & (0x1ull << 43);
-		}
-
-		inline bool null_index() const {
-			return val_ & (0x1ull << 38);
-		}
-
-		inline Sreg get_seg() const {
-			return (val_ >> 44) & 0x7;
-		}
-
-		inline AddrR get_base() const {
-			return (val_ >> 39) & 0xf;
-		}
-
-		inline AddrR get_index() const {
-			return (val_ >> 34) & 0xf;
+		inline const AddrR* get_index() const {
+			assert(contains_index());
+			return index_;
 		}
 
 		inline Scale get_scale() const {
-			return (Scale) ((val_ >> 32) & 0x3);
+			return scale_;
 		}
 
-		inline Imm32 get_disp() const {
-			return val_ & 0xffffffff;
+		inline const Imm* get_disp() const {
+			assert(contains_disp());
+			return disp_;
 		}
 
 		inline bool get_addr_or() const {
-			return (val_ >> 48) & 0x1;
+			return addr_or_;
 		}
 
-		inline void set_seg(Sreg s) {
-			val_ &= ~(0xfull << 44);
-			val_ |= (s.val_ & 0x7) << 45;
+		inline void set_set(const Sreg* seg) {
+			seg_ = seg;
+		}
+
+		inline void set_base(const AddrR* base) {
+			base_ = base;
+		}
+
+		inline void set_index(const AddrR* index) {
+			index_ = index;
+		}
+
+		inline void set_scale(Scale scale) {
+			scale_ = scale;
+		}
+
+		inline void set_disp(const Imm32* disp) {
+			disp_ = disp;
+		}
+
+		inline void set_addr_or(bool addr_or) {
+			addr_or_ = addr_or;
 		}
 
 		inline void clear_seg() {
-			val_ |= (0x1ull << 47);
-		}
-
-		inline void set_base(AddrR b) {
-			val_ &= ~(0x1full << 39);
-			val_ |= (b.val_ & 0xf) << 39;
+			seg_ = 0;
 		}
 
 		inline void clear_base() {
-			val_ |= (0x1ull << 43);
-		}
-
-		inline void set_index(AddrR i) {
-			val_ &= ~(0x1full << 34);
-			val_ |= (i.val_ & 0xf) << 34;
+			base_ = 0;
 		}
 
 		inline void clear_index() {
-			val_ |= (0x1ull << 38);
+			index_ = 0;
 		}
 
-		inline void set_scale(Scale s) {
-			val_ &= ~(0x3ull << 32);
-			val_ |= ((uint64_t) s & 0x3ull) << 32;
+		inline void clear_disp() {
+			disp_ = 0;
 		}
 
-		inline void set_disp(Imm32 d) {
-			val_ &= 0xffffffff00000000;
-			val_ |= (d.val_ & 0xffffffff);
-		}
-
-		inline void set_addr_or() {
-			val_ |= (0x1ull << 48);
-		}
-
-		inline void clear_addr_or() {
-			val_ &= ~(0x1ull << 48);
-		}
-			
-		inline bool check() const {
+		inline virtual bool check() const {
 			// Both base and index can't both be null
-			if ( null_base() && null_index() ) 
+			if ( !contains_base() && !contains_index() ) 
 				return false;
 			// Check non-null bases
-			if ( null_base() && !get_base().check() )
+			if ( contains_base() && !get_base()->check() )
 				return false;
 			// Check non-null indices
-			if ( !null_index() && !get_index().check() )
+			if ( contains_index() && !get_index()->check() )
 				return false;
 			// Index cannot be rsp/esp
-			if ( !null_index() && (R64)get_index() == rsp )
+			if ( contains_index() && (R64)get_index() == rsp )
 				return false;
 			return true;
 		}
 
 	private:	
-
-		// addr (1=32)     [48]
-		// segment? (1=no) [47]
-		// segment         [46:44]
-		// base? (1=no)    [43]
-		// base            [42:39]
-		// index? (1=no)   [38]
-		// index           [37:34]
-		// scale           [33:32]
-		// displacement    [31:0]
-
-		inline uint64_t concat(uint64_t s, uint64_t b, uint64_t i, Scale sc, 
-				                   uint64_t d, uint64_t ao) {
-			return d | ((uint64_t) sc << 32) | (i << 34) | (b << 39) | (s << 44) | 
-				     (ao << 48);
-		}
+		const Sreg* seg_;
+		const AddrR* base_;
+		const AddrR* index_;
+		const Scale scale_;
+		const Imm32* disp_;
+		bool addr_or_;
 };
 
 // NOTE: This ugliness can be replaced using inherited constructors come gcc 4.8
 #define CONSTRUCTORS(T) \
-	inline T(uint64_t val) : M{val} { } \
-	inline T(R64 b) : M{b} { } \
-	inline T(Sreg s, R64 b) : M{s, b} { } \
-	inline T(R64 b, Imm32 d) : M{b, d} { } \
-	inline T(Sreg s, R64 b, Imm32 d) : M{s, b, d} { } \
-	inline T(R64 i, Scale s) : M{i, s} { } \
-	inline T(Sreg s, R64 i, Scale sc) : M{s, i, sc} { } \
-	inline T(R64 i, Scale s, Imm32 d) : M{i, s, d} { } \
-	inline T(Sreg s, R64 i, Scale sc, Imm32 d) : M{s, i, sc, d} { } \
-	inline T(R64 b, R64 i, Scale s) : M{b, i, s} { } \
-	inline T(Sreg s, R64 b, R64 i, Scale sc) : M{s, b, i, sc} { } \
-	inline T(R64 b, R64 i, Scale s, Imm32 d) : M{b, i, s, d} { } \
-	inline T(Sreg s, R64 b, R64 i, Scale sc, Imm32 d) : M{s, b, i, sc, d} { } \
-	inline T(R32 b) : M{b} { } \
-	inline T(Sreg s, R32 b) : M{s, b} { } \
-	inline T(R32 b, Imm32 d) : M{b, d} { } \
-	inline T(Sreg s, R32 b, Imm32 d) : M{s, b, d} { } \
-	inline T(R32 i, Scale s) : M{i, s} { } \
-	inline T(Sreg s, R32 i, Scale sc) : M{s, i, sc} { } \
-	inline T(R32 i, Scale s, Imm32 d) : M{i, s, d} { } \
-	inline T(Sreg s, R32 i, Scale sc, Imm32 d) : M{s, i, sc, d} { } \
-	inline T(R32 b, R32 i, Scale s) : M{b, i, s} { } \
-	inline T(Sreg s, R32 b, R32 i, Scale sc) : M{s, b, i, sc} { } \
-	inline T(R32 b, R32 i, Scale s, Imm32 d) : M{b, i, s, d} { } \
-	inline T(Sreg s, R32 b, R32 i, Scale sc, Imm32 d) : M{s, b, i, sc, d} { } \
+	inline T(const AddrR* b, bool o = false) : M{b, o} { } \
+	inline T(const Sreg* s, const Addr* b, bool o = false) : M{s, b, o} { } \
+	inline T(const AddrR* b, const Imm32* d, bool o = false) : M{b, d, o} { } \
+	inline T(const Sreg* s, const AddrR* b, const Imm32* d, bool o = false) : M{s, b, d, o} { } \
+	inline T(const AddrR* i, Scale s, bool o = false) : M{i, s, o} { } \
+	inline T(const Sreg* s, const AddrR* i, Scale sc, bool o = false) : M{s, i, sc, o} { } \
+	inline T(const AddrR* i, Scale s, const Imm32* d, bool o = false) : M{i, s, d, o} { } \
+	inline T(const Sreg* s, const AddrR* i, Scale sc, const Imm32* d, bool o = false) : M{s, i, sc, d, o} { } \
+	inline T(const AddrR* b, const AddrR* i, Scale s, bool o = false) : M{b, i, s, o} { } \
+	inline T(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, bool o = false) : M{s, b, i, sc, o} { } \
+	inline T(const AddrR* b, const AddrR* i, Scale s, const Imm32* d, bool o = false) : M{b, i, s, d, o} { } \
+	inline T(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, const Imm32* d, bool o = false) : M{s, b, i, sc, d, o} { } \
 
 /** A byte operand in memory, usually expressed as a variable or array name, 
 	  but pointed to by the DS:(E)SI or ES:(E)DI registers. 

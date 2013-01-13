@@ -12,7 +12,7 @@ class Rel8 : public Operand {
 	public:
 		inline Rel8(uint64_t val) : Operand{val} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return true;
 		}
 };
@@ -25,7 +25,7 @@ class Rel32 : public Operand {
 	public:
 		inline Rel32(uint64_t val) : Operand{val} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return true;
 		}
 };

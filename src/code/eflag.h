@@ -10,7 +10,7 @@ class Eflag : public Operand {
 	public:
 		inline Eflag(uint64_t val) : Operand{val} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ < 22 && val_ != 1 && val_ != 3 && val_ != 5;
 		}
 };

@@ -10,7 +10,7 @@ class Rl : public Operand {
 	public:
 		inline Rl(uint64_t val) : Operand{val} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ < 4;
 		}
 };
@@ -20,7 +20,7 @@ class Rh : public Operand {
 	public:
 		inline Rh(uint64_t val) : Operand{val} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ >= 4 && val_ < 8;
 		}
 };
@@ -32,7 +32,7 @@ class Rb : public Operand {
 	public:
 		inline Rb(uint64_t val) : Operand{val} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ >= 4 && val_ < 16;
 		}
 };
@@ -43,7 +43,7 @@ class Al : public Rl {
 		inline Al() : Rl{0} { }
 		inline Al(uint64_t ignore) : Rl{0} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 0;
 		}
 };
@@ -54,7 +54,7 @@ class Cl : public Rl {
 		inline Cl() : Rl{1} { }
 		inline Cl(uint64_t ignore) : Rl{1} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 1;
 		}
 };
@@ -67,7 +67,7 @@ class R16 : public Operand {
 	public:
 		inline R16(uint64_t val) : Operand{val} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ < 16;
 		}
 };
@@ -78,7 +78,7 @@ class Ax : public R16 {
 		inline Ax() : R16{0} { }
 		inline Ax(uint64_t ignore) : R16{0} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 0;
 		}
 };
@@ -89,7 +89,7 @@ class Dx : public R16 {
 		inline Dx() : R16{2} { }
 		inline Dx(uint64_t ignore) : R16{2} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 2;
 		}
 };
@@ -101,7 +101,7 @@ class AddrR : public Operand {
 	public:
 		AddrR(uint64_t val) : Operand{val} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ < 16;
 		}
 };
@@ -114,7 +114,7 @@ class R32 : public AddrR {
 	public:
 		inline R32(uint64_t val) : AddrR{val} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ < 16;
 		}
 };
@@ -125,7 +125,7 @@ class Eax : public R32 {
 		inline Eax() : R32{0} { }
 		inline Eax(uint64_t ignore) : R32{0} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 0;
 		}
 };
@@ -137,7 +137,7 @@ class R64 : public AddrR {
 	public:
 		inline R64(uint64_t val) : AddrR{val} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ < 16;
 		}
 };
@@ -148,7 +148,7 @@ class Rax : public R64 {
 		inline Rax() : R64{0} { }
 		inline Rax(uint64_t ignore) : R64{0} { }
 
-		inline bool check() const {
+		inline virtual bool check() const {
 			return val_ == 0;
 		}
 };
