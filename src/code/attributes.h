@@ -14,7 +14,6 @@ namespace x64 {
 class Attributes {
 	public:
 		static size_t arity(const Opcode o) {
-			assert(o < arity_.size());
 			return arity_[o];
 		}
 
@@ -89,112 +88,7 @@ class Attributes {
 			return implicit_maybe_undef_set_[o];
 		}
 
-		static inline size_t arity(const Instruction& i) {
-			return arity(i.get_opcode());
-		}
-
-		static inline Properties properties(const Instruction& i, size_t index) {
-			return properties(i.get_opcode(), index);
-		}
-
-		static inline OpType type(const Instruction& i, size_t index) {
-			return type(i.get_opcode(), index);
-		}
-
-		static inline bool is_label_defn(const Instruction& i) {
-			return is_label_defn(i.get_opcode());
-		}
-
-		static inline bool is_return(const Instruction& i) {
-			return is_return(i.get_opcode());
-		}
-
-		static inline bool is_nop(const Instruction& i) {
-			return is_nop(i.get_opcode());
-		}
-
-		static inline bool is_jump(const Instruction& i) {
-			return is_jump(i.get_opcode());
-		}
-
-		static inline bool is_cond_jump(const Instruction& i) {
-			return is_cond_jump(i.get_opcode());
-		}
-
-		static inline bool is_uncond_jump(const Instruction& i) {
-			return is_uncond_jump(i.get_opcode());
-		}
-
-		static inline OpSet implicit_must_read_set(const Instruction& i) {
-			return implicit_must_read_set(i.get_opcode());
-		}
-
-		static inline OpSet implicit_maybe_read_set(const Instruction& i) {
-			return implicit_maybe_read_set(i.get_opcode());
-		}
-
-		static inline OpSet implicit_must_write_set(const Instruction& i) {
-			return implicit_must_write_set(i.get_opcode());
-		}
-
-		static inline OpSet implicit_maybe_write_set(const Instruction& i) {
-			return implicit_maybe_write_set(i.get_opcode());
-		}
-
-		static inline OpSet implicit_must_undef_set(const Instruction& i) {
-			return implicit_must_undef_set(i.get_opcode());
-		}
-
-		static inline OpSet implicit_maybe_undef_set(const Instruction& i) {
-			return implicit_maybe_undef_set(i.get_opcode());
-		}
-
-		static OpSet explicit_must_read_set(const Instruction& i);
-		static OpSet explicit_maybe_read_set(const Instruction& i);
-		static OpSet explicit_must_write_set(const Instruction& i);
-		static OpSet explicit_maybe_write_set(const Instruction& i);
-		static OpSet explicit_must_undef_set(const Instruction& i);
-		static OpSet explicit_maybe_undef_set(const Instruction& i);
-
-		static inline OpSet must_read_set(const Instruction& i) {
-			return implicit_must_read_set(i) | explicit_must_read_set(i);
-		}
-
-		static inline OpSet maybe_read_set(const Instruction& i) {
-			return implicit_maybe_read_set(i) | explicit_maybe_read_set(i);
-		}
-
-		static inline OpSet must_write_set(const Instruction& i) {
-			return implicit_must_write_set(i) | explicit_must_write_set(i);
-		}
-
-		static inline OpSet maybe_write_set(const Instruction& i) {
-			return implicit_maybe_write_set(i) | explicit_maybe_write_set(i);
-		}
-
-		static inline OpSet must_undef_set(const Instruction& i) {
-			return implicit_must_undef_set(i) | explicit_must_undef_set(i);
-		}
-
-		static inline OpSet maybe_undef_set(const Instruction& i) {
-			return implicit_maybe_undef_set(i) | explicit_maybe_undef_set(i);
-		}
-
 	private:
-		static std::vector<size_t> arity_;
-		static std::vector<std::vector<Properties>> properties_;
-		static std::vector<std::vector<OpType>> type_;
-		static std::vector<bool> is_return_;
-		static std::vector<bool> is_nop_;
-		static std::vector<bool> is_jump_;
-		static std::vector<bool> is_cond_jump_;
-		static std::vector<bool> is_uncond_jump_;
-		static std::vector<OpSet> implicit_must_read_set_;
-		static std::vector<OpSet> implicit_maybe_read_set_;
-		static std::vector<OpSet> implicit_must_write_set_;
-		static std::vector<OpSet> implicit_maybe_write_set_;
-		static std::vector<OpSet> implicit_must_undef_set_;
-		static std::vector<OpSet> implicit_maybe_undef_set_;
 };
 
 } // namespace x64
