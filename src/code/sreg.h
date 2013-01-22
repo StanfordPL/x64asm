@@ -1,6 +1,8 @@
 #ifndef X64_SRC_CODE_SREG_H
 #define X64_SRC_CODE_SREG_H
 
+#include <iostream>
+
 #include "src/code/operand.h"
 
 namespace x64 {
@@ -8,35 +10,28 @@ namespace x64 {
 /** A segment register. The segment register bit assignments are ES = 0, 
 	  CS = 1, SS = 2, DS = 3, FS = 4, and GS = 5.
 */
-class Sreg : public Operand {
-	public:
-		inline Sreg(uint64_t val) : Operand{val} { }
+class Sreg : public AtomicOperand {
+	friend class Constants;
+	protected:
+		inline Sreg(uint64_t val) : AtomicOperand{val} { }
 
-		inline virtual bool check() const {
-			return val_ < 6;
-		}
+	public:
+		virtual void write_att(std::ostream& os) const;
+		virtual void write_intel(std::ostream& os) const;
 };
 
 /** The segment register FS. */
 class Fs : public Sreg {
-	public:
+	friend class Constants;
+	private:
 		inline Fs() : Sreg{4} { }
-		inline Fs(uint64_t ignore) : Sreg{4} { }
-
-		inline virtual bool check() const {
-			return val_ == 4;
-		}
 };
 
 /** The segment register GS. */
 class Gs : public Sreg {
-	public:
+	friend class Constants;
+	private:
 		inline Gs() : Sreg{5} { }
-		inline Gs(uint64_t ignore) : Sreg{5} { }
-
-		inline virtual bool check() const {
-			return val_ == 5;
-		}
 };
 
 } // namespace x64

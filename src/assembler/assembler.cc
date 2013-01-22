@@ -164,7 +164,7 @@ namespace x64 {
 void Assembler::assemble(const Instruction& instr) {
 	switch ( instr.get_opcode() ) {
 		case LABEL_DEFN:
-			bind((Label)instr.get_operand(0));
+			bind(static_cast<const Label*>(instr.get_operand(0))->val());
 			break;
    	// 4000-way switch
 		//#include "src/gen/assembler.switch"

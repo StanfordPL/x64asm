@@ -1,7 +1,8 @@
 #ifndef X64_SRC_CODE_OP_SET_H
 #define X64_SRC_CODE_OP_SET_H
 
-#include "src/code/checker.h"
+#include <iostream>
+
 #include "src/code/eflag.h"
 #include "src/code/m.h"
 #include "src/code/mm.h"
@@ -144,7 +145,7 @@ class OpSet {
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(M rhs) const {
+		inline OpSet operator+(const M& rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
@@ -152,118 +153,103 @@ class OpSet {
 		// TODO... and so forth
 
 		inline OpSet& operator+=(Rh rhs) {
-			assert(Checker::check(rhs));	
-			gp_regs_ |= ((uint64_t) Mask::HIGH << (rhs.val_-4));
+			gp_regs_ |= ((uint64_t) Mask::HIGH << (rhs.val()-4));
 			return *this;
 		}
 
 		inline OpSet& operator+=(Rl rhs) {
-			assert(Checker::check(rhs));	
-			gp_regs_ |= ((uint64_t) Mask::LOW << rhs.val_);
+			gp_regs_ |= ((uint64_t) Mask::LOW << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(Rb rhs) {
-			assert(Checker::check(rhs));	
-			gp_regs_ |= ((uint64_t) Mask::LOW << rhs.val_);
+			gp_regs_ |= ((uint64_t) Mask::LOW << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(R16 rhs) {
-			assert(Checker::check(rhs));	
-			gp_regs_ |= ((uint64_t) Mask::WORD << rhs.val_);
+			gp_regs_ |= ((uint64_t) Mask::WORD << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(R32 rhs) {
-			assert(Checker::check(rhs));	
-			gp_regs_ |= ((uint64_t) Mask::DOUBLE << rhs.val_);
+			gp_regs_ |= ((uint64_t) Mask::DOUBLE << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(R64 rhs) {
-			assert(Checker::check(rhs));	
-			gp_regs_ |= ((uint64_t) Mask::QUAD << rhs.val_);
+			gp_regs_ |= ((uint64_t) Mask::QUAD << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(Xmm rhs) {
-			assert(Checker::check(rhs));	
-			other_regs_ |= ((uint64_t) Mask::XMM << rhs.val_);
+			other_regs_ |= ((uint64_t) Mask::XMM << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(Ymm rhs) {
-			assert(Checker::check(rhs));	
-			other_regs_ |= ((uint64_t) Mask::YMM << rhs.val_);
+			other_regs_ |= ((uint64_t) Mask::YMM << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(Mm rhs) {
-			assert(Checker::check(rhs));	
-			other_regs_ |= ((uint64_t) Mask::MM << rhs.val_);
+			other_regs_ |= ((uint64_t) Mask::MM << rhs.val());
 			return *this;
 		}
 
-		OpSet& operator+=(M rhs);
+		OpSet& operator+=(const M& rhs);
 
 		// TODO... and so forth	
 
 		// Queries
 
 		inline bool contains(Rh rhs) const {
-			assert(Checker::check(rhs));
-			return ((gp_regs_ >> (rhs.val_-4)) & (uint64_t)Mask::HIGH) == 
+			return ((gp_regs_ >> (rhs.val()-4)) & (uint64_t)Mask::HIGH) == 
 				     (uint64_t)Mask::HIGH;
 		}
 
 		inline bool contains(Rl rhs) const {
-			assert(Checker::check(rhs));
-			return ((gp_regs_ >> rhs.val_) & (uint64_t)Mask::LOW) == 
+			return ((gp_regs_ >> rhs.val()) & (uint64_t)Mask::LOW) == 
 				     (uint64_t)Mask::LOW;
 		}
 
 		inline bool contains(Rb rhs) const {
-			assert(Checker::check(rhs));
-			return ((gp_regs_ >> rhs.val_) & (uint64_t)Mask::LOW) == 
+			return ((gp_regs_ >> rhs.val()) & (uint64_t)Mask::LOW) == 
 				     (uint64_t)Mask::LOW;
 		}
 
 		inline bool contains(R16 rhs) const {
-			assert(Checker::check(rhs));
-			return ((gp_regs_ >> rhs.val_) & (uint64_t)Mask::WORD) == 
+			return ((gp_regs_ >> rhs.val()) & (uint64_t)Mask::WORD) == 
 				     (uint64_t)Mask::WORD;
 		}
 
 		inline bool contains(R32 rhs) const {
-			assert(Checker::check(rhs));
-			return ((gp_regs_ >> rhs.val_) & (uint64_t)Mask::DOUBLE) == 
+			return ((gp_regs_ >> rhs.val()) & (uint64_t)Mask::DOUBLE) == 
 				     (uint64_t)Mask::DOUBLE;
 		}
 
 		inline bool contains(R64 rhs) const {
-			assert(Checker::check(rhs));
-			return ((gp_regs_ >> rhs.val_) & (uint64_t)Mask::QUAD) == 
+			return ((gp_regs_ >> rhs.val()) & (uint64_t)Mask::QUAD) == 
 				     (uint64_t)Mask::QUAD;
 		}
 
 		inline bool contains(Xmm rhs) const {
-			assert(Checker::check(rhs));
-			return ((other_regs_ >> rhs.val_) & (uint64_t)Mask::XMM) == 
+			return ((other_regs_ >> rhs.val()) & (uint64_t)Mask::XMM) == 
 				     (uint64_t)Mask::XMM;
 		}
 
 		inline bool contains(Ymm rhs) const {
-			assert(Checker::check(rhs));
-			return ((other_regs_ >> rhs.val_) & (uint64_t)Mask::YMM) == 
+			return ((other_regs_ >> rhs.val()) & (uint64_t)Mask::YMM) == 
 				     (uint64_t)Mask::YMM;
 		}
 
 		inline bool contains(Mm rhs) const {
-			assert(Checker::check(rhs));
-			return ((other_regs_ >> rhs.val_) & (uint64_t)Mask::MM) == 
+			return ((other_regs_ >> rhs.val()) & (uint64_t)Mask::MM) == 
 				     (uint64_t)Mask::MM;
 		}
+
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 
 	private:
 		// GP regs [63-0]

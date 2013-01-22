@@ -3,7 +3,7 @@
 GCC=ccache g++
 
 INC=-I./
-
+		
 OBJ=build/assembler/assembler.o \
 		\
 		build/cfg/cfg.o \
@@ -13,17 +13,30 @@ OBJ=build/assembler/assembler.o \
 		build/cfg/loops.o \
 		build/cfg/reachable.o \
 		\
-		build/code/attributes.o \
+		build/code/code.o \
 		build/code/constants.o \
+		build/code/cr.o \
+		build/code/dr.o \
+		build/code/eflag.o \
+		build/code/imm.o \
+		build/code/instruction.o \
+		build/code/label.o \
+		build/code/m.o \
+		build/code/mm.o \
+		build/code/modifier.o \
+		build/code/moffs.o \
+		build/code/operand.o \
 		build/code/op_set.o \
+		build/code/r.o \
+		build/code/rel.o \
+		build/code/sreg.o \
+		build/code/st.o \
+		build/code/xmm.o \
+		build/code/ymm.o \
 		\
-		build/io/att_reader.o \
-		build/io/att_writer.o \
 		build/io/dot_writer.o \
-		build/io/elf_writer.o \
 		build/io/hex_writer.o \
-		build/io/intel_reader.o \
-		build/io/intel_writer.o \
+		build/io/elf_writer.o \
 		\
 		build/stream/stream.o
 

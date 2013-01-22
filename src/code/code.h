@@ -1,6 +1,7 @@
 #ifndef X64_SRC_CODE_CODE_H
 #define X64_SRC_CODE_CODE_H
 
+#include <iostream>
 #include <vector>
 
 #include "src/code/instruction.h"
@@ -8,20 +9,15 @@
 namespace x64 {
 
 /** A sequence of Instructions. */
-class Code {
+class Code : public std::vector<Instruction> {
 	public:
-		// Put some constructors here...
-		// Put some vector stuff here...
+		bool check() const;
 
-		inline bool check() const {
-			for ( const auto& i : code_ )
-				if ( !i.check() )
-					return false;
-			return true;
-		}
+		void read_att(std::istream& is);
+		void read_intel(std::istream& is);
 
-	private:
-		std::vector<Instruction> code_;
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 } // namespace x64

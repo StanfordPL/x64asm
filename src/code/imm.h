@@ -1,9 +1,21 @@
 #ifndef X64_SRC_CODE_IMM_H
 #define X64_SRC_CODE_IMM_H
 
+#include <iostream>
+
 #include "src/code/operand.h"
 
 namespace x64 {
+
+/** An immediate value. */
+class Imm : public AtomicOperand {
+	public:
+		inline Imm(uint64_t val) : AtomicOperand{val} { }
+		virtual ~Imm() = 0;
+
+		virtual void write_att(std::ostream& os) const;
+		virtual void write_intel(std::ostream& os) const;
+};
 
 /** An immediate byte value. The imm8 symbol is a signed number between –128 
 	  and +127 inclusive. For instructions in which imm8 is combined with a 
@@ -11,87 +23,58 @@ namespace x64 {
 		a word or doubleword. The upper byte of the word is filled with the topmost 
 		bit of the immediate value. 
 */
-class Imm8 : public Operand {
+class Imm8 : public Imm {
 	public:
-		inline Imm8(uint8_t i) : Operand{i} { }
-
-		inline virtual bool check() const {
-			return (int64_t)val_ >= -128 && (int64_t)val_ <= 127;
-		}
+		inline Imm8(int8_t i) : Imm{(uint64_t)i} { }
 };
 
 /** An immediate word value used for instructions whose operand-size attribute 
 	  is 16 bits. This is a number between -32,768 and +32,767 inclusive.
 */
-class Imm16 : public Operand {
+class Imm16 : public Imm {
 	public:
-		inline Imm16(uint16_t i) : Operand{i} { }
-
-		inline virtual bool check() const {
-			return (int64_t)val_ >= -32768 && (int64_t)val_ <= 32767;
-		}
+		inline Imm16(int16_t i) : Imm{(uint64_t)i} { }
 };
 
 /** An immediate doubleword value used for instructions whose operand-size 
 	  attribute is 32 bits. It allows the use of a number between 
 		+2,147,483,647 and -2,147,483,648 inclusive.
 */
-class Imm32 : public Operand {
+class Imm32 : public Imm {
 	public:
-		inline Imm32(uint32_t i) : Operand{i} { }
-
-		inline virtual bool check() const {
-			return (int64_t)val_ >= -2147483648 && (int64_t)val_ <= 2147483647;
-		}
+		inline Imm32(int32_t i) : Imm{(uint64_t)i} { }
 };
 
 /** An immediate quadword value used for instructions whose operand-size 
 	  attribute is 64 bits. The value allows the use of a number between 
 		+9,223,372,036,854,775,807 and -9,223,372,036,854,775,808 inclusive.
 */
-class Imm64 : public Operand {
+class Imm64 : public Imm {
 	public:
-		inline Imm64(uint64_t i) : Operand{i} { }
-
+		inline Imm64(int64_t i) : Imm{(uint64_t)i} { }
 		template <typename T>
-		inline Imm64(T* t) : Operand{(Operand) t} { }
-
-		inline virtual bool check() const {
-			return true;
-		}
+		inline Imm64(T* t) : Imm{(uint64_t)t} { }
 };
 
 /** The immediate constant value zero */
 class Zero : public Imm8 {
-	public:
+	friend class Constants;
+	private:
 		inline Zero() : Imm8{0} { }
-		inline Zero(uint64_t ignore) : Imm8{0} { }
-
-		inline virtual bool check() const {
-			return val_ == 0;
-		}
 };
 
 /** The immediate constant value one */
 class One : public Imm8 {
-	public:
+	friend class Constants;
+	private:
 		inline One() : Imm8{1} { }
-		inline One(uint64_t ignore) : Imm8{0} { }
-
-		inline virtual bool check() const {
-			return val_ == 1;
-		}
 };
 
 /** The immediate constant value three */
 class Three : public Imm8 {
-	public:
+	friend class Constants;
+	private:
 		inline Three() : Imm8{3} { }
-		inline Three(uint64_t ignore) : Imm8{0} { }
-
-		inline virtual bool check() const {
-			return val_ == 3;
-		}
 };
 
 } // namespace x64

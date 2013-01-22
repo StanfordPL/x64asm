@@ -30,19 +30,13 @@ void IntelWriter::write(ostream& os, const Imm i) {
 void IntelWriter::write(ostream& os, const Label l) {
 }
 
-void IntelWriter::write(ostream& os, const M m) {
+void IntelWriter::write(ostream& os, const M& m) {
 }
 
 void IntelWriter::write(ostream& os, const Mm m) {
 }
 
 void IntelWriter::write(ostream& os, const Moffs m) {
-}
-
-void IntelWriter::write(ostream& os, const NoRexR8 r) {
-}
-
-void IntelWriter::write(ostream& os, const RexR8 r) {
 }
 
 void IntelWriter::write(ostream& os, const Rl r) {

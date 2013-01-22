@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 
-#include "src/code/attributes.h"
+#include "src/code/label.h"
 
 using namespace std;
 
@@ -31,22 +31,22 @@ void Cfg::recompute() {
 
 	// Check whether the first instruction is a label, we skip it below.
 	const auto& first = code_[0];
-	if ( Attributes::is_label_defn(first) )
-		labels[first.get_operand(0).val_] = 1;
+	if ( first.is_label_defn() )
+		labels[((Label*)(first.get_operand(0)))->val()] = 1;
 
 	// Iterate over the remaining instructions
 	for ( size_t i = 1, ie = code_.size(); i < ie; ++i ) {
 		const auto& instr = code_[i];
 
 		// Labels begin blocks (watch out for double counting; see below)
-		if ( Attributes::is_label_defn(instr) ) {
+		if ( instr.is_label_defn() ) {
 			if ( blocks_.back() != i )
 				blocks_.push_back(i);
-			labels[instr.get_operand(0).val_] = blocks_.size()-1;
+			labels[((Label*)(instr.get_operand(0)))->val()] = blocks_.size()-1;
 			continue;
 		}
 		// Jumps and returns end blocks (this can double count a label)
-		if ( Attributes::is_jump(instr) || Attributes::is_return(instr) )
+		if ( instr.is_jump() || instr.is_return() )
 			blocks_.push_back(i+1);
 	}
 
@@ -68,19 +68,19 @@ void Cfg::recompute() {
 		const auto& instr = code_[blocks_[i+1]-1];
 
 		// Unconditional jumps have non-trivial fallthrough targets.
-		if ( Attributes::is_uncond_jump(instr) ) {
-			succs_[i].push_back(labels[instr.get_operand(0).val_]);
+		if ( instr.is_uncond_jump() ) {
+			succs_[i].push_back(labels[((Label*)(instr.get_operand(0)))->val()]);
 			continue;
 		}
 		// Returns point to exit
-		if ( Attributes::is_return(instr) ) {
+		if ( instr.is_return() ) {
 			succs_[i].push_back(get_exit());
 			continue;
 		}
 		// Everything else has a fallthrough and a possible conditional target.
 		succs_[i].push_back(i+1);			
-		if ( Attributes::is_cond_jump(instr) )
-			succs_[i].push_back(labels[instr.get_operand(0).val_]);
+		if ( instr.is_cond_jump() )
+			succs_[i].push_back(labels[((Label*)(instr.get_operand(0)))->val()]);
 	}
 
 	// Predecessors 

@@ -2,11 +2,12 @@
 #define X64_SRC_CODE_M_H
 
 #include <cassert>
+#include <iostream>
 
+#include "src/code/constants.h"
 #include "src/code/r.h"
 #include "src/code/imm.h"
 #include "src/code/operand.h"
-#include "src/code/scale.h"
 #include "src/code/sreg.h"
 
 namespace x64 {
@@ -19,7 +20,7 @@ enum class Scale {
 };
 
 /** An operand in memory. */
-class M : public Operand {
+class M : public CompoundOperand {
 	public:
 		inline M(const AddrR* b, bool addr_or = false)
 				: seg_(0), base_(b), index_(0), scale_(Scale::TIMES_1), disp_(0),
@@ -86,6 +87,8 @@ class M : public Operand {
 				  addr_or_(addr_or) {
 		}
 
+		virtual ~M() = 0;
+
 		inline bool contains_seg() const {
 			return seg_ != 0;
 		}
@@ -121,7 +124,7 @@ class M : public Operand {
 			return scale_;
 		}
 
-		inline const Imm* get_disp() const {
+		inline const Imm32* get_disp() const {
 			assert(contains_disp());
 			return disp_;
 		}
@@ -170,27 +173,16 @@ class M : public Operand {
 			disp_ = 0;
 		}
 
-		inline virtual bool check() const {
-			// Both base and index can't both be null
-			if ( !contains_base() && !contains_index() ) 
-				return false;
-			// Check non-null bases
-			if ( contains_base() && !get_base()->check() )
-				return false;
-			// Check non-null indices
-			if ( contains_index() && !get_index()->check() )
-				return false;
-			// Index cannot be rsp/esp
-			if ( contains_index() && (R64)get_index() == rsp )
-				return false;
-			return true;
-		}
+		virtual bool check() const;
+
+		virtual void write_att(std::ostream& os) const;
+		virtual void write_intel(std::ostream& os) const;
 
 	private:	
 		const Sreg* seg_;
 		const AddrR* base_;
 		const AddrR* index_;
-		const Scale scale_;
+		Scale scale_;
 		const Imm32* disp_;
 		bool addr_or_;
 };
@@ -198,7 +190,7 @@ class M : public Operand {
 // NOTE: This ugliness can be replaced using inherited constructors come gcc 4.8
 #define CONSTRUCTORS(T) \
 	inline T(const AddrR* b, bool o = false) : M{b, o} { } \
-	inline T(const Sreg* s, const Addr* b, bool o = false) : M{s, b, o} { } \
+	inline T(const Sreg* s, const AddrR* b, bool o = false) : M{s, b, o} { } \
 	inline T(const AddrR* b, const Imm32* d, bool o = false) : M{b, d, o} { } \
 	inline T(const Sreg* s, const AddrR* b, const Imm32* d, bool o = false) : M{s, b, d, o} { } \
 	inline T(const AddrR* i, Scale s, bool o = false) : M{i, s, o} { } \

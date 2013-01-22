@@ -3,15 +3,18 @@
 
 #include <cassert>
 #include <initializer_list>
+#include <iostream>
 #include <vector>
 
 #include "src/code/opcode.h"
 #include "src/code/operand.h"
+#include "src/code/op_set.h"
+#include "src/code/op_type.h"
+#include "src/code/properties.h"
 
 namespace x64 {
 
-/** A single hardware instruction.
-*/
+/** A hardware instruction. */
 class Instruction {
 	public:
 		inline Instruction(Opcode opcode) 
@@ -49,16 +52,136 @@ class Instruction {
 			return operands_[index];
 		}
 
-		inline bool check() const {
-			for ( const auto o : operands_ )
-				if ( !o->check() )
-					return false;
-			return true;
+		inline size_t arity() const {
+			assert(get_opcode() < arity_.size());
+			return arity_[get_opcode()];
 		}
+
+		inline Properties properties(size_t index) const {
+			assert(get_opcode() < properites_.size());
+			assert(index < properties_[get_opcode()].size());
+			return properties_[get_opcode()][index];
+		}
+
+		inline OpType type(size_t index) const {
+			assert(get_opcode() < type_.size());
+			assert(index < type_[get_opcode()].size());
+			return type_[get_opcode()][index];
+		}
+
+		inline bool is_label_defn() const {
+			return get_opcode() == Opcode::LABEL_DEFN;
+		}
+
+		inline bool is_return() const {
+			assert(get_opcode() < is_return_.size());
+			return is_return_[get_opcode()];
+		}
+
+		inline bool is_nop() const {
+			assert(get_opcode() < is_nop_.size());
+			return is_nop_[get_opcode()];
+		}
+
+		inline bool is_jump() const {
+			assert(get_opcode() < is_jump_.size());
+			return is_jump_[get_opcode()];
+		}
+
+		inline bool is_cond_jump() const {
+			assert(get_opcode() < is_cond_jump_.size());
+			return is_cond_jump_[get_opcode()];
+		}
+
+		inline bool is_uncond_jump() const {
+			assert(get_opcode() < is_uncond_jump_.size());
+			return is_uncond_jump_[get_opcode()];
+		}
+
+		inline OpSet implicit_must_read_set() const {
+			assert(get_opcode() < implicit_must_read_set_.size());
+			return implicit_must_read_set_[get_opcode()];
+		}
+
+		inline OpSet implicit_maybe_read_set() const {
+			assert(get_opcode() < implicit_maybe_read_set_.size());
+			return implicit_maybe_read_set_[get_opcode()];
+		}
+
+		inline OpSet implicit_must_write_set() const {
+			assert(get_opcode() < implicit_must_write_set_.size());
+			return implicit_must_write_set_[get_opcode()];
+		}
+
+		inline OpSet implicit_maybe_write_set() const {
+			assert(get_opcode() < implicit_maybe_write_set_.size());
+			return implicit_maybe_write_set_[get_opcode()];
+		}
+
+		inline OpSet implicit_must_undef_set() const {
+			assert(get_opcode() < implicit_must_undef_set_.size());
+			return implicit_must_undef_set_[get_opcode()];
+		}
+
+		inline OpSet implicit_maybe_undef_set() const {
+			assert(get_opcode() < implicit_maybe_undef_set_.size());
+			return implicit_maybe_undef_set_[get_opcode()];
+		}
+
+		OpSet explicit_must_read_set() const ;
+		OpSet explicit_maybe_read_set() const ;
+		OpSet explicit_must_write_set() const ;
+		OpSet explicit_maybe_write_set() const ;
+		OpSet explicit_must_undef_set() const ;
+		OpSet explicit_maybe_undef_set() const ;
+
+		inline OpSet must_read_set() const {
+			return implicit_must_read_set() | explicit_must_read_set();
+		}
+
+		inline OpSet maybe_read_set() const {
+			return implicit_maybe_read_set() | explicit_maybe_read_set();
+		}
+
+		inline OpSet must_write_set() const {
+			return implicit_must_write_set() | explicit_must_write_set();
+		}
+
+		inline OpSet maybe_write_set() const {
+			return implicit_maybe_write_set() | explicit_maybe_write_set();
+		}
+
+		inline OpSet must_undef_set() const {
+			return implicit_must_undef_set() | explicit_must_undef_set();
+		}
+
+		inline OpSet maybe_undef_set() const {
+			return implicit_maybe_undef_set() | explicit_maybe_undef_set();
+		}
+
+		bool check() const;
+
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 
 	private:
 		Opcode opcode_;
 		std::vector<Operand*> operands_;
+
+		static std::vector<size_t> arity_;
+		static std::vector<std::vector<Properties>> properties_;
+		static std::vector<std::vector<OpType>> type_;
+		static std::vector<bool> is_return_;
+		static std::vector<bool> is_nop_;
+		static std::vector<bool> is_jump_;
+		static std::vector<bool> is_cond_jump_;
+		static std::vector<bool> is_uncond_jump_;
+		static std::vector<OpSet> implicit_must_read_set_;
+		static std::vector<OpSet> implicit_maybe_read_set_;
+		static std::vector<OpSet> implicit_must_write_set_;
+		static std::vector<OpSet> implicit_maybe_write_set_;
+		static std::vector<OpSet> implicit_must_undef_set_;
+		static std::vector<OpSet> implicit_maybe_undef_set_;
 };
 
 } // namespace x64

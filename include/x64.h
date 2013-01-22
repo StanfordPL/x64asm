@@ -13,7 +13,6 @@
 #include "src/cfg/remove_nop.h"
 #include "src/cfg/remove_unreachable.h"
 
-#include "src/code/attributes.h"
 #include "src/code/code.h"
 #include "src/code/constants.h"
 #include "src/code/cr.h"
@@ -34,19 +33,14 @@
 #include "src/code/properties.h"
 #include "src/code/r.h"
 #include "src/code/rel.h"
-#include "src/code/scale.h"
 #include "src/code/sreg.h"
 #include "src/code/st.h"
 #include "src/code/xmm.h"
 #include "src/code/ymm.h"
 
-#include "src/io/att_reader.h"
-#include "src/io/att_writer.h"
 #include "src/io/dot_writer.h"
 #include "src/io/elf_writer.h"
 #include "src/io/hex_writer.h"
-#include "src/io/intel_reader.h"
-#include "src/io/intel_writer.h"
 
 #include "src/stream/stream.h"
 

@@ -4,190 +4,246 @@ using namespace std;
 
 namespace x64 {
 
-// Constant Registers (cr.h)
-const Cr0234 cr0{0};
-const Cr0234 cr2{2};
-const Cr0234 cr3{3};
-const Cr0234 cr4{4};
-const Cr8 cr8{8};
+const Cr0234 cr0{Constants::cr0()};
+const Cr0234 cr2{Constants::cr2()};
+const Cr0234 cr3{Constants::cr3()};
+const Cr0234 cr4{Constants::cr4()};
 
-// Debug Registers (dr.h)
-const Dr dr0{0};
-const Dr dr1{1};
-const Dr dr2{2};
-const Dr dr3{3};
-const Dr dr4{4};
-const Dr dr5{5};
-const Dr dr6{6};
-const Dr dr7{7};
+const vector<Cr0234> cr0234s {{
+	cr0, cr2, cr3, cr4
+}};
 
-// Eflags (eflag.h2})
-const Eflag cf{0};
-const Eflag pf{2};
-const Eflag af{4};
-const Eflag zf{6};
-const Eflag sf{7};
-const Eflag tf{8};
-const Eflag if_{9};
-const Eflag df{10};
-const Eflag of{11};
-const Eflag iopl0{12};
-const Eflag iopl1{13};
-const Eflag nt{14};
-const Eflag rf{16};
-const Eflag vm{17};
-const Eflag ac{18};
-const Eflag vif{19};
-const Eflag vip{20};
-const Eflag id{21};
+const Cr8 cr8{Constants::cr8()};
 
-// Immediates (imm.h)
-const Zero zero{};
-const One one{};
-const Three three{};
+const vector<Cr> crs {{
+	cr0, cr2, cr3, cr4, cr8
+}};
 
-// MMX Registers (mm.h)
-const Mm mm0{0};
-const Mm mm1{1};
-const Mm mm2{2};
-const Mm mm3{3};
-const Mm mm4{4};
-const Mm mm5{5};
-const Mm mm6{6};
-const Mm mm7{7};
+const Dr dr0{Constants::dr0()};
+const Dr dr1{Constants::dr1()};
+const Dr dr2{Constants::dr2()};
+const Dr dr3{Constants::dr3()};
+const Dr dr4{Constants::dr4()};
+const Dr dr5{Constants::dr5()};
+const Dr dr6{Constants::dr6()};
+const Dr dr7{Constants::dr7()};
 
-// Modifiers (modifier.h)
-const Pref66 pref_66{};
-const PrefRexW pref_rex_w{};
-const Far far{};
+const vector<Dr> drs {{
+	dr0, dr1, dr2, dr3, dr4, dr5, dr6, dr7
+}};
 
-// General Purpose Registers (r.h)
-const Rh ah{4};
-const Rh ch{5};
-const Rh dh{6};
-const Rh bh{7};
+const Eflag cf{Constants::cf()};
+const Eflag pf{Constants::pf()};
+const Eflag af{Constants::af()};
+const Eflag zf{Constants::zf()};
+const Eflag sf{Constants::sf()};
+const Eflag tf{Constants::tf()};
+const Eflag if_{Constants::if_()};
+const Eflag df{Constants::df()};
+const Eflag of{Constants::of()};
+const Eflag iopl0{Constants::iopl0()};
+const Eflag iopl1{Constants::iopl1()};
+const Eflag nt{Constants::nt()};
+const Eflag rf{Constants::rf()};
+const Eflag vm{Constants::vm()};
+const Eflag ac{Constants::ac()};
+const Eflag vif{Constants::vif()};
+const Eflag vip{Constants::vip()};
+const Eflag id{Constants::id()};
 
-const Al al{};
-const Cl cl{};
-const Rl dl{2};
-const Rl bl{3};
+const vector<Eflag> eflags {{
+	cf,    pf,    af, zf, sf, tf, if_, df,  of, 
+	iopl0, iopl1, nt, rf, vm, ac, vif, vip, id
+}};
 
-const Rb spl{4};
-const Rb bpl{5};
-const Rb sil{6};
-const Rb dil{7};
-const Rb r8b{8};
-const Rb r9b{9};
-const Rb r10b{10};
-const Rb r11b{11};
-const Rb r12b{12};
-const Rb r13b{13};
-const Rb r14b{14};
-const Rb r15b{15};
+const Zero zero{Constants::zero()};
+const One one{Constants::one()};
+const Three three{Constants::three()};
 
-const Ax ax{};
-const R16 cx{1};
-const Dx dx{};
-const R16 bx{3};
-const R16 sp{4};
-const R16 bp{5};
-const R16 si{6};
-const R16 di{7};
-const R16 r8w{8};
-const R16 r9w{9};
-const R16 r10w{10};
-const R16 r11w{11};
-const R16 r12w{12};
-const R16 r13w{13};
-const R16 r14w{14};
-const R16 r15w{15};
+const Mm mm0{Constants::mm0()};
+const Mm mm1{Constants::mm1()};
+const Mm mm2{Constants::mm2()};
+const Mm mm3{Constants::mm3()};
+const Mm mm4{Constants::mm4()};
+const Mm mm5{Constants::mm5()};
+const Mm mm6{Constants::mm6()};
+const Mm mm7{Constants::mm7()};
 
-const Eax eax{};
-const R32 ecx{1};
-const R32 edx{2};
-const R32 ebx{3};
-const R32 esp{4};
-const R32 ebp{5};
-const R32 esi{6};
-const R32 edi{7};
-const R32 r8d{8};
-const R32 r9d{9};
-const R32 r10d{10};
-const R32 r11d{11};
-const R32 r12d{12};
-const R32 r13d{13};
-const R32 r14d{14};
-const R32 r15d{15};
+const vector<Mm> mms {{
+	mm0, mm1, mm2, mm3, mm4, mm5, mm6, mm7
+}};
 
-const Rax rax{};
-const R64 rcx{1};
-const R64 rdx{2};
-const R64 rbx{3};
-const R64 rsp{4};
-const R64 rbp{5};
-const R64 rsi{6};
-const R64 rdi{7};
-const R64 r8{8};
-const R64 r9{9};
-const R64 r10{10};
-const R64 r11{11};
-const R64 r12{12};
-const R64 r13{13};
-const R64 r14{14};
-const R64 r15{15};
+const Pref66 pref_66{Constants::pref_66()};
+const PrefRexW pref_rex_w{Constants::pref_rex_w()};
+const Far far{Constants::far()};
 
-// Segment Registers (sreg.h)
-const Sreg es{0};
-const Sreg cs{1};
-const Sreg ss{2};
-const Sreg ds{3};
-const Fs fs{};
-const Gs gs{};
+const Al al{Constants::al()};
+const Cl cl{Constants::cl()};
+const Rl dl{Constants::dl()};
+const Rl bl{Constants::bl()};
 
-// Floating Point Registers (st.h)
-const St0 st0{};
-const St st1{1};
-const St st2{2};
-const St st3{3};
-const St st4{4};
-const St st5{5};
-const St st6{6};
-const St st7{7};
+const vector<Rl> rls {{
+	al, cl, dl, bl
+}};
 
-// Xmm Registers (xmm.h)
-const Xmm0 xmm0{};
-const Xmm xmm1{1};
-const Xmm xmm2{2};
-const Xmm xmm3{3};
-const Xmm xmm4{4};
-const Xmm xmm5{5};
-const Xmm xmm6{6};
-const Xmm xmm7{7};
-const Xmm xmm8{8};
-const Xmm xmm9{9};
-const Xmm xmm10{10};
-const Xmm xmm11{11};
-const Xmm xmm12{12};
-const Xmm xmm13{13};
-const Xmm xmm14{14};
-const Xmm xmm15{15};
+const Rh ah{Constants::ah()};
+const Rh ch{Constants::ch()};
+const Rh dh{Constants::dh()};
+const Rh bh{Constants::bh()};
 
-// Ymm Registers (ymm.h)
-const Ymm ymm0{0};
-const Ymm ymm1{1};
-const Ymm ymm2{2};
-const Ymm ymm3{3};
-const Ymm ymm4{4};
-const Ymm ymm5{5};
-const Ymm ymm6{6};
-const Ymm ymm7{7};
-const Ymm ymm8{8};
-const Ymm ymm9{9};
-const Ymm ymm10{10};
-const Ymm ymm11{11};
-const Ymm ymm12{12};
-const Ymm ymm13{13};
-const Ymm ymm14{14};
-const Ymm ymm15{15};
+const vector<Rh> rhs {{
+	ah, ch, dh, bh
+}};
+
+const Rb spl{Constants::spl()};
+const Rb bpl{Constants::bpl()};
+const Rb sil{Constants::sil()};
+const Rb dil{Constants::dil()};
+const Rb r8b{Constants::r8b()};
+const Rb r9b{Constants::r9b()};
+const Rb r10b{Constants::r10b()};
+const Rb r11b{Constants::r11b()};
+const Rb r12b{Constants::r12b()};
+const Rb r13b{Constants::r13b()};
+const Rb r14b{Constants::r14b()};
+const Rb r15b{Constants::r15b()};
+
+const vector<Rb> rbs {{
+	spl, bpl, sil, dil, r8b, r9b, r10b, r11b, r12b, r13b, r14b, r15b
+}};
+
+const Ax ax{Constants::ax()};
+const R16 cx{Constants::cx()};
+const Dx dx{Constants::dx()};
+const R16 bx{Constants::bx()};
+const R16 sp{Constants::sp()};
+const R16 bp{Constants::bp()};
+const R16 si{Constants::si()};
+const R16 di{Constants::di()};
+const R16 r8w{Constants::r8w()};
+const R16 r9w{Constants::r9w()};
+const R16 r10w{Constants::r10w()};
+const R16 r11w{Constants::r11w()};
+const R16 r12w{Constants::r12w()};
+const R16 r13w{Constants::r13w()};
+const R16 r14w{Constants::r14w()};
+const R16 r15w{Constants::r15w()};
+
+const vector<R16> r16s {{
+	ax,  cx,  dx,   bx,   sp,   bp,   si,   di,
+	r8w, r9w, r10w, r11w, r12w, r13w, r14w, r15w
+}};
+
+const Eax eax{Constants::eax()};
+const R32 ecx{Constants::ecx()};
+const R32 edx{Constants::edx()};
+const R32 ebx{Constants::eax()};
+const R32 esp{Constants::esp()};
+const R32 ebp{Constants::ebp()};
+const R32 esi{Constants::esi()};
+const R32 edi{Constants::edi()};
+const R32 r8d{Constants::r8d()};
+const R32 r9d{Constants::r9d()};
+const R32 r10d{Constants::r10d()};
+const R32 r11d{Constants::r11d()};
+const R32 r12d{Constants::r12d()};
+const R32 r13d{Constants::r13d()};
+const R32 r14d{Constants::r14d()};
+const R32 r15d{Constants::r15d()};
+
+const vector<R32> r32s {{
+	eax, ecx, edx,  ebx,  esp,  ebp,  esi,  edi, 
+	r8d, r9d, r10d, r11d, r12d, r13d, r14d, r15d
+}};
+
+const Rax rax{Constants::rax()};
+const R64 rcx{Constants::rcx()};
+const R64 rdx{Constants::rdx()};
+const R64 rbx{Constants::rbx()};
+const R64 rsp{Constants::rsp()};
+const R64 rbp{Constants::rbp()};
+const R64 rsi{Constants::rsi()};
+const R64 rdi{Constants::rdi()};
+const R64 r8{Constants::r8()};
+const R64 r9{Constants::r9()};
+const R64 r10{Constants::r10()};
+const R64 r11{Constants::r11()};
+const R64 r12{Constants::r12()};
+const R64 r13{Constants::r13()};
+const R64 r14{Constants::r14()};
+const R64 r15{Constants::r15()};
+
+const vector<R64> r64s {{
+	rax, rcx, rdx, rbx, rsp, rbp, rsi, rdi,
+	r8,  r9,  r10, r11, r12, r13, r14, r15
+}};
+
+const Sreg es{Constants::es()};
+const Sreg cs{Constants::cs()};
+const Sreg ss{Constants::ss()};
+const Sreg ds{Constants::ds()};
+const Fs fs{Constants::fs()};
+const Gs gs{Constants::gs()};
+
+const vector<Sreg> sregs {{
+	es, cs, ss, ds, fs, gs
+}};
+
+const St0 st0{Constants::st0()};
+const St st1{Constants::st1()};
+const St st2{Constants::st2()};
+const St st3{Constants::st3()};
+const St st4{Constants::st4()};
+const St st5{Constants::st5()};
+const St st6{Constants::st6()};
+const St st7{Constants::st7()};
+
+const vector<St> sts {{
+	st0, st1, st2, st3, st4, st5, st6, st7
+}};
+
+const Xmm0 xmm0{Constants::xmm0()};
+const Xmm xmm1{Constants::xmm1()};
+const Xmm xmm2{Constants::xmm2()};
+const Xmm xmm3{Constants::xmm3()};
+const Xmm xmm4{Constants::xmm4()};
+const Xmm xmm5{Constants::xmm5()};
+const Xmm xmm6{Constants::xmm6()};
+const Xmm xmm7{Constants::xmm7()};
+const Xmm xmm8{Constants::xmm8()};
+const Xmm xmm9{Constants::xmm9()};
+const Xmm xmm10{Constants::xmm10()};
+const Xmm xmm11{Constants::xmm11()};
+const Xmm xmm12{Constants::xmm12()};
+const Xmm xmm13{Constants::xmm13()};
+const Xmm xmm14{Constants::xmm14()};
+const Xmm xmm15{Constants::xmm15()};
+
+const vector<Xmm> xmms {{
+	xmm0, xmm1, xmm2,  xmm3,  xmm4,  xmm5,  xmm6,  xmm7,
+	xmm8, xmm9, xmm10, xmm11, xmm12, xmm13, xmm14, xmm15
+}};
+
+const Ymm ymm0{Constants::ymm0()};
+const Ymm ymm1{Constants::ymm1()};
+const Ymm ymm2{Constants::ymm2()};
+const Ymm ymm3{Constants::ymm3()};
+const Ymm ymm4{Constants::ymm4()};
+const Ymm ymm5{Constants::ymm5()};
+const Ymm ymm6{Constants::ymm6()};
+const Ymm ymm7{Constants::ymm7()};
+const Ymm ymm8{Constants::ymm8()};
+const Ymm ymm9{Constants::ymm9()};
+const Ymm ymm10{Constants::ymm10()};
+const Ymm ymm11{Constants::ymm11()};
+const Ymm ymm12{Constants::ymm12()};
+const Ymm ymm13{Constants::ymm13()};
+const Ymm ymm14{Constants::ymm14()};
+const Ymm ymm15{Constants::ymm15()};
+
+const vector<Ymm> ymms {{
+	ymm0, ymm1, ymm2,  ymm3,  ymm4,  ymm5,  ymm6,  ymm7,
+	ymm8, ymm9, ymm10, ymm11, ymm12, ymm13, ymm14, ymm15
+}};
 
 } // namespace x64

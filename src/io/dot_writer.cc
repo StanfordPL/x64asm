@@ -8,7 +8,6 @@
 #include "src/cfg/dominators.h"
 #include "src/cfg/loops.h"
 #include "src/cfg/reachable.h"
-#include "src/io/att_writer.h"
 
 using namespace std;
 
@@ -49,7 +48,7 @@ void DotWriter::write(ostream& os, const Code& c) {
 			os << "|";
 			for ( size_t j = 0, je = cfg.num_instrs(bb); j < je; ++j ) {
 				const auto& instr = cfg.get_instr(Cfg::location_type(bb,j));
-				AttWriter::write(os, instr);
+				instr.write_att(os);
 				os << "\\l";
 			}
 			os << "}\"];" << endl;

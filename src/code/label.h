@@ -1,6 +1,8 @@
 #ifndef X64_SRC_CODE_LABEL_H
 #define X64_SRC_CODE_LABEL_H
 
+#include <iostream>
+
 #include "src/code/operand.h"
 
 namespace x64 {
@@ -8,13 +10,12 @@ namespace x64 {
 /** A symbolic representation of a Rel32.
 	  For simplicity, we do not provide a Rel8 equivalent.
 */
-class Label : public Operand {
+class Label : public AtomicOperand {
 	public:
-		inline Label(uint64_t val) : Operand{val} { } 
+		inline Label(uint64_t val) : AtomicOperand{val} { } 
 
-		inline virtual bool check() const {
-			return true;
-		}
+		virtual void write_att(std::ostream& os) const;
+		virtual void write_intel(std::ostream& os) const;
 };
 
 } // namespace x64
