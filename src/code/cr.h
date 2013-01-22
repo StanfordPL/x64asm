@@ -15,6 +15,7 @@ class Cr : public AtomicOperand {
 
 	public:
 		virtual OpType type() const;
+		virtual bool check() const;
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
@@ -28,6 +29,7 @@ class Cr0234 : public Cr {
 
 	public:	
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 /** The control register CR8 */
@@ -38,6 +40,7 @@ class Cr8 : public Cr {
 
 	public:	
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 } // namespace x64

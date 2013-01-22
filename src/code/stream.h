@@ -1,5 +1,5 @@
-#ifndef X64_SRC_STREAM_STREAM_H
-#define X64_SRC_STREAM_STREAM_H
+#ifndef X64_SRC_CODE_STREAM_H
+#define X64_SRC_CODE_STREAM_H
 
 #include <iostream>
 #include <stdint.h>

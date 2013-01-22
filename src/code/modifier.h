@@ -28,6 +28,7 @@ class Pref66 : public Modifier {
 
 	public:
 		virtual OpType type() const;	
+		virtual bool check() const;
 };
 
 /** The REX.w prefix: 0x48. */
@@ -38,6 +39,7 @@ class PrefRexW : public Modifier {
 
 	public:
 		virtual OpType type() const;	
+		virtual bool check() const;
 };
 
 /** Far instruction variant. */
@@ -48,6 +50,7 @@ class Far : public Modifier {
 
 	public:
 		virtual OpType type() const;	
+		virtual bool check() const;
 };
 
 } // namespace x64

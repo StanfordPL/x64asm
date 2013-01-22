@@ -13,7 +13,10 @@ void foo() {
 template <typename T>
 void all(const vector<T>& ts) {
 	for ( const auto& t : ts )
-		cout << t << " ";
+		if ( cout.fail() )
+			cerr << "<FAIL> ";
+		else
+			cout << t << " ";
 	cout << endl;
 }
 

@@ -16,6 +16,7 @@ class Rl : public AtomicOperand {
 
 	public:
 		virtual OpType type() const;
+		virtual bool check() const;
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
@@ -29,6 +30,7 @@ class Rh : public AtomicOperand {
 
 	public:
 		virtual OpType type() const;
+		virtual bool check() const;
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
@@ -41,6 +43,7 @@ class Rb : public AtomicOperand {
 	friend class Constants;
 	private:
 		inline Rb(uint64_t val) : AtomicOperand{val} { }
+		virtual bool check() const;
 
 	public:
 		virtual OpType type() const;
@@ -54,6 +57,7 @@ class Al : public Rl {
 	friend class Constants;
 	private:
 		inline Al() : Rl{0} { }
+		virtual bool check() const;
 
 	public:
 		virtual OpType type() const;
@@ -67,6 +71,7 @@ class Cl : public Rl {
 
 	public:
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 /** One of the word general-purpose registers: AX, CX, DX, BX, SP, BP, SI, DI; 
@@ -80,6 +85,7 @@ class R16 : public AtomicOperand {
 
 	public:
 		virtual OpType type() const;
+		virtual bool check() const;
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
@@ -93,6 +99,7 @@ class Ax : public R16 {
 
 	public:
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 /** The word general-purpose register DX. */
@@ -103,6 +110,7 @@ class Dx : public R16 {
 
 	public:
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 /** One of the double or quadword general-purpose register which may
@@ -114,6 +122,7 @@ class AddrR : public AtomicOperand {
 		virtual ~AddrR() = 0;
 
 		virtual OpType type() const;
+		virtual bool check() const;
 
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;
@@ -143,7 +152,7 @@ class Eax : public R32 {
 
 	public:
 		virtual OpType type() const;
-
+		virtual bool check() const;
 };
 
 /** One of the quadword general-purpose registers: RAX, RBX, RCX, RDX, RDI, RSI,
@@ -169,6 +178,7 @@ class Rax : public R64 {
 
 	public:	
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 } // namespace x64

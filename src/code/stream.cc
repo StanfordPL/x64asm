@@ -1,4 +1,4 @@
-#include "src/stream/stream.h"
+#include "src/code/stream.h"
 
 #include "src/assembler/assembler.h"
 #include "src/cfg/cfg.h"

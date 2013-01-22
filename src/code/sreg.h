@@ -18,6 +18,7 @@ class Sreg : public AtomicOperand {
 
 	public:
 		virtual OpType type() const;
+		virtual bool check() const;
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
@@ -31,6 +32,7 @@ class Fs : public Sreg {
 
 	public:
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 /** The segment register GS. */
@@ -41,6 +43,7 @@ class Gs : public Sreg {
 
 	public:
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 } // namespace x64

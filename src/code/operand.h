@@ -14,8 +14,7 @@ class Operand {
 		virtual ~Operand() = 0; 
 
 		virtual OpType type() const;
-
-		virtual bool check() const = 0;
+		virtual bool check() const;
 
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;
@@ -28,8 +27,6 @@ class AtomicOperand : public Operand {
 		virtual ~AtomicOperand() = 0;
 
 		virtual OpType type() const;
-
-		virtual bool check() const;
 
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;
@@ -48,8 +45,6 @@ class CompoundOperand : public Operand {
 		virtual ~CompoundOperand() = 0;
 
 		virtual OpType type() const;
-
-		virtual bool check() const = 0;
 
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;

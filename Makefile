@@ -19,6 +19,7 @@ OBJ=build/assembler/assembler.o \
 		build/code/dr.o \
 		build/code/eflag.o \
 		build/code/imm.o \
+		build/code/instruction.o \
 		build/code/label.o \
 		build/code/m.o \
 		build/code/mm.o \
@@ -29,15 +30,14 @@ OBJ=build/assembler/assembler.o \
 		build/code/r.o \
 		build/code/rel.o \
 		build/code/sreg.o \
+		build/code/stream.o \
 		build/code/st.o \
 		build/code/xmm.o \
 		build/code/ymm.o \
 		\
 		build/io/dot_writer.o \
 		build/io/hex_writer.o \
-		build/io/elf_writer.o \
-		\
-		build/stream/stream.o
+		build/io/elf_writer.o 
 
 LIB=lib/libx64.a
 
@@ -103,7 +103,7 @@ src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv
 		
 ##### DOCUMENTATION TARGETS
 
-doc/html: doxyfile src/assembler/* src/cfg/* src/code/* src/io/* src/stream/*
+doc/html: doxyfile src/assembler/* src/cfg/* src/code/* src/io/* 
 	doxygen doxyfile
 
 ##### BUILD TARGETS

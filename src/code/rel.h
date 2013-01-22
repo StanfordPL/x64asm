@@ -26,6 +26,7 @@ class Rel8 : public Rel {
 		inline Rel8(int8_t val) : Rel{(uint64_t)val} { }
 
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 /** A relative address within the same code segment as the instruction 
@@ -37,6 +38,7 @@ class Rel32 : public Rel {
 		inline Rel32(int64_t val) : Rel{(uint64_t)val} { }
 
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 } // namespace x64

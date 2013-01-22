@@ -31,6 +31,7 @@ class Imm8 : public Imm {
 		inline Imm8(int8_t i) : Imm{(uint64_t)i} { }
 
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 /** An immediate word value used for instructions whose operand-size attribute 
@@ -41,6 +42,7 @@ class Imm16 : public Imm {
 		inline Imm16(int16_t i) : Imm{(uint64_t)i} { }
 
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 /** An immediate doubleword value used for instructions whose operand-size 
@@ -52,6 +54,7 @@ class Imm32 : public Imm {
 		inline Imm32(int32_t i) : Imm{(uint64_t)i} { }
 
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 /** An immediate quadword value used for instructions whose operand-size 
@@ -73,7 +76,9 @@ class Zero : public Imm8 {
 	private:
 		inline Zero() : Imm8{0} { }
 
+	public:	
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 /** The immediate constant value one */
@@ -82,7 +87,9 @@ class One : public Imm8 {
 	private:
 		inline One() : Imm8{1} { }
 
+	public:
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 /** The immediate constant value three */
@@ -91,7 +98,9 @@ class Three : public Imm8 {
 	private:
 		inline Three() : Imm8{3} { }
 
+	public:
 		virtual OpType type() const;
+		virtual bool check() const;
 };
 
 } // namespace x64
