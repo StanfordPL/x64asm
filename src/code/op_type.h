@@ -6,13 +6,18 @@ namespace x64 {
 /** Any of the types which appear in the Intel Manual. */
 enum class OpType {
 	// Condition Registers (cr.h)
-	CR_0234 = 0,
+	CR = 0,
+	CR_0234,
 	CR_8,
 
 	// Debug Registers (dr.h)
 	DR,
 
+	// EFLAGS Register bits (eflags.h)
+	EFLAG,
+
 	// Immediates (imm.h)
+	IMM,
 	IMM_8,
 	IMM_16,
 	IMM_32,
@@ -25,6 +30,7 @@ enum class OpType {
 	LABEL,
 
 	// Memory (m.h)
+	M,
 	M_8,
 	M_16,
 	M_32,
@@ -53,15 +59,22 @@ enum class OpType {
 	MM,
 
 	// Modifiers (modifier.h)
+	MODIFIER,
 	PREF_66,
 	PREF_REX_W,
 	FAR,
 
 	// Memory Offsets (moffs.h)
+	MOFFS,
 	MOFFS_8,
 	MOFFS_16,
 	MOFFS_32,
 	MOFFS_64,
+
+	// Operands (operand.h)
+	OPERAND,
+	ATOMIC_OPERAND,
+	COMPOUND_OPERAND,
 
 	// General Purpose Registers (r.h)
 	RL,
@@ -72,12 +85,14 @@ enum class OpType {
 	R_16,
 	AX,
 	DX,
+	ADDR_R,
 	R_32,
 	EAX,
 	R_64,
 	RAX,
 
 	// Relatives Addresses (rel.h)
+	REL,
 	REL_8,
 	REL_32,
 
@@ -85,6 +100,10 @@ enum class OpType {
 	SREG,
 	FS,
 	GS,
+
+	// Floating Point Stack Registers (st.h)
+	ST,
+	ST_0,
 
 	// XMM Registers (xmm.h)
 	XMM,

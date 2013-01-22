@@ -5,102 +5,78 @@
 #include <stdint.h>
 
 #include "src/code/code.h"
-#include "src/code/cr.h"
-#include "src/code/dr.h"
-#include "src/code/eflag.h"
-#include "src/code/imm.h"
 #include "src/code/instruction.h"
-#include "src/code/label.h"
-#include "src/code/m.h"
-#include "src/code/mm.h"
-#include "src/code/moffs.h"
-#include "src/code/opcode.h"
 #include "src/code/op_set.h"
-#include "src/code/r.h"
-#include "src/code/rel.h"
-#include "src/code/sreg.h"
-#include "src/code/st.h"
-#include "src/code/xmm.h"
-#include "src/code/ymm.h"
+#include "src/code/operand.h"
 
 namespace x64 {
 
-/** I/O format for iostreams. */
-enum class IO : uint32_t {
+/** I/O syntax for iostreams. */
+enum class Syntax : uint32_t {
 	ATT = 0,
-	DOT,
+	INTEL
+};
+
+/** I/O format for iostreams. */
+enum class Format : uint32_t {
+	TXT = 0,
 	ELF,
 	HEX,
-	INTEL
+	DOT
 };
 
 /** Transforms for iostreams. */
 enum class Transform : uint32_t {
+	NONE               = 0x00000000,
 	ALL                = 0xffffffff,
 	REMOVE_NOP         = 0x00000001,
 	REMOVE_UNREACHABLE = 0x00000002
 };
 
-/** IO manipulator. */
-class set_io {
+/** Syntax manipulator. */
+class syntax {
 	public:
-		inline explicit set_io(IO io) : io_{io} { }
-		inline operator int() const { return (int)io_; }
+		inline explicit syntax(Syntax s) : s_{s} { }
+		inline operator long() const { return (long)s_; }
+		inline bool operator==(Syntax rhs) const { return s_ == rhs; }
 	private:
-		const IO io_;
+		const Syntax s_;
+};
+
+/** Format manipulator. */
+class format {
+	public:
+		inline explicit format(Format f) : f_{f} { }
+		inline operator long() const { return (long)f_; }
+		inline bool operator==(Format rhs) const { return f_ == rhs; }
+	private:
+		const Format f_;
 };
 
 /** Transform activating manipulator. */
-class set_transform {
+class transform {
  	public:
-		inline explicit set_transform(Transform t) : t_{t} { }
-		inline operator int() const { return (int)t_; }
-	private:
-		const Transform t_;
-};
-
-/** Transform deactivating manipulator. */
-class unset_transform {
- 	public:
-		inline explicit unset_transform(Transform t) : t_{t} { }
-		inline operator int() const { return (int)t_; }
+		inline explicit transform(Transform t) : t_{t} { }
+		inline operator long() const { return (long)t_; }
+		inline bool operator==(Transform rhs) const { return t_ == rhs; }
 	private:
 		const Transform t_;
 };
 
 } // namespace x64
 
-std::istream& operator>>(std::istream& is, const x64::set_io& m);
-std::istream& operator>>(std::istream& is, const x64::set_transform& m);
-std::istream& operator>>(std::istream& is, const x64::unset_transform& m);
+std::istream& operator>>(std::istream& is, const x64::syntax& s);
+std::istream& operator>>(std::istream& is, const x64::format& f);
+std::istream& operator>>(std::istream& is, const x64::transform& t);
 
-std::ostream& operator<<(std::ostream& os, const x64::set_io& m);
-std::ostream& operator<<(std::ostream& os, const x64::set_transform& m);
-std::ostream& operator<<(std::ostream& os, const x64::unset_transform& m);
+std::ostream& operator<<(std::ostream& os, const x64::syntax& s);
+std::ostream& operator<<(std::ostream& os, const x64::format& f);
+std::ostream& operator<<(std::ostream& os, const x64::transform& t);
 
 std::istream& operator>>(std::istream& is, x64::Code& c);
 
 std::ostream& operator<<(std::ostream& os, const x64::Code& c);
-std::ostream& operator<<(std::ostream& os, const x64::Cr& c);
-std::ostream& operator<<(std::ostream& os, const x64::Dr& d);
-std::ostream& operator<<(std::ostream& os, const x64::Eflag& e);
-std::ostream& operator<<(std::ostream& os, const x64::Imm& i);
+std::ostream& operator<<(std::ostream& os, const x64::Operand& o);
 std::ostream& operator<<(std::ostream& os, const x64::Instruction& i);
-std::ostream& operator<<(std::ostream& os, const x64::Label& l);
-std::ostream& operator<<(std::ostream& os, const x64::M& m);
-std::ostream& operator<<(std::ostream& os, const x64::Mm& m);
-std::ostream& operator<<(std::ostream& os, const x64::Moffs& m);
-std::ostream& operator<<(std::ostream& os, const x64::OpSet& o);
-std::ostream& operator<<(std::ostream& os, const x64::Rl& r);
-std::ostream& operator<<(std::ostream& os, const x64::Rh& r);
-std::ostream& operator<<(std::ostream& os, const x64::Rb& r);
-std::ostream& operator<<(std::ostream& os, const x64::R16& r);
-std::ostream& operator<<(std::ostream& os, const x64::R32& r);
-std::ostream& operator<<(std::ostream& os, const x64::R64& r);
-std::ostream& operator<<(std::ostream& os, const x64::Rel& r);
-std::ostream& operator<<(std::ostream& os, const x64::Sreg& s);
-std::ostream& operator<<(std::ostream& os, const x64::St& s);
-std::ostream& operator<<(std::ostream& os, const x64::Xmm& x);
-std::ostream& operator<<(std::ostream& os, const x64::Ymm& y);
 
 #endif

@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include "src/code/op_type.h"
 #include "src/code/operand.h"
 
 namespace x64 {
@@ -16,6 +17,8 @@ class Xmm : public AtomicOperand {
 		inline Xmm(uint64_t val) : AtomicOperand{val} { } 
 
 	public:
+		virtual OpType type() const;
+
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 };
@@ -25,6 +28,9 @@ class Xmm0 : public Xmm {
 	friend class Constants;
 	private:
 		inline Xmm0() : Xmm{0} { }
+
+	public:
+		virtual OpType type() const;
 };
 
 } // namespace x64

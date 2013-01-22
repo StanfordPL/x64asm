@@ -4,12 +4,16 @@
 #include <iostream>
 #include <stdint.h>
 
+#include "src/code/op_type.h"
+
 namespace x64 {
 
 /** Base operand type. */
 class Operand {
 	public:
 		virtual ~Operand() = 0; 
+
+		virtual OpType type() const;
 
 		virtual bool check() const = 0;
 
@@ -22,6 +26,8 @@ class AtomicOperand : public Operand {
 	public:
 		inline AtomicOperand(uint64_t val) : val_{val} { }
 		virtual ~AtomicOperand() = 0;
+
+		virtual OpType type() const;
 
 		virtual bool check() const;
 
@@ -40,6 +46,8 @@ class AtomicOperand : public Operand {
 class CompoundOperand : public Operand {
 	public:
 		virtual ~CompoundOperand() = 0;
+
+		virtual OpType type() const;
 
 		virtual bool check() const = 0;
 

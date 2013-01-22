@@ -19,7 +19,6 @@ OBJ=build/assembler/assembler.o \
 		build/code/dr.o \
 		build/code/eflag.o \
 		build/code/imm.o \
-		build/code/instruction.o \
 		build/code/label.o \
 		build/code/m.o \
 		build/code/mm.o \

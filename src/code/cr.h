@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include "src/code/op_type.h"
 #include "src/code/operand.h"
 
 namespace x64 {
@@ -13,6 +14,8 @@ class Cr : public AtomicOperand {
 		inline Cr(uint64_t val) : AtomicOperand{val} { }
 
 	public:
+		virtual OpType type() const;
+
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 };
@@ -22,6 +25,9 @@ class Cr0234 : public Cr {
 	friend class Constants;
 	private:
 		inline Cr0234(uint64_t val) : Cr{val} { }
+
+	public:	
+		virtual OpType type() const;
 };
 
 /** The control register CR8 */
@@ -29,6 +35,9 @@ class Cr8 : public Cr {
 	friend class Constants;
 	private:
 		inline Cr8() : Cr{8} { }
+
+	public:	
+		virtual OpType type() const;
 };
 
 } // namespace x64

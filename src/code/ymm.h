@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include "src/code/op_type.h"
 #include "src/code/operand.h"
 
 namespace x64 {
@@ -16,6 +17,8 @@ class Ymm : public AtomicOperand {
 		inline Ymm(uint64_t val) : AtomicOperand{val} { } 
 
 	public:
+		virtual OpType type() const;
+
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 };

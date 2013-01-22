@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include "src/code/op_type.h"
 #include "src/code/operand.h"
 
 namespace x64 {
@@ -14,6 +15,8 @@ class Rl : public AtomicOperand {
 		inline Rl(uint64_t val) : AtomicOperand{val} { }
 
 	public:
+		virtual OpType type() const;
+
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 };
@@ -25,6 +28,8 @@ class Rh : public AtomicOperand {
 		inline Rh(uint64_t val) : AtomicOperand{val} { }
 
 	public:
+		virtual OpType type() const;
+
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 };
@@ -38,6 +43,8 @@ class Rb : public AtomicOperand {
 		inline Rb(uint64_t val) : AtomicOperand{val} { }
 
 	public:
+		virtual OpType type() const;
+
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 };
@@ -47,6 +54,9 @@ class Al : public Rl {
 	friend class Constants;
 	private:
 		inline Al() : Rl{0} { }
+
+	public:
+		virtual OpType type() const;
 };
 
 /** The byte general-purpose register CL. */
@@ -54,6 +64,9 @@ class Cl : public Rl {
 	friend class Constants;
 	private:
 		inline Cl() : Rl{1} { }
+
+	public:
+		virtual OpType type() const;
 };
 
 /** One of the word general-purpose registers: AX, CX, DX, BX, SP, BP, SI, DI; 
@@ -66,6 +79,8 @@ class R16 : public AtomicOperand {
 		inline R16(uint64_t val) : AtomicOperand{val} { }
 
 	public:
+		virtual OpType type() const;
+
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 };
@@ -75,6 +90,9 @@ class Ax : public R16 {
 	friend class Constants;
 	private:
 		inline Ax() : R16{0} { }
+
+	public:
+		virtual OpType type() const;
 };
 
 /** The word general-purpose register DX. */
@@ -82,6 +100,9 @@ class Dx : public R16 {
 	friend class Constants;
 	private:
 		inline Dx() : R16{2} { }
+
+	public:
+		virtual OpType type() const;
 };
 
 /** One of the double or quadword general-purpose register which may
@@ -91,6 +112,8 @@ class AddrR : public AtomicOperand {
 	public:
 		AddrR(uint64_t val) : AtomicOperand{val} { }
 		virtual ~AddrR() = 0;
+
+		virtual OpType type() const;
 
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;
@@ -106,6 +129,8 @@ class R32 : public AddrR {
 		inline R32(uint64_t val) : AddrR{val} { }
 
 	public:
+		virtual OpType type() const;
+
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 };
@@ -115,6 +140,10 @@ class Eax : public R32 {
 	friend class Constants;
 	private:
 		inline Eax() : R32{0} { }
+
+	public:
+		virtual OpType type() const;
+
 };
 
 /** One of the quadword general-purpose registers: RAX, RBX, RCX, RDX, RDI, RSI,
@@ -126,6 +155,8 @@ class R64 : public AddrR {
 		inline R64(uint64_t val) : AddrR{val} { }
 
 	public:
+		virtual OpType type() const;
+
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 };
@@ -135,6 +166,9 @@ class Rax : public R64 {
 	friend class Constants;
 	private:
 		inline Rax() : R64{0} { }
+
+	public:	
+		virtual OpType type() const;
 };
 
 } // namespace x64

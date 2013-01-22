@@ -7,6 +7,7 @@
 #include "src/code/constants.h"
 #include "src/code/r.h"
 #include "src/code/imm.h"
+#include "src/code/op_type.h"
 #include "src/code/operand.h"
 #include "src/code/sreg.h"
 
@@ -175,6 +176,8 @@ class M : public CompoundOperand {
 
 		virtual bool check() const;
 
+		virtual OpType type() const;
+
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 
@@ -209,6 +212,8 @@ class M : public CompoundOperand {
 class M8 : public M {
 	public:
 		CONSTRUCTORS(M8)
+
+		virtual OpType type() const;
 };
 
 /** A word operand in memory, usually expressed as a variable or array name, 
@@ -218,6 +223,8 @@ class M8 : public M {
 class M16 : public M {
 	public:
 		CONSTRUCTORS(M16)
+
+		virtual OpType type() const;
 };
 
 /** A doubleword operand in memory, usually expressed as a variable or array 
@@ -227,18 +234,24 @@ class M16 : public M {
 class M32 : public M {
 	public:
 		CONSTRUCTORS(M32)
+
+		virtual OpType type() const;
 };
 
 /** A memory quadword operand in memory. */
 class M64 : public M {
 	public:
 		CONSTRUCTORS(M64)
+
+		virtual OpType type() const;
 };
 
 /** A memory double quadword operand in memory. */
 class M128 : public M {
 	public:
 		CONSTRUCTORS(M128)
+
+		virtual OpType type() const;
 };
 
 /** A 32-byte operand in memory. This nomenclature is used only with AVX 
@@ -247,6 +260,8 @@ class M128 : public M {
 class M256 : public M {
 	public:
 		CONSTRUCTORS(M256)
+
+		virtual OpType type() const;
 };
 
 /** A memory operand consisting of data item pairs whose sizes are indicated on 
@@ -258,6 +273,8 @@ class M256 : public M {
 class MPair1664 : public M {
 	public:
 		CONSTRUCTORS(MPair1664)
+
+		virtual OpType type() const;
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -267,6 +284,8 @@ class MPair1664 : public M {
 class MPtr1616 : public M {
 	public:
 		CONSTRUCTORS(MPtr1616)
+
+		virtual OpType type() const;
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -276,6 +295,8 @@ class MPtr1616 : public M {
 class MPtr1632 : public M {
 	public:
 		CONSTRUCTORS(MPtr1632)
+
+		virtual OpType type() const;
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -285,6 +306,8 @@ class MPtr1632 : public M {
 class MPtr1664 : public M {
 	public:
 		CONSTRUCTORS(MPtr1664)
+
+		virtual OpType type() const;
 };
 
 /** A word integer operand in memory. This symbol designates integers that are 
@@ -293,6 +316,8 @@ class MPtr1664 : public M {
 class M16Int : public M {
 	public:
 		CONSTRUCTORS(M16Int)
+
+		virtual OpType type() const;
 };
 
 /** A doubleword integer operand in memory. This symbol designates integers 
@@ -301,6 +326,8 @@ class M16Int : public M {
 class M32Int : public M {
 	public:
 		CONSTRUCTORS(M32Int)
+
+		virtual OpType type() const;
 };
 
 /** A quadword integer operand in memory. This symbol designates integers 
@@ -309,6 +336,8 @@ class M32Int : public M {
 class M64Int : public M {
 	public:
 		CONSTRUCTORS(M64Int)
+
+		virtual OpType type() const;
 };
 
 /** A single-precision floating-point operand in memory. This symbol designates 
@@ -318,6 +347,8 @@ class M64Int : public M {
 class M32Fp : public M {
 	public:
 		CONSTRUCTORS(M32Fp)
+
+		virtual OpType type() const;
 };
 
 /** A double-precision floating-point operand in memory. This symbol designates 
@@ -327,6 +358,8 @@ class M32Fp : public M {
 class M64Fp : public M {
 	public:
 		CONSTRUCTORS(M64Fp)
+
+		virtual OpType type() const;
 };
 
 /** A double extended-precision floating-point operand in memory. This symbol 
@@ -336,48 +369,64 @@ class M64Fp : public M {
 class M80Fp : public M {
 	public:
 		CONSTRUCTORS(M80Fp)
+
+		virtual OpType type() const;
 };
 
 /** A double extended-precision binary-coded-decimaly operand in memory. */
 class M80Bcd : public M {
 	public:
 		CONSTRUCTORS(M80Bcd)
+
+		virtual OpType type() const;
 };
 
 /** A 2 byte operand in memory. */
 class M2Byte : public M {
 	public:
 		CONSTRUCTORS(M2Byte)
+
+		virtual OpType type() const;
 };
 
 /** A 14 byte operand in memory. */
 class M14Byte : public M {
 	public:
 		CONSTRUCTORS(M14Byte)
+
+		virtual OpType type() const;
 };
 
 /** A 28 byte operand in memory. */
 class M28Byte : public M {
 	public:
 		CONSTRUCTORS(M28Byte)
+
+		virtual OpType type() const;
 };
 
 /** A 94 byte operand in memory. */
 class M94Byte : public M {
 	public:
 		CONSTRUCTORS(M94Byte)
+
+		virtual OpType type() const;
 };
 
 /** A 108 byte operand in memory. */
 class M108Byte : public M {
 	public:
 		CONSTRUCTORS(M108Byte)
+
+		virtual OpType type() const;
 };
 
 /** A 5122 byte operand in memory. */
 class M512Byte : public M {
 	public:
 		CONSTRUCTORS(M512Byte)
+
+		virtual OpType type() const;
 };
 
 #undef CONSTRUCTORS

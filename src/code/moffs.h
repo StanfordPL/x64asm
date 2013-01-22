@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include "src/code/op_type.h"
 #include "src/code/operand.h"
 
 namespace x64 {
@@ -12,6 +13,8 @@ class Moffs : public AtomicOperand {
 	public:
 		inline Moffs(uint64_t val) : AtomicOperand{val} { }
 		virtual ~Moffs() = 0;
+
+		virtual OpType type() const;
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
@@ -23,6 +26,8 @@ class Moffs8 : public Moffs {
 		inline Moffs8(uint64_t o) : Moffs{o} { }
 		template <typename T>
 		inline Moffs8(T* t) : Moffs{(uint64_t)t} { }
+
+		virtual OpType type() const;
 };
 
 /** A simple memory variable (memory offset) of type word. */
@@ -31,6 +36,8 @@ class Moffs16 : public Moffs {
 		inline Moffs16(uint64_t o) : Moffs{o} { }
 		template <typename T>
 		inline Moffs16(T* t) : Moffs{(uint64_t)t} { }
+
+		virtual OpType type() const;
 };
 
 /** A simple memory variable (memory offset) of type doubleword. */
@@ -39,6 +46,8 @@ class Moffs32 : public Moffs {
 		inline Moffs32(uint64_t o) : Moffs{o} { }
 		template <typename T>
 		inline Moffs32(T* t) : Moffs{(uint64_t)t} { }
+
+		virtual OpType type() const;
 };
 
 /** A simple memory variable (memory offset) of type quadword. */
@@ -47,6 +56,8 @@ class Moffs64 : public Moffs {
 		inline Moffs64(uint64_t o) : Moffs{o} { }
 		template <typename T>
 		inline Moffs64(T* t) : Moffs{(uint64_t)t} { }
+
+		virtual OpType type() const;
 };
 
 }

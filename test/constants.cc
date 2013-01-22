@@ -13,11 +13,14 @@ void foo() {
 template <typename T>
 void all(const vector<T>& ts) {
 	for ( const auto& t : ts )
-		cout << set_io(IO::ATT) << t << " ";
+		cout << t << " ";
 	cout << endl;
 }
 
 int main() {
+	cout << syntax(Syntax::ATT);
+	cout << format(Format::TXT);
+
 	cout << "BEGIN WRITING CONSTANTS" << endl;
 	all(crs);
 	all(drs);
