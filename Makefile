@@ -36,8 +36,7 @@ OBJ=build/assembler/assembler.o \
 		build/code/ymm.o \
 		\
 		build/io/dot_writer.o \
-		build/io/hex_writer.o \
-		build/io/elf_writer.o 
+		build/io/hex_writer.o
 
 LIB=lib/libx64.a
 

@@ -39,8 +39,4 @@
 #include "src/code/xmm.h"
 #include "src/code/ymm.h"
 
-#include "src/io/dot_writer.h"
-#include "src/io/elf_writer.h"
-#include "src/io/hex_writer.h"
-
 #endif
