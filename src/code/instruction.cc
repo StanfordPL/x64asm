@@ -76,102 +76,102 @@ void Instruction::write_att(ostream& os) const {
 void Instruction::write_intel(ostream& os) const {
 }
 
-vector<size_t> Instruction::arity_ {{
+vector<size_t> Instruction::arity_ {
 	// Internal mnemonics
 	0
 	// Auto-generated mnemonics
 	#include "src/code/arity.table"
-}};
+};
 
-vector<vector<Properties>> Instruction::properties_ {{
+vector<vector<Properties>> Instruction::properties_ {
 	// Internal mnemonics
-	{{}}
+	{}
 	// Auto-generated mnemonics
 	#include "src/code/properties.table"
-}};
+};
 
-vector<vector<OpType>> Instruction::type_ {{
+vector<vector<OpType>> Instruction::type_ {
 	// Internal mnemonics
-	{{}}
+	{}
 	// Auto-generated mnemonics
 	#include "src/code/type.table"
-}};
+};
 
-vector<bool> Instruction::is_return_ {{
+vector<bool> Instruction::is_return_ {
 	// Internal mnemonics
 	false
 	// Auto-generated mnemonics
 	#include "src/code/return.table"
-}};
+};
 
-vector<bool> Instruction::is_nop_ {{
+vector<bool> Instruction::is_nop_ {
 	// Internal mnemonics
 	false
 	// Auto-generated mnemonics
 	#include "src/code/nop.table"
-}};
+};
 
-vector<bool> Instruction::is_jump_ {{
+vector<bool> Instruction::is_jump_ {
 	// Internal mnemonics
 	false
 	// Auto-generated mnemonics
 	#include "src/code/jump.table"
-}};
+};
 
-vector<bool> Instruction::is_cond_jump_ {{
+vector<bool> Instruction::is_cond_jump_ {
 	// Internal mnemonics
 	false
 	// Auto-generated mnemonics
 	#include "src/code/cond_jump.table"
-}};
+};
 
-vector<bool> Instruction::is_uncond_jump_ {{
+vector<bool> Instruction::is_uncond_jump_ {
 	// Internal mnemonics
 	false
 	// Auto-generated mnemonics
 	#include "src/code/uncond_jump.table"
-}};
+};
 
-vector<OpSet> Instruction::implicit_must_read_set_ {{
+vector<OpSet> Instruction::implicit_must_read_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
 	#include "src/code/must_read.table"
-}};
+};
 
-vector<OpSet> Instruction::implicit_maybe_read_set_ {{
+vector<OpSet> Instruction::implicit_maybe_read_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
 	#include "src/code/maybe_read.table"
-}};
+};
 
-vector<OpSet> Instruction::implicit_must_write_set_ {{
+vector<OpSet> Instruction::implicit_must_write_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
 	#include "src/code/must_write.table"
-}};
+};
 
-vector<OpSet> Instruction::implicit_maybe_write_set_ {{
+vector<OpSet> Instruction::implicit_maybe_write_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
 	#include "src/code/maybe_write.table"
-}};
+};
 
-vector<OpSet> Instruction::implicit_must_undef_set_ {{
+vector<OpSet> Instruction::implicit_must_undef_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
 	#include "src/code/must_undef.table"
-}};
+};
 
-vector<OpSet> Instruction::implicit_maybe_undef_set_ {{
+vector<OpSet> Instruction::implicit_maybe_undef_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
 	#include "src/code/maybe_undef.table"
-}};
+};
 
 } // namespace x64

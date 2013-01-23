@@ -583,7 +583,7 @@ property_elem (t,p) = "Properties::none()" ++ (concat (map (elem t) p))
 
 -- Converts an instruction to properties table row
 properties_row :: Instr -> String
-properties_row i = "{{" ++ intercalate "," ps ++ "}}"
+properties_row i = "{" ++ intercalate "," ps ++ "}"
   where ps = map property_elem $ zip (operands i) (properties i)
 
 -- Converts all instruction to properties table
@@ -591,7 +591,7 @@ properties_table is = to_table is properties_row
 
 -- Converts an instruction to type table row
 type_row :: Instr -> String
-type_row i = "{{" ++ intercalate "," [] ++ "}}"
+type_row i = "{" ++ intercalate "," [] ++ "}"
 
 -- Converts all instruction to type table
 type_table is = to_table is type_row 

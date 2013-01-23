@@ -11,9 +11,9 @@ namespace x64 {
 void Cfg::recompute() {
 	// Quick exit for corner case of empty code
 	if ( code_.empty() ) {
-		blocks_ = vector<size_t>{{ 0, 0, 0 }};
-		preds_ = vector<vector<size_t>>{{ {{}}, {{0}} }};
-		succs_ = vector<vector<size_t>>{{ {{1}}, {{}} }};
+		blocks_ = vector<size_t> { 0, 0, 0 };
+		preds_ = vector<vector<size_t>> { {}, {0} };
+		succs_ = vector<vector<size_t>> { {1}, {} };
 		return;
 	}
 
