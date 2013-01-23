@@ -112,7 +112,7 @@ class M : public CompoundOperand {
 		}
 
 		inline const AddrR* get_base() const {
-			assert(constains_base());
+			assert(contains_base());
 			return base_;
 		}
 

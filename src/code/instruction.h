@@ -53,18 +53,18 @@ class Instruction {
 		}
 
 		inline size_t arity() const {
-			assert(get_opcode() < arity_.size());
+			assert((size_t)get_opcode() < arity_.size());
 			return arity_[get_opcode()];
 		}
 
 		inline Properties properties(size_t index) const {
-			assert(get_opcode() < properites_.size());
+			assert((size_t)get_opcode() < properties_.size());
 			assert(index < properties_[get_opcode()].size());
 			return properties_[get_opcode()][index];
 		}
 
 		inline OpType type(size_t index) const {
-			assert(get_opcode() < type_.size());
+			assert((size_t)get_opcode() < type_.size());
 			assert(index < type_[get_opcode()].size());
 			return type_[get_opcode()][index];
 		}
@@ -74,57 +74,57 @@ class Instruction {
 		}
 
 		inline bool is_return() const {
-			assert(get_opcode() < is_return_.size());
+			assert((size_t)get_opcode() < is_return_.size());
 			return is_return_[get_opcode()];
 		}
 
 		inline bool is_nop() const {
-			assert(get_opcode() < is_nop_.size());
+			assert((size_t)get_opcode() < is_nop_.size());
 			return is_nop_[get_opcode()];
 		}
 
 		inline bool is_jump() const {
-			assert(get_opcode() < is_jump_.size());
+			assert((size_t)get_opcode() < is_jump_.size());
 			return is_jump_[get_opcode()];
 		}
 
 		inline bool is_cond_jump() const {
-			assert(get_opcode() < is_cond_jump_.size());
+			assert((size_t)get_opcode() < is_cond_jump_.size());
 			return is_cond_jump_[get_opcode()];
 		}
 
 		inline bool is_uncond_jump() const {
-			assert(get_opcode() < is_uncond_jump_.size());
+			assert((size_t)get_opcode() < is_uncond_jump_.size());
 			return is_uncond_jump_[get_opcode()];
 		}
 
 		inline OpSet implicit_must_read_set() const {
-			assert(get_opcode() < implicit_must_read_set_.size());
+			assert((size_t)get_opcode() < implicit_must_read_set_.size());
 			return implicit_must_read_set_[get_opcode()];
 		}
 
 		inline OpSet implicit_maybe_read_set() const {
-			assert(get_opcode() < implicit_maybe_read_set_.size());
+			assert((size_t)get_opcode() < implicit_maybe_read_set_.size());
 			return implicit_maybe_read_set_[get_opcode()];
 		}
 
 		inline OpSet implicit_must_write_set() const {
-			assert(get_opcode() < implicit_must_write_set_.size());
+			assert((size_t)get_opcode() < implicit_must_write_set_.size());
 			return implicit_must_write_set_[get_opcode()];
 		}
 
 		inline OpSet implicit_maybe_write_set() const {
-			assert(get_opcode() < implicit_maybe_write_set_.size());
+			assert((size_t)get_opcode() < implicit_maybe_write_set_.size());
 			return implicit_maybe_write_set_[get_opcode()];
 		}
 
 		inline OpSet implicit_must_undef_set() const {
-			assert(get_opcode() < implicit_must_undef_set_.size());
+			assert((size_t)get_opcode() < implicit_must_undef_set_.size());
 			return implicit_must_undef_set_[get_opcode()];
 		}
 
 		inline OpSet implicit_maybe_undef_set() const {
-			assert(get_opcode() < implicit_maybe_undef_set_.size());
+			assert((size_t)get_opcode() < implicit_maybe_undef_set_.size());
 			return implicit_maybe_undef_set_[get_opcode()];
 		}
 
