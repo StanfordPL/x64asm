@@ -34,6 +34,7 @@ class Rl : public R {
 	public:
 		virtual OpType type() const;
 		virtual bool check() const;
+		virtual void insert_in(OpSet& os, bool promote = false) const;
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
@@ -48,6 +49,7 @@ class Rh : public R {
 	public:
 		virtual OpType type() const;
 		virtual bool check() const;
+		virtual void insert_in(OpSet& os, bool promote = false) const;
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
@@ -66,6 +68,7 @@ class Rb : public R {
 
 	public:
 		virtual OpType type() const;
+		virtual void insert_in(OpSet& os, bool promote = false) const;
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
@@ -104,6 +107,7 @@ class R16 : public R {
 
 	public:
 		virtual OpType type() const;
+		virtual void insert_in(OpSet& os, bool promote = false) const;
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
@@ -156,6 +160,7 @@ class R32 : public AddrR {
 
 	public:
 		virtual OpType type() const;
+		virtual void insert_in(OpSet& os, bool promote = false) const;
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
@@ -184,6 +189,7 @@ class R64 : public AddrR {
 
 	public:
 		virtual OpType type() const;
+		virtual void insert_in(OpSet& os, bool promote = false) const;
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;

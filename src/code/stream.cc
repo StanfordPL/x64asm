@@ -178,14 +178,14 @@ ostream& operator<<(ostream& os, const Code& c) {
 	return os;
 }
 
-ostream& operator<<(ostream& os, const Operand& o) {
-	check(os, o);
-	return write(os, o);
-}
-
 ostream& operator<<(ostream& os, const Instruction& i) {
 	check(os, i);
 	return write(os, i);
+}
+
+ostream& operator<<(ostream& os, const Operand& o) {
+	check(os, o);
+	return write(os, o);
 }
 
 ostream& operator<<(ostream& os, const OpSet& o) {

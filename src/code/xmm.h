@@ -20,13 +20,12 @@ class Xmm : public AtomicOperand {
 	public:
 		virtual OpType type() const;
 		virtual bool check() const;
+		virtual void insert_in(OpSet& os, bool promote = false) const;
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 
-		inline Ymm parent() const {
-			return Ymm{val()};
-		}
+		Ymm parent() const;
 };
 
 /** The XMM register XMM0. */

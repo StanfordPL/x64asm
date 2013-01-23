@@ -1,5 +1,7 @@
 #include "src/code/ymm.h"
 
+#include "src/code/op_set.h"
+
 #include <cassert>
 
 using namespace std;
@@ -12,6 +14,10 @@ OpType Ymm::type() const {
 
 bool Ymm::check() const {
 	return val() < 16;
+}
+
+void Ymm::insert_in(OpSet& os, bool promote) const {
+	os += *this;
 }
 
 void Ymm::write_att(ostream& os) const {

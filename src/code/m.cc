@@ -1,5 +1,7 @@
 #include "src/code/m.h"
 
+#include "src/code/op_set.h"
+
 using namespace std;
 
 namespace x64 {
@@ -34,6 +36,10 @@ bool M::check() const {
 		return false;
 
 	return true;
+}
+
+void M::insert_in(OpSet& os, bool promote) const {
+	os += *this;
 }
 
 void M::write_att(ostream& os) const {

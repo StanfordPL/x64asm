@@ -17,40 +17,74 @@ namespace x64 {
 
 OpSet Instruction::explicit_must_read_set() const {
 	auto ret = OpSet::empty();
-	/*
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
 		const auto o = get_operand(i);
 		if ( const auto m = dynamic_cast<const M*>(o) )
 			ret += *m;
-		else if ( properties(i).contains(MUST_READ) )
-			o->add_to_set();
+		else if ( properties(i).contains(Property::MUST_READ) )
+			o->insert_in(ret, false);
 	}
-	*/
+
+	return ret;
 }
 
 OpSet Instruction::explicit_maybe_read_set() const {
-	// TODO
-	return OpSet::empty();
+	auto ret = OpSet::empty();
+	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
+		const auto o = get_operand(i);
+		if ( const auto m = dynamic_cast<const M*>(o) )
+			ret += *m;
+		else if ( properties(i).contains(Property::MAYBE_READ) )
+			o->insert_in(ret, false);
+	}
+
+	return ret;
 }
 
 OpSet Instruction::explicit_must_write_set() const {
-	// TODO
-	return OpSet::empty();
+	auto ret = OpSet::empty();
+	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
+		const auto o = get_operand(i);
+		const auto p = properties(i);
+		if ( p.contains(Property::MUST_WRITE_ZX) )
+			o->insert_in(ret, true);
+		else if ( p.contains(Property::MUST_WRITE) )
+			o->insert_in(ret, false);
+	}
+
+	return ret;
 }
 
 OpSet Instruction::explicit_maybe_write_set() const {
-	// TODO
-	return OpSet::empty();
+	auto ret = OpSet::empty();
+	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
+		const auto o = get_operand(i);
+		const auto p = properties(i);
+		if ( p.contains(Property::MAYBE_WRITE_ZX) )
+			o->insert_in(ret, true);
+		else if ( p.contains(Property::MAYBE_WRITE) )
+			o->insert_in(ret, false);
+	}
+
+	return ret;
 }
 
 OpSet Instruction::explicit_must_undef_set() const {
-	// TODO
-	return OpSet::empty();
+	auto ret = OpSet::empty();
+	for ( size_t i = 0, ie = arity(); i < ie; ++i ) 
+		if ( properties(i).contains(Property::MUST_UNDEF) )
+			get_operand(i)->insert_in(ret, false);
+
+	return ret;
 }
 
 OpSet Instruction::explicit_maybe_undef_set() const {
-	// TODO
-	return OpSet::empty();
+	auto ret = OpSet::empty();
+	for ( size_t i = 0, ie = arity(); i < ie; ++i ) 
+		if ( properties(i).contains(Property::MAYBE_UNDEF) )
+			get_operand(i)->insert_in(ret, false);
+
+	return ret;
 }
 
 bool Instruction::check() const {

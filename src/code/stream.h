@@ -76,7 +76,8 @@ std::ostream& operator<<(std::ostream& os, const x64::transform& t);
 std::istream& operator>>(std::istream& is, x64::Code& c);
 
 std::ostream& operator<<(std::ostream& os, const x64::Code& c);
-std::ostream& operator<<(std::ostream& os, const x64::Operand& o);
 std::ostream& operator<<(std::ostream& os, const x64::Instruction& i);
+std::ostream& operator<<(std::ostream& os, const x64::Operand& o);
+std::ostream& operator<<(std::ostream& os, const x64::OpSet& o);
 
 #endif

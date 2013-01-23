@@ -8,6 +8,8 @@
 
 namespace x64 {
 
+class OpSet;
+
 /** Base operand type. */
 class Operand {
 	public:
@@ -15,6 +17,7 @@ class Operand {
 
 		virtual OpType type() const;
 		virtual bool check() const;
+		virtual void insert_in(OpSet& os, bool promote = false) const;
 
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;

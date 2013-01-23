@@ -49,5 +49,26 @@ int main() {
 	cout << "Parent register for " << eax << " = " << eax.parent() << endl;
 	cout << "Parent register for " << rax << " = " << rax.parent() << endl;
 
+	OpSet os = OpSet::empty();
+	os += al;
+	os += ah;
+	os += ax;
+	os += eax;
+	os += rax;
+
+	os += ch;
+	os += dl;
+	os += spl;
+	os += mm3;
+	os += xmm2;
+	os += ymm2;
+	os += ymm4;
+
+	xmm8.insert_in(os, true);
+	r8b.insert_in(os, true);
+
+	cout << os << endl;
+	cout << OpSet::universe() << endl;
+
 	return 0;
 }

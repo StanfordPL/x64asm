@@ -1,5 +1,7 @@
 #include "src/code/mm.h"
 
+#include "src/code/op_set.h"
+
 #include <cassert>
 
 using namespace std;
@@ -12,6 +14,10 @@ OpType Mm::type() const {
 
 bool Mm::check() const {
 	return val() < 8;
+}
+
+void Mm::insert_in(OpSet& os, bool promote) const {
+	os += *this;
 }
 
 void Mm::write_att(ostream& os) const {

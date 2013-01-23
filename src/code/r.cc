@@ -1,5 +1,7 @@
 #include "src/code/r.h"
 
+#include "src/code/op_set.h"
+
 #include <cassert>
 
 using namespace std;
@@ -30,6 +32,13 @@ bool Rl::check() const {
 	return val() < 4;
 }
 
+void Rl::insert_in(OpSet& os, bool promote) const {
+	if ( promote )
+		os += parent();
+	else
+		os += *this;
+}
+
 void Rl::write_att(ostream& os) const {
 	switch ( val() ) {
 		case 0:  os << "%al"; break;
@@ -50,6 +59,13 @@ OpType Rh::type() const {
 
 bool Rh::check() const {
 	return val() >= 4 && val() < 8;
+}
+
+void Rh::insert_in(OpSet& os, bool promote) const {
+	if ( promote )
+		os += parent();
+	else
+		os += *this;
 }
 
 void Rh::write_att(ostream& os) const {
@@ -76,6 +92,13 @@ OpType Rb::type() const {
 
 bool Rb::check() const {
 	return val() >= 4 && val() < 16;
+}
+
+void Rb::insert_in(OpSet& os, bool promote) const {
+	if ( promote )
+		os += parent();
+	else
+		os += *this;
 }
 
 void Rb::write_att(ostream& os) const {
@@ -118,6 +141,13 @@ bool Cl::check() const {
 
 OpType R16::type() const {
 	return OpType::R_16;
+}
+
+void R16::insert_in(OpSet& os, bool promote) const {
+	if ( promote )
+		os += parent();
+	else
+		os += *this;
 }
 
 void R16::write_att(ostream& os) const {
@@ -174,6 +204,13 @@ OpType R32::type() const {
 	return OpType::R_32;
 }
 
+void R32::insert_in(OpSet& os, bool promote) const {
+	if ( promote )
+		os += parent();
+	else
+		os += *this;
+}
+
 void R32::write_att(ostream& os) const {
 	switch ( val() ) {
 		case 0:  os << "%eax"; break;
@@ -210,6 +247,13 @@ bool Eax::check() const {
 
 OpType R64::type() const {
 	return OpType::R_64;
+}
+
+void R64::insert_in(OpSet& os, bool promote) const {
+	if ( promote )
+		os += parent();
+	else
+		os += *this;
 }
 
 void R64::write_att(ostream& os) const {

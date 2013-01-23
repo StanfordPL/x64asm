@@ -1,5 +1,7 @@
 #include "src/code/operand.h"
 
+#include "src/code/op_set.h"
+
 namespace x64 {
 
 Operand::~Operand() {
@@ -12,6 +14,10 @@ OpType Operand::type() const {
 
 bool Operand::check() const {
 	return true;
+}
+
+void Operand::insert_in(OpSet& os, bool promote) const {
+	assert(false);
 }
 
 AtomicOperand::~AtomicOperand() {
