@@ -5,6 +5,7 @@
 
 #include "src/code/op_type.h"
 #include "src/code/operand.h"
+#include "src/code/ymm.h"
 
 namespace x64 {
 
@@ -22,6 +23,10 @@ class Xmm : public AtomicOperand {
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
+
+		inline Ymm parent() const {
+			return Ymm{val()};
+		}
 };
 
 /** The XMM register XMM0. */

@@ -8,11 +8,28 @@
 
 namespace x64 {
 
+class R64;
+
+/** A general-purpose register. */
+class R : public AtomicOperand {
+	public:
+		inline R(uint64_t val) : AtomicOperand{val} { }
+		virtual ~R() = 0;
+
+		virtual OpType type() const;
+		virtual bool check() const;
+
+		virtual void write_att(std::ostream& os) const = 0;
+		virtual void write_intel(std::ostream& os) const = 0;
+
+		virtual R64 parent() const;
+};
+
 /** One of the byte general-purpose registers: AL, CL, DL, BL. */
-class Rl : public AtomicOperand {
+class Rl : public R {
 	friend class Constants;
 	protected:
-		inline Rl(uint64_t val) : AtomicOperand{val} { }
+		inline Rl(uint64_t val) : R{val} { }
 
 	public:
 		virtual OpType type() const;
@@ -23,10 +40,10 @@ class Rl : public AtomicOperand {
 };
 
 /** One of the byte general-purpose registers: AH, CH, DH, BH. */
-class Rh : public AtomicOperand {
+class Rh : public R {
 	friend class Constants;
 	private:
-		inline Rh(uint64_t val) : AtomicOperand{val} { }
+		inline Rh(uint64_t val) : R{val} { }
 
 	public:
 		virtual OpType type() const;
@@ -34,15 +51,17 @@ class Rh : public AtomicOperand {
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
+
+		virtual R64 parent() const;
 };
 
 /** One of the byte general-purpose registers: BPL, SPL, DIL and SIL; or one of 
 	  the byte registers (R8B - R15B) available when using REX.R and 64-bit mode.
 */
-class Rb : public AtomicOperand {
+class Rb : public R {
 	friend class Constants;
 	private:
-		inline Rb(uint64_t val) : AtomicOperand{val} { }
+		inline Rb(uint64_t val) : R{val} { }
 		virtual bool check() const;
 
 	public:
@@ -78,14 +97,13 @@ class Cl : public Rl {
 	  or one of the word registers (R8W - R15W) available when using REX.R and 
 		64-bit mode.
 */
-class R16 : public AtomicOperand {
+class R16 : public R {
 	friend class Constants;
 	protected:
-		inline R16(uint64_t val) : AtomicOperand{val} { }
+		inline R16(uint64_t val) : R{val} { }
 
 	public:
 		virtual OpType type() const;
-		virtual bool check() const;
 
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
@@ -116,13 +134,12 @@ class Dx : public R16 {
 /** One of the double or quadword general-purpose register which may
 	  be used to form an address in memory.
 */
-class AddrR : public AtomicOperand {
+class AddrR : public R {
 	public:
-		AddrR(uint64_t val) : AtomicOperand{val} { }
+		AddrR(uint64_t val) : R{val} { }
 		virtual ~AddrR() = 0;
 
 		virtual OpType type() const;
-		virtual bool check() const;
 
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;
@@ -160,6 +177,8 @@ class Eax : public R32 {
 */
 class R64 : public AddrR {
 	friend class Constants;
+	friend class R;
+	friend class Rh;
 	protected:
 		inline R64(uint64_t val) : AddrR{val} { }
 

@@ -42,5 +42,12 @@ int main() {
 	all(ymms);
 	cout << "DONE WRITING CONSTANTS" << endl;
 
+	cout << "Parent register for " << xmm1 << " = " << xmm1.parent() << endl;
+	cout << "Parent register for " << al << " = " << al.parent() << endl;
+	cout << "Parent register for " << ah << " = " << ah.parent() << endl;
+	cout << "Parent register for " << ax << " = " << ax.parent() << endl;
+	cout << "Parent register for " << eax << " = " << eax.parent() << endl;
+	cout << "Parent register for " << rax << " = " << rax.parent() << endl;
+
 	return 0;
 }

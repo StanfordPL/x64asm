@@ -77,6 +77,7 @@ enum class OpType {
 	COMPOUND_OPERAND,
 
 	// General Purpose Registers (r.h)
+	R,
 	RL,
 	RH,
 	RB,

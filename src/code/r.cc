@@ -6,6 +6,22 @@ using namespace std;
 
 namespace x64 {
 
+R::~R() {
+	// Does nothing.
+}
+
+OpType R::type() const {
+	return OpType::R;
+}
+
+bool R::check() const {
+	return val() < 16;
+}
+
+R64 R::parent() const {
+	return R64{val()};
+}
+
 OpType Rl::type() const {
 	return OpType::RL;
 }
@@ -48,6 +64,10 @@ void Rh::write_att(ostream& os) const {
 }
 
 void Rh::write_intel(ostream& os) const {
+}
+
+R64 Rh::parent() const {
+	return R64{val()-4};
 }
 
 OpType Rb::type() const {
@@ -100,10 +120,6 @@ OpType R16::type() const {
 	return OpType::R_16;
 }
 
-bool R16::check() const {
-	return val() < 16;
-}
-
 void R16::write_att(ostream& os) const {
 	switch ( val() ) {
 		case 0:  os << "%ax"; break;
@@ -152,10 +168,6 @@ AddrR::~AddrR() {
 
 OpType AddrR::type() const {
 	return OpType::ADDR_R;
-}
-
-bool AddrR::check() const {
-	return val() < 16;
 }
 
 OpType R32::type() const {

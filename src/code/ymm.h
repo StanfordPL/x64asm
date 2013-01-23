@@ -13,6 +13,7 @@ namespace x64 {
 */
 class Ymm : public AtomicOperand {
 	friend class Constants;
+	friend class Xmm;
 	private:
 		inline Ymm(uint64_t val) : AtomicOperand{val} { } 
 
