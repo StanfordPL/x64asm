@@ -1,5 +1,7 @@
 #include "src/code/eflag.h"
 
+#include "src/code/op_set.h"
+
 #include <cassert>
 
 using namespace std;
@@ -12,6 +14,10 @@ OpType Eflag::type() const {
 
 bool Eflag::check() const {
 	return val() < 22 && val() != 1 && val() != 3 && val() != 5 && val() != 15;
+}
+
+void Eflag::insert_in(OpSet& os, bool promote) const {
+	os += *this;
 }
 
 void Eflag::write_att(ostream& os) const {

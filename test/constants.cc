@@ -64,6 +64,8 @@ int main() {
 	os += ymm2;
 	os += ymm4;
 
+	os += af;
+
 	xmm8.insert_in(os, true);
 	r8b.insert_in(os, true);
 

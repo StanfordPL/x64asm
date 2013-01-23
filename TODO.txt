@@ -6,10 +6,6 @@ assembler/
 - Emit Rex Prefix
 - Emit Vex Instructions
 
-code/
-
-- OpSet (eflags and some others maybe?)
-
 cfg/
 
 - live in/out for locs

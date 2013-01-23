@@ -18,16 +18,18 @@ class OpSet {
 			EMPTY  = 0x0000000000000000,
 			UNIV   = 0xffffffffffffffff,
 			
+			EFLAG  = 0x0000000000000001,
+
 			LOW    = 0x0000000000000001,
 			HIGH   = 0x0000000000010000,
 			WORD   = 0x0000000000010001,
 			DOUBLE = 0x0000000100010001,
 		 	QUAD   = 0x0001000100010001,
 
-			XMM    = 0x0000000000000001,
-			YMM    = 0x0000000000010001,
+			MM     = 0x0000000100000000,
 
-			MM     = 0x0000000100000000
+			XMM    = 0x0000000000000001,
+			YMM    = 0x0000000000010001
 		};
 
 		inline OpSet(uint64_t g, uint64_t o, uint64_t f)
@@ -100,6 +102,11 @@ class OpSet {
 		}
 
 		// Element Operators
+		inline OpSet operator+(Eflag rhs) const {
+			auto ret = *this;
+			return ret += rhs;
+		}
+
 		inline OpSet operator+(Rh rhs) const {
 			auto ret = *this;
 			return ret += rhs;
@@ -130,6 +137,11 @@ class OpSet {
 			return ret += rhs;
 		}
 
+		inline OpSet operator+(Mm rhs) const {
+			auto ret = *this;
+			return ret += rhs;
+		}
+
 		inline OpSet operator+(Xmm rhs) const {
 			auto ret = *this;
 			return ret += rhs;
@@ -140,17 +152,17 @@ class OpSet {
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(Mm rhs) const {
-			auto ret = *this;
-			return ret += rhs;
-		}
-
 		inline OpSet operator+(const M& rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
 		// TODO... and so forth
+
+		inline OpSet& operator+=(Eflag rhs) {
+			flags_ |= ((uint64_t) Mask::EFLAG << rhs.val());
+			return *this;
+		}
 
 		inline OpSet& operator+=(Rh rhs) {
 			gp_regs_ |= ((uint64_t) Mask::HIGH << (rhs.val()-4));
@@ -182,6 +194,11 @@ class OpSet {
 			return *this;
 		}
 
+		inline OpSet& operator+=(Mm rhs) {
+			other_regs_ |= ((uint64_t) Mask::MM << rhs.val());
+			return *this;
+		}
+
 		inline OpSet& operator+=(Xmm rhs) {
 			other_regs_ |= ((uint64_t) Mask::XMM << rhs.val());
 			return *this;
@@ -192,16 +209,16 @@ class OpSet {
 			return *this;
 		}
 
-		inline OpSet& operator+=(Mm rhs) {
-			other_regs_ |= ((uint64_t) Mask::MM << rhs.val());
-			return *this;
-		}
-
 		OpSet& operator+=(const M& rhs);
 
 		// TODO... and so forth	
 
 		// Queries
+
+		inline bool contains(Eflag rhs) const {
+			return ((flags_ >> rhs.val()) & (uint64_t)Mask::EFLAG) == 
+				     (uint64_t)Mask::EFLAG;
+		}
 
 		inline bool contains(Rh rhs) const {
 			return ((gp_regs_ >> (rhs.val()-4)) & (uint64_t)Mask::HIGH) == 
@@ -233,6 +250,11 @@ class OpSet {
 				     (uint64_t)Mask::QUAD;
 		}
 
+		inline bool contains(Mm rhs) const {
+			return ((other_regs_ >> rhs.val()) & (uint64_t)Mask::MM) == 
+				     (uint64_t)Mask::MM;
+		}
+
 		inline bool contains(Xmm rhs) const {
 			return ((other_regs_ >> rhs.val()) & (uint64_t)Mask::XMM) == 
 				     (uint64_t)Mask::XMM;
@@ -241,11 +263,6 @@ class OpSet {
 		inline bool contains(Ymm rhs) const {
 			return ((other_regs_ >> rhs.val()) & (uint64_t)Mask::YMM) == 
 				     (uint64_t)Mask::YMM;
-		}
-
-		inline bool contains(Mm rhs) const {
-			return ((other_regs_ >> rhs.val()) & (uint64_t)Mask::MM) == 
-				     (uint64_t)Mask::MM;
 		}
 
 		void write_att(std::ostream& os) const;

@@ -70,6 +70,12 @@ void OpSet::write_att(ostream& os) const {
 			os << " ";
 		}
 
+	for ( const auto e : eflags )
+		if ( contains(e) ) {
+			e.write_att(os);
+			os << " ";
+		}
+
 	os << "}";
 }
 
