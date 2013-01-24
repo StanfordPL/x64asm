@@ -4,29 +4,29 @@ GCC=ccache g++
 
 INC=-I./
 		
-OBJ=build/code/assembler.o \
-		build/code/cfg.o \
-		build/code/code.o \
-		build/code/constants.o \
-		build/code/cr.o \
-		build/code/dr.o \
-		build/code/eflag.o \
-		build/code/imm.o \
-		build/code/instruction.o \
-		build/code/label.o \
-		build/code/m.o \
-		build/code/mm.o \
-		build/code/modifier.o \
-		build/code/moffs.o \
-		build/code/operand.o \
-		build/code/op_set.o \
-		build/code/r.o \
-		build/code/rel.o \
-		build/code/sreg.o \
-		build/code/stream.o \
-		build/code/st.o \
-		build/code/xmm.o \
-		build/code/ymm.o
+OBJ=build/assembler.o \
+		build/cfg.o \
+		build/code.o \
+		build/constants.o \
+		build/cr.o \
+		build/dr.o \
+		build/eflag.o \
+		build/imm.o \
+		build/instruction.o \
+		build/label.o \
+		build/m.o \
+		build/mm.o \
+		build/modifier.o \
+		build/moffs.o \
+		build/operand.o \
+		build/op_set.o \
+		build/r.o \
+		build/rel.o \
+		build/sreg.o \
+		build/stream.o \
+		build/st.o \
+		build/xmm.o \
+		build/ymm.o
 
 LIB=lib/libx64.a
 
@@ -64,18 +64,18 @@ test: erthing
 
 clean:
 	rm -rf build/* $(LIB) $(TEST) $(BIN) $(DOC)
-	rm -f src/code/assembler.defn src/code/assembler.decl src/code/assembler.switch
-	rm -f src/code/opcode.att src/code/opcode.enum src/code/*.table
+	rm -f src/assembler.defn src/assembler.decl src/assembler.switch
+	rm -f src/opcode.att src/opcode.enum src/*.table
 	rm -rf test/enumerate_all.hi test/enumerate_all.o test/tmp/* test/enumerate_all
 	rm -f test/stokeasm_py/*.so
 	rm -rf test/stokeasm_py/build
 
 ##### BUILD TARGETS
 
-codegen: src/code/assembler.defn src/code/Codegen.hs src/code/x86.csv
+codegen: src/assembler.defn src/Codegen.hs src/x86.csv
 
-src/code/assembler.defn: src/code/Codegen.hs src/code/x86.csv 
-	cd src/code && \
+src/assembler.defn: src/Codegen.hs src/x86.csv 
+	cd src && \
 		ghc Codegen.hs && \
 		./Codegen x86.csv && \
 		rm -f *.hi *.o Codegen
@@ -86,12 +86,12 @@ src/code/assembler.defn: src/code/Codegen.hs src/code/x86.csv
 		mv att.tab.h src/gen && \
 		mv att.tab.c src/gen
 		
-build/code/%.o: src/code/%.cc src/code/%.h codegen
-	mkdir -p build/code && $(GCC) $(OPT) $(INC) -c $< -o $@
+build/%.o: src/%.cc src/%.h codegen
+	$(GCC) $(OPT) $(INC) -c $< -o $@
 
 ##### DOCUMENTATION TARGETS
 
-doc/html: doxyfile src/code/* 
+doc/html: doxyfile src/* 
 	doxygen doxyfile
 
 ##### LIBRARY TARGET
