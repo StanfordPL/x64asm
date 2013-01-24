@@ -5,7 +5,6 @@ using namespace std;
 namespace x64 {
 
 OpSet& OpSet::operator+=(const M& rhs) {
-	assert(Checker::check(rhs));	
 	if ( rhs.get_addr_or() ) {
 		if ( rhs.contains_base() )
 			*this += *((R32*)rhs.get_base());
@@ -22,65 +21,99 @@ OpSet& OpSet::operator+=(const M& rhs) {
 }
 
 void OpSet::write_att(ostream& os) const {
+	write_txt(os, true);
+}
+
+void OpSet::write_intel(ostream& os) const {
+	write_txt(os, false);
+}
+
+void OpSet::write_txt(ostream& os, bool att) const {
 	os << "{ ";
 	
 	for ( size_t i = 0; i < 16; ++i ) {
 		if ( contains(r64s[i]) ) {
-			r64s[i].write_att(os);
+			if ( att )
+				r64s[i].write_att(os);
+			else
+				r64s[i].write_intel(os);
 		 	os << " ";
 		}
 		else if ( contains(r32s[i]) ) {
-			r32s[i].write_att(os);
+			if ( att )
+				r32s[i].write_att(os);
+			else
+				r32s[i].write_intel(os);
 		 	os << " ";
 		}
 		else if ( contains(r16s[i]) ) {
-			r16s[i].write_att(os);
+			if ( att ) 
+				r16s[i].write_att(os);
+			else
+				r16s[i].write_intel(os);
 		 	os << " ";
 		}
 		else if ( i < 4 ) {
 			if ( contains(rls[i]) ) {
-				rls[i].write_att(os);
+				if ( att )
+					rls[i].write_att(os);
+				else
+					rls[i].write_intel(os);
 		 		os << " ";
 			}
 	    else if ( contains(rhs[i]) ) {
-				rhs[i].write_att(os);
+				if ( att )
+					rhs[i].write_att(os);
+				else
+					rhs[i].write_intel(os);
 		 		os << " ";
 			}
 		}	
 		else if ( contains(rbs[i-4]) ) {
-			rbs[i-4].write_att(os);
+			if ( att ) 
+				rbs[i-4].write_att(os);
+			else
+				rbs[i-4].write_intel(os);
 		 	os << " ";
 		}
 	}
 
 	for ( size_t i = 0; i < 16; ++i ) {
 		if ( contains(ymms[i]) ) {
-			ymms[i].write_att(os);
+			if ( att ) 
+				ymms[i].write_att(os);
+			else
+				ymms[i].write_intel(os);
 		 	os << " ";
 		}
 		else if ( contains(xmms[i]) ) {
-			xmms[i].write_att(os);
+			if ( att ) 
+				xmms[i].write_att(os);
+			else
+				xmms[i].write_intel(os);
 		 	os << " ";
 		}
 	}
 
 	for ( const auto mm : mms )
 		if ( contains(mm) ) {
-			mm.write_att(os);
+			if ( att ) 
+				mm.write_att(os);
+			else
+				mm.write_intel(os);
 			os << " ";
 		}
 
 	for ( const auto e : eflags )
 		if ( contains(e) ) {
-			e.write_att(os);
+			if ( att ) 
+				e.write_att(os);
+			else 
+				e.write_intel(os);
 			os << " ";
 		}
 
 	os << "}";
-}
-
-void OpSet::write_intel(ostream& os) const {
-
 }
 
 } // namespace x64

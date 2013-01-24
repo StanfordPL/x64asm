@@ -1,7 +1,11 @@
 #include "src/cfg/cfg.h"
 
+#include <algorithm>
 #include <unordered_map>
 
+#include "src/cfg/dominators.h"
+#include "src/cfg/loops.h"
+#include "src/cfg/reachable.h"
 #include "src/code/label.h"
 
 using namespace std;
@@ -88,6 +92,83 @@ void Cfg::recompute() {
 	for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i )
 		for ( auto s = succ_begin(i), se = succ_end(i); s != se; ++s )
 			preds_[*s].push_back(i);
+}
+
+void Cfg::write_att(ostream& os) const {
+	write_txt(os, true);
+}
+
+void Cfg::write_intel(ostream& os) const {
+	write_txt(os, false);
+}
+
+void Cfg::write_txt(ostream& os, bool att) const {
+	Reachable reachable(*this);
+	Dominators dominators(*this);
+	Loops loops(*this, dominators, reachable);
+
+	os << "digraph g {" << endl;
+
+	os << "colorscheme = blues6" << endl;
+
+	os << "bb" << get_entry() << " [shape=box label=\"ENTRY\"];" << endl;
+	os << "bb" << get_exit()  << " [shape=box label=\"EXIT\"];" << endl;
+
+	map<size_t, vector<Cfg::id_type>> nestings;
+	for ( size_t i = get_entry()+1, ie = get_exit(); i < ie; ++i )
+		nestings[loops.nesting_depth(i)].push_back(i);
+
+	for ( const auto& n : nestings ) {
+		os << dec;
+		os << "subgraph cluster_" << n.first << " {" << endl;
+		os << "style = filled" << endl;
+		os << "color = " << (n.first+1) << endl;
+
+		for ( const auto bb : n.second ) {
+			os << "bb" << dec << bb << "[";
+			os << "shape=record, style=filled, fillcolor=white, ";
+			if ( !reachable.contains(bb) )
+				os << "color = grey, ";
+			os << "label=\"{";
+			os << "#" << bb; 
+			os << "|live-ins:";
+			os << "|live-outs:";
+			os << "|";
+			for ( size_t j = 0, je = num_instrs(bb); j < je; ++j ) {
+				const auto& instr = get_instr(Cfg::location_type(bb,j));
+				if ( att )
+					instr.write_att(os);
+				else
+					instr.write_intel(os);
+				os << "\\l";
+			}
+			os << "}\"];" << endl;
+		}
+	}
+	for ( size_t i = 0, ie = nestings.size(); i < ie; ++i )
+		os << "}" << endl;
+
+	for ( size_t i = get_entry(), ie = get_exit(); i < ie; ++i ) 
+		for ( auto s = succ_begin(i), se = succ_end(i); s != se; ++s ) {
+			os << "bb" << dec << i << "->bb" << *s << " [";
+			os << "style="; 
+			if ( has_fallthrough_target(i) && 
+					 get_fallthrough_target(i) == *s )
+				os << "bold";
+			else
+				os << "dashed";
+			os << " color=";
+			if ( find(loops.back_edge_begin(), loops.back_edge_end(), 
+						    Loops::edge_type(i,*s)) != loops.back_edge_end() )
+				os << "red";
+			else if ( reachable.contains(i) || is_entry(i) )
+				os << "black";
+			else
+				os << "grey";
+			os << "];" << endl;
+		}
+
+	os << "}";
 }
 
 } // namespace x64

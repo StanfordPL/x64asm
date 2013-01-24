@@ -123,6 +123,9 @@ class Cfg {
 			return succs_[id][1];
 		}
 
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
+
 	private:
 		const Code& code_;
 
@@ -136,6 +139,8 @@ class Cfg {
 			assert(loc.second < num_instrs(loc.first));
 			return blocks_[loc.first] + loc.second;
 		}
+
+		void write_txt(std::ostream& os, bool att) const;
 };
 
 } // namespace x64

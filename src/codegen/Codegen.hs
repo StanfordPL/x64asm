@@ -843,6 +843,26 @@ disp_imm i = case disp_imm_index i of
 assm_src_defns :: [Instr] -> String
 assm_src_defns is = intercalate "\n\n" $ map assm_src_defn is
 
+-- Assembler switch args
+assm_call_arg_list :: Instr -> String
+assm_call_arg_list i = intercalate ", " $ map arg $ zip [0..] (operands i)
+  where arg (i,a) = "*((" ++ (op2type a) ++ "*)" ++ (elem i) ++ ")"
+        elem idx = "instr.get_operand(" ++ (show idx) ++ ")"
+
+-- Assembler switch call
+assm_call :: Instr -> String
+assm_call i = (assm_mnemonic i) ++ "(" ++ (assm_call_arg_list i) ++ ");"
+
+-- Assembler switch case
+assm_case :: Instr -> String
+assm_case i = "case " ++ (opcode_enum i) ++ ":\n" ++
+              "\t" ++ (assm_call i) ++ "\n" ++
+              "\tbreak;"
+
+-- All assembler switch cases
+assm_cases :: [Instr] -> String
+assm_cases is = intercalate "\n" $ map assm_case is
+
 -------------------------------------------------------------------------------
 -- test/ codegen
 -------------------------------------------------------------------------------
@@ -956,6 +976,7 @@ main = do args <- getArgs
           -- Write Code
           writeFile "assembler.decl"    $ assm_header_decls is
           writeFile "assembler.defn"    $ assm_src_defns is
+          writeFile "assembler.switch"  $ assm_cases is
           writeFile "arity.table"       $ arity_table is
           writeFile "properties.table"  $ properties_table is
           writeFile "type.table"        $ type_table is

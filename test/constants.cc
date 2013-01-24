@@ -72,5 +72,11 @@ int main() {
 	cout << os << endl;
 	cout << OpSet::universe() << endl;
 
+	cout << "NOW FOR SOME CODE" << endl << endl;
+
+	Code c { Instruction{Opcode::FABS}, Instruction{Opcode::FABS}, Instruction{Opcode::FABS}, Instruction{Opcode::FABS}, Instruction{Opcode::RET} };
+	cout << format(Format::DEBUG_HEX);
+	cout << c << endl;
+
 	return 0;
 }

@@ -8,7 +8,7 @@ vector<const char*> att_ {{
 	// Internal mnemonics
 	"<label definition>"
 	// Auto-generated mnemonics
-	#include "src/io/opcode.att"
+	#include "src/code/opcode.att"
 }};	
 
 } // namespace
@@ -100,11 +100,12 @@ void Instruction::write_att(ostream& os) const {
 	assert(get_opcode() < att_.size());
 	os << att_[get_opcode()] << " ";
 
-	for ( size_t i = arity()-1; i >= 0; ++i ) {
-		get_operand(i)->write_att(os);
-		if ( i != 0 )
-			os << ", ";
-	}
+	if ( arity() > 0 )
+		for ( size_t i = arity()-1; i >= 0; ++i ) {
+			get_operand(i)->write_att(os);
+			if ( i != 0 )
+				os << ", ";
+		}
 }
 
 void Instruction::write_intel(ostream& os) const {

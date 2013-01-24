@@ -276,6 +276,8 @@ class OpSet {
 		uint64_t other_regs_;
 		// EFLAGS etc...
 		uint64_t flags_;
+
+		void write_txt(std::ostream& os, bool att) const;
 };
 
 } // namespace x64

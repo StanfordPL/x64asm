@@ -1,9 +1,6 @@
 #include "src/code/stream.h"
 
 #include "src/assembler/assembler.h"
-#include "src/cfg/cfg.h"
-#include "src/cfg/remove_nop.h"
-#include "src/cfg/remove_unreachable.h"
 
 using namespace std;
 using namespace x64;
@@ -36,18 +33,13 @@ inline Format get_format(T& ios) {
 }
 
 template <typename T>
-inline Transform get_transform(T& ios) {
-	return (Transform)ios.iword(transform_state());
-}
-
-template <typename T>
 inline void check(ostream& os, const T& t) {
 	if ( !t.check() )
 		os.setstate(ios::failbit);
 }
 
 template <typename T>
-ostream& write(ostream& os, const T& t) {
+ostream& write_txt(ostream& os, const T& t) {
 	switch ( get_syntax(os) ) {
 		case Syntax::ATT:
 			t.write_att(os);
@@ -76,14 +68,6 @@ istream& operator>>(istream& is, const format& f) {
 	return is;
 }
 
-istream& operator>>(istream& is, const transform& t) {
-	if ( t == Transform::NONE )
-		is.iword(transform_state()) = (long)Transform::NONE;
-	else
-		is.iword(transform_state()) |= t;
-	return is;
-}
-
 ostream& operator<<(ostream& os, const syntax& s) {
 	os.iword(syntax_state()) = s;
 	return os;
@@ -91,14 +75,6 @@ ostream& operator<<(ostream& os, const syntax& s) {
 
 ostream& operator<<(ostream& os, const format& f) {
 	os.iword(format_state()) = f;
-	return os;
-}
-
-ostream& operator<<(ostream& os, const transform& t) {
-	if ( t == Transform::NONE )
-		os.iword(transform_state()) = (long)Transform::NONE;
-	else
-		os.iword(transform_state()) |= t;
 	return os;
 }
 
@@ -116,58 +92,31 @@ istream& operator>>(istream& is, Code& c) {
 			break;
 	}
 
-	switch ( get_transform(is) ) {
-		case Transform::ALL:
-			RemoveNop::remove(c);
-			RemoveUnreachable::remove(c);
-			break;
-		case Transform::REMOVE_NOP:
-			RemoveNop::remove(c);
-			break;
-		case Transform::REMOVE_UNREACHABLE:
-			RemoveUnreachable::remove(c);
-			break;
-
-		default:
-			is.setstate(ios::failbit);
-			break;
-	}
-
 	return is;
+}
+
+ostream& operator<<(ostream& os, const Cfg& c) {
+	return write_txt(os, c);
 }
 
 ostream& operator<<(ostream& os, const Code& c) {
 	check(os, c);
-
-	Code code = c;
-	switch ( get_transform(os) ) {
-		case Transform::NONE:
-			break;
-		case Transform::ALL:
-			RemoveNop::remove(code);
-			RemoveUnreachable::remove(code);
-			break;
-		case Transform::REMOVE_NOP:
-			RemoveNop::remove(code);
-			break;
-		case Transform::REMOVE_UNREACHABLE:
-			RemoveUnreachable::remove(code);
-			break;
-
-		default:
-			os.setstate(ios::failbit);
-			break;
-	}
-
 	switch ( get_format(os) ) {
-		case Format::TXT:
-			write(os, c);
+		case Format::DOT:
+			write_txt(os, Cfg{c});
 			break;
 		case Format::ELF:
+			Assembler().write_elf(os, c);
 			break;
 		case Format::HEX:
+			Assembler().write_hex(os, c);
 			break;
-		case Format::DOT:
+		case Format::TXT:
+			write_txt(os, c);
+			break;
+
+		case Format::DEBUG_HEX:
+			Assembler().write_att(os, c);
 			break;
 
 		default:
@@ -180,14 +129,14 @@ ostream& operator<<(ostream& os, const Code& c) {
 
 ostream& operator<<(ostream& os, const Instruction& i) {
 	check(os, i);
-	return write(os, i);
+	return write_txt(os, i);
 }
 
 ostream& operator<<(ostream& os, const Operand& o) {
 	check(os, o);
-	return write(os, o);
+	return write_txt(os, o);
 }
 
 ostream& operator<<(ostream& os, const OpSet& o) {
-	return write(os, o);
+	return write_txt(os, o);
 }

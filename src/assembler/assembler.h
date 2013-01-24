@@ -28,6 +28,12 @@ namespace x64 {
 /** An x64 assembler. */
 class Assembler {
 	public:
+		inline Function assemble(const Code& code) {
+			Function fxn;
+			assemble(fxn, code);
+			return fxn;
+		}
+
 		inline void assemble(Function& fxn, const Code& code) {
 			start(fxn);
 			for ( const auto& instr : code )
@@ -35,9 +41,7 @@ class Assembler {
 			finish();
 		}
 
-		void assemble(const Instruction& instr);
-
-		void start(Function& fxn) {
+		inline void start(Function& fxn) {
 			fxn_ = &fxn;
 			fxn_->clear();
 
@@ -45,7 +49,7 @@ class Assembler {
 			label_rels_.clear();
 		}	
 
-		void finish() { 
+		inline void finish() { 
 			for ( const auto& l : label_rels_ ) {
 				const auto pos = l.first;
 				const auto itr = label_defs_.find(l.second);
@@ -57,11 +61,18 @@ class Assembler {
 			}
 		}
 
-		#include "src/assembler/assembler.decl"
+		void assemble(const Instruction& instr);
 
 		inline void bind(Label label) {
 			label_defs_[label.val()] = fxn_->size();
 		}
+
+		#include "src/assembler/assembler.decl"
+
+		void write_att(std::ostream& os, const Code& c);
+		void write_intel(std::ostream& os, const Code& c);
+		void write_elf(std::ostream& os, const Code& c);
+		void write_hex(std::ostream& os, const Code& c);
 
 	private:
 		Function* fxn_;
@@ -162,6 +173,7 @@ class Assembler {
 				fxn_->resize(fxn_->capacity()*2);
 		}
 
+		void write_txt(std::ostream& os, const Code& c, bool att);
 };
 
 } // namespace x64

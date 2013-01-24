@@ -16,6 +16,8 @@ namespace x64 {
 
 /** An executable buffer. */
 class Function {
+	friend class Assembler;
+
 	private:
 		typedef uint64_t (*f0_type)();
 		typedef uint64_t (*f1_type)(uint64_t);
@@ -75,16 +77,16 @@ class Function {
 			return ((f6_type)(buffer_))(rdi, rsi, rdx, rcx, r8, r9);
 		}
 
+		inline bool is_executable() const {
+			return (long) buffer_ != -1;
+		}
+
 		inline size_t size() const {
 			return head_ - buffer_;
 		}
 
 		inline size_t capacity() const {
 			return capacity_;
-		}
-
-		inline bool executable() const {
-			return (long) buffer_ != -1;
 		}
 
 		inline void resize(size_t capacity) {
@@ -99,6 +101,43 @@ class Function {
 			free_buffer();
 			capacity_ = capacity;
 			buffer_ = buf;
+		}
+
+	private:
+		size_t capacity_;
+		unsigned char* buffer_;
+		unsigned char* head_;
+
+		inline size_t round_up(size_t size) const {
+			if ( size == 0 )
+				return 1024;
+			else if ( size % 1024 == 0 )
+				return size;
+			else
+				return ((size/1024)+1) * 1024;
+		}
+
+		inline unsigned char* make_buffer(size_t size) const {
+			return (unsigned char*) mmap(0, size,
+					PROT_READ | PROT_WRITE | PROT_EXEC,
+					MAP_PRIVATE | MAP_ANONYMOUS,
+					-1, 0);
+		}
+
+		inline void copy_buffer(const Function& rhs) {
+			capacity_ = rhs.capacity_;
+			buffer_ = make_buffer(rhs.capacity_);
+			if ( is_executable() )
+				memcpy(buffer_, rhs.buffer_, rhs.size());	
+		}
+
+		inline void free_buffer() {
+			if ( is_executable() )
+				munmap(buffer_, capacity_);
+		}
+
+		inline size_t remaining() const {
+			return capacity() - size();
 		}
 
 		inline void clear() {
@@ -167,62 +206,6 @@ class Function {
 		inline void advance_quad() {
 			assert(remaining() >= 8);
 			head_ += 8;
-		}
-
-		inline unsigned char& operator[](size_t index) {
-			assert(index < size());
-			return buffer_[index];
-		}
-
-		inline const unsigned char& operator[](size_t index) const {
-			assert(index < size());
-			return buffer_[index];
-		}
-
-		typedef const unsigned char* const_iterator;
-		inline const_iterator begin() const {
-			return buffer_;
-		}
-
-		inline const_iterator end() const {
-			return head_;
-		}
-
-	private:
-		size_t capacity_;
-		unsigned char* buffer_;
-		unsigned char* head_;
-
-		inline size_t round_up(size_t size) const {
-			if ( size == 0 )
-				return 1024;
-			else if ( size % 1024 == 0 )
-				return size;
-			else
-				return ((size/1024)+1) * 1024;
-		}
-
-		inline unsigned char* make_buffer(size_t size) const {
-			return (unsigned char*) mmap(0, size,
-					PROT_READ | PROT_WRITE | PROT_EXEC,
-					MAP_PRIVATE | MAP_ANONYMOUS,
-					-1, 0);
-		}
-
-		inline void copy_buffer(const Function& rhs) {
-			capacity_ = rhs.capacity_;
-			buffer_ = make_buffer(rhs.capacity_);
-			if ( executable() )
-				memcpy(buffer_, rhs.buffer_, rhs.size());	
-		}
-
-		inline void free_buffer() {
-			if ( executable() )
-				munmap(buffer_, capacity_);
-		}
-
-		inline size_t remaining() const {
-			return capacity() - size();
 		}
 };
 

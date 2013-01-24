@@ -3,6 +3,7 @@
 #include <cassert>
 #include <iomanip>
 #include <set>
+#include <vector>
 
 using namespace std;
 using namespace x64;
@@ -167,10 +168,60 @@ void Assembler::assemble(const Instruction& instr) {
 			bind(static_cast<const Label*>(instr.get_operand(0))->val());
 			break;
    	// 4000-way switch
-		//#include "src/gen/assembler.switch"
+		#include "src/assembler/assembler.switch"
 		
 		default:
 			assert(false);
+	}
+}
+
+void Assembler::write_att(std::ostream& os, const Code& c) {
+	write_txt(os, c, true);
+}
+
+void Assembler::write_intel(std::ostream& os, const Code& c) {
+	write_txt(os, c, false);
+}
+
+void Assembler::write_elf(std::ostream& os, const Code& c) {
+}
+
+void Assembler::write_hex(std::ostream& os, const Code& c) {
+	const auto fxn = assemble(c);
+	for ( size_t i = 0, ie = fxn.size(); i < ie; ++i ) {
+		if ( i % 8 == 0 ) 
+			os << hex << showbase << (uint64_t)(fxn.buffer_ + i) << ": ";
+		os << hex << noshowbase << (int32_t)fxn.buffer_[i] << " ";
+		if ( ((i%8) == 7) && ((i+1) != ie) )
+			os << endl;
+	}
+}
+
+void Assembler::write_txt(ostream& os, const Code& c, bool att) {
+	Function fxn;
+	vector<size_t> eols;
+
+	start(fxn);
+	for ( const auto& instr : c ) {
+		assemble(instr);
+		eols.push_back(fxn.size());
+	}
+	finish();
+
+	size_t idx = 0;
+	for ( size_t i = 0, ie = c.size(); i < ie; ++i ) {
+		if ( att )
+			c[i].write_att(os);
+		else
+			c[i].write_intel(os);
+
+		os << "( ";
+		while ( idx != eols[i] )
+			os << hex << noshowbase << (int32_t)fxn.buffer_[idx++] << " ";
+		os << ")";
+
+		if ( (i+1) != ie )
+			os << endl;
 	}
 }
 

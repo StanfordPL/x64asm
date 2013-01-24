@@ -33,10 +33,7 @@ OBJ=build/assembler/assembler.o \
 		build/code/stream.o \
 		build/code/st.o \
 		build/code/xmm.o \
-		build/code/ymm.o \
-		\
-		build/io/dot_writer.o \
-		build/io/hex_writer.o
+		build/code/ymm.o
 
 LIB=lib/libx64.a
 
@@ -74,7 +71,7 @@ test: erthing
 
 clean:
 	rm -rf build/* $(LIB) $(TEST) $(BIN) $(DOC)
-	rm -f src/assembler/assembler.defn src/assembler/assembler.decl
+	rm -f src/assembler/assembler.defn src/assembler/assembler.decl src/assembler/assembler.switch
 	rm -f src/code/opcode.enum src/code/*.table
 	rm -f src/io/opcode.att	
 	rm -rf test/enumerate_all.hi test/enumerate_all.o test/tmp/* test/enumerate_all
@@ -89,9 +86,8 @@ src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv
 	cd src/codegen && \
 		ghc Codegen.hs && \
 		./Codegen x86.csv && \
-		mv assembler.defn assembler.decl ../assembler && \
-		mv opcode.enum *.table ../code && \
-		mv opcode.att ../io && \
+		mv assembler.defn assembler.decl assembler.switch ../assembler && \
+		mv opcode.enum opcode.att *.table ../code && \
 		rm -f *.hi *.o Codegen
 
 #	flex $(FLEXOPS) -Patt src/codegen/att.l && \
@@ -102,7 +98,7 @@ src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv
 		
 ##### DOCUMENTATION TARGETS
 
-doc/html: doxyfile src/assembler/* src/cfg/* src/code/* src/io/* 
+doc/html: doxyfile src/assembler/* src/cfg/* src/code/* 
 	doxygen doxyfile
 
 ##### BUILD TARGETS
@@ -113,10 +109,6 @@ build/cfg/%.o: src/cfg/%.cc src/cfg/%.h codegen
 	mkdir -p build/cfg && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/code/%.o: src/code/%.cc src/code/%.h codegen
 	mkdir -p build/code && $(GCC) $(OPT) $(INC) -c $< -o $@
-build/io/%.o: src/io/%.cc src/io/%.h codegen
-	mkdir -p build/io && $(GCC) $(OPT) $(INC) -c $< -o $@
-build/stream/%.o: src/stream/%.cc src/stream/%.h codegen
-	mkdir -p build/stream && $(GCC) $(OPT) $(INC) -c $< -o $@
 
 ##### LIBRARY TARGET
 
