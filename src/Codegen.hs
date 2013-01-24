@@ -990,5 +990,3 @@ main = do args <- getArgs
           writeFile "opcode.enum"       $ opcode_enums is
           writeFile "opcode.att"        $ att_mnemonics is
           --writeFile "test.s"            $ test_instrs is					
-
-          mapM_ print $ map (\x -> (opcode x) ++ " " ++ (instruction x)) is
