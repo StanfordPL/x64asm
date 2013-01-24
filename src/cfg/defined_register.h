@@ -45,8 +45,6 @@ class DefinedRegister {
 		const Cfg& cfg_;
 		const OpSet boundary_;
 
-		std::vector<OpSet> ins_;
-		std::vector<OpSet> outs_;
 };
 
 } // namespace x64

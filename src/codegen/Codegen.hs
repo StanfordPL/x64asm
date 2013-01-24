@@ -543,7 +543,7 @@ disp_imm_index :: Instr -> Maybe Int
 disp_imm_index i = findIndex disp_imm_op (operands i)
 
 -------------------------------------------------------------------------------
--- code/ codegen
+-- code codegen
 -------------------------------------------------------------------------------
 
 -- Converts an instruction into an Opcode enum value
@@ -700,10 +700,6 @@ maybe_undef_row i = "OpSet::empty()"
 maybe_undef_table :: [Instr] -> String
 maybe_undef_table is = to_table is maybe_undef_row
 
--------------------------------------------------------------------------------
--- io/ codegen
--------------------------------------------------------------------------------
-
 -- Converts an instruction to a printable at&t mnemonic
 att_mnemonic :: Instr -> String
 att_mnemonic i = "\"" ++ (att i) ++ "\""
@@ -713,7 +709,7 @@ att_mnemonics :: [Instr] -> String
 att_mnemonics is = intercalate "\n" $ map (", "++) $ map att_mnemonic is
 
 -------------------------------------------------------------------------------
--- assembler/ codegen
+-- assembler codegen
 -------------------------------------------------------------------------------
 
 -- Assembler mnemonic

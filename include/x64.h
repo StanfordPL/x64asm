@@ -2,13 +2,6 @@
 #define X64_INCLUDE_X64_H
 
 #include "src/cfg/cfg.h"
-#include "src/cfg/defined_register.h"
-#include "src/cfg/dominators.h"
-#include "src/cfg/live_register.h"
-#include "src/cfg/loops.h"
-#include "src/cfg/reachable.h"
-#include "src/cfg/remove_nop.h"
-#include "src/cfg/remove_unreachable.h"
 
 #include "src/code/assembler.h"
 #include "src/code/code.h"

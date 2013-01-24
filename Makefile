@@ -7,11 +7,6 @@ INC=-I./
 OBJ=build/code/assembler.o \
 		\
 		build/cfg/cfg.o \
-		build/cfg/defined_register.o \
-		build/cfg/dominators.o \
-		build/cfg/live_register.o \
-		build/cfg/loops.o \
-		build/cfg/reachable.o \
 		\
 		build/code/code.o \
 		build/code/constants.o \
