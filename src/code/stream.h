@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdint.h>
 
-#include "src/cfg/cfg.h"
+#include "src/code/cfg.h"
 #include "src/code/code.h"
 #include "src/code/instruction.h"
 #include "src/code/op_set.h"

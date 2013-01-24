@@ -5,9 +5,7 @@ GCC=ccache g++
 INC=-I./
 		
 OBJ=build/code/assembler.o \
-		\
-		build/cfg/cfg.o \
-		\
+		build/code/cfg.o \
 		build/code/code.o \
 		build/code/constants.o \
 		build/code/cr.o \
@@ -92,13 +90,11 @@ src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv
 		
 ##### DOCUMENTATION TARGETS
 
-doc/html: doxyfile src/cfg/* src/code/* 
+doc/html: doxyfile src/code/* 
 	doxygen doxyfile
 
 ##### BUILD TARGETS
 
-build/cfg/%.o: src/cfg/%.cc src/cfg/%.h codegen
-	mkdir -p build/cfg && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/code/%.o: src/code/%.cc src/code/%.h codegen
 	mkdir -p build/code && $(GCC) $(OPT) $(INC) -c $< -o $@
 

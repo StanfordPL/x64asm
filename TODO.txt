@@ -1,17 +1,15 @@
-TODO Items; organized by src directory.
-
-assembler/
+assembler
 
 - Emit Mod R/M
 - Emit Rex Prefix
 - Emit Vex Instructions
 
-cfg/
+cfg
 
 - live in/out for locs
 - def in/out for locs
 
-io/
+io
 
 - ElfWriter
 - IntelWriter
