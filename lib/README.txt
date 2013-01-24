@@ -1,2 +1,1 @@
-This empty file is a placeholder.
-Git doesn't allow empty folders.
+Placeholder: Git doesn't allow empty folders.

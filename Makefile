@@ -4,29 +4,29 @@ GCC=ccache g++
 
 INC=-I./
 		
-OBJ=build/assembler.o \
-		build/cfg.o \
-		build/code.o \
-		build/constants.o \
-		build/cr.o \
-		build/dr.o \
-		build/eflag.o \
-		build/imm.o \
-		build/instruction.o \
-		build/label.o \
-		build/m.o \
-		build/mm.o \
-		build/modifier.o \
-		build/moffs.o \
-		build/operand.o \
-		build/op_set.o \
-		build/r.o \
-		build/rel.o \
-		build/sreg.o \
-		build/stream.o \
-		build/st.o \
-		build/xmm.o \
-		build/ymm.o
+OBJ=src/assembler.o \
+		src/cfg.o \
+		src/code.o \
+		src/constants.o \
+		src/cr.o \
+		src/dr.o \
+		src/eflag.o \
+		src/imm.o \
+		src/instruction.o \
+		src/label.o \
+		src/m.o \
+		src/mm.o \
+		src/modifier.o \
+		src/moffs.o \
+		src/operand.o \
+		src/op_set.o \
+		src/r.o \
+		src/rel.o \
+		src/sreg.o \
+		src/stream.o \
+		src/st.o \
+		src/xmm.o \
+		src/ymm.o
 
 LIB=lib/libx64.a
 
@@ -60,16 +60,6 @@ test: erthing
 	cd test/stokeasm_py; python setup.py build; rm *.so; find -name "*.so" -print0 | xargs -0 /bin/cp -f -t .
 	cd test; ./run_tests.sh
 
-##### CLEAN TARGETS
-
-clean:
-	rm -rf build/* $(LIB) $(TEST) $(BIN) $(DOC)
-	rm -f src/assembler.defn src/assembler.decl src/assembler.switch
-	rm -f src/opcode.att src/opcode.enum src/*.table
-	rm -rf test/enumerate_all.hi test/enumerate_all.o test/tmp/* test/enumerate_all
-	rm -f test/stokeasm_py/*.so
-	rm -rf test/stokeasm_py/build
-
 ##### BUILD TARGETS
 
 codegen: src/assembler.defn src/Codegen.hs src/x86.csv
@@ -86,7 +76,7 @@ src/assembler.defn: src/Codegen.hs src/x86.csv
 		mv att.tab.h src/gen && \
 		mv att.tab.c src/gen
 		
-build/%.o: src/%.cc src/%.h codegen
+src/%.o: src/%.cc src/%.h codegen
 	$(GCC) $(OPT) $(INC) -c $< -o $@
 
 ##### DOCUMENTATION TARGETS
@@ -106,15 +96,16 @@ test/constants: test/constants.cc $(LIB)
 
 ##### BINARY TARGET
 
-bin/att_exec: tools/att_exec.cc $(LIB)
+bin/%: tools/%.cc $(LIB)
 	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
-bin/att_sandbox: tools/att_sandbox.cc $(LIB)
-	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
-bin/att_trace: tools/att_trace.cc $(LIB)
-	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
-bin/att2dot: tools/att2dot.cc $(LIB)
-	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
-bin/att2hex: tools/att2hex.cc $(LIB)
-	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
-bin/att2bin: tools/att2bin.cc $(LIB)
-	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
+
+##### CLEAN TARGETS
+
+clean:
+	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN) $(TEST)
+	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.enum src/*.table
+	rm -rf test/enumerate_all.hi test/enumerate_all.o test/tmp/* test/enumerate_all
+	rm -f test/stokeasm_py/*.so
+	rm -rf test/stokeasm_py/build
+
+
