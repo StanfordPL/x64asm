@@ -4,7 +4,7 @@ GCC=ccache g++
 
 INC=-I./
 		
-OBJ=build/assembler/assembler.o \
+OBJ=build/code/assembler.o \
 		\
 		build/cfg/cfg.o \
 		build/cfg/defined_register.o \
@@ -71,9 +71,8 @@ test: erthing
 
 clean:
 	rm -rf build/* $(LIB) $(TEST) $(BIN) $(DOC)
-	rm -f src/assembler/assembler.defn src/assembler/assembler.decl src/assembler/assembler.switch
-	rm -f src/code/opcode.enum src/code/*.table
-	rm -f src/io/opcode.att	
+	rm -f src/code/assembler.defn src/code/assembler.decl src/code/assembler.switch
+	rm -f src/code/opcode.att src/code/opcode.enum src/code/*.table
 	rm -rf test/enumerate_all.hi test/enumerate_all.o test/tmp/* test/enumerate_all
 	rm -f test/stokeasm_py/*.so
 	rm -rf test/stokeasm_py/build
@@ -86,7 +85,7 @@ src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv
 	cd src/codegen && \
 		ghc Codegen.hs && \
 		./Codegen x86.csv && \
-		mv assembler.defn assembler.decl assembler.switch ../assembler && \
+		mv assembler.defn assembler.decl assembler.switch ../code && \
 		mv opcode.enum opcode.att *.table ../code && \
 		rm -f *.hi *.o Codegen
 
@@ -98,13 +97,11 @@ src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv
 		
 ##### DOCUMENTATION TARGETS
 
-doc/html: doxyfile src/assembler/* src/cfg/* src/code/* 
+doc/html: doxyfile src/cfg/* src/code/* 
 	doxygen doxyfile
 
 ##### BUILD TARGETS
 
-build/assembler/%.o: src/assembler/%.cc src/assembler/%.h codegen
-	mkdir -p build/assembler && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/cfg/%.o: src/cfg/%.cc src/cfg/%.h codegen
 	mkdir -p build/cfg && $(GCC) $(OPT) $(INC) -c $< -o $@
 build/code/%.o: src/code/%.cc src/code/%.h codegen

@@ -1,5 +1,5 @@
-#ifndef X64_SRC_ASSEMBLER_FUNCTION_H
-#define X64_SRC_ASSEMBLER_FUNCTION_H
+#ifndef X64_SRC_CODE_FUNCTION_H
+#define X64_SRC_CODE_FUNCTION_H
 
 #include <cassert>
 #include <cstring>

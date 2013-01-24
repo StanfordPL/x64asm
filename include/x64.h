@@ -1,9 +1,6 @@
 #ifndef X64_INCLUDE_X64_H
 #define X64_INCLUDE_X64_H
 
-#include "src/assembler/assembler.h"
-#include "src/assembler/function.h"
-
 #include "src/cfg/cfg.h"
 #include "src/cfg/defined_register.h"
 #include "src/cfg/dominators.h"
@@ -13,11 +10,13 @@
 #include "src/cfg/remove_nop.h"
 #include "src/cfg/remove_unreachable.h"
 
+#include "src/code/assembler.h"
 #include "src/code/code.h"
 #include "src/code/constants.h"
 #include "src/code/cr.h"
 #include "src/code/dr.h"
 #include "src/code/eflag.h"
+#include "src/code/function.h"
 #include "src/code/hint.h"
 #include "src/code/imm.h"
 #include "src/code/instruction.h"

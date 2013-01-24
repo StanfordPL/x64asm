@@ -1,6 +1,6 @@
 #include "src/code/stream.h"
 
-#include "src/assembler/assembler.h"
+#include "src/code/assembler.h"
 
 using namespace std;
 using namespace x64;
@@ -102,6 +102,20 @@ ostream& operator<<(ostream& os, const Cfg& c) {
 ostream& operator<<(ostream& os, const Code& c) {
 	check(os, c);
 	switch ( get_format(os) ) {
+		case Format::DEBUG:
+			switch ( get_syntax(os) ) {
+				case Syntax::ATT:
+					Assembler().write_att(os, c);
+					break;
+				case Syntax::INTEL:
+					Assembler().write_intel(os, c);
+					break;
+
+				default:
+					os.setstate(ios::failbit);
+					break;
+			}
+			break;
 		case Format::DOT:
 			write_txt(os, Cfg{c});
 			break;
@@ -113,10 +127,6 @@ ostream& operator<<(ostream& os, const Code& c) {
 			break;
 		case Format::TXT:
 			write_txt(os, c);
-			break;
-
-		case Format::DEBUG_HEX:
-			Assembler().write_att(os, c);
 			break;
 
 		default:

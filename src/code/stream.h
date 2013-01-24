@@ -20,12 +20,11 @@ enum class Syntax : uint32_t {
 
 /** I/O format for iostreams. */
 enum class Format : uint32_t {
-	DOT = 0,
+	DEBUG = 0,
+	DOT,
 	ELF,
 	HEX,
 	TXT,
-
-	DEBUG_HEX,
 };
 
 /** Syntax manipulator. */

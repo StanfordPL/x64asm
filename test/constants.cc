@@ -75,7 +75,7 @@ int main() {
 	cout << "NOW FOR SOME CODE" << endl << endl;
 
 	Code c { Instruction{Opcode::FABS}, Instruction{Opcode::FABS}, Instruction{Opcode::FABS}, Instruction{Opcode::FABS}, Instruction{Opcode::RET} };
-	cout << format(Format::DEBUG_HEX);
+	cout << format(Format::HEX);
 	cout << c << endl;
 
 	return 0;

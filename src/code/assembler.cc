@@ -1,4 +1,4 @@
-#include "src/assembler/assembler.h"
+#include "src/code/assembler.h"
 
 #include <cassert>
 #include <iomanip>
@@ -160,7 +160,7 @@ inline void emit_rex(unsigned char*& buf, M rm,
 namespace x64 {
 
 // void Assembler::adcb(Imm arg0) { } ...
-#include "src/assembler/assembler.defn"
+#include "src/code/assembler.defn"
 
 void Assembler::assemble(const Instruction& instr) {
 	switch ( instr.get_opcode() ) {
@@ -168,7 +168,7 @@ void Assembler::assemble(const Instruction& instr) {
 			bind(static_cast<const Label*>(instr.get_operand(0))->val());
 			break;
    	// 4000-way switch
-		#include "src/assembler/assembler.switch"
+		#include "src/code/assembler.switch"
 		
 		default:
 			assert(false);
@@ -189,8 +189,6 @@ void Assembler::write_elf(std::ostream& os, const Code& c) {
 void Assembler::write_hex(std::ostream& os, const Code& c) {
 	const auto fxn = assemble(c);
 	for ( size_t i = 0, ie = fxn.size(); i < ie; ++i ) {
-		if ( i % 8 == 0 ) 
-			os << hex << showbase << (uint64_t)(fxn.buffer_ + i) << ": ";
 		os << hex << noshowbase << (int32_t)fxn.buffer_[i] << " ";
 		if ( ((i%8) == 7) && ((i+1) != ie) )
 			os << endl;

@@ -1,10 +1,10 @@
-#ifndef X64_SRC_ASSEMBLER_ASSEMBLER_H
-#define X64_SRC_ASSEMBLER_ASSEMBLER_H
+#ifndef X64_SRC_CODE_ASSEMBLER_H
+#define X64_SRC_CODE_ASSEMBLER_H
 
 #include <iostream>
 #include <unordered_map>
 
-#include "src/assembler/function.h"
+#include "src/code/function.h"
 #include "src/code/code.h"
 #include "src/code/cr.h"
 #include "src/code/dr.h"
@@ -67,7 +67,7 @@ class Assembler {
 			label_defs_[label.val()] = fxn_->size();
 		}
 
-		#include "src/assembler/assembler.decl"
+		#include "src/code/assembler.decl"
 
 		void write_att(std::ostream& os, const Code& c);
 		void write_intel(std::ostream& os, const Code& c);
