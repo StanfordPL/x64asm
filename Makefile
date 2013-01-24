@@ -70,16 +70,14 @@ clean:
 	rm -f test/stokeasm_py/*.so
 	rm -rf test/stokeasm_py/build
 
-##### CODEGEN TARGETS
+##### BUILD TARGETS
 
-codegen: src/assembler/assembler.defn src/codegen/Codegen.hs src/codegen/x86.csv
+codegen: src/code/assembler.defn src/code/Codegen.hs src/code/x86.csv
 
-src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv 
-	cd src/codegen && \
+src/assembler/assembler.defn: src/code/Codegen.hs src/code/x86.csv 
+	cd src/code && \
 		ghc Codegen.hs && \
 		./Codegen x86.csv && \
-		mv assembler.defn assembler.decl assembler.switch ../code && \
-		mv opcode.enum opcode.att *.table ../code && \
 		rm -f *.hi *.o Codegen
 
 #	flex $(FLEXOPS) -Patt src/codegen/att.l && \
@@ -88,15 +86,13 @@ src/assembler/assembler.defn: src/codegen/Codegen.hs src/codegen/x86.csv
 		mv att.tab.h src/gen && \
 		mv att.tab.c src/gen
 		
+build/code/%.o: src/code/%.cc src/code/%.h codegen
+	mkdir -p build/code && $(GCC) $(OPT) $(INC) -c $< -o $@
+
 ##### DOCUMENTATION TARGETS
 
 doc/html: doxyfile src/code/* 
 	doxygen doxyfile
-
-##### BUILD TARGETS
-
-build/code/%.o: src/code/%.cc src/code/%.h codegen
-	mkdir -p build/code && $(GCC) $(OPT) $(INC) -c $< -o $@
 
 ##### LIBRARY TARGET
 
