@@ -74,7 +74,7 @@ clean:
 
 codegen: src/code/assembler.defn src/code/Codegen.hs src/code/x86.csv
 
-src/assembler/assembler.defn: src/code/Codegen.hs src/code/x86.csv 
+src/code/assembler.defn: src/code/Codegen.hs src/code/x86.csv 
 	cd src/code && \
 		ghc Codegen.hs && \
 		./Codegen x86.csv && \
