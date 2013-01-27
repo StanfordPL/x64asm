@@ -1073,7 +1073,7 @@ test_operand "3"        = ["$0x3"]
 test_operand "mm"       = ["%mm0","%mm7"]
 test_operand "xmm"      = ["%xmm0"]
 test_operand "<XMM0>"   = ["%xmm0"]
-test_operand "ymm"     = ["%ymm0"]
+test_operand "ymm"      = ["%ymm0"]
 test_operand "ST"       = ["%st(0)"]
 test_operand "ST(i)"    = ["%st(1)"]
 test_operand "rel8"     = ["0x1"]
@@ -1130,7 +1130,6 @@ main = do args <- getArgs
 
           -- Debugging: Check Inputs
           property_arity_check is 
-          --mapM_ print $ uniq_op_en is 
 
           -- Write Code
           writeFile "assembler.decl"    $ assm_header_decls is
