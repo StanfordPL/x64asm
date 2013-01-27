@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <type_traits>
 #include <unordered_map>
 
 #include "src/function.h"
@@ -110,7 +111,7 @@ class Assembler {
 
 		inline void opcode(uint8_t o1, AtomicOperand& rcode) {
 			const auto delta = rcode.val() & 0x7;
-			fxn_->emit_byte(o1 + delta);
+			opcode(o1+delta);
 		}
 
 		inline void opcode(uint8_t o1, uint8_t o2) {
@@ -120,8 +121,7 @@ class Assembler {
 
 		inline void opcode(uint8_t o1, uint8_t o2, AtomicOperand& rcode) {
 			const auto delta = rcode.val() & 0x7;
-			fxn_->emit_byte(o1);
-			fxn_->emit_byte(o2 + delta);
+			opcode(o1, o2+delta);
 		}
 
 		inline void opcode(uint8_t o1, uint8_t o2, uint8_t o3) {
@@ -130,44 +130,10 @@ class Assembler {
 			fxn_->emit_byte(o3);
 		}
 
-		inline void disp_imm(Imm8 i) {
-			fxn_->emit_byte(i.val());
-		}
-
-		inline void disp_imm(Imm16 i) {
-			fxn_->emit_word(i.val());
-		}
-
-		inline void disp_imm(Imm32 i) {
-			fxn_->emit_long(i.val());
-		}
-
-		inline void disp_imm(Imm64 i) {
-			fxn_->emit_quad(i.val());
-		}
-
-		inline void disp_imm(Moffs8 m) {
-			fxn_->emit_quad(m.val());
-		}
-
-		inline void disp_imm(Moffs16 m) {
-			fxn_->emit_quad(m.val());
-		}
-
-		inline void disp_imm(Moffs32 m) {
-			fxn_->emit_quad(m.val());
-		}
-
-		inline void disp_imm(Moffs64 m) {
-			fxn_->emit_quad(m.val());
-		}
-
-		inline void disp_imm(Rel8 r) {
-			fxn_->emit_byte(r.val());
-		}
-
-		inline void disp_imm(Rel32 r) {
-			fxn_->emit_long(r.val());
+		template <typename T>
+		inline typename std::enable_if<!std::is_same<T,Label>::value, void>::type 
+				disp_imm(T t) {
+			fxn_->emit_byte(t.val());
 		}
 
 		inline void disp_imm(Label l) {
