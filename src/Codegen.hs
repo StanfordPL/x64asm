@@ -111,6 +111,10 @@ opcode_bytes i = (dropWhile is_prefix) . (takeWhile not_suffix) $ ts
   where not_suffix t = not $ is_suffix t
         ts = opcode_terms i
 
+-- Extracts VEX terms
+vex_terms :: Instr -> [String]
+vex_terms i = splitOn "." $ head $ opcode_terms i
+
 -- Extracts suffix bytes
 opcode_suffix :: Instr -> [String]
 opcode_suffix i = (dropWhile is_prefix) . (dropWhile not_suffix) $ ts
@@ -829,8 +833,8 @@ pref4 i = case findIndex mem_op (operands i) of
                Nothing -> "// No Prefix Group 4\n"
 
 -- Explicit MOD/RM and REX args
-mod_rm_rex_args :: Instr -> String
-mod_rm_rex_args i = case op_en i of
+rm_args :: Instr -> String
+rm_args i = case op_en i of
   "MI"   -> "arg0"
   "MR"   -> "arg0,arg1"
   "RM"   -> "arg1,arg0"
@@ -849,7 +853,13 @@ mod_rm_rex_args i = case op_en i of
   "VMI"  -> "arg1"
   _      -> ""
 
--- Default REX arg
+-- Optional Mod R/M SIB digit argument
+digit :: Instr -> String
+digit i = case find is_digit (opcode_suffix i) of
+  (Just ('/':d:[])) -> ",r64s[" ++ [d] ++ "]"
+  Nothing -> ""
+
+-- Default REX value (irrespective of explicit operands)
 def_rex :: Instr -> String
 def_rex i
   | "REX.W+" `elem` (opcode_prefix i) = ",(uint8_t)0x48"
@@ -858,14 +868,61 @@ def_rex i
   | otherwise = ",(uint8_t)0x00"
 
 -- Emits code for REX Prefix 
-rex :: Instr -> String
-rex i = case mod_rm_rex_args i of
+rex_prefix :: Instr -> String
+rex_prefix i = case rm_args i of
     "" -> "// No REX Prefix\n"
-    _ -> "rex(" ++ (mod_rm_rex_args i) ++ (def_rex i) ++ ");\n"
+    _ -> "rex(" ++ (rm_args i) ++ (def_rex i) ++ ");\n"
+
+-- Explicit VEX mmmmm arg
+vex_mmmmm :: Instr -> String
+vex_mmmmm i
+  | "OF"   `elem` (vex_terms i) = "0x01"
+  | "OF3A" `elem` (vex_terms i) = "0x02"
+  | "OF38" `elem` (vex_terms i) = "0x03"
+  | otherwise = "0x01"
+
+-- Explicit VEX l arg
+vex_l :: Instr -> String
+vex_l i 
+  | "256" `elem` (vex_terms i) = "0x1"
+  | otherwise = "0x0"
+
+-- Explicit VEX pp arg
+vex_pp :: Instr -> String
+vex_pp i 
+  | "66" `elem` (vex_terms i) = "0x1"
+  | "F3" `elem` (vex_terms i) = "0x2"
+  | "F2" `elem` (vex_terms i) = "0x3"
+  | otherwise = "0x0"
+
+-- Default VEX w value
+vex_w :: Instr -> String
+vex_w i 
+  | "W1" `elem` (vex_terms i) = "0x1"
+  | otherwise = "0x0"
+
+-- Explicit VEX vvvv arg
+vex_vvvv :: Instr -> String
+vex_vvvv i = case findIndex (=='V') (op_en i) of
+  (Just idx) -> "arg" ++ (show idx) 
+  Nothing -> "r64s[15]"
+
+-- Emits code for VEX Prefix
+vex_prefix :: Instr -> String
+vex_prefix i = "vex(" ++ 
+               (vex_mmmmm i) ++ "," ++
+               (vex_l i) ++ "," ++
+               (vex_pp i) ++ "," ++
+               (vex_w i) ++ "," ++
+               (vex_vvvv i) ++ 
+               (case (rm_args i) of
+                  "" -> ""
+                  _  -> "," ++ (rm_args i) ++ (digit i)) ++ 
+               ");\n"
 
 -- Emits code for VEX opcodes
 vex_opcode :: Instr -> String
-vex_opcode i = "opcode(0x" ++ (opcode_terms i)!!1 ++ ");\n"
+vex_opcode i = "opcode(0x" ++ (low ((opcode_terms i)!!1)) ++ ");\n"
 
 -- Emits code for non-VEX encoded opcode bytes
 non_vex_opcode :: Instr -> String
@@ -875,17 +932,11 @@ non_vex_opcode i = "opcode(" ++ (bytes i) ++ (code i) ++ ");\n"
                       (Just idx) -> ",arg" ++ (show idx)
                       Nothing -> ""
 
--- Mod R/M SIB digit argument
-digit :: Instr -> String
-digit i = case find is_digit (opcode_suffix i) of
-  (Just ('/':d:[])) -> ",r64s[" ++ [d] ++ "]"
-  Nothing -> ""
-
 -- Emits code for mod/rm and sib bytes
 mod_rm_sib :: Instr -> String
-mod_rm_sib i = case mod_rm_rex_args i of
+mod_rm_sib i = case rm_args i of
     "" -> "// No MOD R/M or SIB Bytes\n"
-    _ -> "mod_rm_sib(" ++ (mod_rm_rex_args i) ++ (digit i) ++ ");\n"
+    _ -> "mod_rm_sib(" ++ (rm_args i) ++ (digit i) ++ ");\n"
 
 -- Does this instruction have a displacement or immediate operand?
 disp_imm_index :: Instr -> Maybe Int
@@ -906,29 +957,30 @@ vex_imm i = case "/is4" `elem` (opcode_suffix i) of
 
 -- VEX encoded instruction definition
 assm_vex_defn :: Instr -> String
-assm_vex_defn i = "// VEX-Encoded Instruction: \n\n" ++
-                  "// Prefix Group 1 is #UD for VEX\n" ++
-                  pref2 i ++ 
-                  "// Prefix Group 3 is #UD for VEX\n" ++
-                  pref4 i ++
-                  vex_opcode i ++
-                  mod_rm_sib i ++
-                  disp_imm i ++
-                  vex_imm i ++
-                  "resize();\n"
+assm_vex_defn i = "  // VEX-Encoded Instruction: \n\n" ++
+                  "  // Prefix Group 1 is #UD for VEX\n" ++
+                  "  " ++ pref2 i ++ 
+                  "  // Prefix Group 3 is #UD for VEX\n" ++
+                  "  " ++ pref4 i ++
+                  "  " ++ vex_prefix i ++ 
+                  "  " ++ vex_opcode i ++
+                  "  " ++ mod_rm_sib i ++
+                  "  " ++ disp_imm i ++
+                  "  " ++ vex_imm i ++
+                  "  resize();\n"
 
 -- Other instruction definition
 assm_oth_defn :: Instr -> String
-assm_oth_defn i = "// Non-VEX-Encoded Instruction: \n\n" ++
-                  pref1 i ++
-                  pref2 i ++ 
-                  pref3 i ++
-                  pref4 i ++
-                  rex i ++
-                  non_vex_opcode i ++
-                  mod_rm_sib i ++
-                  disp_imm i ++
-                  "resize();\n"
+assm_oth_defn i = "  // Non-VEX-Encoded Instruction: \n\n" ++
+                  "  " ++ pref1 i ++
+                  "  " ++ pref2 i ++ 
+                  "  " ++ pref3 i ++
+                  "  " ++ pref4 i ++
+                  "  " ++ rex_prefix i ++
+                  "  " ++ non_vex_opcode i ++
+                  "  " ++ mod_rm_sib i ++
+                  "  " ++ disp_imm i ++
+                  "  resize();\n"
 
 -- Assembler src definition
 assm_src_defn :: Instr -> String
@@ -1040,7 +1092,6 @@ test_operand "GS"       = ["%gs"]
 test_operand "p66"      = []
 test_operand "pw"       = []
 test_operand "far"      = []
-test_operand "norexr8"  = []
 test_operand "label"    = [".L0"]
 test_operand "hint"     = []
 test_operand o = error $ "Unrecognized test operand type: \"" ++ o ++ "\""

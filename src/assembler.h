@@ -150,6 +150,7 @@ class Assembler {
 		// Figure 2.6: Intel Manual Vol 2A 2.9
 		inline void rex(const M& rm, uint8_t val) {
 			assert(rm.check());
+
 			if ( rm.contains_base() )
 				val |= (rm.get_base()->val() >> 3);
 			if ( rm.contains_index() )
@@ -182,6 +183,47 @@ class Assembler {
 		inline void resize() {
 			if ( fxn_->capacity() - fxn_->size() < 15 ) 
 				fxn_->resize(fxn_->capacity()*2);
+		}
+
+		// Figure 2-9: Intel Manual Vol 2A 2-14
+		// For simplicity, we always emit a three-byte rex prefix. 
+		// If we want, we could change the logic here, I believe.
+		inline void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
+				            const AtomicOperand& vvvv) {
+			assert(vvvv.check());
+
+			fxn_->emit_byte(0xc4);
+			fxn_->emit_byte(mmmmm);
+			fxn_->emit_byte((w << 7) | (vvvv.val() << 3) | (l << 2) | pp); 
+		}
+
+		// Figure 2-9: Intel Manual Vol 2A 2-14
+		inline void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
+				            const AtomicOperand& vvvv, const M& rm, 
+										const AtomicOperand& r) {
+			assert(rm.check());
+			assert(r.check());	
+
+			mmmmm |= ((~r.val() << 4) & 0x80);
+			if ( rm.contains_base() )
+				mmmmm |= ((~rm.get_base()->val() << 3) & 0x40);
+			if ( rm.contains_index() )
+				mmmmm |= ((~rm.get_index()->val() << 2) & 0x20);
+
+			vex(mmmmm, l, pp, w, vvvv);
+		}
+
+		// Figure 2-9: Intel Manual Vol 2A 2-14
+		inline void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
+				            const AtomicOperand& vvvv, const AtomicOperand& rm, 
+										const AtomicOperand& r) {
+			assert(rm.check());
+			assert(r.check());
+
+			mmmmm |= ((~rm.val() << 2) & 0x20);
+			mmmmm |= ((~r.val()  << 4) & 0x80);
+
+			vex(mmmmm, l, pp, w, vvvv);
 		}
 
 		void write_txt(std::ostream& os, const Code& c, bool att);
