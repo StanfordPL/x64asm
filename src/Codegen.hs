@@ -6,24 +6,28 @@ import Text.Regex
 import Text.Regex.TDFA
 
 -------------------------------------------------------------------------------
--- Data Types 
+-- Row Data Types 
+-- Corresponds to the rows in x86.csv
 -------------------------------------------------------------------------------
 
 -- Instruction Row Type
 data Instr =
-  Instr { opcode      :: String
-        , instruction :: String
-        , op_en       :: String
-        , property    :: String
-        , mode64      :: String
-        , mode32      :: String				
-        , flag        :: String
-        , att         :: String
-        , description :: String
+  Instr { opcode      :: String -- Regular expression-ish hex encoding
+        , instruction :: String -- Regular expression-ish name and type
+        , op_en       :: String -- Operand type/position tags
+        , property    :: String -- Operand read/write/undef properties
+        , mode64      :: String -- Is this instruction valid in 64-bit mode?
+        , mode32      :: String	-- Is this instruction valid in 32-bit mode?
+        , flag        :: String -- CPUID flag
+        , att         :: String -- att mnemonic (per gcc)
+        , description :: String -- Intel manual description
         } deriving (Show)
 
 -------------------------------------------------------------------------------
--- Helper Methods
+-- Common Helper Methods
+-------------------------------------------------------------------------------
+
+-- String transforms
 -------------------------------------------------------------------------------
 
 -- Remove leading/trailing whitespace
@@ -38,6 +42,9 @@ low s = map toLower s
 -- To upper case
 up :: String -> String
 up s = map toUpper s
+
+-- Instruction modification
+-------------------------------------------------------------------------------
 
 -- Replace all occurrences of an operand
 repl_op :: Instr -> String -> String -> Instr
@@ -54,280 +61,34 @@ repl_first_op i op val = i{instruction=inst'}
                    (Just idx) -> (take idx os) ++ [val] ++ (drop (idx+1) os)
                    Nothing -> os
 
+-- Table formatting
+-------------------------------------------------------------------------------
+
 -- Transforms a list of instructions into a comma separated table
 to_table :: [Instr] -> (Instr -> String) -> String
 to_table is f = intercalate "\n" $ map elem is
   where elem i = ", " ++ (f i) ++ " // " ++ instruction i
 
--------------------------------------------------------------------------------
--- Read Input File
--------------------------------------------------------------------------------
-
--- Step 0: Read input file
+-- Opcode related
 -------------------------------------------------------------------------------
 
--- Read a row
-read_instr :: String -> Instr
-read_instr s = let (o:i:e:p:m64:m32:f:a:d:[]) = splitOn "\t" s in 
-                   (Instr (trim o) (trim i) 
-                          (trim e) (trim p)
-                          (trim m64) (trim m32) 
-                          (trim f) 
-                          (trim a) (trim d))
-
--- Read all rows
-read_instrs :: String -> [Instr]
-read_instrs s = map read_instr $ lines s
-
--- Step 1: Remove formatting
--------------------------------------------------------------------------------
-
--- Remove title row and empty rows		
-remove_format :: [Instr] -> [Instr]
-remove_format is = filter (\x -> keep x) is
-    where keep i = (opcode i) /= "" && 
-                   (opcode i) /= "Opcode" &&
-                   (instruction i) /= "(No mnemonic)"
-
--- Step 2: Remove instructions which are invalid in 64-bit mode
--------------------------------------------------------------------------------
-
--- Filters out valid 64-bit mode instructions
-x64 :: [Instr] -> [Instr]
-x64 is = filter (\x -> (mode64 x) == "V") is
-
--- Step 3: Split instructions with implicit or explicit disjunct operands
--------------------------------------------------------------------------------
-
--- Identifies a disjunct operand
-disjunct_idx :: Instr -> Maybe Int
-disjunct_idx i = findIndex d $ operands i
-  where d o = ('/' `elem` o) || (o == "reg") || (o == "m") || (o == "mem")
-
--- Split a disjunct operand into parts
-split_op :: String -> [String]
-split_op "r/m8" = ["r8","m8"]
-split_op "r/m16" = ["r16","m16"]
-split_op "r/m32" = ["r32","m32"]
-split_op "r/m64" = ["r64","m64"]
-split_op "reg/m32" = ["r32","r64","m32"]
-split_op "m14/28byte" = ["m14byte","m28byte"]
-split_op "m94/108byte" = ["m94byte","m108byte"]
-split_op "reg/m8" = ["r32","r64","m8"]
-split_op "reg/m16" = ["r32","r64","m16"]
-split_op "reg" = ["r32","r64"]
-split_op "m" = ["m16","m32","m64"]
-split_op "mem" = ["m16","m32","m64"]
-split_op o
-  | '/' `elem` o = splitOn "/" o
-  | otherwise = error $ "Can't split non-disjunct operand " ++ o
-
--- Flatten instructions with disjunct operands
-flatten_instr :: Instr -> [Instr]
-flatten_instr i = case disjunct_idx i of
-  Nothing    -> [i]
-  (Just idx) -> map (repl_op i op) vals
-    where op = (operands i) !! idx
-          vals = split_op op
-
--- Flatten all instructions
--- Instructions can have up to two disjucnt operands (thus the double call)
-flatten_instrs :: [Instr] -> [Instr]
-flatten_instrs is = concat $ map flatten_instr $ 
-                    concat $ map flatten_instr is
-
--- Step 4: Canonicalize operand symbols
--------------------------------------------------------------------------------
-
--- Canonical operand symbols
-canonical_op :: String -> String
-canonical_op "mm1"   = "mm"
-canonical_op "mm2"   = "mm"
-canonical_op "xmm1"  = "xmm"
-canonical_op "xmm2"  = "xmm"
-canonical_op "xmm3"  = "xmm"
-canonical_op "xmm4"  = "xmm"
-canonical_op "ymm1"  = "ymm"
-canonical_op "ymm2"  = "ymm"
-canonical_op "ymm3"  = "ymm"
-canonical_op "ymm4"  = "ymm"
-canonical_op "ST(0)" = "ST"
-canonical_op "ST(i)" = "ST(i)"
-canonical_op o = o
-
--- Canonicalize operands where synonyms were used
-fix_op :: Instr -> Instr
-fix_op i = i{instruction=inst}
-  where inst = (raw_mnemonic i) ++ " " ++ (intercalate ", " (ops i))
-        ops i = map canonical_op $ operands i	
-
--- Canonicalize operands for all instructions
-fix_ops :: [Instr] -> [Instr]
-fix_ops is = map fix_op is
-
--- Step 5: Fix up REX rows
--------------------------------------------------------------------------------
-
--- Split a row with an r8 operand into two alternatives
-split_r8 :: String -> String -> Instr -> [Instr]
-split_r8 alt1 alt2 i = case "r8" `elem` (operands i) of
-  True ->  [(repl_first_op i "r8" alt1), (repl_first_op i "r8" alt2)]
-  False -> [i]
-
--- Replace r8 in rew rows by rl and rb
-fix_rex_r8 :: Instr -> [Instr]
-fix_rex_r8 i = case "REX+" `elem` (opcode_terms i) of
-  True  -> concat $ map (split_r8 "rl" "rb") $ split_r8 "rl" "rb" i
-  False -> [i]
-
--- Replace r8 in non-rex rows by rl and rh
-fix_norex_r8 :: Instr -> [Instr]
-fix_norex_r8 i = case "REX+" `notElem` (opcode_terms i) of
-  True  -> concat $ map (split_r8 "rl" "rh") $ split_r8 "rl" "rh" i
-  False -> [i]
-
--- Replace an r8 in a rex row if necessary
-fix_rex_row :: Instr -> [Instr]
-fix_rex_row i = concat $ map fix_norex_r8 $ fix_rex_r8 i
-
--- Does this row have r8 operands?
-r8_row :: Instr -> Bool
-r8_row i = "rl" `elem` os || "rh" `elem` os || "rb" `elem` os
-  where os = operands i
-
--- Is this one of three instructions that require REX+ no matter what
-needs_rex :: Instr -> Bool
-needs_rex i = mn == "LSS" || mn == "LFS" || mn == "LGS"
-  where mn = raw_mnemonic i
-
--- Remove REX+ rows which correspond to r/m8 splits
-remove_m8_rex :: [Instr] -> [Instr]
-remove_m8_rex is = filter keep is
-  where keep i = "REX+" `notElem` (opcode_terms i) || r8_row i || needs_rex i
-
--- Fix all rex rows
-fix_rex_rows :: [Instr] -> [Instr]
-fix_rex_rows is = remove_m8_rex $ concat $ map fix_rex_row is
-
--- Step 6: Remove duplicate rows by prefering shortest encoding
--------------------------------------------------------------------------------
-
--- Returns the instruction with the shortest encoding
-shortest :: [Instr] -> Instr
-shortest is = minimumBy encoding is
-  where encoding i1 i2 = compare (len i1) (len i2)
-        len i = (length (opcode_terms i))
-
--- Remove ambiguity by prefering the shortest encoding
-remove_ambiguity :: [Instr] -> [Instr]
-remove_ambiguity is = map shortest $ groupBy eq $ sortBy srt is
-  where srt x y = compare (assm_decl x) (assm_decl y)
-        eq x y = (assm_decl x) == (assm_decl y)	
-
--- Step 7: Insert prefixes and operands
--------------------------------------------------------------------------------
-
--- Inserts PREF.66+ for instructions with 16-bit operands
--- This ignores DX which I think is always an implicit operand (CHECK THIS)
--- NOTE: This is unnecessary for the p66 operand which comes with PREF.66+
-insert_pref66 :: Instr -> Instr
-insert_pref66 i = case r16 || m16 || ax || imm16 of
-  True  -> i{opcode=("PREF.66+ " ++ (opcode i))}
-  False -> i
-  where r16   = "r16"   `elem` (operands i)
-        m16   = "m16"   `elem` (operands i)
-        ax    = "AX"    `elem` (operands i)
-        imm16 = "imm16" `elem` (operands i)
-
--- Inserts a label variant for instructions that take rel operands
-insert_label_variant :: Instr -> [Instr]
-insert_label_variant i
-  | "rel32" `elem` (operands i) =
-    [i
-    ,i{instruction=(subRegex (mkRegex "rel32") (instruction i) "label")
-      ,opcode=(subRegex (mkRegex "cd") (opcode i) "0d")}]	
-	| otherwise = [i]
-
--- Inserts a hint variant for conditional jumps
-insert_hint_variant :: Instr -> [Instr]
-insert_hint_variant i = case is_cond_jump i of
-  True -> [i,i{instruction=(instruction i ++ ", hint"),
-               property=(property i ++ ", I")}]
-  False -> [i]
-
--- Inserts everything that's missing
-insert_missing :: [Instr] -> [Instr]
-insert_missing is = concat $ map insert_label_variant $
-                    concat $ map insert_hint_variant $
-                    map insert_pref66 is
-
--------------------------------------------------------------------------------
--- Debugging
--------------------------------------------------------------------------------
-
--- Generate a list of unique mnemonics
-uniq_mnemonics :: [Instr] -> [String]
-uniq_mnemonics is = nub $ map raw_mnemonic is
-
--- Generate a list of unique operands
-uniq_operands :: [Instr] -> [String]
-uniq_operands is = nub $ concat $ map nub $ map operands is 
-
--- Generate a list of unique operand types
-uniq_operand_types :: [Instr] -> [String]
-uniq_operand_types is = map op2type $ uniq_operands is
-
--- Generate a list of unique opcode terms
-uniq_opc_terms :: [Instr] -> [String]
-uniq_opc_terms is = nub $ concat $ map opcode_terms is
-
--- Generate a list of unique op/ens
-uniq_op_en :: [Instr] -> [String]
-uniq_op_en is = nub $ map op_en is
-
--- Generate a list of ambiguous declarations
-ambig_decls :: [Instr] -> [[Instr]]
-ambig_decls is = filter ambig $ groupBy eq $ sortBy srt is
-  where srt x y = compare (assm_decl x) (assm_decl y)
-        eq x y = (assm_decl x) == (assm_decl y)	
-        ambig x = (length x) > 1
-
--- Pretty print version of ambig_decls
-ambig_decls_pretty :: [Instr] -> [String]
-ambig_decls_pretty is = map pretty $ ambig_decls is
-  where pretty xs = (instruction (head xs)) ++ ":" ++ (concat (map elem xs))
-        elem x = "\n\t" ++ (opcode x)
-
--- Do operand and property arities always match?
-property_arity_check :: [Instr] -> IO ()
-property_arity_check is = sequence_ $ map check is
-  where check i = case (length (operands i)) == (length (properties i)) of
-                       True -> return ()
-                       False -> error $ "Property error for " ++ (opcode i)
-
--------------------------------------------------------------------------------
--- Views (transformations on row data into usable forms)
--------------------------------------------------------------------------------
-
--- Separate opcode terms
+-- Extract opcode terms
 opcode_terms :: Instr -> [String]
 opcode_terms i = splitOn " " (opcode i)
 
--- Is this opcode term a prefix?
--- Does it refer to bytes which must appear before the rex prefix?
--- 66 is a mandatory prefix with different semantics from PREF.66+.
--- Ditto for F2 and F3 which are otherwise REP prefixes.
+-- Is this a prefix (ie: a byte that must appear before the REX prefix byte)?
 is_prefix :: String -> Bool
 is_prefix "PREF.66+" = True
-is_prefix "REX.W+" = True
-is_prefix "REX.R+" = True
-is_prefix "REX+" = True
-is_prefix "66" = True
-is_prefix "F2" = True
-is_prefix "F3" = True
+is_prefix "66"       = True -- Not the same as PREF.66+; different semantics
+is_prefix "REX.W+"   = True
+is_prefix "REX.R+"   = True
+is_prefix "REX+"     = True
+is_prefix "F2"       = True -- Not the same as REP; different semantics
+is_prefix "F3"       = True -- Not the same as REP; different semantics
+is_prefix ('V':_)    = True -- VEX Prefixes all start with a V
 is_prefix _ = False
 
--- Is this opcode term a suffix?
+-- Is this a suffix?
 is_suffix :: String -> Bool
 is_suffix ('+':_) = True
 is_suffix ('/':_) = True
@@ -335,168 +96,47 @@ is_suffix ('i':_) = True
 is_suffix ('c':_) = True
 is_suffix _ = False
 
--- Is this opcode term a digit?
+-- Is this a mod r/m digit?
 is_digit :: String -> Bool
 is_digit ('/':d:_) = isDigit d
 is_digit _ = False
 
--- Extracts opcode prefix bytes
+-- Extracts prefix bytes
 opcode_prefix :: Instr -> [String]
 opcode_prefix i = takeWhile is_prefix $ opcode_terms i
 
--- Extracts opcode bytes (non rex prefix or suffix terms) from opcode terms
+-- Extracts opcode bytes 
 opcode_bytes :: Instr -> [String]
 opcode_bytes i = (dropWhile is_prefix) . (takeWhile not_suffix) $ ts
   where not_suffix t = not $ is_suffix t
         ts = opcode_terms i
 
--- Extracts opcode suffix bytes
+-- Extracts suffix bytes
 opcode_suffix :: Instr -> [String]
 opcode_suffix i = (dropWhile is_prefix) . (dropWhile not_suffix) $ ts
   where not_suffix t = not $ is_suffix t
         ts = opcode_terms i
 
--- Is this a register coded opcode instruction?
-is_register_coded :: Instr -> Bool
-is_register_coded i
-  | "+RB" `elem` opcode_suffix i = True
-  | "+RW" `elem` opcode_suffix i = True
-  | "+RD" `elem` opcode_suffix i = True
-  | "+RO" `elem` opcode_suffix i = True
-  | "+I"  `elem` opcode_suffix i = True
-  | otherwise = False
+-- Instruction related
+-------------------------------------------------------------------------------
 
--- Returns true for an operand which is a register code parameter
-is_register_code_arg :: String -> Bool
-is_register_code_arg "rl" = True
-is_register_code_arg "rh" = True
-is_register_code_arg "rb" = True
-is_register_code_arg "r16" = True
-is_register_code_arg "r32" = True
-is_register_code_arg "r64" = True
-is_register_code_arg "ST(i)" = True
-is_register_code_arg _ = False
-
--- Extracts raw mnemonic from instruction
+-- Extract raw mnemonic
 raw_mnemonic :: Instr -> String
 raw_mnemonic i = head $ words $ instruction i
 
--- Extract operands from instruction
-operands :: Instr -> [String]
-operands i = let x = (splitOn ",") $ concat $ tail $ words (instruction i) in
-	filter (\o -> o /= "") x
-
--- Extract properties from property
-properties :: Instr -> [String]
-properties i = let x = map trim $ (splitOn ",") $ property i in
-  filter (\p -> p /= "") x
-
--- Transform operand notation into type
-op2type :: String -> String
-op2type "rl"       = "Rl"
-op2type "rh"       = "Rh"
-op2type "rb"       = "Rb"
-op2type "r16"      = "R16"
-op2type "r32"      = "R32"
-op2type "r64"      = "R64"
-op2type "AL"       = "Al"
-op2type "CL"       = "Cl"
-op2type "AX"       = "Ax"
-op2type "DX"       = "Dx"
-op2type "EAX"      = "Eax" 
-op2type "RAX"      = "Rax"
-op2type "m8"       = "M8"
-op2type "m16"      = "M16"
-op2type "m32"      = "M32"
-op2type "m64"      = "M64"
-op2type "m128"     = "M128"
-op2type "m256"     = "M256"
-op2type "m16&64"   = "MPair1664"
-op2type "m16:16"   = "MPtr1616" 
-op2type "m16:32"   = "MPtr1632"
-op2type "m16:64"   = "MPtr1664"
-op2type "m16int"   = "M16Int"
-op2type "m32int"   = "M32Int"
-op2type "m64int"   = "M64Int"
-op2type "m80bcd"   = "M80Bcd" 
-op2type "m32fp"    = "M32Fp"
-op2type "m64fp"    = "M64Fp"
-op2type "m80fp"    = "M80Fp"
-op2type "m2byte"   = "M2Byte" 
-op2type "m14byte"  = "M14Byte" 
-op2type "m28byte"  = "M28Byte" 
-op2type "m94byte"  = "M94Byte" 
-op2type "m108byte" = "M108Byte" 
-op2type "m512byte" = "M512Byte" 
-op2type "imm8"     = "Imm8"
-op2type "imm16"    = "Imm16"
-op2type "imm32"    = "Imm32"
-op2type "imm64"    = "Imm64"
-op2type "0"        = "Zero"
-op2type "1"        = "One"
-op2type "3"        = "Three"
-op2type "mm"       = "Mm"
-op2type "xmm"      = "Xmm"
-op2type "<XMM0>"   = "Xmm0"
-op2type "ymm"      = "Ymm"
-op2type "ST"       = "St0"
-op2type "ST(i)"    = "St"
-op2type "rel8"     = "Rel8"
-op2type "rel32"    = "Rel32"
-op2type "moffs8"   = "Moffs8"
-op2type "moffs16"  = "Moffs16"
-op2type "moffs32"  = "Moffs32"
-op2type "moffs64"  = "Moffs64"
-op2type "CR0-CR7"  = "Cr0234" 
-op2type "CR8"      = "Cr8"
-op2type "DR0-DR7"  = "Dr" 
-op2type "Sreg"     = "Sreg"
-op2type "FS"       = "Fs"
-op2type "GS"       = "Gs"
--- Below this point are operand types we have introduced
-op2type "p66"      = "Pref66"
-op2type "pw"       = "PrefRexW"
-op2type "far"      = "Far"
-op2type "norexr8"  = "NoRexR8"
-op2type "label"    = "Label"
-op2type "hint"     = "Hint"
-op2type o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
-
--- Separate cpuid feature flags
-flags :: Instr -> [String]
-flags i = splitOn " " $ flag i
-
--- Is this instruction VEX encoded?
-is_vex_encoded :: Instr -> Bool
-is_vex_encoded i = ("AVX" `elem` fs) || ("F16C" `elem` fs)
-  where fs = flags i
-
--- Is this a string instruction?
-is_string_instr :: Instr -> Bool
-is_string_instr i = let mn = raw_mnemonic i in
-  (mn == "CMPS")  || 
-	(mn == "CMPSB") || (mn == "CMPSW") || (mn == "CMPSD") || (mn =="CMPSQ") ||
-  (mn == "INS")   || 
-	(mn == "INSB")  || (mn == "INSW")  || (mn == "INSD")  ||
-  (mn == "LODS")  || 
-	(mn == "LODSB") || (mn == "LODSW") || (mn == "LODSD") || (mn =="LODSQ") ||
-  (mn == "MOVS")  || 
-	(mn == "MOVSB") || (mn == "MOVSW") || (mn == "MOVSD") || (mn =="MOVSQ") ||
-  (mn == "OUTS")  ||
-	(mn == "OUTB")  || (mn == "OUTSW") || (mn == "OUTSD") ||
-  (mn == "SCAS")  || 
-	(mn == "SCASB") || (mn == "SCASW") || (mn == "SCASD") || (mn =="SCASQ") ||
-  (mn == "STOS")  || 
-	(mn == "STOSB") || (mn == "STOSW") || (mn == "STOSD") || (mn =="STOSQ")
-
--- Is this a conditional jump?
+-- Returns true for conditional jump instructions
 is_cond_jump :: Instr -> Bool
 is_cond_jump i = let mn = raw_mnemonic i in
   head mn == 'J' && mn /= "JMP"
 
--- Is this an unconditional jump?
+-- Returns true for unconditional jump instructions
 is_uncond_jump :: Instr -> Bool
 is_uncond_jump i = raw_mnemonic i == "JMP"
+
+-- Extract operands 
+operands :: Instr -> [String]
+operands i = let x = (splitOn ",") $ concat $ tail $ words (instruction i) in
+	filter (\o -> o /= "") x
 
 -- Returns true for register operands
 reg_op :: String -> Bool
@@ -599,20 +239,347 @@ xmm_op "xmm"    = True
 xmm_op "<XMM0>" = True
 xmm_op _        = False
 
--- Returns true for any form of displacement or immediate operand
-disp_imm_op :: String -> Bool
-disp_imm_op o = imm_op o || moffs_op o || rel_op o || label_op o
+-- Transform operand into type
+op2type :: String -> String
+op2type "rl"       = "Rl"
+op2type "rh"       = "Rh"
+op2type "rb"       = "Rb"
+op2type "r16"      = "R16"
+op2type "r32"      = "R32"
+op2type "r64"      = "R64"
+op2type "AL"       = "Al"
+op2type "CL"       = "Cl"
+op2type "AX"       = "Ax"
+op2type "DX"       = "Dx"
+op2type "EAX"      = "Eax" 
+op2type "RAX"      = "Rax"
+op2type "m8"       = "M8"
+op2type "m16"      = "M16"
+op2type "m32"      = "M32"
+op2type "m64"      = "M64"
+op2type "m128"     = "M128"
+op2type "m256"     = "M256"
+op2type "m16&64"   = "MPair1664"
+op2type "m16:16"   = "MPtr1616" 
+op2type "m16:32"   = "MPtr1632"
+op2type "m16:64"   = "MPtr1664"
+op2type "m16int"   = "M16Int"
+op2type "m32int"   = "M32Int"
+op2type "m64int"   = "M64Int"
+op2type "m80bcd"   = "M80Bcd" 
+op2type "m32fp"    = "M32Fp"
+op2type "m64fp"    = "M64Fp"
+op2type "m80fp"    = "M80Fp"
+op2type "m2byte"   = "M2Byte" 
+op2type "m14byte"  = "M14Byte" 
+op2type "m28byte"  = "M28Byte" 
+op2type "m94byte"  = "M94Byte" 
+op2type "m108byte" = "M108Byte" 
+op2type "m512byte" = "M512Byte" 
+op2type "imm8"     = "Imm8"
+op2type "imm16"    = "Imm16"
+op2type "imm32"    = "Imm32"
+op2type "imm64"    = "Imm64"
+op2type "0"        = "Zero"
+op2type "1"        = "One"
+op2type "3"        = "Three"
+op2type "mm"       = "Mm"
+op2type "xmm"      = "Xmm"
+op2type "<XMM0>"   = "Xmm0"
+op2type "ymm"      = "Ymm"
+op2type "ST"       = "St0"
+op2type "ST(i)"    = "St"
+op2type "rel8"     = "Rel8"
+op2type "rel32"    = "Rel32"
+op2type "moffs8"   = "Moffs8"
+op2type "moffs16"  = "Moffs16"
+op2type "moffs32"  = "Moffs32"
+op2type "moffs64"  = "Moffs64"
+op2type "CR0-CR7"  = "Cr0234" 
+op2type "CR8"      = "Cr8"
+op2type "DR0-DR7"  = "Dr" 
+op2type "Sreg"     = "Sreg"
+op2type "FS"       = "Fs"
+op2type "GS"       = "Gs"
+-- Below this point are operand types we have introduced
+op2type "p66"      = "Pref66"
+op2type "pw"       = "PrefRexW"
+op2type "far"      = "Far"
+op2type "label"    = "Label"
+op2type "hint"     = "Hint"
+op2type o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
 
--- Does this instruction have a memory operand?
-mem_index :: Instr -> Maybe Int
-mem_index i = findIndex mem_op (operands i) 
+-- Property related
+-------------------------------------------------------------------------------
 
--- Does this instruction have a displacement or immediate operand
-disp_imm_index :: Instr -> Maybe Int
-disp_imm_index i = findIndex disp_imm_op (operands i)
+-- Extract properties
+properties :: Instr -> [String]
+properties i = let x = map trim $ (splitOn ",") $ property i in
+  filter (\p -> p /= "") x
+
+-- Flag related
+-------------------------------------------------------------------------------
+
+-- Separate cpuid feature flags
+flags :: Instr -> [String]
+flags i = splitOn " " $ flag i
+
+-- Is this instruction VEX encoded?
+is_vex_encoded :: Instr -> Bool
+is_vex_encoded i = ("AVX" `elem` fs) || ("F16C" `elem` fs)
+  where fs = flags i
 
 -------------------------------------------------------------------------------
--- code codegen
+-- Data parsing
+-------------------------------------------------------------------------------
+
+-- Step 0: Read input file
+-------------------------------------------------------------------------------
+
+-- Read a row
+read_instr :: String -> Instr
+read_instr s = let (o:i:e:p:m64:m32:f:a:d:[]) = splitOn "\t" s in 
+                   (Instr (trim o) (trim i) 
+                          (trim e) (trim p)
+                          (trim m64) (trim m32) 
+                          (trim f) 
+                          (trim a) (trim d))
+
+-- Read all rows
+read_instrs :: String -> [Instr]
+read_instrs s = map read_instr $ lines s
+
+-- Step 1: Remove formatting
+-------------------------------------------------------------------------------
+
+-- Remove title row and empty rows		
+remove_format :: [Instr] -> [Instr]
+remove_format is = filter (\x -> keep x) is
+    where keep i = (opcode i) /= "" && 
+                   (opcode i) /= "Opcode" &&
+                   (instruction i) /= "(No mnemonic)"
+
+-- Step 2: Remove instructions which are invalid in 64-bit mode
+-------------------------------------------------------------------------------
+
+-- Filter out valid 64-bit mode instructions
+x64 :: [Instr] -> [Instr]
+x64 is = filter (\x -> (mode64 x) == "V") is
+
+-- Step 3: Split instructions with implicit or explicit disjunct operands
+-------------------------------------------------------------------------------
+
+-- Identifies a disjunct operand
+disjunct_idx :: Instr -> Maybe Int
+disjunct_idx i = findIndex disj $ operands i
+  where disj o = ('/' `elem` o) || (o == "reg") || (o == "m") || (o == "mem")
+
+-- Split a disjunct operand into its constituent parts
+split_op :: String -> [String]
+split_op "r/m8" = ["r8","m8"]
+split_op "r/m16" = ["r16","m16"]
+split_op "r/m32" = ["r32","m32"]
+split_op "r/m64" = ["r64","m64"]
+split_op "reg/m32" = ["r32","r64","m32"]
+split_op "m14/28byte" = ["m14byte","m28byte"]
+split_op "m94/108byte" = ["m94byte","m108byte"]
+split_op "reg/m8" = ["r32","r64","m8"]
+split_op "reg/m16" = ["r32","r64","m16"]
+split_op "reg" = ["r32","r64"]
+split_op "m" = ["m16","m32","m64"]
+split_op "mem" = ["m16","m32","m64"]
+split_op o
+  | '/' `elem` o = splitOn "/" o
+  | otherwise = error $ "Can't split non-disjunct operand " ++ o
+
+-- Flatten instructions with disjunct operands
+flatten_instr :: Instr -> [Instr]
+flatten_instr i = case disjunct_idx i of
+  Nothing    -> [i]
+  (Just idx) -> map (repl_op i op) vals
+    where op = (operands i) !! idx
+          vals = split_op op
+
+-- Flatten all instructions
+-- Instructions can have up to two disjucnt operands (thus the double call)
+flatten_instrs :: [Instr] -> [Instr]
+flatten_instrs is = concat $ map flatten_instr $ 
+                    concat $ map flatten_instr is
+
+-- Step 4: Canonicalize operand symbols
+-------------------------------------------------------------------------------
+
+-- Canonical operand symbols
+canonical_op :: String -> String
+canonical_op "mm1"   = "mm"
+canonical_op "mm2"   = "mm"
+canonical_op "xmm1"  = "xmm"
+canonical_op "xmm2"  = "xmm"
+canonical_op "xmm3"  = "xmm"
+canonical_op "xmm4"  = "imm8" -- Not a bug! This is a bitmask reference
+canonical_op "ymm1"  = "ymm"
+canonical_op "ymm2"  = "ymm"
+canonical_op "ymm3"  = "ymm"
+canonical_op "ymm4"  = "imm8" -- Not a bug! This is a bitmask reference
+canonical_op "ST(0)" = "ST"
+canonical_op "ST(i)" = "ST(i)"
+canonical_op o = o
+
+-- Canonicalize operands where synonyms were used
+fix_op :: Instr -> Instr
+fix_op i = i{instruction=inst}
+  where inst = (raw_mnemonic i) ++ " " ++ (intercalate ", " (ops i))
+        ops i = map canonical_op $ operands i	
+
+-- Canonicalize operands for all instructions
+fix_ops :: [Instr] -> [Instr]
+fix_ops is = map fix_op is
+
+-- Step 5: Fix up REX rows
+-------------------------------------------------------------------------------
+
+-- Split a row with an r8 operand into two alternatives
+split_r8 :: String -> String -> Instr -> [Instr]
+split_r8 alt1 alt2 i = case "r8" `elem` (operands i) of
+  True ->  [(repl_first_op i "r8" alt1), (repl_first_op i "r8" alt2)]
+  False -> [i]
+
+-- Replace r8 in rew rows by rl and rb
+fix_rex_r8 :: Instr -> [Instr]
+fix_rex_r8 i = case "REX+" `elem` (opcode_terms i) of
+  True  -> concat $ map (split_r8 "rl" "rb") $ split_r8 "rl" "rb" i
+  False -> [i]
+
+-- Replace r8 in non-rex rows by rl and rh
+fix_norex_r8 :: Instr -> [Instr]
+fix_norex_r8 i = case "REX+" `notElem` (opcode_terms i) of
+  True  -> concat $ map (split_r8 "rl" "rh") $ split_r8 "rl" "rh" i
+  False -> [i]
+
+-- Replace an r8 in a rex row if necessary
+fix_rex_row :: Instr -> [Instr]
+fix_rex_row i = concat $ map fix_norex_r8 $ fix_rex_r8 i
+
+-- Does this row have r8 operands?
+r8_row :: Instr -> Bool
+r8_row i = "rl" `elem` os || "rh" `elem` os || "rb" `elem` os
+  where os = operands i
+
+-- Is this one of three instructions that require REX+ no matter what
+needs_rex :: Instr -> Bool
+needs_rex i = mn == "LSS" || mn == "LFS" || mn == "LGS"
+  where mn = raw_mnemonic i
+
+-- Remove REX+ rows which correspond to r/m8 splits
+remove_m8_rex :: [Instr] -> [Instr]
+remove_m8_rex is = filter keep is
+  where keep i = "REX+" `notElem` (opcode_terms i) || r8_row i || needs_rex i
+
+-- Fix all rex rows
+fix_rex_rows :: [Instr] -> [Instr]
+fix_rex_rows is = remove_m8_rex $ concat $ map fix_rex_row is
+
+-- Step 6: Remove duplicate rows by prefering shortest encoding
+-------------------------------------------------------------------------------
+
+-- Returns the instruction with the shortest encoding
+shortest :: [Instr] -> Instr
+shortest is = minimumBy encoding is
+  where encoding i1 i2 = compare (len i1) (len i2)
+        len i = (length (opcode_terms i))
+
+-- Remove ambiguity by prefering the shortest encoding
+remove_ambiguity :: [Instr] -> [Instr]
+remove_ambiguity is = map shortest $ groupBy eq $ sortBy srt is
+  where srt x y = compare (assm_decl x) (assm_decl y)
+        eq x y = (assm_decl x) == (assm_decl y)	
+
+-- Step 7: Insert prefixes and operands
+-------------------------------------------------------------------------------
+
+-- Inserts PREF.66+ for instructions with 16-bit operands
+-- This ignores DX which only appears as an implicit operand to string instrs
+-- VEX instructions are not modifed (the override is encoded differently)
+insert_pref66 :: Instr -> Instr
+insert_pref66 i = case r16 || m16 || ax || imm16 of
+  True  -> i{opcode=("PREF.66+ " ++ (opcode i))}
+  False -> i
+  where r16   = "r16"   `elem` (operands i)
+        m16   = "m16"   `elem` (operands i) && not (is_vex_encoded i)
+        ax    = "AX"    `elem` (operands i)
+        imm16 = "imm16" `elem` (operands i)
+
+-- Inserts a label variant for instructions that take rel operands
+insert_label_variant :: Instr -> [Instr]
+insert_label_variant i
+  | "rel32" `elem` (operands i) =
+    [i
+    ,i{instruction=(subRegex (mkRegex "rel32") (instruction i) "label")
+      ,opcode=(subRegex (mkRegex "cd") (opcode i) "0d")}]	
+	| otherwise = [i]
+
+-- Inserts a hint variant for conditional jumps
+insert_hint_variant :: Instr -> [Instr]
+insert_hint_variant i = case is_cond_jump i of
+  True -> [i,i{instruction=(instruction i ++ ", hint"),
+               property=(property i ++ ", I")}]
+  False -> [i]
+
+-- Inserts everything that's missing
+insert_missing :: [Instr] -> [Instr]
+insert_missing is = concat $ map insert_label_variant $
+                    concat $ map insert_hint_variant $
+                    map insert_pref66 is
+
+-------------------------------------------------------------------------------
+-- Debugging
+-------------------------------------------------------------------------------
+
+-- Generate a list of unique mnemonics
+uniq_mnemonics :: [Instr] -> [String]
+uniq_mnemonics is = nub $ map raw_mnemonic is
+
+-- Generate a list of unique operands
+uniq_operands :: [Instr] -> [String]
+uniq_operands is = nub $ concat $ map nub $ map operands is 
+
+-- Generate a list of unique operand types
+uniq_operand_types :: [Instr] -> [String]
+uniq_operand_types is = map op2type $ uniq_operands is
+
+-- Generate a list of unique opcode terms
+uniq_opc_terms :: [Instr] -> [String]
+uniq_opc_terms is = nub $ concat $ map opcode_terms is
+
+-- Generate a list of unique op/ens
+uniq_op_en :: [Instr] -> [String]
+uniq_op_en is = nub $ map op_en is
+
+-- Generate a list of ambiguous declarations
+ambig_decls :: [Instr] -> [[Instr]]
+ambig_decls is = filter ambig $ groupBy eq $ sortBy srt is
+  where srt x y = compare (assm_decl x) (assm_decl y)
+        eq x y = (assm_decl x) == (assm_decl y)	
+        ambig x = (length x) > 1
+
+-- Pretty print version of ambig_decls
+ambig_decls_pretty :: [Instr] -> [String]
+ambig_decls_pretty is = map pretty $ ambig_decls is
+  where pretty xs = (instruction (head xs)) ++ ":" ++ (concat (map elem xs))
+        elem x = "\n\t" ++ (opcode x)
+
+-- Do operand and property arities always match?
+property_arity_check :: [Instr] -> IO ()
+property_arity_check is = sequence_ $ map check is
+  where check i = case (length (operands i)) == (length (properties i)) of
+                       True -> return ()
+                       False -> error $ "Property error for " ++ (opcode i)
+
+-------------------------------------------------------------------------------
+-- Codegen
+-------------------------------------------------------------------------------
+
+-- Opcode
 -------------------------------------------------------------------------------
 
 -- Converts an instruction into an Opcode enum value
@@ -624,6 +591,9 @@ opcode_enum i = intercalate "_" $ (mnem i) : (ops i)
 -- Converts all instructions to Opcode enum values
 opcode_enums :: [Instr] -> String
 opcode_enums is = to_table is opcode_enum
+
+-- Instruction
+-------------------------------------------------------------------------------
 
 -- Converts an instruction to arity table row
 arity_row :: Instr -> String
@@ -777,8 +747,7 @@ att_mnemonic i = "\"" ++ (att i) ++ "\""
 att_mnemonics :: [Instr] -> String
 att_mnemonics is = intercalate "\n" $ map (", "++) $ map att_mnemonic is
 
--------------------------------------------------------------------------------
--- assembler codegen
+-- Common Assembler strings
 -------------------------------------------------------------------------------
 
 -- Assembler mnemonic
@@ -816,6 +785,9 @@ assm_decl i = "void " ++
               (assm_arg_list i) ++
               ")"
 
+-- Assembler header declarations
+-------------------------------------------------------------------------------
+
 -- Assembler header declaration
 assm_header_decl :: Instr -> String
 assm_header_decl i = (assm_doxy i) ++ "\n" ++ (assm_decl i) ++ ";"
@@ -824,65 +796,37 @@ assm_header_decl i = (assm_doxy i) ++ "\n" ++ (assm_decl i) ++ ";"
 assm_header_decls :: [Instr] -> String
 assm_header_decls is = intercalate "\n\n" $ map assm_header_decl is
 
--- Assembler src definition
-assm_src_defn :: Instr -> String
-assm_src_defn i = "void Assembler::" ++
-                  (assm_mnemonic i) ++
-                  "(" ++
-                  (assm_arg_list i) ++
-                  ") {\n" ++
-                  body i ++ 
-                  "}"
-  where body i = case is_vex_encoded i of
-                      True  -> assm_vex_defn i
-                      False -> assm_oth_defn i
-
--- VEX encoded instruction definition
-assm_vex_defn :: Instr -> String
-assm_vex_defn i = "// VEX-Encoded Instruction: \n" ++
-                  "// TODO...\n"
-
--- Other instruction definition
-assm_oth_defn :: Instr -> String
-assm_oth_defn i = "// Non-VEX-Encoded Instruction: \n" ++
-                  pref1 i ++
-                  pref2 i ++ 
-                  pref3 i ++
-                  pref4 i ++
-                  rex i ++
-                  opc i ++
-                  mod_rm_sib i ++
-                  disp_imm i ++
-                  "resize();\n"
+-- Assembler source definitions
+-------------------------------------------------------------------------------
 
 -- Emits code for Prefix Group 1
--- This doesn't check for the lock prefix which we treat as an opcode
+-- This doesn't check for the the lock prefix which we treat as an opcode
 pref1 :: Instr -> String
 pref1 i 
-  | "F2" `elem` opcode_terms i = "pref_group1(0xf2);\n"
-  | "F3" `elem` opcode_terms i = "pref_group1(0xf3);\n"
+  | "F2" `elem` opcode_prefix i = "pref_group1(0xf2);\n"
+  | "F3" `elem` opcode_prefix i = "pref_group1(0xf3);\n"
 	| otherwise = "// No Prefix Group 1\n"
 
 -- Emits code for Prefix Group 2
 pref2 :: Instr -> String
 pref2 i
   | "hint" `elem` operands i = "pref_group2(arg1);\n"
-	| otherwise = case mem_index i of
+	| otherwise = case findIndex mem_op (operands i) of
                      (Just idx) -> "pref_group2(arg" ++ (show idx) ++ ");\n"
                      Nothing -> "// No Prefix Group 2\n"
 
 -- Emits code for Prefix Group 3 (operand size override)
 pref3 :: Instr -> String
 pref3 i 
-  | "PREF.66+" `elem` opcode_terms i = "pref_group3();\n"
-  | "66" `elem` opcode_terms i = "pref_group3();\n"
+  | "PREF.66+" `elem` opcode_prefix i = "pref_group3();\n"
+  | "66" `elem` opcode_prefix i = "pref_group3();\n"
   | otherwise = "// No Prefix Group 3\n"
 
 -- Emits code for Prefix Group 4 (address size override)
 pref4 :: Instr -> String
-pref4 i = case mem_index i of
-  (Just idx) -> "pref_group4(arg" ++ (show idx) ++ ");\n"
-  Nothing -> "// No Prefix Group 4\n"
+pref4 i = case findIndex mem_op (operands i) of
+               (Just idx) -> "pref_group4(arg" ++ (show idx) ++ ");\n"
+               Nothing -> "// No Prefix Group 4\n"
 
 -- Explicit MOD/RM and REX args
 mod_rm_rex_args :: Instr -> String
@@ -908,9 +852,9 @@ mod_rm_rex_args i = case op_en i of
 -- Default REX arg
 def_rex :: Instr -> String
 def_rex i
-  | "REX.W+" `elem` (opcode_terms i) = ",(uint8_t)0x48"
-  | "REX.R+" `elem` (opcode_terms i) = ",(uint8_t)0x44"
-  | "REX+"   `elem` (opcode_terms i) = ",(uint8_t)0x40"
+  | "REX.W+" `elem` (opcode_prefix i) = ",(uint8_t)0x48"
+  | "REX.R+" `elem` (opcode_prefix i) = ",(uint8_t)0x44"
+  | "REX+"   `elem` (opcode_prefix i) = ",(uint8_t)0x40"
   | otherwise = ",(uint8_t)0x00"
 
 -- Emits code for REX Prefix 
@@ -919,16 +863,17 @@ rex i = case mod_rm_rex_args i of
     "" -> "// No REX Prefix\n"
     _ -> "rex(" ++ (mod_rm_rex_args i) ++ (def_rex i) ++ ");\n"
 
--- Emits code for opcode bytes
-opc :: Instr -> String
-opc i = "opcode(" ++ (bytes i) ++ (code i) ++ ");\n"
+-- Emits code for VEX opcodes
+vex_opcode :: Instr -> String
+vex_opcode i = "opcode(0x" ++ (opcode_terms i)!!1 ++ ");\n"
+
+-- Emits code for non-VEX encoded opcode bytes
+non_vex_opcode :: Instr -> String
+non_vex_opcode i = "opcode(" ++ (bytes i) ++ (code i) ++ ");\n"
   where bytes i = intercalate "," $ map (("0x"++).low) (opcode_bytes i)
-        idx i = case findIndex is_register_code_arg (operands i) of
-                     (Just n) -> show n
-                     Nothing -> "[" ++ (intercalate "," (operands i)) ++ "]"
-        code i = case is_register_coded i of
-                      True -> ",arg" ++ idx i
-                      False -> ""
+        code i = case findIndex (=='O') (op_en i) of
+                      (Just idx) -> ",arg" ++ (show idx)
+                      Nothing -> ""
 
 -- Mod R/M SIB digit argument
 digit :: Instr -> String
@@ -942,15 +887,68 @@ mod_rm_sib i = case mod_rm_rex_args i of
     "" -> "// No MOD R/M or SIB Bytes\n"
     _ -> "mod_rm_sib(" ++ (mod_rm_rex_args i) ++ (digit i) ++ ");\n"
 
+-- Does this instruction have a displacement or immediate operand?
+disp_imm_index :: Instr -> Maybe Int
+disp_imm_index i = findIndex disp_imm_op (operands i)
+  where disp_imm_op o = imm_op o || moffs_op o || rel_op o || label_op o
+
 -- Emits code for displacement or immediate bytes
 disp_imm :: Instr -> String
 disp_imm i = case disp_imm_index i of
   (Just idx) -> "disp_imm(arg" ++ (show idx) ++ ");\n"
   Nothing -> "// No Displacement/Immediate\n"
 
+-- Emits code for vex immediate byte
+vex_imm :: Instr -> String
+vex_imm i = case "/is4" `elem` (opcode_suffix i) of
+  True -> "disp_imm(arg3);\n"
+  False -> "// No VEX Immediate\n"
+
+-- VEX encoded instruction definition
+assm_vex_defn :: Instr -> String
+assm_vex_defn i = "// VEX-Encoded Instruction: \n\n" ++
+                  "// Prefix Group 1 is #UD for VEX\n" ++
+                  pref2 i ++ 
+                  "// Prefix Group 3 is #UD for VEX\n" ++
+                  pref4 i ++
+                  vex_opcode i ++
+                  mod_rm_sib i ++
+                  disp_imm i ++
+                  vex_imm i ++
+                  "resize();\n"
+
+-- Other instruction definition
+assm_oth_defn :: Instr -> String
+assm_oth_defn i = "// Non-VEX-Encoded Instruction: \n\n" ++
+                  pref1 i ++
+                  pref2 i ++ 
+                  pref3 i ++
+                  pref4 i ++
+                  rex i ++
+                  non_vex_opcode i ++
+                  mod_rm_sib i ++
+                  disp_imm i ++
+                  "resize();\n"
+
+-- Assembler src definition
+assm_src_defn :: Instr -> String
+assm_src_defn i = "void Assembler::" ++
+                  (assm_mnemonic i) ++
+                  "(" ++
+                  (assm_arg_list i) ++
+                  ") {\n" ++
+                  body i ++ 
+                  "}"
+  where body i = case is_vex_encoded i of
+                      True  -> assm_vex_defn i
+                      False -> assm_oth_defn i
+
 -- Assembler src definitions
 assm_src_defns :: [Instr] -> String
 assm_src_defns is = intercalate "\n\n" $ map assm_src_defn is
+
+-- Assembler switch code
+-------------------------------------------------------------------------------
 
 -- Assembler switch args
 assm_call_arg_list :: Instr -> String
@@ -973,7 +971,7 @@ assm_cases :: [Instr] -> String
 assm_cases is = intercalate "\n" $ map assm_case is
 
 -------------------------------------------------------------------------------
--- test/ codegen
+-- Test Codegen
 -------------------------------------------------------------------------------
 
 -- Representative values for each operand type

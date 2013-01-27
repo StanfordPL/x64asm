@@ -221,9 +221,7 @@ TODO items:
 
 assembler
 
-- Emit Mod R/M
-- Emit Rex Prefix
-- Emit Vex Instructions
+- Vex Instructions
 
 cfg
 

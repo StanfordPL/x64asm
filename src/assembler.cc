@@ -102,11 +102,10 @@ void Assembler::mod_rm_sib(const M& rm, const AtomicOperand& r) {
 	}
 
 	// This logic parallels the logic for the mod bit
-	switch ( mod ) {
-		case 0x40: disp_imm(Imm8(disp));  break;
-		case 0x80: disp_imm(Imm32(disp)); break;
-		default: break;
-	}
+	if ( mod == 0x40 )
+		disp_imm(Imm8(disp));
+	else if ( mod == 0x80 )
+		disp_imm(Imm32(disp));
 }
 
 void Assembler::write_txt(ostream& os, const Code& c, bool att) {

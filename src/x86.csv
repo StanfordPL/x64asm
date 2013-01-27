@@ -138,12 +138,12 @@ VEX.NDS.256.0F.WIG 55 /r	VANDNPS ymm1, ymm2, ymm3/m256	RVM	W, R, R	V	V	AVX	vandn
 63 /r	ARPL r/m16, r16			NE	V			Adjust RPL of r/m16 to not less than RPL of r16.
 								
 66 0F 3A 0D /r ib	BLENDPD xmm1, xmm2/m128, imm8	RMI	RW, R, R	V	V	SSE4_1	blendpd	Select packed DP-FP values from xmm1 and xmm2/m128 from mask specified in imm8 and store the values into xmm1.
-VEX.NDS.128.66.0F3A.WIG0D /r ib	VBLENDPD xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R	V	V	AVX	vblendpd	Select packed double-precision floating-point values from xmm2 and xmm3/m128 from mask in imm8 and store the values in xmm1. 
-VEX.NDS.256.66.0F3A.WIG0D /r ib	VBLENDPD ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R	V	V	AVX	vblendpd	Select packed double-precision floating-point values from ymm2 and ymm3/m256 from mask in imm8 and store the values in ymm1.
+VEX.NDS.128.66.0F3A.WIG 0D /r ib	VBLENDPD xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R	V	V	AVX	vblendpd	Select packed double-precision floating-point values from xmm2 and xmm3/m128 from mask in imm8 and store the values in xmm1. 
+VEX.NDS.256.66.0F3A.WIG 0D /r ib	VBLENDPD ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R	V	V	AVX	vblendpd	Select packed double-precision floating-point values from ymm2 and ymm3/m256 from mask in imm8 and store the values in ymm1.
 								
 66 0F 3A 0C /r ib	BLENDPS xmm1, xmm2/m128, imm8	RMI	RW, R, R	V	V	SSE4_1	blendps	Select packed single precision floating-point values from xmm1 and xmm2/m128 from mask specified in imm8 and store the values into xmm1.
-VEX.NDS.128.66.0F3A.WIG0C /r ib	VBLENDPS xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R	V	V	AVX	vblendps	Select packed single-precision floating-point values from xmm2 and xmm3/m128 from mask in imm8 and store the values in xmm1.
-VEX.NDS.256.66.0F3A.WIG0C /r ib	VBLENDPS ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R	V	V	AVX	vblendps	Select packed single-precision floating-point values from ymm2 and ymm3/m256 from mask in imm8 and store the values in ymm1.
+VEX.NDS.128.66.0F3A.WIG 0C /r ib	VBLENDPS xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R	V	V	AVX	vblendps	Select packed single-precision floating-point values from xmm2 and xmm3/m128 from mask in imm8 and store the values in xmm1.
+VEX.NDS.256.66.0F3A.WIG 0C /r ib	VBLENDPS ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R	V	V	AVX	vblendps	Select packed single-precision floating-point values from ymm2 and ymm3/m256 from mask in imm8 and store the values in ymm1.
 								
 66 0F 38 15 /r	BLENDVPD xmm1, xmm2/m128, <XMM0>	RM0	RW, R, R	V	V	SSE4_1	blendvpd	Select packed DP FP values from xmm1 and xmm2 from mask specified in XMM0 and store the values in xmm1.
 VEX.NDS.128.66.0F3A.W0 4B /r /is4	VBLENDVPD xmm1, xmm2, xmm3/m128, xmm4	RVMR	Z, R, R, R	V	V	AVX	vblendvpd	Conditionally copy double-precision floating- point values from xmm2 or xmm3/m128 to xmm1, based on mask bits in the mask operand, xmm4.
@@ -372,7 +372,7 @@ REX.W+ 0F C7 /1	CMPXCHG16B m128	M	Rw	V	NE		cmpxchg16b	Compare RDX:RAX with m128.
 VEX.LIG.66.0F.WIG 2F /r	VCOMISD xmm1, xmm2/m64	RM	R, R	V	V	AVX	vcomisd	Compare low double precision floating-point values in xmm1 and xmm2/mem64 and set the EFLAGS flags accordingly.
 								
 0F 2F /r	COMISS xmm1, xmm2/m32	RM	R, R	V	V	SSE	comiss	Compare low single-precision floating-point values in xmm1 and xmm2/mem32 and set the EFLAGS flags accordingly.
-VEX.LIG.0F.2F.WIG /r	VCOMISS xmm1, xmm2/m32	RM	R, R	V	V	AVX	vcomiss	Compare low single precision floating-point values in xmm1 and xmm2/mem32 and set the EFLAGS flags accordingly.
+VEX.LIG.0F.WIG 2F /r	VCOMISS xmm1, xmm2/m32	RM	R, R	V	V	AVX	vcomiss	Compare low single precision floating-point values in xmm1 and xmm2/mem32 and set the EFLAGS flags accordingly.
 								
 0F A2	CPUID	NP		V	V		cpuid	Returns processor identification and feature information to the EAX, EBX, ECX, and EDX registers, as determined by input entered in EAX (in some cases, ECX as well).
 								
@@ -2275,7 +2275,7 @@ VEX.256.66.0F38.W0 13 /r	VCVTPH2PS ymm1, xmm2/m128	RM	W, R	V	V	F16C	vcvtph2ps	Co
 VEX.128.66.0F38.W0 13 /r	VCVTPH2PS xmm1, xmm2/m64	RM	Z, R	V	V	F16C	vcvtph2ps	Convert four packed half precision (16-bit) floating-point values in xmm2/m64 to packed single-precision floating-point value in xmm1.
 								
 VEX.256.66.0F3A.W0 1D /r ib	VCVTPS2PH xmm1/m128, ymm2, imm8	MR	Z, R, R	V	V	F16C	vcvtps2ph	Convert eight packed single-precision floating-point value in ymm2 to packed half-precision (16-bit) floating-point value in xmm1/mem. Imm8 provides rounding controls.
-VEX.128.66.0F3A.W0.1D /r ib	VCVTPS2PH xmm1/m64, xmm2, imm8	MR	Z, R, R	V	V	F16C	vcvtps2ph	Convert four packed single-precision float- ing-point value in xmm2 to packed half- precision (16-bit) floating-point value in xmm1/mem. Imm8 provides rounding con- trols.
+VEX.128.66.0F3A.W0 1D /r ib	VCVTPS2PH xmm1/m64, xmm2, imm8	MR	Z, R, R	V	V	F16C	vcvtps2ph	Convert four packed single-precision float- ing-point value in xmm2 to packed half- precision (16-bit) floating-point value in xmm1/mem. Imm8 provides rounding con- trols.
 								
 0F 00 /4	VERR r/m16	M	R	V	V		verr	Set ZF=1 if segment specified with r/m16 can be read.
 0F 00 /5	VERW r/m16	M	R	V	V		verw	Set ZF=1 if segment specified with r/m16 can be written.

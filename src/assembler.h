@@ -118,6 +118,12 @@ class Assembler {
 			fxn_->emit_byte(o2);
 		}
 
+		inline void opcode(uint8_t o1, uint8_t o2, AtomicOperand& rcode) {
+			const auto delta = rcode.val() & 0x7;
+			fxn_->emit_byte(o1);
+			fxn_->emit_byte(o2 + delta);
+		}
+
 		inline void opcode(uint8_t o1, uint8_t o2, uint8_t o3) {
 			fxn_->emit_byte(o1);
 			fxn_->emit_byte(o2);
