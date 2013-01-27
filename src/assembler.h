@@ -71,8 +71,9 @@ class Assembler {
 
 		#include "src/assembler.decl"
 
-		void write_att(std::ostream& os, const Code& c);
-		void write_intel(std::ostream& os, const Code& c);
+		void debug_att(std::ostream& os, const Code& c);
+		void debug_intel(std::ostream& os, const Code& c);
+
 		void write_elf(std::ostream& os, const Code& c);
 		void write_hex(std::ostream& os, const Code& c);
 
@@ -226,7 +227,7 @@ class Assembler {
 			vex(mmmmm, l, pp, w, vvvv);
 		}
 
-		void write_txt(std::ostream& os, const Code& c, bool att);
+		void debug(std::ostream& os, const Code& c, bool att);
 };
 
 } // namespace x64

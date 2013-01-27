@@ -101,5 +101,3 @@ clean:
 	rm -rf test/enumerate_all.hi test/enumerate_all.o test/tmp/* test/enumerate_all
 	rm -f test/stokeasm_py/*.so
 	rm -rf test/stokeasm_py/build
-
-

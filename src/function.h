@@ -77,30 +77,8 @@ class Function {
 			return ((f6_type)(buffer_))(rdi, rsi, rdx, rcx, r8, r9);
 		}
 
-		inline bool is_executable() const {
+		inline bool good() const {
 			return (long) buffer_ != -1;
-		}
-
-		inline size_t size() const {
-			return head_ - buffer_;
-		}
-
-		inline size_t capacity() const {
-			return capacity_;
-		}
-
-		inline void resize(size_t capacity) {
-			if ( capacity <= capacity_ )
-				return;
-
-			capacity = round_up(capacity);
-			auto buf = make_buffer(capacity);
-			if ( (long) buf != -1 )
-				memcpy(buf, buffer_, size());
-
-			free_buffer();
-			capacity_ = capacity;
-			buffer_ = buf;
 		}
 
 	private:
@@ -134,6 +112,28 @@ class Function {
 		inline void free_buffer() {
 			if ( is_executable() )
 				munmap(buffer_, capacity_);
+		}
+
+		inline size_t size() const {
+			return head_ - buffer_;
+		}
+
+		inline size_t capacity() const {
+			return capacity_;
+		}
+
+		inline void resize(size_t capacity) {
+			if ( capacity <= capacity_ )
+				return;
+
+			capacity = round_up(capacity);
+			auto buf = make_buffer(capacity);
+			if ( (long) buf != -1 )
+				memcpy(buf, buffer_, size());
+
+			free_buffer();
+			capacity_ = capacity;
+			buffer_ = buf;
 		}
 
 		inline size_t remaining() const {

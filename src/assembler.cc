@@ -25,12 +25,12 @@ void Assembler::assemble(const Instruction& instr) {
 	}
 }
 
-void Assembler::write_att(std::ostream& os, const Code& c) {
-	write_txt(os, c, true);
+void Assembler::debug_att(std::ostream& os, const Code& c) {
+	debug(os, c, true);
 }
 
-void Assembler::write_intel(std::ostream& os, const Code& c) {
-	write_txt(os, c, false);
+void Assembler::debug_intel(std::ostream& os, const Code& c) {
+	debug(os, c, false);
 }
 
 void Assembler::write_elf(std::ostream& os, const Code& c) {
@@ -108,7 +108,7 @@ void Assembler::mod_rm_sib(const M& rm, const AtomicOperand& r) {
 		disp_imm(Imm32(disp));
 }
 
-void Assembler::write_txt(ostream& os, const Code& c, bool att) {
+void Assembler::debug(ostream& os, const Code& c, bool att) {
 	Function fxn;
 	vector<size_t> eols;
 
