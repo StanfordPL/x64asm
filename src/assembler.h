@@ -1,6 +1,7 @@
 #ifndef X64_SRC_ASSEMBLER_H
 #define X64_SRC_ASSEMBLER_H
 
+#include <cassert>
 #include <iostream>
 #include <unordered_map>
 
@@ -166,6 +167,44 @@ class Assembler {
 		inline void disp_imm(Label l) {
 			label_rels_.push_back(std::make_pair(fxn_->size(), l.val()));
 			fxn_->advance_long();
+		}
+
+		// Figure 2.4: Intel Manual Vol 2A 2-8
+		inline void rex(const M& rm, const AtomicOperand& r, uint8_t val) {
+			assert(r.check());
+			rex(rm, val | ((r.val() >> 1) & 0x4));
+		}
+
+		// Figure 2.6: Intel Manual Vol 2A 2.9
+		inline void rex(const M& rm, uint8_t val) {
+			assert(rm.check());
+			if ( rm.contains_base() )
+				val |= (rm.get_base()->val() >> 3);
+			if ( rm.contains_index() )
+				val |= ((rm.get_index()->val() >> 2) & 0x2);
+			if ( val )
+				fxn_->emit_byte(val | 0x40);
+		}
+
+		// Figure 2.5: Intel Manual Vol 2A 2-8
+		inline void rex(const AtomicOperand& rm, const AtomicOperand& r, 
+				            uint8_t val) {
+			assert(r.check());
+			rex(rm, val | ((r.val() >> 1) & 0x4));
+		}
+
+		// Figure 2.7: Intel Manual Vol 2A 2-9
+		inline void rex(const AtomicOperand& rm, uint8_t val) {
+			assert(rm.check());
+			if ( val |= (rm.val() >> 3) )
+				fxn_->emit_byte(val | 0x40);	
+		}
+
+		void mod_rm_sib(const M& rm, const AtomicOperand& r);
+		
+		inline void mod_rm_sib(const AtomicOperand& rm, const AtomicOperand& r) {
+			auto mod = 0xc0 | ((r.val() << 3) & 0x38) | (rm.val() & 0x7);
+			fxn_->emit_byte(mod);
 		}
 
 		inline void resize() {

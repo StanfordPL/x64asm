@@ -13,6 +13,7 @@ import Text.Regex.TDFA
 data Instr =
   Instr { opcode      :: String
         , instruction :: String
+        , op_en       :: String
         , property    :: String
         , mode64      :: String
         , mode32      :: String				
@@ -67,9 +68,9 @@ to_table is f = intercalate "\n" $ map elem is
 
 -- Read a row
 read_instr :: String -> Instr
-read_instr s = let (o:i:p:m64:m32:f:a:d:[]) = splitOn "\t" s in 
+read_instr s = let (o:i:e:p:m64:m32:f:a:d:[]) = splitOn "\t" s in 
                    (Instr (trim o) (trim i) 
-                          (trim p)
+                          (trim e) (trim p)
                           (trim m64) (trim m32) 
                           (trim f) 
                           (trim a) (trim d))
@@ -280,6 +281,10 @@ uniq_operand_types is = map op2type $ uniq_operands is
 uniq_opc_terms :: [Instr] -> [String]
 uniq_opc_terms is = nub $ concat $ map opcode_terms is
 
+-- Generate a list of unique op/ens
+uniq_op_en :: [Instr] -> [String]
+uniq_op_en is = nub $ map op_en is
+
 -- Generate a list of ambiguous declarations
 ambig_decls :: [Instr] -> [[Instr]]
 ambig_decls is = filter ambig $ groupBy eq $ sortBy srt is
@@ -329,6 +334,11 @@ is_suffix ('/':_) = True
 is_suffix ('i':_) = True
 is_suffix ('c':_) = True
 is_suffix _ = False
+
+-- Is this opcode term a digit?
+is_digit :: String -> Bool
+is_digit ('/':d:_) = isDigit d
+is_digit _ = False
 
 -- Extracts opcode prefix bytes
 opcode_prefix :: Instr -> [String]
@@ -461,6 +471,24 @@ is_vex_encoded :: Instr -> Bool
 is_vex_encoded i = ("AVX" `elem` fs) || ("F16C" `elem` fs)
   where fs = flags i
 
+-- Is this a string instruction?
+is_string_instr :: Instr -> Bool
+is_string_instr i = let mn = raw_mnemonic i in
+  (mn == "CMPS")  || 
+	(mn == "CMPSB") || (mn == "CMPSW") || (mn == "CMPSD") || (mn =="CMPSQ") ||
+  (mn == "INS")   || 
+	(mn == "INSB")  || (mn == "INSW")  || (mn == "INSD")  ||
+  (mn == "LODS")  || 
+	(mn == "LODSB") || (mn == "LODSW") || (mn == "LODSD") || (mn =="LODSQ") ||
+  (mn == "MOVS")  || 
+	(mn == "MOVSB") || (mn == "MOVSW") || (mn == "MOVSD") || (mn =="MOVSQ") ||
+  (mn == "OUTS")  ||
+	(mn == "OUTB")  || (mn == "OUTSW") || (mn == "OUTSD") ||
+  (mn == "SCAS")  || 
+	(mn == "SCASB") || (mn == "SCASW") || (mn == "SCASD") || (mn =="SCASQ") ||
+  (mn == "STOS")  || 
+	(mn == "STOSB") || (mn == "STOSW") || (mn == "STOSD") || (mn =="STOSQ")
+
 -- Is this a conditional jump?
 is_cond_jump :: Instr -> Bool
 is_cond_jump i = let mn = raw_mnemonic i in
@@ -469,6 +497,22 @@ is_cond_jump i = let mn = raw_mnemonic i in
 -- Is this an unconditional jump?
 is_uncond_jump :: Instr -> Bool
 is_uncond_jump i = raw_mnemonic i == "JMP"
+
+-- Returns true for register operands
+reg_op :: String -> Bool
+reg_op "rl"  = True
+reg_op "rh"  = True
+reg_op "rb"  = True
+reg_op "r16" = True
+reg_op "r32" = True
+reg_op "r64" = True
+reg_op "AL"  = True
+reg_op "CL"  = True
+reg_op "AX"  = True
+reg_op "DX"  = True
+reg_op "EAX" = True
+reg_op "RAX" = True
+reg_op _ = False
 
 -- Returns true for 32-bit register operands
 reg32_op :: String -> Bool
@@ -530,11 +574,36 @@ label_op :: String -> Bool
 label_op "label" = True
 label_op _ = False
 
+-- Returns true for sreg operands
+sreg_op :: String -> Bool
+sreg_op "Sreg" = True
+sreg_op "FS"   = True
+sreg_op "GS"   = True
+sreg_op _      = False
+
+-- Returns true for st operands
+st_op :: String -> Bool
+st_op "ST"    = True
+st_op "ST(i)" = True
+st_op _       = False
+
+-- Returns true for cr operands
+cr_op :: String -> Bool
+cr_op "CR0-CR7" = True
+cr_op "CR8"     = True
+cr_op _         = False
+
+-- Returns true for xmm operands
+xmm_op :: String -> Bool
+xmm_op "xmm"    = True
+xmm_op "<XMM0>" = True
+xmm_op _        = False
+
 -- Returns true for any form of displacement or immediate operand
 disp_imm_op :: String -> Bool
 disp_imm_op o = imm_op o || moffs_op o || rel_op o || label_op o
 
--- Does this instruction have a memory operands?
+-- Does this instruction have a memory operand?
 mem_index :: Instr -> Maybe Int
 mem_index i = findIndex mem_op (operands i) 
 
@@ -728,10 +797,16 @@ assm_mnemonic i = let m = raw_mnemonic i in
 assm_doxy :: Instr -> String
 assm_doxy i = "/** " ++ (description i) ++ " */"
 
+-- Assembler arg type
+assm_arg_type :: String -> String
+assm_arg_type a
+  | mem_op a = "const " ++ (op2type a) ++ "&"
+  | otherwise = op2type a
+
 -- Assembler declaration arg list
 assm_arg_list :: Instr -> String
 assm_arg_list i = intercalate ", " $ map arg $ zip [0..] (operands i)
-  where arg (i,a) = (op2type a) ++ " arg" ++ (show i)
+  where arg (i,a) = (assm_arg_type a) ++ " arg" ++ (show i)
 
 -- Assembler declaration
 assm_decl :: Instr -> String
@@ -776,7 +851,7 @@ assm_oth_defn i = "// Non-VEX-Encoded Instruction: \n" ++
                   pref4 i ++
                   rex i ++
                   opc i ++
-                  modrm_sib i ++
+                  mod_rm_sib i ++
                   disp_imm i ++
                   "resize();\n"
 
@@ -809,10 +884,40 @@ pref4 i = case mem_index i of
   (Just idx) -> "pref_group4(arg" ++ (show idx) ++ ");\n"
   Nothing -> "// No Prefix Group 4\n"
 
+-- Explicit MOD/RM and REX args
+mod_rm_rex_args :: Instr -> String
+mod_rm_rex_args i = case op_en i of
+  "MI"   -> "arg0"
+  "MR"   -> "arg0,arg1"
+  "RM"   -> "arg1,arg0"
+  "RMI"  -> "arg1,arg0"
+  "RM0"  -> "arg1,arg0"
+  "M"    -> "arg0"
+  "MRI"  -> "arg0,arg1"
+  "RVM"  -> "arg2,arg0"
+  "MC"   -> "arg0"
+  "M1"   -> "arg0"
+  "MRC"  -> "arg0,arg1"
+  "RVMI" -> "arg2,arg0"
+  "RVMR" -> "arg2,arg0"
+  "MVR"  -> "arg0,arg2"
+  "XM"   -> "arg1,arg0"
+  "VMI"  -> "arg1"
+  _      -> ""
+
+-- Default REX arg
+def_rex :: Instr -> String
+def_rex i
+  | "REX.W+" `elem` (opcode_terms i) = ",(uint8_t)0x48"
+  | "REX.R+" `elem` (opcode_terms i) = ",(uint8_t)0x44"
+  | "REX+"   `elem` (opcode_terms i) = ",(uint8_t)0x40"
+  | otherwise = ",(uint8_t)0x00"
+
 -- Emits code for REX Prefix 
--- TODO -- Finish this!
 rex :: Instr -> String
-rex i = "// TODO - REX Prefix\n"
+rex i = case mod_rm_rex_args i of
+    "" -> "// No REX Prefix\n"
+    _ -> "rex(" ++ (mod_rm_rex_args i) ++ (def_rex i) ++ ");\n"
 
 -- Emits code for opcode bytes
 opc :: Instr -> String
@@ -825,9 +930,17 @@ opc i = "opcode(" ++ (bytes i) ++ (code i) ++ ");\n"
                       True -> ",arg" ++ idx i
                       False -> ""
 
+-- Mod R/M SIB digit argument
+digit :: Instr -> String
+digit i = case find is_digit (opcode_suffix i) of
+  (Just ('/':d:[])) -> ",r64s[" ++ [d] ++ "]"
+  Nothing -> ""
+
 -- Emits code for mod/rm and sib bytes
-modrm_sib :: Instr -> String
-modrm_sib i = "// TODO - mod r/m sib bytes\n"
+mod_rm_sib :: Instr -> String
+mod_rm_sib i = case mod_rm_rex_args i of
+    "" -> "// No MOD R/M or SIB Bytes\n"
+    _ -> "mod_rm_sib(" ++ (mod_rm_rex_args i) ++ (digit i) ++ ");\n"
 
 -- Emits code for displacement or immediate bytes
 disp_imm :: Instr -> String
@@ -968,6 +1081,7 @@ main = do args <- getArgs
 
           -- Debugging: Check Inputs
           property_arity_check is 
+          --mapM_ print $ uniq_op_en is 
 
           -- Write Code
           writeFile "assembler.decl"    $ assm_header_decls is
