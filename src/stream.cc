@@ -95,10 +95,6 @@ istream& operator>>(istream& is, Code& c) {
 	return is;
 }
 
-ostream& operator<<(ostream& os, const Cfg& c) {
-	return write_txt(os, c);
-}
-
 ostream& operator<<(ostream& os, const Code& c) {
 	check(os, c);
 	switch ( get_format(os) ) {
@@ -117,7 +113,6 @@ ostream& operator<<(ostream& os, const Code& c) {
 			}
 			break;
 		case Format::DOT:
-			write_txt(os, Cfg{c});
 			break;
 		case Format::ELF:
 			Assembler().write_elf(os, c);

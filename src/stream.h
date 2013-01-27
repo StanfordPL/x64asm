@@ -4,7 +4,6 @@
 #include <iostream>
 #include <stdint.h>
 
-#include "src/cfg.h"
 #include "src/code.h"
 #include "src/instruction.h"
 #include "src/op_set.h"
@@ -57,7 +56,6 @@ std::ostream& operator<<(std::ostream& os, const x64::format& f);
 
 std::istream& operator>>(std::istream& is, x64::Code& c);
 
-std::ostream& operator<<(std::ostream& os, const x64::Cfg& c);
 std::ostream& operator<<(std::ostream& os, const x64::Code& c);
 std::ostream& operator<<(std::ostream& os, const x64::Instruction& i);
 std::ostream& operator<<(std::ostream& os, const x64::Operand& o);

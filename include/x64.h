@@ -2,7 +2,6 @@
 #define X64_INCLUDE_X64_H
 
 #include "src/assembler.h"
-#include "src/cfg.h"
 #include "src/code.h"
 #include "src/constants.h"
 #include "src/cr.h"

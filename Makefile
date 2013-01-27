@@ -5,7 +5,6 @@ GCC=ccache g++
 INC=-I./
 		
 OBJ=src/assembler.o \
-		src/cfg.o \
 		src/code.o \
 		src/constants.o \
 		src/cr.o \
@@ -32,12 +31,7 @@ LIB=lib/libx64.a
 
 TEST=test/constants
 
-BIN=#bin/att_exec \
-		bin/att_sandbox \
-		bin/att_trace \
-		bin/att2dot \
-		bin/att2hex \
-		bin/att2bin
+BIN=bin/x64_asm
 
 DOC=doc/html
 

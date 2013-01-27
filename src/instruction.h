@@ -42,15 +42,15 @@ class Instruction {
 			opcode_ = o;
 		}
 
+		inline const Operand* get_operand(size_t index) const {
+			assert(index < operands_.size());
+			return operands_[index];
+		}
+
 		inline void set_operand(Operand* o, size_t index) {
 			assert(index < operands_.size());
 			operands_[index] = o;
 		}	
-
-		inline Operand* get_operand(size_t index) const {
-			assert(index < operands_.size());
-			return operands_[index];
-		}
 
 		inline size_t arity() const {
 			assert((size_t)get_opcode() < arity_.size());
