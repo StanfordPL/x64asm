@@ -1,12 +1,12 @@
-#ifndef X64_SRC_MM_H
-#define X64_SRC_MM_H
+#ifndef X64ASM_SRC_MM_H
+#define X64ASM_SRC_MM_H
 
 #include <iostream>
 
 #include "src/op_type.h"
 #include "src/operand.h"
 
-namespace x64 {
+namespace x64asm {
 
 /** An MMX register. The 64-bit MMX registers are: MM0 through MM7. */
 class Mm : public AtomicOperand {
@@ -23,7 +23,7 @@ class Mm : public AtomicOperand {
 		virtual void write_intel(std::ostream& os) const;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif
 

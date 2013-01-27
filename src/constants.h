@@ -1,5 +1,5 @@
-#ifndef X64_SRC_CONSTANTS_H
-#define X64_SRC_CONSTANTS_H
+#ifndef X64ASM_SRC_CONSTANTS_H
+#define X64ASM_SRC_CONSTANTS_H
 
 #include "src/cr.h"
 #include "src/dr.h"
@@ -15,7 +15,7 @@
 
 #include <vector>
 
-namespace x64 {
+namespace x64asm {
 
 class Constants {
 	public:
@@ -401,6 +401,6 @@ extern const Ymm ymm15;
 
 extern const std::vector<Ymm> ymms;
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

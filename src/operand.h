@@ -1,12 +1,12 @@
-#ifndef X64_SRC_OPERAND_H
-#define X64_SRC_OPERAND_H
+#ifndef X64ASM_SRC_OPERAND_H
+#define X64ASM_SRC_OPERAND_H
 
 #include <iostream>
 #include <stdint.h>
 
 #include "src/op_type.h"
 
-namespace x64 {
+namespace x64asm {
 
 class OpSet;
 
@@ -53,6 +53,6 @@ class CompoundOperand : public Operand {
 		virtual void write_intel(std::ostream& os) const = 0;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 OpType Eflag::type() const {
 	return OpType::EFLAG;
@@ -48,4 +48,4 @@ void Eflag::write_att(ostream& os) const {
 void Eflag::write_intel(ostream& os) const {
 }
 
-} // namespace x64
+} // namespace x64asm

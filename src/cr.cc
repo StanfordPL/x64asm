@@ -4,7 +4,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 OpType Cr::type() const {
 	return OpType::CR;
@@ -45,4 +45,4 @@ bool Cr8::check() const {
 	return val() == 8;
 }
 
-} // namespace x64
+} // namespace x64asm

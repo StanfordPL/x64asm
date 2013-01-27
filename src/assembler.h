@@ -1,5 +1,5 @@
-#ifndef X64_SRC_ASSEMBLER_H
-#define X64_SRC_ASSEMBLER_H
+#ifndef X64ASM_SRC_ASSEMBLER_H
+#define X64ASM_SRC_ASSEMBLER_H
 
 #include <cassert>
 #include <iostream>
@@ -25,7 +25,7 @@
 #include "src/xmm.h"
 #include "src/ymm.h"
 
-namespace x64 {
+namespace x64asm {
 
 /** An x64 assembler. */
 class Assembler {
@@ -230,6 +230,6 @@ class Assembler {
 		void debug(std::ostream& os, const Code& c, bool att);
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 Modifier::~Modifier() {
 	// Does nothing.
@@ -44,4 +44,4 @@ bool Far::check() const {
 	return val() == 0;
 }
 
-} // namespace x64
+} // namespace x64asm

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 OpType Dr::type() const {
 	return OpType::DR;
@@ -22,4 +22,4 @@ void Dr::write_att(ostream& os) const {
 void Dr::write_intel(ostream& os) const {
 }
 
-} // namespace x64
+} // namespace x64asm

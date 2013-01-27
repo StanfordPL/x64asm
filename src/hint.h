@@ -1,7 +1,7 @@
-#ifndef X64_SRC_HINT_H
-#define X64_SRC_HINT_H
+#ifndef X64ASM_SRC_HINT_H
+#define X64ASM_SRC_HINT_H
 
-namespace x64 {
+namespace x64asm {
 
 /** A taken/not-taken hint for conditional jumps. */
 enum class Hint {
@@ -9,6 +9,6 @@ enum class Hint {
 	NOT_TAKEN
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 OpType Label::type() const {
 	return OpType::LABEL;
@@ -15,4 +15,4 @@ void Label::write_att(ostream& os) const {
 void Label::write_intel(ostream& os) const {
 }
 
-} // namespace x64
+} // namespace x64asm

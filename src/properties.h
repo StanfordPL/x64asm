@@ -1,9 +1,9 @@
-#ifndef X64_SRC_PROPERTIES_H
-#define X64_SRC_PROPERTIES_H
+#ifndef X64ASM_SRC_PROPERTIES_H
+#define X64ASM_SRC_PROPERTIES_H
 
 #include <stdint.h>
 
-namespace x64 {
+namespace x64asm {
 
 enum class Property : uint32_t {
 	MUST_READ      = 0x00000003,
@@ -64,6 +64,6 @@ class Properties {
 		uint32_t mask_;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

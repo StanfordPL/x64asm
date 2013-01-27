@@ -1,12 +1,12 @@
-#ifndef X64_SRC_ST_H
-#define X64_SRC_ST_H
+#ifndef X64ASM_SRC_ST_H
+#define X64ASM_SRC_ST_H
 
 #include <iostream>
 
 #include "src/op_type.h"
 #include "src/operand.h"
 
-namespace x64 {
+namespace x64asm {
 
 /** The ith element from the top of the FPU register stack 
 	  (i = 0 through 7). 
@@ -35,6 +35,6 @@ class St0 : public St {
 		virtual bool check() const;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

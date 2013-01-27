@@ -1,5 +1,5 @@
-#ifndef X64_SRC_XMM_H
-#define X64_SRC_XMM_H
+#ifndef X64ASM_SRC_XMM_H
+#define X64ASM_SRC_XMM_H
 
 #include <iostream>
 
@@ -7,7 +7,7 @@
 #include "src/operand.h"
 #include "src/ymm.h"
 
-namespace x64 {
+namespace x64asm {
 
 /** An XMM register. The 128-bit XMM registers are: XMM0 through XMM7; XMM8 
 	  through XMM15 are available using REX.R in 64-bit mode.
@@ -39,6 +39,6 @@ class Xmm0 : public Xmm {
 		virtual bool check() const;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

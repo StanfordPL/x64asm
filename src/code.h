@@ -1,5 +1,5 @@
-#ifndef X64_SRC_CODE_H
-#define X64_SRC_CODE_H
+#ifndef X64ASM_SRC_CODE_H
+#define X64ASM_SRC_CODE_H
 
 #include <initializer_list>
 #include <iostream>
@@ -7,7 +7,7 @@
 
 #include "src/instruction.h"
 
-namespace x64 {
+namespace x64asm {
 
 /** A sequence of Instructions. */
 class Code : public std::vector<Instruction> {
@@ -29,6 +29,6 @@ class Code : public std::vector<Instruction> {
 		void write_intel(std::ostream& os) const;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 OpType Xmm::type() const {
 	return OpType::XMM;
@@ -43,4 +43,4 @@ bool Xmm0::check() const {
 	return val() == 0;
 }
 
-} // namespace x64
+} // namespace x64asm

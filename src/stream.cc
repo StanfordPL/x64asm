@@ -3,7 +3,7 @@
 #include "src/assembler.h"
 
 using namespace std;
-using namespace x64;
+using namespace x64asm;
 
 namespace {
 
@@ -44,12 +44,12 @@ ostream& write(ostream& os, const T& t) {
 } // namespace
 
 istream& operator>>(istream& is, const Syntax s) {
-	is.iword(syntax_state()) = s;
+	is.iword(syntax_state()) = (long)s;
 	return is;
 }
 
-ostream& operator<<(ostream& os, const Syntax& s) {
-	os.iword(syntax_state()) = s;
+ostream& operator<<(ostream& os, const Syntax s) {
+	os.iword(syntax_state()) = (long)s;
 	return os;
 }
 

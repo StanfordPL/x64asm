@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 OpSet& OpSet::operator+=(const M& rhs) {
 	if ( rhs.get_addr_or() ) {
@@ -116,4 +116,4 @@ void OpSet::write_txt(ostream& os, bool att) const {
 	os << "}";
 }
 
-} // namespace x64
+} // namespace x64asm

@@ -1,12 +1,12 @@
-#ifndef X64_SRC_CR_H
-#define X64_SRC_CR_H
+#ifndef X64ASM_SRC_CR_H
+#define X64ASM_SRC_CR_H
 
 #include <iostream>
 
 #include "src/op_type.h"
 #include "src/operand.h"
 
-namespace x64 {
+namespace x64asm {
 
 /** A control register. */
 class Cr : public AtomicOperand {
@@ -43,6 +43,6 @@ class Cr8 : public Cr {
 		virtual bool check() const;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 OpType Mm::type() const {
 	return OpType::MM;
@@ -28,4 +28,4 @@ void Mm::write_att(ostream& os) const {
 void Mm::write_intel(ostream& os) const {
 }
 
-} // namespace x64
+} // namespace x64asm

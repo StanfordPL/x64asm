@@ -1,9 +1,9 @@
 #include <iostream>
 
-#include "include/x64.h"
+#include "include/x64asm.h"
 
 using namespace std;
-using namespace x64;
+using namespace x64asm;
 
 int main() {
 

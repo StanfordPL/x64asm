@@ -1,5 +1,5 @@
-#ifndef X64_SRC_M_H
-#define X64_SRC_M_H
+#ifndef X64ASM_SRC_M_H
+#define X64ASM_SRC_M_H
 
 #include <cassert>
 #include <iostream>
@@ -11,7 +11,7 @@
 #include "src/operand.h"
 #include "src/sreg.h"
 
-namespace x64 {
+namespace x64asm {
 
 enum class Scale {
 	TIMES_1 = 0,
@@ -431,6 +431,6 @@ class M512Byte : public M {
 
 #undef CONSTRUCTORS
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

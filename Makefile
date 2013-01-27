@@ -27,11 +27,11 @@ OBJ=src/assembler.o \
 		src/xmm.o \
 		src/ymm.o
 
-LIB=lib/libx64.a
+LIB=lib/libx64asm.a
 
 TEST=test/constants
 
-BIN=bin/x64_asm
+BIN=bin/x64asm
 
 DOC=doc/html
 

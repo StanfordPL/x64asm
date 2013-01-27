@@ -1,12 +1,12 @@
-#ifndef X64_SRC_MOFFS_H
-#define X64_SRC_MOFFS_H
+#ifndef X64ASM_SRC_MOFFS_H
+#define X64ASM_SRC_MOFFS_H
 
 #include <iostream>
 
 #include "src/op_type.h"
 #include "src/operand.h"
 
-namespace x64 {
+namespace x64asm {
 
 /** A simple memory variable. */
 class Moffs : public AtomicOperand {
@@ -60,6 +60,6 @@ class Moffs64 : public Moffs {
 		virtual OpType type() const;
 };
 
-}
+} // namespace x64asm
 
 #endif

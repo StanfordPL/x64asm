@@ -1,7 +1,7 @@
-#ifndef X64_SRC_OPCODE_H
-#define X64_SRC_OPCODE_H
+#ifndef X64ASM_SRC_OPCODE_H
+#define X64ASM_SRC_OPCODE_H
 
-namespace x64 {
+namespace x64asm {
 
 /** An x64 mnemonic. */
 enum Opcode : int32_t {
@@ -11,6 +11,6 @@ enum Opcode : int32_t {
 	#include "src/opcode.enum"
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

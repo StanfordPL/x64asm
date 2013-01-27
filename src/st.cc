@@ -4,7 +4,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 OpType St::type() const {
 	return OpType::ST;
@@ -33,4 +33,4 @@ bool St0::check() const {
 	return val() == 0;
 }
 
-} // namespace x64
+} // namespace x64asm

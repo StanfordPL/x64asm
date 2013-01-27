@@ -1,12 +1,12 @@
-#ifndef X64_SRC_R_H
-#define X64_SRC_R_H
+#ifndef X64ASM_SRC_R_H
+#define X64ASM_SRC_R_H
 
 #include <iostream>
 
 #include "src/op_type.h"
 #include "src/operand.h"
 
-namespace x64 {
+namespace x64asm {
 
 class R64;
 
@@ -206,6 +206,6 @@ class Rax : public R64 {
 		virtual bool check() const;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

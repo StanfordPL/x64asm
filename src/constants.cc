@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 const Cr0234 cr0{Constants::cr0()};
 const Cr0234 cr2{Constants::cr2()};
@@ -246,4 +246,4 @@ const vector<Ymm> ymms {{
 	ymm8, ymm9, ymm10, ymm11, ymm12, ymm13, ymm14, ymm15
 }};
 
-} // namespace x64
+} // namespace x64asm

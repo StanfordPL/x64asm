@@ -1,5 +1,5 @@
-#ifndef X64_SRC_OP_SET_H
-#define X64_SRC_OP_SET_H
+#ifndef X64ASM_SRC_OP_SET_H
+#define X64ASM_SRC_OP_SET_H
 
 #include <iostream>
 
@@ -10,7 +10,7 @@
 #include "src/xmm.h"
 #include "src/ymm.h"
 
-namespace x64 {
+namespace x64asm {
 
 class OpSet {
 	private:
@@ -280,6 +280,6 @@ class OpSet {
 		void write_txt(std::ostream& os, bool att) const;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 M::~M() {
   // Does nothing.
@@ -170,4 +170,4 @@ OpType M512Byte::type() const {
 	return OpType::M_512_BYTE;
 }
 
-} // namespace x64
+} // namespace x64asm

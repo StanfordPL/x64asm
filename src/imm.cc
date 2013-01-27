@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 Imm::~Imm() {
 	// Does nothing.
@@ -71,4 +71,4 @@ bool Three::check() const {
 	return val() == 3;
 }
 
-} // namespace x64
+} // namespace x64asm

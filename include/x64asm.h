@@ -1,5 +1,5 @@
-#ifndef X64_INCLUDE_X64_H
-#define X64_INCLUDE_X64_H
+#ifndef X64ASM_INCLUDE_X64_H
+#define X64ASM_INCLUDE_X64_H
 
 #include "src/assembler.h"
 #include "src/code.h"

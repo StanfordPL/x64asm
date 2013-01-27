@@ -1,12 +1,12 @@
-#ifndef X64_SRC_IMM_H
-#define X64_SRC_IMM_H
+#ifndef X64ASM_SRC_IMM_H
+#define X64ASM_SRC_IMM_H
 
 #include <iostream>
 
 #include "src/op_type.h"
 #include "src/operand.h"
 
-namespace x64 {
+namespace x64asm {
 
 /** An immediate value. */
 class Imm : public AtomicOperand {
@@ -103,6 +103,6 @@ class Three : public Imm8 {
 		virtual bool check() const;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

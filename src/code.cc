@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 bool Code::check() const {
 	for ( const auto& i : *this )
@@ -35,4 +35,4 @@ void Code::write_intel(ostream& os) const {
 	}
 }
 
-} // namespace x64
+} // namespace x64asm

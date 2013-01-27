@@ -2,7 +2,7 @@
 
 #include "src/op_set.h"
 
-namespace x64 {
+namespace x64asm {
 
 Operand::~Operand() {
 	// Does nothing.
@@ -36,4 +36,4 @@ OpType CompoundOperand::type() const {
 	return OpType::COMPOUND_OPERAND;
 }
 
-} // namespace x64
+} // namespace x64asm

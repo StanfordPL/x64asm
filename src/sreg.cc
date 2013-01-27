@@ -4,7 +4,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 OpType Sreg::type() const {
 	return OpType::SREG;
@@ -46,4 +46,4 @@ bool Gs::check() const {
 	return val() == 5;
 }
 
-} // namespace x64
+} // namespace x64asm

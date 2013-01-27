@@ -1,12 +1,12 @@
-#ifndef X64_SRC_DR_H
-#define X64_SRC_DR_H
+#ifndef X64ASM_SRC_DR_H
+#define X64ASM_SRC_DR_H
 
 #include <iostream>
 
 #include "src/op_type.h"
 #include "src/operand.h"
 
-namespace x64 {
+namespace x64asm {
 
 /** A debug register. */
 class Dr : public AtomicOperand {
@@ -22,6 +22,6 @@ class Dr : public AtomicOperand {
 		virtual void write_intel(std::ostream& os) const;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

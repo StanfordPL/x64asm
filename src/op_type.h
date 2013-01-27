@@ -1,7 +1,7 @@
-#ifndef X64_SRC_OP_TYPE_H
-#define X64_SRC_OP_TYPE_H
+#ifndef X64ASM_SRC_OP_TYPE_H
+#define X64ASM_SRC_OP_TYPE_H
 
-namespace x64 {
+namespace x64asm {
 
 /** Any of the types which appear in the Intel Manual. */
 enum class OpType {
@@ -114,6 +114,6 @@ enum class OpType {
 	YMM
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

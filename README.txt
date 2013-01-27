@@ -1,41 +1,47 @@
 -------------------------------------------------------------------------------
 
-x64_asm
+x64asm
 
-Say something about what this project is.
+
+-------------------------------------------------------------------------------
+
+Supported Platforms:
+
+Ubuntu 12.04 LTS
+Mac OSX 10.8.x
 
 -------------------------------------------------------------------------------
 
 Build Instructions:
 
-0. Upgrade to ubuntu 12.04 LTS.
-
 1. Dependency hell!
+
+Satisfy the following package dependencies.
+Equivalents are all available using MacPorts.
 
 $ sudo apt-get install ccache
 $ sudo apt-get install g++
 $ sudo apt-get install g++-multilib
-$ sudo apt-get install doxygen
 $ sudo apt-get install ghc
 $ sudo apt-get install cabal
 $ sudo apt-get install libghc-split-dev
-$ sudo apt-get install graphviz
 
-TODO: Add more dependencies here as we discover them.
-
-2. Type make.
-   You can optionally specify a build type.
+2. Type make (specify a build type to override the default 'release')
 
 $ make (release|profile|debug)
 
-3. Browse the (no longer totally) woefully incomplete documentation.
+3. Browse the documentation.
 
 $ <browser> doc/html/index.html
 
-4. Write and compile some code.
+4a. Play around with the command line app.
+
+$ x64asm -i att -o hex test.s
+
+4b. Write and compile some code.
 
 // code.cc
-#include "<path/to/here>/include/x64.h"
+#include "<path/to/here>/include/x64asm.h"
 
 int main() {
 	...
@@ -49,6 +55,8 @@ Undefined Assembler Behavior:
 
 Jumps to undefined labels are handled per g++ by emitting a 32-bit relative
 displacement of 0x00000000.
+
+-------------------------------------------------------------------------------
 
 Assembler Simplifications:
 
@@ -69,10 +77,11 @@ encodings.
 
 -------------------------------------------------------------------------------
 
-Spreadsheet modifications:
+Intel Specification Modifications:
 
-Unless otherwise mentioned below, the contents of x64.ods are transcribed 
-directly from the Intel Manual.
+Most of the source code in this project is automatically generated using the
+the x64.ods spreadsheet.  Unless otherwise noted below, the contents of the 
+spreadsheet are transcribed directly from the Intel Manual.
 
 LAHS/SAHF:
 
@@ -231,11 +240,6 @@ to variants with shorter encodings.
 
 TODO:
 
-cfg.h
-
-- live in/out for locs
-- def in/out for locs
-
 assembler.h
 
 - write_elf()
@@ -245,6 +249,8 @@ instruction.h
 
 - read_att()
 - read_intel()
+- write_intel()
+- implicit sets()
 
 test/
 

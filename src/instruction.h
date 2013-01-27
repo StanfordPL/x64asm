@@ -1,5 +1,5 @@
-#ifndef X64_SRC_INSTRUCTION_H
-#define X64_SRC_INSTRUCTION_H
+#ifndef X64ASM_SRC_INSTRUCTION_H
+#define X64ASM_SRC_INSTRUCTION_H
 
 #include <cassert>
 #include <initializer_list>
@@ -12,7 +12,7 @@
 #include "src/op_type.h"
 #include "src/properties.h"
 
-namespace x64 {
+namespace x64asm {
 
 /** A hardware instruction. */
 class Instruction {
@@ -184,6 +184,6 @@ class Instruction {
 		static std::vector<OpSet> implicit_maybe_undef_set_;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

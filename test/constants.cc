@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
 
-#include "include/x64.h"
+#include "include/x64asm.h"
 
-using namespace x64;
+using namespace x64asm;
 using namespace std;
 
 void foo() {
@@ -21,8 +21,7 @@ void all(const vector<T>& ts) {
 }
 
 int main() {
-	cout << syntax(Syntax::ATT);
-	cout << format(Format::TXT);
+	cout << Syntax::ATT;
 
 	cout << "BEGIN WRITING CONSTANTS" << endl;
 	all(crs);
@@ -75,7 +74,6 @@ int main() {
 	cout << "NOW FOR SOME CODE" << endl << endl;
 
 	Code c { Instruction{Opcode::FABS}, Instruction{Opcode::FABS}, Instruction{Opcode::FABS}, Instruction{Opcode::FABS}, Instruction{Opcode::RET} };
-	cout << format(Format::HEX);
 	cout << c << endl;
 
 	return 0;

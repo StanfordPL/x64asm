@@ -1,5 +1,5 @@
-#ifndef X64_SRC_FUNCTION_H
-#define X64_SRC_FUNCTION_H
+#ifndef X64ASM_SRC_FUNCTION_H
+#define X64ASM_SRC_FUNCTION_H
 
 #include <cassert>
 #include <cstring>
@@ -12,7 +12,7 @@
 	#define MAP_ANONYMOUS MAP_ANON
 #endif
 
-namespace x64 {
+namespace x64asm {
 
 /** An executable buffer. */
 class Function {
@@ -105,12 +105,12 @@ class Function {
 		inline void copy_buffer(const Function& rhs) {
 			capacity_ = rhs.capacity_;
 			buffer_ = make_buffer(rhs.capacity_);
-			if ( is_executable() )
+			if ( good() )
 				memcpy(buffer_, rhs.buffer_, rhs.size());	
 		}
 
 		inline void free_buffer() {
-			if ( is_executable() )
+			if ( good() )
 				munmap(buffer_, capacity_);
 		}
 
@@ -209,6 +209,6 @@ class Function {
 		}
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 // void Assembler::adcb(Al arg0, Imm8 arg1) { } ...
 #include "src/assembler.defn"
@@ -136,4 +136,4 @@ void Assembler::debug(ostream& os, const Code& c, bool att) {
 	}
 }
 
-} // namespace x64
+} // namespace x64asm

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 Rel::~Rel() {
 	// Does nothing.
@@ -35,4 +35,4 @@ bool Rel32::check() const {
 	return (int64_t)val() >= -2147483648 && (int64_t)val() < 2147483648;
 }
 
-} // namespace x64
+} // namespace x64asm

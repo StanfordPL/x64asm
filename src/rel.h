@@ -1,10 +1,10 @@
-#ifndef X64_SRC_REL_H
-#define X64_SRC_REL_H
+#ifndef X64ASM_SRC_REL_H
+#define X64ASM_SRC_REL_H
 
 #include "src/op_type.h"
 #include "src/operand.h"
 
-namespace x64 {
+namespace x64asm {
 
 /** A relative address. */
 class Rel : public AtomicOperand {
@@ -41,6 +41,6 @@ class Rel32 : public Rel {
 		virtual bool check() const;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

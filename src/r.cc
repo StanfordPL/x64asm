@@ -6,7 +6,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 R::~R() {
 	// Does nothing.
@@ -290,4 +290,4 @@ bool Rax::check() const {
 	return val() == 0;
 }
 
-} // namespace x64
+} // namespace x64asm

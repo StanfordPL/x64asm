@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace x64 {
+namespace x64asm {
 
 Moffs::~Moffs() {
 	// Does nothing.
@@ -35,4 +35,4 @@ OpType Moffs64::type() const {
 	return OpType::MOFFS_64;
 }
 
-} // namespace x64
+} // namespace x64asm

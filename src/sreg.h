@@ -1,12 +1,12 @@
-#ifndef X64_SRC_SREG_H
-#define X64_SRC_SREG_H
+#ifndef X64ASM_SRC_SREG_H
+#define X64ASM_SRC_SREG_H
 
 #include <iostream>
 
 #include "src/op_type.h"
 #include "src/operand.h"
 
-namespace x64 {
+namespace x64asm {
 
 /** A segment register. The segment register bit assignments are ES = 0, 
 	  CS = 1, SS = 2, DS = 3, FS = 4, and GS = 5.
@@ -46,6 +46,6 @@ class Gs : public Sreg {
 		virtual bool check() const;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif

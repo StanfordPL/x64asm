@@ -13,7 +13,7 @@ vector<const char*> att_ {{
 
 } // namespace
 
-namespace x64 {
+namespace x64asm {
 
 OpSet Instruction::explicit_must_read_set() const {
 	auto ret = OpSet::empty();
@@ -209,4 +209,4 @@ vector<OpSet> Instruction::implicit_maybe_undef_set_ {
 	#include "src/maybe_undef.table"
 };
 
-} // namespace x64
+} // namespace x64asm

@@ -1,12 +1,12 @@
-#ifndef X64_SRC_MODIFIER_H
-#define X64_SRC_MODIFIER_H
+#ifndef X64ASM_SRC_MODIFIER_H
+#define X64ASM_SRC_MODIFIER_H
 
 #include <iostream>
 
 #include "src/op_type.h"
 #include "src/operand.h"
 
-namespace x64 {
+namespace x64asm {
 
 /** A modifier. */
 class Modifier : public AtomicOperand {
@@ -53,6 +53,6 @@ class Far : public Modifier {
 		virtual bool check() const;
 };
 
-} // namespace x64
+} // namespace x64asm
 
 #endif
