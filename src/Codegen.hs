@@ -1110,12 +1110,12 @@ assm_cases is = intercalate "\n" $ map assm_case is
 
 -- Representative values for each operand type
 test_operand :: String -> [String]
-test_operand "rl"      = ["%al"] 
-test_operand "rh"      = ["%ah"] 
-test_operand "rb"      = ["%spl"] 
-test_operand "r16"      = ["%ax"]
-test_operand "r32"      = ["%eax"]
-test_operand "r64"      = ["%rax"]
+test_operand "rl"       = ["%al","%cl","%dl","%bl"] 
+test_operand "rh"       = ["%ah","%ch","%dh","%bh"] 
+test_operand "rb"       = ["%spl","%sil","%r8b","%r12b"]
+test_operand "r16"      = ["%ax","%cx","%dx","%bx","%sp","%si","%r8w","%r12w"]
+test_operand "r32"      = ["%eax","%ecx","%edx","%ebx","%esp","%esi","%r8d","%r12d"]
+test_operand "r64"      = ["%rax","%rcx","%rdx","%rbx","%rsp","%rsi","%r8","%r12"]
 test_operand "AL"       = ["%al"]
 test_operand "CL"       = ["%cl"]
 test_operand "AX"       = ["%ax"]
@@ -1145,29 +1145,29 @@ test_operand "m28byte"  = ["(%eax)"]
 test_operand "m94byte"  = ["(%eax)"]
 test_operand "m108byte" = ["(%eax)"]
 test_operand "m512byte" = ["(%eax)"]
-test_operand "imm8"     = ["$0x1"]
-test_operand "imm16"    = ["$0x1"]
-test_operand "imm32"    = ["$0x1"]
-test_operand "imm64"    = ["$0x1"]
+test_operand "imm8"     = ["$0x1","$-0x1"]
+test_operand "imm16"    = ["$0x1","$-0x1"]
+test_operand "imm32"    = ["$0x1","$-0x1"]
+test_operand "imm64"    = ["$0x1","$-0x1"]
 test_operand "0"        = ["$0x0"]
 test_operand "1"        = ["$0x1"]
 test_operand "3"        = ["$0x3"]
-test_operand "mm"       = ["%mm0","%mm7"]
-test_operand "xmm"      = ["%xmm0"]
+test_operand "mm"       = ["%mm0","%mm2","%mm4","%mm6"]
+test_operand "xmm"      = ["%xmm0","%xmm2","%xmm4","%xmm6","%xmm8","%xmm10","%xmm12","%xmm14"]
 test_operand "<XMM0>"   = ["%xmm0"]
-test_operand "ymm"      = ["%ymm0"]
+test_operand "ymm"      = ["%ymm0","%ymm2","%ymm4","%ymm6","%ymm8","%ymm10","%ymm12","%ymm14"]
 test_operand "ST"       = ["%st(0)"]
-test_operand "ST(i)"    = ["%st(1)"]
+test_operand "ST(i)"    = ["%st(1)","%st(2)","%st(3)","%st(4)","%st(5)","%st(6)","%st(7)"]
 test_operand "rel8"     = ["0x1"]
 test_operand "rel32"    = ["0x1"]
 test_operand "moffs8"   = ["0x1"]
 test_operand "moffs16"  = ["0x1"]
 test_operand "moffs32"  = ["0x1"]
 test_operand "moffs64"  = ["0x1"]
-test_operand "CR0-CR7"  = ["%cr0"]
+test_operand "CR0-CR7"  = ["%cr0","%cr2","%cr3","%cr4"]
 test_operand "CR8"      = ["%cr8"]
-test_operand "DR0-DR7"  = ["%cr0"]
-test_operand "Sreg"     = ["%cs"]
+test_operand "DR0-DR7"  = ["%db0","%db2","%db4","%db6"]
+test_operand "Sreg"     = ["%es","%cs","%ss","%ds","%fs","%gs"]
 test_operand "FS"       = ["%fs"]
 test_operand "GS"       = ["%gs"]
 -- Below this point are operand types we have introduced
@@ -1188,9 +1188,14 @@ test_instr :: Instr -> [String]
 test_instr i = map (mn ++) $ test_operands i
   where mn = (att i ++ " ")
 
+-- Convert an instruction into a test file
+test_file :: Instr -> IO()
+test_file i = writeFile file $ intercalate "\n" $ test_instr i
+  where file = "../test/" ++ (low (opcode_enum i)) ++ ".s"
+
 -- Convert all instructions into a list of instances for compilation
-test_instrs :: [Instr] -> String
-test_instrs is = intercalate "\n" $ concat $ map test_instr is
+test_files :: [Instr] -> IO()
+test_files is = mapM_ test_file is
 
 -------------------------------------------------------------------------------
 -- Main (read the spreadsheet and write some code)
@@ -1234,4 +1239,6 @@ main = do args <- getArgs
           writeFile "opcode.enum"       $ opcode_enums is
           writeFile "opcode.att"        $ att_mnemonics is
           writeFile "opcode.intel"      $ intel_mnemonics is
-          --writeFile "test.s"            $ test_instrs is					
+
+          -- Write Tests
+          test_files is
