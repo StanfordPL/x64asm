@@ -33,12 +33,12 @@ void all() {
 	all(sts);
 	all(xmms);
 	all(ymms);
-	all(vector<M>{  M8(&fs, &r15d, &ebx, Scale::TIMES_2, &disp),
-	               M16(&fs, &r15d, &ebx, Scale::TIMES_2, &disp),
-	               M32(&fs, &r15d, &ebx, Scale::TIMES_2, &disp),
- 	               M64(&fs, &r15d, &ebx, Scale::TIMES_2, &disp),
-	              M128(&fs, &r15d, &ebx, Scale::TIMES_2, &disp),
-	              M256(&fs, &r15d, &ebx, Scale::TIMES_2, &disp)});
+	cout << M8(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
+	cout << M16(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
+	cout << M32(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
+	cout << M64(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
+	cout << M128(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
+	cout << M256(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
 }
 
 int main() {

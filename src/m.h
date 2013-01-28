@@ -13,6 +13,7 @@
 
 namespace x64asm {
 
+/** Index register scaling constant. */
 enum class Scale {
 	TIMES_1 = 0,
 	TIMES_2,
@@ -22,7 +23,7 @@ enum class Scale {
 
 /** An operand in memory. */
 class M : public CompoundOperand {
-	protected:
+	public:
 		inline M(const AddrR* b, bool addr_or = false)
 				: seg_(0), base_(b), index_(0), scale_(Scale::TIMES_1), disp_(0),
 				  addr_or_(addr_or) {
@@ -88,7 +89,9 @@ class M : public CompoundOperand {
 				  addr_or_(addr_or) {
 		}
 
-	public:
+		virtual ~M() = 0;
+
+		virtual void write_intel_width(std::ostream& os) const;
 
 		inline bool contains_seg() const {
 			return seg_ != 0;
@@ -212,7 +215,9 @@ class M : public CompoundOperand {
 class M8 : public M {
 	public:
 		CONSTRUCTORS(M8)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -223,7 +228,9 @@ class M8 : public M {
 class M16 : public M {
 	public:
 		CONSTRUCTORS(M16)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -234,7 +241,9 @@ class M16 : public M {
 class M32 : public M {
 	public:
 		CONSTRUCTORS(M32)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -242,7 +251,9 @@ class M32 : public M {
 class M64 : public M {
 	public:
 		CONSTRUCTORS(M64)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -250,7 +261,9 @@ class M64 : public M {
 class M128 : public M {
 	public:
 		CONSTRUCTORS(M128)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -260,7 +273,9 @@ class M128 : public M {
 class M256 : public M {
 	public:
 		CONSTRUCTORS(M256)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -273,7 +288,9 @@ class M256 : public M {
 class MPair1664 : public M {
 	public:
 		CONSTRUCTORS(MPair1664)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -284,7 +301,9 @@ class MPair1664 : public M {
 class MPtr1616 : public M {
 	public:
 		CONSTRUCTORS(MPtr1616)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -295,7 +314,9 @@ class MPtr1616 : public M {
 class MPtr1632 : public M {
 	public:
 		CONSTRUCTORS(MPtr1632)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -306,7 +327,9 @@ class MPtr1632 : public M {
 class MPtr1664 : public M {
 	public:
 		CONSTRUCTORS(MPtr1664)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -316,7 +339,9 @@ class MPtr1664 : public M {
 class M16Int : public M {
 	public:
 		CONSTRUCTORS(M16Int)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -326,7 +351,9 @@ class M16Int : public M {
 class M32Int : public M {
 	public:
 		CONSTRUCTORS(M32Int)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -336,7 +363,9 @@ class M32Int : public M {
 class M64Int : public M {
 	public:
 		CONSTRUCTORS(M64Int)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -347,7 +376,9 @@ class M64Int : public M {
 class M32Fp : public M {
 	public:
 		CONSTRUCTORS(M32Fp)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -358,7 +389,9 @@ class M32Fp : public M {
 class M64Fp : public M {
 	public:
 		CONSTRUCTORS(M64Fp)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -369,7 +402,9 @@ class M64Fp : public M {
 class M80Fp : public M {
 	public:
 		CONSTRUCTORS(M80Fp)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -377,7 +412,9 @@ class M80Fp : public M {
 class M80Bcd : public M {
 	public:
 		CONSTRUCTORS(M80Bcd)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -385,7 +422,9 @@ class M80Bcd : public M {
 class M2Byte : public M {
 	public:
 		CONSTRUCTORS(M2Byte)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -393,7 +432,9 @@ class M2Byte : public M {
 class M14Byte : public M {
 	public:
 		CONSTRUCTORS(M14Byte)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -401,7 +442,9 @@ class M14Byte : public M {
 class M28Byte : public M {
 	public:
 		CONSTRUCTORS(M28Byte)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -409,7 +452,9 @@ class M28Byte : public M {
 class M94Byte : public M {
 	public:
 		CONSTRUCTORS(M94Byte)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -417,7 +462,9 @@ class M94Byte : public M {
 class M108Byte : public M {
 	public:
 		CONSTRUCTORS(M108Byte)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
@@ -425,7 +472,9 @@ class M108Byte : public M {
 class M512Byte : public M {
 	public:
 		CONSTRUCTORS(M512Byte)
-
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
 		virtual OpType type() const;
 };
 
