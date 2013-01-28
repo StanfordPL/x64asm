@@ -91,8 +91,6 @@ class M : public CompoundOperand {
 
 		virtual ~M() = 0;
 
-		virtual void write_intel_width(std::ostream& os) const;
-
 		inline bool contains_seg() const {
 			return seg_ != 0;
 		}
@@ -180,6 +178,10 @@ class M : public CompoundOperand {
 		virtual bool check() const;
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
+
+	protected:
+
+		virtual void write_intel_width(std::ostream& os) const;
 
 	private:
 		virtual OpType type() const;
