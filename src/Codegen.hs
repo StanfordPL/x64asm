@@ -1,3 +1,19 @@
+{-
+Copyright 2103 eric schkufza
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-}
+
 import Data.Char
 import Data.List
 import Data.List.Split
@@ -426,12 +442,10 @@ read_instrs s = map read_instr $ lines s
 -- Step 1: Remove formatting
 -------------------------------------------------------------------------------
 
--- Remove title row and empty rows		
+-- Remove license, title row, and empty rows		
 remove_format :: [Instr] -> [Instr]
-remove_format is = filter (\x -> keep x) is
-    where keep i = (opcode i) /= "" && 
-                   (opcode i) /= "Opcode" &&
-                   (instruction i) /= "(No mnemonic)"
+remove_format is = filter (\x -> keep x) (drop 16 is)
+    where keep i = (opcode i) /= "" 
 
 -- Step 2: Remove instructions which are invalid in 64-bit mode
 -------------------------------------------------------------------------------
