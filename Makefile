@@ -75,7 +75,7 @@ codegen: src/assembler.defn src/Codegen.hs src/x86.csv
 src/assembler.defn: src/Codegen.hs src/x86.csv 
 	cd src && \
 		ghc Codegen.hs && \
-		./Codegen x86.csv && \
+		./Codegen && \
 		rm -f *.hi *.o Codegen
 
 #	flex $(FLEXOPS) -Patt src/codegen/att.l && \

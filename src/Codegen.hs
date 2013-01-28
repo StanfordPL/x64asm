@@ -21,10 +21,10 @@ import System.Environment
 import Text.Regex
 import Text.Regex.TDFA
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Row Data Types 
 -- Corresponds to the rows in x86.csv
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Instruction Row Type
 data Instr =
@@ -39,12 +39,12 @@ data Instr =
         , description :: String -- Intel manual description
         } deriving (Show)
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Common Helper Methods
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- String transforms
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Remove leading/trailing whitespace
 trim :: String -> String
@@ -60,7 +60,7 @@ up :: String -> String
 up s = map toUpper s
 
 -- Instruction modification
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Replace all occurrences of an operand
 repl_op :: Instr -> String -> String -> Instr
@@ -78,7 +78,7 @@ repl_first_op i op val = i{instruction=inst'}
                    Nothing -> os
 
 -- Table formatting
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Transforms a list of instructions into a comma separated table
 to_table :: [Instr] -> (Instr -> String) -> String
@@ -86,7 +86,7 @@ to_table is f = intercalate "\n" $ map elem is
   where elem i = ", " ++ (f i) ++ " // " ++ instruction i
 
 -- Opcode related
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Extract opcode terms
 opcode_terms :: Instr -> [String]
@@ -138,7 +138,7 @@ opcode_suffix i = (dropWhile is_prefix) . (dropWhile not_suffix) $ ts
         ts = opcode_terms i
 
 -- Instruction related
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Extract raw mnemonic
 raw_mnemonic :: Instr -> String
@@ -400,7 +400,7 @@ op2tag "hint"     = "HINT"
 op2tag o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
 
 -- Property related
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Extract properties
 properties :: Instr -> [String]
@@ -408,7 +408,7 @@ properties i = let x = map trim $ (splitOn ",") $ property i in
   filter (\p -> p /= "") x
 
 -- Flag related
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Separate cpuid feature flags
 flags :: Instr -> [String]
@@ -419,12 +419,12 @@ is_vex_encoded :: Instr -> Bool
 is_vex_encoded i = ("AVX" `elem` fs) || ("F16C" `elem` fs)
   where fs = flags i
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Data parsing
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Step 0: Read input file
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Read a row
 read_instr :: String -> Instr
@@ -440,7 +440,7 @@ read_instrs :: String -> [Instr]
 read_instrs s = map read_instr $ lines s
 
 -- Step 1: Remove formatting
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Remove license, title row, and empty rows		
 remove_format :: [Instr] -> [Instr]
@@ -448,14 +448,14 @@ remove_format is = filter (\x -> keep x) (drop 16 is)
     where keep i = (opcode i) /= "" 
 
 -- Step 2: Remove instructions which are invalid in 64-bit mode
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Filter out valid 64-bit mode instructions
 x64 :: [Instr] -> [Instr]
 x64 is = filter (\x -> (mode64 x) == "V") is
 
 -- Step 3: Split instructions with implicit or explicit disjunct operands
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Identifies a disjunct operand
 disjunct_idx :: Instr -> Maybe Int
@@ -495,7 +495,7 @@ flatten_instrs is = concat $ map flatten_instr $
                     concat $ map flatten_instr is
 
 -- Step 4: Canonicalize operand symbols
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Canonical operand symbols
 canonical_op :: String -> String
@@ -524,7 +524,7 @@ fix_ops :: [Instr] -> [Instr]
 fix_ops is = map fix_op is
 
 -- Step 5: Fix up REX rows
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Split a row with an r8 operand into two alternatives
 split_r8 :: String -> String -> Instr -> [Instr]
@@ -568,7 +568,7 @@ fix_rex_rows :: [Instr] -> [Instr]
 fix_rex_rows is = remove_m8_rex $ concat $ map fix_rex_row is
 
 -- Step 6: Remove duplicate rows by prefering shortest encoding
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Returns the instruction with the shortest encoding
 shortest :: [Instr] -> Instr
@@ -583,7 +583,7 @@ remove_ambiguity is = map shortest $ groupBy eq $ sortBy srt is
         eq x y = (assm_decl x) == (assm_decl y)	
 
 -- Step 7: Insert prefixes and operands
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Inserts PREF.66+ for instructions with 16-bit operands
 -- This ignores DX which only appears as an implicit operand to string instrs
@@ -619,9 +619,24 @@ insert_missing is = concat $ map insert_label_variant $
                     concat $ map insert_hint_variant $
                     map insert_pref66 is
 
--------------------------------------------------------------------------------
+-- Parse input file
+--------------------------------------------------------------------------------
+
+parse_instrs :: String -> IO [Instr]
+parse_instrs file = do f <- readFile file
+                       return $ all f
+  where all = insert_missing .
+              remove_ambiguity . 
+              fix_rex_rows . 
+              fix_ops . 
+              flatten_instrs . 
+              x64 . 
+              remove_format . 
+              read_instrs
+
+--------------------------------------------------------------------------------
 -- Debugging
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Generate a list of unique mnemonics
 uniq_mnemonics :: [Instr] -> [String]
@@ -663,12 +678,12 @@ property_arity_check is = sequence_ $ map check is
                        True -> return ()
                        False -> error $ "Property error for " ++ (opcode i)
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 -- Codegen
 -------------------------------------------------------------------------------
 
 -- Opcode
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Converts an instruction into an Opcode enum value
 opcode_enum :: Instr -> String
@@ -681,7 +696,7 @@ opcode_enums :: [Instr] -> String
 opcode_enums is = to_table is opcode_enum
 
 -- Instruction
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Converts an instruction to arity table row
 arity_row :: Instr -> String
@@ -848,7 +863,7 @@ intel_mnemonics :: [Instr] -> String
 intel_mnemonics is = intercalate "\n" $ map (", "++) $ map intel_mnemonic is
 
 -- Common Assembler strings
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Assembler mnemonic
 assm_mnemonic :: Instr -> String
@@ -886,7 +901,7 @@ assm_decl i = "void " ++
               ")"
 
 -- Assembler header declarations
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Assembler header declaration
 assm_header_decl :: Instr -> String
@@ -897,7 +912,7 @@ assm_header_decls :: [Instr] -> String
 assm_header_decls is = intercalate "\n\n" $ map assm_header_decl is
 
 -- Assembler source definitions
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Emits code for Prefix Group 1
 -- This doesn't check for the the lock prefix which we treat as an opcode
@@ -1096,7 +1111,7 @@ assm_src_defns :: [Instr] -> String
 assm_src_defns is = intercalate "\n\n" $ map assm_src_defn is
 
 -- Assembler switch code
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Assembler switch args
 assm_call_arg_list :: Instr -> String
@@ -1118,9 +1133,34 @@ assm_case i = "case " ++ (opcode_enum i) ++ ":\n" ++
 assm_cases :: [Instr] -> String
 assm_cases is = intercalate "\n" $ map assm_case is
 
--------------------------------------------------------------------------------
+-- Write code
+--------------------------------------------------------------------------------
+
+write_code :: [Instr] -> IO ()
+write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
+                   writeFile "assembler.defn"    $ assm_src_defns is
+                   writeFile "assembler.switch"  $ assm_cases is
+                   writeFile "arity.table"       $ arity_table is
+                   writeFile "properties.table"  $ properties_table is
+                   writeFile "type.table"        $ type_table is
+                   writeFile "return.table"      $ return_table is
+                   writeFile "nop.table"         $ nop_table is
+                   writeFile "jump.table"        $ jump_table is
+                   writeFile "cond_jump.table"   $ cond_jump_table is
+                   writeFile "uncond_jump.table" $ uncond_jump_table is
+                   writeFile "must_read.table"   $ must_read_table is
+                   writeFile "maybe_read.table"  $ maybe_read_table is
+                   writeFile "must_write.table"  $ must_write_table is
+                   writeFile "maybe_write.table" $ maybe_write_table is
+                   writeFile "must_undef.table"  $ must_undef_table is
+                   writeFile "maybe_undef.table" $ maybe_undef_table is
+                   writeFile "opcode.enum"       $ opcode_enums is
+                   writeFile "opcode.att"        $ att_mnemonics is
+                   writeFile "opcode.intel"      $ intel_mnemonics is
+
+--------------------------------------------------------------------------------
 -- Test Codegen
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 -- Representative values for each operand type
 test_operand :: String -> [String]
@@ -1203,56 +1243,57 @@ test_instr i = map (mn ++) $ test_operands i
   where mn = (att i ++ " ")
 
 -- Convert an instruction into a test file
-test_file :: Instr -> IO()
-test_file i = writeFile file $ intercalate "\n" $ test_instr i
+write_test_file :: Instr -> IO ()
+write_test_file i = writeFile file $ intercalate "\n" $ test_instr i
   where file = "../test/" ++ (low (opcode_enum i)) ++ ".s"
 
 -- Convert all instructions into a list of instances for compilation
-test_files :: [Instr] -> IO()
-test_files is = mapM_ test_file is
+write_test_files :: [Instr] -> IO ()
+write_test_files is = mapM_ write_test_file is
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-- Documentation
+--------------------------------------------------------------------------------
+
+-- Convert an instruction into an html table row
+html_row :: Instr -> String
+html_row i = "<tr>" ++
+             "<td>" ++ (opcode i) ++ "</td>" ++
+             "<td>" ++ (low (instruction i)) ++ "</td>" ++
+             "<td>" ++ (low (att_form i)) ++ "</td>" ++
+             "<td>" ++ (intercalate ", " (map (:[]) (op_en i))) ++ "</td>" ++
+             "<td>" ++ (property i) ++ "</td>" ++
+             "<td>" ++ (flag i) ++ "</td>" ++
+             "<td>" ++ (description i) ++ "</td>" ++
+             "</tr>"
+  where att_form i = (att i) ++ " " ++ (intercalate ", " (reverse (operands i)))
+
+-- Convert all instructions into an html table
+html_table :: [Instr] -> String
+html_table is = "<table>" ++ 
+                "<tr>" ++
+                "<td>Hex Encoding</td>" ++
+                "<td>Intel Form</td>" ++
+                "<td>AT&T Form</td>" ++
+                "<td>Operand Encoding</td>" ++
+                "<td>Read/Write/Undef Properties</td>" ++
+                "<td>CPU ID Flag</td>" ++
+                "<td>Description</td>" ++
+                "</tr>\n" ++ 
+                intercalate "\n" (map html_row is) ++ 
+                "</table>"
+
+-- Write the html table
+write_html :: [Instr] -> IO ()
+write_html is = writeFile "../doc/ref/x64.html" $ html_table is
+
+--------------------------------------------------------------------------------
 -- Main (read the spreadsheet and write some code)
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 main :: IO ()		
-main = do args <- getArgs
-          file <- readFile $ head args
-
-          -- Read Inputs
-          let is = insert_missing $
-                   remove_ambiguity $
-                   fix_rex_rows $
-                   fix_ops $ 
-                   flatten_instrs $ 
-                   x64 $
-                   remove_format $ 
-                   read_instrs file
-
-          -- Debugging: Check Inputs
+main = do is <- parse_instrs "x86.csv"
           property_arity_check is 
-
-          -- Write Code
-          writeFile "assembler.decl"    $ assm_header_decls is
-          writeFile "assembler.defn"    $ assm_src_defns is
-          writeFile "assembler.switch"  $ assm_cases is
-          writeFile "arity.table"       $ arity_table is
-          writeFile "properties.table"  $ properties_table is
-          writeFile "type.table"        $ type_table is
-          writeFile "return.table"      $ return_table is
-          writeFile "nop.table"         $ nop_table is
-          writeFile "jump.table"        $ jump_table is
-          writeFile "cond_jump.table"   $ cond_jump_table is
-          writeFile "uncond_jump.table" $ uncond_jump_table is
-          writeFile "must_read.table"   $ must_read_table is
-          writeFile "maybe_read.table"  $ maybe_read_table is
-          writeFile "must_write.table"  $ must_write_table is
-          writeFile "maybe_write.table" $ maybe_write_table is
-          writeFile "must_undef.table"  $ must_undef_table is
-          writeFile "maybe_undef.table" $ maybe_undef_table is
-          writeFile "opcode.enum"       $ opcode_enums is
-          writeFile "opcode.att"        $ att_mnemonics is
-          writeFile "opcode.intel"      $ intel_mnemonics is
-
-          -- Write Tests
-          test_files is
+          write_code is
+          write_test_files is					
+          write_html is
