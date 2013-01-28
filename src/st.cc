@@ -15,14 +15,16 @@ bool St::check() const {
 }
 
 void St::write_att(ostream& os) const {
-	assert(val() < 8);
-	if ( val() == 0 )
-		os << "%st";	
-	else
-		os << "%st(" << dec << val() << ")";
+	os << "%";
+	write_intel(os);
 }
 
 void St::write_intel(ostream& os) const {
+	assert(check());
+	if ( val() == 0 )
+		os << "st";	
+	else
+		os << "st(" << dec << val() << ")";
 }
 
 OpType St0::type() const {

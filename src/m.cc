@@ -6,10 +6,6 @@ using namespace std;
 
 namespace x64asm {
 
-M::~M() {
-  // Does nothing.
-}
-
 OpType M::type() const {
 	return OpType::M;
 }
@@ -47,6 +43,8 @@ void M::write_att(ostream& os) const {
 		get_seg()->write_att(os);
 		os << ":";
 	}
+	if ( contains_disp() )
+		get_disp()->write_att(os);
 	os << "(";
 	if ( contains_base() ) {
 		const auto b = get_base();

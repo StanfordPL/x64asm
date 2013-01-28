@@ -15,18 +15,13 @@ bool Cr::check() const {
 }
 
 void Cr::write_att(ostream& os) const {
-	switch ( val() ) {
-		case 0: os << "%cr0"; break;
-		case 2: os << "%cr2"; break;
-		case 3: os << "%cr3"; break;
-		case 4: os << "%cr4"; break;
-		case 8: os << "%cr8"; break;
-
-		default: assert(false);
-	}				 
+	os << "%";
+	write_intel(os);
 }
 
 void Cr::write_intel(ostream& os) const {
+	assert(check());
+	os << "cr" << dec << val();
 }
 
 OpType Cr0234::type() const {

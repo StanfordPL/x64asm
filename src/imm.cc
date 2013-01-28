@@ -13,10 +13,12 @@ OpType Imm::type() const {
 }
 
 void Imm::write_att(ostream& os) const {
-	os << "$" << hex << val();
+	os << "$";
+	write_intel(os);
 }
 
 void Imm::write_intel(ostream& os) const {
+	os << "0x" << noshowbase << hex << val();
 }
 
 OpType Imm8::type() const {

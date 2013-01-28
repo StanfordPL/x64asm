@@ -22,7 +22,7 @@ class Instruction {
 		}
 
 		inline Instruction(Opcode opcode, 
-				               std::initializer_list<Operand*> operands)
+				               std::initializer_list<const Operand*> operands)
 				: opcode_(opcode), operands_(operands.begin(), operands.end()) {
 			assert(operands.size() <= 4);
 		}
@@ -47,7 +47,7 @@ class Instruction {
 			return operands_[index];
 		}
 
-		inline void set_operand(Operand* o, size_t index) {
+		inline void set_operand(const Operand* o, size_t index) {
 			assert(index < operands_.size());
 			operands_[index] = o;
 		}	
@@ -166,7 +166,7 @@ class Instruction {
 
 	private:
 		Opcode opcode_;
-		std::vector<Operand*> operands_;
+		std::vector<const Operand*> operands_;
 
 		static std::vector<size_t> arity_;
 		static std::vector<std::vector<Properties>> properties_;

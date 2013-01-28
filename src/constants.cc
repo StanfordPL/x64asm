@@ -137,7 +137,7 @@ const vector<R16> r16s {{
 const Eax eax{Constants::eax()};
 const R32 ecx{Constants::ecx()};
 const R32 edx{Constants::edx()};
-const R32 ebx{Constants::eax()};
+const R32 ebx{Constants::ebx()};
 const R32 esp{Constants::esp()};
 const R32 ebp{Constants::ebp()};
 const R32 esi{Constants::esi()};

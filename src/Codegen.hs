@@ -751,6 +751,14 @@ att_mnemonic i = "\"" ++ (att i) ++ "\""
 att_mnemonics :: [Instr] -> String
 att_mnemonics is = intercalate "\n" $ map (", "++) $ map att_mnemonic is
 
+-- Converts an instruction to a printable intel mnemonic
+intel_mnemonic :: Instr -> String
+intel_mnemonic i = "\"" ++ (low (raw_mnemonic i)) ++ "\""
+
+-- Converts all instructions to printable intel mnemonics
+intel_mnemonics :: [Instr] -> String
+intel_mnemonics is = intercalate "\n" $ map (", "++) $ map intel_mnemonic is
+
 -- Common Assembler strings
 -------------------------------------------------------------------------------
 
@@ -1151,4 +1159,5 @@ main = do args <- getArgs
           writeFile "maybe_undef.table" $ maybe_undef_table is
           writeFile "opcode.enum"       $ opcode_enums is
           writeFile "opcode.att"        $ att_mnemonics is
+          writeFile "opcode.intel"      $ intel_mnemonics is
           --writeFile "test.s"            $ test_instrs is					

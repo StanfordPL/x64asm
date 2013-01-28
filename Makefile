@@ -97,7 +97,7 @@ bin/%: tools/%.cc $(LIB)
 
 clean:
 	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN) $(TEST)
-	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.enum src/*.table
+	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.intel src/*.enum src/*.table
 	rm -rf test/enumerate_all.hi test/enumerate_all.o test/tmp/* test/enumerate_all
 	rm -f test/stokeasm_py/*.so
 	rm -rf test/stokeasm_py/build

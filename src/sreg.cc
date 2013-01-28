@@ -15,19 +15,21 @@ bool Sreg::check() const {
 }
 
 void Sreg::write_att(ostream& os) const {
-	switch ( val() ) {
-		case 0: os << "%es"; break;
-		case 1: os << "%cs"; break;
-		case 2: os << "%ss"; break;
-		case 3: os << "%ds"; break;
-		case 4: os << "%fs"; break;
-		case 5: os << "%gs"; break;
-
-		default: assert(false);
-	}
+	os << "%";
+	write_intel(os);
 }
 
 void Sreg::write_intel(ostream& os) const {
+	switch ( val() ) {
+		case 0: os << "es"; break;
+		case 1: os << "cs"; break;
+		case 2: os << "ss"; break;
+		case 3: os << "ds"; break;
+		case 4: os << "fs"; break;
+		case 5: os << "gs"; break;
+
+		default: assert(false);
+	}
 }
 
 OpType Fs::type() const {

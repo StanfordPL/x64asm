@@ -17,11 +17,12 @@ void all(const vector<T>& ts) {
 }
 
 void all() {
+	Imm32 disp(100);
 	all(crs);
 	all(drs);
 	all(eflags);
 	all(mms);
-	all(vector<Imm8>{{zero,one,three}});
+	all(vector<Imm8>{zero,one,three});
 	all(rhs);
 	all(rls);
 	all(rbs);
@@ -32,6 +33,12 @@ void all() {
 	all(sts);
 	all(xmms);
 	all(ymms);
+	all(vector<M>{  M8(&fs, &r15d, &ebx, Scale::TIMES_2, &disp),
+	               M16(&fs, &r15d, &ebx, Scale::TIMES_2, &disp),
+	               M32(&fs, &r15d, &ebx, Scale::TIMES_2, &disp),
+ 	               M64(&fs, &r15d, &ebx, Scale::TIMES_2, &disp),
+	              M128(&fs, &r15d, &ebx, Scale::TIMES_2, &disp),
+	              M256(&fs, &r15d, &ebx, Scale::TIMES_2, &disp)});
 }
 
 int main() {
@@ -44,6 +51,14 @@ int main() {
 	cout << Syntax::INTEL;
 	all();
 	cout << endl;
+
+
+	Code c {
+		Instruction{Opcode::NOP},
+		Instruction{Opcode::ADD_R16_R16, {&ax, &ax}}
+
+	};
+	cout << c << endl;
 
 	return 0;
 }

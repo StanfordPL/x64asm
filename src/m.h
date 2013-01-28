@@ -22,7 +22,7 @@ enum class Scale {
 
 /** An operand in memory. */
 class M : public CompoundOperand {
-	public:
+	protected:
 		inline M(const AddrR* b, bool addr_or = false)
 				: seg_(0), base_(b), index_(0), scale_(Scale::TIMES_1), disp_(0),
 				  addr_or_(addr_or) {
@@ -88,7 +88,7 @@ class M : public CompoundOperand {
 				  addr_or_(addr_or) {
 		}
 
-		virtual ~M() = 0;
+	public:
 
 		inline bool contains_seg() const {
 			return seg_ != 0;

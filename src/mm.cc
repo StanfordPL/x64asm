@@ -21,11 +21,13 @@ void Mm::insert_in(OpSet& os, bool promote) const {
 }
 
 void Mm::write_att(ostream& os) const {
-	assert(val() < 8);
-	os << "%mm" << dec << val();
+	os << "%";
+ 	write_intel(os);
 }
 
 void Mm::write_intel(ostream& os) const {
+	assert(check());
+	os << "mm" << dec << val();
 }
 
 } // namespace x64asm

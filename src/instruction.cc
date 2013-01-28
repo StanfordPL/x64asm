@@ -11,6 +11,13 @@ vector<const char*> att_ {{
 	#include "src/opcode.att"
 }};	
 
+vector<const char*> intel_ {{
+	// Internal mnemonics
+	"<label definition>"
+	// Auto-generated mnemonics
+	#include "src/opcode.intel"
+}};	
+
 } // namespace
 
 namespace x64asm {
@@ -109,6 +116,14 @@ void Instruction::write_att(ostream& os) const {
 }
 
 void Instruction::write_intel(ostream& os) const {
+	assert(get_opcode() < intel_.size());
+	os << intel_[get_opcode()] << " ";
+
+	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
+		get_operand(i)->write_intel(os);
+		if ( i != 0 )
+			os << ", ";
+	}
 }
 
 vector<size_t> Instruction::arity_ {

@@ -15,11 +15,13 @@ bool Dr::check() const {
 }
 
 void Dr::write_att(ostream& os) const {
-	assert(val() < 8);
-	os << "%dr" << dec << val();
+	os << "%";
+	write_intel(os);
 }
 
 void Dr::write_intel(ostream& os) const {
+	assert(check());
+	os << "db" << dec << val();
 }
 
 } // namespace x64asm

@@ -21,11 +21,13 @@ void Ymm::insert_in(OpSet& os, bool promote) const {
 }
 
 void Ymm::write_att(ostream& os) const {
-	assert(val() < 16);
-	os << "%ymm" << dec << val();
+	os << "%";
+	write_intel(os);
 }
 
 void Ymm::write_intel(ostream& os) const {
+	assert(check());
+	os << "ymm" << dec << val();
 }
 
 } // namespace x64asm

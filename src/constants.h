@@ -118,7 +118,7 @@ class Constants {
 		static inline R32 ebp()  { return R32{5}; }
 		static inline R32 esi()  { return R32{6}; }
 		static inline R32 edi()  { return R32{7}; }
-		static inline R32 r8d()  { return R32{9}; }
+		static inline R32 r8d()  { return R32{8}; }
 		static inline R32 r9d()  { return R32{9}; }
 		static inline R32 r10d() { return R32{10}; }
 		static inline R32 r11d() { return R32{11}; }
