@@ -21,10 +21,8 @@ class Code : public std::vector<Instruction> {
 				: std::vector<Instruction>{begin, end} { }
 
 		bool check() const;
-
 		void read_att(std::istream& is);
 		void read_intel(std::istream& is);
-
 		void write_att(std::ostream& os) const;
 		void write_intel(std::ostream& os) const;
 };

@@ -174,14 +174,14 @@ class M : public CompoundOperand {
 			disp_ = 0;
 		}
 
-		virtual OpType type() const;
 		virtual bool check() const;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
-
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 
-	private:	
+	private:
+		virtual OpType type() const;
+		virtual void insert_in(OpSet& os, bool promote = false) const;
+
 		const Sreg* seg_;
 		const AddrR* base_;
 		const AddrR* index_;

@@ -11,11 +11,10 @@ class Rel : public AtomicOperand {
 	public:
 		inline Rel(uint64_t val) : AtomicOperand{val} { }
 		virtual ~Rel() = 0;
-
-		virtual OpType type() const;
-
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
+	private:
+		virtual OpType type() const;
 };
 
 /** A relative address in the range from 128 bytes before the end of the 
@@ -24,9 +23,9 @@ class Rel : public AtomicOperand {
 class Rel8 : public Rel {
 	public:
 		inline Rel8(int8_t val) : Rel{(uint64_t)val} { }
-
-		virtual OpType type() const;
 		virtual bool check() const;
+	private:
+		virtual OpType type() const;
 };
 
 /** A relative address within the same code segment as the instruction 
@@ -36,9 +35,9 @@ class Rel8 : public Rel {
 class Rel32 : public Rel {
 	public:
 		inline Rel32(int64_t val) : Rel{(uint64_t)val} { }
-
-		virtual OpType type() const;
 		virtual bool check() const;
+	private:
+		virtual OpType type() const;
 };
 
 } // namespace x64asm

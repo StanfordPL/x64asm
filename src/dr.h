@@ -11,15 +11,13 @@ namespace x64asm {
 /** A debug register. */
 class Dr : public AtomicOperand {
 	friend class Constants;
-	private:
-		inline Dr(uint64_t val) : AtomicOperand{val} { }
-
 	public:
-		virtual OpType type() const;
 		virtual bool check() const;
-
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
+	private:
+		inline Dr(uint64_t val) : AtomicOperand{val} { }
+		virtual OpType type() const;
 };
 
 } // namespace x64asm

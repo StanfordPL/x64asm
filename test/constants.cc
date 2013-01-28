@@ -65,9 +65,6 @@ int main() {
 
 	os += af;
 
-	xmm8.insert_in(os, true);
-	r8b.insert_in(os, true);
-
 	cout << os << endl;
 	cout << OpSet::universe() << endl;
 

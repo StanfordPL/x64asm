@@ -14,11 +14,10 @@ namespace x64asm {
 class Label : public AtomicOperand {
 	public:
 		inline Label(uint64_t val) : AtomicOperand{val} { } 
-
-		virtual OpType type() const;
-
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
+	private:
+		virtual OpType type() const;
 };
 
 } // namespace x64asm

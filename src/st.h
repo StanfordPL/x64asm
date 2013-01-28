@@ -13,26 +13,24 @@ namespace x64asm {
 */
 class St : public AtomicOperand {
 	friend class Constants;
-	protected:
-		inline St(uint64_t val) : AtomicOperand{val} { } 
-
 	public:
-		virtual OpType type() const;
 		virtual bool check() const;
-
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
+	protected:
+		inline St(uint64_t val) : AtomicOperand{val} { } 
+	private:
+		virtual OpType type() const;
 };
 
 /** The top element of the FPU register stack. */
 class St0 : public St {
 	friend class Constants;
+	public:
+		virtual bool check() const;
 	private:
 		inline St0() : St{0} { }
-
-	public:
 		virtual OpType type() const;
-		virtual bool check() const;
 };
 
 } // namespace x64asm

@@ -14,16 +14,14 @@ namespace x64asm {
 class Ymm : public AtomicOperand {
 	friend class Constants;
 	friend class Xmm;
-	private:
-		inline Ymm(uint64_t val) : AtomicOperand{val} { } 
-
 	public:
-		virtual OpType type() const;
 		virtual bool check() const;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
-
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
+	private:
+		inline Ymm(uint64_t val) : AtomicOperand{val} { } 
+		virtual OpType type() const;
+		virtual void insert_in(OpSet& os, bool promote = false) const;
 };
 
 } // namespace x64asm

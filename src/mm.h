@@ -11,16 +11,14 @@ namespace x64asm {
 /** An MMX register. The 64-bit MMX registers are: MM0 through MM7. */
 class Mm : public AtomicOperand {
 	friend class Constants;
-	private:
-		inline Mm(uint64_t val) : AtomicOperand{val} { }
-
 	public:
-		virtual OpType type() const;
 		virtual bool check() const;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
-
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
+	private:
+		inline Mm(uint64_t val) : AtomicOperand{val} { }
+		virtual OpType type() const;
+		virtual void insert_in(OpSet& os, bool promote = false) const;
 };
 
 } // namespace x64asm

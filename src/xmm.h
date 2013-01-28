@@ -14,29 +14,26 @@ namespace x64asm {
 */
 class Xmm : public AtomicOperand {
 	friend class Constants;
-	protected:
-		inline Xmm(uint64_t val) : AtomicOperand{val} { } 
-
 	public:
-		virtual OpType type() const;
+		Ymm parent() const;
 		virtual bool check() const;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
-
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
-
-		Ymm parent() const;
+	protected:
+		inline Xmm(uint64_t val) : AtomicOperand{val} { } 
+	private:
+		virtual OpType type() const;
+		virtual void insert_in(OpSet& os, bool promote = false) const;
 };
 
 /** The XMM register XMM0. */
 class Xmm0 : public Xmm {
 	friend class Constants;
+	public:
+		virtual bool check() const;
 	private:
 		inline Xmm0() : Xmm{0} { }
-
-	public:
 		virtual OpType type() const;
-		virtual bool check() const;
 };
 
 } // namespace x64asm
