@@ -18,18 +18,19 @@ namespace x64asm {
 class Instruction {
 	public:
 		inline Instruction(Opcode opcode) 
-				: opcode_(opcode), operands_{{0,0,0,0}} { 
+				: opcode_(opcode), operands_{0,0,0,0} { 
 		}
 
 		inline Instruction(Opcode opcode, 
 				               std::initializer_list<const Operand*> operands)
-				: opcode_(opcode), operands_(operands.begin(), operands.end()) {
+				: opcode_(opcode), operands_{0,0,0,0} {
 			assert(operands.size() <= 4);
+			std::copy(operands.begin(), operands.end(), operands_.begin());
 		}
 
 		template <typename InItr>
 		inline Instruction(Opcode opcode, InItr begin, InItr end) 
-				: opcode_(opcode), operands_(begin, end) {
+				: opcode_(opcode), operands_{0,0,0,0} {
 			assert(end-begin <= 4);		
 			std::copy(begin, end, operands_.begin());
 		}

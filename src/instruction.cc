@@ -4,19 +4,19 @@ using namespace std;
 
 namespace {
 
-vector<const char*> att_ {{
+vector<const char*> att_ {
 	// Internal mnemonics
 	"<label definition>"
 	// Auto-generated mnemonics
 	#include "src/opcode.att"
-}};	
+};	
 
-vector<const char*> intel_ {{
+vector<const char*> intel_ {
 	// Internal mnemonics
 	"<label definition>"
 	// Auto-generated mnemonics
 	#include "src/opcode.intel"
-}};	
+};	
 
 } // namespace
 
@@ -97,8 +97,45 @@ OpSet Instruction::explicit_maybe_undef_set() const {
 bool Instruction::check() const {
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
 		const auto o = get_operand(i);
-		if ( type(i) != o->type() || !o->check() )
+		if ( !o->check() )
 			return false;
+
+		const auto t = o->type();
+		switch ( type(i) ) {
+			case OpType::IMM_8: 
+				if ( t != OpType::IMM_8 && t != OpType::ZERO && t != OpType::ONE &&
+						 t != OpType::THREE )
+					return false;
+				break;
+			case OpType::RL:
+				if ( t != OpType::RL && t != OpType::AL && t != OpType::CL )
+					return false;
+				break;
+			case OpType::R_16:
+				if ( t != OpType::R_16 && t != OpType::AX && t != OpType::DX )
+					return false;
+				break;
+			case OpType::R_32:
+				if ( t != OpType::R_32 && t != OpType::EAX )
+					return false;
+				break;
+			case OpType::R_64:
+				if ( t != OpType::R_64 && t != OpType::RAX )
+					return false;
+				break;
+			case OpType::SREG:
+				if ( t != OpType::SREG && t != OpType::FS && t != OpType::GS )
+					return false;
+				break;
+			case OpType::XMM:
+				if ( t != OpType::XMM && t != OpType::XMM_0 )
+					return false;
+				break;
+
+			default:
+				if ( t != type(i) )
+					return false;
+		}
 	}
 	return true;
 }
@@ -108,7 +145,7 @@ void Instruction::write_att(ostream& os) const {
 	os << att_[get_opcode()] << " ";
 
 	if ( arity() > 0 )
-		for ( size_t i = arity()-1; i >= 0; ++i ) {
+		for ( int i = arity()-1; i >= 0; --i ) {
 			get_operand(i)->write_att(os);
 			if ( i != 0 )
 				os << ", ";
@@ -121,7 +158,7 @@ void Instruction::write_intel(ostream& os) const {
 
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
 		get_operand(i)->write_intel(os);
-		if ( i != 0 )
+		if ( (i+1) != ie )
 			os << ", ";
 	}
 }
@@ -137,7 +174,7 @@ vector<vector<Properties>> Instruction::properties_ {
 	// Internal mnemonics
 	{}
 	// Auto-generated mnemonics
-	#include "src/properties.table"
+//	#include "src/properties.table"
 };
 
 vector<vector<OpType>> Instruction::type_ {
@@ -186,42 +223,42 @@ vector<OpSet> Instruction::implicit_must_read_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-	#include "src/must_read.table"
+//	#include "src/must_read.table"
 };
 
 vector<OpSet> Instruction::implicit_maybe_read_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-	#include "src/maybe_read.table"
+//	#include "src/maybe_read.table"
 };
 
 vector<OpSet> Instruction::implicit_must_write_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-	#include "src/must_write.table"
+//	#include "src/must_write.table"
 };
 
 vector<OpSet> Instruction::implicit_maybe_write_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-	#include "src/maybe_write.table"
+//	#include "src/maybe_write.table"
 };
 
 vector<OpSet> Instruction::implicit_must_undef_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-	#include "src/must_undef.table"
+//	#include "src/must_undef.table"
 };
 
 vector<OpSet> Instruction::implicit_maybe_undef_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-	#include "src/maybe_undef.table"
+//	#include "src/maybe_undef.table"
 };
 
 } // namespace x64asm

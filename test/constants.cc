@@ -53,10 +53,10 @@ int main() {
 	cout << endl;
 
 
+	cout << Syntax::ATT;
 	Code c {
-		Instruction{Opcode::NOP},
-		Instruction{Opcode::ADD_R16_R16, {&ax, &ax}}
-
+ 		  Instruction{Opcode::NOP}
+		, Instruction{Opcode::ADD_R16_R16, {&ax, &ax}}
 	};
 	cout << c << endl;
 

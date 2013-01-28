@@ -243,7 +243,7 @@ xmm_op "xmm"    = True
 xmm_op "<XMM0>" = True
 xmm_op _        = False
 
--- Transform operand into type
+-- Transform operand into c++ type
 op2type :: String -> String
 op2type "rl"       = "Rl"
 op2type "rh"       = "Rh"
@@ -312,6 +312,76 @@ op2type "far"      = "Far"
 op2type "label"    = "Label"
 op2type "hint"     = "Hint"
 op2type o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
+
+-- Transform operand into type tag
+op2tag :: String -> String
+op2tag "rl"       = "RL"
+op2tag "rh"       = "RH"
+op2tag "rb"       = "RB"
+op2tag "r16"      = "R_16"
+op2tag "r32"      = "R_32"
+op2tag "r64"      = "R_64"
+op2tag "AL"       = "AL"
+op2tag "CL"       = "CL"
+op2tag "AX"       = "AX"
+op2tag "DX"       = "DX"
+op2tag "EAX"      = "EAX" 
+op2tag "RAX"      = "RAX"
+op2tag "m8"       = "M_8"
+op2tag "m16"      = "M_16"
+op2tag "m32"      = "M_32"
+op2tag "m64"      = "M_64"
+op2tag "m128"     = "M_128"
+op2tag "m256"     = "M_256"
+op2tag "m16&64"   = "M_PAIR_16_64"
+op2tag "m16:16"   = "M_PTR_16_16" 
+op2tag "m16:32"   = "M_PTR_16_32"
+op2tag "m16:64"   = "M_PTR_16_64"
+op2tag "m16int"   = "M_16_INT"
+op2tag "m32int"   = "M_32_INT"
+op2tag "m64int"   = "M_64_INT"
+op2tag "m80bcd"   = "M_80_BCD" 
+op2tag "m32fp"    = "M_32_FP"
+op2tag "m64fp"    = "M_64_FP"
+op2tag "m80fp"    = "M_80_FP"
+op2tag "m2byte"   = "M_2_BYTE" 
+op2tag "m14byte"  = "M_14_BYTE" 
+op2tag "m28byte"  = "M_28_BYTE" 
+op2tag "m94byte"  = "M_94_BYTE" 
+op2tag "m108byte" = "M_108_BYTE" 
+op2tag "m512byte" = "M_512_BYTE" 
+op2tag "imm8"     = "IMM_8"
+op2tag "imm16"    = "IMM_16"
+op2tag "imm32"    = "IMM_32"
+op2tag "imm64"    = "IMM_64"
+op2tag "0"        = "ZERO"
+op2tag "1"        = "ONE"
+op2tag "3"        = "THREE"
+op2tag "mm"       = "MM"
+op2tag "xmm"      = "XMM"
+op2tag "<XMM0>"   = "XMM_0"
+op2tag "ymm"      = "YMM"
+op2tag "ST"       = "ST_0"
+op2tag "ST(i)"    = "ST"
+op2tag "rel8"     = "REL_8"
+op2tag "rel32"    = "REL_32"
+op2tag "moffs8"   = "MOFFS_8"
+op2tag "moffs16"  = "MOFFS_16"
+op2tag "moffs32"  = "MOFFS_32"
+op2tag "moffs64"  = "MOFFS_64"
+op2tag "CR0-CR7"  = "CR_0234" 
+op2tag "CR8"      = "CR_8"
+op2tag "DR0-DR7"  = "DR" 
+op2tag "Sreg"     = "SREG"
+op2tag "FS"       = "FS"
+op2tag "GS"       = "GS"
+-- Below this point are operand types we have introduced
+op2tag "p66"      = "PREF_66"
+op2tag "pw"       = "PREF_REX_W"
+op2tag "far"      = "FAR"
+op2tag "label"    = "LABEL"
+op2tag "hint"     = "HINT"
+op2tag o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
 
 -- Property related
 -------------------------------------------------------------------------------
@@ -632,9 +702,13 @@ properties_row i = "{" ++ intercalate "," ps ++ "}"
 -- Converts all instruction to properties table
 properties_table is = to_table is properties_row
 
+-- Creates an entry for a type row
+type_elem :: String -> String
+type_elem o = "OpType::" ++ (op2tag o)
+
 -- Converts an instruction to type table row
 type_row :: Instr -> String
-type_row i = "{" ++ intercalate "," [] ++ "}"
+type_row i = "{" ++ intercalate "," (map type_elem (operands i)) ++ "}"
 
 -- Converts all instruction to type table
 type_table is = to_table is type_row 

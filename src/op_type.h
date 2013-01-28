@@ -16,6 +16,9 @@ enum class OpType {
 	// EFLAGS Register bits (eflags.h)
 	EFLAG,
 
+	// Conditional Jump Hint (hint.h)
+	HINT,
+
 	// Immediates (imm.h)
 	IMM,
 	IMM_8,
