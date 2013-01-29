@@ -190,7 +190,7 @@ vector<vector<Properties>> Instruction::properties_ {
 	// Internal mnemonics
 	{}
 	// Auto-generated mnemonics
-//	#include "src/properties.table"
+	#include "src/properties.table"
 };
 
 vector<vector<OpType>> Instruction::type_ {
@@ -246,35 +246,35 @@ vector<OpSet> Instruction::implicit_maybe_read_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-//	#include "src/maybe_read.table"
+	#include "src/maybe_read.table"
 };
 
 vector<OpSet> Instruction::implicit_must_write_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-//	#include "src/must_write.table"
+	#include "src/must_write.table"
 };
 
 vector<OpSet> Instruction::implicit_maybe_write_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-//	#include "src/maybe_write.table"
+	#include "src/maybe_write.table"
 };
 
 vector<OpSet> Instruction::implicit_must_undef_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-//	#include "src/must_undef.table"
+	#include "src/must_undef.table"
 };
 
 vector<OpSet> Instruction::implicit_maybe_undef_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-//	#include "src/maybe_undef.table"
+	#include "src/maybe_undef.table"
 };
 
 } // namespace x64asm

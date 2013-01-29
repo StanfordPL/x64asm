@@ -868,7 +868,7 @@ set2op "rdx"   = "r64::rdx"
 set2op "RDX"   = "r64::RDX"
 set2op "FS"    = "sreg::FS"
 set2op "GS"    = "sreg::GS"
-set2op "XMM0"  = "xmm:XMM0"
+set2op "XMM0"  = "xmm::XMM0"
 set2op s = error $ "Unrecognized operand: " ++ s
 
 -- Converts an instruction to implicit_read table row
