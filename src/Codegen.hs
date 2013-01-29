@@ -408,40 +408,22 @@ op2tag o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
 -- Extract properties
 properties :: Instr -> [String]
 properties i = let x = map trim $ (splitOn ",") $ property i in
-  filter (\p -> p /= "") x
+  filter (/= "") x
 
 -- Implicit Read/Write/Undef related
 --------------------------------------------------------------------------------
 
--- Convert set elements to canonical form
-set2op :: String -> String
-set2op "a" = "af"
-set2op "A" = "AF"
-set2op "c" = "cf"
-set2op "C" = "CF"
-set2op "d" = "df"
-set2op "D" = "DF"
-set2op "o" = "of"
-set2op "O" = "OF"
-set2op "p" = "pf"
-set2op "P" = "PF"
-set2op "s" = "sf"
-set2op "S" = "SF"
-set2op "z" = "zf"
-set2op "Z" = "ZF"
-set2op s = s
-
 -- Extract implicit reads
 implicit_reads :: Instr -> [String]
-implicit_reads i = map set2op $ (splitOn " ") $ imp_read i
+implicit_reads i = filter (/= "") $ (splitOn " ") $ imp_read i
 
 -- Extract implicit writes
 implicit_writes :: Instr -> [String]
-implicit_writes i = map set2op $ (splitOn " ") $ imp_write i
+implicit_writes i = filter (/= "") $ (splitOn " ") $ imp_write i
 
 -- Extract implicit undefs
 implicit_undefs :: Instr -> [String]
-implicit_undefs i = map set2op $ (splitOn " ") $ imp_undef i
+implicit_undefs i = filter (/= "") $ (splitOn " ") $ imp_undef i
 
 -- Flag related
 --------------------------------------------------------------------------------
@@ -835,21 +817,67 @@ uncond_jump_row i = case is_uncond_jump i of
 uncond_jump_table :: [Instr] -> String
 uncond_jump_table is = to_table is uncond_jump_row 
 
+-- Is this a must element?
+is_must :: String -> Bool
+is_must o = any isUpper o
+
+-- Convert set elements to canonical form
+set2op :: String -> String
+set2op "CR0"   = "cr::CR0"
+set2op "a"     = "eflags::af"
+set2op "A"     = "eflags::AF"
+set2op "c"     = "eflags::cf"
+set2op "C"     = "eflags::CF"
+set2op "d"     = "eflags::df"
+set2op "D"     = "eflags::DF"
+set2op "o"     = "eflags::of"
+set2op "O"     = "eflags::OF"
+set2op "p"     = "eflags::pf"
+set2op "P"     = "eflags::PF"
+set2op "s"     = "eflags::sf"
+set2op "S"     = "eflags::SF"
+set2op "z"     = "eflags::zf"
+set2op "Z"     = "eflags::ZF"
+set2op "ST(0)" = "st::ST0"
+set2op "ST(1)" = "st::ST1"
+set2op "C0"    = "status::C0"
+set2op "c1"    = "status::c1"
+set2op "C1"    = "status::C1"
+set2op "C2"    = "status::C2"
+set2op "C3"    = "status::C3"
+set2op "al"    = "rl::al"
+set2op "AL"    = "rl::AL"
+set2op "AH"    = "rh::AH"
+set2op "ax"    = "r16::ax"
+set2op "AX"    = "r16::AX"
+set2op "DX"    = "r16::DX"
+set2op "eax"   = "r32::eax"
+set2op "EAX"   = "r32::EAX"
+set2op "ebx"   = "r32::ebx"
+set2op "EBX"   = "r32::EBX"
+set2op "ecx"   = "r32::ecx"
+set2op "ECX"   = "r32::ECX"
+set2op "edx"   = "r32::edx"
+set2op "EDX"   = "r32::EDX"
+set2op "rax"   = "r64::rax"
+set2op "rbx"   = "r64::rbx"
+set2op "RAX"   = "r64::RAX"
+set2op "rcx"   = "r64::rcx"
+set2op "RCX"   = "r64::RCX"
+set2op "rdx"   = "r64::rdx"
+set2op "RDX"   = "r64::RDX"
+set2op "FS"    = "sreg::FS"
+set2op "GS"    = "sreg::GS"
+set2op "XMM0"  = "xmm:XMM0"
+set2op s = error $ "Unrecognized operand: " ++ s
+
 -- Converts an instruction to implicit_read table row
 must_read_row :: Instr -> String
-must_read_row i = "OpSet::empty()"
-{-
+must_read_row i 
   | "???" `elem` (implicit_reads i) = "OpSet::universe()"
-  | otherwise = "OpSet::empty()" ++ (concat (map elem (implicit_reads i)))
-    where elem "???" = ""
-          elem "C0" = ""
-          elem "C1" = ""
-          elem "C2" = ""
-          elem "C3" = ""
-          elem s = s
-            | isUpper (head s) = "+" ++ s
-            | otherwise = ""
--}						
+  | otherwise = "OpSet::empty()" ++ (concat (map val (irs i)))
+    where irs i = filter is_must $ map set2op $ implicit_reads i
+          val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_read table
 must_read_table :: [Instr] -> String
@@ -857,7 +885,11 @@ must_read_table is = to_table is must_read_row
 
 -- Converts an instruction to implicit_read table row
 maybe_read_row :: Instr -> String
-maybe_read_row i = "OpSet::empty()"
+maybe_read_row i 
+  | "???" `elem` (implicit_reads i) = "OpSet::universe()"
+  | otherwise = "OpSet::empty()" ++ (concat (map val (irs i)))
+    where irs i = map set2op $ implicit_reads i
+          val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_read table
 maybe_read_table :: [Instr] -> String
@@ -865,7 +897,11 @@ maybe_read_table is = to_table is maybe_read_row
 
 -- Converts an instruction to implicit_write table row
 must_write_row :: Instr -> String
-must_write_row i = "OpSet::empty()"
+must_write_row i 
+  | "???" `elem` (implicit_writes i) = "OpSet::universe()"
+  | otherwise = "OpSet::empty()" ++ (concat (map val (iws i)))
+    where iws i = filter is_must $ map set2op $ implicit_writes i
+          val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_write table
 must_write_table :: [Instr] -> String
@@ -873,7 +909,11 @@ must_write_table is = to_table is must_write_row
 
 -- Converts an instruction to implicit_write table row
 maybe_write_row :: Instr -> String
-maybe_write_row i = "OpSet::empty()"
+maybe_write_row i 
+  | "???" `elem` (implicit_writes i) = "OpSet::universe()"
+  | otherwise = "OpSet::empty()" ++ (concat (map val (iws i)))
+    where iws i = map set2op $ implicit_writes i
+          val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_write table
 maybe_write_table :: [Instr] -> String
@@ -881,7 +921,11 @@ maybe_write_table is = to_table is maybe_write_row
 
 -- Converts an instruction to implicit_undef table row
 must_undef_row :: Instr -> String
-must_undef_row i = "OpSet::empty()"
+must_undef_row i 
+  | "???" `elem` (implicit_undefs i) = "OpSet::universe()"
+  | otherwise = "OpSet::empty()" ++ (concat (map val (ius i)))
+    where ius i = filter is_must $ map set2op $ implicit_undefs i
+          val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_undef table
 must_undef_table :: [Instr] -> String
@@ -889,7 +933,11 @@ must_undef_table is = to_table is must_undef_row
 
 -- Converts an instruction to implicit_undef table row
 maybe_undef_row :: Instr -> String
-maybe_undef_row i = "OpSet::empty()"
+maybe_undef_row i 
+  | "???" `elem` (implicit_undefs i) = "OpSet::universe()"
+  | otherwise = "OpSet::empty()" ++ (concat (map val (ius i)))
+    where ius i = map set2op $ implicit_undefs i
+          val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_undef table
 maybe_undef_table :: [Instr] -> String

@@ -239,7 +239,7 @@ vector<OpSet> Instruction::implicit_must_read_set_ {
 	// Internal mnemonics
 	OpSet::empty()
 	// Auto-generated mnemonics
-//	#include "src/must_read.table"
+	#include "src/must_read.table"
 };
 
 vector<OpSet> Instruction::implicit_maybe_read_set_ {

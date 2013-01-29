@@ -25,6 +25,7 @@ limitations under the License.
 #include "src/mm.h"
 #include "src/mxcsr.h"
 #include "src/r.h"
+#include "src/sreg.h"
 #include "src/status.h"
 #include "src/tag.h"
 #include "src/xmm.h"
@@ -50,6 +51,7 @@ class OpSet {
 			YMM     = 0x0000000000010001,
 			MM      = 0x0000000100000000,
 			MXCSR   = 0x0000010000000000,
+			SREG    = 0x0100000000000000,
 
 			// Group 3
 			EFLAG   = 0x0000000000000001,
@@ -178,6 +180,11 @@ class OpSet {
 			return ret += rhs;
 		}
 
+		inline OpSet operator+(Sreg rhs) const {
+			auto ret = *this;
+			return ret += rhs;
+		}
+
 		inline OpSet operator+(Status rhs) const {
 			auto ret = *this;
 			return ret += rhs;
@@ -250,6 +257,11 @@ class OpSet {
 
 		inline OpSet& operator+=(Mxcsr rhs) {
 			group2_ |= ((uint64_t) Mask::MXCSR << rhs.val());
+			return *this;
+		}
+
+		inline OpSet& operator+=(Sreg rhs) {
+			group2_ |= ((uint64_t) Mask::SREG << rhs.val());
 			return *this;
 		}
 
@@ -327,6 +339,11 @@ class OpSet {
 				     (uint64_t)Mask::MXCSR;
 		}
 
+		inline bool contains(Sreg rhs) const {
+			return ((group2_ >> rhs.val()) & (uint64_t)Mask::SREG) == 
+				     (uint64_t)Mask::SREG;
+		}
+
 		inline bool contains(Status rhs) const {
 			return ((group3_ >> rhs.val()) & (uint64_t)Mask::STATUS) == 
 				     (uint64_t)Mask::STATUS;
@@ -356,6 +373,7 @@ class OpSet {
 		// YMM/XMM regs [31-0]
 		// MM/FP regs   [39-32]
 		// MXCSR reg    [55-40]
+		// Segment reg  [61-56]
 		uint64_t group2_;
 		// EFLAGS  [21-0]
 		// Control [34-22]   

@@ -257,15 +257,13 @@ TODO:
 assembler.h
 
 - write_elf()
-- write_intel()
 
 instruction.h
 
 - read_att()
 - read_intel()
 - write_intel()
-- implicit sets()
 
 test/
 
-- Actually write some tests
+- Test checker
