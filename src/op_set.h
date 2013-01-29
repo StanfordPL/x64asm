@@ -20,12 +20,14 @@ limitations under the License.
 #include <iostream>
 
 #include "src/control.h"
+#include "src/cr.h"
 #include "src/eflags.h"
 #include "src/m.h"
 #include "src/mm.h"
 #include "src/mxcsr.h"
 #include "src/r.h"
 #include "src/sreg.h"
+#include "src/st.h"
 #include "src/status.h"
 #include "src/tag.h"
 #include "src/xmm.h"
@@ -135,6 +137,11 @@ class OpSet {
 			return ret += rhs;
 		}
 
+		inline OpSet operator+(Cr rhs) const {
+			auto ret = *this;
+			return ret += rhs;
+		}
+
 		inline OpSet operator+(Eflags rhs) const {
 			auto ret = *this;
 			return ret += rhs;
@@ -185,6 +192,11 @@ class OpSet {
 			return ret += rhs;
 		}
 
+		inline OpSet operator+(St rhs) const {
+			auto ret = *this;
+			return ret += rhs;
+		}
+
 		inline OpSet operator+(Status rhs) const {
 			auto ret = *this;
 			return ret += rhs;
@@ -212,6 +224,11 @@ class OpSet {
 
 		inline OpSet& operator+=(Control rhs) {
 			group3_ |= ((uint64_t) Mask::CONTROL << rhs.val());
+			return *this;
+		}
+
+		inline OpSet& operator+=(Cr rhs) {
+			// TODO!!!
 			return *this;
 		}
 
@@ -265,6 +282,11 @@ class OpSet {
 			return *this;
 		}
 
+		inline OpSet& operator+=(St rhs) {
+			// TODO!!!
+			return *this;
+		}
+
 		inline OpSet& operator+=(Status rhs) {
 			group3_ |= ((uint64_t) Mask::STATUS << rhs.val());
 			return *this;
@@ -288,6 +310,11 @@ class OpSet {
 		OpSet& operator+=(const M& rhs);
 
 		// Queries
+
+		inline bool contains(Cr rhs) const {
+			// TODO!!!
+			return false;
+		}
 
 		inline bool contains(Control rhs) const {
 			return ((group3_ >> rhs.val()) & (uint64_t)Mask::CONTROL) == 
@@ -342,6 +369,11 @@ class OpSet {
 		inline bool contains(Sreg rhs) const {
 			return ((group2_ >> rhs.val()) & (uint64_t)Mask::SREG) == 
 				     (uint64_t)Mask::SREG;
+		}
+
+		inline bool contains(St rhs) const {
+			// TODO!!!
+			return false;
 		}
 
 		inline bool contains(Status rhs) const {
