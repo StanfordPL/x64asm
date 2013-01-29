@@ -48,70 +48,70 @@ void OpSet::write_txt(ostream& os, bool att) const {
 	os << "{ ";
 	
 	for ( size_t i = 0; i < 16; ++i ) {
-		if ( contains(r64s[i]) ) {
+		if ( contains(r64::r64s[i]) ) {
 			if ( att )
-				r64s[i].write_att(os);
+				r64::r64s[i].write_att(os);
 			else
-				r64s[i].write_intel(os);
+				r64::r64s[i].write_intel(os);
 		 	os << " ";
 		}
-		else if ( contains(r32s[i]) ) {
+		else if ( contains(r32::r32s[i]) ) {
 			if ( att )
-				r32s[i].write_att(os);
+				r32::r32s[i].write_att(os);
 			else
-				r32s[i].write_intel(os);
+				r32::r32s[i].write_intel(os);
 		 	os << " ";
 		}
-		else if ( contains(r16s[i]) ) {
+		else if ( contains(r16::r16s[i]) ) {
 			if ( att ) 
-				r16s[i].write_att(os);
+				r16::r16s[i].write_att(os);
 			else
-				r16s[i].write_intel(os);
+				r16::r16s[i].write_intel(os);
 		 	os << " ";
 		}
 		else if ( i < 4 ) {
-			if ( contains(rls[i]) ) {
+			if ( contains(rl::rls[i]) ) {
 				if ( att )
-					rls[i].write_att(os);
+					rl::rls[i].write_att(os);
 				else
-					rls[i].write_intel(os);
+					rl::rls[i].write_intel(os);
 		 		os << " ";
 			}
-	    else if ( contains(rhs[i]) ) {
+	    else if ( contains(rh::rhs[i]) ) {
 				if ( att )
-					rhs[i].write_att(os);
+					rh::rhs[i].write_att(os);
 				else
-					rhs[i].write_intel(os);
+					rh::rhs[i].write_intel(os);
 		 		os << " ";
 			}
 		}	
-		else if ( contains(rbs[i-4]) ) {
+		else if ( contains(rb::rbs[i-4]) ) {
 			if ( att ) 
-				rbs[i-4].write_att(os);
+				rb::rbs[i-4].write_att(os);
 			else
-				rbs[i-4].write_intel(os);
+				rb::rbs[i-4].write_intel(os);
 		 	os << " ";
 		}
 	}
 
 	for ( size_t i = 0; i < 16; ++i ) {
-		if ( contains(ymms[i]) ) {
+		if ( contains(ymm::ymms[i]) ) {
 			if ( att ) 
-				ymms[i].write_att(os);
+				ymm::ymms[i].write_att(os);
 			else
-				ymms[i].write_intel(os);
+				ymm::ymms[i].write_intel(os);
 		 	os << " ";
 		}
-		else if ( contains(xmms[i]) ) {
+		else if ( contains(xmm::xmms[i]) ) {
 			if ( att ) 
-				xmms[i].write_att(os);
+				xmm::xmms[i].write_att(os);
 			else
-				xmms[i].write_intel(os);
+				xmm::xmms[i].write_intel(os);
 		 	os << " ";
 		}
 	}
 
-	for ( const auto mm : mms )
+	for ( const auto mm : mm::mms )
 		if ( contains(mm) ) {
 			if ( att ) 
 				mm.write_att(os);
@@ -120,12 +120,39 @@ void OpSet::write_txt(ostream& os, bool att) const {
 			os << " ";
 		}
 
-	for ( const auto e : eflags )
+	for ( const auto e : eflags::eflags )
 		if ( contains(e) ) {
 			if ( att ) 
 				e.write_att(os);
 			else 
 				e.write_intel(os);
+			os << " ";
+		}
+
+	for ( const auto m : mxcsr::mxcsr )
+		if ( contains(m) ) {
+			if ( att ) 
+				m.write_att(os);
+			else 
+				m.write_intel(os);
+			os << " ";
+		}
+
+	for ( const auto s : status::status )
+		if ( contains(s) ) {
+			if ( att ) 
+				s.write_att(os);
+			else 
+				s.write_intel(os);
+			os << " ";
+		}
+
+	for ( const auto t : tag::tags )
+		if ( contains(t) ) {
+			if ( att ) 
+				t.write_att(os);
+			else 
+				t.write_intel(os);
 			os << " ";
 		}
 

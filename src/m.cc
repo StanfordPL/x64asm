@@ -52,7 +52,7 @@ bool M::check() const {
 	if ( !contains_base() && !contains_index() ) 
 		return false;
 	// Index cannot be rsp/esp
-	if ( contains_index() && get_index()->val() == rsp.val() )
+	if ( contains_index() && get_index()->val() == r64::rsp.val() )
 		return false;
 
 	return true;

@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef X64ASM_SRC_EFLAG_H
-#define X64ASM_SRC_EFLAG_H
+#ifndef X64ASM_SRC_MXCSR_H
+#define X64ASM_SRC_MXCSR_H
 
 #include <iostream>
 
@@ -24,15 +24,15 @@ limitations under the License.
 
 namespace x64asm {
 
-/** An EFLAGS register bit. */
-class Eflag : public AtomicOperand {
+/** An MXCSR register bit. */
+class Mxcsr : public AtomicOperand {
 	friend class Constants;
 	public:
 		virtual bool check() const;
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	private:
-		inline Eflag(uint64_t val) : AtomicOperand{val} { }	
+		inline Mxcsr(uint64_t val) : AtomicOperand{val} { }	
 		virtual OpType type() const;
 		virtual void insert_in(OpSet& os, bool promote = false) const;
 };
@@ -40,3 +40,4 @@ class Eflag : public AtomicOperand {
 } // namespace x64asm
 
 #endif
+

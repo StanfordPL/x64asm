@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "src/eflag.h"
+#include "src/eflags.h"
 
 #include "src/op_set.h"
 
@@ -24,24 +24,25 @@ using namespace std;
 
 namespace x64asm {
 
-OpType Eflag::type() const {
-	return OpType::EFLAG;
+OpType Eflags::type() const {
+	return OpType::EFLAGS;
 }
 
-bool Eflag::check() const {
-	return val() < 22 && val() != 1 && val() != 3 && val() != 5 && val() != 15;
+bool Eflags::check() const {
+	return val() < 22 && val() != 1 && val() != 3 && val() != 5 && val() != 15 &&
+		     val() != 12;
 }
 
-void Eflag::insert_in(OpSet& os, bool promote) const {
+void Eflags::insert_in(OpSet& os, bool promote) const {
 	os += *this;
 }
 
-void Eflag::write_att(ostream& os) const {
+void Eflags::write_att(ostream& os) const {
 	os << "%";
 	write_intel(os);
 }
 
-void Eflag::write_intel(ostream& os) const {
+void Eflags::write_intel(ostream& os) const {
 	switch ( val() ) {
 		case 0: os << "cf"; break;
 		case 2: os << "pf"; break;
@@ -52,8 +53,7 @@ void Eflag::write_intel(ostream& os) const {
 		case 9: os << "if"; break;
 		case 10: os << "dr"; break;
 		case 11: os << "of"; break;
-		case 12: os << "iopl[0]"; break;
-		case 13: os << "iopl[1]"; break;
+		case 13: os << "iopl"; break;
 		case 14: os << "nt"; break;
 		case 16: os << "rf"; break;
 		case 17: os << "vm"; break;

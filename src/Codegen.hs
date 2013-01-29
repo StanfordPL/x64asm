@@ -32,6 +32,9 @@ data Instr =
         , instruction :: String -- Regular expression-ish name and type
         , op_en       :: String -- Operand type/position tags
         , property    :: String -- Operand read/write/undef properties
+        , imp_read    :: String -- Implicit read set				
+        , imp_write   :: String -- Implicit write set				
+        , imp_undef   :: String -- Implicit undef set				
         , mode64      :: String -- Is this instruction valid in 64-bit mode?
         , mode32      :: String	-- Is this instruction valid in 32-bit mode?
         , flag        :: String -- CPUID flag
@@ -407,6 +410,39 @@ properties :: Instr -> [String]
 properties i = let x = map trim $ (splitOn ",") $ property i in
   filter (\p -> p /= "") x
 
+-- Implicit Read/Write/Undef related
+--------------------------------------------------------------------------------
+
+-- Convert set elements to canonical form
+set2op :: String -> String
+set2op "a" = "af"
+set2op "A" = "AF"
+set2op "c" = "cf"
+set2op "C" = "CF"
+set2op "d" = "df"
+set2op "D" = "DF"
+set2op "o" = "of"
+set2op "O" = "OF"
+set2op "p" = "pf"
+set2op "P" = "PF"
+set2op "s" = "sf"
+set2op "S" = "SF"
+set2op "z" = "zf"
+set2op "Z" = "ZF"
+set2op s = s
+
+-- Extract implicit reads
+implicit_reads :: Instr -> [String]
+implicit_reads i = map set2op $ (splitOn " ") $ imp_read i
+
+-- Extract implicit writes
+implicit_writes :: Instr -> [String]
+implicit_writes i = map set2op $ (splitOn " ") $ imp_write i
+
+-- Extract implicit undefs
+implicit_undefs :: Instr -> [String]
+implicit_undefs i = map set2op $ (splitOn " ") $ imp_undef i
+
 -- Flag related
 --------------------------------------------------------------------------------
 
@@ -428,9 +464,10 @@ is_vex_encoded i = ("AVX" `elem` fs) || ("F16C" `elem` fs)
 
 -- Read a row
 read_instr :: String -> Instr
-read_instr s = let (o:i:e:p:m64:m32:f:a:d:[]) = splitOn "\t" s in 
+read_instr s = let (o:i:e:p:r:w:u:m64:m32:f:a:d:[]) = splitOn "\t" s in 
                    (Instr (trim o) (trim i) 
                           (trim e) (trim p)
+                          (trim r) (trim w) (trim u)
                           (trim m64) (trim m32) 
                           (trim f) 
                           (trim a) (trim d))
@@ -801,6 +838,18 @@ uncond_jump_table is = to_table is uncond_jump_row
 -- Converts an instruction to implicit_read table row
 must_read_row :: Instr -> String
 must_read_row i = "OpSet::empty()"
+{-
+  | "???" `elem` (implicit_reads i) = "OpSet::universe()"
+  | otherwise = "OpSet::empty()" ++ (concat (map elem (implicit_reads i)))
+    where elem "???" = ""
+          elem "C0" = ""
+          elem "C1" = ""
+          elem "C2" = ""
+          elem "C3" = ""
+          elem s = s
+            | isUpper (head s) = "+" ++ s
+            | otherwise = ""
+-}						
 
 -- Converts all instructions to implicit_read table
 must_read_table :: [Instr] -> String
@@ -967,7 +1016,7 @@ rm_args i = case op_en i of
 -- Optional Mod R/M SIB digit argument
 digit :: Instr -> String
 digit i = case find is_digit (opcode_suffix i) of
-  (Just ('/':d:[])) -> ",r64s[" ++ [d] ++ "]"
+  (Just ('/':d:[])) -> ",r64::r64s[" ++ [d] ++ "]"
   Nothing -> ""
 
 -- Default REX value (irrespective of explicit operands)
@@ -1016,7 +1065,7 @@ vex_w i
 vex_vvvv :: Instr -> String
 vex_vvvv i = case findIndex (=='V') (op_en i) of
   (Just idx) -> "arg" ++ (show idx) 
-  Nothing -> "r64s[15]"
+  Nothing -> "r64::r64s[15]"
 
 -- Emits code for VEX Prefix
 vex_prefix :: Instr -> String
@@ -1263,6 +1312,9 @@ html_row i = "<tr>" ++
              "<td>" ++ (low (att_form i)) ++ "</td>" ++
              "<td>" ++ (intercalate ", " (map (:[]) (op_en i))) ++ "</td>" ++
              "<td>" ++ (property i) ++ "</td>" ++
+             "<td>" ++ (intercalate ", " (implicit_reads i)) ++ "</td>" ++
+             "<td>" ++ (intercalate ", " (implicit_writes i)) ++ "</td>" ++
+             "<td>" ++ (intercalate ", " (implicit_undefs i)) ++ "</td>" ++
              "<td>" ++ (flag i) ++ "</td>" ++
              "<td>" ++ (description i) ++ "</td>" ++
              "</tr>"
@@ -1276,7 +1328,10 @@ html_table is = "<table>" ++
                 "<td>Intel Form</td>" ++
                 "<td>AT&T Form</td>" ++
                 "<td>Operand Encoding</td>" ++
-                "<td>Read/Write/Undef Properties</td>" ++
+                "<td>Explicit Read/Write/Undef Properties</td>" ++
+                "<td>Implicit Reads</td>" ++
+                "<td>Implicit Write</td>" ++
+                "<td>Implicit Undefs</td>" ++
                 "<td>CPU ID Flag</td>" ++
                 "<td>Description</td>" ++
                 "</tr>\n" ++ 

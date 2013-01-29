@@ -21,8 +21,11 @@ namespace x64asm {
 
 /** Any of the types which appear in the Intel Manual. */
 enum class OpType {
+	// FPU Control Register bits (control.h)
+	CONTROL = 0,
+
 	// Condition Registers (cr.h)
-	CR = 0,
+	CR,
 	CR_0234,
 	CR_8,
 
@@ -30,7 +33,7 @@ enum class OpType {
 	DR,
 
 	// EFLAGS Register bits (eflags.h)
-	EFLAG,
+	EFLAGS,
 
 	// Conditional Jump Hint (hint.h)
 	HINT,
@@ -90,6 +93,9 @@ enum class OpType {
 	MOFFS_32,
 	MOFFS_64,
 
+	// MXCSR Register bits (mxcsr.h)
+	MXCSR,
+
 	// Operands (operand.h)
 	OPERAND,
 	ATOMIC_OPERAND,
@@ -124,6 +130,12 @@ enum class OpType {
 	// Floating Point Stack Registers (st.h)
 	ST,
 	ST_0,
+
+	// FPU Status Register bits (status.h)
+	STATUS,
+
+	// FPU Tag Registers (tag.h)
+	TAG,
 
 	// XMM Registers (xmm.h)
 	XMM,

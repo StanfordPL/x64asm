@@ -19,10 +19,14 @@ limitations under the License.
 
 #include <iostream>
 
-#include "src/eflag.h"
+#include "src/control.h"
+#include "src/eflags.h"
 #include "src/m.h"
 #include "src/mm.h"
+#include "src/mxcsr.h"
 #include "src/r.h"
+#include "src/status.h"
+#include "src/tag.h"
 #include "src/xmm.h"
 #include "src/ymm.h"
 
@@ -31,29 +35,35 @@ namespace x64asm {
 class OpSet {
 	private:
 		enum class Mask : uint64_t {
-			EMPTY  = 0x0000000000000000,
-			UNIV   = 0xffffffffffffffff,
+			EMPTY   = 0x0000000000000000,
+			UNIV    = 0xffffffffffffffff,
 			
-			EFLAG  = 0x0000000000000001,
+			// Group 1
+			LOW     = 0x0000000000000001,
+			HIGH    = 0x0000000000010000,
+			WORD    = 0x0000000000010001,
+			DOUBLE  = 0x0000000100010001,
+		 	QUAD    = 0x0001000100010001,
 
-			LOW    = 0x0000000000000001,
-			HIGH   = 0x0000000000010000,
-			WORD   = 0x0000000000010001,
-			DOUBLE = 0x0000000100010001,
-		 	QUAD   = 0x0001000100010001,
+			// Group 2
+			XMM     = 0x0000000000000001,
+			YMM     = 0x0000000000010001,
+			MM      = 0x0000000100000000,
+			MXCSR   = 0x0000010000000000,
 
-			MM     = 0x0000000100000000,
-
-			XMM    = 0x0000000000000001,
-			YMM    = 0x0000000000010001
+			// Group 3
+			EFLAG   = 0x0000000000000001,
+			CONTROL = 0x0000000000400000,
+			STATUS  = 0x0000000800000000,
+			TAG     = 0x0008000000000000
 		};
 
-		inline OpSet(uint64_t g, uint64_t o, uint64_t f)
-				: gp_regs_{g}, other_regs_{o}, flags_{f} {
+		inline OpSet(uint64_t g1, uint64_t g2, uint64_t g3)
+				: group1_{g1}, group2_{g2}, group3_{g3} {
 		}
 
-		inline OpSet(Mask g, Mask o, Mask f)
-				: gp_regs_{(uint64_t)g}, other_regs_{(uint64_t)o}, flags_{(uint64_t)f} {
+		inline OpSet(Mask g1, Mask g2, Mask g3)
+				: group1_{(uint64_t)g1}, group2_{(uint64_t)g2}, group3_{(uint64_t)g3} {
 		}
 
 	public:	
@@ -68,7 +78,7 @@ class OpSet {
 
 		// Set Operators
 		inline OpSet operator~() const {
-			return OpSet(~gp_regs_, ~other_regs_, ~flags_);
+			return OpSet(~group1_, ~group2_, ~group3_);
 		}
 
 		inline OpSet operator&(const OpSet& rhs) const {
@@ -87,30 +97,30 @@ class OpSet {
 		}
 
 		inline OpSet& operator&=(const OpSet& rhs) {
-			gp_regs_ &= rhs.gp_regs_;
-			other_regs_ &= rhs.other_regs_;
-			flags_ &= rhs.flags_;
+			group1_ &= rhs.group1_;
+			group2_ &= rhs.group2_;
+			group3_ &= rhs.group3_;
 			return *this;
 		}
 
 		inline OpSet& operator|=(const OpSet& rhs) {
-			gp_regs_ |= rhs.gp_regs_;
-			other_regs_ |= rhs.other_regs_;
-			flags_ |= rhs.flags_;
+			group1_ |= rhs.group1_;
+			group2_ |= rhs.group2_;
+			group3_ |= rhs.group3_;
 			return *this;
 		}
 
 		inline OpSet& operator-=(const OpSet& rhs) {
-			gp_regs_ &= ~rhs.gp_regs_;
-			other_regs_ &= ~rhs.other_regs_;
-			flags_ &= ~rhs.flags_;
+			group1_ &= ~rhs.group1_;
+			group2_ &= ~rhs.group2_;
+			group3_ &= ~rhs.group3_;
 			return *this;
 		}
 
 		// Comparison Operators
 		inline bool operator==(const OpSet& rhs) const {
-			return gp_regs_ == rhs.gp_regs_ && other_regs_ == rhs.other_regs_ &&
-				     flags_ == rhs.flags_;
+			return group1_ == rhs.group1_ && group2_ == rhs.group2_ &&
+				     group3_ == rhs.group3_;
 		}
 
 		inline bool operator!=(const OpSet& rhs) const {
@@ -118,7 +128,12 @@ class OpSet {
 		}
 
 		// Element Operators
-		inline OpSet operator+(Eflag rhs) const {
+		inline OpSet operator+(Control rhs) const {
+			auto ret = *this;
+			return ret += rhs;
+		}
+
+		inline OpSet operator+(Eflags rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
@@ -158,6 +173,21 @@ class OpSet {
 			return ret += rhs;
 		}
 
+		inline OpSet operator+(Mxcsr rhs) const {
+			auto ret = *this;
+			return ret += rhs;
+		}
+
+		inline OpSet operator+(Status rhs) const {
+			auto ret = *this;
+			return ret += rhs;
+		}
+
+		inline OpSet operator+(Tag rhs) const {
+			auto ret = *this;
+			return ret += rhs;
+		}
+
 		inline OpSet operator+(Xmm rhs) const {
 			auto ret = *this;
 			return ret += rhs;
@@ -173,111 +203,147 @@ class OpSet {
 			return ret += rhs;
 		}
 
-		// TODO... and so forth
+		inline OpSet& operator+=(Control rhs) {
+			group3_ |= ((uint64_t) Mask::CONTROL << rhs.val());
+			return *this;
+		}
 
-		inline OpSet& operator+=(Eflag rhs) {
-			flags_ |= ((uint64_t) Mask::EFLAG << rhs.val());
+		inline OpSet& operator+=(Eflags rhs) {
+			group3_ |= ((uint64_t) Mask::EFLAG << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(Rh rhs) {
-			gp_regs_ |= ((uint64_t) Mask::HIGH << (rhs.val()-4));
+			group1_ |= ((uint64_t) Mask::HIGH << (rhs.val()-4));
 			return *this;
 		}
 
 		inline OpSet& operator+=(Rl rhs) {
-			gp_regs_ |= ((uint64_t) Mask::LOW << rhs.val());
+			group1_ |= ((uint64_t) Mask::LOW << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(Rb rhs) {
-			gp_regs_ |= ((uint64_t) Mask::LOW << rhs.val());
+			group1_ |= ((uint64_t) Mask::LOW << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(R16 rhs) {
-			gp_regs_ |= ((uint64_t) Mask::WORD << rhs.val());
+			group1_ |= ((uint64_t) Mask::WORD << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(R32 rhs) {
-			gp_regs_ |= ((uint64_t) Mask::DOUBLE << rhs.val());
+			group1_ |= ((uint64_t) Mask::DOUBLE << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(R64 rhs) {
-			gp_regs_ |= ((uint64_t) Mask::QUAD << rhs.val());
+			group1_ |= ((uint64_t) Mask::QUAD << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(Mm rhs) {
-			other_regs_ |= ((uint64_t) Mask::MM << rhs.val());
+			group2_ |= ((uint64_t) Mask::MM << rhs.val());
+			return *this;
+		}
+
+		inline OpSet& operator+=(Mxcsr rhs) {
+			group2_ |= ((uint64_t) Mask::MXCSR << rhs.val());
+			return *this;
+		}
+
+		inline OpSet& operator+=(Status rhs) {
+			group3_ |= ((uint64_t) Mask::STATUS << rhs.val());
+			return *this;
+		}
+
+		inline OpSet& operator+=(Tag rhs) {
+			group3_ |= ((uint64_t) Mask::TAG << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(Xmm rhs) {
-			other_regs_ |= ((uint64_t) Mask::XMM << rhs.val());
+			group2_ |= ((uint64_t) Mask::XMM << rhs.val());
 			return *this;
 		}
 
 		inline OpSet& operator+=(Ymm rhs) {
-			other_regs_ |= ((uint64_t) Mask::YMM << rhs.val());
+			group2_ |= ((uint64_t) Mask::YMM << rhs.val());
 			return *this;
 		}
 
 		OpSet& operator+=(const M& rhs);
 
-		// TODO... and so forth	
-
 		// Queries
 
-		inline bool contains(Eflag rhs) const {
-			return ((flags_ >> rhs.val()) & (uint64_t)Mask::EFLAG) == 
+		inline bool contains(Control rhs) const {
+			return ((group3_ >> rhs.val()) & (uint64_t)Mask::CONTROL) == 
+				     (uint64_t)Mask::CONTROL;
+		}
+
+		inline bool contains(Eflags rhs) const {
+			return ((group3_ >> rhs.val()) & (uint64_t)Mask::EFLAG) == 
 				     (uint64_t)Mask::EFLAG;
 		}
 
 		inline bool contains(Rh rhs) const {
-			return ((gp_regs_ >> (rhs.val()-4)) & (uint64_t)Mask::HIGH) == 
+			return ((group1_ >> (rhs.val()-4)) & (uint64_t)Mask::HIGH) == 
 				     (uint64_t)Mask::HIGH;
 		}
 
 		inline bool contains(Rl rhs) const {
-			return ((gp_regs_ >> rhs.val()) & (uint64_t)Mask::LOW) == 
+			return ((group1_ >> rhs.val()) & (uint64_t)Mask::LOW) == 
 				     (uint64_t)Mask::LOW;
 		}
 
 		inline bool contains(Rb rhs) const {
-			return ((gp_regs_ >> rhs.val()) & (uint64_t)Mask::LOW) == 
+			return ((group1_ >> rhs.val()) & (uint64_t)Mask::LOW) == 
 				     (uint64_t)Mask::LOW;
 		}
 
 		inline bool contains(R16 rhs) const {
-			return ((gp_regs_ >> rhs.val()) & (uint64_t)Mask::WORD) == 
+			return ((group1_ >> rhs.val()) & (uint64_t)Mask::WORD) == 
 				     (uint64_t)Mask::WORD;
 		}
 
 		inline bool contains(R32 rhs) const {
-			return ((gp_regs_ >> rhs.val()) & (uint64_t)Mask::DOUBLE) == 
+			return ((group1_ >> rhs.val()) & (uint64_t)Mask::DOUBLE) == 
 				     (uint64_t)Mask::DOUBLE;
 		}
 
 		inline bool contains(R64 rhs) const {
-			return ((gp_regs_ >> rhs.val()) & (uint64_t)Mask::QUAD) == 
+			return ((group1_ >> rhs.val()) & (uint64_t)Mask::QUAD) == 
 				     (uint64_t)Mask::QUAD;
 		}
 
 		inline bool contains(Mm rhs) const {
-			return ((other_regs_ >> rhs.val()) & (uint64_t)Mask::MM) == 
+			return ((group2_ >> rhs.val()) & (uint64_t)Mask::MM) == 
 				     (uint64_t)Mask::MM;
 		}
 
+		inline bool contains(Mxcsr rhs) const {
+			return ((group2_ >> rhs.val()) & (uint64_t)Mask::MXCSR) == 
+				     (uint64_t)Mask::MXCSR;
+		}
+
+		inline bool contains(Status rhs) const {
+			return ((group3_ >> rhs.val()) & (uint64_t)Mask::STATUS) == 
+				     (uint64_t)Mask::STATUS;
+		}
+
+		inline bool contains(Tag rhs) const {
+			return ((group3_ >> rhs.val()) & (uint64_t)Mask::TAG) == 
+				     (uint64_t)Mask::TAG;
+		}
+
 		inline bool contains(Xmm rhs) const {
-			return ((other_regs_ >> rhs.val()) & (uint64_t)Mask::XMM) == 
+			return ((group2_ >> rhs.val()) & (uint64_t)Mask::XMM) == 
 				     (uint64_t)Mask::XMM;
 		}
 
 		inline bool contains(Ymm rhs) const {
-			return ((other_regs_ >> rhs.val()) & (uint64_t)Mask::YMM) == 
+			return ((group2_ >> rhs.val()) & (uint64_t)Mask::YMM) == 
 				     (uint64_t)Mask::YMM;
 		}
 
@@ -286,12 +352,16 @@ class OpSet {
 
 	private:
 		// GP regs [63-0]
-		uint64_t gp_regs_;
+		uint64_t group1_;
 		// YMM/XMM regs [31-0]
 		// MM/FP regs   [39-32]
-		uint64_t other_regs_;
-		// EFLAGS etc...
-		uint64_t flags_;
+		// MXCSR reg    [55-40]
+		uint64_t group2_;
+		// EFLAGS  [21-0]
+		// Control [34-22]   
+		// Status  [50-35]
+		// Tag     [58-51]
+		uint64_t group3_;
 
 		void write_txt(std::ostream& os, bool att) const;
 };
