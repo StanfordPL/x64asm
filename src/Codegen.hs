@@ -35,6 +35,8 @@ data Instr =
         , imp_read    :: String -- Implicit read set				
         , imp_write   :: String -- Implicit write set				
         , imp_undef   :: String -- Implicit undef set				
+        , useful      :: String -- Is this a useful system instruction?
+        , protected   :: String -- Is this a protected system instruction?			
         , mode64      :: String -- Is this instruction valid in 64-bit mode?
         , mode32      :: String	-- Is this instruction valid in 32-bit mode?
         , flag        :: String -- CPUID flag
@@ -120,23 +122,23 @@ is_digit :: String -> Bool
 is_digit ('/':d:_) = isDigit d
 is_digit _ = False
 
+-- Extracts VEX terms
+vex_terms :: Instr -> [String]
+vex_terms i = splitOn "." $ head $ opcode_terms i
+
 -- Extracts prefix bytes
 opcode_prefix :: Instr -> [String]
 opcode_prefix i = takeWhile is_prefix $ opcode_terms i
 
 -- Extracts opcode bytes 
 opcode_bytes :: Instr -> [String]
-opcode_bytes i = (dropWhile is_prefix) . (takeWhile not_suffix) $ ts
+opcode_bytes i = takeWhile not_suffix $ dropWhile is_prefix $ ts 
   where not_suffix t = not $ is_suffix t
         ts = opcode_terms i
 
--- Extracts VEX terms
-vex_terms :: Instr -> [String]
-vex_terms i = splitOn "." $ head $ opcode_terms i
-
 -- Extracts suffix bytes
 opcode_suffix :: Instr -> [String]
-opcode_suffix i = (dropWhile is_prefix) . (dropWhile not_suffix) $ ts
+opcode_suffix i = dropWhile not_suffix $ dropWhile is_prefix $ ts
   where not_suffix t = not $ is_suffix t
         ts = opcode_terms i
 
@@ -446,13 +448,13 @@ is_vex_encoded i = ("AVX" `elem` fs) || ("F16C" `elem` fs)
 
 -- Read a row
 read_instr :: String -> Instr
-read_instr s = let (o:i:e:p:r:w:u:m64:m32:f:a:d:[]) = splitOn "\t" s in 
-                   (Instr (trim o) (trim i) 
-                          (trim e) (trim p)
-                          (trim r) (trim w) (trim u)
-                          (trim m64) (trim m32) 
+read_instr s = let (o:i:e:p:r:w:u:su:sp:m64:m32:f:a:d:[]) = splitOn "\t" s in 
+                   (Instr (trim o)  (trim i) 
+                          (trim e)  (trim p)
+                          (trim r)  (trim w)  (trim u)
+                          (trim su) (trim sp) (trim m64) (trim m32) 
                           (trim f) 
-                          (trim a) (trim d))
+                          (trim a)  (trim d))
 
 -- Read all rows
 read_instrs :: String -> [Instr]
@@ -469,9 +471,12 @@ remove_format is = filter (\x -> keep x) (drop 16 is)
 -- Step 2: Remove instructions which are invalid in 64-bit mode
 --------------------------------------------------------------------------------
 
--- Filter out valid 64-bit mode instructions
+-- Filter out valid 64-bit application mode instructions
 x64 :: [Instr] -> [Instr]
-x64 is = filter (\x -> (mode64 x) == "V") is
+x64 is = filter keep is
+  where keep i = mode64 i == "V" &&
+                 useful i /= "NO" && useful i /= "NO*" &&
+                 protected i /= "YES" && protected i /= "YES*"
 
 -- Step 3: Split instructions with implicit or explicit disjunct operands
 --------------------------------------------------------------------------------
@@ -676,6 +681,12 @@ uniq_opc_terms is = nub $ concat $ map opcode_terms is
 -- Generate a list of unique op/ens
 uniq_op_en :: [Instr] -> [String]
 uniq_op_en is = nub $ map op_en is
+
+-- Generate a list of unique implict operands
+uniq_implicits :: [Instr] -> [String]
+uniq_implicits is = nub $ concat imps
+  where imps = (map implicit_reads is) ++ (map implicit_writes is) ++ 
+               (map implicit_undefs is)
 
 -- Generate a list of ambiguous declarations
 ambig_decls :: [Instr] -> [[Instr]]
@@ -1134,7 +1145,7 @@ vex_opcode i = "opcode(0x" ++ (low ((opcode_terms i)!!1)) ++ ");\n"
 
 -- Emits code for non-VEX encoded opcode bytes
 non_vex_opcode :: Instr -> String
-non_vex_opcode i = "opcode(" ++ (bytes i) ++ (code i) ++ ");\n"
+non_vex_opcode i = "opcode(" ++ (bytes i) ++ (code i) ++ ");" ++ "// " ++ (intercalate "-" (opcode_bytes i)) ++ "&&&" ++ (intercalate "-" (opcode_suffix i)) ++ "\n" 
   where bytes i = intercalate "," $ map (("0x"++).low) (opcode_bytes i)
         code i = case findIndex (=='O') (op_en i) of
                       (Just idx) -> ",arg" ++ (show idx)
@@ -1400,3 +1411,4 @@ main = do is <- parse_instrs "x86.csv"
           write_code is
           write_test_files is					
           write_html is
+          mapM_ print $ uniq_operands is					
