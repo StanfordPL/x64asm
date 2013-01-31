@@ -358,14 +358,14 @@ VEX.NDS.256.66.0F.WIG C2 /r ib	VCMPPD ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, 
 VEX.NDS.128.0F.WIG C2 /r ib	VCMPPS xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R						V	V	AVX	vcmpps	Compare packed single-precision floating- point values in xmm3/m128 and xmm2 using bits 4:0 of imm8 as a comparison predicate.
 VEX.NDS.256.0F.WIG C2 /r ib	VCMPPS ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R						V	V	AVX	vcmpps	Compare packed single-precision floating- point values in ymm3/m256 and ymm2 using bits 4:0 of imm8 as a comparison predicate.
 													
-A6	CMPS m8, m8	NP	I, I	DF ESI rsi ESI rdi	CF IF SF ZF AF PF				V	V		cmps	For legacy mode, compare byte at address DS:(E)SI with byte at address ES:(E)DI; For 64-bit mode compare byte at address (R|E)SI to byte at address (R|E)DI. The status flags are set accordingly.
-A7	CMPS m16, m16	NP	I, I	DF ESI rsi ESI rdi	CF IF SF ZF AF PF				V	V		cmps	For legacy mode, compare word at address DS:(E)SI with word at address ES:(E)DI; For 64-bit mode compare word at address (R|E)SI with word at address (R|E)DI. The status flags are set accordingly.
-A7	CMPS m32, m32	NP	I, I	DF ESI rsi ESI rdi	CF IF SF ZF AF PF				V	V		cmps	For legacy mode, compare dword at address DS:(E)SI at dword at address ES:(E)DI; For 64-bit mode compare dword at address (R|E)SI at dword at address (R|E)DI. The status flags are set accordingly.
-REX.W+ A7 	CMPS m64, m64 	NP	I, I	DF ESI rsi ESI rdi	CF IF SF ZF AF PF				V	NE		cmps	Compares quadword at address (R|E)SI with quadword at address (R|E)DI and sets the status flags accordingly.
-A6	CMPSB	NP		DF ESI rsi ESI rdi	CF IF SF ZF AF PF				V	V		cmpsb	For legacy mode, compare byte at address DS:(E)SI with byte at address ES:(E)DI; For 64- bit mode compare byte at address (R|E)SI with byte at address (R|E)DI. The status flags are set accordingly.
-PREF.66+ A7	CMPSW	NP		DF ESI rsi ESI rdi	CF IF SF ZF AF PF				V	V		cmpsw	For legacy mode, compare word at address DS:(E)SI with word at address ES:(E)DI; For 64- bit mode compare word at address (R|E)SI with word at address (R|E)DI. The status flags are set accordingly.
-A7	CMPSD	NP		DF ESI rsi ESI rdi	CF IF SF ZF AF PF				V	V		cmpsl	For legacy mode, compare dword at address DS:(E)SI with dword at address ES:(E)DI; For 64-bit mode compare dword at address (R|E)SI with dword at address (R|E)DI. The status flags are set accordingly.
-REX.W+ A7	CMPSQ	NP		DF ESI rsi ESI rdi	CF IF SF ZF AF PF				V	NE		cmpsq	Compares quadword at address (R|E)SI with quadword at address (R|E)DI and sets the status flags accordingly.
+A6	CMPS m8, m8	NP	I, I	DF ESI rsi EDI rdi	CF IF SF ZF AF PF				V	V		cmps	For legacy mode, compare byte at address DS:(E)SI with byte at address ES:(E)DI; For 64-bit mode compare byte at address (R|E)SI to byte at address (R|E)DI. The status flags are set accordingly.
+A7	CMPS m16, m16	NP	I, I	DF ESI rsi EDI rdi	CF IF SF ZF AF PF				V	V		cmps	For legacy mode, compare word at address DS:(E)SI with word at address ES:(E)DI; For 64-bit mode compare word at address (R|E)SI with word at address (R|E)DI. The status flags are set accordingly.
+A7	CMPS m32, m32	NP	I, I	DF ESI rsi EDI rdi	CF IF SF ZF AF PF				V	V		cmps	For legacy mode, compare dword at address DS:(E)SI at dword at address ES:(E)DI; For 64-bit mode compare dword at address (R|E)SI at dword at address (R|E)DI. The status flags are set accordingly.
+REX.W+ A7 	CMPS m64, m64 	NP	I, I	DF ESI rsi EDI rdi	CF IF SF ZF AF PF				V	NE		cmps	Compares quadword at address (R|E)SI with quadword at address (R|E)DI and sets the status flags accordingly.
+A6	CMPSB	NP		DF ESI rsi EDI rdi	CF IF SF ZF AF PF				V	V		cmpsb	For legacy mode, compare byte at address DS:(E)SI with byte at address ES:(E)DI; For 64- bit mode compare byte at address (R|E)SI with byte at address (R|E)DI. The status flags are set accordingly.
+PREF.66+ A7	CMPSW	NP		DF ESI rsi EDI rdi	CF IF SF ZF AF PF				V	V		cmpsw	For legacy mode, compare word at address DS:(E)SI with word at address ES:(E)DI; For 64- bit mode compare word at address (R|E)SI with word at address (R|E)DI. The status flags are set accordingly.
+A7	CMPSD	NP		DF ESI rsi EDI rdi	CF IF SF ZF AF PF				V	V		cmpsl	For legacy mode, compare dword at address DS:(E)SI with dword at address ES:(E)DI; For 64-bit mode compare dword at address (R|E)SI with dword at address (R|E)DI. The status flags are set accordingly.
+REX.W+ A7	CMPSQ	NP		DF ESI rsi EDI rdi	CF IF SF ZF AF PF				V	NE		cmpsq	Compares quadword at address (R|E)SI with quadword at address (R|E)DI and sets the status flags accordingly.
 													
 F2 0F C2 /r ib	CMPSD xmm1, xmm2/m64, imm8	RMI	W, R, R						V	V	SSE2	cmpsd	Compare low double-precision floating-point value in xmm2/m64 and xmm1 using imm8 as comparison predicate.
 VEX.NDS.LIG.F2.0F.WIG C2 /r ib	VCMPSD xmm1, xmm2, xmm3/m64, imm8	RVMI	W, R, R, R						V	V	AVX	vcmpsd	Compare low double precision floating-point value in xmm3/m64 and xmm2 using bits 4:0 of imm8 as comparison predicate.
@@ -520,7 +520,7 @@ VEX.NDS.128.66.0F3A.WIG 41 /r ib	VDPPD xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R,
 VEX.NDS.128.66.0F3A.WIG 40 /r ib	VDPPS xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R						V	V	AVX	vdpps	Multiply packed SP floating point values from xmm1 with packed SP floating point values from xmm2/mem selectively add and store to xmm1.
 VEX.NDS.256.66.0F3A.WIG 40 /r ib	VDPPS ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R						V	V	AVX	vdpps	Multiply packed single-precision floating-point values from ymm2 with packed SP floating point values from ymm3/mem, selectively add pairs of elements and store to ymm1.
 													
-0F 77	EMMS	NP							V	V		emms	Set the x87 FPU tag word to empty.
+0F 77	EMMS	NP			TAG(*)				V	V		emms	Set the x87 FPU tag word to empty.
 													
 C8 iw 00 	ENTER imm16, 0	II	R, R	???	???	???			V	V		enterq	Create a stack frame for a procedure.
 C8 iw 01	ENTER imm16, 1 	II	R, R	???	???	???			V	V		enterq	Create a nested stack frame for a procedure.
@@ -570,10 +570,10 @@ D8 D8 +i 	FCOMP ST(i) 		R	ST(0)	C0 C1 C2 C3				V	V		fcomp	Compare ST(0) with ST(
 D8 D9 	FCOMP 			ST(0) ST(1)	C0 C1 C2 C3				V	V		fcomp	Compare ST(0) with ST(1) and pop register stack.
 DE D9	FCOMPP			ST(0) ST(1)	C0 C1 C2 C3				V	V		fcompp	Compare ST(0) with ST(1) and pop register stack twice.
 													
-DB F0 +i 	FCOMI ST, ST(i) 		R, R		Z P C C1				V	V		fcomi	Compare ST(0) with ST(i) and set status flags accordingly.
-DF F0 +i	FCOMIP ST, ST(i) 		R, R		Z P C C1				V	V		fcomip	Compare ST(0) with ST(i), set status flags accordingly, and pop register stack.
-DB E8 +i 	FUCOMI ST, ST(i) 		R, R		Z P C C1				V	V		fucomi	Compare ST(0) with ST(i), check for ordered values, and set status flags accordingly.
-DF E8 +i	FUCOMIP ST, ST(i) 		R, R		Z P C C1				V	V		fucomip	Compare ST(0) with ST(i), check for ordered values, set status flags accordingly, and pop register stack.
+DB F0 +i 	FCOMI ST, ST(i) 		R, R		CF OF SF ZF AF PF C1				V	V		fcomi	Compare ST(0) with ST(i) and set status flags accordingly.
+DF F0 +i	FCOMIP ST, ST(i) 		R, R		CF OF SF ZF AF PF C1				V	V		fcomip	Compare ST(0) with ST(i), set status flags accordingly, and pop register stack.
+DB E8 +i 	FUCOMI ST, ST(i) 		R, R		CF OF SF ZF AF PF C1				V	V		fucomi	Compare ST(0) with ST(i), check for ordered values, and set status flags accordingly.
+DF E8 +i	FUCOMIP ST, ST(i) 		R, R		CF OF SF ZF AF PF C1				V	V		fucomip	Compare ST(0) with ST(i), check for ordered values, set status flags accordingly, and pop register stack.
 													
 D9 FF 	FCOS 			ST(0)	ST(0) c1 C2	c1 C0 C3			V	V		fcos	Replace ST(0) with its cosine.
 													
@@ -610,8 +610,8 @@ DF /5 	FILD m64int 		R		ST(0) C1	C0 C2 C3			V	V		fildll	Push m64int onto the FPU
 													
 D9 F7 	FINCSTP 			TOP	TOP C1	C0 C2 C3			V	V		fincstp	Increment the TOP field in the FPU status register.
 													
-9B DB E3 	FINIT 				STATUS				V	V		finit	Initialize FPU after checking for pending unmasked floating-point exceptions.
-DB E3 	FNINIT				STATUS				V	V		fninit	Initialize FPU without checking for pending unmasked floating-point exceptions.
+9B DB E3 	FINIT 				STATUS TAG(*)				V	V		finit	Initialize FPU after checking for pending unmasked floating-point exceptions.
+DB E3 	FNINIT				STATUS TAG(*)				V	V		fninit	Initialize FPU without checking for pending unmasked floating-point exceptions.
 													
 DF /2 	FIST m16int 		W	ST(0)	C1	C0 C2 C3			V	V		fist	Store ST(0) in m16int.
 DB /2 	FIST m32int 		W	ST(0)	C1	C0 C2 C3			V	V		fistl	Store ST(0) in m32int.
@@ -638,7 +638,7 @@ D9 EE 	FLDZ 				ST(0) C1	C0 C2 C3			V	V		fldz	Push +0.0 onto the FPU register st
 													
 D9 /5 	FLDCW m2byte 		R			C0 C1 C2 C3			V	V		fldcw	Load FPU control word from m2byte.
 													
-D9 /4 	FLDENV m14/28byte 		R		STATUS				V	V		fldenv	Load FPU environment from m14byte or m28byte.
+D9 /4 	FLDENV m14/28byte 		R		STATUS TAG(*)				V	V		fldenv	Load FPU environment from m14byte or m28byte.
 													
 D8 /1 	FMUL m32fp 		R	ST(0)	ST(0) C1	C0 C2 C3			V	V		fmuls	Multiply ST(0) by m32fp and store result in ST(0).
 DC /1 	FMUL m64fp 		R	ST(0)	ST(0) C1	C0 C2 C3			V	V		fmull	Multiply ST(0) by m64fp and store result in ST(0).
@@ -661,10 +661,10 @@ D9 F2 	FPTAN 			ST(0)	ST(0) C1 C2	C0 C3			V	V		fptan	Replace ST(0) with its tang
 													
 D9 FC 	FRNDINT 			ST(0)	ST(0) C1	C0 C2 C3			V	V		frndint	Round ST(0) to an integer.
 													
-DD /4 	FRSTOR m94/108byte 		R		ST(*) STATUS				V	V		frstor	Load FPU state from m94byte or m108byte.
+DD /4 	FRSTOR m94/108byte 		R		ST(*) TAG(*) STATUS				V	V		frstor	Load FPU state from m94byte or m108byte.
 													
-9B DD /6 	FSAVE m94/108byte 		W	ST(*) STATUS	ST(*) STATUS				V	V		fsave	Store FPU state to m94byte or m108byte after checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
-DD /6 	FNSAVE m94/108byte 		W	ST(*) STATUS	ST(*) STATUS				V	V		fnsave	Store FPU environment to m94byte or m108byte without checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
+9B DD /6 	FSAVE m94/108byte 		W	ST(*) STATUS	ST(*) TAG(*) STATUS				V	V		fsave	Store FPU state to m94byte or m108byte after checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
+DD /6 	FNSAVE m94/108byte 		W	ST(*) STATUS	ST(*) TAG(*) STATUS				V	V		fnsave	Store FPU environment to m94byte or m108byte without checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
 													
 D9 FD 	FSCALE 			ST(0) ST(1)	ST(0) C1	C0 C2 C3			V	V		fscale	Scale ST(0) by ST(1).
 													
@@ -685,8 +685,8 @@ DD D8 +i 	FSTP ST(i) 		W	ST(0)	C1	C0 C2 C3			V	V		fstp	Copy ST(0) to ST(i) and p
 9B D9 /7 	FSTCW m2byte 		W			C0 C1 C2 C3			V	V		fstcw	Store FPU control word to m2byte after checking for pending unmasked floating-point exceptions.
 D9 /7 	FNSTCW m2byte 		W			C0 C1 C2 C3			V	V		fnstcw	Store FPU control word to m2byte without checking for pending unmasked floating-point exceptions.
 													
-9B D9 /6 	FSTENV m14/28byte 		W		STATUS	C0 C1 C2 C3			V	V		fstenv	Store FPU environment to m14byte or m28byte after checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
-D9 /6 	FNSTENV m14/28byte 		W		STATUS	C0 C1 C2 C3			V	V		fnstenv	Store FPU environment to m14byte or m28byte without checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
+9B D9 /6 	FSTENV m14/28byte 		W		STATUS TAG(*)	C0 C1 C2 C3			V	V		fstenv	Store FPU environment to m14byte or m28byte after checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
+D9 /6 	FNSTENV m14/28byte 		W		STATUS TAG(*)	C0 C1 C2 C3			V	V		fnstenv	Store FPU environment to m14byte or m28byte without checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
 													
 9B DD /7 	FSTSW m2byte 		W		STATUS	C0 C1 C2 C3			V	V		fstsw	Store FPU status word at m2byte after checking for pending unmasked floating-point exceptions.
 9B DF E0 	FSTSW AX 		W		STATUS	C0 C1 C2 C3			V	V		fstsw	Store FPU status word in AX register after checking for pending unmasked floating-point exceptions.
@@ -724,11 +724,11 @@ D9 E5 	FXAM 			ST(0)	C0 C1 C2 C3				V	V		fxam	Classify value or number in ST(0).
 D9 C8 +i 	FXCH ST(i) 		RW	ST(0)	ST(0) C1	C0 C2 C3			V	V		fxch	Exchange the contents of ST(0) and ST(i).
 D9 C9 	FXCH 			ST(0) ST(1)	ST(0) ST(1) C1	C0 C2 C3			V	V		fxch	Exchange the contents of ST(0) and ST(1).
 													
-0F AE /1 	FXRSTOR m512byte		R	???	???	???			V	V		fxrstor	Restore the x87 FPU, MMX, XMM, and MXCSR register state from m512byte.
-REX.W+ 0F AE /1	FXRSTOR64 m512byte		R	???	???	???			V	NE		fxrstor64	Restore the x87 FPU, MMX, XMM, and MXCSR register state from m512byte.
+0F AE /1 	FXRSTOR m512byte		R		ST(*) MM* XMM* CS DS				V	V		fxrstor	Restore the x87 FPU, MMX, XMM, and MXCSR register state from m512byte.
+REX.W+ 0F AE /1	FXRSTOR64 m512byte		R		ST(*) MM* XMM*				V	NE		fxrstor64	Restore the x87 FPU, MMX, XMM, and MXCSR register state from m512byte.
 													
-0F AE /0 	FXSAVE m512byte		W	???	???	???			V	V		fxsave	Save the x87 FPU, MMX, XMM, and MXCSR register state to m512byte.
-REX.W+ 0F AE /0	FXSAVE64 m512byte		W	???	???	???			V	NE		fxsave64	Save the x87 FPU, MMX, XMM, and MXCSR register state to m512byte.
+0F AE /0 	FXSAVE m512byte		W	ST(*) MM* XMM* CS DS					V	V		fxsave	Save the x87 FPU, MMX, XMM, and MXCSR register state to m512byte.
+REX.W+ 0F AE /0	FXSAVE64 m512byte		W	ST(*) MM* XMM*					V	NE		fxsave64	Save the x87 FPU, MMX, XMM, and MXCSR register state to m512byte.
 													
 D9 F4 	FXTRACT			ST(0)	ST(0) C1	C0 C2 C3			V	V		fxtract	Separate value in ST(0) into exponent and significand, store exponent in ST(0), and push the significand onto the register stack.
 													
@@ -754,47 +754,47 @@ F2 0F 7D /r 	HSUBPS xmm1, xmm2/m128	RM	RW, R						V	V	SSE3	hsubps	Horizontal sub
 VEX.NDS.128.F2.0F.WIG 7D /r	VHSUBPS xmm1, xmm2, xmm3/m128	RVM	W, R, R						V	V	AVX	vhsubps	Horizontal subtract packed single-precision floating-point values from xmm2 and xmm3/mem.
 VEX.NDS.256.F2.0F.WIG 7D /r	VHSUBPS ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	vhsubps	Horizontal subtract packed single-precision floating-point values from ymm2 and ymm3/mem.
 													
-F6 /7 	IDIV r/m8 	M	R	AX	AX	C O S Z A P			V	V		idivb	Signed divide AX by r/m8, with result stored in: AL = Quotient, AH = Remainder.
-REX+ F6 /7 	IDIV r/m8	M	R	AX	AX	C O S Z A P			V	NE		idivb	Signed divide AX by r/m8, with result stored in AL = Quotient, AH = Remainder.
-F7 /7 	IDIV r/m16 	M	R	AX DX	AX DX	C O S Z A P			V	V		idivw	Signed divide DX:AX by r/m16, with result stored in AX = Quotient, DX = Remainder.
-F7 /7 	IDIV r/m32 	M	R	EAX EDX	EAX EDX	C O S Z A P			V	V		idivl	Signed divide EDX:EAX by r/m32, with result stored in EAX = Quotient, EDX = Remainder.
-REX.W+ F7 /7 	IDIV r/m64 	M	R	RAX RDX	RAX RDX	C O S Z A P			V	NE		idivq	Signed divide RDX:RAX by r/m64, with result stored in RAX = Quotient, RDX = Remainder.
+F6 /7 	IDIV r/m8 	M	R	AX	AX	CF OF SF ZF AF PF			V	V		idivb	Signed divide AX by r/m8, with result stored in: AL = Quotient, AH = Remainder.
+REX+ F6 /7 	IDIV r/m8	M	R	AX	AX	CF OF SF ZF AF PF			V	NE		idivb	Signed divide AX by r/m8, with result stored in AL = Quotient, AH = Remainder.
+F7 /7 	IDIV r/m16 	M	R	AX DX	AX DX	CF OF SF ZF AF PF			V	V		idivw	Signed divide DX:AX by r/m16, with result stored in AX = Quotient, DX = Remainder.
+F7 /7 	IDIV r/m32 	M	R	EAX EDX	EAX EDX	CF OF SF ZF AF PF			V	V		idivl	Signed divide EDX:EAX by r/m32, with result stored in EAX = Quotient, EDX = Remainder.
+REX.W+ F7 /7 	IDIV r/m64 	M	R	RAX RDX	RAX RDX	CF OF SF ZF AF PF			V	NE		idivq	Signed divide RDX:RAX by r/m64, with result stored in RAX = Quotient, RDX = Remainder.
 													
-F6 /5	IMUL r/m8	M	R	AL	AX C O	S Z A P			V	V		imulb	AX= AL ∗ r/m byte.
-F7 /5 	IMUL r/m16 	M	R	AX	AX DX C O	S Z A P			V	V		imulw	DX:AX = AX ∗ r/m word.
-F7 /5 	IMUL r/m32 	M	R	EAX	EAX EDX C O	S Z A P			V	V		imull	EDX:EAX = EAX ∗ r/m32.
-REX.W+ F7 /5 	IMUL r/m64 	M	R	RAX	RAX RDX C O	S Z A P			V	NE		imulq	RDX:RAX = RAX ∗ r/m64.
-0F AF /r 	IMUL r16, r/m16 	RM	RW, R		C O	S Z A P			V	V		imulw	word register = word register ∗ r/m16.
-0F AF /r 	IMUL r32, r/m32 	RM	RW, R		C O	S Z A P			V	V		imull	doubleword register = doubleword register ∗  r/m32.
-REX.W+ 0F AF /r 	IMUL r64, r/m64 	RM	RW, R		C O	S Z A P			V	NE		imulq	Quadword register = Quadword register ∗  r/m64.
-6B /r ib 	IMUL r16, r/m16, imm8 	RMI	W, R, R		C O	S Z A P			V	V		imulw	word register = r/m16 ∗ sign-extended immediate byte.
-6B /r ib 	IMUL r32, r/m32, imm8 	RMI	W, R, R		C O	S Z A P			V	V		imull	doubleword register = r/m32 ∗ sign- extended immediate byte.
-REX.W+ 6B /r ib 	IMUL r64, r/m64, imm8 	RMI	W, R, R		C O	S Z A P			V	NE		imulq	Quadword register = r/m64 ∗ sign-extended  immediate byte.
-69 /r iw 	IMUL r16, r/m16, imm16 	RMI	W, R, R		C O	S Z A P			V	V		imulw	word register = r/m16 ∗ immediate word.
-69 /r id 	IMUL r32, r/m32, imm32 	RMI	W, R, R		C O	S Z A P			V	V		imull	doubleword register = r/m32 ∗ immediate doubleword.
-REX.W+ 69 /r id 	IMUL r64, r/m64, imm32 	RMI	W, R, R		C O	S Z A P			V	NE		imulq	Quadword register = r/m64 ∗ immediate doubleword.
+F6 /5	IMUL r/m8	M	R	AL	AX CF OF	SF ZF AF PF			V	V		imulb	AX= AL ∗ r/m byte.
+F7 /5 	IMUL r/m16 	M	R	AX	AX DX CF OF	SF ZF AF PF			V	V		imulw	DX:AX = AX ∗ r/m word.
+F7 /5 	IMUL r/m32 	M	R	EAX	EAX EDX CF OF	SF ZF AF PF			V	V		imull	EDX:EAX = EAX ∗ r/m32.
+REX.W+ F7 /5 	IMUL r/m64 	M	R	RAX	RAX RDX CF OF	SF ZF AF PF			V	NE		imulq	RDX:RAX = RAX ∗ r/m64.
+0F AF /r 	IMUL r16, r/m16 	RM	RW, R		CF OF	SF ZF AF PF			V	V		imulw	word register = word register ∗ r/m16.
+0F AF /r 	IMUL r32, r/m32 	RM	RW, R		CF OF	SF ZF AF PF			V	V		imull	doubleword register = doubleword register ∗  r/m32.
+REX.W+ 0F AF /r 	IMUL r64, r/m64 	RM	RW, R		CF OF	SF ZF AF PF			V	NE		imulq	Quadword register = Quadword register ∗  r/m64.
+6B /r ib 	IMUL r16, r/m16, imm8 	RMI	W, R, R		CF OF	SF ZF AF PF			V	V		imulw	word register = r/m16 ∗ sign-extended immediate byte.
+6B /r ib 	IMUL r32, r/m32, imm8 	RMI	W, R, R		CF OF	SF ZF AF PF			V	V		imull	doubleword register = r/m32 ∗ sign- extended immediate byte.
+REX.W+ 6B /r ib 	IMUL r64, r/m64, imm8 	RMI	W, R, R		CF OF	SF ZF AF PF			V	NE		imulq	Quadword register = r/m64 ∗ sign-extended  immediate byte.
+69 /r iw 	IMUL r16, r/m16, imm16 	RMI	W, R, R		CF OF	SF ZF AF PF			V	V		imulw	word register = r/m16 ∗ immediate word.
+69 /r id 	IMUL r32, r/m32, imm32 	RMI	W, R, R		CF OF	SF ZF AF PF			V	V		imull	doubleword register = r/m32 ∗ immediate doubleword.
+REX.W+ 69 /r id 	IMUL r64, r/m64, imm32 	RMI	W, R, R		CF OF	SF ZF AF PF			V	NE		imulq	Quadword register = r/m64 ∗ immediate doubleword.
 													
-E4 ib 	IN AL, imm8 	I	W, R						V	V		inb	Input byte from imm8 I/O port address into AL.
-E5 ib 	IN AX, imm8 	I	W, R						V	V		inw	Input word from imm8 I/O port address into AX.
-E5 ib 	IN EAX, imm8 	I	W, R						V	V		inl	Input dword from imm8 I/O port address into EAX.
-EC 	IN AL,DX 	NP	W, R						V	V		inb	Input byte from I/O port in DX into AL.
-ED 	IN AX,DX 	NP	W, R						V	V		inw	Input word from I/O port in DX into AX.
-ED 	IN EAX,DX 	NP	W, R						V	V		inl	Input doubleword from I/O port in DX into EAX.
+E4 ib 	IN AL, imm8 	I	W, R	IOPL VM					V	V		inb	Input byte from imm8 I/O port address into AL.
+E5 ib 	IN AX, imm8 	I	W, R	IOPL VM					V	V		inw	Input word from imm8 I/O port address into AX.
+E5 ib 	IN EAX, imm8 	I	W, R	IOPL VM					V	V		inl	Input dword from imm8 I/O port address into EAX.
+EC 	IN AL,DX 	NP	W, R	IOPL VM					V	V		inb	Input byte from I/O port in DX into AL.
+ED 	IN AX,DX 	NP	W, R	IOPL VM					V	V		inw	Input word from I/O port in DX into AX.
+ED 	IN EAX,DX 	NP	W, R	IOPL VM					V	V		inl	Input doubleword from I/O port in DX into EAX.
 													
-FE /0 	INC r/m8 	M	RW		O S Z A P				V	V		incb	Increment r/m byte by 1.
-REX+ FE /0 	INC r/m8	M	RW		O S Z A P				V	NE		incb	Increment r/m byte by 1.
-FF /0 	INC r/m16 	M	RW		O S Z A P				V	V		incw	Increment r/m word by 1.
-FF /0 	INC r/m32 	M	RW		O S Z A P				V	V		incl	Increment r/m doubleword by 1.
-REX.W+ FF /0	INC r/m64 	M	RW		O S Z A P				V	NE		incq	Increment r/m quadword by 1.
+FE /0 	INC r/m8 	M	RW		OF SF ZF AF PF				V	V		incb	Increment r/m byte by 1.
+REX+ FE /0 	INC r/m8	M	RW		OF SF ZF AF PF				V	NE		incb	Increment r/m byte by 1.
+FF /0 	INC r/m16 	M	RW		OF SF ZF AF PF				V	V		incw	Increment r/m word by 1.
+FF /0 	INC r/m32 	M	RW		OF SF ZF AF PF				V	V		incl	Increment r/m doubleword by 1.
+REX.W+ FF /0	INC r/m64 	M	RW		OF SF ZF AF PF				V	NE		incq	Increment r/m quadword by 1.
 40 +rw 	INC r16 								NE	V			Increment word register by 1.
 40 +rd 	INC r32 								NE	V			Increment doubleword register by 1.
 													
-6C 	INS m8, DX 	NP	I, I	???	???	???			V	V		ins	Input byte from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.
-6D 	INS m16, DX 	NP	I, I	???	???	???			V	V		ins	Input word from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.1
-6D 	INS m32, DX 	NP	I, I	???	???	???			V	V		ins	Input doubleword from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.1
-6C 	INSB 	NP		???	???	???			V	V		insb	Input byte from I/O port specified in DX into memory location specified with ES:(E)DI or RDI.1
-PREF.66+ 6D 	INSW 	NP		???	???	???			V	V		insw	Input word from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.1
-6D 	INSD 	NP		???	???	???			V	V		insl	Input doubleword from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.1
+6C 	INS m8, DX 	NP	I, R	IOPL VM DF RDI					V	V		ins	Input byte from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.
+6D 	INS m16, DX 	NP	I, R	IOPL VM DF RDI					V	V		ins	Input word from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.
+6D 	INS m32, DX 	NP	I, R	IOPL VM DF RDI					V	V		ins	Input doubleword from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.
+6C 	INSB 	NP		IOPL VM DF DX RDI					V	V		insb	Input byte from I/O port specified in DX into memory location specified with ES:(E)DI or RDI.
+PREF.66+ 6D 	INSW 	NP		IOPL VM DF DX RDI					V	V		insw	Input word from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.
+6D 	INSD 	NP		IOPL VM DF DX RDI					V	V		insl	Input doubleword from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.
 													
 66 0F 3A 21 /r ib 	INSERTPS xmm1, xmm2/m32, imm8	RMI	RW, R, R						V	V	SSE4_1	insertps	Insert a single precision floating-point value selected by imm8 from xmm2/m32 into xmm1 at the specified destination element specified by imm8 and zero out destination elements in xmm1 as indicated in imm8.
 VEX.NDS.128.66.0F3A.WIG 21 /r ib	VINSERTPS xmm1, xmm2, xmm3/m32, imm8	RVMI	Z, W, R, R						V	V	AVX	vinsertps	Insert a single precision floating point value selected by imm8 from xmm3/m32 and merge into xmm2 at the specified destination element specified by imm8 and zero out destination elements in xmm1 as indicated in imm8.
@@ -814,97 +814,97 @@ CF 	IRET 	NP		???	???	???			V	V		iretw	Interrupt return (16-bit operand size).
 CF 	IRETD 	NP		???	???	???			V	V		iretl	Interrupt return (32-bit operand size).
 REX.W+ CF 	IRETQ 	NP		???	???	???			V	NE		iretq	Interrupt return (64-bit operand size).
 													
-77 cb 	JA rel8 	D	R	C Z					V	V		ja	Jump short if above (CF=0 and ZF=0).
-73 cb 	JAE rel8 	D	R	C					V	V		jae	Jump short if above or equal (CF=0).
-72 cb 	JB rel8 	D	R	C					V	V		jb	Jump short if below (CF=1).
-76 cb 	JBE rel8 	D	R	C Z					V	V		jbe	Jump short if below or equal (CF=1 or ZF=1).
-72 cb 	JC rel8 	D	R	C					V	V		jb	Jump short if carry (CF=1).
+77 cb 	JA rel8 	D	R	CF ZF					V	V		ja	Jump short if above (CF=0 and ZF=0).
+73 cb 	JAE rel8 	D	R	CF					V	V		jae	Jump short if above or equal (CF=0).
+72 cb 	JB rel8 	D	R	CF					V	V		jb	Jump short if below (CF=1).
+76 cb 	JBE rel8 	D	R	CF ZF					V	V		jbe	Jump short if below or equal (CF=1 or ZF=1).
+72 cb 	JC rel8 	D	R	CF					V	V		jb	Jump short if carry (CF=1).
 E3 cb 	JCXZ rel8 								NE	V			Jump short if CX register is 0.
 E3 cb 	JECXZ rel8 	D	R	ECX					V	V		jecxz	Jump short if ECX register is 0.
 E3 cb 	JRCXZ rel8 	D	R	RCX					V	NE		jrcxz	Jump short if RCX register is 0.
-74 cb 	JE rel8 	D	R	Z					V	V		je	Jump short if equal (ZF=1).
-7F cb 	JG rel8 	D	R	Z S O					V	V		jg	Jump short if greater (ZF=0 and SF=OF).
-7D cb 	JGE rel8 	D	R	S O					V	V		jge	Jump short if greater or equal (SF=OF).
-7C cb 	JL rel8 	D	R	S O					V	V		jl	Jump short if less (SF!= OF).
-7E cb 	JLE rel8 	D	R	Z S O					V	V		jle	Jump short if less or equal (ZF=1 or SF!= OF).
-76 cb 	JNA rel8 	D	R	C Z					V	V		jbe	Jump short if not above (CF=1 or ZF=1).
-72 cb 	JNAE rel8 	D	R	C					V	V		jb	Jump short if not above or equal (CF=1).
-73 cb 	JNB rel8 	D	R	C					V	V		jae	Jump short if not below (CF=0).
-77 cb 	JNBE rel8 	D	R	C Z					V	V		ja	Jump short if not below or equal (CF=0 and ZF=0).
-73 cb 	JNC rel8 	D	R	C					V	V		jae	Jump short if not carry (CF=0).
-75 cb 	JNE rel8 	D	R	Z					V	V		jne	Jump short if not equal (ZF=0).
-7E cb 	JNG rel8 	D	R	Z S O					V	V		jle	Jump short if not greater (ZF=1 or SF!= OF).
-7C cb 	JNGE rel8 	D	R	S O					V	V		jl	Jump short if not greater or equal (SF!= OF).
-7D cb 	JNL rel8 	D	R	S O					V	V		jge	Jump short if not less (SF=OF).
-7F cb 	JNLE rel8 	D	R	Z S O					V	V		jg	Jump short if not less or equal (ZF=0 and SF=OF).
-71 cb 	JNO rel8 	D	R	O					V	V		jno	Jump short if not overflow (OF=0).
-7B cb 	JNP rel8 	D	R	P					V	V		jnp	Jump short if not parity (PF=0).
-79 cb 	JNS rel8 	D	R	S					V	V		jns	Jump short if not sign (SF=0).
-75 cb 	JNZ rel8 	D	R	Z					V	V		jne	Jump short if not zero (ZF=0).
-70 cb 	JO rel8 	D	R	O					V	V		jo	Jump short if overflow (OF=1).
-7A cb 	JP rel8 	D	R	P					V	V		jp	Jump short if parity (PF=1).
-7A cb 	JPE rel8 	D	R	P					V	V		jp	Jump short if parity even (PF=1).
-7B cb 	JPO rel8 	D	R	P					V	V		jnp	Jump short if parity odd (PF=0).
-78 cb 	JS rel8 	D	R	S					V	V		js	Jump short if sign (SF=1).
-74 cb 	JZ rel8 	D	R	Z					V	V		je	Jump short if zero (ZF = 1).
+74 cb 	JE rel8 	D	R	ZF					V	V		je	Jump short if equal (ZF=1).
+7F cb 	JG rel8 	D	R	ZF SF OF					V	V		jg	Jump short if greater (ZF=0 and SF=OF).
+7D cb 	JGE rel8 	D	R	SF OF					V	V		jge	Jump short if greater or equal (SF=OF).
+7C cb 	JL rel8 	D	R	SF OF					V	V		jl	Jump short if less (SF!= OF).
+7E cb 	JLE rel8 	D	R	ZF SF OF					V	V		jle	Jump short if less or equal (ZF=1 or SF!= OF).
+76 cb 	JNA rel8 	D	R	CF ZF					V	V		jbe	Jump short if not above (CF=1 or ZF=1).
+72 cb 	JNAE rel8 	D	R	CF					V	V		jb	Jump short if not above or equal (CF=1).
+73 cb 	JNB rel8 	D	R	CF					V	V		jae	Jump short if not below (CF=0).
+77 cb 	JNBE rel8 	D	R	CF ZF					V	V		ja	Jump short if not below or equal (CF=0 and ZF=0).
+73 cb 	JNC rel8 	D	R	CF					V	V		jae	Jump short if not carry (CF=0).
+75 cb 	JNE rel8 	D	R	ZF					V	V		jne	Jump short if not equal (ZF=0).
+7E cb 	JNG rel8 	D	R	ZF SF OF					V	V		jle	Jump short if not greater (ZF=1 or SF!= OF).
+7C cb 	JNGE rel8 	D	R	SF OF					V	V		jl	Jump short if not greater or equal (SF!= OF).
+7D cb 	JNL rel8 	D	R	SF OF					V	V		jge	Jump short if not less (SF=OF).
+7F cb 	JNLE rel8 	D	R	ZF SF OF					V	V		jg	Jump short if not less or equal (ZF=0 and SF=OF).
+71 cb 	JNO rel8 	D	R	OF					V	V		jno	Jump short if not overflow (OF=0).
+7B cb 	JNP rel8 	D	R	PF					V	V		jnp	Jump short if not parity (PF=0).
+79 cb 	JNS rel8 	D	R	SF					V	V		jns	Jump short if not sign (SF=0).
+75 cb 	JNZ rel8 	D	R	ZF					V	V		jne	Jump short if not zero (ZF=0).
+70 cb 	JO rel8 	D	R	OF					V	V		jo	Jump short if overflow (OF=1).
+7A cb 	JP rel8 	D	R	PF					V	V		jp	Jump short if parity (PF=1).
+7A cb 	JPE rel8 	D	R	PF					V	V		jp	Jump short if parity even (PF=1).
+7B cb 	JPO rel8 	D	R	PF					V	V		jnp	Jump short if parity odd (PF=0).
+78 cb 	JS rel8 	D	R	SF					V	V		js	Jump short if sign (SF=1).
+74 cb 	JZ rel8 	D	R	ZF					V	V		je	Jump short if zero (ZF = 1).
 0F 87 cw 	JA rel16 								NS	V			Jump near if above (CF=0 and ZF=0). Not supported in 64-bit mode.
-0F 87 cd 	JA rel32 	D	R	C Z					V	V		ja	Jump near if above (CF=0 and ZF=0).
+0F 87 cd 	JA rel32 	D	R	CF ZF					V	V		ja	Jump near if above (CF=0 and ZF=0).
 0F 83 cw 	JAE rel16 								NS	V			Jump near if above or equal (CF=0). Not supported in 64-bit mode.
-0F 83 cd 	JAE rel32 	D	R	C					V	V		jae	Jump near if above or equal (CF=0).
+0F 83 cd 	JAE rel32 	D	R	CF					V	V		jae	Jump near if above or equal (CF=0).
 0F 82 cw 	JB rel16 								NS	V			Jump near if below (CF=1). Not supported in 64-bit mode.
-0F 82 cd 	JB rel32 	D	R	C					V	V		jb	Jump near if below (CF=1).
+0F 82 cd 	JB rel32 	D	R	CF					V	V		jb	Jump near if below (CF=1).
 0F 86 cw 	JBE rel16 								NS	V			Jump near if below or equal (CF=1 or ZF=1). Not supported in 64-bit mode.
-0F 86 cd 	JBE rel32 	D	R	C Z					V	V		jbe	Jump near if below or equal (CF=1 or ZF=1).
+0F 86 cd 	JBE rel32 	D	R	CF ZF					V	V		jbe	Jump near if below or equal (CF=1 or ZF=1).
 0F 82 cw 	JC rel16 								NS	V			Jump near if carry (CF=1). Not supported in 64-bit mode.
-0F 82 cd 	JC rel32 	D	R	C					V	V		jb	Jump near if carry (CF=1).
+0F 82 cd 	JC rel32 	D	R	CF					V	V		jb	Jump near if carry (CF=1).
 0F 84 cw 	JE rel16 								NS	V			Jump near if equal (ZF=1). Not supported in 64-bit mode.
-0F 84 cd 	JE rel32 	D	R	Z					V	V		je	Jump near if 0 (ZF=1).
+0F 84 cd 	JE rel32 	D	R	ZF					V	V		je	Jump near if 0 (ZF=1).
 0F 8F cw 	JG rel16 								NS	V			Jump near if greater (ZF=0 and SF=OF). Not supported in 64-bit mode.
-0F 8F cd 	JG rel32 	D	R	Z S O					V	V		jg	Jump near if greater (ZF=0 and SF=OF).
+0F 8F cd 	JG rel32 	D	R	ZF SF OF					V	V		jg	Jump near if greater (ZF=0 and SF=OF).
 0F 8D cw 	JGE rel16 								NS	V			Jump near if greater or equal (SF=OF). Not supported in 64-bit mode.
-0F 8D cd 	JGE rel32 	D	R	S O					V	V		jge	Jump near if greater or equal (SF=OF).
+0F 8D cd 	JGE rel32 	D	R	SF OF					V	V		jge	Jump near if greater or equal (SF=OF).
 0F 8C cw 	JL rel16 								NS	V			Jump near if less (SF!= OF). Not supported in  64-bit mode.
-0F 8C cd 	JL rel32 	D	R	S O					V	V		jl	Jump near if less (SF!= OF).
+0F 8C cd 	JL rel32 	D	R	SF OF					V	V		jl	Jump near if less (SF!= OF).
 0F 8E cw 	JLE rel16 								NS	V			Jump near if less or equal (ZF=1 or SF!= OF).  Not supported in 64-bit mode.
-0F 8E cd 	JLE rel32 	D	R	Z S O					V	V		jle	Jump near if less or equal (ZF=1 or SF!= OF).
+0F 8E cd 	JLE rel32 	D	R	ZF SF OF					V	V		jle	Jump near if less or equal (ZF=1 or SF!= OF).
 0F 86 cw 	JNA rel16 								NS	V			Jump near if not above (CF=1 or ZF=1). Not supported in 64-bit mode.
-0F 86 cd 	JNA rel32 	D	R	C Z					V	V		jbe	Jump near if not above (CF=1 or ZF=1).
+0F 86 cd 	JNA rel32 	D	R	CF ZF					V	V		jbe	Jump near if not above (CF=1 or ZF=1).
 0F 82 cw 	JNAE rel16 								NS	V			Jump near if not above or equal (CF=1). Not supported in 64-bit mode.
-0F 82 cd 	JNAE rel32 	D	R	C					V	V		jb	Jump near if not above or equal (CF=1).
+0F 82 cd 	JNAE rel32 	D	R	CF					V	V		jb	Jump near if not above or equal (CF=1).
 0F 83 cw 	JNB rel16 								NS	V			Jump near if not below (CF=0). Not supported in 64-bit mode.
-0F 83 cd 	JNB rel32 	D	R	C					V	V		jae	Jump near if not below (CF=0).
+0F 83 cd 	JNB rel32 	D	R	CF					V	V		jae	Jump near if not below (CF=0).
 0F 87 cw 	JNBE rel16 								NS	V			Jump near if not below or equal (CF=0 and ZF=0). Not supported in 64-bit mode.
-0F 87 cd 	JNBE rel32 	D	R	C Z					V	V		ja	Jump near if not below or equal (CF=0 and ZF=0). 
+0F 87 cd 	JNBE rel32 	D	R	CF ZF					V	V		ja	Jump near if not below or equal (CF=0 and ZF=0). 
 0F 83 cw 	JNC rel16 								NS	V			Jump near if not carry (CF=0). Not supported in 64-bit mode.
-0F 83 cd 	JNC rel32 	D	R	C					V	V		jae	Jump near if not carry (CF=0).
+0F 83 cd 	JNC rel32 	D	R	CF					V	V		jae	Jump near if not carry (CF=0).
 0F 85 cw 	JNE rel16 								NS	V			Jump near if not equal (ZF=0). Not supported in 64-bit mode.
-0F 85 cd 	JNE rel32 	D	R	Z					V	V		jne	Jump near if not equal (ZF=0).
+0F 85 cd 	JNE rel32 	D	R	ZF					V	V		jne	Jump near if not equal (ZF=0).
 0F 8E cw 	JNG rel16 								NS	V			Jump near if not greater (ZF=1 or SF != OF). Not supported in 64-bit mode.
-0F 8E cd 	JNG rel32 	D	R	Z S O					V	V		jle	Jump near if not greater (ZF=1 or SF != OF).
+0F 8E cd 	JNG rel32 	D	R	ZF SF OF					V	V		jle	Jump near if not greater (ZF=1 or SF != OF).
 0F 8C cw 	JNGE rel16 								NS	V			Jump near if not greater or equal (SF != OF). Not supported in 64-bit mode.
-0F 8C cd 	JNGE rel32 	D	R	S O					V	V		jl	Jump near if not greater or equal (SF != OF).
+0F 8C cd 	JNGE rel32 	D	R	SF OF					V	V		jl	Jump near if not greater or equal (SF != OF).
 0F 8D cw 	JNL rel16 								NS	V			Jump near if not less (SF=OF). Not supported in 64-bit mode.
-0F 8D cd 	JNL rel32 	D	R	S O					V	V		jge	Jump near if not less (SF=OF).
+0F 8D cd 	JNL rel32 	D	R	SF OF					V	V		jge	Jump near if not less (SF=OF).
 0F 8F cw 	JNLE rel16 								NS	V			Jump near if not less or equal (ZF=0 and SF=OF). Not supported in 64-bit mode.
-0F 8F cd 	JNLE rel32 	D	R	Z S O					V	V		jg	Jump near if not less or equal (ZF=0 and SF=OF).
+0F 8F cd 	JNLE rel32 	D	R	ZF SF OF					V	V		jg	Jump near if not less or equal (ZF=0 and SF=OF).
 0F 81 cw 	JNO rel16 								NS	V			Jump near if not overflow (OF=0). Not supported in 64-bit mode.
-0F 81 cd 	JNO rel32 	D	R	O					V	V		jno	Jump near if not overflow (OF=0).
+0F 81 cd 	JNO rel32 	D	R	OF					V	V		jno	Jump near if not overflow (OF=0).
 0F 8B cw 	JNP rel16 								NS	V			Jump near if not parity (PF=0). Not supported in 64-bit mode.
-0F 8B cd 	JNP rel32 	D	R	P					V	V		jnp	Jump near if not parity (PF=0).
+0F 8B cd 	JNP rel32 	D	R	PF					V	V		jnp	Jump near if not parity (PF=0).
 0F 89 cw 	JNS rel16 								NS	V			Jump near if not sign (SF=0). Not supported in 64-bit mode.
-0F 89 cd 	JNS rel32 	D	R	S					V	V		jns	Jump near if not sign (SF=0).
+0F 89 cd 	JNS rel32 	D	R	SF					V	V		jns	Jump near if not sign (SF=0).
 0F 85 cw 	JNZ rel16 								NS	V			Jump near if not zero (ZF=0). Not supported in 64-bit mode.
-0F 85 cd 	JNZ rel32 	D	R	Z					V	V		jne	Jump near if not zero (ZF=0).
+0F 85 cd 	JNZ rel32 	D	R	ZF					V	V		jne	Jump near if not zero (ZF=0).
 0F 80 cw 	JO rel16 								NS	V			Jump near if overflow (OF=1). Not supported in 64-bit mode.
-0F 80 cd 	JO rel32 	D	R	O					V	V		jo	Jump near if overflow (OF=1).
+0F 80 cd 	JO rel32 	D	R	OF					V	V		jo	Jump near if overflow (OF=1).
 0F 8A cw 	JP rel16 								NS	V			Jump near if parity (PF=1). Not supported in 64-bit mode.
-0F 8A cd 	JPE rel32 	D	R	P					V	V		jp	Jump near if parity even (PF=1).
+0F 8A cd 	JPE rel32 	D	R	PF					V	V		jp	Jump near if parity even (PF=1).
 0F 8B cw 	JPO rel16 								NS	V			Jump near if parity odd (PF=0). Not supported in 64-bit mode.
-0F 8B cd 	JPO rel32 	D	R	P					V	V		jnp	Jump near if parity odd (PF=0).
+0F 8B cd 	JPO rel32 	D	R	PF					V	V		jnp	Jump near if parity odd (PF=0).
 0F 88 cw 	JS rel16 								NS	V			Jump near if sign (SF=1). Not supported in 64-bit mode.
-0F 88 cd 	JS rel32 	D	R	S					V	V		js	Jump near if sign (SF=1).
+0F 88 cd 	JS rel32 	D	R	SF					V	V		js	Jump near if sign (SF=1).
 0F 84 cw 	JZ rel16 								NS	V			Jump near if 0 (ZF=1). Not supported in 64-bit mode.
-0F 84 cd 	JZ rel32 	D	R	Z					V	V		je	Jump near if 0 (ZF=1).
+0F 84 cd 	JZ rel32 	D	R	ZF					V	V		je	Jump near if 0 (ZF=1).
 													
 EB cb 	JMP rel8 	D	R	???	???	???			V	V		jmpq	Jump short, RIP = RIP + 8-bit displacement sign extended to 64-bits
 E9 cw 	JMP rel16 								NS	V			Jump near, relative, displacement relative to next instruction. Not supported in 64-bit mode.
@@ -918,31 +918,31 @@ FF /5 	JMP m16:16 	D	R	???	???	???			V	V		jmpq	Jump far, absolute indirect, addr
 FF /5 	JMP m16:32 	D	R	???	???	???			V	V		jmpq	Jump far, absolute indirect, address given in m16:32.
 REX.W+ FF /5 	JMP m16:64 	D	R	???	???	???			V	NE		jmpq	Jump far, absolute indirect, address given in m16:64.
 													
-9F 	LAHF 	NP		S Z P A C	AH				V	V		lahf	Load: AH = EFLAGS(SF:ZF:0:AF:0:PF:1:CF).
+9F 	LAHF 	NP		SF ZF PF AF CF	AH				V	V		lahf	Load: AH = EFLAGS(SF:ZF:0:AF:0:PF:1:CF).
 													
-0F 02 /r 	LAR r16, r16/m16 	RM	W, R	???	???	???	YES	NO	V	V		larw	r16 = access rights referenced by r16/m16
-0F 02 /r 	LAR reg, r32/m16	RM	W, R	???	???	???	YES	NO	V	V		larl	reg = access rights referenced by r32/m16
+0F 02 /r 	LAR r16, r16/m16 	RM	W, R		ZF		YES	NO	V	V		larw	r16 = access rights referenced by r16/m16
+0F 02 /r 	LAR reg, r32/m16	RM	W, R		ZF		YES	NO	V	V		larl	reg = access rights referenced by r32/m16
 													
 F2 0F F0 /r 	LDDQU xmm1, mem	RM	W, R						V	V	SSE3	lddqu	Load unaligned data from mem and return double quadword in xmm1.
 VEX.128.F2.0F.WIG F0 /r	VLDDQU xmm1, m128	RM	Z, R						V	V	AVX	vlddqu	Load unaligned packed integer values from mem to xmm1.
 VEX.256.F2.0F.WIG F0 /r	VLDDQU ymm1, m256	RM	W, R						V	V	AVX	vlddqu	Load unaligned packed integer values from mem to ymm1.
 													
-0F AE /2 	LDMXCSR m32	M	R	???	???	???			V	V	SSE	ldmxcsr	Load MXCSR register from m32.
-VEX.LZ.0F.WIG AE /2	VLDMXCSR m32	M	R	???	???	???			V	V	AVX	vldmxcsr	Load MXCSR register from m32.
+0F AE /2 	LDMXCSR m32	M	R						V	V	SSE	ldmxcsr	Load MXCSR register from m32.
+VEX.LZ.0F.WIG AE /2	VLDMXCSR m32	M	R						V	V	AVX	vldmxcsr	Load MXCSR register from m32.
 													
 C5 /r 	LDS r16, m16:16 								I	V			Load DS:r16 with far pointer from memory.
 C5 /r 	LDS r32, m16:32 								I	V			Load DS:r32 with far pointer from memory.
-0F B2 /r 	LSS r16, m16:16 	RM	W, R	???	???	???			V	V		lssw	Load SS:r16 with far pointer from memory.
-0F B2 /r 	LSS r32, m16:32 	RM	W, R	???	???	???			V	V		lssl	Load SS:r32 with far pointer from memory.
-REX+ 0F B2 /r 	LSS r64, m16:64 	RM	W, R	???	???	???			V	NE		lssq	Load SS:r64 with far pointer from memory.
+0F B2 /r 	LSS r16, m16:16 	RM	W, R		SS				V	V		lssw	Load SS:r16 with far pointer from memory.
+0F B2 /r 	LSS r32, m16:32 	RM	W, R		SS				V	V		lssl	Load SS:r32 with far pointer from memory.
+REX+ 0F B2 /r 	LSS r64, m16:64 	RM	W, R		SS				V	NE		lssq	Load SS:r64 with far pointer from memory.
 C4 /r 	LES r16, m16:16 								I	V			Load ES:r16 with far pointer from memory.
 C4 /r 	LES r32, m16:32 								I	V			Load ES:r32 with far pointer from memory.
-0F B4 /r 	LFS r16, m16:16 	RM	W, R	???	???	???			V	V		lfsw	Load FS:r16 with far pointer from memory.
-0F B4 /r 	LFS r32, m16:32 	RM	W, R	???	???	???			V	V		lfsl	Load FS:r32 with far pointer from memory.
-REX+ 0F B4 /r 	LFS r64, m16:64 	RM	W, R	???	???	???			V	NE		lfsq	Load FS:r64 with far pointer from memory.
-0F B5 /r 	LGS r16, m16:16 	RM	W, R	???	???	???			V	V		lgsw	Load GS:r16 with far pointer from memory.
-0F B5 /r 	LGS r32, m16:32 	RM	W, R	???	???	???			V	V		lgsl	Load GS:r32 with far pointer from memory.
-REX+ 0F B5 /r 	LGS r64, m16:64 	RM	W, R	???	???	???			V	NE		lgsq	Load GS:r64 with far pointer from memory.
+0F B4 /r 	LFS r16, m16:16 	RM	W, R		FS				V	V		lfsw	Load FS:r16 with far pointer from memory.
+0F B4 /r 	LFS r32, m16:32 	RM	W, R		FS				V	V		lfsl	Load FS:r32 with far pointer from memory.
+REX+ 0F B4 /r 	LFS r64, m16:64 	RM	W, R		FS				V	NE		lfsq	Load FS:r64 with far pointer from memory.
+0F B5 /r 	LGS r16, m16:16 	RM	W, R		GS				V	V		lgsw	Load GS:r16 with far pointer from memory.
+0F B5 /r 	LGS r32, m16:32 	RM	W, R		GS				V	V		lgsl	Load GS:r32 with far pointer from memory.
+REX+ 0F B5 /r 	LGS r64, m16:64 	RM	W, R		GS				V	NE		lgsq	Load GS:r64 with far pointer from memory.
 													
 8D /r 	LEA r16, m 	RM	W, I						V	V		leaw	Store effective address for m in register r16.
 8D /r 	LEA r32, m 	RM	W, I						V	V		leal	Store effective address for m in register r32.
@@ -965,22 +965,22 @@ C9 	LEAVE 	NP							V	NE		leaveq	Set RSP to RBP, then pop RBP.
 													
 F0 	LOCK 	NP					YES	NO	V	V		lock	Asserts LOCK# signal for duration of the accompanying instruction.
 													
-AC 	LODS m8 	NP	I	???	???	???			V	V		lods	For legacy mode, Load byte at address DS:(E)SI into AL. For 64-bit mode load byte at address (R)SI into AL.
-AD 	LODS m16 	NP	I	???	???	???			V	V		lods	For legacy mode, Load word at address DS:(E)SI into AX. For 64-bit mode load word at address (R)SI into AX.
-AD 	LODS m32 	NP	I	???	???	???			V	V		lods	For legacy mode, Load dword at address DS:(E)SI into EAX. For 64-bit mode load dword at address (R)SI into EAX.
-REX.W+ AD 	LODS m64 	NP	I	???	???	???			V	NE		lods	Load qword at address (R)SI into RAX.
-AC 	LODSB 	NP		???	???	???			V	V		lodsb	For legacy mode, Load byte at address DS:(E)SI into AL. For 64-bit mode load byte at address (R)SI into AL.
-PREF.66+ AD 	LODSW 	NP		???	???	???			V	V		lodsw	For legacy mode, Load word at address DS:(E)SI into AX. For 64-bit mode load word at address (R)SI into AX.
-AD 	LODSD 	NP		???	???	???			V	V		lodsl	For legacy mode, Load dword at address DS:(E)SI into EAX. For 64-bit mode load dword at address (R)SI into EAX.
-REX.W+ AD 	LODSQ 	NP		???	???	???			V	NE		lodsq	Load qword at address (R)SI into RAX.
+AC 	LODS m8 	NP	I	DF SI rsi	AL				V	V		lods	For legacy mode, Load byte at address DS:(E)SI into AL. For 64-bit mode load byte at address (R)SI into AL.
+AD 	LODS m16 	NP	I	DF SI rsi	AX				V	V		lods	For legacy mode, Load word at address DS:(E)SI into AX. For 64-bit mode load word at address (R)SI into AX.
+AD 	LODS m32 	NP	I	DF SI rsi	EAX				V	V		lods	For legacy mode, Load dword at address DS:(E)SI into EAX. For 64-bit mode load dword at address (R)SI into EAX.
+REX.W+ AD 	LODS m64 	NP	I	DF SI rsi	RAX				V	NE		lods	Load qword at address (R)SI into RAX.
+AC 	LODSB 	NP		DF SI rsi	AL				V	V		lodsb	For legacy mode, Load byte at address DS:(E)SI into AL. For 64-bit mode load byte at address (R)SI into AL.
+PREF.66+ AD 	LODSW 	NP		DF SI rsi	AX				V	V		lodsw	For legacy mode, Load word at address DS:(E)SI into AX. For 64-bit mode load word at address (R)SI into AX.
+AD 	LODSD 	NP		DF SI rsi	EAX				V	V		lodsl	For legacy mode, Load dword at address DS:(E)SI into EAX. For 64-bit mode load dword at address (R)SI into EAX.
+REX.W+ AD 	LODSQ 	NP		DF SI rsi	RAX				V	NE		lodsq	Load qword at address (R)SI into RAX.
 													
-E2 cb 	LOOP rel8 	D	R	???	???	???			V	V		loop	Decrement count; jump short if count != 0.
-E1 cb 	LOOPE rel8 	D	R	???	???	???			V	V		loope	Decrement count; jump short if count != 0 and  ZF = 1.
-E0 cb 	LOOPNE rel8 	D	R	???	???	???			V	V		loopne	Decrement count; jump short if count != 0 and  ZF = 0.
+E2 cb 	LOOP rel8 	D	R	RCX ZF					V	V		loop	Decrement count; jump short if count != 0.
+E1 cb 	LOOPE rel8 	D	R	RCX ZF					V	V		loope	Decrement count; jump short if count != 0 and  ZF = 1.
+E0 cb 	LOOPNE rel8 	D	R	RCX ZF					V	V		loopne	Decrement count; jump short if count != 0 and  ZF = 0.
 													
-0F 03 /r 	LSL r16, r16/m16 	RM	W, R	???	???	???	YES	NO	V	V		lslw	Load: r16 = segment limit, selector r16/m16.
-0F 03 /r 	LSL r32, r32/m16	RM	W, R	???	???	???	YES	NO	V	V		lsll	Load: r32 = segment limit, selector r32/m16.
-REX.W+ 0F 03 /r	LSL r64, r32/m16	RM	W, R	???	???	???	YES	NO	V	V		lslq	Load: r64 = segment limit, selector r32/m16
+0F 03 /r 	LSL r16, r16/m16 	RM	W, R		ZF		YES	NO	V	V		lslw	Load: r16 = segment limit, selector r16/m16.
+0F 03 /r 	LSL r32, r32/m16	RM	W, R		ZF		YES	NO	V	V		lsll	Load: r32 = segment limit, selector r32/m16.
+REX.W+ 0F 03 /r	LSL r64, r32/m16	RM	W, R		ZF		YES	NO	V	V		lslq	Load: r64 = segment limit, selector r32/m16
 													
 0F 00 /3 	LTR r/m16 						NO	YES	V	V			Load r/m16 into task register.
 													
@@ -1186,14 +1186,14 @@ VEX.128.66.0F.WIG D6 /r	VMOVQ xmm1/m64, xmm2	MR	Z, R						V	V	AVX	vmovq	Move qua
 													
 F3 0F D6 	MOVQ2DQ xmm, mm 	RM	W, R						V	V		movq2dq	Move quadword from mmx to low quadword of xmm.
 													
-A4 	MOVS m8, m8 	NP	I, I	???	???	???			V	V		movs	For legacy mode, Move byte from address DS:(E)SI to ES:(E)DI. For 64-bit mode move byte from address (R|E)SI to (R|E)DI.
-A5 	MOVS m16, m16 	NP	I, I	???	???	???			V	V		movs	For legacy mode, move word from address DS:(E)SI to ES:(E)DI. For 64-bit mode move word at address (R|E)SI to (R|E)DI.
-A5 	MOVS m32, m32 	NP	I, I	???	???	???			V	V		movs	For legacy mode, move dword from address DS:(E)SI to ES:(E)DI. For 64-bit mode move dword from address (R|E)SI to (R|E)DI.
-REX.W+ A5 	MOVS m64, m64 	NP	I, I	???	???	???			V	NE		movs	Move qword from address (R|E)SI to (R|E)DI.
-A4 	MOVSB 	NP		???	???	???			V	V		movsb	For legacy mode, Move byte from address DS:(E)SI to ES:(E)DI. For 64-bit mode move byte from address (R|E)SI to (R|E)DI.
-PREF.66+ A5 	MOVSW 	NP		???	???	???			V	V		movsw	For legacy mode, move word from address DS:(E)SI to ES:(E)DI. For 64-bit mode move word at address (R|E)SI to (R|E)DI.
-A5 	MOVSD 	NP		???	???	???			V	V		movsl	For legacy mode, move dword from address DS:(E)SI to ES:(E)DI. For 64-bit mode move dword from address (R|E)SI to (R|E)DI.
-REX.W+ A5 	MOVSQ 	NP		???	???	???			V	NE		movsq	Move qword from address (R|E)SI to (R|E)DI.
+A4 	MOVS m8, m8 	NP	I, I	DF ESI rsi EDI rdi					V	V		movs	For legacy mode, Move byte from address DS:(E)SI to ES:(E)DI. For 64-bit mode move byte from address (R|E)SI to (R|E)DI.
+A5 	MOVS m16, m16 	NP	I, I	DF ESI rsi EDI rdi					V	V		movs	For legacy mode, move word from address DS:(E)SI to ES:(E)DI. For 64-bit mode move word at address (R|E)SI to (R|E)DI.
+A5 	MOVS m32, m32 	NP	I, I	DF ESI rsi EDI rdi					V	V		movs	For legacy mode, move dword from address DS:(E)SI to ES:(E)DI. For 64-bit mode move dword from address (R|E)SI to (R|E)DI.
+REX.W+ A5 	MOVS m64, m64 	NP	I, I	DF ESI rsi EDI rdi					V	NE		movs	Move qword from address (R|E)SI to (R|E)DI.
+A4 	MOVSB 	NP		DF ESI rsi EDI rdi					V	V		movsb	For legacy mode, Move byte from address DS:(E)SI to ES:(E)DI. For 64-bit mode move byte from address (R|E)SI to (R|E)DI.
+PREF.66+ A5 	MOVSW 	NP		DF ESI rsi EDI rdi					V	V		movsw	For legacy mode, move word from address DS:(E)SI to ES:(E)DI. For 64-bit mode move word at address (R|E)SI to (R|E)DI.
+A5 	MOVSD 	NP		DF ESI rsi EDI rdi					V	V		movsl	For legacy mode, move dword from address DS:(E)SI to ES:(E)DI. For 64-bit mode move dword from address (R|E)SI to (R|E)DI.
+REX.W+ A5 	MOVSQ 	NP		DF ESI rsi EDI rdi					V	NE		movsq	Move qword from address (R|E)SI to (R|E)DI.
 													
 F2 0F 10 /r 	MOVSD xmm1, xmm2/m64	RM	W, R						V	V	SSE2	movsd	Move scalar double-precision floating-point value from xmm2/m64 to xmm1 register.
 VEX.NDS.LIG.F2.0F.WIG 10 /r	VMOVSD xmm1, xmm2, xmm3	RVM	W, R, R						V	V	AVX	vmovsd	Merge scalar double-precision floating-point value from xmm2 and xmm3 to xmm1 register.
@@ -1247,11 +1247,11 @@ REX.W+ 0F B7 /r 	MOVZX r64, r/m16 	RM	W, R						V	NE		movzwq	Move word to quadwo
 66 0F 3A 42 /r ib 	MPSADBW xmm1, xmm2/m128, imm8	RMI	W, R, R						V	V	SSE4_1	mpsadbw	Sums absolute 8-bit integer difference of adjacent groups of 4 byte integers in xmm1 and xmm2/m128 and writes the results in xmm1. Starting offsets within xmm1 and xmm2/m128 are determined by imm8.
 VEX.NDS.128.66.0F3A.WIG 42 /r ib	VMPSADBW xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R						V	V	AVX	vmpsadbw	Sums absolute 8-bit integer difference of adjacent groups of 4 byte integers in xmm2 and xmm3/m128 and writes the results in xmm1. Starting offsets within xmm2 and xmm3/m128 are determined by imm8.
 													
-F6 /4 	MUL r/m8 	M	R	AL	AX O C	S Z A P			V	V		mulb	Unsigned multiply (AX = AL ∗ r/m8).
-REX+ F6 /4 	MUL r/m8	M	R	AL	AX O C	S Z A P			V	NE		mulb	Unsigned multiply (AX = AL ∗ r/m8).
-F7 /4 	MUL r/m16 	M	R	AX	AX DX O C	S Z A P			V	V		mulw	Unsigned multiply (DX:AX = AX ∗ r/m16).
-F7 /4 	MUL r/m32 	M	R	EAX	EAX EDX O C	S Z A P			V	V		mull	Unsigned multiply (EDX:EAX = EAX ∗ r/m32).
-REX.W+ F7 /4 	MUL r/m64 	M	R	RAX	RAX RDX O C	S Z A P			V	NE		mulq	Unsigned multiply (RDX:RAX = RAX ∗ r/m64.
+F6 /4 	MUL r/m8 	M	R	AL	AX OF CF	SF ZF AF PF			V	V		mulb	Unsigned multiply (AX = AL ∗ r/m8).
+REX+ F6 /4 	MUL r/m8	M	R	AL	AX OF CF	SF ZF AF PF			V	NE		mulb	Unsigned multiply (AX = AL ∗ r/m8).
+F7 /4 	MUL r/m16 	M	R	AX	AX DX OF CF	SF ZF AF PF			V	V		mulw	Unsigned multiply (DX:AX = AX ∗ r/m16).
+F7 /4 	MUL r/m32 	M	R	EAX	EAX EDX OF CF	SF ZF AF PF			V	V		mull	Unsigned multiply (EDX:EAX = EAX ∗ r/m32).
+REX.W+ F7 /4 	MUL r/m64 	M	R	RAX	RAX RDX OF CF	SF ZF AF PF			V	NE		mulq	Unsigned multiply (RDX:RAX = RAX ∗ r/m64.
 													
 66 0F 59 /r 	MULPD xmm1, xmm2/m128	RM	W, R						V	V	SSE2	mulpd	Multiply packed double-precision floating-point values in xmm2/m128 by xmm1.
 VEX.NDS.128.66.0F.WIG 59 /r	VMULPD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vmulpd	Multiply packed double-precision floating-point values from xmm3/mem to xmm2 and stores result in xmm1.
@@ -1269,11 +1269,11 @@ VEX.NDS.LIG.F3.0F.WIG 59 /r	VMULSS xmm1,xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	
 													
 0F 01 C9 	MWAIT 	NP		EAX ECX					V	V		mwait	A hint that allow the processor to stop instruction execution and enter an implementation-dependent optimized state until occurrence of a class of events.
 													
-F6 /3 	NEG r/m8 	M	RW		C O S Z A P				V	V		negb	Two's complement negate r/m8.
-REX+ F6 /3 	NEG r/m8	M	RW		C O S Z A P				V	NE		negb	Two's complement negate r/m8.
-F7 /3 	NEG r/m16 	M	RW		C O S Z A P				V	V		negw	Two's complement negate r/m16.
-F7 /3 	NEG r/m32 	M	RW		C O S Z A P				V	V		negl	Two's complement negate r/m32.
-REX.W+ F7 /3 	NEG r/m64 	M	RW		C O S Z A P				V	NE		negq	Two's complement negate r/m64.
+F6 /3 	NEG r/m8 	M	RW		CF OF SF ZF AF PF				V	V		negb	Two's complement negate r/m8.
+REX+ F6 /3 	NEG r/m8	M	RW		CF OF SF ZF AF PF				V	NE		negb	Two's complement negate r/m8.
+F7 /3 	NEG r/m16 	M	RW		CF OF SF ZF AF PF				V	V		negw	Two's complement negate r/m16.
+F7 /3 	NEG r/m32 	M	RW		CF OF SF ZF AF PF				V	V		negl	Two's complement negate r/m32.
+REX.W+ F7 /3 	NEG r/m64 	M	RW		CF OF SF ZF AF PF				V	NE		negq	Two's complement negate r/m64.
 													
 90	NOP 	NP							V	V		nop	One byte no-operation instruction.
 0F 1F /0 	NOP r/m16 	M	I						V	V		nopw	Multi-byte no-operation instruction.
@@ -1285,28 +1285,28 @@ F7 /2 	NOT r/m16 	M	RW						V	V		notw	Reverse each bit of r/m16.
 F7 /2 	NOT r/m32 	M	RW						V	V		notl	Reverse each bit of r/m32.
 REX.W+ F7 /2 	NOT r/m64 	M	RW						V	NE		notq	Reverse each bit of r/m64.
 													
-0C ib 	OR AL, imm8 	I	RW, R		O C S Z P	A			V	V		orb	AL OR imm8.
-0D iw 	OR AX, imm16 	I	RW, R		O C S Z P	A			V	V		orw	AX OR imm16.
-0D id 	OR EAX, imm32 	I	RW, R		O C S Z P	A			V	V		orl	EAX OR imm32.
-REX.W+ 0D id 	OR RAX, imm32 	I	RW, R		O C S Z P	A			V	NE		orq	RAX OR imm32 (sign-extended).
-80 /1 ib 	OR r/m8, imm8 	MI	RW, R		O C S Z P	A			V	V		orb	r/m8 OR imm8.
-REX+ 80 /1 ib 	OR r/m8, imm8 	MI	RW, R		O C S Z P	A			V	NE		orb	r/m8 OR imm8.
-81 /1 iw 	OR r/m16, imm16 	MI	RW, R		O C S Z P	A			V	V		orw	r/m16 OR imm16.
-81 /1 id 	OR r/m32, imm32 	MI	RW, R		O C S Z P	A			V	V		orl	r/m32 OR imm32.
-REX.W+ 81 /1 id 	OR r/m64, imm32 	MI	RW, R		O C S Z P	A			V	NE		orq	r/m64 OR imm32 (sign-extended).
-83 /1 ib 	OR r/m16, imm8 	MI	RW, R		O C S Z P	A			V	V		orw	r/m16 OR imm8 (sign-extended).
-83 /1 ib 	OR r/m32, imm8 	MI	RW, R		O C S Z P	A			V	V		orl	r/m32 OR imm8 (sign-extended).
-REX.W+ 83 /1 ib 	OR r/m64, imm8 	MI	RW, R		O C S Z P	A			V	NE		orq	r/m64 OR imm8 (sign-extended).
-08 /r 	OR r/m8, r8 	MR	RW, R		O C S Z P	A			V	V		orb	r/m8 OR r8.
-REX+ 08 /r 	OR r/m8, r8	MR	RW, R		O C S Z P	A			V	NE		orb	r/m8 OR r8.
-09 /r 	OR r/m16, r16 	MR	RW, R		O C S Z P	A			V	V		orw	r/m16 OR r16.
-09 /r 	OR r/m32, r32 	MR	RW, R		O C S Z P	A			V	V		orl	r/m32 OR r32.
-REX.W+ 09 /r 	OR r/m64, r64 	MR	RW, R		O C S Z P	A			V	NE		orq	r/m64 OR r64.
-0A /r 	OR r8, r/m8 	RM	RW, R		O C S Z P	A			V	V		orb	r8 OR r/m8.
-REX+ 0A /r 	OR r8, r/m8	RM	RW, R		O C S Z P	A			V	NE		orb	r8 OR r/m8.
-0B /r 	OR r16, r/m16 	RM	RW, R		O C S Z P	A			V	V		orw	r16 OR r/m16.
-0B /r 	OR r32, r/m32 	RM	RW, R		O C S Z P	A			V	V		orl	r32 OR r/m32.
-REX.W+ 0B /r 	OR r64, r/m64 	RM	RW, R		O C S Z P	A			V	NE		orq	r64 OR r/m64.
+0C ib 	OR AL, imm8 	I	RW, R		OF CF SF ZF PF	AF			V	V		orb	AL OR imm8.
+0D iw 	OR AX, imm16 	I	RW, R		OF CF SF ZF PF	AF			V	V		orw	AX OR imm16.
+0D id 	OR EAX, imm32 	I	RW, R		OF CF SF ZF PF	AF			V	V		orl	EAX OR imm32.
+REX.W+ 0D id 	OR RAX, imm32 	I	RW, R		OF CF SF ZF PF	AF			V	NE		orq	RAX OR imm32 (sign-extended).
+80 /1 ib 	OR r/m8, imm8 	MI	RW, R		OF CF SF ZF PF	AF			V	V		orb	r/m8 OR imm8.
+REX+ 80 /1 ib 	OR r/m8, imm8 	MI	RW, R		OF CF SF ZF PF	AF			V	NE		orb	r/m8 OR imm8.
+81 /1 iw 	OR r/m16, imm16 	MI	RW, R		OF CF SF ZF PF	AF			V	V		orw	r/m16 OR imm16.
+81 /1 id 	OR r/m32, imm32 	MI	RW, R		OF CF SF ZF PF	AF			V	V		orl	r/m32 OR imm32.
+REX.W+ 81 /1 id 	OR r/m64, imm32 	MI	RW, R		OF CF SF ZF PF	AF			V	NE		orq	r/m64 OR imm32 (sign-extended).
+83 /1 ib 	OR r/m16, imm8 	MI	RW, R		OF CF SF ZF PF	AF			V	V		orw	r/m16 OR imm8 (sign-extended).
+83 /1 ib 	OR r/m32, imm8 	MI	RW, R		OF CF SF ZF PF	AF			V	V		orl	r/m32 OR imm8 (sign-extended).
+REX.W+ 83 /1 ib 	OR r/m64, imm8 	MI	RW, R		OF CF SF ZF PF	AF			V	NE		orq	r/m64 OR imm8 (sign-extended).
+08 /r 	OR r/m8, r8 	MR	RW, R		OF CF SF ZF PF	AF			V	V		orb	r/m8 OR r8.
+REX+ 08 /r 	OR r/m8, r8	MR	RW, R		OF CF SF ZF PF	AF			V	NE		orb	r/m8 OR r8.
+09 /r 	OR r/m16, r16 	MR	RW, R		OF CF SF ZF PF	AF			V	V		orw	r/m16 OR r16.
+09 /r 	OR r/m32, r32 	MR	RW, R		OF CF SF ZF PF	AF			V	V		orl	r/m32 OR r32.
+REX.W+ 09 /r 	OR r/m64, r64 	MR	RW, R		OF CF SF ZF PF	AF			V	NE		orq	r/m64 OR r64.
+0A /r 	OR r8, r/m8 	RM	RW, R		OF CF SF ZF PF	AF			V	V		orb	r8 OR r/m8.
+REX+ 0A /r 	OR r8, r/m8	RM	RW, R		OF CF SF ZF PF	AF			V	NE		orb	r8 OR r/m8.
+0B /r 	OR r16, r/m16 	RM	RW, R		OF CF SF ZF PF	AF			V	V		orw	r16 OR r/m16.
+0B /r 	OR r32, r/m32 	RM	RW, R		OF CF SF ZF PF	AF			V	V		orl	r32 OR r/m32.
+REX.W+ 0B /r 	OR r64, r/m64 	RM	RW, R		OF CF SF ZF PF	AF			V	NE		orq	r64 OR r/m64.
 													
 66 0F 56 /r 	ORPD xmm1, xmm2/m128	RM	W, R						V	V	SSE2	orpd	Bitwise OR of xmm2/m128 and xmm1.
 VEX.NDS.128.66.0F.WIG 56 /r 	VORPD xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vorpd	Return the bitwise logical OR of packed double-precision floating-point values in xmm2 and xmm3/mem.
@@ -1316,19 +1316,19 @@ VEX.NDS.256.66.0F.WIG 56 /r 	VORPD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AV
 VEX.NDS.128.0F.WIG 56 /r	VORPS xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vorps	Return the bitwise logical OR of packed single-precision floating-point values in xmm2 and xmm3/mem.
 VEX.NDS.256.0F.WIG 56 /r	VORPS ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	vorps	Return the bitwise logical OR of packed single-precision floating-point values in ymm2 and ymm3/mem.
 													
-E6 ib 	OUT imm8, AL 	I	R, R						V	V		outb	Output byte in AL to I/O port address imm8.
-E7 ib 	OUT imm8, AX 	I	R, R						V	V		outw	Output word in AX to I/O port address imm8.
-E7 ib 	OUT imm8, EAX 	I	R, R						V	V		outl	Output doubleword in EAX to I/O port address imm8.
-EE 	OUT DX, AL 	NP	R, R						V	V		outb	Output byte in AL to I/O port address in DX.
-EF 	OUT DX, AX 	NP	R, R						V	V		outw	Output word in AX to I/O port address in DX.
-EF 	OUT DX, EAX 	NP	R, R						V	V		outl	Output doubleword in EAX to I/O port address in DX.
+E6 ib 	OUT imm8, AL 	I	R, R	IOPL VM					V	V		outb	Output byte in AL to I/O port address imm8.
+E7 ib 	OUT imm8, AX 	I	R, R	IOPL VM					V	V		outw	Output word in AX to I/O port address imm8.
+E7 ib 	OUT imm8, EAX 	I	R, R	IOPL VM					V	V		outl	Output doubleword in EAX to I/O port address imm8.
+EE 	OUT DX, AL 	NP	R, R	IOPL VM					V	V		outb	Output byte in AL to I/O port address in DX.
+EF 	OUT DX, AX 	NP	R, R	IOPL VM					V	V		outw	Output word in AX to I/O port address in DX.
+EF 	OUT DX, EAX 	NP	R, R	IOPL VM					V	V		outl	Output doubleword in EAX to I/O port address in DX.
 													
-6E 	OUTS DX, m8 	NP	I, I	???	???	???			V	V		outs	Output byte from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
-6F 	OUTS DX, m16 	NP	I, I	???	???	???			V	V		outs	Output word from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
-6F 	OUTS DX, m32 	NP	I, I	???	???	???			V	V		outs	Output doubleword from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
-6E 	OUTSB 	NP		???	???	???			V	V		outsb	Output byte from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
-PREF.66+ 6F 	OUTSW 	NP		???	???	???			V	V		outsw	Output word from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
-6F 	OUTSD 	NP		???	???	???			V	V		outsl	Output doubleword from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
+6E 	OUTS DX, m8 	NP	R, I	IOPL VM DF RSI					V	V		outs	Output byte from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
+6F 	OUTS DX, m16 	NP	R, I	IOPL VM DF RSI					V	V		outs	Output word from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
+6F 	OUTS DX, m32 	NP	R, I	IOPL VM DF RSI					V	V		outs	Output doubleword from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
+6E 	OUTSB 	NP		IOPL VM DF DX RSI					V	V		outsb	Output byte from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
+PREF.66+ 6F 	OUTSW 	NP		IOPL VM DF DX RSI					V	V		outsw	Output word from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
+6F 	OUTSD 	NP		IOPL VM DF DX RSI					V	V		outsl	Output doubleword from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 													
 0F 38 1C /r 	PABSB mm1, mm2/m64	RM	W, R						V	V	SSE3	pabsb	Compute the absolute value of bytes in mm2/m64 and store UNSIGNED result in mm1.
 66 0F 38 1C /r	PABSB xmm1, xmm2/m128	RM	W, R						V	V	SSE3	pabsb	Compute the absolute value of bytes in xmm2/m128 and store UNSIGNED result in xmm1.
@@ -1425,11 +1425,11 @@ VEX.NDS.128.66.0F.WIG 76 /r	VPCMPEQD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	
 66 0F 38 29 /r 	PCMPEQQ xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pcmpeqq	Compare packed qwords in xmm2/m128 and xmm1 for equality.
 VEX.NDS.128.66.0F38.WIG 29 /r 	VPCMPEQQ xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpcmpeqq	Compare packed quadwords in xmm3/m128 and xmm2 for equality.
 													
-66 0F 3A 61 /r	PCMPESTRI xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	ECX C Z S O A P				V	V	SSE4_2	pcmpestri	Perform a packed comparison of string data with explicit lengths, generating an index, and storing the result in ECX.
-VEX.128.66.0F3A.WIG 61 /r ib 	VPCMPESTRI xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	ECX C Z S O A P				V	V	AVX	vpcmpestri	Perform a packed comparison of string data with explicit lengths, generating an index, and storing the result in ECX.
+66 0F 3A 61 /r	PCMPESTRI xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	ECX CF ZF SF OF AF PF				V	V	SSE4_2	pcmpestri	Perform a packed comparison of string data with explicit lengths, generating an index, and storing the result in ECX.
+VEX.128.66.0F3A.WIG 61 /r ib 	VPCMPESTRI xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	ECX CF ZF SF OF AF PF				V	V	AVX	vpcmpestri	Perform a packed comparison of string data with explicit lengths, generating an index, and storing the result in ECX.
 													
-66 0F 3A 60 /r	PCMPESTRM xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	XMM0 C Z S O A P				V	V	SSE4_2	pcmpestrm	Perform a packed comparison of string data with explicit lengths, generating a mask, and storing the result in XMM0
-VEX.128.66.0F3A.WIG 60 /r ib 	VPCMPESTRM xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	XMM0 C Z S O A P				V	V	AVX	vpcmpestrm	Perform a packed comparison of string data with explicit lengths, generating a mask, and storing the result in XMM0.
+66 0F 3A 60 /r	PCMPESTRM xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	XMM0 CF ZF SF OF AF PF				V	V	SSE4_2	pcmpestrm	Perform a packed comparison of string data with explicit lengths, generating a mask, and storing the result in XMM0
+VEX.128.66.0F3A.WIG 60 /r ib 	VPCMPESTRM xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	XMM0 CF ZF SF OF AF PF				V	V	AVX	vpcmpestrm	Perform a packed comparison of string data with explicit lengths, generating a mask, and storing the result in XMM0.
 													
 0F 64 /r 	PCMPGTB mm, mm/m64	RM	RW, R						V	V	MMX	pcmpgtb	Compare packed signed byte integers in mm and mm/m64 for greater than.
 66 0F 64 /r	PCMPGTB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pcmpgtb	Compare packed signed byte integers in xmm1 and xmm2/m128 for greater than.
@@ -1444,11 +1444,11 @@ VEX.NDS.128.66.0F.WIG 66 /r	VPCMPGTD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	
 66 0F 38 37 /r 	PCMPGTQ xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_2	pcmpgtq	Compare packed signed qwords in xmm2/m128 and xmm1 for greater than.
 VEX.NDS.128.66.0F38.WIG 37 /r 	VPCMPGTQ xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpcmpgtq	Compare packed signed qwords in xmm2 and xmm3/m128 for greater than.
 													
-66 0F 3A 63 /r	PCMPISTRI xmm1, xmm2/m128, imm8 	RM	R, R, R		ECX C Z S O A P				V	V	SSE4_2	pcmpistri	Perform a packed comparison of string data with implicit lengths, generating an index, and storing the result in ECX.
-VEX.128.66.0F3A.WIG 63 /r ib 	VPCMPISTRI xmm1, xmm2/m128, imm8 	RM	R, R, R		ECX C Z S O A P				V	V	AVX	vpcmpistri	Perform a packed comparison of string data with implicit lengths, generating an index, and storing the result in ECX.
+66 0F 3A 63 /r	PCMPISTRI xmm1, xmm2/m128, imm8 	RM	R, R, R		ECX CF ZF SF OF AF PF				V	V	SSE4_2	pcmpistri	Perform a packed comparison of string data with implicit lengths, generating an index, and storing the result in ECX.
+VEX.128.66.0F3A.WIG 63 /r ib 	VPCMPISTRI xmm1, xmm2/m128, imm8 	RM	R, R, R		ECX CF ZF SF OF AF PF				V	V	AVX	vpcmpistri	Perform a packed comparison of string data with implicit lengths, generating an index, and storing the result in ECX.
 													
-66 0F 3A 62 /r	PCMPISTRM xmm1, xmm2/m128, imm8 	RM	R, R, R		XMM0 C Z S O A P				V	V	SSE4_2	pcmpistrm	Perform a packed comparison of string data with implicit lengths, generating a mask, and storing the result in XMM0.
-VEX.128.66.0F3A.WIG 62 /r ib 	VPCMPISTRM xmm1, xmm2/m128, imm8 	RM	R, R, R		XMM0 C Z S O A P				V	V	AVX	vpcmpistrm	Perform a packed comparison of string data with implicit lengths, generating a Mask, and storing the result in XMM0.
+66 0F 3A 62 /r	PCMPISTRM xmm1, xmm2/m128, imm8 	RM	R, R, R		XMM0 CF ZF SF OF AF PF				V	V	SSE4_2	pcmpistrm	Perform a packed comparison of string data with implicit lengths, generating a mask, and storing the result in XMM0.
+VEX.128.66.0F3A.WIG 62 /r ib 	VPCMPISTRM xmm1, xmm2/m128, imm8 	RM	R, R, R		XMM0 CF ZF SF OF AF PF				V	V	AVX	vpcmpistrm	Perform a packed comparison of string data with implicit lengths, generating a Mask, and storing the result in XMM0.
 													
 66 0F 3A 14 /r ib 	PEXTRB reg/m8, xmm2, imm8 	MRI	W, R, R						V	V	SSE4_1	pextrb	Extract a byte integer value from xmm2 at the source byte offset specified by imm8 into rreg or m8. The upper bits of r32 or r64 are zeroed.
 66 0F 3A 16 /r ib 	PEXTRD r/m32, xmm2, imm8 	MRI	W, R, R						V	V	SSE4_1	pextrd	Extract a dword integer value from xmm2 at the source dword offset specified by imm8 into r/m32.
@@ -1622,13 +1622,13 @@ PREF.66+ 0F A9 	POP GS, p66	NP	W, I						V	V		popq	Pop top of stack into GS; inc
 61	POPA 								I	V			Pop DI, SI, BP, BX, DX, CX, and AX.
 61	POPAD 								I	V			Pop EDI, ESI, EBP, EBX, EDX, ECX, and EAX.
 													
-F3 0F B8 /r 	POPCNT r16, r/m16 	RM	W, R		O S Z A C P				V	V		popcntb	POPCNT on r/m16
-F3 0F B8 /r 	POPCNT r32, r/m32 	RM	W, R		O S Z A C P				V	V		popcntl	POPCNT on r/m32
-F3 REX.W+ 0F B8 /r 	POPCNT r64, r/m64 	RM	W, R		O S Z A C P				V	NE		popcntq	POPCNT on r/m64
+F3 0F B8 /r 	POPCNT r16, r/m16 	RM	W, R		OF SF ZF AF CF PF				V	V		popcntb	POPCNT on r/m16
+F3 0F B8 /r 	POPCNT r32, r/m32 	RM	W, R		OF SF ZF AF CF PF				V	V		popcntl	POPCNT on r/m32
+F3 REX.W+ 0F B8 /r 	POPCNT r64, r/m64 	RM	W, R		OF SF ZF AF CF PF				V	NE		popcntq	POPCNT on r/m64
 													
-PREF.66+ 9D 	POPF 	NP		???	???	???			V	V		popf	Pop top of stack into lower 16 bits of EFLAGS.
+PREF.66+ 9D 	POPF 	NP			EFLAGS				V	V		popf	Pop top of stack into lower 16 bits of EFLAGS.
 9D 	POPFD 								NE	V			Pop top of stack into EFLAGS.
-REX.W+ 9D 	POPFQ 	NP		???	???	???			V	NE		popfq	Pop top of stack and zero-extend into RFLAGS.
+REX.W+ 9D 	POPFQ 	NP			EFLAGS				V	NE		popfq	Pop top of stack and zero-extend into RFLAGS.
 													
 0F EB /r 	POR mm, mm/m64	RM	RW, R						V	V	MMX	por	Bitwise OR of mm/m64 and mm.
 66 0F EB /r	POR xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	por	Bitwise OR of xmm2/m128 and xmm1.
@@ -1753,9 +1753,9 @@ VEX.NDS.128.66.0F.WIG E9 /r	VPSUBSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	A
 VEX.NDS.128.66.0F.WIG D8 /r	VPSUBUSB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsubusb	Subtract packed unsigned byte integers in xmm3/m128 from packed unsigned byte integers in xmm2 and saturate result.
 VEX.NDS.128.66.0F.WIG D9 /r	VPSUBUSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsubusw	Subtract packed unsigned word integers in xmm3/m128 from packed unsigned word integers in xmm2 and saturate result.
 													
-66 0F 38 17 /r	PTEST xmm1, xmm2/m128	RM	R, R		O S Z A C P				V	V	SSE4_1	ptest	Set ZF if xmm2/m128 AND xmm1 result is all 0s. Set CF if xmm2/m128 AND NOT xmm1 result is all 0s.
-VEX.128.66.0F38.WIG 17 /r	VPTEST xmm1, xmm2/m128	RM	R, R		O S Z A C P				V	V	AVX	vptest	Set ZF and CF depending on bitwise AND and ANDN of sources.
-VEX.256.66.0F38.WIG 17 /r	VPTEST ymm1, ymm2/m256	RM	R, R		O S Z A C P				V	V	AVX	vptest	Set ZF and CF depending on bitwise AND and ANDN of sources.
+66 0F 38 17 /r	PTEST xmm1, xmm2/m128	RM	R, R		OF SF ZF AF CF PF				V	V	SSE4_1	ptest	Set ZF if xmm2/m128 AND xmm1 result is all 0s. Set CF if xmm2/m128 AND NOT xmm1 result is all 0s.
+VEX.128.66.0F38.WIG 17 /r	VPTEST xmm1, xmm2/m128	RM	R, R		OF SF ZF AF CF PF				V	V	AVX	vptest	Set ZF and CF depending on bitwise AND and ANDN of sources.
+VEX.256.66.0F38.WIG 17 /r	VPTEST ymm1, ymm2/m256	RM	R, R		OF SF ZF AF CF PF				V	V	AVX	vptest	Set ZF and CF depending on bitwise AND and ANDN of sources.
 													
 0F 68 /r	PUNPCKHBW mm, mm/m64	RM	RW, R						V	V	MMX	punpckhbw	Unpack and interleave high-order bytes from mm and mm/m64 into mm.
 66 0F 68 /r	PUNPCKHBW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	punpckhbw	Unpack and interleave high-order bytes from xmm1 and xmm2/m128 into xmm1.
@@ -1800,74 +1800,74 @@ FF /6	PUSH r/m64	M	R						V	NE		pushq	Push r/m64.
 60	PUSHA								I	V			Push AX, CX, DX, BX, original SP, BP, SI, and DI.
 60	PUSHAD								I	V			Push EAX, ECX, EDX, EBX, original ESP, EBP, ESI, and EDI.
 													
-PREF.66+ 9C	PUSHF	NP		???	???	???			V	V		pushf	Push lower 16 bits of EFLAGS.
+PREF.66+ 9C	PUSHF	NP		EFLAGS					V	V		pushf	Push lower 16 bits of EFLAGS.
 9C	PUSHFD								NE	V			Push EFLAGS.
-9C	PUSHFQ	NP		???	???	???			V	NE		pushfq	Push RFLAGS.
+9C	PUSHFQ	NP		EFLAGS					V	NE		pushfq	Push RFLAGS.
 													
 0F EF /r	PXOR mm, mm/m64	RM	RW, R						V	V	MMX	pxor	Bitwise XOR of mm/m64 and mm.
 66 0F EF /r	PXOR xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pxor	Bitwise XOR of xmm2/m128 and xmm1. 
 VEX.NDS.128.66.0F.WIG EF /r	VPXOR xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpxor	Bitwise XOR of xmm3/m128 and xmm2.
 													
-D0 /2	RCL r/m8, 1	M1	RW, R		C O				V	V		rclb	Rotate 9 bits (CF, r/m8) left once.
-REX+ D0 /2	RCL r/m8, 1	M1	RW, R		C O				V	NE		rclb	Rotate 9 bits (CF, r/m8) left once.
-D2 /2	RCL r/m8, CL	MC	RW, R		C o	o			V	V		rclb	Rotate 9 bits (CF, r/m8) left CL times.
-REX+ D2 /2	RCL r/m8, CL	MC	RW, R		C o	o			V	NE		rclb	Rotate 9 bits (CF, r/m8) left CL times.
-C0 /2 ib	RCL r/m8, imm8	MI	RW, R		C o	o			V	V		rclb	Rotate 9 bits (CF, r/m8) left imm8 times.
-REX+ C0 /2 ib	RCL r/m8, imm8	MI	RW, R		C o	o			V	NE		rclb	Rotate 9 bits (CF, r/m8) left imm8 times.
-D1 /2	RCL r/m16, 1	M1	RW, R		C O				V	V		rclw	Rotate 17 bits (CF, r/m16) left once.
-D3 /2	RCL r/m16, CL	MC	RW, R		C o	o			V	V		rclw	Rotate 17 bits (CF, r/m16) left CL times.
-C1 /2 ib	RCL r/m16, imm8	MI	RW, R		C o	o			V	V		rclw	Rotate 17 bits (CF, r/m16) left imm8 times.
-D1 /2	RCL r/m32, 1	M1	RW, R		C O				V	V		rcll	Rotate 33 bits (CF, r/m32) left once.
-REX.W+ D1 /2	RCL r/m64, 1	M1	RW, R		C O				V	NE		rclq	Rotate 65 bits (CF, r/m64) left once. Uses a 6 bit count.
-D3 /2	RCL r/m32, CL	MC	RW, R		C o	o			V	V		rcll	Rotate 33 bits (CF, r/m32) left CL times.
-REX.W+ D3 /2	RCL r/m64, CL	MC	RW, R		C o	o			V	NE		rclq	Rotate 65 bits (CF, r/m64) left CL times. Uses a 6 bit count.
-C1 /2 ib	RCL r/m32, imm8	MI	RW, R		C o	o			V	V		rcll	Rotate 33 bits (CF, r/m32) left imm8 times.
-REX.W+ C1 /2 ib	RCL r/m64, imm8	MI	RW, R		C o	o			V	NE		rclq	Rotate 65 bits (CF, r/m64) left imm8 times. Uses a 6 bit count.
-D0 /3	RCR r/m8, 1	M1	RW, R		C O				V	V		rcrb	Rotate 9 bits (CF, r/m8) right once.
-REX+ D0 /3	RCR r/m8, 1	M1	RW, R		C O				V	NE		rcrb	Rotate 9 bits (CF, r/m8) right once.
-D2 /3	RCR r/m8, CL	MC	RW, R		C o	o			V	V		rcrb	Rotate 9 bits (CF, r/m8) right CL times.
-REX+ D2 /3	RCR r/m8, CL	MC	RW, R		C o	o			V	NE		rcrb	Rotate 9 bits (CF, r/m8) right CL times.
-C0 /3 ib	RCR r/m8, imm8	MI	RW, R		C o	o			V	V		rcrb	Rotate 9 bits (CF, r/m8) right imm8 times.
-REX+ C0 /3 ib	RCR r/m8, imm8	MI	RW, R		C o	o			V	NE		rcrb	Rotate 9 bits (CF, r/m8) right imm8 times.
-D1 /3	RCR r/m16, 1	M1	RW, R		C O				V	V		rcrw	Rotate 17 bits (CF, r/m16) right once.
-D3 /3	RCR r/m16, CL	MC	RW, R		C o	o			V	V		rcrw	Rotate 17 bits (CF, r/m16) right CL times.
-C1 /3 ib	RCR r/m16, imm8	MI	RW, R		C o	o			V	V		rcrw	Rotate 17 bits (CF, r/m16) right imm8 times.
-D1 /3	RCR r/m32, 1	M1	RW, R		C O				V	V		rcrl	Rotate 33 bits (CF, r/m32) right once. Uses a 6 bit count.
-REX.W+ D1 /3	RCR r/m64, 1	M1	RW, R		C O				V	NE		rcrq	Rotate 65 bits (CF, r/m64) right once. Uses a 6 bit count.
-D3 /3	RCR r/m32, CL	MC	RW, R		C o	o			V	V		rcrl	Rotate 33 bits (CF, r/m32) right CL times.
-REX.W+ D3 /3	RCR r/m64, CL	MC	RW, R		C o	o			V	NE		rcrq	Rotate 65 bits (CF, r/m64) right CL times. Uses a 6 bit count.
-C1 /3 ib	RCR r/m32, imm8	MI	RW, R		C o	o			V	V		rcrl	Rotate 33 bits (CF, r/m32) right imm8 times.
-REX.W+ C1 /3 ib	RCR r/m64, imm8	MI	RW, R		C o	o			V	NE		rcrq	Rotate 65 bits (CF, r/m64) right imm8 times. Uses a 6 bit count.
-D0 /0	ROL r/m8, 1	M1	RW, R		C O				V	V		rolb	Rotate 8 bits r/m8 left once.
-REX+ D0 /0	ROL r/m8, 1	M1	RW, R		C O				V	NE		rolb	Rotate 8 bits r/m8 left once.
-D2 /0	ROL r/m8, CL	MC	RW, R		C o	o			V	V		rolb	Rotate 8 bits r/m8 left CL times.
-REX+ D2 /0	ROL r/m8, CL	MC	RW, R		C o	o			V	NE		rolb	Rotate 8 bits r/m8 left CL times.
-C0 /0 ib	ROL r/m8, imm8	MI	RW, R		C o	o			V	V		rolb	Rotate 8 bits r/m8 left imm8 times.
-REX+ C0 /0 ib	ROL r/m8, imm8	MI	RW, R		C o	o			V	NE		rolb	Rotate 8 bits r/m8 left imm8 times.
-D1 /0	ROL r/m16, 1	M1	RW, R		C O				V	V		rolw	Rotate 16 bits r/m16 left once.
-D3 /0	ROL r/m16, CL	MC	RW, R		C o	o			V	V		rolw	Rotate 16 bits r/m16 left CL times.
-C1 /0 ib	ROL r/m16, imm8	MI	RW, R		C o	o			V	V		rolw	Rotate 16 bits r/m16 left imm8 times.
-D1 /0	ROL r/m32, 1	M1	RW, R		C O				V	V		roll	Rotate 32 bits r/m32 left once.
-REX.W+ D1 /0	ROL r/m64, 1	M1	RW, R		C O				V	NE		rolq	Rotate 64 bits r/m64 left once. Uses a 6 bit count.
-D3 /0	ROL r/m32, CL	MC	RW, R		C o	o			V	V		roll	Rotate 32 bits r/m32 left CL times.
-REX.W+ D3 /0	ROL r/m64, CL	MC	RW, R		C o	o			V	NE		rolq	Rotate 64 bits r/m64 left CL times. Uses a 6 bit count.
-C1 /0 ib	ROL r/m32, imm8	MI	RW, R		C o	o			V	V		roll	Rotate 32 bits r/m32 left imm8 times.
-C1 /0 ib	ROL r/m64, imm8	MI	RW, R		C o	o			V	NE		rolq	Rotate 64 bits r/m64 left imm8 times. Uses a 6 bit count.
-D0 /1	ROR r/m8, 1	M1	RW, R		C O				V	V		rorb	Rotate 8 bits r/m8 right once.
-REX+ D0 /1	ROR r/m8, 1	M1	RW, R		C O				V	NE		rorb	Rotate 8 bits r/m8 right once.
-D2 /1	ROR r/m8, CL	MC	RW, R		C o	o			V	V		rorb	Rotate 8 bits r/m8 right CL times.
-REX+ D2 /1	ROR r/m8, CL	MC	RW, R		C o	o			V	NE		rorb	Rotate 8 bits r/m8 right CL times.
-C0 /1 ib	ROR r/m8, imm8	MI	RW, R		C o	o			V	V		rorb	Rotate 8 bits r/m16 right imm8 times.
-REX+ C0 /1 ib	ROR r/m8, imm8	MI	RW, R		C o	o			V	NE		rorb	Rotate 8 bits r/m16 right imm8 times.
-D1 /1	ROR r/m16, 1	M1	RW, R		C O				V	V		rorw	Rotate 16 bits r/m16 right once.
-D3 /1	ROR r/m16, CL	MC	RW, R		C o	o			V	V		rorw	Rotate 16 bits r/m16 right CL times.
-C1 /1 ib	ROR r/m16, imm8	MI	RW, R		C o	o			V	V		rorw	Rotate 16 bits r/m16 right imm8 times.
-D1 /1	ROR r/m32, 1	M1	RW, R		C O				V	V		rorl	Rotate 32 bits r/m32 right once.
-REX.W+ D1 /1	ROR r/m64, 1	M1	RW, R		C O				V	NE		rorq	Rotate 64 bits r/m64 right once. Uses a 6 bit count.
-D3 /1	ROR r/m32, CL	MC	RW, R		C o	o			V	V		rorl	Rotate 32 bits r/m32 right CL times.
-REX.W+ D3 /1	ROR r/m64, CL	MC	RW, R		C o	o			V	NE		rorq	Rotate 64 bits r/m64 right CL times. Uses a 6 bit count.
-C1 /1 ib	ROR r/m32, imm8	MI	RW, R		C o	o			V	V		rorl	Rotate 32 bits r/m32 right imm8 times.
-REX.W+ C1 /1 ib	ROR r/m64, imm8	MI	RW, R		C o	o			V	NE		rorq	Rotate 64 bits r/m64 right imm8 times. Uses a 6 bit count.
+D0 /2	RCL r/m8, 1	M1	RW, R		CF OF				V	V		rclb	Rotate 9 bits (CF, r/m8) left once.
+REX+ D0 /2	RCL r/m8, 1	M1	RW, R		CF OF				V	NE		rclb	Rotate 9 bits (CF, r/m8) left once.
+D2 /2	RCL r/m8, CL	MC	RW, R		CF of	of			V	V		rclb	Rotate 9 bits (CF, r/m8) left CL times.
+REX+ D2 /2	RCL r/m8, CL	MC	RW, R		CF of	of			V	NE		rclb	Rotate 9 bits (CF, r/m8) left CL times.
+C0 /2 ib	RCL r/m8, imm8	MI	RW, R		CF of	of			V	V		rclb	Rotate 9 bits (CF, r/m8) left imm8 times.
+REX+ C0 /2 ib	RCL r/m8, imm8	MI	RW, R		CF of	of			V	NE		rclb	Rotate 9 bits (CF, r/m8) left imm8 times.
+D1 /2	RCL r/m16, 1	M1	RW, R		CF OF				V	V		rclw	Rotate 17 bits (CF, r/m16) left once.
+D3 /2	RCL r/m16, CL	MC	RW, R		CF of	of			V	V		rclw	Rotate 17 bits (CF, r/m16) left CL times.
+C1 /2 ib	RCL r/m16, imm8	MI	RW, R		CF of	of			V	V		rclw	Rotate 17 bits (CF, r/m16) left imm8 times.
+D1 /2	RCL r/m32, 1	M1	RW, R		CF OF				V	V		rcll	Rotate 33 bits (CF, r/m32) left once.
+REX.W+ D1 /2	RCL r/m64, 1	M1	RW, R		CF OF				V	NE		rclq	Rotate 65 bits (CF, r/m64) left once. Uses a 6 bit count.
+D3 /2	RCL r/m32, CL	MC	RW, R		CF of	of			V	V		rcll	Rotate 33 bits (CF, r/m32) left CL times.
+REX.W+ D3 /2	RCL r/m64, CL	MC	RW, R		CF of	of			V	NE		rclq	Rotate 65 bits (CF, r/m64) left CL times. Uses a 6 bit count.
+C1 /2 ib	RCL r/m32, imm8	MI	RW, R		CF of	of			V	V		rcll	Rotate 33 bits (CF, r/m32) left imm8 times.
+REX.W+ C1 /2 ib	RCL r/m64, imm8	MI	RW, R		CF of	of			V	NE		rclq	Rotate 65 bits (CF, r/m64) left imm8 times. Uses a 6 bit count.
+D0 /3	RCR r/m8, 1	M1	RW, R		CF OF				V	V		rcrb	Rotate 9 bits (CF, r/m8) right once.
+REX+ D0 /3	RCR r/m8, 1	M1	RW, R		CF OF				V	NE		rcrb	Rotate 9 bits (CF, r/m8) right once.
+D2 /3	RCR r/m8, CL	MC	RW, R		CF of	of			V	V		rcrb	Rotate 9 bits (CF, r/m8) right CL times.
+REX+ D2 /3	RCR r/m8, CL	MC	RW, R		CF of	of			V	NE		rcrb	Rotate 9 bits (CF, r/m8) right CL times.
+C0 /3 ib	RCR r/m8, imm8	MI	RW, R		CF of	of			V	V		rcrb	Rotate 9 bits (CF, r/m8) right imm8 times.
+REX+ C0 /3 ib	RCR r/m8, imm8	MI	RW, R		CF of	of			V	NE		rcrb	Rotate 9 bits (CF, r/m8) right imm8 times.
+D1 /3	RCR r/m16, 1	M1	RW, R		CF OF				V	V		rcrw	Rotate 17 bits (CF, r/m16) right once.
+D3 /3	RCR r/m16, CL	MC	RW, R		CF of	of			V	V		rcrw	Rotate 17 bits (CF, r/m16) right CL times.
+C1 /3 ib	RCR r/m16, imm8	MI	RW, R		CF of	of			V	V		rcrw	Rotate 17 bits (CF, r/m16) right imm8 times.
+D1 /3	RCR r/m32, 1	M1	RW, R		CF OF				V	V		rcrl	Rotate 33 bits (CF, r/m32) right once. Uses a 6 bit count.
+REX.W+ D1 /3	RCR r/m64, 1	M1	RW, R		CF OF				V	NE		rcrq	Rotate 65 bits (CF, r/m64) right once. Uses a 6 bit count.
+D3 /3	RCR r/m32, CL	MC	RW, R		CF of	of			V	V		rcrl	Rotate 33 bits (CF, r/m32) right CL times.
+REX.W+ D3 /3	RCR r/m64, CL	MC	RW, R		CF of	of			V	NE		rcrq	Rotate 65 bits (CF, r/m64) right CL times. Uses a 6 bit count.
+C1 /3 ib	RCR r/m32, imm8	MI	RW, R		CF of	of			V	V		rcrl	Rotate 33 bits (CF, r/m32) right imm8 times.
+REX.W+ C1 /3 ib	RCR r/m64, imm8	MI	RW, R		CF of	of			V	NE		rcrq	Rotate 65 bits (CF, r/m64) right imm8 times. Uses a 6 bit count.
+D0 /0	ROL r/m8, 1	M1	RW, R		CF OF				V	V		rolb	Rotate 8 bits r/m8 left once.
+REX+ D0 /0	ROL r/m8, 1	M1	RW, R		CF OF				V	NE		rolb	Rotate 8 bits r/m8 left once.
+D2 /0	ROL r/m8, CL	MC	RW, R		CF of	of			V	V		rolb	Rotate 8 bits r/m8 left CL times.
+REX+ D2 /0	ROL r/m8, CL	MC	RW, R		CF of	of			V	NE		rolb	Rotate 8 bits r/m8 left CL times.
+C0 /0 ib	ROL r/m8, imm8	MI	RW, R		CF of	of			V	V		rolb	Rotate 8 bits r/m8 left imm8 times.
+REX+ C0 /0 ib	ROL r/m8, imm8	MI	RW, R		CF of	of			V	NE		rolb	Rotate 8 bits r/m8 left imm8 times.
+D1 /0	ROL r/m16, 1	M1	RW, R		CF OF				V	V		rolw	Rotate 16 bits r/m16 left once.
+D3 /0	ROL r/m16, CL	MC	RW, R		CF of	of			V	V		rolw	Rotate 16 bits r/m16 left CL times.
+C1 /0 ib	ROL r/m16, imm8	MI	RW, R		CF of	of			V	V		rolw	Rotate 16 bits r/m16 left imm8 times.
+D1 /0	ROL r/m32, 1	M1	RW, R		CF OF				V	V		roll	Rotate 32 bits r/m32 left once.
+REX.W+ D1 /0	ROL r/m64, 1	M1	RW, R		CF OF				V	NE		rolq	Rotate 64 bits r/m64 left once. Uses a 6 bit count.
+D3 /0	ROL r/m32, CL	MC	RW, R		CF of	of			V	V		roll	Rotate 32 bits r/m32 left CL times.
+REX.W+ D3 /0	ROL r/m64, CL	MC	RW, R		CF of	of			V	NE		rolq	Rotate 64 bits r/m64 left CL times. Uses a 6 bit count.
+C1 /0 ib	ROL r/m32, imm8	MI	RW, R		CF of	of			V	V		roll	Rotate 32 bits r/m32 left imm8 times.
+C1 /0 ib	ROL r/m64, imm8	MI	RW, R		CF of	of			V	NE		rolq	Rotate 64 bits r/m64 left imm8 times. Uses a 6 bit count.
+D0 /1	ROR r/m8, 1	M1	RW, R		CF OF				V	V		rorb	Rotate 8 bits r/m8 right once.
+REX+ D0 /1	ROR r/m8, 1	M1	RW, R		CF OF				V	NE		rorb	Rotate 8 bits r/m8 right once.
+D2 /1	ROR r/m8, CL	MC	RW, R		CF of	of			V	V		rorb	Rotate 8 bits r/m8 right CL times.
+REX+ D2 /1	ROR r/m8, CL	MC	RW, R		CF of	of			V	NE		rorb	Rotate 8 bits r/m8 right CL times.
+C0 /1 ib	ROR r/m8, imm8	MI	RW, R		CF of	of			V	V		rorb	Rotate 8 bits r/m16 right imm8 times.
+REX+ C0 /1 ib	ROR r/m8, imm8	MI	RW, R		CF of	of			V	NE		rorb	Rotate 8 bits r/m16 right imm8 times.
+D1 /1	ROR r/m16, 1	M1	RW, R		CF OF				V	V		rorw	Rotate 16 bits r/m16 right once.
+D3 /1	ROR r/m16, CL	MC	RW, R		CF of	of			V	V		rorw	Rotate 16 bits r/m16 right CL times.
+C1 /1 ib	ROR r/m16, imm8	MI	RW, R		CF of	of			V	V		rorw	Rotate 16 bits r/m16 right imm8 times.
+D1 /1	ROR r/m32, 1	M1	RW, R		CF OF				V	V		rorl	Rotate 32 bits r/m32 right once.
+REX.W+ D1 /1	ROR r/m64, 1	M1	RW, R		CF OF				V	NE		rorq	Rotate 64 bits r/m64 right once. Uses a 6 bit count.
+D3 /1	ROR r/m32, CL	MC	RW, R		CF of	of			V	V		rorl	Rotate 32 bits r/m32 right CL times.
+REX.W+ D3 /1	ROR r/m64, CL	MC	RW, R		CF of	of			V	NE		rorq	Rotate 64 bits r/m64 right CL times. Uses a 6 bit count.
+C1 /1 ib	ROR r/m32, imm8	MI	RW, R		CF of	of			V	V		rorl	Rotate 32 bits r/m32 right imm8 times.
+REX.W+ C1 /1 ib	ROR r/m64, imm8	MI	RW, R		CF of	of			V	NE		rorq	Rotate 64 bits r/m64 right imm8 times. Uses a 6 bit count.
 													
 0F 53 /r	RCPPS xmm1, xmm2/m128	RM	W, R						V	V	SSE	rcpps	Computes the approximate reciprocals of the packed single-precision floating-point values in xmm2/m128 and stores the results in xmm1.
 VEX.128.0F.WIG 53 /r	VRCPPS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vrcpps	Computes the approximate reciprocals of packed single-precision values in xmm2/mem and stores the results in xmm1.
@@ -1885,59 +1885,59 @@ REX.W+ F3 0F AE /1	RDGSBASE r64	M	W						V	I	FSGSBASE	rdgsbase	Load the 64-bit d
 													
 0F 33	RDPMC						YES	YES*	V	V			Read performance-monitoring counter specified by ECX into EDX:EAX.
 													
-0F C7 /6	RDRAND r16	M	W	???	???	???			V	V	RDRAND	rdrand	Read a 16-bit random number and store in the destination register.
-0F C7 /6	RDRAND r32	M	W	???	???	???			V	V	RDRAND	rdrand	Read a 32-bit random number and store in the destination register.
-REX.W+ 0F C7 /6	RDRAND r64	M	W	???	???	???			V	I	RDRAND	rdrand	Read a 64-bit random number and store in the destination register.
+0F C7 /6	RDRAND r16	M	W		CF OF SF ZF AF PF				V	V	RDRAND	rdrand	Read a 16-bit random number and store in the destination register.
+0F C7 /6	RDRAND r32	M	W		CF OF SF ZF AF PF				V	V	RDRAND	rdrand	Read a 32-bit random number and store in the destination register.
+REX.W+ 0F C7 /6	RDRAND r64	M	W		CF OF SF ZF AF PF				V	I	RDRAND	rdrand	Read a 64-bit random number and store in the destination register.
 													
 0F 31	RDTSC						YES	YES*	V	V			Read time-stamp counter into EDX:EAX.
 													
 0F 01 F9	RDTSCP						YES	YES*	V	V			Read 64-bit time-stamp counter and 32-bit IA32_TSC_AUX value into EDX:EAX and ECX.
 													
-F3 6C	REP_INS m8, DX 	NP	I, I	???	???	???			V	V		rep ins	Input (E)CX bytes from port DX into ES:[(E)DI].
-F3 REX.W+ 6C	REP_INS m8, DX	NP	I, I	???	???	???			V	NE		rep ins	Input RCX bytes from port DX into [RDI].
-F3 6D	REP_INS m16, DX	NP	I, I	???	???	???			V	V		rep ins	Input (E)CX words from port DX into ES:[(E)DI.]
-F3 6D	REP_INS m32, DX	NP	I, I	???	???	???			V	V		rep ins	Input (E)CX doublewords from port DX into ES:[(E)DI].
-F3 REX.W+ 6D	REP_INS m32, DX	NP	I, I	???	???	???			V	NE		rep ins	Input RCX default size from port DX into [RDI].
-F3 A4	REP_MOVS m8, m8	NP	I, I	???	???	???			V	V		rep movs	Move (E)CX bytes from DS:[(E)SI] to ES:[(E)DI].
-F3 REX.W+ A4	REP_MOVS m8, m8	NP	I, I	???	???	???			V	NE		rep movs	Move RCX bytes from [RSI] to [RDI].
-F3 A5	REP_MOVS m16, m16	NP	I, I	???	???	???			V	V		rep movs	Move (E)CX words from DS:[(E)SI] to ES:[(E)DI].
-F3 A5	REP_MOVS m32, m32	NP	I, I	???	???	???			V	V		rep movs	Move (E)CX doublewords from DS:[(E)SI] to ES:[(E)DI].
-F3 REX.W+ A5	REP_MOVS m64, m64	NP	I, I	???	???	???			V	NE		rep movs	Move RCX quadwords from [RSI] to [RDI].
-F3 6E	REP_OUTS DX, m8	NP	I, I	???	???	???			V	V		rep outs	Output (E)CX bytes from DS:[(E)SI] to port DX.
-F3 REX.W+ 6E	REP_OUTS DX, m8	NP	I, I	???	???	???			V	NE		rep outs	Output RCX bytes from [RSI] to port DX.
-F3 6F	REP_OUTS DX, m16	NP	I, I	???	???	???			V	V		rep outs	Output (E)CX words from DS:[(E)SI] to port DX.
-F3 6F	REP_OUTS DX, m32	NP	I, I	???	???	???			V	V		rep outs	Output (E)CX doublewords from DS:[(E)SI] to port DX.
-F3 REX.W+ 6F	REP_OUTS DX, m32	NP	I, I	???	???	???			V	NE		rep outs	Output RCX default size from [RSI] to port DX.
-F3 AC	REP_LODS AL	NP	I	???	???	???			V	V		rep lods	Load (E)CX bytes from DS:[(E)SI] to AL.
-F3 REX.W+ AC	REP_LODS AL	NP	I	???	???	???			V	NE		rep lods	Load RCX bytes from [RSI] to AL.
-F3 AD	REP_LODS AX	NP	I	???	???	???			V	V		rep lods	Load (E)CX words from DS:[(E)SI] to AX.
-F3 AD	REP_LODS EAX	NP	I	???	???	???			V	V		rep lods	Load (E)CX doublewords from DS:[(E)SI] to EAX.
-F3 REX.W+ AD	REP_LODS RAX	NP	I	???	???	???			V	NE		rep lods	Load RCX quadwords from [RSI] to RAX.
-F3 AA	REP_STOS m8	NP	I	???	???	???			V	V		rep stos	Fill (E)CX bytes at ES:[(E)DI] with AL.
-F3 REX.W+ AA	REP_STOS m8	NP	I	???	???	???			V	NE		rep stos	Fill RCX bytes at [RDI] with AL.
-F3 AB	REP_STOS m16	NP	I	???	???	???			V	V		rep stos	Fill (E)CX words at ES:[(E)DI] with AX.
-F3 AB	REP_STOS m32	NP	I	???	???	???			V	V		rep stos	Fill (E)CX doublewords at ES:[(E)DI] with EAX.
-F3 REX.W+ AB	REP_STOS m64	NP	I	???	???	???			V	NE		rep stos	Fill RCX quadwords at [RDI] with RAX.
-F3 A6	REPE_CMPS m8, m8	NP	I, I	???	???	???			V	V		repe cmps	Find nonmatching bytes in ES:[(E)DI] and DS:[(E)SI].
-F3 REX.W+ A6	REPE_CMPS m8, m8	NP	I, I	???	???	???			V	NE		repe cmps	Find non-matching bytes in [RDI] and [RSI].
-F3 A7	REPE_CMPS m16, m16	NP	I, I	???	???	???			V	V		repe cmps	Find nonmatching words in ES:[(E)DI] and DS:[(E)SI].
-F3 A7	REPE_CMPS m32, m32	NP	I, I	???	???	???			V	V		repe cmps	Find nonmatching doublewords in ES:[(E)DI] and DS:[(E)SI].
-F3 REX.W+ A7	REPE_CMPS m64, m64	NP	I, I	???	???	???			V	NE		repe cmps	Find non-matching quadwords in [RDI] and [RSI].
-F3 AE	REPE_SCAS m8	NP	I	???	???	???			V	V		repe scas	Find non-AL byte starting at ES:[(E)DI].
-F3 REX.W+ AE	REPE_SCAS m8	NP	I	???	???	???			V	NE		repe scas	Find non-AL byte starting at [RDI].
-F3 AF	REPE_SCAS m16	NP	I	???	???	???			V	V		repe scas	Find non-AX word starting at ES:[(E)DI].
-F3 AF	REPE_SCAS m32	NP	I	???	???	???			V	V		repe scas	Find non-EAX doubleword starting at ES:[(E)DI].
-F3 REX.W+ AF	REPE_SCAS m64	NP	I	???	???	???			V	NE		repe scas	Find non-RAX quadword starting at [RDI].
-F2 A6	REPNE_CMPS m8, m8	NP	I, I	???	???	???			V	V		repne cmps	Find matching bytes in ES:[(E)DI] and DS:[(E)SI].
-F2 REX.W+ A6	REPNE_CMPS m8, m8	NP	I, I	???	???	???			V	NE		repne cmps	Find matching bytes in [RDI] and [RSI].
-F2 A7	REPNE_CMPS m16, m16	NP	I, I	???	???	???			V	V		repne cmps	Find matching words in ES:[(E)DI] and DS:[(E)SI].
-F2 A7	REPNE_CMPS m32, m32	NP	I, I	???	???	???			V	V		repne cmps	Find matching doublewords in ES:[(E)DI] and DS:[(E)SI].
-F2 REX.W+ A7	REPNE_CMPS m64, m64	NP	I, I	???	???	???			V	NE		repne cmps	Find matching doublewords in [RDI] and [RSI].
-F2 AE	REPNE_SCAS m8	NP	I	???	???	???			V	V		repne scas	Find AL, starting at ES:[(E)DI].
-F2 REX.W+ AE	REPNE_SCAS m8	NP	I	???	???	???			V	NE		repne scas	Find AL, starting at [RDI].
-F2 AF	REPNE_SCAS m16	NP	I	???	???	???			V	V		repne scas	Find AX, starting at ES:[(E)DI].
-F2 AF	REPNE_SCAS m32	NP	I	???	???	???			V	V		repne scas	Find EAX, starting at ES:[(E)DI].
-F2 REX.W+ AF	REPNE_SCAS m64	NP	I	???	???	???			V	NE		repne scas	Find RAX, starting at [RDI].
+F3 6C	REP_INS m8, DX 	NP	I, R	ECX IOPL VM DF RDI					V	V		rep ins	Input (E)CX bytes from port DX into ES:[(E)DI].
+F3 REX.W+ 6C	REP_INS m8, DX	NP	I, R	RCX IOPL VM DF RDI					V	NE		rep ins	Input RCX bytes from port DX into [RDI].
+F3 6D	REP_INS m16, DX	NP	I, R	ECX IOPL VM DF RDI					V	V		rep ins	Input (E)CX words from port DX into ES:[(E)DI.]
+F3 6D	REP_INS m32, DX	NP	I, R	RCX IOPL VM DF RDI					V	V		rep ins	Input (E)CX doublewords from port DX into ES:[(E)DI].
+F3 REX.W+ 6D	REP_INS m32, DX	NP	I, R	ECX IOPL VM DF RDI					V	NE		rep ins	Input RCX default size from port DX into [RDI].
+F3 A4	REP_MOVS m8, m8	NP	I, I	ECX DF ESI rsi EDI rdi					V	V		rep movs	Move (E)CX bytes from DS:[(E)SI] to ES:[(E)DI].
+F3 REX.W+ A4	REP_MOVS m8, m8	NP	I, I	RCX DF ESI rsi EDI rdi					V	NE		rep movs	Move RCX bytes from [RSI] to [RDI].
+F3 A5	REP_MOVS m16, m16	NP	I, I	ECX DF ESI rsi EDI rdi					V	V		rep movs	Move (E)CX words from DS:[(E)SI] to ES:[(E)DI].
+F3 A5	REP_MOVS m32, m32	NP	I, I	ECX DF ESI rsi EDI rdi					V	V		rep movs	Move (E)CX doublewords from DS:[(E)SI] to ES:[(E)DI].
+F3 REX.W+ A5	REP_MOVS m64, m64	NP	I, I	RCX DF ESI rsi EDI rdi					V	NE		rep movs	Move RCX quadwords from [RSI] to [RDI].
+F3 6E	REP_OUTS DX, m8	NP	R, I	ECX IOPL VM DF RSI					V	V		rep outs	Output (E)CX bytes from DS:[(E)SI] to port DX.
+F3 REX.W+ 6E	REP_OUTS DX, m8	NP	R, I	RCX IOPL VM DF RSI					V	NE		rep outs	Output RCX bytes from [RSI] to port DX.
+F3 6F	REP_OUTS DX, m16	NP	R, I	ECX IOPL VM DF RSI					V	V		rep outs	Output (E)CX words from DS:[(E)SI] to port DX.
+F3 6F	REP_OUTS DX, m32	NP	R, I	ECX IOPL VM DF RSI					V	V		rep outs	Output (E)CX doublewords from DS:[(E)SI] to port DX.
+F3 REX.W+ 6F	REP_OUTS DX, m32	NP	R, I	RCX IOPL VM DF RSI					V	NE		rep outs	Output RCX default size from [RSI] to port DX.
+F3 AC	REP_LODS AL	NP	W	ECX DF SI rsi					V	V		rep lods	Load (E)CX bytes from DS:[(E)SI] to AL.
+F3 REX.W+ AC	REP_LODS AL	NP	W	RCX DF SI rsi					V	NE		rep lods	Load RCX bytes from [RSI] to AL.
+F3 AD	REP_LODS AX	NP	W	ECX DF SI rsi					V	V		rep lods	Load (E)CX words from DS:[(E)SI] to AX.
+F3 AD	REP_LODS EAX	NP	W	ECX DF SI rsi					V	V		rep lods	Load (E)CX doublewords from DS:[(E)SI] to EAX.
+F3 REX.W+ AD	REP_LODS RAX	NP	W	RCX DF SI rsi					V	NE		rep lods	Load RCX quadwords from [RSI] to RAX.
+F3 AA	REP_STOS m8	NP	I	ECX DF RDI AL					V	V		rep stos	Fill (E)CX bytes at ES:[(E)DI] with AL.
+F3 REX.W+ AA	REP_STOS m8	NP	I	RCX DF RDI AL					V	NE		rep stos	Fill RCX bytes at [RDI] with AL.
+F3 AB	REP_STOS m16	NP	I	ECX DF RDI AX					V	V		rep stos	Fill (E)CX words at ES:[(E)DI] with AX.
+F3 AB	REP_STOS m32	NP	I	RCX DF RDI EAX 					V	V		rep stos	Fill (E)CX doublewords at ES:[(E)DI] with EAX.
+F3 REX.W+ AB	REP_STOS m64	NP	I	RCX DF RDI RAX					V	NE		rep stos	Fill RCX quadwords at [RDI] with RAX.
+F3 A6	REPE_CMPS m8, m8	NP	I, I	ZF DF ESI rsi EDI rdi					V	V		repe cmps	Find nonmatching bytes in ES:[(E)DI] and DS:[(E)SI].
+F3 REX.W+ A6	REPE_CMPS m8, m8	NP	I, I	ZF DF ESI rsi EDI rdi					V	NE		repe cmps	Find non-matching bytes in [RDI] and [RSI].
+F3 A7	REPE_CMPS m16, m16	NP	I, I	ZF DF ESI rsi EDI rdi					V	V		repe cmps	Find nonmatching words in ES:[(E)DI] and DS:[(E)SI].
+F3 A7	REPE_CMPS m32, m32	NP	I, I	ZF DF ESI rsi EDI rdi					V	V		repe cmps	Find nonmatching doublewords in ES:[(E)DI] and DS:[(E)SI].
+F3 REX.W+ A7	REPE_CMPS m64, m64	NP	I, I	ZF DF ESI rsi EDI rdi					V	NE		repe cmps	Find non-matching quadwords in [RDI] and [RSI].
+F3 AE	REPE_SCAS m8	NP	I	ZF DF RDI AL					V	V		repe scas	Find non-AL byte starting at ES:[(E)DI].
+F3 REX.W+ AE	REPE_SCAS m8	NP	I	ZF DF RDI AL					V	NE		repe scas	Find non-AL byte starting at [RDI].
+F3 AF	REPE_SCAS m16	NP	I	ZF DF RDI AX					V	V		repe scas	Find non-AX word starting at ES:[(E)DI].
+F3 AF	REPE_SCAS m32	NP	I	ZF DF RDI EAX					V	V		repe scas	Find non-EAX doubleword starting at ES:[(E)DI].
+F3 REX.W+ AF	REPE_SCAS m64	NP	I	ZF DF RDI RAX					V	NE		repe scas	Find non-RAX quadword starting at [RDI].
+F2 A6	REPNE_CMPS m8, m8	NP	I, I	ZF DF ESI rsi EDI rdi					V	V		repne cmps	Find matching bytes in ES:[(E)DI] and DS:[(E)SI].
+F2 REX.W+ A6	REPNE_CMPS m8, m8	NP	I, I	ZF DF ESI rsi EDI rdi					V	NE		repne cmps	Find matching bytes in [RDI] and [RSI].
+F2 A7	REPNE_CMPS m16, m16	NP	I, I	ZF DF ESI rsi EDI rdi					V	V		repne cmps	Find matching words in ES:[(E)DI] and DS:[(E)SI].
+F2 A7	REPNE_CMPS m32, m32	NP	I, I	ZF DF ESI rsi EDI rdi					V	V		repne cmps	Find matching doublewords in ES:[(E)DI] and DS:[(E)SI].
+F2 REX.W+ A7	REPNE_CMPS m64, m64	NP	I, I	ZF DF ESI rsi EDI rdi					V	NE		repne cmps	Find matching doublewords in [RDI] and [RSI].
+F2 AE	REPNE_SCAS m8	NP	I	ZF DF RDI AL					V	V		repne scas	Find AL, starting at ES:[(E)DI].
+F2 REX.W+ AE	REPNE_SCAS m8	NP	I	ZF DF RDI AL					V	NE		repne scas	Find AL, starting at [RDI].
+F2 AF	REPNE_SCAS m16	NP	I	ZF DF RDI AX					V	V		repne scas	Find AX, starting at ES:[(E)DI].
+F2 AF	REPNE_SCAS m32	NP	I	ZF DF RDI EAX					V	V		repne scas	Find EAX, starting at ES:[(E)DI].
+F2 REX.W+ AF	REPNE_SCAS m64	NP	I	ZF DF RDI RAX					V	NE		repne scas	Find RAX, starting at [RDI].
 													
 C3	RET	NP		???	???	???			V	V		retq	Near return to calling procedure.
 CB	RET far	NP	I	???	???	???			V	V		lretl	Far return to calling procedure.
@@ -1967,179 +1967,179 @@ VEX.256.0F.WIG 52 /r	VRSQRTPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vrsqrtps	Comp
 F3 0F 52 /r	RSQRTSS xmm1, xmm2/m32	RM	W, R						V	V	SSE	rsqrtss	Computes the approximate reciprocal of the square root of the low single-precision floating-point value in xmm2/m32 and stores the results in xmm1.
 VEX.NDS.LIG.F3.0F.WIG 52 /r	VRSQRTSS xmm1, xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vrsqrtss	Computes the approximate reciprocal of the square root of the low single precision floating-point value in xmm3/m32 and stores the results in xmm1. Also, upper single precision floating-point values (bits[127:32]) from xmm2 are copied to xmm1[127:32].
 													
-9E	SAHF	NP		AH	S Z A P C				V	V		sahf	Loads SF, ZF, AF, PF, and CF from AH into EFLAGS register.
+9E	SAHF	NP		AH	SF ZF AF PF CF				V	V		sahf	Loads SF, ZF, AF, PF, and CF from AH into EFLAGS register.
 													
-D0 /4	SAL r/m8, 1	M1	RW, R	C	O S Z P	A			V	V		salb	Multiply r/m8 by 2, once.
-REX+ D0 /4	SAL r/m8, 1	M1	RW, R	C	O S Z P	A			V	NE		salb	Multiply r/m8 by 2, once.
-D2 /4	SAL r/m8, CL	MC	RW, R	C	o S Z P	o A			V	V		salb	Multiply r/m8 by 2, CL times.
-REX+ D2 /4	SAL r/m8, CL	MC	RW, R	C	o S Z P	o A			V	NE		salb	Multiply r/m8 by 2, CL times.
-C0 /4 ib	SAL r/m8, imm8	MI	RW, R	C	o S Z P	o A			V	V		salb	Multiply r/m8 by 2, imm8 times.
-REX+ C0 /4 ib	SAL r/m8, imm8	MI	RW, R	C	o S Z P	o A			V	NE		salb	Multiply r/m8 by 2, imm8 times.
-D1 /4	SAL r/m16, 1	M1	RW, R	C	O S Z P	A			V	V		salw	Multiply r/m16 by 2, once.
-D3 /4	SAL r/m16, CL	MC	RW, R	C	o S Z P	o A			V	V		salw	Multiply r/m16 by 2, CL times.
-C1 /4 ib	SAL r/m16, imm8	MI	RW, R	C	o S Z P	o A			V	V		salw	Multiply r/m16 by 2, imm8 times.
-D1 /4	SAL r/m32, 1	M1	RW, R	C	O S Z P	A			V	V		sall	Multiply r/m32 by 2, once.
-REX.W+ D1 /4	SAL r/m64, 1	M1	RW, R	C	O S Z P	A			V	NE		salq	Multiply r/m64 by 2, once.
-D3 /4	SAL r/m32, CL	MC	RW, R	C	o S Z P	o A			V	V		sall	Multiply r/m32 by 2, CL times.
-REX.W+ D3 /4	SAL r/m64, CL	MC	RW, R	C	o S Z P	o A			V	NE		salq	Multiply r/m64 by 2, CL times.
-C1 /4 ib	SAL r/m32, imm8	MI	RW, R	C	o S Z P	o A			V	V		sall	Multiply r/m32 by 2, imm8 times.
-REX.W+ C1 /4 ib	SAL r/m64, imm8	MI	RW, R	C	o S Z P	o A			V	NE		salq	Multiply r/m64 by 2, imm8 times.
-D0 /7	SAR r/m8, 1	M1	RW, R	C	O S Z P	A			V	V		sarb	Signed divide r/m8 by 2, once.
-REX+ D0 /7	SAR r/m8, 1	M1	RW, R	C	O S Z P	A			V	NE		sarb	Signed divide r/m8 by 2, once.
-D2 /7	SAR r/m8, CL	MC	RW, R	C	o S Z P	o A			V	V		sarb	Signed divide r/m8 by 2, CL times.
-REX+ D2 /7	SAR r/m8, CL	MC	RW, R	C	o S Z P	o A			V	NE		sarb	Signed divide r/m8 by 2, CL times.
-C0 /7 ib	SAR r/m8, imm8	MI	RW, R	C	o S Z P	o A			V	V		sarb	Signed divide r/m8 by 2, imm8 time.
-REX+ C0 /7 ib	SAR r/m8, imm8	MI	RW, R	C	o S Z P	o A			V	NE		sarb	Signed divide r/m8 by 2, imm8 time.
-D1 /7	SAR r/m16,1	M1	RW, R	C	O S Z P	A			V	V		sarw	Signed divide r/m16 by 2, once.
-D3 /7	SAR r/m16, CL	MC	RW, R	C	o S Z P	o A			V	V		sarw	Signed divide r/m16 by 2, CL times.
-C1 /7 ib	SAR r/m16, imm8	MI	RW, R	C	o S Z P	o A			V	V		sarw	Signed divide r/m16 by 2, imm8 times.
-D1 /7	SAR r/m32, 1	M1	RW, R	C	O S Z P	A			V	V		sarl	Signed divide r/m32 by 2, once.
-REX.W+ D1 /7	SAR r/m64, 1	M1	RW, R	C	O S Z P	A			V	NE		sarq	Signed divide r/m32 by 2, once.
-D3 /7	SAR r/m32, CL	MC	RW, R	C	o S Z P	o A			V	V		sarl	Signed divide r/m32 by 2, CL times.
-REX.W+ D3 /7	SAR r/m64, CL	MC	RW, R	C	o S Z P	o A			V	NE		sarq	Signed divide r/m32 by 2, CL times.
-C1 /7 ib	SAR r/m32, imm8	MI	RW, R	C	o S Z P	o A			V	V		sarl	Signed divide r/m32 by 2, imm8 times.
-REX.W+ C1 /7 ib	SAR r/m64, imm8	MI	RW, R	C	o S Z P	o A			V	NE		sarq	Signed divide r/m32 by 2, imm8 times.
-D0 /4	SHL r/m8, 1	M1	RW, R	c	O S Z P	A c			V	V		shlb	Multiply r/m8 by 2, once.
-REX+ D0 /4	SHL r/m8, 1	M1	RW, R	c	O S Z P	A c			V	NE		shlb	Multiply r/m8 by 2, once.
-D2 /4	SHL r/m8, CL	MC	RW, R	c	o S Z P	o c A			V	V		shlb	Multiply r/m8 by 2, CL times.
-REX+ D2 /4	SHL r/m8, CL	MC	RW, R	c	o S Z P	o c A			V	NE		shlb	Multiply r/m8 by 2, CL times.
-C0 /4 ib	SHL r/m8, imm8	MI	RW, R	c	o S Z P	o c A			V	V		shlb	Multiply r/m8 by 2, imm8 times.
-REX+ C0 /4 ib	SHL r/m8, imm8	MI	RW, R	c	o S Z P	o c A			V	NE		shlb	Multiply r/m8 by 2, imm8 times.
-D1 /4	SHL r/m16,1	M1	RW, R	c	O S Z P	A c			V	V		shlw	Multiply r/m16 by 2, once.
-D3 /4	SHL r/m16, CL	MC	RW, R	c	o S Z P	o c A			V	V		shlw	Multiply r/m16 by 2, CL times.
-C1 /4 ib	SHL r/m16, imm8	MI	RW, R	c	o S Z P	o c A			V	V		shlw	Multiply r/m16 by 2, imm8 times.
-D1 /4	SHL r/m32,1	M1	RW, R	c	O S Z P	A c			V	V		shll	Multiply r/m32 by 2, once.
-REX.W+ D1 /4	SHL r/m64,1	M1	RW, R	c	O S Z P	A c			V	NE		shlq	Multiply r/m64 by 2, once.
-D3 /4	SHL r/m32, CL	MC	RW, R	c	o S Z P	o c A			V	V		shll	Multiply r/m32 by 2, CL times.
-REX.W+ D3 /4	SHL r/m64, CL	MC	RW, R	c	o S Z P	o c A			V	NE		shlq	Multiply r/m32 by 2, CL times.
-C1 /4 ib	SHL r/m32, imm8	MI	RW, R	c	o S Z P	o c A			V	V		shll	Multiply r/m32 by 2, imm8 times.
-REX.W+ C1 /4 ib	SHL r/m64, imm8	MI	RW, R	c	o S Z P	o c A			V	NE		shlq	Multiply r/m32 by 2, imm8 times.
-D0 /5	SHR r/m8,1	M1	RW, R	c	O S Z P	A c			V	V		shrb	Unsigned divide r/m8 by 2, once.
-REX+ D0 /5	SHR r/m8, 1	M1	RW, R	c	O S Z P	A c			V	NE		shrb	Unsigned divide r/m8 by 2, once.
-D2 /5	SHR r/m8, CL	MC	RW, R	c	o S Z P	o c A			V	V		shrb	Unsigned divide r/m8 by 2, CL times.
-REX+ D2 /5	SHR r/m8, CL	MC	RW, R	c	o S Z P	o c A			V	NE		shrb	Unsigned divide r/m8 by 2, CL times.
-C0 /5 ib	SHR r/m8, imm8	MI	RW, R	c	o S Z P	o c A			V	V		shrb	Unsigned divide r/m8 by 2, imm8 times.
-REX+ C0 /5 ib	SHR r/m8, imm8	MI	RW, R	c	o S Z P	o c A			V	NE		shrb	Unsigned divide r/m8 by 2, imm8 times.
-D1 /5	SHR r/m16, 1	M1	RW, R	c	O S Z P	A c			V	V		shrw	Unsigned divide r/m16 by 2, once.
-D3 /5	SHR r/m16, CL	MC	RW, R	c	o S Z P	o c A			V	V		shrw	Unsigned divide r/m16 by 2, CL times
-C1 /5 ib	SHR r/m16, imm8	MI	RW, R	c	o S Z P	o c A			V	V		shrw	Unsigned divide r/m16 by 2, imm8 times.
-D1 /5	SHR r/m32, 1	M1	RW, R	c	O S Z P	A c			V	V		shrl	Unsigned divide r/m32 by 2, once.
-REX.W+ D1 /5	SHR r/m64, 1	M1	RW, R	c	O S Z P	A c			V	NE		shrq	Unsigned divide r/m32 by 2, once.
-D3 /5	SHR r/m32, CL	MC	RW, R	c	o S Z P	o c A			V	V		shrl	Unsigned divide r/m32 by 2, CL times.
-REX.W+ D3 /5	SHR r/m64, CL	MC	RW, R	c	o S Z P	o c A			V	NE		shrq	Unsigned divide r/m32 by 2, CL times.
-C1 /5 ib	SHR r/m32, imm8	MI	RW, R	c	o S Z P	o c A			V	V		shrl	Unsigned divide r/m32 by 2, imm8 times.
-REX.W+ C1 /5 ib	SHR r/m64, imm8	MI	RW, R	c	o S Z P	o c A			V	NE		shrq	Unsigned divide r/m32 by 2, imm8 times.
+D0 /4	SAL r/m8, 1	M1	RW, R	CF	OF SF ZF PF	AF			V	V		salb	Multiply r/m8 by 2, once.
+REX+ D0 /4	SAL r/m8, 1	M1	RW, R	CF	OF SF ZF PF	AF			V	NE		salb	Multiply r/m8 by 2, once.
+D2 /4	SAL r/m8, CL	MC	RW, R	CF	of SF ZF PF	of AF			V	V		salb	Multiply r/m8 by 2, CL times.
+REX+ D2 /4	SAL r/m8, CL	MC	RW, R	CF	of SF ZF PF	of AF			V	NE		salb	Multiply r/m8 by 2, CL times.
+C0 /4 ib	SAL r/m8, imm8	MI	RW, R	CF	of SF ZF PF	of AF			V	V		salb	Multiply r/m8 by 2, imm8 times.
+REX+ C0 /4 ib	SAL r/m8, imm8	MI	RW, R	CF	of SF ZF PF	of AF			V	NE		salb	Multiply r/m8 by 2, imm8 times.
+D1 /4	SAL r/m16, 1	M1	RW, R	CF	OF SF ZF PF	AF			V	V		salw	Multiply r/m16 by 2, once.
+D3 /4	SAL r/m16, CL	MC	RW, R	CF	of SF ZF PF	of AF			V	V		salw	Multiply r/m16 by 2, CL times.
+C1 /4 ib	SAL r/m16, imm8	MI	RW, R	CF	of SF ZF PF	of AF			V	V		salw	Multiply r/m16 by 2, imm8 times.
+D1 /4	SAL r/m32, 1	M1	RW, R	CF	OF SF ZF PF	AF			V	V		sall	Multiply r/m32 by 2, once.
+REX.W+ D1 /4	SAL r/m64, 1	M1	RW, R	CF	OF SF ZF PF	AF			V	NE		salq	Multiply r/m64 by 2, once.
+D3 /4	SAL r/m32, CL	MC	RW, R	CF	of SF ZF PF	of AF			V	V		sall	Multiply r/m32 by 2, CL times.
+REX.W+ D3 /4	SAL r/m64, CL	MC	RW, R	CF	of SF ZF PF	of AF			V	NE		salq	Multiply r/m64 by 2, CL times.
+C1 /4 ib	SAL r/m32, imm8	MI	RW, R	CF	of SF ZF PF	of AF			V	V		sall	Multiply r/m32 by 2, imm8 times.
+REX.W+ C1 /4 ib	SAL r/m64, imm8	MI	RW, R	CF	of SF ZF PF	of AF			V	NE		salq	Multiply r/m64 by 2, imm8 times.
+D0 /7	SAR r/m8, 1	M1	RW, R	CF	OF SF ZF PF	AF			V	V		sarb	Signed divide r/m8 by 2, once.
+REX+ D0 /7	SAR r/m8, 1	M1	RW, R	CF	OF SF ZF PF	AF			V	NE		sarb	Signed divide r/m8 by 2, once.
+D2 /7	SAR r/m8, CL	MC	RW, R	CF	of SF ZF PF	of AF			V	V		sarb	Signed divide r/m8 by 2, CL times.
+REX+ D2 /7	SAR r/m8, CL	MC	RW, R	CF	of SF ZF PF	of AF			V	NE		sarb	Signed divide r/m8 by 2, CL times.
+C0 /7 ib	SAR r/m8, imm8	MI	RW, R	CF	of SF ZF PF	of AF			V	V		sarb	Signed divide r/m8 by 2, imm8 time.
+REX+ C0 /7 ib	SAR r/m8, imm8	MI	RW, R	CF	of SF ZF PF	of AF			V	NE		sarb	Signed divide r/m8 by 2, imm8 time.
+D1 /7	SAR r/m16,1	M1	RW, R	CF	OF SF ZF PF	AF			V	V		sarw	Signed divide r/m16 by 2, once.
+D3 /7	SAR r/m16, CL	MC	RW, R	CF	of SF ZF PF	of AF			V	V		sarw	Signed divide r/m16 by 2, CL times.
+C1 /7 ib	SAR r/m16, imm8	MI	RW, R	CF	of SF ZF PF	of AF			V	V		sarw	Signed divide r/m16 by 2, imm8 times.
+D1 /7	SAR r/m32, 1	M1	RW, R	CF	OF SF ZF PF	AF			V	V		sarl	Signed divide r/m32 by 2, once.
+REX.W+ D1 /7	SAR r/m64, 1	M1	RW, R	CF	OF SF ZF PF	AF			V	NE		sarq	Signed divide r/m32 by 2, once.
+D3 /7	SAR r/m32, CL	MC	RW, R	CF	of SF ZF PF	of AF			V	V		sarl	Signed divide r/m32 by 2, CL times.
+REX.W+ D3 /7	SAR r/m64, CL	MC	RW, R	CF	of SF ZF PF	of AF			V	NE		sarq	Signed divide r/m32 by 2, CL times.
+C1 /7 ib	SAR r/m32, imm8	MI	RW, R	CF	of SF ZF PF	of AF			V	V		sarl	Signed divide r/m32 by 2, imm8 times.
+REX.W+ C1 /7 ib	SAR r/m64, imm8	MI	RW, R	CF	of SF ZF PF	of AF			V	NE		sarq	Signed divide r/m32 by 2, imm8 times.
+D0 /4	SHL r/m8, 1	M1	RW, R	cf	OF SF ZF PF	AF cf			V	V		shlb	Multiply r/m8 by 2, once.
+REX+ D0 /4	SHL r/m8, 1	M1	RW, R	cf	OF SF ZF PF	AF cf			V	NE		shlb	Multiply r/m8 by 2, once.
+D2 /4	SHL r/m8, CL	MC	RW, R	cf	of SF ZF PF	of cf AF			V	V		shlb	Multiply r/m8 by 2, CL times.
+REX+ D2 /4	SHL r/m8, CL	MC	RW, R	cf	of SF ZF PF	of cf AF			V	NE		shlb	Multiply r/m8 by 2, CL times.
+C0 /4 ib	SHL r/m8, imm8	MI	RW, R	cf	of SF ZF PF	of cf AF			V	V		shlb	Multiply r/m8 by 2, imm8 times.
+REX+ C0 /4 ib	SHL r/m8, imm8	MI	RW, R	cf	of SF ZF PF	of cf AF			V	NE		shlb	Multiply r/m8 by 2, imm8 times.
+D1 /4	SHL r/m16,1	M1	RW, R	cf	OF SF ZF PF	AF cf			V	V		shlw	Multiply r/m16 by 2, once.
+D3 /4	SHL r/m16, CL	MC	RW, R	cf	of SF ZF PF	of cf AF			V	V		shlw	Multiply r/m16 by 2, CL times.
+C1 /4 ib	SHL r/m16, imm8	MI	RW, R	cf	of SF ZF PF	of cf AF			V	V		shlw	Multiply r/m16 by 2, imm8 times.
+D1 /4	SHL r/m32,1	M1	RW, R	cf	OF SF ZF PF	AF cf			V	V		shll	Multiply r/m32 by 2, once.
+REX.W+ D1 /4	SHL r/m64,1	M1	RW, R	cf	OF SF ZF PF	AF cf			V	NE		shlq	Multiply r/m64 by 2, once.
+D3 /4	SHL r/m32, CL	MC	RW, R	cf	of SF ZF PF	of cf AF			V	V		shll	Multiply r/m32 by 2, CL times.
+REX.W+ D3 /4	SHL r/m64, CL	MC	RW, R	cf	of SF ZF PF	of cf AF			V	NE		shlq	Multiply r/m32 by 2, CL times.
+C1 /4 ib	SHL r/m32, imm8	MI	RW, R	cf	of SF ZF PF	of cf AF			V	V		shll	Multiply r/m32 by 2, imm8 times.
+REX.W+ C1 /4 ib	SHL r/m64, imm8	MI	RW, R	cf	of SF ZF PF	of cf AF			V	NE		shlq	Multiply r/m32 by 2, imm8 times.
+D0 /5	SHR r/m8,1	M1	RW, R	cf	OF SF ZF PF	AF cf			V	V		shrb	Unsigned divide r/m8 by 2, once.
+REX+ D0 /5	SHR r/m8, 1	M1	RW, R	cf	OF SF ZF PF	AF cf			V	NE		shrb	Unsigned divide r/m8 by 2, once.
+D2 /5	SHR r/m8, CL	MC	RW, R	cf	of SF ZF PF	of cf AF			V	V		shrb	Unsigned divide r/m8 by 2, CL times.
+REX+ D2 /5	SHR r/m8, CL	MC	RW, R	cf	of SF ZF PF	of cf AF			V	NE		shrb	Unsigned divide r/m8 by 2, CL times.
+C0 /5 ib	SHR r/m8, imm8	MI	RW, R	cf	of SF ZF PF	of cf AF			V	V		shrb	Unsigned divide r/m8 by 2, imm8 times.
+REX+ C0 /5 ib	SHR r/m8, imm8	MI	RW, R	cf	of SF ZF PF	of cf AF			V	NE		shrb	Unsigned divide r/m8 by 2, imm8 times.
+D1 /5	SHR r/m16, 1	M1	RW, R	cf	OF SF ZF PF	AF cf			V	V		shrw	Unsigned divide r/m16 by 2, once.
+D3 /5	SHR r/m16, CL	MC	RW, R	cf	of SF ZF PF	of cf AF			V	V		shrw	Unsigned divide r/m16 by 2, CL times
+C1 /5 ib	SHR r/m16, imm8	MI	RW, R	cf	of SF ZF PF	of cf AF			V	V		shrw	Unsigned divide r/m16 by 2, imm8 times.
+D1 /5	SHR r/m32, 1	M1	RW, R	cf	OF SF ZF PF	AF cf			V	V		shrl	Unsigned divide r/m32 by 2, once.
+REX.W+ D1 /5	SHR r/m64, 1	M1	RW, R	cf	OF SF ZF PF	AF cf			V	NE		shrq	Unsigned divide r/m32 by 2, once.
+D3 /5	SHR r/m32, CL	MC	RW, R	cf	of SF ZF PF	of cf AF			V	V		shrl	Unsigned divide r/m32 by 2, CL times.
+REX.W+ D3 /5	SHR r/m64, CL	MC	RW, R	cf	of SF ZF PF	of cf AF			V	NE		shrq	Unsigned divide r/m32 by 2, CL times.
+C1 /5 ib	SHR r/m32, imm8	MI	RW, R	cf	of SF ZF PF	of cf AF			V	V		shrl	Unsigned divide r/m32 by 2, imm8 times.
+REX.W+ C1 /5 ib	SHR r/m64, imm8	MI	RW, R	cf	of SF ZF PF	of cf AF			V	NE		shrq	Unsigned divide r/m32 by 2, imm8 times.
 													
-1C ib	SBB AL, imm8	I	RW, R		O S Z A P C				V	V		sbbb	Subtract with borrow imm8 from AL.
-1D iw	SBB AX, imm16	I	RW, R		O S Z A P C				V	V		sbbw	Subtract with borrow imm16 from AX.
-1D id	SBB EAX, imm32	I	RW, R		O S Z A P C				V	V		sbbl	Subtract with borrow imm32 from EAX.
-REX.W+ 1D id	SBB RAX, imm32	I	RW, R		O S Z A P C				V	NE		sbbq	Subtract with borrow sign-extended imm.32 to 64-bits from RAX.
-80 /3 ib	SBB r/m8, imm8	MI	RW, R		O S Z A P C				V	V		sbbb	Subtract with borrow imm8 from r/m8.
-REX+ 80 /3 ib	SBB r/m8, imm8	MI	RW, R		O S Z A P C				V	NE		sbbb	Subtract with borrow imm8 from r/m8.
-81 /3 iw	SBB r/m16, imm16	MI	RW, R		O S Z A P C				V	V		sbbw	Subtract with borrow imm16 from r/m16.
-81 /3 id	SBB r/m32, imm32	MI	RW, R		O S Z A P C				V	V		sbbl	Subtract with borrow imm32 from r/m32.
-REX.W+ 81 /3 id	SBB r/m64, imm32	MI	RW, R		O S Z A P C				V	NE		sbbq	Subtract with borrow sign-extended imm32 to 64-bits from r/m64.
-83 /3 ib	SBB r/m16, imm8	MI	RW, R		O S Z A P C				V	V		sbbw	Subtract with borrow sign-extended imm8 from r/m16.
-83 /3 ib	SBB r/m32, imm8	MI	RW, R		O S Z A P C				V	V		sbbl	Subtract with borrow sign-extended imm8 from r/m32.
-REX.W+ 83 /3 ib	SBB r/m64, imm8	MI	RW, R		O S Z A P C				V	NE		sbbq	Subtract with borrow sign-extended imm8 from r/m64.
-18 /r	SBB r/m8, r8	MR	RW, R		O S Z A P C				V	V		sbbb	Subtract with borrow r8 from r/m8.
-REX+ 18 /r	SBB r/m8, r8	MR	RW, R		O S Z A P C				V	NE		sbbb	Subtract with borrow r8 from r/m8.
-19 /r	SBB r/m16, r16	MR	RW, R		O S Z A P C				V	V		sbbw	Subtract with borrow r16 from r/m16.
-19 /r	SBB r/m32, r32	MR	RW, R		O S Z A P C				V	V		sbbl	Subtract with borrow r32 from r/m32.
-REX.W+ 19 /r	SBB r/m64, r64	MR	RW, R		O S Z A P C				V	NE		sbbq	Subtract with borrow r64 from r/m64.
-1A /r	SBB r8, r/m8	RM	RW, R		O S Z A P C				V	V		sbbb	Subtract with borrow r/m8 from r8.
-REX+ 1A /r	SBB r8, r/m8	RM	RW, R		O S Z A P C				V	NE		sbbb	Subtract with borrow r/m8 from r8.
-1B /r	SBB r16, r/m16	RM	RW, R		O S Z A P C				V	V		sbbw	Subtract with borrow r/m16 from r16.
-1B /r	SBB r32, r/m32	RM	RW, R		O S Z A P C				V	V		sbbl	Subtract with borrow r/m32 from r32.
-REX.W+ 1B /r	SBB r64, r/m64	RM	RW, R		O S Z A P C				V	NE		sbbq	Subtract with borrow r/m64 from r64.
+1C ib	SBB AL, imm8	I	RW, R		OF SF ZF AF PF CF				V	V		sbbb	Subtract with borrow imm8 from AL.
+1D iw	SBB AX, imm16	I	RW, R		OF SF ZF AF PF CF				V	V		sbbw	Subtract with borrow imm16 from AX.
+1D id	SBB EAX, imm32	I	RW, R		OF SF ZF AF PF CF				V	V		sbbl	Subtract with borrow imm32 from EAX.
+REX.W+ 1D id	SBB RAX, imm32	I	RW, R		OF SF ZF AF PF CF				V	NE		sbbq	Subtract with borrow sign-extended imm.32 to 64-bits from RAX.
+80 /3 ib	SBB r/m8, imm8	MI	RW, R		OF SF ZF AF PF CF				V	V		sbbb	Subtract with borrow imm8 from r/m8.
+REX+ 80 /3 ib	SBB r/m8, imm8	MI	RW, R		OF SF ZF AF PF CF				V	NE		sbbb	Subtract with borrow imm8 from r/m8.
+81 /3 iw	SBB r/m16, imm16	MI	RW, R		OF SF ZF AF PF CF				V	V		sbbw	Subtract with borrow imm16 from r/m16.
+81 /3 id	SBB r/m32, imm32	MI	RW, R		OF SF ZF AF PF CF				V	V		sbbl	Subtract with borrow imm32 from r/m32.
+REX.W+ 81 /3 id	SBB r/m64, imm32	MI	RW, R		OF SF ZF AF PF CF				V	NE		sbbq	Subtract with borrow sign-extended imm32 to 64-bits from r/m64.
+83 /3 ib	SBB r/m16, imm8	MI	RW, R		OF SF ZF AF PF CF				V	V		sbbw	Subtract with borrow sign-extended imm8 from r/m16.
+83 /3 ib	SBB r/m32, imm8	MI	RW, R		OF SF ZF AF PF CF				V	V		sbbl	Subtract with borrow sign-extended imm8 from r/m32.
+REX.W+ 83 /3 ib	SBB r/m64, imm8	MI	RW, R		OF SF ZF AF PF CF				V	NE		sbbq	Subtract with borrow sign-extended imm8 from r/m64.
+18 /r	SBB r/m8, r8	MR	RW, R		OF SF ZF AF PF CF				V	V		sbbb	Subtract with borrow r8 from r/m8.
+REX+ 18 /r	SBB r/m8, r8	MR	RW, R		OF SF ZF AF PF CF				V	NE		sbbb	Subtract with borrow r8 from r/m8.
+19 /r	SBB r/m16, r16	MR	RW, R		OF SF ZF AF PF CF				V	V		sbbw	Subtract with borrow r16 from r/m16.
+19 /r	SBB r/m32, r32	MR	RW, R		OF SF ZF AF PF CF				V	V		sbbl	Subtract with borrow r32 from r/m32.
+REX.W+ 19 /r	SBB r/m64, r64	MR	RW, R		OF SF ZF AF PF CF				V	NE		sbbq	Subtract with borrow r64 from r/m64.
+1A /r	SBB r8, r/m8	RM	RW, R		OF SF ZF AF PF CF				V	V		sbbb	Subtract with borrow r/m8 from r8.
+REX+ 1A /r	SBB r8, r/m8	RM	RW, R		OF SF ZF AF PF CF				V	NE		sbbb	Subtract with borrow r/m8 from r8.
+1B /r	SBB r16, r/m16	RM	RW, R		OF SF ZF AF PF CF				V	V		sbbw	Subtract with borrow r/m16 from r16.
+1B /r	SBB r32, r/m32	RM	RW, R		OF SF ZF AF PF CF				V	V		sbbl	Subtract with borrow r/m32 from r32.
+REX.W+ 1B /r	SBB r64, r/m64	RM	RW, R		OF SF ZF AF PF CF				V	NE		sbbq	Subtract with borrow r/m64 from r64.
 													
-AE	SCAS m8	NP	I	???	???	???			V	V		scas	Compare AL with byte at ES:(E)DI or RDI, then set status flags.
-AF	SCAS m16	NP	I	???	???	???			V	V		scas	Compare AX with word at ES:(E)DI or RDI, then set status flags.
-AF	SCAS m32	NP	I	???	???	???			V	V		scas	Compare EAX with doubleword at ES(E)DI or RDI then set status flags.
-REX.W+ AF	SCAS m64	NP	I	???	???	???			V	NE		scas	Compare RAX with quadword at RDI or EDI then set status flags.
-AE	SCASB	NP		???	???	???			V	V		scasb	Compare AL with byte at ES:(E)DI or RDI then set status flags.
-PREF.66+ AF	SCASW	NP		???	???	???			V	V		scasw	Compare AX with word at ES:(E)DI or RDI then set status flags.
-AF	SCASD	NP		???	???	???			V	V		scasl	Compare EAX with doubleword at ES:(E)DI or RDI then set status flags.
-REX.W+ AF	SCASQ	NP		???	???	???			V	NE		scasq	Compare RAX with quadword at RDI or EDI then set status flags.
+AE	SCAS m8	NP	I	DF RDI AL					V	V		scas	Compare AL with byte at ES:(E)DI or RDI, then set status flags.
+AF	SCAS m16	NP	I	DF RDI AX					V	V		scas	Compare AX with word at ES:(E)DI or RDI, then set status flags.
+AF	SCAS m32	NP	I	DF RDI EAX					V	V		scas	Compare EAX with doubleword at ES(E)DI or RDI then set status flags.
+REX.W+ AF	SCAS m64	NP	I	DF RDI RAX					V	NE		scas	Compare RAX with quadword at RDI or EDI then set status flags.
+AE	SCASB	NP		DF RDI AL					V	V		scasb	Compare AL with byte at ES:(E)DI or RDI then set status flags.
+PREF.66+ AF	SCASW	NP		DF RDI AX					V	V		scasw	Compare AX with word at ES:(E)DI or RDI then set status flags.
+AF	SCASD	NP		DF RDI EAX					V	V		scasl	Compare EAX with doubleword at ES:(E)DI or RDI then set status flags.
+REX.W+ AF	SCASQ	NP		DF RDI RAX					V	NE		scasq	Compare RAX with quadword at RDI or EDI then set status flags.
 													
-0F 97 /0	SETA r/m8	M	w	C Z					V	V		seta	Set byte if above (CF=0 and ZF=0).
-REX+ 0F 97 /0 	SETA r/m8	M	w	C Z					V	NE		seta	Set byte if above (CF=0 and ZF=0).
-0F 93 /0	SETAE r/m8	M	w	C					V	V		setae	Set byte if above or equal (CF=0).
-REX+ 0F 93 /0	SETAE r/m8	M	w	C					V	NE		setae	Set byte if above or equal (CF=0).
-0F 92 /0	SETB r/m8	M	w	C					V	V		setb	Set byte if below (CF=1).
-REX+ 0F 92 /0	SETB r/m8	M	w	C					V	NE		setb	Set byte if below (CF=1).
-0F 96 /0	SETBE r/m8	M	w	C Z					V	V		setbe	Set byte if below or equal (CF=1 or ZF=1).
-REX+ 0F 96 /0	SETBE r/m8	M	w	C Z					V	NE		setbe	Set byte if below or equal (CF=1 or ZF=1).
-0F 92 /0	SETC r/m8	M	w	C					V	V		setb	Set byte if carry (CF=1).
-REX+ 0F 92 /0	SETC r/m8	M	w	C					V	NE		setb	Set byte if carry (CF=1).
-0F 94 /0	SETE r/m8	M	w	Z					V	V		sete	Set byte if equal (ZF=1).
-REX+ 0F 94 /0	SETE r/m8	M	w	Z					V	NE		sete	Set byte if equal (ZF=1).
-0F 9F /0	SETG r/m8	M	w	Z S O					V	V		setg	Set byte if greater (ZF=0 and SF=OF).
-REX+ 0F 9F /0	SETG r/m8	M	w	Z S O					V	NE		setg	Set byte if greater (ZF=0 and SF=OF).
-0F 9D /0	SETGE r/m8	M	w	S O					V	V		setge	Set byte if greater or equal (SF=OF).
-REX+ 0F 9D /0	SETGE r/m8	M	w	S O					V	NE		setge	Set byte if greater or equal (SF=OF).
-0F 9C /0	SETL r/m8	M	w	S O					V	V		setl	Set byte if less (SF!= OF).
-REX+ 0F 9C /0	SETL r/m8	M	w	S O					V	NE		setl	Set byte if less (SF!= OF).
-0F 9E /0	SETLE r/m8	M	w	Z S O					V	V		setle	Set byte if less or equal (ZF=1 or SF!= OF).
-REX+ 0F 9E /0	SETLE r/m8	M	w	Z S O					V	NE		setle	Set byte if less or equal (ZF=1 or SF!= OF).
-0F 96 /0	SETNA r/m8	M	w	C Z					V	V		setbe	Set byte if not above (CF=1 or ZF=1).
-REX+ 0F 96 /0	SETNA r/m8	M	w	C Z					V	NE		setbe	Set byte if not above (CF=1 or ZF=1).
-0F 92 /0	SETNAE r/m8	M	w	C					V	V		setbe	Set byte if not above or equal (CF=1).
-REX+ 0F 92 /0	SETNAE r/m8	M	w	C					V	NE		setbe	Set byte if not above or equal (CF=1).
-0F 93 /0	SETNB r/m8	M	w	C					V	V		setae	Set byte if not below (CF=0).
-REX+ 0F 93 /0	SETNB r/m8	M	w	C					V	NE		setae	Set byte if not below (CF=0).
-0F 97 /0	SETNBE r/m8	M	w	C Z					V	V		seta	Set byte if not below or equal (CF=0 and ZF=0).
-REX+ 0F 97 /0	SETNBE r/m8	M	w	C Z					V	NE		seta	Set byte if not below or equal (CF=0 and ZF=0).
-0F 93 /0	SETNC r/m8	M	w	C					V	V		setae	Set byte if not carry (CF=0).
-REX+ 0F 93 /0	SETNC r/m8	M	w	C					V	NE		setae	Set byte if not carry (CF=0).
-0F 95 /0	SETNE r/m8	M	w	Z					V	V		setne	Set byte if not equal (ZF=0).
-REX+ 0F 95 /0	SETNE r/m8	M	w	Z					V	NE		setne	Set byte if not equal (ZF=0).
-0F 9E /0	SETNG r/m8	M	w	Z S O					V	V		setle	Set byte if not greater (ZF=1 or SF!= OF)
-REX+ 0F 9E /0	SETNG r/m8	M	w	Z S O					V	NE		setle	Set byte if not greater (ZF=1 or SF!= OF)
-0F 9C /0	SETNGE r/m8	M	w	S O					V	V		setl	Set byte if not greater or equal (SF!= OF).
-REX+ 0F 9C /0	SETNGE r/m8	M	w	S O					V	NE		setl	Set byte if not greater or equal (SF!= OF).
-0F 9D /0	SETNL r/m8	M	w	S O					V	V		setge	Set byte if not less (SF=OF).
-REX+ 0F 9D /0	SETNL r/m8	M	w	S O					V	NE		setge	Set byte if not less (SF=OF).
-0F 9F /0	SETNLE r/m8	M	w	Z S O					V	V		setg	Set byte if not less or equal (ZF=0 and SF=OF).
-REX+ 0F 9F /0	SETNLE r/m8	M	w	Z S O					V	NE		setg	Set byte if not less or equal (ZF=0 and SF=OF).
-0F 91 /0	SETNO r/m8	M	w	O					V	V		setno	Set byte if not overflow (OF=0).
-REX+ 0F 91 /0	SETNO r/m8	M	w	O					V	NE		setno	Set byte if not overflow (OF=0).
-0F 9B /0	SETNP r/m8	M	w	P					V	V		setnp	Set byte if not parity (PF=0).
-REX+ 0F 9B /0	SETNP r/m8	M	w	P					V	NE		setnp	Set byte if not parity (PF=0).
-0F 99 /0	SETNS r/m8	M	w	S					V	V		setns	Set byte if not sign (SF=0).
-REX+ 0F 99 /0	SETNS r/m8	M	w	S					V	NE		setns	Set byte if not sign (SF=0).
-0F 95 /0	SETNZ r/m8	M	w	Z					V	V		setne	Set byte if not zero (ZF=0).
-REX+ 0F 95 /0	SETNZ r/m8	M	w	Z					V	NE		setne	Set byte if not zero (ZF=0).
-0F 90 /0	SETO r/m8	M	w	O					V	V		seto	Set byte if overflow (OF=1)
-REX+ 0F 90 /0	SETO r/m8	M	w	O					V	NE		seto	Set byte if overflow (OF=1)
-0F 9A /0	SETP r/m8	M	w	P					V	V		setp	Set byte if parity (PF=1).
-REX+ 0F 9A /0	SETP r/m8	M	w	P					V	NE		setp	Set byte if parity (PF=1).
-0F 9A /0	SETPE r/m8	M	w	P					V	V		setp	Set byte if parity even (PF=1).
-REX+ 0F 9A /0	SETPE r/m8	M	w	P					V	NE		setp	Set byte if parity even (PF=1).
-0F 9B /0	SETPO r/m8	M	w	P					V	V		setnp	Set byte if parity odd (PF=0).
-REX+ 0F 9B /0	SETPO r/m8	M	w	P					V	NE		setnp	Set byte if parity odd (PF=0).
-0F 98 /0	SETS r/m8	M	w	S					V	V		sets	Set byte if sign (SF=1).
-REX+ 0F 98 /0	SETS r/m8	M	w	S					V	NE		sets	Set byte if sign (SF=1).
-0F 94 /0	SETZ r/m8	M	w	Z					V	V		sete	Set byte if zero (ZF=1).
-REX+ 0F 94 /0	SETZ r/m8	M	w	Z					V	NE		sete	Set byte if zero (ZF=1).
+0F 97 /0	SETA r/m8	M	w	CF ZF					V	V		seta	Set byte if above (CF=0 and ZF=0).
+REX+ 0F 97 /0 	SETA r/m8	M	w	CF ZF					V	NE		seta	Set byte if above (CF=0 and ZF=0).
+0F 93 /0	SETAE r/m8	M	w	CF					V	V		setae	Set byte if above or equal (CF=0).
+REX+ 0F 93 /0	SETAE r/m8	M	w	CF					V	NE		setae	Set byte if above or equal (CF=0).
+0F 92 /0	SETB r/m8	M	w	CF					V	V		setb	Set byte if below (CF=1).
+REX+ 0F 92 /0	SETB r/m8	M	w	CF					V	NE		setb	Set byte if below (CF=1).
+0F 96 /0	SETBE r/m8	M	w	CF ZF					V	V		setbe	Set byte if below or equal (CF=1 or ZF=1).
+REX+ 0F 96 /0	SETBE r/m8	M	w	CF ZF					V	NE		setbe	Set byte if below or equal (CF=1 or ZF=1).
+0F 92 /0	SETC r/m8	M	w	CF					V	V		setb	Set byte if carry (CF=1).
+REX+ 0F 92 /0	SETC r/m8	M	w	CF					V	NE		setb	Set byte if carry (CF=1).
+0F 94 /0	SETE r/m8	M	w	ZF					V	V		sete	Set byte if equal (ZF=1).
+REX+ 0F 94 /0	SETE r/m8	M	w	ZF					V	NE		sete	Set byte if equal (ZF=1).
+0F 9F /0	SETG r/m8	M	w	ZF SF OF					V	V		setg	Set byte if greater (ZF=0 and SF=OF).
+REX+ 0F 9F /0	SETG r/m8	M	w	ZF SF OF					V	NE		setg	Set byte if greater (ZF=0 and SF=OF).
+0F 9D /0	SETGE r/m8	M	w	SF OF					V	V		setge	Set byte if greater or equal (SF=OF).
+REX+ 0F 9D /0	SETGE r/m8	M	w	SF OF					V	NE		setge	Set byte if greater or equal (SF=OF).
+0F 9C /0	SETL r/m8	M	w	SF OF					V	V		setl	Set byte if less (SF!= OF).
+REX+ 0F 9C /0	SETL r/m8	M	w	SF OF					V	NE		setl	Set byte if less (SF!= OF).
+0F 9E /0	SETLE r/m8	M	w	ZF SF OF					V	V		setle	Set byte if less or equal (ZF=1 or SF!= OF).
+REX+ 0F 9E /0	SETLE r/m8	M	w	ZF SF OF					V	NE		setle	Set byte if less or equal (ZF=1 or SF!= OF).
+0F 96 /0	SETNA r/m8	M	w	CF ZF					V	V		setbe	Set byte if not above (CF=1 or ZF=1).
+REX+ 0F 96 /0	SETNA r/m8	M	w	CF ZF					V	NE		setbe	Set byte if not above (CF=1 or ZF=1).
+0F 92 /0	SETNAE r/m8	M	w	CF					V	V		setbe	Set byte if not above or equal (CF=1).
+REX+ 0F 92 /0	SETNAE r/m8	M	w	CF					V	NE		setbe	Set byte if not above or equal (CF=1).
+0F 93 /0	SETNB r/m8	M	w	CF					V	V		setae	Set byte if not below (CF=0).
+REX+ 0F 93 /0	SETNB r/m8	M	w	CF					V	NE		setae	Set byte if not below (CF=0).
+0F 97 /0	SETNBE r/m8	M	w	CF ZF					V	V		seta	Set byte if not below or equal (CF=0 and ZF=0).
+REX+ 0F 97 /0	SETNBE r/m8	M	w	CF ZF					V	NE		seta	Set byte if not below or equal (CF=0 and ZF=0).
+0F 93 /0	SETNC r/m8	M	w	CF					V	V		setae	Set byte if not carry (CF=0).
+REX+ 0F 93 /0	SETNC r/m8	M	w	CF					V	NE		setae	Set byte if not carry (CF=0).
+0F 95 /0	SETNE r/m8	M	w	ZF					V	V		setne	Set byte if not equal (ZF=0).
+REX+ 0F 95 /0	SETNE r/m8	M	w	ZF					V	NE		setne	Set byte if not equal (ZF=0).
+0F 9E /0	SETNG r/m8	M	w	ZF SF OF					V	V		setle	Set byte if not greater (ZF=1 or SF!= OF)
+REX+ 0F 9E /0	SETNG r/m8	M	w	ZF SF OF					V	NE		setle	Set byte if not greater (ZF=1 or SF!= OF)
+0F 9C /0	SETNGE r/m8	M	w	SF OF					V	V		setl	Set byte if not greater or equal (SF!= OF).
+REX+ 0F 9C /0	SETNGE r/m8	M	w	SF OF					V	NE		setl	Set byte if not greater or equal (SF!= OF).
+0F 9D /0	SETNL r/m8	M	w	SF OF					V	V		setge	Set byte if not less (SF=OF).
+REX+ 0F 9D /0	SETNL r/m8	M	w	SF OF					V	NE		setge	Set byte if not less (SF=OF).
+0F 9F /0	SETNLE r/m8	M	w	ZF SF OF					V	V		setg	Set byte if not less or equal (ZF=0 and SF=OF).
+REX+ 0F 9F /0	SETNLE r/m8	M	w	ZF SF OF					V	NE		setg	Set byte if not less or equal (ZF=0 and SF=OF).
+0F 91 /0	SETNO r/m8	M	w	OF					V	V		setno	Set byte if not overflow (OF=0).
+REX+ 0F 91 /0	SETNO r/m8	M	w	OF					V	NE		setno	Set byte if not overflow (OF=0).
+0F 9B /0	SETNP r/m8	M	w	PF					V	V		setnp	Set byte if not parity (PF=0).
+REX+ 0F 9B /0	SETNP r/m8	M	w	PF					V	NE		setnp	Set byte if not parity (PF=0).
+0F 99 /0	SETNS r/m8	M	w	SF					V	V		setns	Set byte if not sign (SF=0).
+REX+ 0F 99 /0	SETNS r/m8	M	w	SF					V	NE		setns	Set byte if not sign (SF=0).
+0F 95 /0	SETNZ r/m8	M	w	ZF					V	V		setne	Set byte if not zero (ZF=0).
+REX+ 0F 95 /0	SETNZ r/m8	M	w	ZF					V	NE		setne	Set byte if not zero (ZF=0).
+0F 90 /0	SETO r/m8	M	w	OF					V	V		seto	Set byte if overflow (OF=1)
+REX+ 0F 90 /0	SETO r/m8	M	w	OF					V	NE		seto	Set byte if overflow (OF=1)
+0F 9A /0	SETP r/m8	M	w	PF					V	V		setp	Set byte if parity (PF=1).
+REX+ 0F 9A /0	SETP r/m8	M	w	PF					V	NE		setp	Set byte if parity (PF=1).
+0F 9A /0	SETPE r/m8	M	w	PF					V	V		setp	Set byte if parity even (PF=1).
+REX+ 0F 9A /0	SETPE r/m8	M	w	PF					V	NE		setp	Set byte if parity even (PF=1).
+0F 9B /0	SETPO r/m8	M	w	PF					V	V		setnp	Set byte if parity odd (PF=0).
+REX+ 0F 9B /0	SETPO r/m8	M	w	PF					V	NE		setnp	Set byte if parity odd (PF=0).
+0F 98 /0	SETS r/m8	M	w	SF					V	V		sets	Set byte if sign (SF=1).
+REX+ 0F 98 /0	SETS r/m8	M	w	SF					V	NE		sets	Set byte if sign (SF=1).
+0F 94 /0	SETZ r/m8	M	w	ZF					V	V		sete	Set byte if zero (ZF=1).
+REX+ 0F 94 /0	SETZ r/m8	M	w	ZF					V	NE		sete	Set byte if zero (ZF=1).
 													
 0F AE /7	SFENCE	NP							V	V		sfence	Serializes store operations.
 													
 0F 01 /0	SGDT m						NO	NO	V	V			Store GDTR to m.
 													
-0F A4	SHLD r/m16, r16, imm8	MRI	Rwu, R, R		c s z p	o s z a c p			V	V		shldw	Shift r/m16 to left imm8 places while shifting bits from r16 in from the right.
-0F A5	SHLD r/m16, r16, CL	MRC	Rwu, R, R		c s z p	o s z a c p			V	V		shldw	Shift r/m16 to left CL places while shifting bits from r16 in from the right.
-0F A4	SHLD r/m32, r32, imm8	MRI	Rwu, R, R		c s z p	o s z a c p			V	V		shldl	Shift r/m32 to left imm8 places while shifting bits from r32 in from the right.
-REX.W+ 0F A4 	SHLD r/m64, r64, imm8	MRI	Rwu, R, R		c s z p	o s z a c p			V	NE		shldq	Shift r/m64 to left imm8 places while shifting bits from r64 in from the right.
-0F A5	SHLD r/m32, r32, CL	MRC	Rwu, R, R		c s z p	o s z a c p			V	V		shldl	Shift r/m32 to left CL places while shifting bits from r32 in from the right.
-REX.W+ 0F A5	SHLD r/m64, r64, CL	MRC	Rwu, R, R		c s z p	o s z a c p			V	NE		shldq	Shift r/m64 to left CL places while shifting bits from r64 in from the right.
+0F A4	SHLD r/m16, r16, imm8	MRI	Rwu, R, R		cf sf zf pf	of sf zf af cf pf			V	V		shldw	Shift r/m16 to left imm8 places while shifting bits from r16 in from the right.
+0F A5	SHLD r/m16, r16, CL	MRC	Rwu, R, R		cf sf zf pf	of sf zf af cf pf			V	V		shldw	Shift r/m16 to left CL places while shifting bits from r16 in from the right.
+0F A4	SHLD r/m32, r32, imm8	MRI	Rwu, R, R		cf sf zf pf	of sf zf af cf pf			V	V		shldl	Shift r/m32 to left imm8 places while shifting bits from r32 in from the right.
+REX.W+ 0F A4 	SHLD r/m64, r64, imm8	MRI	Rwu, R, R		cf sf zf pf	of sf zf af cf pf			V	NE		shldq	Shift r/m64 to left imm8 places while shifting bits from r64 in from the right.
+0F A5	SHLD r/m32, r32, CL	MRC	Rwu, R, R		cf sf zf pf	of sf zf af cf pf			V	V		shldl	Shift r/m32 to left CL places while shifting bits from r32 in from the right.
+REX.W+ 0F A5	SHLD r/m64, r64, CL	MRC	Rwu, R, R		cf sf zf pf	of sf zf af cf pf			V	NE		shldq	Shift r/m64 to left CL places while shifting bits from r64 in from the right.
 													
-0F AC	SHRD r/m16, r16, imm8	MRI	Rwu, R, R		c s z p	o s z a c p			V	V		shrdw	Shift r/m16 to right imm8 places while shifting bits from r16 in from the left.
-0F AD	SHRD r/m16, r16, CL	MRC	Rwu, R, R		c s z p	o s z a c p			V	V		shrdw	Shift r/m16 to right CL places while shifting bits from r16 in from the left.
-0F AC	SHRD r/m32, r32, imm8	MRI	Rwu, R, R		c s z p	o s z a c p			V	V		shrdl	Shift r/m32 to right imm8 places while shifting bits from r32 in from the left.
-REX.W+ 0F AC	SHRD r/m64, r64, imm8	MRI	Rwu, R, R		c s z p	o s z a c p			V	NE		shrdq	Shift r/m64 to right imm8 places while shifting bits from r64 in from the left.
-0F AD	SHRD r/m32, r32, CL	MRC	Rwu, R, R		c s z p	o s z a c p			V	V		shrdl	Shift r/m32 to right CL places while shifting bits from r32 in from the left.
-REX.W+ 0F AD	SHRD r/m64, r64, CL	MRC	Rwu, R, R		c s z p	o s z a c p			V	NE		shrdq	Shift r/m64 to right CL places while shifting bits from r64 in from the left.
+0F AC	SHRD r/m16, r16, imm8	MRI	Rwu, R, R		cf sf zf pf	of sf zf af cf pf			V	V		shrdw	Shift r/m16 to right imm8 places while shifting bits from r16 in from the left.
+0F AD	SHRD r/m16, r16, CL	MRC	Rwu, R, R		cf sf zf pf	of sf zf af cf pf			V	V		shrdw	Shift r/m16 to right CL places while shifting bits from r16 in from the left.
+0F AC	SHRD r/m32, r32, imm8	MRI	Rwu, R, R		cf sf zf pf	of sf zf af cf pf			V	V		shrdl	Shift r/m32 to right imm8 places while shifting bits from r32 in from the left.
+REX.W+ 0F AC	SHRD r/m64, r64, imm8	MRI	Rwu, R, R		cf sf zf pf	of sf zf af cf pf			V	NE		shrdq	Shift r/m64 to right imm8 places while shifting bits from r64 in from the left.
+0F AD	SHRD r/m32, r32, CL	MRC	Rwu, R, R		cf sf zf pf	of sf zf af cf pf			V	V		shrdl	Shift r/m32 to right CL places while shifting bits from r32 in from the left.
+REX.W+ 0F AD	SHRD r/m64, r64, CL	MRC	Rwu, R, R		cf sf zf pf	of sf zf af cf pf			V	NE		shrdq	Shift r/m64 to right CL places while shifting bits from r64 in from the left.
 													
 66 0F C6 /r ib	SHUFPD xmm1, xmm2/m128, imm8	RMI	RW, R, R						V	V	SSE2	shufpd	Shuffle packed double-precision floating- point values selected by imm8 from xmm1 and xmm2/m128 to xmm1.
 VEX.NDS.128.66.0F.WIG C6 /r ib	VSHUFPD xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R						V	V	AVX	vshufpd	Shuffle Packed double-precision floating- point values selected by imm8 from xmm2 and xmm3/mem.
@@ -2172,48 +2172,48 @@ VEX.NDS.LIG.F2.0F.WIG 51 /r	VSQRTSD xmm1,xmm2, xmm3/m64	RVM	Z, R, R						V	V	AVX
 F3 0F 51 /r	SQRTSS xmm1, xmm2/m32	RM	W, R						V	V	SSE	sqrtss	Computes square root of the low single- precision floating-point value in xmm2/m32 and stores the results in xmm1.
 VEX.NDS.LIG.F3.0F.WIG 51	VSQRTSS xmm1, xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vsqrtss	Computes square root of the low single- precision floating-point value in xmm3/m32 and stores the results in xmm1. Also, upper single precision floating-point values (bits[127:32]) from xmm2 are copied to xmm1[127:32].
 													
-F9	STC	NP			C				V	V		stc	Set CF flag.
+F9	STC	NP			CF				V	V		stc	Set CF flag.
 													
-FD	STD	NP			D				V	V		std	Set DF flag.
+FD	STD	NP			DF				V	V		std	Set DF flag.
 													
-FB	STI	NP		???	???	???			V	V		sti	Set interrupt flag; external, maskable interrupts enabled at the end of the next instruction.
+FB	STI	NP		VM IOPL VIP	if vif				V	V		sti	Set interrupt flag; external, maskable interrupts enabled at the end of the next instruction.
 													
-0F AE /3	STMXCSR m32	M	W	???	???	???			V	V	SSE	stmxcsr	Store contents of MXCSR register to m32. 
-VEX.LZ.0F.WIG AE /3	VSTMXCSR m32	M	W	???	???	???			V	V	AVX	vstmxcsr	Store contents of MXCSR register to m32.
+0F AE /3	STMXCSR m32	M	W						V	V	SSE	stmxcsr	Store contents of MXCSR register to m32. 
+VEX.LZ.0F.WIG AE /3	VSTMXCSR m32	M	W						V	V	AVX	vstmxcsr	Store contents of MXCSR register to m32.
 													
-AA	STOS m8	NP	I	???	???	???			V	V		stos	For legacy mode, store AL at address ES:(E)DI; For 64-bit mode store AL at address RDI or EDI.
-AB	STOS m16	NP	I	???	???	???			V	V		stos	For legacy mode, store AX at address ES:(E)DI; For 64-bit mode store AX at address RDI or EDI.
-AB	STOS m32	NP	I	???	???	???			V	V		stos	For legacy mode, store EAX at address ES:(E)DI; For 64-bit mode store EAX at address RDI or EDI.
-REX.W+ AB	STOS m64	NP	I	???	???	???			V	NE		stos	Store RAX at address RDI or EDI.
-AA	STOSB	NP		???	???	???			V	V		stosb	For legacy mode, store AL at address ES:(E)DI; For 64-bit mode store AL at address RDI or EDI.
-PREF.66+ AB	STOSW	NP		???	???	???			V	V		stosw	For legacy mode, store AX at address ES:(E)DI; For 64-bit mode store AX at address RDI or EDI.
-AB	STOSD	NP		???	???	???			V	V		stosl	For legacy mode, store EAX at address ES:(E)DI; For 64-bit mode store EAX at address RDI or EDI.
-REX.W+ AB	STOSQ	NP		???	???	???			V	NE		stosq	Store RAX at address RDI or EDI.
+AA	STOS m8	NP	I	DF RDI AL					V	V		stos	For legacy mode, store AL at address ES:(E)DI; For 64-bit mode store AL at address RDI or EDI.
+AB	STOS m16	NP	I	DF RDI AX					V	V		stos	For legacy mode, store AX at address ES:(E)DI; For 64-bit mode store AX at address RDI or EDI.
+AB	STOS m32	NP	I	DF RDI EAX					V	V		stos	For legacy mode, store EAX at address ES:(E)DI; For 64-bit mode store EAX at address RDI or EDI.
+REX.W+ AB	STOS m64	NP	I	DF RDI RAX					V	NE		stos	Store RAX at address RDI or EDI.
+AA	STOSB	NP		DF RDI AL					V	V		stosb	For legacy mode, store AL at address ES:(E)DI; For 64-bit mode store AL at address RDI or EDI.
+PREF.66+ AB	STOSW	NP		DF RDI AX					V	V		stosw	For legacy mode, store AX at address ES:(E)DI; For 64-bit mode store AX at address RDI or EDI.
+AB	STOSD	NP		DF RDI EAX					V	V		stosl	For legacy mode, store EAX at address ES:(E)DI; For 64-bit mode store EAX at address RDI or EDI.
+REX.W+ AB	STOSQ	NP		DF RDI RAX					V	NE		stosq	Store RAX at address RDI or EDI.
 													
 0F 00 /1	STR r/m16						NO	NO	V	V			Stores segment selector from TR in r/m16.
 													
-2C ib	SUB AL, imm8	I	RW, R		O S Z A C P				V	V		subb	Subtract imm8 from AL.
-2D iw	SUB AX, imm16	I	RW, R		O S Z A C P				V	V		subw	Subtract imm16 from AX.
-2D id	SUB EAX, imm32	I	RW, R		O S Z A C P				V	V		subl	Subtract imm32 from EAX.
-REX.W+ 2D id	SUB RAX, imm32	I	RW, R		O S Z A C P				V	NE		subq	Subtract imm32 sign-extended to 64-bits from RAX.
-80 /5 ib	SUB r/m8, imm8	MI	RW, R		O S Z A C P				V	V		subb	Subtract imm8 from r/m8.
-REX+ 80 /5 ib	SUB r/m8, imm8	MI	RW, R		O S Z A C P				V	NE		subb	Subtract imm8 from r/m8.
-81 /5 iw	SUB r/m16, imm16	MI	RW, R		O S Z A C P				V	V		subw	Subtract imm16 from r/m16.
-81 /5 id	SUB r/m32, imm32	MI	RW, R		O S Z A C P				V	V		subl	Subtract imm32 from r/m32.
-REX.W+ 81 /5 id	SUB r/m64, imm32	MI	RW, R		O S Z A C P				V	NE		subq	Subtract imm32 sign-extended to 64-bits from r/m64.
-83 /5 ib	SUB r/m16, imm8	MI	RW, R		O S Z A C P				V	V		subw	Subtract sign-extended imm8 from r/m16.
-83 /5 ib	SUB r/m32, imm8	MI	RW, R		O S Z A C P				V	V		subl	Subtract sign-extended imm8 from r/m32.
-REX.W+ 83 /5 ib	SUB r/m64, imm8	MI	RW, R		O S Z A C P				V	NE		subq	Subtract sign-extended imm8 from r/m64.
-28 /r	SUB r/m8, r8	MR	RW, R		O S Z A C P				V	V		subb	Subtract r8 from r/m8.
-REX+ 28 /r	SUB r/m8, r8	MR	RW, R		O S Z A C P				V	NE		subb	Subtract r8 from r/m8.
-29 /r	SUB r/m16, r16	MR	RW, R		O S Z A C P				V	V		subw	Subtract r16 from r/m16.
-29 /r	SUB r/m32, r32	MR	RW, R		O S Z A C P				V	V		subl	Subtract r32 from r/m32.
-REX.W+ 29 /r	SUB r/m64, r64	MR	RW, R		O S Z A C P				V	NE		subq	Subtract r64 from r/m64.
-2A /r	SUB r8, r/m8	RM	RW, R		O S Z A C P				V	V		subb	Subtract r/m8 from r8.
-REX+ 2A /r	SUB r8, r/m8	RM	RW, R		O S Z A C P				V	NE		subb	Subtract r/m8 from r8.
-2B /r	SUB r16, r/m16	RM	RW, R		O S Z A C P				V	V		subw	Subtract r/m16 from r16.
-2B /r	SUB r32, r/m32	RM	RW, R		O S Z A C P				V	V		subl	Subtract r/m32 from r32.
-REX.W+ 2B /r	SUB r64, r/m64	RM	RW, R		O S Z A C P				V	NE		subq	Subtract r/m64 from r64.
+2C ib	SUB AL, imm8	I	RW, R		OF SF ZF AF CF PF				V	V		subb	Subtract imm8 from AL.
+2D iw	SUB AX, imm16	I	RW, R		OF SF ZF AF CF PF				V	V		subw	Subtract imm16 from AX.
+2D id	SUB EAX, imm32	I	RW, R		OF SF ZF AF CF PF				V	V		subl	Subtract imm32 from EAX.
+REX.W+ 2D id	SUB RAX, imm32	I	RW, R		OF SF ZF AF CF PF				V	NE		subq	Subtract imm32 sign-extended to 64-bits from RAX.
+80 /5 ib	SUB r/m8, imm8	MI	RW, R		OF SF ZF AF CF PF				V	V		subb	Subtract imm8 from r/m8.
+REX+ 80 /5 ib	SUB r/m8, imm8	MI	RW, R		OF SF ZF AF CF PF				V	NE		subb	Subtract imm8 from r/m8.
+81 /5 iw	SUB r/m16, imm16	MI	RW, R		OF SF ZF AF CF PF				V	V		subw	Subtract imm16 from r/m16.
+81 /5 id	SUB r/m32, imm32	MI	RW, R		OF SF ZF AF CF PF				V	V		subl	Subtract imm32 from r/m32.
+REX.W+ 81 /5 id	SUB r/m64, imm32	MI	RW, R		OF SF ZF AF CF PF				V	NE		subq	Subtract imm32 sign-extended to 64-bits from r/m64.
+83 /5 ib	SUB r/m16, imm8	MI	RW, R		OF SF ZF AF CF PF				V	V		subw	Subtract sign-extended imm8 from r/m16.
+83 /5 ib	SUB r/m32, imm8	MI	RW, R		OF SF ZF AF CF PF				V	V		subl	Subtract sign-extended imm8 from r/m32.
+REX.W+ 83 /5 ib	SUB r/m64, imm8	MI	RW, R		OF SF ZF AF CF PF				V	NE		subq	Subtract sign-extended imm8 from r/m64.
+28 /r	SUB r/m8, r8	MR	RW, R		OF SF ZF AF CF PF				V	V		subb	Subtract r8 from r/m8.
+REX+ 28 /r	SUB r/m8, r8	MR	RW, R		OF SF ZF AF CF PF				V	NE		subb	Subtract r8 from r/m8.
+29 /r	SUB r/m16, r16	MR	RW, R		OF SF ZF AF CF PF				V	V		subw	Subtract r16 from r/m16.
+29 /r	SUB r/m32, r32	MR	RW, R		OF SF ZF AF CF PF				V	V		subl	Subtract r32 from r/m32.
+REX.W+ 29 /r	SUB r/m64, r64	MR	RW, R		OF SF ZF AF CF PF				V	NE		subq	Subtract r64 from r/m64.
+2A /r	SUB r8, r/m8	RM	RW, R		OF SF ZF AF CF PF				V	V		subb	Subtract r/m8 from r8.
+REX+ 2A /r	SUB r8, r/m8	RM	RW, R		OF SF ZF AF CF PF				V	NE		subb	Subtract r/m8 from r8.
+2B /r	SUB r16, r/m16	RM	RW, R		OF SF ZF AF CF PF				V	V		subw	Subtract r/m16 from r16.
+2B /r	SUB r32, r/m32	RM	RW, R		OF SF ZF AF CF PF				V	V		subl	Subtract r/m32 from r32.
+REX.W+ 2B /r	SUB r64, r/m64	RM	RW, R		OF SF ZF AF CF PF				V	NE		subq	Subtract r/m64 from r64.
 													
 66 0F 5C /r	SUBPD xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	subpd	Subtract packed double-precision floating- point values in xmm2/m128 from xmm1.
 VEX.NDS.128.66.0F.WIG 5C /r	VSUBPD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vsubpd	Subtract packed double-precision floating- point values in xmm3/mem from xmm2 and stores result in xmm1.
@@ -2229,7 +2229,7 @@ VEX.NDS.LIG.F2.0F.WIG 5C /r	VSUBSD xmm1, xmm2, xmm3/m64	RVM	Z, R, R						V	V	AVX
 F3 0F 5C /r	SUBSS xmm1, xmm2/m32	RM	RW, R						V	V	SSE	subss	Subtract the lower single-precision floating- point values in xmm2/m32 from xmm1.
 VEX.NDS.LIG.F3.0F.WIG 5C /r	VSUBSS xmm1, xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vsubss	Subtract the low single-precision floating- point value in xmm3/mem from xmm2 and store the result in xmm1.
 													
-0F 01 F8	SWAPGS	NP		???	???	???			V	I		swapgs	Exchanges the current GS base register value with the value contained in MSR address C0000102H.
+0F 01 F8	SWAPGS	NP							V	I		swapgs	Exchanges the current GS base register value with the value contained in MSR address C0000102H.
 													
 0F 05	SYSCALL	NP		???	???	???			V	I		syscall	Fast call to privilege level 0 system procedures.
 													
@@ -2241,26 +2241,26 @@ REX.W+ 0F 35	SYSEXIT pw	NP	I	???	???	???			V	V		sysexit	Fast return to 64-bit mo
 0F 07	SYSRET	NP		???	???	???			V	I		sysret	Return to compatibility mode from fast system call
 REX.W+ 0F 07	SYSRET pw	NP	I						V	I		sysret	Return to 64-bit mode from fast system call
 													
-A8 ib	TEST AL, imm8	I	R, R		O S Z C P	A			V	V		testb	AND imm8 with AL; set SF, ZF, PF according to result.
-A9 iw	TEST AX, imm16	I	R, R		O S Z C P	A			V	V		testw	AND imm16 with AX; set SF, ZF, PF according to result.
-A9 id	TEST EAX, imm32	I	R, R		O S Z C P	A			V	V		testl	AND imm32 with EAX; set SF, ZF, PF according to result.
-REX.W+ A9 id	TEST RAX, imm32	I	R, R		O S Z C P	A			V	NE		testq	AND imm32 sign-extended to 64-bits with RAX; set SF, ZF, PF according to result.
-F6 /0 ib	TEST r/m8, imm8	MI	R, R		O S Z C P	A			V	V		testb	AND imm8 with r/m8; set SF, ZF, PF according to result.
-REX+ F6 /0 ib	TEST r/m8, imm8	MI	R, R		O S Z C P	A			V	NE		testb	AND imm8 with r/m8; set SF, ZF, PF according to result.
-F7 /0 iw	TEST r/m16, imm16	MI	R, R		O S Z C P	A			V	V		testw	AND imm16 with r/m16; set SF, ZF, PF according to result.
-F7 /0 id	TEST r/m32, imm32	MI	R, R		O S Z C P	A			V	V		testl	AND imm32 with r/m32; set SF, ZF, PF according to result.
-REX.W+ F7 /0 id	TEST r/m64, imm32	MI	R, R		O S Z C P	A			V	NE		testq	AND imm32 sign-extended to 64-bits with r/m64; set SF, ZF, PF according to result.
-84 /r	TEST r/m8, r8	MR	R, R		O S Z C P	A			V	V		testb	AND r8 with r/m8; set SF, ZF, PF according to result.
-REX+ 84 /r	TEST r/m8, r8	MR	R, R		O S Z C P	A			V	NE		testb	AND r8 with r/m8; set SF, ZF, PF according to result.
-85 /r	TEST r/m16, r16	MR	R, R		O S Z C P	A			V	V		testw	AND r16 with r/m16; set SF, ZF, PF according to result.
-85 /r	TEST r/m32, r32	MR	R, R		O S Z C P	A			V	V		testl	AND r32 with r/m32; set SF, ZF, PF according to result.
-REX.W+ 85 /r	TEST r/m64, r64	MR	R, R		O S Z C P	A			V	NE		testq	AND r64 with r/m64; set SF, ZF, PF according to result.
+A8 ib	TEST AL, imm8	I	R, R		OF SF ZF CF PF	AF			V	V		testb	AND imm8 with AL; set SF, ZF, PF according to result.
+A9 iw	TEST AX, imm16	I	R, R		OF SF ZF CF PF	AF			V	V		testw	AND imm16 with AX; set SF, ZF, PF according to result.
+A9 id	TEST EAX, imm32	I	R, R		OF SF ZF CF PF	AF			V	V		testl	AND imm32 with EAX; set SF, ZF, PF according to result.
+REX.W+ A9 id	TEST RAX, imm32	I	R, R		OF SF ZF CF PF	AF			V	NE		testq	AND imm32 sign-extended to 64-bits with RAX; set SF, ZF, PF according to result.
+F6 /0 ib	TEST r/m8, imm8	MI	R, R		OF SF ZF CF PF	AF			V	V		testb	AND imm8 with r/m8; set SF, ZF, PF according to result.
+REX+ F6 /0 ib	TEST r/m8, imm8	MI	R, R		OF SF ZF CF PF	AF			V	NE		testb	AND imm8 with r/m8; set SF, ZF, PF according to result.
+F7 /0 iw	TEST r/m16, imm16	MI	R, R		OF SF ZF CF PF	AF			V	V		testw	AND imm16 with r/m16; set SF, ZF, PF according to result.
+F7 /0 id	TEST r/m32, imm32	MI	R, R		OF SF ZF CF PF	AF			V	V		testl	AND imm32 with r/m32; set SF, ZF, PF according to result.
+REX.W+ F7 /0 id	TEST r/m64, imm32	MI	R, R		OF SF ZF CF PF	AF			V	NE		testq	AND imm32 sign-extended to 64-bits with r/m64; set SF, ZF, PF according to result.
+84 /r	TEST r/m8, r8	MR	R, R		OF SF ZF CF PF	AF			V	V		testb	AND r8 with r/m8; set SF, ZF, PF according to result.
+REX+ 84 /r	TEST r/m8, r8	MR	R, R		OF SF ZF CF PF	AF			V	NE		testb	AND r8 with r/m8; set SF, ZF, PF according to result.
+85 /r	TEST r/m16, r16	MR	R, R		OF SF ZF CF PF	AF			V	V		testw	AND r16 with r/m16; set SF, ZF, PF according to result.
+85 /r	TEST r/m32, r32	MR	R, R		OF SF ZF CF PF	AF			V	V		testl	AND r32 with r/m32; set SF, ZF, PF according to result.
+REX.W+ 85 /r	TEST r/m64, r64	MR	R, R		OF SF ZF CF PF	AF			V	NE		testq	AND r64 with r/m64; set SF, ZF, PF according to result.
 													
-66 0F 2E /r	UCOMISD xmm1, xmm2/m64	RM	R, R		O S Z A C P				V	V	SSE2	ucomisd	Compares (unordered) the low double- precision floating-point values in xmm1 and xmm2/m64 and set the EFLAGS accordingly.
-VEX.LIG.66.0F.WIG 2E /r	VUCOMISD xmm1, xmm2/m64	RM	R, R		O S Z A C P				V	V	AVX	vucomisd	Compare low double precision floating-point values in xmm1 and xmm2/mem64 and set the EFLAGS flags accordingly.
+66 0F 2E /r	UCOMISD xmm1, xmm2/m64	RM	R, R		OF SF ZF AF CF PF				V	V	SSE2	ucomisd	Compares (unordered) the low double- precision floating-point values in xmm1 and xmm2/m64 and set the EFLAGS accordingly.
+VEX.LIG.66.0F.WIG 2E /r	VUCOMISD xmm1, xmm2/m64	RM	R, R		OF SF ZF AF CF PF				V	V	AVX	vucomisd	Compare low double precision floating-point values in xmm1 and xmm2/mem64 and set the EFLAGS flags accordingly.
 													
-0F 2E /r	UCOMISS xmm1, xmm2/m32	RM	R, R		O S Z A C P				V	V	SSE	ucomiss	Compare lower single-precision floating-point value in xmm1 register with lower single- precision floating-point value in xmm2/mem and set the status flags accordingly.
-VEX.LIG.0F.WIG 2E /r	VUCOMISS xmm1, xmm2/m32	RM	R, R		O S Z A C P				V	V	AVX	vucomiss	Compare low single precision floating-point values in xmm1 and xmm2/mem32 and set the EFLAGS flags accordingly.
+0F 2E /r	UCOMISS xmm1, xmm2/m32	RM	R, R		OF SF ZF AF CF PF				V	V	SSE	ucomiss	Compare lower single-precision floating-point value in xmm1 register with lower single- precision floating-point value in xmm2/mem and set the status flags accordingly.
+VEX.LIG.0F.WIG 2E /r	VUCOMISS xmm1, xmm2/m32	RM	R, R		OF SF ZF AF CF PF				V	V	AVX	vucomiss	Compare low single precision floating-point values in xmm1 and xmm2/mem32 and set the EFLAGS flags accordingly.
 													
 0F 0B	UD2	NP							V	V		ud2	Raise invalid opcode exception.
 													
@@ -2291,8 +2291,8 @@ VEX.128.66.0F38.W0 13 /r	VCVTPH2PS xmm1, xmm2/m64	RM	Z, R						V	V	F16C	vcvtph2p
 VEX.256.66.0F3A.W0 1D /r ib	VCVTPS2PH xmm1/m128, ymm2, imm8	MR	Z, R, R						V	V	F16C	vcvtps2ph	Convert eight packed single-precision floating-point value in ymm2 to packed half-precision (16-bit) floating-point value in xmm1/mem. Imm8 provides rounding controls.
 VEX.128.66.0F3A.W0 1D /r ib	VCVTPS2PH xmm1/m64, xmm2, imm8	MR	Z, R, R						V	V	F16C	vcvtps2ph	Convert four packed single-precision float- ing-point value in xmm2 to packed half- precision (16-bit) floating-point value in xmm1/mem. Imm8 provides rounding con- trols.
 													
-0F 00 /4	VERR r/m16	M	R		Z		YES	NO	V	V		verr	Set ZF=1 if segment specified with r/m16 can be read.
-0F 00 /5	VERW r/m16	M	R		Z		YES	NO	V	V		verw	Set ZF=1 if segment specified with r/m16 can be written.
+0F 00 /4	VERR r/m16	M	R		ZF		YES	NO	V	V		verr	Set ZF=1 if segment specified with r/m16 can be read.
+0F 00 /5	VERW r/m16	M	R		ZF		YES	NO	V	V		verw	Set ZF=1 if segment specified with r/m16 can be written.
 													
 VEX.256.66.0F3A.W0 19 /r ib	VEXTRACTF128 xmm1/m128, ymm2, imm8	MR	Z, R, R						V	V	AVX	vextractf128	Extract 128 bits of packed floating-point values from ymm2 and store results in xmm1/mem.
 													
@@ -2319,10 +2319,10 @@ VEX.256.66.0F3A.W0 04 /r ib	VPERMILPS ymm1, ymm2/m256, imm8	RMI	W, R, R						V	V
 													
 VEX.NDS.256.66.0F3A.W0 06 /r ib	VPERM2F128 ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R						V	V	AVX	vperm2f128	Permute 128-bit floating-point fields in ymm2 and ymm3/mem using controls from imm8 and store result in ymm1.
 													
-VEX.128.66.0F38.W0 0E /r	VTESTPS xmm1, xmm2/m128	RM	R, R		O S Z A C P				V	V	AVX	vtestps	Set ZF and CF depending on sign bit AND and ANDN of packed single-precision floating- point sources.
-VEX.256.66.0F38.W0 0E /r	VTESTPS ymm1, ymm2/m256	RM	R, R		O S Z A C P				V	V	AVX	vtestps	Set ZF and CF depending on sign bit AND and ANDN of packed single-precision floating- point sources.
-VEX.128.66.0F38.W0 0F /r	VTESTPD xmm1, xmm2/m128	RM	R, R		O S Z A C P				V	V	AVX	vtestpd	Set ZF and CF depending on sign bit AND and ANDN of packed double-precision floating- point sources.
-VEX.256.66.0F38.W0 0F /r	VTESTPD ymm1, ymm2/m256	RM	R, R		O S Z A C P				V	V	AVX	vtestpd	Set ZF and CF depending on sign bit AND and ANDN of packed double-precision floating- point sources.
+VEX.128.66.0F38.W0 0E /r	VTESTPS xmm1, xmm2/m128	RM	R, R		OF SF ZF AF CF PF				V	V	AVX	vtestps	Set ZF and CF depending on sign bit AND and ANDN of packed single-precision floating- point sources.
+VEX.256.66.0F38.W0 0E /r	VTESTPS ymm1, ymm2/m256	RM	R, R		OF SF ZF AF CF PF				V	V	AVX	vtestps	Set ZF and CF depending on sign bit AND and ANDN of packed single-precision floating- point sources.
+VEX.128.66.0F38.W0 0F /r	VTESTPD xmm1, xmm2/m128	RM	R, R		OF SF ZF AF CF PF				V	V	AVX	vtestpd	Set ZF and CF depending on sign bit AND and ANDN of packed double-precision floating- point sources.
+VEX.256.66.0F38.W0 0F /r	VTESTPD ymm1, ymm2/m256	RM	R, R		OF SF ZF AF CF PF				V	V	AVX	vtestpd	Set ZF and CF depending on sign bit AND and ANDN of packed double-precision floating- point sources.
 													
 VEX.256.0F.WIG 77	VZEROALL	NP							V	V	AVX	vzeroall	Zero all YMM registers.
 													
@@ -2340,11 +2340,11 @@ REX.W+ F3 0F AE /3	WRGSBASE r64	M	R						V	I	FSGSBASE	wrfsbase	Load the GS base 
 													
 0F 30	WRMSR						NO	YES	V	V			Write the value in EDX:EAX to MSR specified by ECX.
 													
-0F C0 /r	XADD r/m8, r8	MR	W, W		O S Z A C P				V	V		xaddb	Exchange r8 and r/m8; load sum into r/m8.
-REX+ 0F C0 /r	XADD r/m8, r8	MR	W, W		O S Z A C P				V	NE		xaddb	Exchange r8 and r/m8; load sum into r/m8.
-0F C1 /r	XADD r/m16, r16	MR	W, W		O S Z A C P				V	V		xaddw	Exchange r16 and r/m16; load sum into r/m16.
-0F C1 /r	XADD r/m32, r32	MR	W, W		O S Z A C P				V	V		xaddl	Exchange r32 and r/m32; load sum into r/m32.
-REX.W+ 0F C1 /r	XADD r/m64, r64	MR	W, W		O S Z A C P				V	NE		xaddq	Exchange r64 and r/m64; load sum into r/m64.
+0F C0 /r	XADD r/m8, r8	MR	W, W		OF SF ZF AF CF PF				V	V		xaddb	Exchange r8 and r/m8; load sum into r/m8.
+REX+ 0F C0 /r	XADD r/m8, r8	MR	W, W		OF SF ZF AF CF PF				V	NE		xaddb	Exchange r8 and r/m8; load sum into r/m8.
+0F C1 /r	XADD r/m16, r16	MR	W, W		OF SF ZF AF CF PF				V	V		xaddw	Exchange r16 and r/m16; load sum into r/m16.
+0F C1 /r	XADD r/m32, r32	MR	W, W		OF SF ZF AF CF PF				V	V		xaddl	Exchange r32 and r/m32; load sum into r/m32.
+REX.W+ 0F C1 /r	XADD r/m64, r64	MR	W, W		OF SF ZF AF CF PF				V	NE		xaddq	Exchange r64 and r/m64; load sum into r/m64.
 													
 90 +rw	XCHG AX, r16	O	W, W						V	V		xchgw	Exchange r16 with AX.
 90 +rw	XCHG r16, AX	O	W, W						V	V		xchgw	Exchange AX with r16.
@@ -2363,34 +2363,34 @@ REX.W+ 87 /r	XCHG r/m64, r64	MR	W, W						V	NE		xchgq	Exchange r64 with quadword
 87 /r	XCHG r32, r/m32	RM	W, W						V	V		xchgl	Exchange doubleword from r/m32 with r32.
 REX.W+ 87 /r	XCHG r64, r/m64	RM	W, W						V	NE		xchgq	Exchange quadword from r/m64 with r64.
 													
-0F 01 D0	XGETBV	NP		???	???	???	YES	NO	V	V		xgetbv	Reads an XCR specified by ECX into EDX:EAX.
+0F 01 D0	XGETBV	NP		ECX	EAX EDX		YES	NO	V	V		xgetbv	Reads an XCR specified by ECX into EDX:EAX.
 													
-D7	XLAT m8	NP	I	???	???	???			V	V		xlat	Set AL to memory byte DS:[(E)BX + unsigned AL].
-D7	XLATB	NP		???	???	???			V	V		xlatb	Set AL to memory byte DS:[(E)BX + unsigned AL].
-REX.W+ D7	XLATB	NP		???	???	???			V	NE		xlatb	Set AL to memory byte [RBX + unsigned AL].
+D7	XLAT m8	NP	I	AL DS BX ebx	AL				V	V		xlat	Set AL to memory byte DS:[(E)BX + unsigned AL].
+D7	XLATB	NP		AL DS BX ebx	AL				V	V		xlatb	Set AL to memory byte DS:[(E)BX + unsigned AL].
+REX.W+ D7	XLATB	NP		AL RBX	AL				V	NE		xlatb	Set AL to memory byte [RBX + unsigned AL].
 													
-34 ib	XOR AL, imm8	I	RW, R		O S Z C P	A			V	V		xorb	AL XOR imm8.
-35 iw	XOR AX, imm16	I	RW, R		O S Z C P	A			V	V		xorw	AX XOR imm16.
-35 id	XOR EAX, imm32	I	RW, R		O S Z C P	A			V	V		xorl	EAX XOR imm32.
-REX.W+ 35 id	XOR RAX, imm32	I	RW, R		O S Z C P	A			V	NE		xorq	RAX XOR imm32 (sign-extended).
-80 /6 ib	XOR r/m8, imm8	MI	RW, R		O S Z C P	A			V	V		xorb	r/m8 XOR imm8.
-REX+ 80 /6 ib	XOR r/m8, imm8	MI	RW, R		O S Z C P	A			V	NE		xorb	r/m8 XOR imm8.
-81 /6 iw	XOR r/m16, imm16	MI	RW, R		O S Z C P	A			V	V		xorw	r/m16 XOR imm16.
-81 /6 id	XOR r/m32, imm32	MI	RW, R		O S Z C P	A			V	V		xorl	r/m32 XOR imm32.
-REX.W+ 81 /6 id	XOR r/m64, imm32	MI	RW, R		O S Z C P	A			V	NE		xorq	r/m64 XOR imm32 (sign-extended).
-83 /6 ib	XOR r/m16, imm8	MI	RW, R		O S Z C P	A			V	V		xorw	r/m16 XOR imm8 (sign-extended).
-83 /6 ib	XOR r/m32, imm8	MI	RW, R		O S Z C P	A			V	V		xorl	r/m32 XOR imm8 (sign-extended).
-REX.W+ 83 /6 ib	XOR r/m64, imm8	MI	RW, R		O S Z C P	A			V	NE		xorq	r/m64 XOR imm8 (sign-extended).
-30 /r	XOR r/m8, r8	MR	RW, R		O S Z C P	A			V	V		xorb	r/m8 XOR r8.
-REX+ 30 /r	XOR r/m8, r8	MR	RW, R		O S Z C P	A			V	NE		xorb	r/m8 XOR r8.
-31 /r	XOR r/m16, r16	MR	RW, R		O S Z C P	A			V	V		xorw	r/m16 XOR r16.
-31 /r	XOR r/m32, r32	MR	RW, R		O S Z C P	A			V	V		xorl	r/m32 XOR r32.
-REX.W+ 31 /r	XOR r/m64, r64	MR	RW, R		O S Z C P	A			V	NE		xorq	r/m64 XOR r64.
-32 /r	XOR r8, r/m8	RM	RW, R		O S Z C P	A			V	V		xorb	r8 XOR r/m8.
-REX+ 32 /r	XOR r8, r/m8	RM	RW, R		O S Z C P	A			V	NE		xorb	r8 XOR r/m8.
-33 /r	XOR r16, r/m16	RM	RW, R		O S Z C P	A			V	V		xorw	r16 XOR r/m16.
-33 /r	XOR r32, r/m32	RM	RW, R		O S Z C P	A			V	V		xorl	r32 XOR r/m32.
-REX.W+ 33 /r	XOR r64, r/m64	RM	RW, R		O S Z C P	A			V	NE		xorq	r64 XOR r/m64.
+34 ib	XOR AL, imm8	I	RW, R		OF SF ZF CF PF	AF			V	V		xorb	AL XOR imm8.
+35 iw	XOR AX, imm16	I	RW, R		OF SF ZF CF PF	AF			V	V		xorw	AX XOR imm16.
+35 id	XOR EAX, imm32	I	RW, R		OF SF ZF CF PF	AF			V	V		xorl	EAX XOR imm32.
+REX.W+ 35 id	XOR RAX, imm32	I	RW, R		OF SF ZF CF PF	AF			V	NE		xorq	RAX XOR imm32 (sign-extended).
+80 /6 ib	XOR r/m8, imm8	MI	RW, R		OF SF ZF CF PF	AF			V	V		xorb	r/m8 XOR imm8.
+REX+ 80 /6 ib	XOR r/m8, imm8	MI	RW, R		OF SF ZF CF PF	AF			V	NE		xorb	r/m8 XOR imm8.
+81 /6 iw	XOR r/m16, imm16	MI	RW, R		OF SF ZF CF PF	AF			V	V		xorw	r/m16 XOR imm16.
+81 /6 id	XOR r/m32, imm32	MI	RW, R		OF SF ZF CF PF	AF			V	V		xorl	r/m32 XOR imm32.
+REX.W+ 81 /6 id	XOR r/m64, imm32	MI	RW, R		OF SF ZF CF PF	AF			V	NE		xorq	r/m64 XOR imm32 (sign-extended).
+83 /6 ib	XOR r/m16, imm8	MI	RW, R		OF SF ZF CF PF	AF			V	V		xorw	r/m16 XOR imm8 (sign-extended).
+83 /6 ib	XOR r/m32, imm8	MI	RW, R		OF SF ZF CF PF	AF			V	V		xorl	r/m32 XOR imm8 (sign-extended).
+REX.W+ 83 /6 ib	XOR r/m64, imm8	MI	RW, R		OF SF ZF CF PF	AF			V	NE		xorq	r/m64 XOR imm8 (sign-extended).
+30 /r	XOR r/m8, r8	MR	RW, R		OF SF ZF CF PF	AF			V	V		xorb	r/m8 XOR r8.
+REX+ 30 /r	XOR r/m8, r8	MR	RW, R		OF SF ZF CF PF	AF			V	NE		xorb	r/m8 XOR r8.
+31 /r	XOR r/m16, r16	MR	RW, R		OF SF ZF CF PF	AF			V	V		xorw	r/m16 XOR r16.
+31 /r	XOR r/m32, r32	MR	RW, R		OF SF ZF CF PF	AF			V	V		xorl	r/m32 XOR r32.
+REX.W+ 31 /r	XOR r/m64, r64	MR	RW, R		OF SF ZF CF PF	AF			V	NE		xorq	r/m64 XOR r64.
+32 /r	XOR r8, r/m8	RM	RW, R		OF SF ZF CF PF	AF			V	V		xorb	r8 XOR r/m8.
+REX+ 32 /r	XOR r8, r/m8	RM	RW, R		OF SF ZF CF PF	AF			V	NE		xorb	r8 XOR r/m8.
+33 /r	XOR r16, r/m16	RM	RW, R		OF SF ZF CF PF	AF			V	V		xorw	r16 XOR r/m16.
+33 /r	XOR r32, r/m32	RM	RW, R		OF SF ZF CF PF	AF			V	V		xorl	r32 XOR r/m32.
+REX.W+ 33 /r	XOR r64, r/m64	RM	RW, R		OF SF ZF CF PF	AF			V	NE		xorq	r64 XOR r/m64.
 													
 66 0F 57 /r	XORPD xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	xorpd	Bitwise exclusive-OR of xmm2/m128 and xmm1.
 VEX.NDS.128.66.0F.WIG 57 /r	VXORPD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vxorpd	Return the bitwise logical XOR of packed double-precision floating-point values in xmm2 and xmm3/mem.

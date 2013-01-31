@@ -415,17 +415,34 @@ properties i = let x = map trim $ (splitOn ",") $ property i in
 -- Implicit Read/Write/Undef related
 --------------------------------------------------------------------------------
 
+-- Expand shorthands
+expand_implicit :: String -> [String]
+expand_implicit "EFLAGS" = ["CF","PF","AF","ZF","SF","SF","TF","IF","DF","OF",
+                            "IOPL","NT","RF","VM","AC","VIF","VIP","ID"]
+expand_implicit "ST(*)"  = ["ST(0)","ST(1)","ST(2)","ST(3)","ST(4)","ST(5)",
+                            "ST(6)","ST(7)"]
+expand_implicit "MM*"    = ["MM0","MM1","MM2","MM3","MM4","MM5","MM6","MM7"]
+expand_implicit "XMM*"   = ["XMM0","XMM1","XMM2","XMM3","XMM4","XMM5","XMM6",
+                            "XMM7","XMM8","XMM9","XMM10","XMM11","XMM12",
+                            "XMM13","XMM14","XMM15"]
+expand_implicit "STATUS" = ["IE","DE","ZE","OE","UE","PE","SF","ES","C0","C1",
+                            "C2","TOP","C3","B"]
+expand_implicit s = [s]
+
 -- Extract implicit reads
 implicit_reads :: Instr -> [String]
-implicit_reads i = filter (/= "") $ (splitOn " ") $ imp_read i
+implicit_reads i = filter (/= "") $ 
+                   concat $ map expand_implicit $ (splitOn " ") $ imp_read i
 
 -- Extract implicit writes
 implicit_writes :: Instr -> [String]
-implicit_writes i = filter (/= "") $ (splitOn " ") $ imp_write i
+implicit_writes i = filter (/= "") $ 
+                    concat $ map expand_implicit $ (splitOn " ") $ imp_write i
 
 -- Extract implicit undefs
 implicit_undefs :: Instr -> [String]
-implicit_undefs i = filter (/= "") $ (splitOn " ") $ imp_undef i
+implicit_undefs i = filter (/= "") $ 
+                    concat $ map expand_implicit $ (splitOn " ") $ imp_undef i
 
 -- Flag related
 --------------------------------------------------------------------------------
@@ -832,62 +849,18 @@ uncond_jump_table is = to_table is uncond_jump_row
 is_must :: String -> Bool
 is_must o = any isUpper o
 
--- Convert set elements to canonical form
-set2op :: String -> String
-set2op "CR0"   = "cr::CR0"
-set2op "a"     = "eflags::af"
-set2op "A"     = "eflags::AF"
-set2op "c"     = "eflags::cf"
-set2op "C"     = "eflags::CF"
-set2op "d"     = "eflags::df"
-set2op "D"     = "eflags::DF"
-set2op "o"     = "eflags::of"
-set2op "O"     = "eflags::OF"
-set2op "p"     = "eflags::pf"
-set2op "P"     = "eflags::PF"
-set2op "s"     = "eflags::sf"
-set2op "S"     = "eflags::SF"
-set2op "z"     = "eflags::zf"
-set2op "Z"     = "eflags::ZF"
-set2op "ST(0)" = "st::ST0"
-set2op "ST(1)" = "st::ST1"
-set2op "C0"    = "status::C0"
-set2op "c1"    = "status::c1"
-set2op "C1"    = "status::C1"
-set2op "C2"    = "status::C2"
-set2op "C3"    = "status::C3"
-set2op "al"    = "rl::al"
-set2op "AL"    = "rl::AL"
-set2op "AH"    = "rh::AH"
-set2op "ax"    = "r16::ax"
-set2op "AX"    = "r16::AX"
-set2op "DX"    = "r16::DX"
-set2op "eax"   = "r32::eax"
-set2op "EAX"   = "r32::EAX"
-set2op "ebx"   = "r32::ebx"
-set2op "EBX"   = "r32::EBX"
-set2op "ecx"   = "r32::ecx"
-set2op "ECX"   = "r32::ECX"
-set2op "edx"   = "r32::edx"
-set2op "EDX"   = "r32::EDX"
-set2op "rax"   = "r64::rax"
-set2op "rbx"   = "r64::rbx"
-set2op "RAX"   = "r64::RAX"
-set2op "rcx"   = "r64::rcx"
-set2op "RCX"   = "r64::RCX"
-set2op "rdx"   = "r64::rdx"
-set2op "RDX"   = "r64::RDX"
-set2op "FS"    = "sreg::FS"
-set2op "GS"    = "sreg::GS"
-set2op "XMM0"  = "xmm::XMM0"
-set2op s = error $ "Unrecognized operand: " ++ s
+-- Converts an operand to its fully qualified name
+qualify_imp :: String -> String
+qualify_imp s
+  | s == "IF" || s == "if" = "eflags::" ++ s ++ "_"
+  | otherwise = s
 
 -- Converts an instruction to implicit_read table row
 must_read_row :: Instr -> String
 must_read_row i 
   | "???" `elem` (implicit_reads i) = "OpSet::universe()"
   | otherwise = "OpSet::empty()" ++ (concat (map val (irs i)))
-    where irs i = filter is_must $ map set2op $ implicit_reads i
+    where irs i = filter is_must $ map qualify_imp $ implicit_reads i
           val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_read table
@@ -899,7 +872,7 @@ maybe_read_row :: Instr -> String
 maybe_read_row i 
   | "???" `elem` (implicit_reads i) = "OpSet::universe()"
   | otherwise = "OpSet::empty()" ++ (concat (map val (irs i)))
-    where irs i = map set2op $ implicit_reads i
+    where irs i = map qualify_imp $ implicit_reads i
           val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_read table
@@ -911,7 +884,7 @@ must_write_row :: Instr -> String
 must_write_row i 
   | "???" `elem` (implicit_writes i) = "OpSet::universe()"
   | otherwise = "OpSet::empty()" ++ (concat (map val (iws i)))
-    where iws i = filter is_must $ map set2op $ implicit_writes i
+    where iws i = filter is_must $ map qualify_imp $ implicit_writes i
           val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_write table
@@ -923,7 +896,7 @@ maybe_write_row :: Instr -> String
 maybe_write_row i 
   | "???" `elem` (implicit_writes i) = "OpSet::universe()"
   | otherwise = "OpSet::empty()" ++ (concat (map val (iws i)))
-    where iws i = map set2op $ implicit_writes i
+    where iws i = map qualify_imp $ implicit_writes i
           val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_write table
@@ -935,7 +908,7 @@ must_undef_row :: Instr -> String
 must_undef_row i 
   | "???" `elem` (implicit_undefs i) = "OpSet::universe()"
   | otherwise = "OpSet::empty()" ++ (concat (map val (ius i)))
-    where ius i = filter is_must $ map set2op $ implicit_undefs i
+    where ius i = filter is_must $ map qualify_imp $ implicit_undefs i
           val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_undef table
@@ -947,7 +920,7 @@ maybe_undef_row :: Instr -> String
 maybe_undef_row i 
   | "???" `elem` (implicit_undefs i) = "OpSet::universe()"
   | otherwise = "OpSet::empty()" ++ (concat (map val (ius i)))
-    where ius i = map set2op $ implicit_undefs i
+    where ius i = map qualify_imp $ implicit_undefs i
           val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_undef table
@@ -1408,7 +1381,6 @@ write_html is = writeFile "../doc/ref/x64.html" $ html_table is
 main :: IO ()		
 main = do is <- parse_instrs "x86.csv"
           property_arity_check is 
+          write_html is
           write_code is
           write_test_files is					
-          write_html is
-          mapM_ print $ uniq_operands is					
