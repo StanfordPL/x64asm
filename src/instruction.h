@@ -115,32 +115,32 @@ class Instruction {
 			return is_uncond_jump_[get_opcode()];
 		}
 
-		inline OpSet implicit_must_read_set() const {
+		inline const OpSet& implicit_must_read_set() const {
 			assert((size_t)get_opcode() < implicit_must_read_set_.size());
 			return implicit_must_read_set_[get_opcode()];
 		}
 
-		inline OpSet implicit_maybe_read_set() const {
+		inline const OpSet& implicit_maybe_read_set() const {
 			assert((size_t)get_opcode() < implicit_maybe_read_set_.size());
 			return implicit_maybe_read_set_[get_opcode()];
 		}
 
-		inline OpSet implicit_must_write_set() const {
+		inline const OpSet& implicit_must_write_set() const {
 			assert((size_t)get_opcode() < implicit_must_write_set_.size());
 			return implicit_must_write_set_[get_opcode()];
 		}
 
-		inline OpSet implicit_maybe_write_set() const {
+		inline const OpSet& implicit_maybe_write_set() const {
 			assert((size_t)get_opcode() < implicit_maybe_write_set_.size());
 			return implicit_maybe_write_set_[get_opcode()];
 		}
 
-		inline OpSet implicit_must_undef_set() const {
+		inline const OpSet& implicit_must_undef_set() const {
 			assert((size_t)get_opcode() < implicit_must_undef_set_.size());
 			return implicit_must_undef_set_[get_opcode()];
 		}
 
-		inline OpSet implicit_maybe_undef_set() const {
+		inline const OpSet& implicit_maybe_undef_set() const {
 			assert((size_t)get_opcode() < implicit_maybe_undef_set_.size());
 			return implicit_maybe_undef_set_[get_opcode()];
 		}

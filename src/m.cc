@@ -26,14 +26,6 @@ M::~M() {
 	// Does nothing.
 }
 
-void M::write_intel_width(ostream& os) const {
-	// Does nothing.
-}
-
-OpType M::type() const {
-	return OpType::M;
-}
-
 bool M::check() const {
 	// Check seg
 	if ( contains_seg() && !get_seg()->check() )
@@ -184,16 +176,8 @@ OpType M256::type() const {
 	return OpType::M_256;
 }
 
-void MPair1664::write_intel_width(ostream& os) const {
-	os << "??? ";
-}
-
-OpType MPair1664::type() const {
-	return OpType::M_PAIR_16_64;
-}
-
 void MPtr1616::write_intel_width(ostream& os) const {
-	os << "??? ";
+	os << "";
 }
 
 OpType MPtr1616::type() const {
@@ -201,7 +185,7 @@ OpType MPtr1616::type() const {
 }
 
 void MPtr1632::write_intel_width(ostream& os) const {
-	os << "??? ";
+	os << "";
 }
 
 OpType MPtr1632::type() const {
@@ -209,7 +193,7 @@ OpType MPtr1632::type() const {
 }
 
 void MPtr1664::write_intel_width(ostream& os) const {
-	os << "??? ";
+	os << "";
 }
 
 OpType MPtr1664::type() const {
@@ -273,7 +257,7 @@ OpType M80Bcd::type() const {
 }
 
 void M2Byte::write_intel_width(ostream& os) const {
-	os << "??? ";
+	os << "";
 }
 
 OpType M2Byte::type() const {
@@ -281,7 +265,7 @@ OpType M2Byte::type() const {
 }
 
 void M14Byte::write_intel_width(ostream& os) const {
-	os << "??? ";
+	os << "";
 }
 
 OpType M14Byte::type() const {
@@ -289,7 +273,7 @@ OpType M14Byte::type() const {
 }
 
 void M28Byte::write_intel_width(ostream& os) const {
-	os << "??? ";
+	os << "";
 }
 
 OpType M28Byte::type() const {
@@ -297,7 +281,7 @@ OpType M28Byte::type() const {
 }
 
 void M94Byte::write_intel_width(ostream& os) const {
-	os << "??? ";
+	os << "";
 }
 
 OpType M94Byte::type() const {
@@ -305,7 +289,7 @@ OpType M94Byte::type() const {
 }
 
 void M108Byte::write_intel_width(ostream& os) const {
-	os << "??? ";
+	os << "";
 }
 
 OpType M108Byte::type() const {
@@ -313,7 +297,7 @@ OpType M108Byte::type() const {
 }
 
 void M512Byte::write_intel_width(ostream& os) const {
-	os << "??? ";
+	os << "";
 }
 
 OpType M512Byte::type() const {

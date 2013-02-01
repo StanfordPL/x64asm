@@ -29,10 +29,11 @@ class Modifier : public AtomicOperand {
 	public:
 		inline Modifier(uint64_t val) : AtomicOperand{val} { }
 		virtual ~Modifier() = 0;
+		virtual bool check() const = 0;
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual OpType type() const = 0;
 };
 
 /** The 32-bit memory address override prefix: 0x66. */

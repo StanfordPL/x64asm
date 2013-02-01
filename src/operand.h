@@ -31,11 +31,11 @@ class Operand {
 	friend class Instruction;
 	public:
 		virtual ~Operand() = 0; 
-		virtual bool check() const;
+		virtual bool check() const = 0;
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;
 	private:
-		virtual OpType type() const;
+		virtual OpType type() const = 0;
 		virtual void insert_in(OpSet& os, bool promote = false) const;
 };
 
@@ -47,22 +47,24 @@ class AtomicOperand : public Operand {
 	public:
 		inline AtomicOperand(uint64_t val) : val_{val} { }
 		virtual ~AtomicOperand() = 0;
+		virtual bool check() const = 0;
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;
 	protected:
 		uint64_t val_;	
 	private:
-		virtual OpType type() const;
+		virtual OpType type() const = 0;
 };
 
 /** Aggregate Operand Type. */
 class CompoundOperand : public Operand {
 	public:
 		virtual ~CompoundOperand() = 0;
+		virtual bool check() const = 0;
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;
 	private:
-		virtual OpType type() const;
+		virtual OpType type() const = 0;
 };
 
 } // namespace x64asm

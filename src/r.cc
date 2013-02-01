@@ -28,14 +28,6 @@ R::~R() {
 	// Does nothing.
 }
 
-OpType R::type() const {
-	return OpType::R;
-}
-
-bool R::check() const {
-	return val_ < 16;
-}
-
 R64 R::parent() const {
 	return R64{val_};
 }
@@ -172,6 +164,10 @@ void R16::insert_in(OpSet& os, bool promote) const {
 		os += *this;
 }
 
+bool R16::check() const {
+	return val_ < 16;
+}
+
 void R16::write_att(ostream& os) const {
 	os << "%";
 	write_intel(os);
@@ -220,10 +216,6 @@ AddrR::~AddrR() {
 	// Does nothing.
 }
 
-OpType AddrR::type() const {
-	return OpType::ADDR_R;
-}
-
 OpType R32::type() const {
 	return OpType::R_32;
 }
@@ -233,6 +225,10 @@ void R32::insert_in(OpSet& os, bool promote) const {
 		os += parent();
 	else
 		os += *this;
+}
+
+bool R32::check() const {
+	return val_ < 16;
 }
 
 void R32::write_att(ostream& os) const {
@@ -280,6 +276,10 @@ void R64::insert_in(OpSet& os, bool promote) const {
 		os += parent();
 	else
 		os += *this;
+}
+
+bool R64::check() const {
+	return val_ < 16;
 }
 
 void R64::write_att(ostream& os) const {

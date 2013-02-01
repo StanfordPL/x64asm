@@ -29,10 +29,11 @@ class Imm : public AtomicOperand {
 	public:
 		inline Imm(uint64_t val) : AtomicOperand{val} { }
 		virtual ~Imm() = 0;
+		virtual bool check() const = 0;
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual OpType type() const = 0;
 };
 
 /** An immediate byte value. The imm8 symbol is a signed number between –128 
@@ -81,6 +82,7 @@ class Imm64 : public Imm {
 		inline Imm64(int64_t i) : Imm{(uint64_t)i} { }
 		template <typename T>
 		inline Imm64(T* t) : Imm{(uint64_t)t} { }
+		virtual bool check() const;
 	private:
 		virtual OpType type() const;
 };

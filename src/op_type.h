@@ -21,25 +21,8 @@ namespace x64asm {
 
 /** Any of the types which appear in the Intel Manual. */
 enum class OpType {
-	// FPU Control Register bits (control.h)
-	CONTROL = 0,
+	HINT = 0,
 
-	// Condition Registers (cr.h)
-	CR,
-	CR_0234,
-	CR_8,
-
-	// Debug Registers (dr.h)
-	DR,
-
-	// EFLAGS Register bits (eflags.h)
-	EFLAGS,
-
-	// Conditional Jump Hint (hint.h)
-	HINT,
-
-	// Immediates (imm.h)
-	IMM,
 	IMM_8,
 	IMM_16,
 	IMM_32,
@@ -48,18 +31,14 @@ enum class OpType {
 	ONE,
 	THREE,
 
-	// Labels (label.h)
 	LABEL,
 
-	// Memory (m.h)
-	M,
 	M_8,
 	M_16,
 	M_32,
 	M_64,
 	M_128,
 	M_256,
-	M_PAIR_16_64,
 	M_PTR_16_16,
 	M_PTR_16_32,
 	M_PTR_16_64,
@@ -77,32 +56,17 @@ enum class OpType {
 	M_108_BYTE,
 	M_512_BYTE,
 
-	// MMX Registers (mm.h)
 	MM,
 
-	// Modifiers (modifier.h)
-	MODIFIER,
 	PREF_66,
 	PREF_REX_W,
 	FAR,
 
-	// Memory Offsets (moffs.h)
-	MOFFS,
 	MOFFS_8,
 	MOFFS_16,
 	MOFFS_32,
 	MOFFS_64,
 
-	// MXCSR Register bits (mxcsr.h)
-	MXCSR,
-
-	// Operands (operand.h)
-	OPERAND,
-	ATOMIC_OPERAND,
-	COMPOUND_OPERAND,
-
-	// General Purpose Registers (r.h)
-	R,
 	RL,
 	RH,
 	RB,
@@ -111,37 +75,24 @@ enum class OpType {
 	R_16,
 	AX,
 	DX,
-	ADDR_R,
 	R_32,
 	EAX,
 	R_64,
 	RAX,
 
-	// Relatives Addresses (rel.h)
-	REL,
 	REL_8,
 	REL_32,
 
-	// Segment Registers (sreg.h)
 	SREG,
 	FS,
 	GS,
 
-	// Floating Point Stack Registers (st.h)
 	ST,
 	ST_0,
 
-	// FPU Status Register bits (status.h)
-	STATUS,
-
-	// FPU Tag Registers (tag.h)
-	TAG,
-
-	// XMM Registers (xmm.h)
 	XMM,
 	XMM_0,
 
-	// YMM Registers (ymm.h)
 	YMM
 };
 

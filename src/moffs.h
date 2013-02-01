@@ -29,10 +29,11 @@ class Moffs : public AtomicOperand {
 	public:
 		inline Moffs(uint64_t val) : AtomicOperand{val} { }
 		virtual ~Moffs() = 0;
+		virtual bool check() const;
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual OpType type() const = 0;
 };
 
 /** A simple memory variable (memory offset) of type byte. */

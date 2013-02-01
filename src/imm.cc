@@ -24,10 +24,6 @@ Imm::~Imm() {
 	// Does nothing.
 }
 
-OpType Imm::type() const {
-	return OpType::IMM;
-}
-
 void Imm::write_att(ostream& os) const {
 	os << "$";
 	write_intel(os);
@@ -63,6 +59,10 @@ bool Imm32::check() const {
 
 OpType Imm64::type() const {
 	return OpType::IMM_64;
+}
+
+bool Imm64::check() const {
+	return true;
 }
 
 OpType Zero::type() const {

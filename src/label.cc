@@ -20,6 +20,10 @@ using namespace std;
 
 namespace x64asm {
 
+bool Label::check() const {
+	return true;
+}
+
 OpType Label::type() const {
 	return OpType::LABEL;
 }

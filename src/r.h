@@ -32,11 +32,11 @@ class R : public AtomicOperand {
 		inline R(uint64_t val) : AtomicOperand{val} { }
 		virtual ~R() = 0;
 		virtual R64 parent() const;
-		virtual bool check() const;
+		virtual bool check() const = 0;
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;
 	private:
-		virtual OpType type() const;
+		virtual OpType type() const = 0;
 };
 
 /** One of the byte general-purpose registers: AL, CL, DL, BL. */
@@ -109,6 +109,7 @@ class Cl : public Rl {
 class R16 : public R {
 	friend class Constants;
 	public:
+		virtual bool check() const;
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
@@ -145,10 +146,11 @@ class AddrR : public R {
 	public:
 		AddrR(uint64_t val) : R{val} { }
 		virtual ~AddrR() = 0;
+		virtual bool check() const = 0;
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;
 	private:
-		virtual OpType type() const;
+		virtual OpType type() const = 0;
 };
 
 /** One of the doubleword general-purpose registers: EAX, ECX, EDX, EBX, ESP, 
@@ -158,6 +160,7 @@ class AddrR : public R {
 class R32 : public AddrR {
 	friend class Constants;
 	public:
+		virtual bool check() const;
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
@@ -185,6 +188,7 @@ class R64 : public AddrR {
 	friend class R;
 	friend class Rh;
 	public:
+		virtual bool check() const;
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:

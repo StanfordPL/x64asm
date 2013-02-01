@@ -196,11 +196,10 @@ class M : public CompoundOperand {
 		virtual void write_intel(std::ostream& os) const;
 
 	protected:
-
-		virtual void write_intel_width(std::ostream& os) const;
+		virtual void write_intel_width(std::ostream& os) const = 0;
 
 	private:
-		virtual OpType type() const;
+		virtual OpType type() const = 0;
 		virtual void insert_in(OpSet& os, bool promote = false) const;
 
 		const Sreg* seg_;
@@ -291,21 +290,6 @@ class M128 : public M {
 class M256 : public M {
 	public:
 		CONSTRUCTORS(M256)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
-		virtual OpType type() const;
-};
-
-/** A memory operand consisting of data item pairs whose sizes are indicated on 
-	  the left and the right side of the ampersand. All memory addressing modes 
-		are allowed. The m16&64 operand is used by LIDT and LGDT in 64-bit mode to 
-		provide a word with which to load the limit field, and a quadword with 
-		which to load the base field of the corresponding GDTR and IDTR registers.
-*/
-class MPair1664 : public M {
-	public:
-		CONSTRUCTORS(MPair1664)
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:

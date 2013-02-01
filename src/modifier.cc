@@ -24,10 +24,6 @@ Modifier::~Modifier() {
 	// Does nothing.
 }
 
-OpType Modifier::type() const {
-	return OpType::MODIFIER;
-}
-
 void Modifier::write_att(ostream& os) const {
 	// Does nothing.
 }

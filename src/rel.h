@@ -27,10 +27,11 @@ class Rel : public AtomicOperand {
 	public:
 		inline Rel(uint64_t val) : AtomicOperand{val} { }
 		virtual ~Rel() = 0;
+		virtual bool check() const = 0;
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual OpType type() const = 0;
 };
 
 /** A relative address in the range from 128 bytes before the end of the 

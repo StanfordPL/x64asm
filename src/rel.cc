@@ -24,10 +24,6 @@ Rel::~Rel() {
 	// Does nothing.
 }
 
-OpType Rel::type() const {
-	return OpType::REL;
-}
-
 void Rel::write_att(ostream& os) const {
 	os << hex << showbase << val_;
 }

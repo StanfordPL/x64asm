@@ -24,8 +24,8 @@ Moffs::~Moffs() {
 	// Does nothing.
 }
 
-OpType Moffs::type() const {
-	return OpType::MOFFS;
+bool Moffs::check() const {
+	return true;
 }
 
 void Moffs::write_att(ostream& os) const {

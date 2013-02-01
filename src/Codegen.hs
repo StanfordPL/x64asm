@@ -1384,3 +1384,4 @@ main = do is <- parse_instrs "x86.csv"
           write_html is
           write_code is
           write_test_files is					
+          mapM_ print $ uniq_operands is
