@@ -200,7 +200,7 @@ class M : public CompoundOperand {
 
 	private:
 		virtual OpType type() const = 0;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
+		virtual void insert_in(RegSet& os, bool promote = false) const;
 
 		const Sreg* seg_;
 		const AddrR* base_;

@@ -24,7 +24,6 @@ limitations under the License.
 #include "src/env_bits.h"
 #include "src/env_reg.h"
 #include "src/instruction.h"
-#include "src/op_set.h"
 #include "src/operand.h"
 
 namespace x64asm {

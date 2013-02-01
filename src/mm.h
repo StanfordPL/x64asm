@@ -34,7 +34,7 @@ class Mm : public AtomicOperand {
 	private:
 		inline Mm(uint64_t val) : AtomicOperand{val} { }
 		virtual OpType type() const;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
+		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
 } // namespace x64asm

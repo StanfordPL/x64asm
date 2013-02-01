@@ -858,8 +858,8 @@ qualify_imp s
 -- Converts an instruction to implicit_read table row
 must_read_row :: Instr -> String
 must_read_row i 
-  | "???" `elem` (implicit_reads i) = "OpSet::universe()"
-  | otherwise = "OpSet::empty()" ++ (concat (map val (irs i)))
+  | "???" `elem` (implicit_reads i) = "RegSet::universe()"
+  | otherwise = "RegSet::empty()" ++ (concat (map val (irs i)))
     where irs i = filter is_must $ map qualify_imp $ implicit_reads i
           val s = "+" ++ (low s)
 
@@ -870,8 +870,8 @@ must_read_table is = to_table is must_read_row
 -- Converts an instruction to implicit_read table row
 maybe_read_row :: Instr -> String
 maybe_read_row i 
-  | "???" `elem` (implicit_reads i) = "OpSet::universe()"
-  | otherwise = "OpSet::empty()" ++ (concat (map val (irs i)))
+  | "???" `elem` (implicit_reads i) = "RegSet::universe()"
+  | otherwise = "RegSet::empty()" ++ (concat (map val (irs i)))
     where irs i = map qualify_imp $ implicit_reads i
           val s = "+" ++ (low s)
 
@@ -882,8 +882,8 @@ maybe_read_table is = to_table is maybe_read_row
 -- Converts an instruction to implicit_write table row
 must_write_row :: Instr -> String
 must_write_row i 
-  | "???" `elem` (implicit_writes i) = "OpSet::universe()"
-  | otherwise = "OpSet::empty()" ++ (concat (map val (iws i)))
+  | "???" `elem` (implicit_writes i) = "RegSet::universe()"
+  | otherwise = "RegSet::empty()" ++ (concat (map val (iws i)))
     where iws i = filter is_must $ map qualify_imp $ implicit_writes i
           val s = "+" ++ (low s)
 
@@ -894,8 +894,8 @@ must_write_table is = to_table is must_write_row
 -- Converts an instruction to implicit_write table row
 maybe_write_row :: Instr -> String
 maybe_write_row i 
-  | "???" `elem` (implicit_writes i) = "OpSet::universe()"
-  | otherwise = "OpSet::empty()" ++ (concat (map val (iws i)))
+  | "???" `elem` (implicit_writes i) = "RegSet::universe()"
+  | otherwise = "RegSet::empty()" ++ (concat (map val (iws i)))
     where iws i = map qualify_imp $ implicit_writes i
           val s = "+" ++ (low s)
 
@@ -906,8 +906,8 @@ maybe_write_table is = to_table is maybe_write_row
 -- Converts an instruction to implicit_undef table row
 must_undef_row :: Instr -> String
 must_undef_row i 
-  | "???" `elem` (implicit_undefs i) = "OpSet::universe()"
-  | otherwise = "OpSet::empty()" ++ (concat (map val (ius i)))
+  | "???" `elem` (implicit_undefs i) = "RegSet::universe()"
+  | otherwise = "RegSet::empty()" ++ (concat (map val (ius i)))
     where ius i = filter is_must $ map qualify_imp $ implicit_undefs i
           val s = "+" ++ (low s)
 
@@ -918,8 +918,8 @@ must_undef_table is = to_table is must_undef_row
 -- Converts an instruction to implicit_undef table row
 maybe_undef_row :: Instr -> String
 maybe_undef_row i 
-  | "???" `elem` (implicit_undefs i) = "OpSet::universe()"
-  | otherwise = "OpSet::empty()" ++ (concat (map val (ius i)))
+  | "???" `elem` (implicit_undefs i) = "RegSet::universe()"
+  | otherwise = "RegSet::empty()" ++ (concat (map val (ius i)))
     where ius i = map qualify_imp $ implicit_undefs i
           val s = "+" ++ (low s)
 

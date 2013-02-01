@@ -31,8 +31,8 @@ OBJ=src/assembler.o \
 		src/modifier.o \
 		src/moffs.o \
 		src/operand.o \
-		src/op_set.o \
 		src/r.o \
+		src/reg_set.o \
 		src/rel.o \
 		src/sreg.o \
 		src/stream.o \

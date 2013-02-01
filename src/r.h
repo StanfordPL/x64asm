@@ -50,7 +50,7 @@ class Rl : public R {
 		inline Rl(uint64_t val) : R{val} { }
 	private:
 		virtual OpType type() const;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
+		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
 /** One of the byte general-purpose registers: AH, CH, DH, BH. */
@@ -64,7 +64,7 @@ class Rh : public R {
 	private:
 		inline Rh(uint64_t val) : R{val} { }
 		virtual OpType type() const;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
+		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
 /** One of the byte general-purpose registers: BPL, SPL, DIL and SIL; or one of 
@@ -79,7 +79,7 @@ class Rb : public R {
 	private:
 		inline Rb(uint64_t val) : R{val} { }
 		virtual OpType type() const;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
+		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
 /** The byte general-purpose register AL. */
@@ -116,7 +116,7 @@ class R16 : public R {
 		inline R16(uint64_t val) : R{val} { }
 	private:
 		virtual OpType type() const;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
+		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
 /** The word general-purpose register AX. */
@@ -167,7 +167,7 @@ class R32 : public AddrR {
 		inline R32(uint64_t val) : AddrR{val} { }
 	private:
 		virtual OpType type() const;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
+		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
 /** The doubleword general-purpose register EAX. */
@@ -195,7 +195,7 @@ class R64 : public AddrR {
 		inline R64(uint64_t val) : AddrR{val} { }
 	private:
 		virtual OpType type() const;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
+		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
 /** The quadword general-purpose register RAX. */

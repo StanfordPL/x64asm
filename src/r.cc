@@ -16,7 +16,7 @@ limitations under the License.
 
 #include "src/r.h"
 
-#include "src/op_set.h"
+#include "src/reg_set.h"
 
 #include <cassert>
 
@@ -52,7 +52,7 @@ void Rl::write_intel(ostream& os) const {
 	}
 }
 
-void Rl::insert_in(OpSet& os, bool promote) const {
+void Rl::insert_in(RegSet& os, bool promote) const {
 	if ( promote )
 		os += parent();
 	else
@@ -83,7 +83,7 @@ void Rh::write_intel(ostream& os) const {
 	}
 }
 
-void Rh::insert_in(OpSet& os, bool promote) const {
+void Rh::insert_in(RegSet& os, bool promote) const {
 	if ( promote )
 		os += parent();
 	else
@@ -126,7 +126,7 @@ void Rb::write_intel(ostream& os) const {
 	}
 }
 
-void Rb::insert_in(OpSet& os, bool promote) const {
+void Rb::insert_in(RegSet& os, bool promote) const {
 	if ( promote )
 		os += parent();
 	else
@@ -189,7 +189,7 @@ OpType R16::type() const {
 	return OpType::R_16;
 }
 
-void R16::insert_in(OpSet& os, bool promote) const {
+void R16::insert_in(RegSet& os, bool promote) const {
 	if ( promote )
 		os += parent();
 	else
@@ -252,7 +252,7 @@ OpType R32::type() const {
 	return OpType::R_32;
 }
 
-void R32::insert_in(OpSet& os, bool promote) const {
+void R32::insert_in(RegSet& os, bool promote) const {
 	if ( promote )
 		os += parent();
 	else
@@ -303,7 +303,7 @@ OpType R64::type() const {
 	return OpType::R_64;
 }
 
-void R64::insert_in(OpSet& os, bool promote) const {
+void R64::insert_in(RegSet& os, bool promote) const {
 	if ( promote )
 		os += parent();
 	else

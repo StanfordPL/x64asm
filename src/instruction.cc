@@ -38,8 +38,8 @@ vector<const char*> intel_ {
 
 namespace x64asm {
 
-OpSet Instruction::explicit_must_read_set() const {
-	auto ret = OpSet::empty();
+RegSet Instruction::explicit_must_read_set() const {
+	auto ret = RegSet::empty();
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
 		const auto o = get_operand(i);
 		if ( const auto m = dynamic_cast<const M*>(o) )
@@ -51,8 +51,8 @@ OpSet Instruction::explicit_must_read_set() const {
 	return ret;
 }
 
-OpSet Instruction::explicit_maybe_read_set() const {
-	auto ret = OpSet::empty();
+RegSet Instruction::explicit_maybe_read_set() const {
+	auto ret = RegSet::empty();
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
 		const auto o = get_operand(i);
 		if ( const auto m = dynamic_cast<const M*>(o) )
@@ -64,8 +64,8 @@ OpSet Instruction::explicit_maybe_read_set() const {
 	return ret;
 }
 
-OpSet Instruction::explicit_must_write_set() const {
-	auto ret = OpSet::empty();
+RegSet Instruction::explicit_must_write_set() const {
+	auto ret = RegSet::empty();
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
 		const auto o = get_operand(i);
 		const auto p = properties(i);
@@ -78,8 +78,8 @@ OpSet Instruction::explicit_must_write_set() const {
 	return ret;
 }
 
-OpSet Instruction::explicit_maybe_write_set() const {
-	auto ret = OpSet::empty();
+RegSet Instruction::explicit_maybe_write_set() const {
+	auto ret = RegSet::empty();
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
 		const auto o = get_operand(i);
 		const auto p = properties(i);
@@ -92,8 +92,8 @@ OpSet Instruction::explicit_maybe_write_set() const {
 	return ret;
 }
 
-OpSet Instruction::explicit_must_undef_set() const {
-	auto ret = OpSet::empty();
+RegSet Instruction::explicit_must_undef_set() const {
+	auto ret = RegSet::empty();
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) 
 		if ( properties(i).contains(Property::MUST_UNDEF) )
 			get_operand(i)->insert_in(ret, false);
@@ -101,8 +101,8 @@ OpSet Instruction::explicit_must_undef_set() const {
 	return ret;
 }
 
-OpSet Instruction::explicit_maybe_undef_set() const {
-	auto ret = OpSet::empty();
+RegSet Instruction::explicit_maybe_undef_set() const {
+	auto ret = RegSet::empty();
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) 
 		if ( properties(i).contains(Property::MAYBE_UNDEF) )
 			get_operand(i)->insert_in(ret, false);
@@ -235,44 +235,44 @@ vector<bool> Instruction::is_uncond_jump_ {
 	#include "src/uncond_jump.table"
 };
 
-vector<OpSet> Instruction::implicit_must_read_set_ {
+vector<RegSet> Instruction::implicit_must_read_set_ {
 	// Internal mnemonics
-	OpSet::empty()
+	RegSet::empty()
 	// Auto-generated mnemonics
 	//#include "src/must_read.table"
 };
 
-vector<OpSet> Instruction::implicit_maybe_read_set_ {
+vector<RegSet> Instruction::implicit_maybe_read_set_ {
 	// Internal mnemonics
-	OpSet::empty()
+	RegSet::empty()
 	// Auto-generated mnemonics
 	//#include "src/maybe_read.table"
 };
 
-vector<OpSet> Instruction::implicit_must_write_set_ {
+vector<RegSet> Instruction::implicit_must_write_set_ {
 	// Internal mnemonics
-	OpSet::empty()
+	RegSet::empty()
 	// Auto-generated mnemonics
 	//#include "src/must_write.table"
 };
 
-vector<OpSet> Instruction::implicit_maybe_write_set_ {
+vector<RegSet> Instruction::implicit_maybe_write_set_ {
 	// Internal mnemonics
-	OpSet::empty()
+	RegSet::empty()
 	// Auto-generated mnemonics
 	//#include "src/maybe_write.table"
 };
 
-vector<OpSet> Instruction::implicit_must_undef_set_ {
+vector<RegSet> Instruction::implicit_must_undef_set_ {
 	// Internal mnemonics
-	OpSet::empty()
+	RegSet::empty()
 	// Auto-generated mnemonics
 	//#include "src/must_undef.table"
 };
 
-vector<OpSet> Instruction::implicit_maybe_undef_set_ {
+vector<RegSet> Instruction::implicit_maybe_undef_set_ {
 	// Internal mnemonics
-	OpSet::empty()
+	RegSet::empty()
 	// Auto-generated mnemonics
 	//#include "src/maybe_undef.table"
 };

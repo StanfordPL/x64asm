@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef X64ASM_SRC_OP_SET_H
-#define X64ASM_SRC_OP_SET_H
+#ifndef X64ASM_SRC_REG_SET_H
+#define X64ASM_SRC_REG_SET_H
 
 #include <iostream>
 
@@ -32,7 +32,7 @@ limitations under the License.
 namespace x64asm {
 
 /** A compact bit set representation for registers. */
-class OpSet {
+class RegSet {
 	private:
 		enum class Mask : uint64_t {
 			// Group 1
@@ -70,46 +70,46 @@ class OpSet {
 			UNIV4   = 0x00000000dfffaaaa,
 		};
 
-		inline OpSet(uint64_t g1, uint64_t g2, uint64_t g3, uint64_t g4)
+		inline RegSet(uint64_t g1, uint64_t g2, uint64_t g3, uint64_t g4)
 				: group1_{g1}, group2_{g2}, group3_{g3}, group4_{g4} {
 		}
 
-		inline OpSet(Mask g1, Mask g2, Mask g3, Mask g4)
+		inline RegSet(Mask g1, Mask g2, Mask g3, Mask g4)
 				: group1_{(uint64_t)g1}, group2_{(uint64_t)g2}, group3_{(uint64_t)g3},
 	        group4_{(uint64_t)g4}	{
 		}
 
 	public:	
 		// Static Constants
-		static inline OpSet empty() {
-			return OpSet(Mask::EMPTY, Mask::EMPTY, Mask::EMPTY, Mask::EMPTY);
+		static inline RegSet empty() {
+			return RegSet(Mask::EMPTY, Mask::EMPTY, Mask::EMPTY, Mask::EMPTY);
 		}
 
-		static inline OpSet universe() {
-			return OpSet(Mask::UNIV1, Mask::UNIV2, Mask::UNIV3, Mask::UNIV4); 
+		static inline RegSet universe() {
+			return RegSet(Mask::UNIV1, Mask::UNIV2, Mask::UNIV3, Mask::UNIV4); 
 		}
 
 		// Set Operators
-		inline OpSet operator~() const {
-			return OpSet(~group1_, ~group2_, ~group3_, ~group4_);
+		inline RegSet operator~() const {
+			return RegSet(~group1_, ~group2_, ~group3_, ~group4_);
 		}
 
-		inline OpSet operator&(const OpSet& rhs) const {
+		inline RegSet operator&(const RegSet& rhs) const {
 			auto ret = *this;
 			return ret &= rhs;
 		}
 
-		inline OpSet operator|(const OpSet& rhs) const {
+		inline RegSet operator|(const RegSet& rhs) const {
 			auto ret = *this;
 			return ret |= rhs;
 		}
 
-		inline OpSet operator-(const OpSet& rhs) const {
+		inline RegSet operator-(const RegSet& rhs) const {
 			auto ret = *this;
 			return ret -= rhs;
 		}
 
-		inline OpSet& operator&=(const OpSet& rhs) {
+		inline RegSet& operator&=(const RegSet& rhs) {
 			group1_ &= rhs.group1_;
 			group2_ &= rhs.group2_;
 			group3_ &= rhs.group3_;
@@ -117,7 +117,7 @@ class OpSet {
 			return *this;
 		}
 
-		inline OpSet& operator|=(const OpSet& rhs) {
+		inline RegSet& operator|=(const RegSet& rhs) {
 			group1_ |= rhs.group1_;
 			group2_ |= rhs.group2_;
 			group3_ |= rhs.group3_;
@@ -125,7 +125,7 @@ class OpSet {
 			return *this;
 		}
 
-		inline OpSet& operator-=(const OpSet& rhs) {
+		inline RegSet& operator-=(const RegSet& rhs) {
 			group1_ &= ~rhs.group1_;
 			group2_ &= ~rhs.group2_;
 			group3_ &= ~rhs.group3_;
@@ -134,222 +134,222 @@ class OpSet {
 		}
 
 		// Comparison Operators
-		inline bool operator==(const OpSet& rhs) const {
+		inline bool operator==(const RegSet& rhs) const {
 			return group1_ == rhs.group1_ && group2_ == rhs.group2_ &&
 				     group3_ == rhs.group3_ && group4_ == rhs.group4_;
 		}
 
-		inline bool operator!=(const OpSet& rhs) const {
+		inline bool operator!=(const RegSet& rhs) const {
 			return !(*this == rhs);
 		}
 
 		// Element Operators
-		inline OpSet operator+(Rl rhs) const {
+		inline RegSet operator+(Rl rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(Rh rhs) const {
+		inline RegSet operator+(Rh rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(Rb rhs) const {
+		inline RegSet operator+(Rb rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(R16 rhs) const {
+		inline RegSet operator+(R16 rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(R32 rhs) const {
+		inline RegSet operator+(R32 rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(R64 rhs) const {
+		inline RegSet operator+(R64 rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(Xmm rhs) const {
+		inline RegSet operator+(Xmm rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(Ymm rhs) const {
+		inline RegSet operator+(Ymm rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(Mm rhs) const {
+		inline RegSet operator+(Mm rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(St rhs) const {
+		inline RegSet operator+(St rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(Sreg rhs) const {
+		inline RegSet operator+(Sreg rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(FpuData rhs) const {
+		inline RegSet operator+(FpuData rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(FpuInstruction rhs) const {
+		inline RegSet operator+(FpuInstruction rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(FpuOpcode rhs) const {
+		inline RegSet operator+(FpuOpcode rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(Rip rhs) const {
+		inline RegSet operator+(Rip rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(Eflags rhs) const {
+		inline RegSet operator+(Eflags rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(FpuControl rhs) const {
+		inline RegSet operator+(FpuControl rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(FpuStatus rhs) const {
+		inline RegSet operator+(FpuStatus rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(FpuTag rhs) const {
+		inline RegSet operator+(FpuTag rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(Mxcsr rhs) const {
+		inline RegSet operator+(Mxcsr rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet operator+(const M& rhs) const {
+		inline RegSet operator+(const M& rhs) const {
 			auto ret = *this;
 			return ret += rhs;
 		}
 
-		inline OpSet& operator+=(Rl rhs) {
+		inline RegSet& operator+=(Rl rhs) {
 			group1_ |= ((uint64_t) Mask::LOW << rhs.val_);
 			return *this;
 		}
 
-		inline OpSet& operator+=(Rh rhs) {
+		inline RegSet& operator+=(Rh rhs) {
 			group1_ |= ((uint64_t) Mask::HIGH << (rhs.val_-4));
 			return *this;
 		}
 
-		inline OpSet& operator+=(Rb rhs) {
+		inline RegSet& operator+=(Rb rhs) {
 			group1_ |= ((uint64_t) Mask::LOW << rhs.val_);
 			return *this;
 		}
 
-		inline OpSet& operator+=(R16 rhs) {
+		inline RegSet& operator+=(R16 rhs) {
 			group1_ |= ((uint64_t) Mask::WORD << rhs.val_);
 			return *this;
 		}
 
-		inline OpSet& operator+=(R32 rhs) {
+		inline RegSet& operator+=(R32 rhs) {
 			group1_ |= ((uint64_t) Mask::DOUBLE << rhs.val_);
 			return *this;
 		}
 
-		inline OpSet& operator+=(R64 rhs) {
+		inline RegSet& operator+=(R64 rhs) {
 			group1_ |= ((uint64_t) Mask::QUAD << rhs.val_);
 			return *this;
 		}
 
-		inline OpSet& operator+=(Xmm rhs) {
+		inline RegSet& operator+=(Xmm rhs) {
 			group2_ |= ((uint64_t) Mask::XMM << rhs.val_);
 			return *this;
 		}
 
-		inline OpSet& operator+=(Ymm rhs) {
+		inline RegSet& operator+=(Ymm rhs) {
 			group2_ |= ((uint64_t) Mask::YMM << rhs.val_);
 			return *this;
 		}
 
-		inline OpSet& operator+=(Mm rhs) {
+		inline RegSet& operator+=(Mm rhs) {
 			group2_ |= ((uint64_t) Mask::MM << rhs.val_);
 			return *this;
 		}
 
-		inline OpSet& operator+=(St rhs) {
+		inline RegSet& operator+=(St rhs) {
 			group2_ |= ((uint64_t) Mask::ST << rhs.val_);
 			return *this;
 		}
 
-		inline OpSet& operator+=(Sreg rhs) {
+		inline RegSet& operator+=(Sreg rhs) {
 			group2_ |= ((uint64_t) Mask::SREG << rhs.val_);
 			return *this;
 		}
 
-		inline OpSet& operator+=(FpuData rhs) {
+		inline RegSet& operator+=(FpuData rhs) {
 			group2_ |= ((uint64_t) Mask::DATA << rhs.val_);
 			return *this;
 		}
 
-		inline OpSet& operator+=(FpuInstruction rhs) {
+		inline RegSet& operator+=(FpuInstruction rhs) {
 			group2_ |= ((uint64_t) Mask::INSTR << rhs.val_);
 			return *this;
 		}
 
-		inline OpSet& operator+=(FpuOpcode rhs) {
+		inline RegSet& operator+=(FpuOpcode rhs) {
 			group2_ |= ((uint64_t) Mask::OPCODE << rhs.val_);
 			return *this;
 		}
 
-		inline OpSet& operator+=(Rip rhs) {
+		inline RegSet& operator+=(Rip rhs) {
 			group2_ |= ((uint64_t) Mask::RIP << rhs.val_);
 			return *this;
 		}
 
-		inline OpSet& operator+=(Eflags rhs) {
+		inline RegSet& operator+=(Eflags rhs) {
 			group3_ |= ((uint64_t) Mask::EFLAG << rhs.index());
 			return *this;
 		}
 
-		inline OpSet& operator+=(FpuControl rhs) {
+		inline RegSet& operator+=(FpuControl rhs) {
 			group3_ |= ((uint64_t) Mask::CONTROL << rhs.index());
 			return *this;
 		}
 
-		inline OpSet& operator+=(FpuStatus rhs) {
+		inline RegSet& operator+=(FpuStatus rhs) {
 			group3_ |= ((uint64_t) Mask::STATUS << rhs.index());
 			return *this;
 		}
 
-		inline OpSet& operator+=(FpuTag rhs) {
+		inline RegSet& operator+=(FpuTag rhs) {
 			group4_ |= ((uint64_t) Mask::TAG << rhs.index());
 			return *this;
 		}
 
-		inline OpSet& operator+=(Mxcsr rhs) {
+		inline RegSet& operator+=(Mxcsr rhs) {
 			group4_ |= ((uint64_t) Mask::MXCSR << rhs.index());
 			return *this;
 		}
 
-		OpSet& operator+=(const M& rhs);
+		RegSet& operator+=(const M& rhs);
 
 		// Queries
 

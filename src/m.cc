@@ -16,7 +16,7 @@ limitations under the License.
 
 #include "src/m.h"
 
-#include "src/op_set.h"
+#include "src/reg_set.h"
 
 using namespace std;
 
@@ -124,7 +124,7 @@ void M::write_intel(ostream& os) const {
 	os << "]";
 }
 
-void M::insert_in(OpSet& os, bool promote) const {
+void M::insert_in(RegSet& os, bool promote) const {
 	os += *this;
 }
 

@@ -16,7 +16,7 @@ limitations under the License.
 
 #include "src/ymm.h"
 
-#include "src/op_set.h"
+#include "src/reg_set.h"
 
 #include <cassert>
 
@@ -38,7 +38,7 @@ void Ymm::write_intel(ostream& os) const {
 	os << "ymm" << dec << val_;
 }
 
-void Ymm::insert_in(OpSet& os, bool promote) const {
+void Ymm::insert_in(RegSet& os, bool promote) const {
 	os += *this;
 }
 

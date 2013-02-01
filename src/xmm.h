@@ -39,7 +39,7 @@ class Xmm : public AtomicOperand {
 		inline Xmm(uint64_t val) : AtomicOperand{val} { } 
 	private:
 		virtual OpType type() const;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
+		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
 /** The XMM register XMM0. */

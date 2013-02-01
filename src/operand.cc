@@ -22,7 +22,7 @@ Operand::~Operand() {
 	// Does nothing.
 }	
 
-void Operand::insert_in(OpSet& os, bool promote) const {
+void Operand::insert_in(RegSet& os, bool promote) const {
 	// Does nothing.
 }
 

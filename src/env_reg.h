@@ -23,7 +23,7 @@ namespace x64asm {
 
 /** An environment register. */
 class EnvReg {
-	friend class OpSet;
+	friend class RegSet;
 	public:
 		inline EnvReg(uint64_t val) : val_{val} { }
 		virtual ~EnvReg() = 0;

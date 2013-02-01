@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "src/op_set.h"
+#include "src/reg_set.h"
 
 using namespace std;
 
 namespace x64asm {
 
-OpSet& OpSet::operator+=(const M& rhs) {
+RegSet& RegSet::operator+=(const M& rhs) {
 	if ( rhs.get_addr_or() ) {
 		if ( rhs.contains_base() )
 			*this += *((R32*)rhs.get_base());

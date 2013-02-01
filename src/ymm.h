@@ -37,7 +37,7 @@ class Ymm : public AtomicOperand {
 	private:
 		inline Ymm(uint64_t val) : AtomicOperand{val} { } 
 		virtual OpType type() const;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
+		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
 } // namespace x64asm

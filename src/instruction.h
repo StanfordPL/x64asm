@@ -24,9 +24,9 @@ limitations under the License.
 
 #include "src/opcode.h"
 #include "src/operand.h"
-#include "src/op_set.h"
 #include "src/op_type.h"
 #include "src/properties.h"
+#include "src/reg_set.h"
 
 namespace x64asm {
 
@@ -115,64 +115,64 @@ class Instruction {
 			return is_uncond_jump_[get_opcode()];
 		}
 
-		inline const OpSet& implicit_must_read_set() const {
+		inline const RegSet& implicit_must_read_set() const {
 			assert((size_t)get_opcode() < implicit_must_read_set_.size());
 			return implicit_must_read_set_[get_opcode()];
 		}
 
-		inline const OpSet& implicit_maybe_read_set() const {
+		inline const RegSet& implicit_maybe_read_set() const {
 			assert((size_t)get_opcode() < implicit_maybe_read_set_.size());
 			return implicit_maybe_read_set_[get_opcode()];
 		}
 
-		inline const OpSet& implicit_must_write_set() const {
+		inline const RegSet& implicit_must_write_set() const {
 			assert((size_t)get_opcode() < implicit_must_write_set_.size());
 			return implicit_must_write_set_[get_opcode()];
 		}
 
-		inline const OpSet& implicit_maybe_write_set() const {
+		inline const RegSet& implicit_maybe_write_set() const {
 			assert((size_t)get_opcode() < implicit_maybe_write_set_.size());
 			return implicit_maybe_write_set_[get_opcode()];
 		}
 
-		inline const OpSet& implicit_must_undef_set() const {
+		inline const RegSet& implicit_must_undef_set() const {
 			assert((size_t)get_opcode() < implicit_must_undef_set_.size());
 			return implicit_must_undef_set_[get_opcode()];
 		}
 
-		inline const OpSet& implicit_maybe_undef_set() const {
+		inline const RegSet& implicit_maybe_undef_set() const {
 			assert((size_t)get_opcode() < implicit_maybe_undef_set_.size());
 			return implicit_maybe_undef_set_[get_opcode()];
 		}
 
-		OpSet explicit_must_read_set() const ;
-		OpSet explicit_maybe_read_set() const ;
-		OpSet explicit_must_write_set() const ;
-		OpSet explicit_maybe_write_set() const ;
-		OpSet explicit_must_undef_set() const ;
-		OpSet explicit_maybe_undef_set() const ;
+		RegSet explicit_must_read_set() const ;
+		RegSet explicit_maybe_read_set() const ;
+		RegSet explicit_must_write_set() const ;
+		RegSet explicit_maybe_write_set() const ;
+		RegSet explicit_must_undef_set() const ;
+		RegSet explicit_maybe_undef_set() const ;
 
-		inline OpSet must_read_set() const {
+		inline RegSet must_read_set() const {
 			return implicit_must_read_set() | explicit_must_read_set();
 		}
 
-		inline OpSet maybe_read_set() const {
+		inline RegSet maybe_read_set() const {
 			return implicit_maybe_read_set() | explicit_maybe_read_set();
 		}
 
-		inline OpSet must_write_set() const {
+		inline RegSet must_write_set() const {
 			return implicit_must_write_set() | explicit_must_write_set();
 		}
 
-		inline OpSet maybe_write_set() const {
+		inline RegSet maybe_write_set() const {
 			return implicit_maybe_write_set() | explicit_maybe_write_set();
 		}
 
-		inline OpSet must_undef_set() const {
+		inline RegSet must_undef_set() const {
 			return implicit_must_undef_set() | explicit_must_undef_set();
 		}
 
-		inline OpSet maybe_undef_set() const {
+		inline RegSet maybe_undef_set() const {
 			return implicit_maybe_undef_set() | explicit_maybe_undef_set();
 		}
 
@@ -193,12 +193,12 @@ class Instruction {
 		static std::vector<bool> is_jump_;
 		static std::vector<bool> is_cond_jump_;
 		static std::vector<bool> is_uncond_jump_;
-		static std::vector<OpSet> implicit_must_read_set_;
-		static std::vector<OpSet> implicit_maybe_read_set_;
-		static std::vector<OpSet> implicit_must_write_set_;
-		static std::vector<OpSet> implicit_maybe_write_set_;
-		static std::vector<OpSet> implicit_must_undef_set_;
-		static std::vector<OpSet> implicit_maybe_undef_set_;
+		static std::vector<RegSet> implicit_must_read_set_;
+		static std::vector<RegSet> implicit_maybe_read_set_;
+		static std::vector<RegSet> implicit_must_write_set_;
+		static std::vector<RegSet> implicit_maybe_write_set_;
+		static std::vector<RegSet> implicit_must_undef_set_;
+		static std::vector<RegSet> implicit_maybe_undef_set_;
 };
 
 } // namespace x64asm

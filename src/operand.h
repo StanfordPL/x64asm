@@ -24,7 +24,7 @@ limitations under the License.
 
 namespace x64asm {
 
-class OpSet;
+class RegSet;
 
 /** Base operand type. */
 class Operand {
@@ -36,14 +36,14 @@ class Operand {
 		virtual void write_intel(std::ostream& os) const = 0;
 	private:
 		virtual OpType type() const = 0;
-		virtual void insert_in(OpSet& os, bool promote = false) const;
+		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
 /** Atomic Operand Type. */
 class AtomicOperand : public Operand {
 	friend class Assembler;
 	friend class M;
-	friend class OpSet;
+	friend class RegSet;
 	public:
 		inline AtomicOperand(uint64_t val) : val_{val} { }
 		virtual ~AtomicOperand() = 0;

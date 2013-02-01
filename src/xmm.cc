@@ -16,7 +16,7 @@ limitations under the License.
 
 #include "src/xmm.h"
 
-#include "src/op_set.h"
+#include "src/reg_set.h"
 
 #include <cassert>
 
@@ -42,7 +42,7 @@ OpType Xmm::type() const {
 	return OpType::XMM;
 }
 
-void Xmm::insert_in(OpSet& os, bool promote) const {
+void Xmm::insert_in(RegSet& os, bool promote) const {
 	if ( promote )
 		os += parent();
 	else

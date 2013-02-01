@@ -16,7 +16,7 @@ limitations under the License.
 
 #include "src/mm.h"
 
-#include "src/op_set.h"
+#include "src/reg_set.h"
 
 #include <cassert>
 
@@ -38,7 +38,7 @@ void Mm::write_intel(ostream& os) const {
 	os << "mm" << dec << val_;
 }
 
-void Mm::insert_in(OpSet& os, bool promote) const {
+void Mm::insert_in(RegSet& os, bool promote) const {
 	os += *this;
 }
 
