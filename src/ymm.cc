@@ -24,16 +24,8 @@ using namespace std;
 
 namespace x64asm {
 
-OpType Ymm::type() const {
-	return OpType::YMM;
-}
-
 bool Ymm::check() const {
 	return val_ < 16;
-}
-
-void Ymm::insert_in(OpSet& os, bool promote) const {
-	os += *this;
 }
 
 void Ymm::write_att(ostream& os) const {
@@ -44,6 +36,14 @@ void Ymm::write_att(ostream& os) const {
 void Ymm::write_intel(ostream& os) const {
 	assert(check());
 	os << "ymm" << dec << val_;
+}
+
+void Ymm::insert_in(OpSet& os, bool promote) const {
+	os += *this;
+}
+
+OpType Ymm::type() const {
+	return OpType::YMM;
 }
 
 } // namespace x64asm

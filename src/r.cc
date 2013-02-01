@@ -32,19 +32,8 @@ R64 R::parent() const {
 	return R64{val_};
 }
 
-OpType Rl::type() const {
-	return OpType::RL;
-}
-
 bool Rl::check() const {
 	return val_ < 4;
-}
-
-void Rl::insert_in(OpSet& os, bool promote) const {
-	if ( promote )
-		os += parent();
-	else
-		os += *this;
 }
 
 void Rl::write_att(ostream& os) const {
@@ -63,19 +52,19 @@ void Rl::write_intel(ostream& os) const {
 	}
 }
 
-OpType Rh::type() const {
-	return OpType::RH;
-}
-
-bool Rh::check() const {
-	return val_ >= 4 && val_ < 8;
-}
-
-void Rh::insert_in(OpSet& os, bool promote) const {
+void Rl::insert_in(OpSet& os, bool promote) const {
 	if ( promote )
 		os += parent();
 	else
 		os += *this;
+}
+
+OpType Rl::type() const {
+	return OpType::RL;
+}
+
+bool Rh::check() const {
+	return val_ >= 4 && val_ < 8;
 }
 
 void Rh::write_att(ostream& os) const {
@@ -94,23 +83,23 @@ void Rh::write_intel(ostream& os) const {
 	}
 }
 
-R64 Rh::parent() const {
-	return R64{val_-4};
-}
-
-OpType Rb::type() const {
-	return OpType::RB;
-}
-
-bool Rb::check() const {
-	return val_ >= 4 && val_ < 16;
-}
-
-void Rb::insert_in(OpSet& os, bool promote) const {
+void Rh::insert_in(OpSet& os, bool promote) const {
 	if ( promote )
 		os += parent();
 	else
 		os += *this;
+}
+
+OpType Rh::type() const {
+	return OpType::RH;
+}
+
+R64 Rh::parent() const {
+	return R64{val_-4};
+}
+
+bool Rb::check() const {
+	return val_ >= 4 && val_ < 16;
 }
 
 void Rb::write_att(ostream& os) const {
@@ -137,31 +126,31 @@ void Rb::write_intel(ostream& os) const {
 	}
 }
 
-OpType Al::type() const {
-	return OpType::AL;
+void Rb::insert_in(OpSet& os, bool promote) const {
+	if ( promote )
+		os += parent();
+	else
+		os += *this;
+}
+
+OpType Rb::type() const {
+	return OpType::RB;
 }
 
 bool Al::check() const {
 	return val_ == 0;
 }
 
-OpType Cl::type() const {
-	return OpType::CL;
+OpType Al::type() const {
+	return OpType::AL;
 }
 
 bool Cl::check() const {
 	return val_ == 0;
 }
 
-OpType R16::type() const {
-	return OpType::R_16;
-}
-
-void R16::insert_in(OpSet& os, bool promote) const {
-	if ( promote )
-		os += parent();
-	else
-		os += *this;
+OpType Cl::type() const {
+	return OpType::CL;
 }
 
 bool R16::check() const {
@@ -196,11 +185,26 @@ void R16::write_intel(ostream& os) const {
 	}
 }
 
+OpType R16::type() const {
+	return OpType::R_16;
+}
+
+void R16::insert_in(OpSet& os, bool promote) const {
+	if ( promote )
+		os += parent();
+	else
+		os += *this;
+}
+
+bool Ax::check() const {
+	return val_ == 0;
+}
+
 OpType Ax::type() const {
 	return OpType::AX;
 }
 
-bool Ax::check() const {
+bool Dx::check() const {
 	return val_ == 0;
 }
 
@@ -208,23 +212,8 @@ OpType Dx::type() const {
 	return OpType::DX;
 }
 
-bool Dx::check() const {
-	return val_ == 0;
-}
-
 AddrR::~AddrR() {
 	// Does nothing.
-}
-
-OpType R32::type() const {
-	return OpType::R_32;
-}
-
-void R32::insert_in(OpSet& os, bool promote) const {
-	if ( promote )
-		os += parent();
-	else
-		os += *this;
 }
 
 bool R32::check() const {
@@ -259,23 +248,23 @@ void R32::write_intel(ostream& os) const {
 	}
 }
 
-OpType Eax::type() const {
-	return OpType::EAX;
+OpType R32::type() const {
+	return OpType::R_32;
+}
+
+void R32::insert_in(OpSet& os, bool promote) const {
+	if ( promote )
+		os += parent();
+	else
+		os += *this;
 }
 
 bool Eax::check() const {
 	return val_ == 0;
 }
 
-OpType R64::type() const {
-	return OpType::R_64;
-}
-
-void R64::insert_in(OpSet& os, bool promote) const {
-	if ( promote )
-		os += parent();
-	else
-		os += *this;
+OpType Eax::type() const {
+	return OpType::EAX;
 }
 
 bool R64::check() const {
@@ -310,12 +299,23 @@ void R64::write_intel(ostream& os) const {
 	}
 }
 
-OpType Rax::type() const {
-	return OpType::RAX;
+OpType R64::type() const {
+	return OpType::R_64;
+}
+
+void R64::insert_in(OpSet& os, bool promote) const {
+	if ( promote )
+		os += parent();
+	else
+		os += *this;
 }
 
 bool Rax::check() const {
 	return val_ == 0;
+}
+
+OpType Rax::type() const {
+	return OpType::RAX;
 }
 
 } // namespace x64asm

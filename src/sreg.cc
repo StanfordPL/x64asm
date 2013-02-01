@@ -22,10 +22,6 @@ using namespace std;
 
 namespace x64asm {
 
-OpType Sreg::type() const {
-	return OpType::SREG;
-}
-
 bool Sreg::check() const {
 	return val_ < 6;
 }
@@ -48,20 +44,24 @@ void Sreg::write_intel(ostream& os) const {
 	}
 }
 
-OpType Fs::type() const {
-	return OpType::FS;
+OpType Sreg::type() const {
+	return OpType::SREG;
 }
 
 bool Fs::check() const {
 	return val_ == 4;
 }
 
-OpType Gs::type() const {
-	return OpType::GS;
+OpType Fs::type() const {
+	return OpType::FS;
 }
 
 bool Gs::check() const {
 	return val_ == 5;
+}
+
+OpType Gs::type() const {
+	return OpType::GS;
 }
 
 } // namespace x64asm

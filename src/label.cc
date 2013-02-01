@@ -24,15 +24,16 @@ bool Label::check() const {
 	return true;
 }
 
-OpType Label::type() const {
-	return OpType::LABEL;
-}
-
 void Label::write_att(ostream& os) const {
-	os << ".LABEL_" << dec << val_;
+	write_intel(os);
 }
 
 void Label::write_intel(ostream& os) const {
+	os << ".LABEL_" << dec << val_;
+}
+
+OpType Label::type() const {
+	return OpType::LABEL;
 }
 
 } // namespace x64asm

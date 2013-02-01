@@ -236,8 +236,6 @@ class Assembler {
 
 			vex(mmmmm, l, pp, w, vvvv);
 		}
-
-		void debug(std::ostream& os, const Code& c, bool att);
 };
 
 } // namespace x64asm

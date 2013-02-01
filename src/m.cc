@@ -50,10 +50,6 @@ bool M::check() const {
 	return true;
 }
 
-void M::insert_in(OpSet& os, bool promote) const {
-	os += *this;
-}
-
 void M::write_att(ostream& os) const {
 	if ( contains_seg() ) {
 		get_seg()->write_att(os);
@@ -126,6 +122,10 @@ void M::write_intel(ostream& os) const {
 		get_disp()->write_intel(os);
 	}
 	os << "]";
+}
+
+void M::insert_in(OpSet& os, bool promote) const {
+	os += *this;
 }
 
 void M8::write_intel_width(ostream& os) const {
