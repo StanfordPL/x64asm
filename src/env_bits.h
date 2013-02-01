@@ -21,6 +21,7 @@ limitations under the License.
 
 namespace x64asm {
 
+/** An environment register bit. */
 class EnvBits {
 	public:
 		inline EnvBits(size_t index, size_t width) 

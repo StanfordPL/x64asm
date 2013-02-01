@@ -21,6 +21,7 @@ limitations under the License.
 
 namespace x64asm {
 
+/** An environment register. */
 class EnvReg {
 	friend class OpSet;
 	public:
@@ -33,6 +34,7 @@ class EnvReg {
 		uint64_t val_;
 };
 
+/** The FPU Data register. */
 class FpuData : public EnvReg {
 	public:
 		inline FpuData() : EnvReg{0} { }
@@ -40,6 +42,7 @@ class FpuData : public EnvReg {
 		virtual void write_intel(std::ostream& os) const;
 };
 
+/** The FPU Instruction register. */
 class FpuInstruction : public EnvReg {
 	public:
 		inline FpuInstruction() : EnvReg{0} { }
@@ -47,6 +50,7 @@ class FpuInstruction : public EnvReg {
 		virtual void write_intel(std::ostream& os) const;
 };
 
+/** The FPU Opcode regiter. */
 class FpuOpcode : public EnvReg {
 	public:
 		inline FpuOpcode() : EnvReg{0} { }
@@ -54,6 +58,7 @@ class FpuOpcode : public EnvReg {
 		virtual void write_intel(std::ostream& os) const;
 };
 
+/** The instruction pointer register. */
 class Rip : public EnvReg {
 	public:
 		inline Rip() : EnvReg{0} { }
