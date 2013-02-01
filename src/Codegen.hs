@@ -882,7 +882,7 @@ must_read_row i
   | "???" `elem` (implicit_reads i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (irs i)))
     where irs i = filter is_must $ map qualify_imp $ implicit_reads i
-          val s = ".add(" ++ (low s) ++ ")"
+          val s = "+" ++ (low s) 
 
 -- Converts all instructions to implicit_read table
 must_read_table :: [Instr] -> String
@@ -894,7 +894,7 @@ maybe_read_row i
   | "???" `elem` (implicit_reads i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (irs i)))
     where irs i = map qualify_imp $ implicit_reads i
-          val s = ".add(" ++ (low s) ++ ")"
+          val s = "+" ++ (low s) 
 
 -- Converts all instructions to implicit_read table
 maybe_read_table :: [Instr] -> String
@@ -906,7 +906,7 @@ must_write_row i
   | "???" `elem` (implicit_writes i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (iws i)))
     where iws i = filter is_must $ map qualify_imp $ implicit_writes i
-          val s = ".add(" ++ (low s) ++ ")"
+          val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_write table
 must_write_table :: [Instr] -> String
@@ -918,7 +918,7 @@ maybe_write_row i
   | "???" `elem` (implicit_writes i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (iws i)))
     where iws i = map qualify_imp $ implicit_writes i
-          val s = ".add(" ++ (low s) ++ ")"
+          val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_write table
 maybe_write_table :: [Instr] -> String
@@ -930,7 +930,7 @@ must_undef_row i
   | "???" `elem` (implicit_undefs i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (ius i)))
     where ius i = filter is_must $ map qualify_imp $ implicit_undefs i
-          val s = ".add(" ++ (low s) ++ ")"
+          val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_undef table
 must_undef_table :: [Instr] -> String
@@ -942,7 +942,7 @@ maybe_undef_row i
   | "???" `elem` (implicit_undefs i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (ius i)))
     where ius i = map qualify_imp $ implicit_undefs i
-          val s = ".add(" ++ (low s) ++ ")"
+          val s = "+" ++ (low s)
 
 -- Converts all instructions to implicit_undef table
 maybe_undef_table :: [Instr] -> String
