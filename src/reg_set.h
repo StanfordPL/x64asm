@@ -33,6 +33,7 @@ namespace x64asm {
 
 /** A compact bit set representation for registers. */
 class RegSet {
+	friend class Instruction;
 	private:
 		enum class Mask : uint64_t {
 			// Group 1
@@ -80,6 +81,11 @@ class RegSet {
 		}
 
 	public:	
+		inline RegSet() 
+				: group1_{(uint64_t)Mask::EMPTY}, group2_{(uint64_t)Mask::EMPTY}, 
+			    group3_{(uint64_t)Mask::EMPTY}, group4_{(uint64_t)Mask::EMPTY} {
+		}
+
 		// Static Constants
 		static inline RegSet empty() {
 			return RegSet(Mask::EMPTY, Mask::EMPTY, Mask::EMPTY, Mask::EMPTY);
@@ -458,6 +464,12 @@ class RegSet {
 		uint64_t group2_;
 		uint64_t group3_;
 		uint64_t group4_;
+
+		template <typename T>
+		RegSet& add(T rhs) {
+			*this += rhs;
+			return *this;
+		}
 };
 
 } // namespace x64asm

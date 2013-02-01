@@ -417,16 +417,24 @@ properties i = let x = map trim $ (splitOn ",") $ property i in
 
 -- Expand shorthands
 expand_implicit :: String -> [String]
-expand_implicit "EFLAGS" = ["CF","PF","AF","ZF","SF","SF","TF","IF","DF","OF",
-                            "IOPL","NT","RF","VM","AC","VIF","VIP","ID"]
 expand_implicit "ST(*)"  = ["ST(0)","ST(1)","ST(2)","ST(3)","ST(4)","ST(5)",
                             "ST(6)","ST(7)"]
+expand_implicit "TAG(*)" = ["TAG(0)","TAG(1)","TAG(2)","TAG(3)","TAG(4)",
+                            "TAG(5)","TAG(6)","TAG(7)"]
 expand_implicit "MM*"    = ["MM0","MM1","MM2","MM3","MM4","MM5","MM6","MM7"]
 expand_implicit "XMM*"   = ["XMM0","XMM1","XMM2","XMM3","XMM4","XMM5","XMM6",
                             "XMM7","XMM8","XMM9","XMM10","XMM11","XMM12",
                             "XMM13","XMM14","XMM15"]
-expand_implicit "STATUS" = ["IE","DE","ZE","OE","UE","PE","SF","ES","C0","C1",
-                            "C2","TOP","C3","B"]
+expand_implicit "E.*"    = ["E.CF","E.PF","E.AF","E.ZF","E.SF","E.SF","E.TF",
+                            "E.IF","E.DF","E.OF","E.IOPL","E.NT","E.RF","E.VM",
+                            "E.AC","E.VIF","E.VIP","E.ID"]
+expand_implicit "S.*"    = ["S.IE","S.DE","S.ZE","S.OE","S.UE","S.PE","S.SF",
+                            "S.ES","S.C0","S.C1","S.C2","S.TOP","S.C3","S.B"]
+expand_implicit "M.*"    = ["M.IE","M.DE","M.ZE","M.OE","M.UE","M.PE","M.DAZ",
+                            "M.IM","M.DM","M.ZM","M.OM","M.UM","M.PM","M.RC",
+                            "M.FZ"]
+expand_implicit "C.*"    = ["C.IM","C.DM","C.ZM","C.OM","C.UM","C.PM","C.PM",
+                            "C.PC","C.RC","C.X"]
 expand_implicit s = [s]
 
 -- Extract implicit reads
@@ -851,9 +859,22 @@ is_must o = any isUpper o
 
 -- Converts an operand to its fully qualified name
 qualify_imp :: String -> String
-qualify_imp s
-  | s == "IF" || s == "if" = "eflags::" ++ s ++ "_"
-  | otherwise = s
+qualify_imp s = rep "FPUDATA" "fpu_data" $
+                rep "FPUINSTR" "fpu_instruction" $
+                rep "FPUOPCODE" "fpu_opcode" $
+                rep "ST\\((.)\\)" "ST\\1" $
+                rep "st\\((.)\\)" "st\\1" $
+                rep "TAG\\((.)\\)" "TAG\\1" $
+                rep "tag\\((.)\\)" "tag\\1" $
+                rep "E\\." "eflags_" $
+                rep "e\\." "eflags_" $
+                rep "C\\." "fpu_control_" $
+                rep "c\\." "fpu_control_" $ 
+                rep "S\\." "fpu_status_" $
+                rep "s\\." "fpu_status_" $
+                rep "M\\." "mxcsr_" $
+                rep "m\\." "mxcsr_" $ s
+  where rep x y s = subRegex (mkRegex x) s y
 
 -- Converts an instruction to implicit_read table row
 must_read_row :: Instr -> String
@@ -861,7 +882,7 @@ must_read_row i
   | "???" `elem` (implicit_reads i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (irs i)))
     where irs i = filter is_must $ map qualify_imp $ implicit_reads i
-          val s = "+" ++ (low s)
+          val s = ".add(" ++ (low s) ++ ")"
 
 -- Converts all instructions to implicit_read table
 must_read_table :: [Instr] -> String
@@ -873,7 +894,7 @@ maybe_read_row i
   | "???" `elem` (implicit_reads i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (irs i)))
     where irs i = map qualify_imp $ implicit_reads i
-          val s = "+" ++ (low s)
+          val s = ".add(" ++ (low s) ++ ")"
 
 -- Converts all instructions to implicit_read table
 maybe_read_table :: [Instr] -> String
@@ -885,7 +906,7 @@ must_write_row i
   | "???" `elem` (implicit_writes i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (iws i)))
     where iws i = filter is_must $ map qualify_imp $ implicit_writes i
-          val s = "+" ++ (low s)
+          val s = ".add(" ++ (low s) ++ ")"
 
 -- Converts all instructions to implicit_write table
 must_write_table :: [Instr] -> String
@@ -897,7 +918,7 @@ maybe_write_row i
   | "???" `elem` (implicit_writes i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (iws i)))
     where iws i = map qualify_imp $ implicit_writes i
-          val s = "+" ++ (low s)
+          val s = ".add(" ++ (low s) ++ ")"
 
 -- Converts all instructions to implicit_write table
 maybe_write_table :: [Instr] -> String
@@ -909,7 +930,7 @@ must_undef_row i
   | "???" `elem` (implicit_undefs i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (ius i)))
     where ius i = filter is_must $ map qualify_imp $ implicit_undefs i
-          val s = "+" ++ (low s)
+          val s = ".add(" ++ (low s) ++ ")"
 
 -- Converts all instructions to implicit_undef table
 must_undef_table :: [Instr] -> String
@@ -921,7 +942,7 @@ maybe_undef_row i
   | "???" `elem` (implicit_undefs i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (ius i)))
     where ius i = map qualify_imp $ implicit_undefs i
-          val s = "+" ++ (low s)
+          val s = ".add(" ++ (low s) ++ ")"
 
 -- Converts all instructions to implicit_undef table
 maybe_undef_table :: [Instr] -> String
@@ -1384,4 +1405,3 @@ main = do is <- parse_instrs "x86.csv"
           write_html is
           write_code is
           write_test_files is					
-          mapM_ print $ uniq_operands is

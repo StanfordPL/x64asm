@@ -17,6 +17,7 @@ limitations under the License.
 #ifndef X64ASM_SRC_INSTRUCTION_H
 #define X64ASM_SRC_INSTRUCTION_H
 
+#include <array>
 #include <cassert>
 #include <initializer_list>
 #include <iostream>
@@ -185,20 +186,20 @@ class Instruction {
 		Opcode opcode_;
 		std::vector<const Operand*> operands_;
 
-		static std::vector<size_t> arity_;
-		static std::vector<std::vector<Properties>> properties_;
-		static std::vector<std::vector<OpType>> type_;
-		static std::vector<bool> is_return_;
-		static std::vector<bool> is_nop_;
-		static std::vector<bool> is_jump_;
-		static std::vector<bool> is_cond_jump_;
-		static std::vector<bool> is_uncond_jump_;
-		static std::vector<RegSet> implicit_must_read_set_;
-		static std::vector<RegSet> implicit_maybe_read_set_;
-		static std::vector<RegSet> implicit_must_write_set_;
-		static std::vector<RegSet> implicit_maybe_write_set_;
-		static std::vector<RegSet> implicit_must_undef_set_;
-		static std::vector<RegSet> implicit_maybe_undef_set_;
+		static std::array<size_t, 3257> arity_;
+		static std::array<std::vector<Properties>, 3257> properties_;
+		static std::array<std::vector<OpType>, 3257> type_;
+		static std::array<bool, 3257> is_return_;
+		static std::array<bool, 3257> is_nop_;
+		static std::array<bool, 3257> is_jump_;
+		static std::array<bool, 3257> is_cond_jump_;
+		static std::array<bool, 3257> is_uncond_jump_;
+		static std::array<RegSet, 3257> implicit_must_read_set_;
+		static std::array<RegSet, 3257> implicit_maybe_read_set_;
+		static std::array<RegSet, 3257> implicit_must_write_set_;
+		static std::array<RegSet, 3257> implicit_maybe_write_set_;
+		static std::array<RegSet, 3257> implicit_must_undef_set_;
+		static std::array<RegSet, 3257> implicit_maybe_undef_set_;
 };
 
 } // namespace x64asm
