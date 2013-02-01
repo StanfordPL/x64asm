@@ -17,19 +17,14 @@ limitations under the License.
 #ifndef X64ASM_SRC_CONSTANTS_H
 #define X64ASM_SRC_CONSTANTS_H
 
-#include "src/control.h"
-#include "src/cr.h"
-#include "src/dr.h"
-#include "src/eflags.h"
+#include "src/env_bits.h"
+#include "src/env_reg.h"
 #include "src/imm.h"
 #include "src/mm.h"
 #include "src/modifier.h"
-#include "src/mxcsr.h"
 #include "src/r.h"
 #include "src/sreg.h"
 #include "src/st.h"
-#include "src/status.h"
-#include "src/tag.h"
 #include "src/xmm.h"
 #include "src/ymm.h"
 
@@ -39,48 +34,78 @@ namespace x64asm {
 
 class Constants {
 	public:
-		static inline Control control_im() { return Control{0}; }
-		static inline Control control_dm() { return Control{1}; }
-		static inline Control control_zm() { return Control{2}; }
-		static inline Control control_om() { return Control{3}; }
-		static inline Control control_um() { return Control{4}; }
-		static inline Control control_pm() { return Control{5}; }
-		static inline Control control_pc() { return Control{9}; }
-		static inline Control control_rc() { return Control{11}; }
-		static inline Control control_x() { return Control{12}; }
+		static inline FpuControl fpu_control_im() { return FpuControl{0,1}; }
+		static inline FpuControl fpu_control_dm() { return FpuControl{1,1}; }
+		static inline FpuControl fpu_control_zm() { return FpuControl{2,1}; }
+		static inline FpuControl fpu_control_om() { return FpuControl{3,1}; }
+		static inline FpuControl fpu_control_um() { return FpuControl{4,1}; }
+		static inline FpuControl fpu_control_pm() { return FpuControl{5,1}; }
+		static inline FpuControl fpu_control_pc() { return FpuControl{9,2}; }
+		static inline FpuControl fpu_control_rc() { return FpuControl{11,2}; }
+		static inline FpuControl fpu_control_x()  { return FpuControl{12,1}; }
 
-		static inline Cr0234 cr0() { return Cr0234{0}; }
-		static inline Cr0234 cr2() { return Cr0234{2}; }
-		static inline Cr0234 cr3() { return Cr0234{3}; }
-		static inline Cr0234 cr4() { return Cr0234{4}; }
-		static inline Cr8 cr8() { return Cr8{}; }
-		
-		static inline Dr dr0() { return Dr{0}; }
-		static inline Dr dr1() { return Dr{1}; }
-		static inline Dr dr2() { return Dr{2}; }
-		static inline Dr dr3() { return Dr{3}; }
-		static inline Dr dr4() { return Dr{4}; }
-		static inline Dr dr5() { return Dr{5}; }
-		static inline Dr dr6() { return Dr{6}; }
-		static inline Dr dr7() { return Dr{7}; }
+		static inline Eflags eflags_cf()   { return Eflags{0,1}; }
+		static inline Eflags eflags_pf()   { return Eflags{2,1}; }
+		static inline Eflags eflags_af()   { return Eflags{4,1}; }
+		static inline Eflags eflags_zf()   { return Eflags{6,1}; }
+		static inline Eflags eflags_sf()   { return Eflags{7,1}; }
+		static inline Eflags eflags_tf()   { return Eflags{8,1}; }
+		static inline Eflags eflags_if()   { return Eflags{9,1}; }
+		static inline Eflags eflags_df()   { return Eflags{10,1}; }
+		static inline Eflags eflags_of()   { return Eflags{11,1}; }
+		static inline Eflags eflags_iopl() { return Eflags{13,1}; }
+		static inline Eflags eflags_nt()   { return Eflags{14,1}; }
+		static inline Eflags eflags_rf()   { return Eflags{16,1}; }
+		static inline Eflags eflags_vm()   { return Eflags{17,1}; }
+		static inline Eflags eflags_ac()   { return Eflags{18,1}; }
+		static inline Eflags eflags_vif()  { return Eflags{19,1}; }
+		static inline Eflags eflags_vip()  { return Eflags{20,1}; }
+		static inline Eflags eflags_id()   { return Eflags{21,1}; }
 
-		static inline Eflags eflags_cf()   { return Eflags{0}; }
-		static inline Eflags eflags_pf()   { return Eflags{2}; }
-		static inline Eflags eflags_af()   { return Eflags{4}; }
-		static inline Eflags eflags_zf()   { return Eflags{6}; }
-		static inline Eflags eflags_sf()   { return Eflags{7}; }
-		static inline Eflags eflags_tf()   { return Eflags{8}; }
-		static inline Eflags eflags_if_()  { return Eflags{9}; }
-		static inline Eflags eflags_df()   { return Eflags{10}; }
-		static inline Eflags eflags_of()   { return Eflags{11}; }
-		static inline Eflags eflags_iopl() { return Eflags{13}; }
-		static inline Eflags eflags_nt()   { return Eflags{14}; }
-		static inline Eflags eflags_rf()   { return Eflags{16}; }
-		static inline Eflags eflags_vm()   { return Eflags{17}; }
-		static inline Eflags eflags_ac()   { return Eflags{18}; }
-		static inline Eflags eflags_vif()  { return Eflags{19}; }
-		static inline Eflags eflags_vip()  { return Eflags{20}; }
-		static inline Eflags eflags_id()   { return Eflags{21}; }
+		static inline Mxcsr mxcsr_ie()  { return Mxcsr{0,1}; }
+		static inline Mxcsr mxcsr_de()  { return Mxcsr{1,1}; }
+		static inline Mxcsr mxcsr_ze()  { return Mxcsr{2,1}; }
+		static inline Mxcsr mxcsr_oe()  { return Mxcsr{3,1}; }
+		static inline Mxcsr mxcsr_ue()  { return Mxcsr{4,1}; }
+		static inline Mxcsr mxcsr_pe()  { return Mxcsr{5,1}; }
+		static inline Mxcsr mxcsr_daz() { return Mxcsr{6,1}; }
+		static inline Mxcsr mxcsr_im()  { return Mxcsr{7,1}; }
+		static inline Mxcsr mxcsr_dm()  { return Mxcsr{8,1}; }
+		static inline Mxcsr mxcsr_zm()  { return Mxcsr{9,1}; }
+		static inline Mxcsr mxcsr_om()  { return Mxcsr{10,1}; }
+		static inline Mxcsr mxcsr_um()  { return Mxcsr{11,1}; }
+		static inline Mxcsr mxcsr_pm()  { return Mxcsr{12,1}; }
+		static inline Mxcsr mxcsr_rc()  { return Mxcsr{14,2}; }
+		static inline Mxcsr mxcsr_fz()  { return Mxcsr{15,1}; }
+
+		static inline FpuStatus fpu_status_ie()  { return FpuStatus{0,1}; }
+		static inline FpuStatus fpu_status_de()  { return FpuStatus{1,1}; }
+		static inline FpuStatus fpu_status_ze()  { return FpuStatus{2,1}; }
+		static inline FpuStatus fpu_status_oe()  { return FpuStatus{3,1}; }
+		static inline FpuStatus fpu_status_ue()  { return FpuStatus{4,1}; }
+		static inline FpuStatus fpu_status_pe()  { return FpuStatus{5,1}; }
+		static inline FpuStatus fpu_status_sf()  { return FpuStatus{6,1}; }
+		static inline FpuStatus fpu_status_es()  { return FpuStatus{7,1}; }
+		static inline FpuStatus fpu_status_c0()  { return FpuStatus{8,1}; }
+		static inline FpuStatus fpu_status_c1()  { return FpuStatus{9,1}; }
+		static inline FpuStatus fpu_status_c2()  { return FpuStatus{10,1}; }
+		static inline FpuStatus fpu_status_top() { return FpuStatus{13,3}; }
+		static inline FpuStatus fpu_status_c3()  { return FpuStatus{14,1}; }
+		static inline FpuStatus fpu_status_b()   { return FpuStatus{15,1}; }
+
+		static inline FpuTag tag0() { return FpuTag{1,2}; }
+		static inline FpuTag tag1() { return FpuTag{3,2}; }
+		static inline FpuTag tag2() { return FpuTag{5,2}; }
+		static inline FpuTag tag3() { return FpuTag{7,2}; }
+		static inline FpuTag tag4() { return FpuTag{9,2}; }
+		static inline FpuTag tag5() { return FpuTag{11,2}; }
+		static inline FpuTag tag6() { return FpuTag{13,2}; }
+		static inline FpuTag tag7() { return FpuTag{15,2}; }
+
+		static inline EnvReg rip() { return Rip{}; }
+		static inline EnvReg fpu_data() { return FpuData{}; }
+		static inline EnvReg fpu_instruction() { return FpuInstruction{}; }
+		static inline EnvReg fpu_opcode() { return FpuOpcode{}; }
 
 		static inline Zero zero() { return Zero{}; }
 		static inline One one() { return One{}; }
@@ -94,22 +119,6 @@ class Constants {
 		static inline Mm mm5() { return Mm{5}; }
 		static inline Mm mm6() { return Mm{6}; }
 		static inline Mm mm7() { return Mm{7}; }
-
-		static inline Mxcsr mxcsr_ie()  { return Mxcsr{0}; }
-		static inline Mxcsr mxcsr_de()  { return Mxcsr{1}; }
-		static inline Mxcsr mxcsr_ze()  { return Mxcsr{2}; }
-		static inline Mxcsr mxcsr_oe()  { return Mxcsr{3}; }
-		static inline Mxcsr mxcsr_ue()  { return Mxcsr{4}; }
-		static inline Mxcsr mxcsr_pe()  { return Mxcsr{5}; }
-		static inline Mxcsr mxcsr_daz() { return Mxcsr{6}; }
-		static inline Mxcsr mxcsr_im()  { return Mxcsr{7}; }
-		static inline Mxcsr mxcsr_dm()  { return Mxcsr{8}; }
-		static inline Mxcsr mxcsr_zm()  { return Mxcsr{9}; }
-		static inline Mxcsr mxcsr_om()  { return Mxcsr{10}; }
-		static inline Mxcsr mxcsr_um()  { return Mxcsr{11}; }
-		static inline Mxcsr mxcsr_pm()  { return Mxcsr{12}; }
-		static inline Mxcsr mxcsr_rc()  { return Mxcsr{14}; }
-		static inline Mxcsr mxcsr_fz()  { return Mxcsr{15}; }
 
 		static inline Pref66 pref_66()      { return Pref66{}; }
 		static inline PrefRexW pref_rex_w() { return PrefRexW{}; }
@@ -205,30 +214,6 @@ class Constants {
 		static inline St st6()  { return St{6}; }
 		static inline St st7()  { return St{7}; }
 
-		static inline Status status_ie()  { return Status{0}; }
-		static inline Status status_de()  { return Status{1}; }
-		static inline Status status_ze()  { return Status{2}; }
-		static inline Status status_oe()  { return Status{3}; }
-		static inline Status status_ue()  { return Status{4}; }
-		static inline Status status_pe()  { return Status{5}; }
-		static inline Status status_sf()  { return Status{6}; }
-		static inline Status status_es()  { return Status{7}; }
-		static inline Status status_c0()  { return Status{8}; }
-		static inline Status status_c1()  { return Status{9}; }
-		static inline Status status_c2()  { return Status{10}; }
-		static inline Status status_top() { return Status{13}; }
-		static inline Status status_c3()  { return Status{14}; }
-		static inline Status status_b()   { return Status{15}; }
-
-		static inline Tag tag0() { return Tag{0}; }
-		static inline Tag tag1() { return Tag{1}; }
-		static inline Tag tag2() { return Tag{2}; }
-		static inline Tag tag3() { return Tag{3}; }
-		static inline Tag tag4() { return Tag{4}; }
-		static inline Tag tag5() { return Tag{5}; }
-		static inline Tag tag6() { return Tag{6}; }
-		static inline Tag tag7() { return Tag{7}; }
-
 		static inline Xmm0 xmm0()  { return Xmm0{}; }
 		static inline Xmm xmm1()   { return Xmm{1}; } 
 		static inline Xmm xmm2()   { return Xmm{2}; } 
@@ -264,82 +249,94 @@ class Constants {
 		static inline Ymm ymm15() { return Ymm{15}; } 
 };
 
-namespace control {
+extern const FpuControl fpu_control_im;
+extern const FpuControl fpu_control_dm;
+extern const FpuControl fpu_control_zm;
+extern const FpuControl fpu_control_om;
+extern const FpuControl fpu_control_um;
+extern const FpuControl fpu_control_pm;
+extern const FpuControl fpu_control_pc;
+extern const FpuControl fpu_control_rc;
+extern const FpuControl fpu_control_x;
 
-extern const Control im;
-extern const Control dm;
-extern const Control zm;
-extern const Control om;
-extern const Control um;
-extern const Control pm;
-extern const Control pc;
-extern const Control rc;
-extern const Control x;
+extern const std::vector<FpuControl> fpu_control;
 
-extern const std::vector<Control> control;
-
-} // namespace control
-
-namespace cr {
-
-extern const Cr0234 cr0;
-extern const Cr0234 cr2;
-extern const Cr0234 cr3;
-extern const Cr0234 cr4;
-extern const Cr8 cr8;
-
-extern const std::vector<Cr> crs;
-
-} // namespace cr
-
-namespace dr {
-
-extern const Dr dr0;
-extern const Dr dr1;
-extern const Dr dr2;
-extern const Dr dr3;
-extern const Dr dr4;
-extern const Dr dr5;
-extern const Dr dr6;
-extern const Dr dr7;
-
-extern const std::vector<Dr> drs;
-
-} // namespace dr
-
-namespace eflags {
-
-extern const Eflags cf;
-extern const Eflags pf;
-extern const Eflags af;
-extern const Eflags zf;
-extern const Eflags sf;
-extern const Eflags tf;
-extern const Eflags if_;
-extern const Eflags df;
-extern const Eflags of;
-extern const Eflags iopl;
-extern const Eflags nt;
-extern const Eflags rf;
-extern const Eflags vm;
-extern const Eflags ac;
-extern const Eflags vif;
-extern const Eflags vip;
-extern const Eflags id;
+extern const Eflags eflags_cf;
+extern const Eflags eflags_pf;
+extern const Eflags eflags_af;
+extern const Eflags eflags_zf;
+extern const Eflags eflags_sf;
+extern const Eflags eflags_tf;
+extern const Eflags eflags_if;
+extern const Eflags eflags_df;
+extern const Eflags eflags_of;
+extern const Eflags eflags_iopl;
+extern const Eflags eflags_nt;
+extern const Eflags eflags_rf;
+extern const Eflags eflags_vm;
+extern const Eflags eflags_ac;
+extern const Eflags eflags_vif;
+extern const Eflags eflags_vip;
+extern const Eflags eflags_id;
 
 extern const std::vector<Eflags> eflags;
 
-} // namespace eflags
+extern const Mxcsr mxcsr_ie;
+extern const Mxcsr mxcsr_de;
+extern const Mxcsr mxcsr_ze;
+extern const Mxcsr mxcsr_oe;
+extern const Mxcsr mxcsr_ue;
+extern const Mxcsr mxcsr_pe;
+extern const Mxcsr mxcsr_daz;
+extern const Mxcsr mxcsr_im;
+extern const Mxcsr mxcsr_dm;
+extern const Mxcsr mxcsr_zm;
+extern const Mxcsr mxcsr_om;
+extern const Mxcsr mxcsr_um;
+extern const Mxcsr mxcsr_pm;
+extern const Mxcsr mxcsr_rc;
+extern const Mxcsr mxcsr_fz;
 
-namespace imm {
+extern const std::vector<Mxcsr> mxcsr;
+
+extern const FpuStatus fpu_status_ie;
+extern const FpuStatus fpu_status_de;
+extern const FpuStatus fpu_status_ze;
+extern const FpuStatus fpu_status_oe;
+extern const FpuStatus fpu_status_ue;
+extern const FpuStatus fpu_status_pe;
+extern const FpuStatus fpu_status_sf;
+extern const FpuStatus fpu_status_es;
+extern const FpuStatus fpu_status_c0;
+extern const FpuStatus fpu_status_c1;
+extern const FpuStatus fpu_status_c2;
+extern const FpuStatus fpu_status_top;
+extern const FpuStatus fpu_status_c3;
+extern const FpuStatus fpu_status_b;
+
+extern const std::vector<FpuStatus> fpu_status;
+
+extern const FpuTag tag0;
+extern const FpuTag tag1;
+extern const FpuTag tag2;
+extern const FpuTag tag3;
+extern const FpuTag tag4;
+extern const FpuTag tag5;
+extern const FpuTag tag6;
+extern const FpuTag tag7;
+
+extern const std::vector<FpuTag> fpu_tags;
+
+extern const EnvReg rip;
+extern const EnvReg fpu_data;
+extern const EnvReg fpu_instruction;
+extern const EnvReg fpu_opcode;
+
+extern const std::vector<EnvReg> env_regs;
 
 extern const Zero zero;
 extern const One one;
 extern const Three three;
-
-} // namespace imm
-
-namespace mm {
 
 extern const Mm mm0;
 extern const Mm mm1;
@@ -352,39 +349,9 @@ extern const Mm mm7;
 
 extern const std::vector<Mm> mms;
 
-} // namespace mm
-
-namespace mxcsr {
-
-extern const Mxcsr ie;
-extern const Mxcsr de;
-extern const Mxcsr ze;
-extern const Mxcsr oe;
-extern const Mxcsr ue;
-extern const Mxcsr pe;
-extern const Mxcsr daz;
-extern const Mxcsr im;
-extern const Mxcsr dm;
-extern const Mxcsr zm;
-extern const Mxcsr om;
-extern const Mxcsr um;
-extern const Mxcsr pm;
-extern const Mxcsr rc;
-extern const Mxcsr fz;
-
-extern const std::vector<Mxcsr> mxcsr;
-
-} // namespace mxcsr
-
-namespace modifier {
-
 extern const Pref66 pref_66;
 extern const PrefRexW pref_rexw;
 extern const Far far;
-
-} // namespace modifier
-
-namespace rl {
 
 extern const Al al;
 extern const Cl cl;
@@ -393,20 +360,12 @@ extern const Rl bl;
 
 extern const std::vector<Rl> rls;
 
-} // namespace rl
-
-namespace rh {
-
 extern const Rh ah;
 extern const Rh ch;
 extern const Rh dh;
 extern const Rh bh;
 
 extern const std::vector<Rh> rhs;
-
-} // namespace rh
-
-namespace rb {
 
 extern const Rb spl;
 extern const Rb bpl;
@@ -422,10 +381,6 @@ extern const Rb r14b;
 extern const Rb r15b;
 
 extern const std::vector<Rb> rbs;
-
-} // namespace rb
-
-namespace r16 {
 
 extern const Ax ax;
 extern const R16 cx;
@@ -446,10 +401,6 @@ extern const R16 r15w;
 
 extern const std::vector<R16> r16s;
 
-} // namespace r16
-
-namespace r32 {
-
 extern const Eax eax;
 extern const R32 ecx;
 extern const R32 edx;
@@ -468,10 +419,6 @@ extern const R32 r14d;
 extern const R32 r15d;
 
 extern const std::vector<R32> r32s;
-
-} // namespace r32
-
-namespace r64 {
 
 extern const Rax rax;
 extern const R64 rcx;
@@ -492,10 +439,6 @@ extern const R64 r15;
 
 extern const std::vector<R64> r64s;
 
-} // namespace r64
-
-namespace sreg {
-
 extern const Sreg es;
 extern const Sreg cs;
 extern const Sreg ss;
@@ -504,10 +447,6 @@ extern const Fs fs;
 extern const Gs gs;
 
 extern const std::vector<Sreg> sregs;
-
-} // namespace sreg
-
-namespace st {
 
 extern const St0 st0;
 extern const St st1;
@@ -519,46 +458,6 @@ extern const St st6;
 extern const St st7;
 
 extern const std::vector<St> sts;
-
-} // namespace st
-
-namespace status {
-
-extern const Status ie;
-extern const Status de;
-extern const Status ze;
-extern const Status oe;
-extern const Status ue;
-extern const Status pe;
-extern const Status sf;
-extern const Status es;
-extern const Status c0;
-extern const Status c1;
-extern const Status c2;
-extern const Status top;
-extern const Status c3;
-extern const Status b;
-
-extern const std::vector<Status> status;
-
-} // namespace status
-
-namespace tag {
-
-extern const Tag tag0;
-extern const Tag tag1;
-extern const Tag tag2;
-extern const Tag tag3;
-extern const Tag tag4;
-extern const Tag tag5;
-extern const Tag tag6;
-extern const Tag tag7;
-
-extern const std::vector<Tag> tags;
-
-} // namespace tag
-
-namespace xmm {
 
 extern const Xmm0 xmm0;
 extern const Xmm xmm1;
@@ -579,10 +478,6 @@ extern const Xmm xmm15;
 
 extern const std::vector<Xmm> xmms;
 
-} // namespace xmm
-
-namespace ymm {
-
 extern const Ymm ymm0;
 extern const Ymm ymm1;
 extern const Ymm ymm2;
@@ -601,8 +496,6 @@ extern const Ymm ymm14;
 extern const Ymm ymm15;
 
 extern const std::vector<Ymm> ymms;
-
-} // namespace
 
 } // namespace x64asm
 

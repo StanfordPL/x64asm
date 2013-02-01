@@ -20,91 +20,109 @@ using namespace std;
 
 namespace x64asm {
 
-namespace control {
+const FpuControl fpu_control_im{Constants::fpu_control_im()};
+const FpuControl fpu_control_dm{Constants::fpu_control_dm()};
+const FpuControl fpu_control_zm{Constants::fpu_control_zm()};
+const FpuControl fpu_control_om{Constants::fpu_control_om()};
+const FpuControl fpu_control_um{Constants::fpu_control_um()};
+const FpuControl fpu_control_pm{Constants::fpu_control_pm()};
+const FpuControl fpu_control_pc{Constants::fpu_control_pc()};
+const FpuControl fpu_control_rc{Constants::fpu_control_rc()};
+const FpuControl fpu_control_x{Constants::fpu_control_x()};
 
-const Control im{Constants::control_im()};
-const Control dm{Constants::control_dm()};
-const Control zm{Constants::control_zm()};
-const Control om{Constants::control_om()};
-const Control um{Constants::control_um()};
-const Control pm{Constants::control_pm()};
-const Control pc{Constants::control_pc()};
-const Control rc{Constants::control_rc()};
-const Control x{Constants::control_x()};
-
-const vector<Control> control {
-	im,  dm,  zm, om, um, pm, pc, rc, x
+const vector<FpuControl> fpu_control {
+	fpu_control_im, fpu_control_dm, fpu_control_zm, fpu_control_om, 
+	fpu_control_um, fpu_control_pm, fpu_control_pc, fpu_control_rc,
+	fpu_control_x
 };
 
-} // namespace control
-
-namespace cr {
-
-const Cr0234 cr0{Constants::cr0()};
-const Cr0234 cr2{Constants::cr2()};
-const Cr0234 cr3{Constants::cr3()};
-const Cr0234 cr4{Constants::cr4()};
-const Cr8 cr8{Constants::cr8()};
-
-const vector<Cr> crs {
-	cr0, cr2, cr3, cr4, cr8
-};
-
-} // namespace cr
-
-namespace dr {
-
-const Dr dr0{Constants::dr0()};
-const Dr dr1{Constants::dr1()};
-const Dr dr2{Constants::dr2()};
-const Dr dr3{Constants::dr3()};
-const Dr dr4{Constants::dr4()};
-const Dr dr5{Constants::dr5()};
-const Dr dr6{Constants::dr6()};
-const Dr dr7{Constants::dr7()};
-
-const vector<Dr> drs {
-	dr0, dr1, dr2, dr3, dr4, dr5, dr6, dr7
-};
-
-} // namespace dr
-
-namespace eflags {
-
-const Eflags cf{Constants::eflags_cf()};
-const Eflags pf{Constants::eflags_pf()};
-const Eflags af{Constants::eflags_af()};
-const Eflags zf{Constants::eflags_zf()};
-const Eflags sf{Constants::eflags_sf()};
-const Eflags tf{Constants::eflags_tf()};
-const Eflags if_{Constants::eflags_if_()};
-const Eflags df{Constants::eflags_df()};
-const Eflags of{Constants::eflags_of()};
-const Eflags iopl{Constants::eflags_iopl()};
-const Eflags nt{Constants::eflags_nt()};
-const Eflags rf{Constants::eflags_rf()};
-const Eflags vm{Constants::eflags_vm()};
-const Eflags ac{Constants::eflags_ac()};
-const Eflags vif{Constants::eflags_vif()};
-const Eflags vip{Constants::eflags_vip()};
-const Eflags id{Constants::eflags_id()};
+const Eflags eflags_cf{Constants::eflags_cf()};
+const Eflags eflags_pf{Constants::eflags_pf()};
+const Eflags eflags_af{Constants::eflags_af()};
+const Eflags eflags_zf{Constants::eflags_zf()};
+const Eflags eflags_sf{Constants::eflags_sf()};
+const Eflags eflags_tf{Constants::eflags_tf()};
+const Eflags eflags_if{Constants::eflags_if_()};
+const Eflags eflags_df{Constants::eflags_df()};
+const Eflags eflags_of{Constants::eflags_of()};
+const Eflags eflags_iopl{Constants::eflags_iopl()};
+const Eflags eflags_nt{Constants::eflags_nt()};
+const Eflags eflags_rf{Constants::eflags_rf()};
+const Eflags eflags_vm{Constants::eflags_vm()};
+const Eflags eflags_ac{Constants::eflags_ac()};
+const Eflags eflags_vif{Constants::eflags_vif()};
+const Eflags eflags_vip{Constants::eflags_vip()};
+const Eflags eflags_id{Constants::eflags_id()};
 
 const vector<Eflags> eflags {
-	cf,   pf, af, zf, sf, tf,  if_, df,  of, 
-	iopl, nt, rf, vm, ac, vif, vip, id
+	eflags_cf, eflags_pf,   eflags_af,  eflags_zf, 
+	eflags_sf, eflags_tf,   eflags_if,  eflags_df,  
+	eflags_of, eflags_iopl, eflags_nt,  eflags_rf, 
+ 	eflags_vm, eflags_ac,   eflags_vif, eflags_vip, 
+	eflags_id
 };
 
-} // namespace eflags
+const Mxcsr mxcsr_ie{Constants::mxcsr_ie()};
+const Mxcsr mxcsr_de{Constants::mxcsr_de()};
+const Mxcsr mxcsr_ze{Constants::mxcsr_ze()};
+const Mxcsr mxcsr_oe{Constants::mxcsr_oe()};
+const Mxcsr mxcsr_ue{Constants::mxcsr_ue()};
+const Mxcsr mxcsr_pe{Constants::mxcsr_pe()};
+const Mxcsr mxcsr_daz{Constants::mxcsr_daz()};
+const Mxcsr mxcsr_im{Constants::mxcsr_im()};
+const Mxcsr mxcsr_dm{Constants::mxcsr_dm()};
+const Mxcsr mxcsr_zm{Constants::mxcsr_zm()};
+const Mxcsr mxcsr_om{Constants::mxcsr_om()};
+const Mxcsr mxcsr_um{Constants::mxcsr_um()};
+const Mxcsr mxcsr_pm{Constants::mxcsr_pm()};
+const Mxcsr mxcsr_rc{Constants::mxcsr_rc()};
+const Mxcsr mxcsr_fz{Constants::mxcsr_fz()};
 
-namespace imm {
+const vector<Mxcsr> mxcsr {
+	mxcsr_ie, mxcsr_de, mxcsr_ze,  mxcsr_oe, 
+	mxcsr_ue, mxcsr_pe, mxcsr_daz, mxcsr_im,
+	mxcsr_dm, mxcsr_zm, mxcsr_om,  mxcsr_um, 
+	mxcsr_pm, mxcsr_rc, mxcsr_fz
+};
+
+const FpuStatus ie{Constants::fpu_status_ie()};
+const FpuStatus de{Constants::fpu_status_de()};
+const FpuStatus ze{Constants::fpu_status_ze()};
+const FpuStatus oe{Constants::fpu_status_oe()};
+const FpuStatus ue{Constants::fpu_status_ue()};
+const FpuStatus pe{Constants::fpu_status_pe()};
+const FpuStatus sf{Constants::fpu_status_sf()};
+const FpuStatus es{Constants::fpu_status_es()};
+const FpuStatus c0{Constants::fpu_status_c0()};
+const FpuStatus c1{Constants::fpu_status_c1()};
+const FpuStatus c2{Constants::fpu_status_c2()};
+const FpuStatus top{Constants::fpu_status_top()};
+const FpuStatus c3{Constants::fpu_status_c3()};
+const FpuStatus b{Constants::fpu_status_b()};
+
+const vector<FpuStatus> fpu_status {
+	spu_status_ie, spu_status_de, spu_status_ze, spu_status_oe,  
+	spu_status_ue, spu_status_pe, spu_status_sf, spu_status_es, 
+	spu_status_c0, spu_status_c1, spu_status_c2, spu_status_top, 
+	spu_status_c3, spu_status_b
+};
+
+const FpuTag tag0{Constants::tag0()};
+const FpuTag tag1{Constants::tag1()};
+const FpuTag tag2{Constants::tag2()};
+const FpuTag tag3{Constants::tag3()};
+const FpuTag tag4{Constants::tag4()};
+const FpuTag tag5{Constants::tag5()};
+const FpuTag tag6{Constants::tag6()};
+const FpuTag tag7{Constants::tag7()};
+
+const vector<FpuTag> tags {
+	tag0, tag1, tag2, tag3, tag4, tag5, tag6, tag7
+};
 
 const Zero zero{Constants::zero()};
 const One one{Constants::one()};
 const Three three{Constants::three()};
-
-} // namespace imm
-
-namespace mm {
 
 const Mm mm0{Constants::mm0()};
 const Mm mm1{Constants::mm1()};
@@ -119,42 +137,9 @@ const vector<Mm> mms {
 	mm0, mm1, mm2, mm3, mm4, mm5, mm6, mm7
 };
 
-} // namespace mm
-
-namespace mxcsr {
-
-const Mxcsr ie{Constants::mxcsr_ie()};
-const Mxcsr de{Constants::mxcsr_de()};
-const Mxcsr ze{Constants::mxcsr_ze()};
-const Mxcsr oe{Constants::mxcsr_oe()};
-const Mxcsr ue{Constants::mxcsr_ue()};
-const Mxcsr pe{Constants::mxcsr_pe()};
-const Mxcsr daz{Constants::mxcsr_daz()};
-const Mxcsr im{Constants::mxcsr_im()};
-const Mxcsr dm{Constants::mxcsr_dm()};
-const Mxcsr zm{Constants::mxcsr_zm()};
-const Mxcsr om{Constants::mxcsr_om()};
-const Mxcsr um{Constants::mxcsr_um()};
-const Mxcsr pm{Constants::mxcsr_pm()};
-const Mxcsr rc{Constants::mxcsr_rc()};
-const Mxcsr fz{Constants::mxcsr_fz()};
-
-const vector<Mxcsr> mxcsr {
-	ie, de, ze, oe, ue, pe, daz, im,
-	dm, zm, om, um, pm, rc, fz
-};
-
-} // namespace mxcsr
-
-namespace modifier {
-
 const Pref66 pref_66{Constants::pref_66()};
 const PrefRexW pref_rex_w{Constants::pref_rex_w()};
 const Far far{Constants::far()};
-
-} // namespace modifier
-
-namespace rl {
 
 const Al al{Constants::al()};
 const Cl cl{Constants::cl()};
@@ -165,10 +150,6 @@ const vector<Rl> rls {
 	al, cl, dl, bl
 };
 
-} // namespace rl
-
-namespace rh {
-
 const Rh ah{Constants::ah()};
 const Rh ch{Constants::ch()};
 const Rh dh{Constants::dh()};
@@ -177,10 +158,6 @@ const Rh bh{Constants::bh()};
 const vector<Rh> rhs {
 	ah, ch, dh, bh
 };
-
-} // namespace rh
-
-namespace rb {
 
 const Rb spl{Constants::spl()};
 const Rb bpl{Constants::bpl()};
@@ -198,10 +175,6 @@ const Rb r15b{Constants::r15b()};
 const vector<Rb> rbs {
 	spl, bpl, sil, dil, r8b, r9b, r10b, r11b, r12b, r13b, r14b, r15b
 };
-
-} // namespace rb
-
-namespace r16 {
 
 const Ax ax{Constants::ax()};
 const R16 cx{Constants::cx()};
@@ -225,10 +198,6 @@ const vector<R16> r16s {
 	r8w, r9w, r10w, r11w, r12w, r13w, r14w, r15w
 };
 
-} // namespace r16
-
-namespace r32 {
-
 const Eax eax{Constants::eax()};
 const R32 ecx{Constants::ecx()};
 const R32 edx{Constants::edx()};
@@ -250,10 +219,6 @@ const vector<R32> r32s {
 	eax, ecx, edx,  ebx,  esp,  ebp,  esi,  edi, 
 	r8d, r9d, r10d, r11d, r12d, r13d, r14d, r15d
 };
-
-} // namespace r32
-
-namespace r64 {
 
 const Rax rax{Constants::rax()};
 const R64 rcx{Constants::rcx()};
@@ -277,10 +242,6 @@ const vector<R64> r64s {
 	r8,  r9,  r10, r11, r12, r13, r14, r15
 };
 
-} // namespace r64
-
-namespace sreg {
-
 const Sreg es{Constants::es()};
 const Sreg cs{Constants::cs()};
 const Sreg ss{Constants::ss()};
@@ -291,10 +252,6 @@ const Gs gs{Constants::gs()};
 const vector<Sreg> sregs {
 	es, cs, ss, ds, fs, gs
 };
-
-} // namespace sreg
-
-namespace st {
 
 const St0 st0{Constants::st0()};
 const St st1{Constants::st1()};
@@ -308,51 +265,6 @@ const St st7{Constants::st7()};
 const vector<St> sts {
 	st0, st1, st2, st3, st4, st5, st6, st7
 };
-
-} // namespace st
-
-namespace status {
-
-const Status ie{Constants::status_ie()};
-const Status de{Constants::status_de()};
-const Status ze{Constants::status_ze()};
-const Status oe{Constants::status_oe()};
-const Status ue{Constants::status_ue()};
-const Status pe{Constants::status_pe()};
-const Status sf{Constants::status_sf()};
-const Status es{Constants::status_es()};
-const Status c0{Constants::status_c0()};
-const Status c1{Constants::status_c1()};
-const Status c2{Constants::status_c2()};
-const Status top{Constants::status_top()};
-const Status c3{Constants::status_c3()};
-const Status b{Constants::status_b()};
-
-const vector<Status> status {
-	ie, de, ze, oe,  ue, pe, sf, es, 
-	c0, c1, c2, top, c3, b
-};
-
-} // namespace status
-
-namespace tag {
-
-const Tag tag0{Constants::tag0()};
-const Tag tag1{Constants::tag1()};
-const Tag tag2{Constants::tag2()};
-const Tag tag3{Constants::tag3()};
-const Tag tag4{Constants::tag4()};
-const Tag tag5{Constants::tag5()};
-const Tag tag6{Constants::tag6()};
-const Tag tag7{Constants::tag7()};
-
-const vector<Tag> tags {
-	tag0, tag1, tag2, tag3, tag4, tag5, tag6, tag7
-};
-
-}
-
-namespace xmm {
 
 const Xmm0 xmm0{Constants::xmm0()};
 const Xmm xmm1{Constants::xmm1()};
@@ -376,10 +288,6 @@ const vector<Xmm> xmms {
 	xmm8, xmm9, xmm10, xmm11, xmm12, xmm13, xmm14, xmm15
 };
 
-} // namespace xmm
-
-namespace ymm {
-
 const Ymm ymm0{Constants::ymm0()};
 const Ymm ymm1{Constants::ymm1()};
 const Ymm ymm2{Constants::ymm2()};
@@ -401,7 +309,5 @@ const vector<Ymm> ymms {
 	ymm0, ymm1, ymm2,  ymm3,  ymm4,  ymm5,  ymm6,  ymm7,
 	ymm8, ymm9, ymm10, ymm11, ymm12, ymm13, ymm14, ymm15
 };
-
-} // namespace ymm
 
 } // namespace x64asm

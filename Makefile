@@ -21,16 +21,13 @@ INC=-I./
 OBJ=src/assembler.o \
 		src/code.o \
 		src/constants.o \
-		src/control.o \
-		src/cr.o \
-		src/dr.o \
-		src/eflags.o \
+		src/env_bits.o \
+		src/env_reg.o \
 		src/imm.o \
 		src/instruction.o \
 		src/label.o \
 		src/m.o \
 		src/mm.o \
-		src/mxcsr.o \
 		src/modifier.o \
 		src/moffs.o \
 		src/operand.o \
@@ -41,7 +38,6 @@ OBJ=src/assembler.o \
 		src/status.o \
 		src/stream.o \
 		src/st.o \
-		src/tag.o \
 		src/xmm.o \
 		src/ymm.o
 

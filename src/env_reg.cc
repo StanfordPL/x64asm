@@ -14,38 +14,54 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "src/tag.h"
-
-#include "src/op_set.h"
-
-#include <cassert>
+#include "env_reg.h"
 
 using namespace std;
 
 namespace x64asm {
 
-OpType Tag::type() const {
-	return OpType::TAG;
+EnvReg::~EnvReg() {
+	// Does nothing.
 }
 
-bool Tag::check() const {
-	return val() < 8;
-}
-
-void Tag::insert_in(OpSet& os, bool promote) const {
-	os += *this;
-}
-
-void Tag::write_att(ostream& os) const {
+void Rip::write_att(ostream& os) const {
 	os << "%";
 	write_intel(os);
 }
 
-void Tag::write_intel(ostream& os) const {
-	assert(check());
-	os << "tag" << val();
+void Rip::write_intel(ostream& os) const {
+	os << "rip";
+}
+
+void FpuData::write_att(ostream& os) const {
+	os << "%";
+	write_intel(os);
+}
+
+void FpuData::write_intel(ostream& os) const {
+	os << "fpu_data";
+}
+
+void FpuInstruction::write_att(ostream& os) const {
+	os << "%";
+	write_intel(os);
+}
+
+void FpuInstruction::write_intel(ostream& os) const {
+	os << "fpu_instruction";
+}
+
+void FpuOpcode::write_att(ostream& os) const {
+	os << "%";
+	write_intel(os);
+}
+
+void FpuOpcode::write_intel(ostream& os) const {
+	os << "fpu_opcode";
 }
 
 } // namespace x64asm
+
+#endif
 
 

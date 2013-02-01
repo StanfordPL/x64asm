@@ -21,6 +21,8 @@ limitations under the License.
 #include <stdint.h>
 
 #include "src/code.h"
+#include "src/env_bits.h"
+#include "src/env_reg.h"
 #include "src/instruction.h"
 #include "src/op_set.h"
 #include "src/operand.h"
@@ -41,6 +43,8 @@ std::ostream& operator<<(std::ostream& os, const x64asm::Syntax s);
 std::istream& operator>>(std::istream& is, x64asm::Code& c);
 
 std::ostream& operator<<(std::ostream& os, const x64asm::Code& c);
+std::ostream& operator<<(std::ostream& os, const x64asm::EnvBits& b);
+std::ostream& operator<<(std::ostream& os, const x64asm::EnvReg& r);
 std::ostream& operator<<(std::ostream& os, const x64asm::Instruction& i);
 std::ostream& operator<<(std::ostream& os, const x64asm::Operand& o);
 std::ostream& operator<<(std::ostream& os, const x64asm::OpSet& o);
