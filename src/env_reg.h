@@ -22,39 +22,41 @@ limitations under the License.
 namespace x64asm {
 
 class EnvReg {
+	friend class OpSet;
 	public:
 		inline EnvReg(uint64_t val) : val_{val} { }
 		virtual ~EnvReg() = 0;
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;
 	private:
+		inline uint64_t val() const { return val_; }
 		uint64_t val_;
-};
-
-class Rip : public EnvReg {
-	public:
-		inline Rip() : val_{0} { }
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
 };
 
 class FpuData : public EnvReg {
 	public:
-		inline FpuData() : val_{0} { }
+		inline FpuData() : EnvReg{0} { }
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 };
 
 class FpuInstruction : public EnvReg {
 	public:
-		inline FpuInstruction() : val_{0} { }
+		inline FpuInstruction() : EnvReg{0} { }
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 };
 
 class FpuOpcode : public EnvReg {
 	public:
-		inline FpuOpcode() : val_{0} { }
+		inline FpuOpcode() : EnvReg{0} { }
+		virtual void write_att(std::ostream& os) const;
+		virtual void write_intel(std::ostream& os) const;
+};
+
+class Rip : public EnvReg {
+	public:
+		inline Rip() : EnvReg{0} { }
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 };

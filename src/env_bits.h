@@ -27,23 +27,13 @@ class EnvBits {
 				: index_{index}, width_{width} {
 		}
 		virtual ~EnvBits() = 0;
-		inline size_t index() const { return index_ }
-		inline size_t width() const { return width_ }
+		inline size_t index() const { return index_; }
+		inline size_t width() const { return width_; }
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;
 	private:
 		size_t index_;
 		size_t width_;
-};
-
-/** An FPU control register bit. */
-class FpuControl : public EnvBits {
-	friend class Constants;
-	public:
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
-	private:
-		inline FpuControl(size_t index, size_t width) : EnvBits{index, width} { }
 };
 
 /** An EFLAGS register bit. */
@@ -56,14 +46,14 @@ class Eflags : public EnvBits {
 		inline Eflags(size_t index, size_t width) : EnvBits{index, width} { }
 };
 
-/** An MXCSR register bit. */
-class Mxcsr : public EnvBits {
+/** An FPU control register bit. */
+class FpuControl : public EnvBits {
 	friend class Constants;
 	public:
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	private:
-		inline Mxcsr(size_t index, size_t width) : EnvBits{index, width} { }
+		inline FpuControl(size_t index, size_t width) : EnvBits{index, width} { }
 };
 
 /** An FPU status register bit. */
@@ -83,7 +73,17 @@ class FpuTag : public EnvBits {
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	private:
-		inline FpuStatus(size_t index, size_t width) : EnvBits{index, width} { }
+		inline FpuTag(size_t index, size_t width) : EnvBits{index, width} { }
+};
+
+/** An MXCSR register bit. */
+class Mxcsr : public EnvBits {
+	friend class Constants;
+	public:
+		virtual void write_att(std::ostream& os) const;
+		virtual void write_intel(std::ostream& os) const;
+	private:
+		inline Mxcsr(size_t index, size_t width) : EnvBits{index, width} { }
 };
 
 } // namespace x64asm

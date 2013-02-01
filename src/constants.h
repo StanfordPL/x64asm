@@ -34,16 +34,6 @@ namespace x64asm {
 
 class Constants {
 	public:
-		static inline FpuControl fpu_control_im() { return FpuControl{0,1}; }
-		static inline FpuControl fpu_control_dm() { return FpuControl{1,1}; }
-		static inline FpuControl fpu_control_zm() { return FpuControl{2,1}; }
-		static inline FpuControl fpu_control_om() { return FpuControl{3,1}; }
-		static inline FpuControl fpu_control_um() { return FpuControl{4,1}; }
-		static inline FpuControl fpu_control_pm() { return FpuControl{5,1}; }
-		static inline FpuControl fpu_control_pc() { return FpuControl{9,2}; }
-		static inline FpuControl fpu_control_rc() { return FpuControl{11,2}; }
-		static inline FpuControl fpu_control_x()  { return FpuControl{12,1}; }
-
 		static inline Eflags eflags_cf()   { return Eflags{0,1}; }
 		static inline Eflags eflags_pf()   { return Eflags{2,1}; }
 		static inline Eflags eflags_af()   { return Eflags{4,1}; }
@@ -62,21 +52,15 @@ class Constants {
 		static inline Eflags eflags_vip()  { return Eflags{20,1}; }
 		static inline Eflags eflags_id()   { return Eflags{21,1}; }
 
-		static inline Mxcsr mxcsr_ie()  { return Mxcsr{0,1}; }
-		static inline Mxcsr mxcsr_de()  { return Mxcsr{1,1}; }
-		static inline Mxcsr mxcsr_ze()  { return Mxcsr{2,1}; }
-		static inline Mxcsr mxcsr_oe()  { return Mxcsr{3,1}; }
-		static inline Mxcsr mxcsr_ue()  { return Mxcsr{4,1}; }
-		static inline Mxcsr mxcsr_pe()  { return Mxcsr{5,1}; }
-		static inline Mxcsr mxcsr_daz() { return Mxcsr{6,1}; }
-		static inline Mxcsr mxcsr_im()  { return Mxcsr{7,1}; }
-		static inline Mxcsr mxcsr_dm()  { return Mxcsr{8,1}; }
-		static inline Mxcsr mxcsr_zm()  { return Mxcsr{9,1}; }
-		static inline Mxcsr mxcsr_om()  { return Mxcsr{10,1}; }
-		static inline Mxcsr mxcsr_um()  { return Mxcsr{11,1}; }
-		static inline Mxcsr mxcsr_pm()  { return Mxcsr{12,1}; }
-		static inline Mxcsr mxcsr_rc()  { return Mxcsr{14,2}; }
-		static inline Mxcsr mxcsr_fz()  { return Mxcsr{15,1}; }
+		static inline FpuControl fpu_control_im() { return FpuControl{0,1}; }
+		static inline FpuControl fpu_control_dm() { return FpuControl{1,1}; }
+		static inline FpuControl fpu_control_zm() { return FpuControl{2,1}; }
+		static inline FpuControl fpu_control_om() { return FpuControl{3,1}; }
+		static inline FpuControl fpu_control_um() { return FpuControl{4,1}; }
+		static inline FpuControl fpu_control_pm() { return FpuControl{5,1}; }
+		static inline FpuControl fpu_control_pc() { return FpuControl{9,2}; }
+		static inline FpuControl fpu_control_rc() { return FpuControl{11,2}; }
+		static inline FpuControl fpu_control_x()  { return FpuControl{12,1}; }
 
 		static inline FpuStatus fpu_status_ie()  { return FpuStatus{0,1}; }
 		static inline FpuStatus fpu_status_de()  { return FpuStatus{1,1}; }
@@ -102,10 +86,26 @@ class Constants {
 		static inline FpuTag tag6() { return FpuTag{13,2}; }
 		static inline FpuTag tag7() { return FpuTag{15,2}; }
 
-		static inline EnvReg rip() { return Rip{}; }
-		static inline EnvReg fpu_data() { return FpuData{}; }
-		static inline EnvReg fpu_instruction() { return FpuInstruction{}; }
-		static inline EnvReg fpu_opcode() { return FpuOpcode{}; }
+		static inline Mxcsr mxcsr_ie()  { return Mxcsr{0,1}; }
+		static inline Mxcsr mxcsr_de()  { return Mxcsr{1,1}; }
+		static inline Mxcsr mxcsr_ze()  { return Mxcsr{2,1}; }
+		static inline Mxcsr mxcsr_oe()  { return Mxcsr{3,1}; }
+		static inline Mxcsr mxcsr_ue()  { return Mxcsr{4,1}; }
+		static inline Mxcsr mxcsr_pe()  { return Mxcsr{5,1}; }
+		static inline Mxcsr mxcsr_daz() { return Mxcsr{6,1}; }
+		static inline Mxcsr mxcsr_im()  { return Mxcsr{7,1}; }
+		static inline Mxcsr mxcsr_dm()  { return Mxcsr{8,1}; }
+		static inline Mxcsr mxcsr_zm()  { return Mxcsr{9,1}; }
+		static inline Mxcsr mxcsr_om()  { return Mxcsr{10,1}; }
+		static inline Mxcsr mxcsr_um()  { return Mxcsr{11,1}; }
+		static inline Mxcsr mxcsr_pm()  { return Mxcsr{12,1}; }
+		static inline Mxcsr mxcsr_rc()  { return Mxcsr{14,2}; }
+		static inline Mxcsr mxcsr_fz()  { return Mxcsr{15,1}; }
+
+		static inline Rip rip() { return Rip{}; }
+		static inline FpuData fpu_data() { return FpuData{}; }
+		static inline FpuInstruction fpu_instruction() { return FpuInstruction{}; }
+		static inline FpuOpcode fpu_opcode() { return FpuOpcode{}; }
 
 		static inline Zero zero() { return Zero{}; }
 		static inline One one() { return One{}; }
@@ -327,10 +327,10 @@ extern const FpuTag tag7;
 
 extern const std::vector<FpuTag> fpu_tags;
 
-extern const EnvReg rip;
-extern const EnvReg fpu_data;
-extern const EnvReg fpu_instruction;
-extern const EnvReg fpu_opcode;
+extern const Rip rip;
+extern const FpuData fpu_data;
+extern const FpuInstruction fpu_instruction;
+extern const FpuOpcode fpu_opcode;
 
 extern const std::vector<EnvReg> env_regs;
 

@@ -16,34 +16,14 @@ limitations under the License.
 
 #include "env_bits.h"
 
+#include <cassert>
+
 using namespace std;
 
 namespace x64asm {
 
 EnvBits::~EnvBits() {
 	// Does nothing.
-}
-
-void FpuControl::write_att(ostream& os) const {
-	os << "%";
-	write_intel(os);
-}
-
-void FpuControl::write_intel(ostream& os) const {
-	switch ( index() ) {
-		case 0:  os << "fpu_control[im]"; break;
-		case 1:  os << "fpu_control[dm]"; break;
-		case 2:  os << "fpu_control[zm]"; break;
-		case 3:  os << "fpu_control[om]"; break;
-		case 4:  os << "fpu_control[um]"; break;
-		case 5:  os << "fpu_control[pm]"; break;
-		case 9:  os << "fpu_control[pc]"; break;
-		case 11: os << "fpu_control[rc]"; break;
-		case 12: os << "fpu_control[x]"; break;
-
-		default:
-			assert(false);
-	}
 }
 
 void Eflags::write_att(ostream& os) const {
@@ -76,28 +56,22 @@ void Eflags::write_intel(ostream& os) const {
 	}
 }
 
-void Mxcsr::write_att(ostream& os) const {
+void FpuControl::write_att(ostream& os) const {
 	os << "%";
 	write_intel(os);
 }
 
-void Mxcsr::write_intel(ostream& os) const {
+void FpuControl::write_intel(ostream& os) const {
 	switch ( index() ) {
-		case 0:  os << "mxcsr[ie]"; break;
-		case 1:  os << "mxcsr[de]"; break;
-		case 2:  os << "mxcsr[ze]"; break;
-		case 3:  os << "mxcsr[oe]"; break;
-		case 4:  os << "mxcsr[ue]"; break;
-		case 5:  os << "mxcsr[pe]"; break;
-		case 6:  os << "mxcsr[daz]"; break;
-		case 7:  os << "mxcsr[im]"; break;
-		case 8:  os << "mxcsr[dm]"; break;
-		case 9:  os << "mxcsr[zm]"; break;
-		case 10: os << "mxcsr[om]"; break;
-		case 11: os << "mxcsr[um]"; break;
-		case 12: os << "mxcsr[pm]"; break;
-		case 14: os << "mxcsr[rc]"; break;
-		case 15: os << "mxcsr[fz]"; break;
+		case 0:  os << "fpu_control[im]"; break;
+		case 1:  os << "fpu_control[dm]"; break;
+		case 2:  os << "fpu_control[zm]"; break;
+		case 3:  os << "fpu_control[om]"; break;
+		case 4:  os << "fpu_control[um]"; break;
+		case 5:  os << "fpu_control[pm]"; break;
+		case 9:  os << "fpu_control[pc]"; break;
+		case 11: os << "fpu_control[rc]"; break;
+		case 12: os << "fpu_control[x]"; break;
 
 		default:
 			assert(false);
@@ -137,11 +111,36 @@ void FpuTag::write_att(ostream& os) const {
 }
 
 void FpuTag::write_intel(ostream& os) const {
-	os << "tag(" ++ ((index()-1)/2) ++ ")";
+	os << "tag(" << ((index()-1)/2) << ")";
+}
+
+void Mxcsr::write_att(ostream& os) const {
+	os << "%";
+	write_intel(os);
+}
+
+void Mxcsr::write_intel(ostream& os) const {
+	switch ( index() ) {
+		case 0:  os << "mxcsr[ie]"; break;
+		case 1:  os << "mxcsr[de]"; break;
+		case 2:  os << "mxcsr[ze]"; break;
+		case 3:  os << "mxcsr[oe]"; break;
+		case 4:  os << "mxcsr[ue]"; break;
+		case 5:  os << "mxcsr[pe]"; break;
+		case 6:  os << "mxcsr[daz]"; break;
+		case 7:  os << "mxcsr[im]"; break;
+		case 8:  os << "mxcsr[dm]"; break;
+		case 9:  os << "mxcsr[zm]"; break;
+		case 10: os << "mxcsr[om]"; break;
+		case 11: os << "mxcsr[um]"; break;
+		case 12: os << "mxcsr[pm]"; break;
+		case 14: os << "mxcsr[rc]"; break;
+		case 15: os << "mxcsr[fz]"; break;
+
+		default:
+			assert(false);
+	}
 }
 
 } // namespace x64asm
-
-#endif
-
 

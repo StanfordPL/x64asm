@@ -1048,7 +1048,7 @@ rm_args i = case op_en i of
 -- Optional Mod R/M SIB digit argument
 digit :: Instr -> String
 digit i = case find is_digit (opcode_suffix i) of
-  (Just ('/':d:[])) -> ",r64::r64s[" ++ [d] ++ "]"
+  (Just ('/':d:[])) -> ",r64s[" ++ [d] ++ "]"
   Nothing -> ""
 
 -- Default REX value (irrespective of explicit operands)
@@ -1097,7 +1097,7 @@ vex_w i
 vex_vvvv :: Instr -> String
 vex_vvvv i = case findIndex (=='V') (op_en i) of
   (Just idx) -> "arg" ++ (show idx) 
-  Nothing -> "r64::r64s[15]"
+  Nothing -> "r64s[15]"
 
 -- Emits code for VEX Prefix
 vex_prefix :: Instr -> String

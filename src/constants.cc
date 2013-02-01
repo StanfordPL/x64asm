@@ -20,29 +20,13 @@ using namespace std;
 
 namespace x64asm {
 
-const FpuControl fpu_control_im{Constants::fpu_control_im()};
-const FpuControl fpu_control_dm{Constants::fpu_control_dm()};
-const FpuControl fpu_control_zm{Constants::fpu_control_zm()};
-const FpuControl fpu_control_om{Constants::fpu_control_om()};
-const FpuControl fpu_control_um{Constants::fpu_control_um()};
-const FpuControl fpu_control_pm{Constants::fpu_control_pm()};
-const FpuControl fpu_control_pc{Constants::fpu_control_pc()};
-const FpuControl fpu_control_rc{Constants::fpu_control_rc()};
-const FpuControl fpu_control_x{Constants::fpu_control_x()};
-
-const vector<FpuControl> fpu_control {
-	fpu_control_im, fpu_control_dm, fpu_control_zm, fpu_control_om, 
-	fpu_control_um, fpu_control_pm, fpu_control_pc, fpu_control_rc,
-	fpu_control_x
-};
-
 const Eflags eflags_cf{Constants::eflags_cf()};
 const Eflags eflags_pf{Constants::eflags_pf()};
 const Eflags eflags_af{Constants::eflags_af()};
 const Eflags eflags_zf{Constants::eflags_zf()};
 const Eflags eflags_sf{Constants::eflags_sf()};
 const Eflags eflags_tf{Constants::eflags_tf()};
-const Eflags eflags_if{Constants::eflags_if_()};
+const Eflags eflags_if{Constants::eflags_if()};
 const Eflags eflags_df{Constants::eflags_df()};
 const Eflags eflags_of{Constants::eflags_of()};
 const Eflags eflags_iopl{Constants::eflags_iopl()};
@@ -60,6 +44,57 @@ const vector<Eflags> eflags {
 	eflags_of, eflags_iopl, eflags_nt,  eflags_rf, 
  	eflags_vm, eflags_ac,   eflags_vif, eflags_vip, 
 	eflags_id
+};
+
+const FpuControl fpu_control_im{Constants::fpu_control_im()};
+const FpuControl fpu_control_dm{Constants::fpu_control_dm()};
+const FpuControl fpu_control_zm{Constants::fpu_control_zm()};
+const FpuControl fpu_control_om{Constants::fpu_control_om()};
+const FpuControl fpu_control_um{Constants::fpu_control_um()};
+const FpuControl fpu_control_pm{Constants::fpu_control_pm()};
+const FpuControl fpu_control_pc{Constants::fpu_control_pc()};
+const FpuControl fpu_control_rc{Constants::fpu_control_rc()};
+const FpuControl fpu_control_x{Constants::fpu_control_x()};
+
+const vector<FpuControl> fpu_control {
+	fpu_control_im, fpu_control_dm, fpu_control_zm, fpu_control_om, 
+	fpu_control_um, fpu_control_pm, fpu_control_pc, fpu_control_rc,
+	fpu_control_x
+};
+
+const FpuStatus fpu_status_ie{Constants::fpu_status_ie()};
+const FpuStatus fpu_status_de{Constants::fpu_status_de()};
+const FpuStatus fpu_status_ze{Constants::fpu_status_ze()};
+const FpuStatus fpu_status_oe{Constants::fpu_status_oe()};
+const FpuStatus fpu_status_ue{Constants::fpu_status_ue()};
+const FpuStatus fpu_status_pe{Constants::fpu_status_pe()};
+const FpuStatus fpu_status_sf{Constants::fpu_status_sf()};
+const FpuStatus fpu_status_es{Constants::fpu_status_es()};
+const FpuStatus fpu_status_c0{Constants::fpu_status_c0()};
+const FpuStatus fpu_status_c1{Constants::fpu_status_c1()};
+const FpuStatus fpu_status_c2{Constants::fpu_status_c2()};
+const FpuStatus fpu_status_top{Constants::fpu_status_top()};
+const FpuStatus fpu_status_c3{Constants::fpu_status_c3()};
+const FpuStatus fpu_status_b{Constants::fpu_status_b()};
+
+const vector<FpuStatus> fpu_status {
+	fpu_status_ie, fpu_status_de, fpu_status_ze, fpu_status_oe,  
+	fpu_status_ue, fpu_status_pe, fpu_status_sf, fpu_status_es, 
+	fpu_status_c0, fpu_status_c1, fpu_status_c2, fpu_status_top, 
+	fpu_status_c3, fpu_status_b
+};
+
+const FpuTag tag0{Constants::tag0()};
+const FpuTag tag1{Constants::tag1()};
+const FpuTag tag2{Constants::tag2()};
+const FpuTag tag3{Constants::tag3()};
+const FpuTag tag4{Constants::tag4()};
+const FpuTag tag5{Constants::tag5()};
+const FpuTag tag6{Constants::tag6()};
+const FpuTag tag7{Constants::tag7()};
+
+const vector<FpuTag> tags {
+	tag0, tag1, tag2, tag3, tag4, tag5, tag6, tag7
 };
 
 const Mxcsr mxcsr_ie{Constants::mxcsr_ie()};
@@ -83,41 +118,6 @@ const vector<Mxcsr> mxcsr {
 	mxcsr_ue, mxcsr_pe, mxcsr_daz, mxcsr_im,
 	mxcsr_dm, mxcsr_zm, mxcsr_om,  mxcsr_um, 
 	mxcsr_pm, mxcsr_rc, mxcsr_fz
-};
-
-const FpuStatus ie{Constants::fpu_status_ie()};
-const FpuStatus de{Constants::fpu_status_de()};
-const FpuStatus ze{Constants::fpu_status_ze()};
-const FpuStatus oe{Constants::fpu_status_oe()};
-const FpuStatus ue{Constants::fpu_status_ue()};
-const FpuStatus pe{Constants::fpu_status_pe()};
-const FpuStatus sf{Constants::fpu_status_sf()};
-const FpuStatus es{Constants::fpu_status_es()};
-const FpuStatus c0{Constants::fpu_status_c0()};
-const FpuStatus c1{Constants::fpu_status_c1()};
-const FpuStatus c2{Constants::fpu_status_c2()};
-const FpuStatus top{Constants::fpu_status_top()};
-const FpuStatus c3{Constants::fpu_status_c3()};
-const FpuStatus b{Constants::fpu_status_b()};
-
-const vector<FpuStatus> fpu_status {
-	spu_status_ie, spu_status_de, spu_status_ze, spu_status_oe,  
-	spu_status_ue, spu_status_pe, spu_status_sf, spu_status_es, 
-	spu_status_c0, spu_status_c1, spu_status_c2, spu_status_top, 
-	spu_status_c3, spu_status_b
-};
-
-const FpuTag tag0{Constants::tag0()};
-const FpuTag tag1{Constants::tag1()};
-const FpuTag tag2{Constants::tag2()};
-const FpuTag tag3{Constants::tag3()};
-const FpuTag tag4{Constants::tag4()};
-const FpuTag tag5{Constants::tag5()};
-const FpuTag tag6{Constants::tag6()};
-const FpuTag tag7{Constants::tag7()};
-
-const vector<FpuTag> tags {
-	tag0, tag1, tag2, tag3, tag4, tag5, tag6, tag7
 };
 
 const Zero zero{Constants::zero()};

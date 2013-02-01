@@ -24,8 +24,6 @@ limitations under the License.
 
 #include "src/function.h"
 #include "src/code.h"
-#include "src/cr.h"
-#include "src/dr.h"
 #include "src/hint.h"
 #include "src/imm.h"
 #include "src/instruction.h"

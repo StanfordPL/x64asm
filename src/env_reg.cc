@@ -24,15 +24,6 @@ EnvReg::~EnvReg() {
 	// Does nothing.
 }
 
-void Rip::write_att(ostream& os) const {
-	os << "%";
-	write_intel(os);
-}
-
-void Rip::write_intel(ostream& os) const {
-	os << "rip";
-}
-
 void FpuData::write_att(ostream& os) const {
 	os << "%";
 	write_intel(os);
@@ -60,8 +51,13 @@ void FpuOpcode::write_intel(ostream& os) const {
 	os << "fpu_opcode";
 }
 
+void Rip::write_att(ostream& os) const {
+	os << "%";
+	write_intel(os);
+}
+
+void Rip::write_intel(ostream& os) const {
+	os << "rip";
+}
+
 } // namespace x64asm
-
-#endif
-
-
