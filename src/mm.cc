@@ -29,7 +29,7 @@ OpType Mm::type() const {
 }
 
 bool Mm::check() const {
-	return val() < 8;
+	return val_ < 8;
 }
 
 void Mm::insert_in(OpSet& os, bool promote) const {
@@ -43,7 +43,7 @@ void Mm::write_att(ostream& os) const {
 
 void Mm::write_intel(ostream& os) const {
 	assert(check());
-	os << "mm" << dec << val();
+	os << "mm" << dec << val_;
 }
 
 } // namespace x64asm

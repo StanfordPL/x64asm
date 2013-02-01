@@ -35,7 +35,6 @@ OBJ=src/assembler.o \
 		src/r.o \
 		src/rel.o \
 		src/sreg.o \
-		src/status.o \
 		src/stream.o \
 		src/st.o \
 		src/xmm.o \

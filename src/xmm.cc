@@ -29,7 +29,7 @@ OpType Xmm::type() const {
 }
 
 bool Xmm::check() const {
-	return val() < 16;
+	return val_ < 16;
 }
 
 void Xmm::insert_in(OpSet& os, bool promote) const {
@@ -46,11 +46,11 @@ void Xmm::write_att(ostream& os) const {
 
 void Xmm::write_intel(ostream& os) const {
 	assert(check());
-	os << "xmm" << dec << val();
+	os << "xmm" << dec << val_;
 }
 
 Ymm Xmm::parent() const {
-	return Ymm{val()};
+	return Ymm{val_};
 }
 
 OpType Xmm0::type() const {
@@ -58,7 +58,7 @@ OpType Xmm0::type() const {
 }
 
 bool Xmm0::check() const {
-	return val() == 0;
+	return val_ == 0;
 }
 
 } // namespace x64asm

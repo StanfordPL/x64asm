@@ -27,7 +27,7 @@ OpType St::type() const {
 }
 
 bool St::check() const {
-	return val() < 8;
+	return val_ < 8;
 }
 
 void St::write_att(ostream& os) const {
@@ -37,10 +37,10 @@ void St::write_att(ostream& os) const {
 
 void St::write_intel(ostream& os) const {
 	assert(check());
-	if ( val() == 0 )
+	if ( val_ == 0 )
 		os << "st";	
 	else
-		os << "st(" << dec << val() << ")";
+		os << "st(" << dec << val_ << ")";
 }
 
 OpType St0::type() const {
@@ -48,7 +48,7 @@ OpType St0::type() const {
 }
 
 bool St0::check() const {
-	return val() == 0;
+	return val_ == 0;
 }
 
 } // namespace x64asm

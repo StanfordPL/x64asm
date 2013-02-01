@@ -29,7 +29,7 @@ OpType Moffs::type() const {
 }
 
 void Moffs::write_att(ostream& os) const {
-	os << hex << showbase << val();
+	os << hex << showbase << val_;
 }
 
 void Moffs::write_intel(ostream& os) const {

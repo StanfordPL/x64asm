@@ -29,7 +29,7 @@ OpType Rel::type() const {
 }
 
 void Rel::write_att(ostream& os) const {
-	os << hex << showbase << val();
+	os << hex << showbase << val_;
 }
 
 void Rel::write_intel(ostream& os) const {
@@ -40,7 +40,7 @@ OpType Rel8::type() const {
 }
 
 bool Rel8::check() const {
-	return (int64_t)val() >= -128 && (int64_t)val() < 128;
+	return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
 }
 
 OpType Rel32::type() const {
@@ -48,7 +48,7 @@ OpType Rel32::type() const {
 }
 
 bool Rel32::check() const {
-	return (int64_t)val() >= -2147483648 && (int64_t)val() < 2147483648;
+	return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
 }
 
 } // namespace x64asm

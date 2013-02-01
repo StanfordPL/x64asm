@@ -43,10 +43,7 @@ std::ostream& operator<<(std::ostream& os, const x64asm::Syntax s);
 std::istream& operator>>(std::istream& is, x64asm::Code& c);
 
 std::ostream& operator<<(std::ostream& os, const x64asm::Code& c);
-std::ostream& operator<<(std::ostream& os, const x64asm::EnvBits& b);
-std::ostream& operator<<(std::ostream& os, const x64asm::EnvReg& r);
 std::ostream& operator<<(std::ostream& os, const x64asm::Instruction& i);
 std::ostream& operator<<(std::ostream& os, const x64asm::Operand& o);
-std::ostream& operator<<(std::ostream& os, const x64asm::OpSet& o);
 
 #endif

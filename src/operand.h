@@ -50,10 +50,9 @@ class AtomicOperand : public Operand {
 		virtual void write_att(std::ostream& os) const = 0;
 		virtual void write_intel(std::ostream& os) const = 0;
 	protected:
-		inline uint64_t val() const { return val_; }
+		uint64_t val_;	
 	private:
 		virtual OpType type() const;
-		uint64_t val_;	
 };
 
 /** Aggregate Operand Type. */

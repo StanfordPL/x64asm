@@ -33,11 +33,11 @@ OpType R::type() const {
 }
 
 bool R::check() const {
-	return val() < 16;
+	return val_ < 16;
 }
 
 R64 R::parent() const {
-	return R64{val()};
+	return R64{val_};
 }
 
 OpType Rl::type() const {
@@ -45,7 +45,7 @@ OpType Rl::type() const {
 }
 
 bool Rl::check() const {
-	return val() < 4;
+	return val_ < 4;
 }
 
 void Rl::insert_in(OpSet& os, bool promote) const {
@@ -61,7 +61,7 @@ void Rl::write_att(ostream& os) const {
 }
 
 void Rl::write_intel(ostream& os) const {
-	switch ( val() ) {
+	switch ( val_ ) {
 		case 0:  os << "al"; break;
 		case 1:  os << "cl"; break;
 		case 2:  os << "dl"; break;
@@ -76,7 +76,7 @@ OpType Rh::type() const {
 }
 
 bool Rh::check() const {
-	return val() >= 4 && val() < 8;
+	return val_ >= 4 && val_ < 8;
 }
 
 void Rh::insert_in(OpSet& os, bool promote) const {
@@ -92,7 +92,7 @@ void Rh::write_att(ostream& os) const {
 }
 
 void Rh::write_intel(ostream& os) const {
-	switch ( val() ) {
+	switch ( val_ ) {
 		case 4:  os << "ah"; break;
 		case 5:  os << "ch"; break;
 		case 6:  os << "dh"; break;
@@ -103,7 +103,7 @@ void Rh::write_intel(ostream& os) const {
 }
 
 R64 Rh::parent() const {
-	return R64{val()-4};
+	return R64{val_-4};
 }
 
 OpType Rb::type() const {
@@ -111,7 +111,7 @@ OpType Rb::type() const {
 }
 
 bool Rb::check() const {
-	return val() >= 4 && val() < 16;
+	return val_ >= 4 && val_ < 16;
 }
 
 void Rb::insert_in(OpSet& os, bool promote) const {
@@ -127,7 +127,7 @@ void Rb::write_att(ostream& os) const {
 }
 
 void Rb::write_intel(ostream& os) const {
-	switch ( val() ) {
+	switch ( val_ ) {
 		case 4:  os << "spl"; break;
 		case 5:  os << "bpl"; break;
 		case 6:  os << "sil"; break;
@@ -150,7 +150,7 @@ OpType Al::type() const {
 }
 
 bool Al::check() const {
-	return val() == 0;
+	return val_ == 0;
 }
 
 OpType Cl::type() const {
@@ -158,7 +158,7 @@ OpType Cl::type() const {
 }
 
 bool Cl::check() const {
-	return val() == 0;
+	return val_ == 0;
 }
 
 OpType R16::type() const {
@@ -178,7 +178,7 @@ void R16::write_att(ostream& os) const {
 }
 
 void R16::write_intel(ostream& os) const {
-	switch ( val() ) {
+	switch ( val_ ) {
 		case 0:  os << "ax"; break;
 		case 1:  os << "cx"; break;
 		case 2:  os << "dx"; break;
@@ -205,7 +205,7 @@ OpType Ax::type() const {
 }
 
 bool Ax::check() const {
-	return val() == 0;
+	return val_ == 0;
 }
 
 OpType Dx::type() const {
@@ -213,7 +213,7 @@ OpType Dx::type() const {
 }
 
 bool Dx::check() const {
-	return val() == 0;
+	return val_ == 0;
 }
 
 AddrR::~AddrR() {
@@ -241,7 +241,7 @@ void R32::write_att(ostream& os) const {
 }
 
 void R32::write_intel(ostream& os) const {
-	switch ( val() ) {
+	switch ( val_ ) {
 		case 0:  os << "eax"; break;
 		case 1:  os << "ecx"; break;
 		case 2:  os << "edx"; break;
@@ -268,7 +268,7 @@ OpType Eax::type() const {
 }
 
 bool Eax::check() const {
-	return val() == 0;
+	return val_ == 0;
 }
 
 OpType R64::type() const {
@@ -288,7 +288,7 @@ void R64::write_att(ostream& os) const {
 }
 
 void R64::write_intel(ostream& os) const {
-	switch ( val() ) {
+	switch ( val_ ) {
 		case 0:  os << "rax"; break;
 		case 1:  os << "rcx"; break;
 		case 2:  os << "rdx"; break;
@@ -315,7 +315,7 @@ OpType Rax::type() const {
 }
 
 bool Rax::check() const {
-	return val() == 0;
+	return val_ == 0;
 }
 
 } // namespace x64asm

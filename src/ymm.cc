@@ -29,7 +29,7 @@ OpType Ymm::type() const {
 }
 
 bool Ymm::check() const {
-	return val() < 16;
+	return val_ < 16;
 }
 
 void Ymm::insert_in(OpSet& os, bool promote) const {
@@ -43,7 +43,7 @@ void Ymm::write_att(ostream& os) const {
 
 void Ymm::write_intel(ostream& os) const {
 	assert(check());
-	os << "ymm" << dec << val();
+	os << "ymm" << dec << val_;
 }
 
 } // namespace x64asm

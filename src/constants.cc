@@ -93,7 +93,7 @@ const FpuTag tag5{Constants::tag5()};
 const FpuTag tag6{Constants::tag6()};
 const FpuTag tag7{Constants::tag7()};
 
-const vector<FpuTag> tags {
+const vector<FpuTag> fpu_tags {
 	tag0, tag1, tag2, tag3, tag4, tag5, tag6, tag7
 };
 
@@ -119,6 +119,11 @@ const vector<Mxcsr> mxcsr {
 	mxcsr_dm, mxcsr_zm, mxcsr_om,  mxcsr_um, 
 	mxcsr_pm, mxcsr_rc, mxcsr_fz
 };
+
+const FpuData fpu_data{Constants::fpu_data()};
+const FpuInstruction fpu_instruction{Constants::fpu_instruction()};
+const FpuOpcode fpu_opcode{Constants::fpu_opcode()};
+const Rip rip{Constants::rip()};
 
 const Zero zero{Constants::zero()};
 const One one{Constants::one()};

@@ -91,14 +91,6 @@ ostream& operator<<(ostream& os, const Code& c) {
 	return write(os, c);
 }
 
-ostream& operator<<(ostream& os, const EnvBits& b) {
-	return write(os, b);
-}
-
-ostream& operator<<(ostream& os, const EnvReg& r) {
-	return write(os, r);
-}
-
 ostream& operator<<(ostream& os, const Instruction& i) {
 	check(os, i);
 	return write(os, i);
@@ -106,9 +98,5 @@ ostream& operator<<(ostream& os, const Instruction& i) {
 
 ostream& operator<<(ostream& os, const Operand& o) {
 	check(os, o);
-	return write(os, o);
-}
-
-ostream& operator<<(ostream& os, const OpSet& o) {
 	return write(os, o);
 }

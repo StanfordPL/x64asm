@@ -250,77 +250,77 @@ class OpSet {
 		}
 
 		inline OpSet& operator+=(Rl rhs) {
-			group1_ |= ((uint64_t) Mask::LOW << rhs.val());
+			group1_ |= ((uint64_t) Mask::LOW << rhs.val_);
 			return *this;
 		}
 
 		inline OpSet& operator+=(Rh rhs) {
-			group1_ |= ((uint64_t) Mask::HIGH << (rhs.val()-4));
+			group1_ |= ((uint64_t) Mask::HIGH << (rhs.val_-4));
 			return *this;
 		}
 
 		inline OpSet& operator+=(Rb rhs) {
-			group1_ |= ((uint64_t) Mask::LOW << rhs.val());
+			group1_ |= ((uint64_t) Mask::LOW << rhs.val_);
 			return *this;
 		}
 
 		inline OpSet& operator+=(R16 rhs) {
-			group1_ |= ((uint64_t) Mask::WORD << rhs.val());
+			group1_ |= ((uint64_t) Mask::WORD << rhs.val_);
 			return *this;
 		}
 
 		inline OpSet& operator+=(R32 rhs) {
-			group1_ |= ((uint64_t) Mask::DOUBLE << rhs.val());
+			group1_ |= ((uint64_t) Mask::DOUBLE << rhs.val_);
 			return *this;
 		}
 
 		inline OpSet& operator+=(R64 rhs) {
-			group1_ |= ((uint64_t) Mask::QUAD << rhs.val());
+			group1_ |= ((uint64_t) Mask::QUAD << rhs.val_);
 			return *this;
 		}
 
 		inline OpSet& operator+=(Xmm rhs) {
-			group2_ |= ((uint64_t) Mask::XMM << rhs.val());
+			group2_ |= ((uint64_t) Mask::XMM << rhs.val_);
 			return *this;
 		}
 
 		inline OpSet& operator+=(Ymm rhs) {
-			group2_ |= ((uint64_t) Mask::YMM << rhs.val());
+			group2_ |= ((uint64_t) Mask::YMM << rhs.val_);
 			return *this;
 		}
 
 		inline OpSet& operator+=(Mm rhs) {
-			group2_ |= ((uint64_t) Mask::MM << rhs.val());
+			group2_ |= ((uint64_t) Mask::MM << rhs.val_);
 			return *this;
 		}
 
 		inline OpSet& operator+=(St rhs) {
-			group2_ |= ((uint64_t) Mask::ST << rhs.val());
+			group2_ |= ((uint64_t) Mask::ST << rhs.val_);
 			return *this;
 		}
 
 		inline OpSet& operator+=(Sreg rhs) {
-			group2_ |= ((uint64_t) Mask::SREG << rhs.val());
+			group2_ |= ((uint64_t) Mask::SREG << rhs.val_);
 			return *this;
 		}
 
 		inline OpSet& operator+=(FpuData rhs) {
-			group2_ |= ((uint64_t) Mask::DATA << rhs.val());
+			group2_ |= ((uint64_t) Mask::DATA << rhs.val_);
 			return *this;
 		}
 
 		inline OpSet& operator+=(FpuInstruction rhs) {
-			group2_ |= ((uint64_t) Mask::INSTR << rhs.val());
+			group2_ |= ((uint64_t) Mask::INSTR << rhs.val_);
 			return *this;
 		}
 
 		inline OpSet& operator+=(FpuOpcode rhs) {
-			group2_ |= ((uint64_t) Mask::OPCODE << rhs.val());
+			group2_ |= ((uint64_t) Mask::OPCODE << rhs.val_);
 			return *this;
 		}
 
 		inline OpSet& operator+=(Rip rhs) {
-			group2_ |= ((uint64_t) Mask::RIP << rhs.val());
+			group2_ |= ((uint64_t) Mask::RIP << rhs.val_);
 			return *this;
 		}
 
@@ -354,77 +354,77 @@ class OpSet {
 		// Queries
 
 		inline bool contains(Rl rhs) const {
-			return ((group1_ >> rhs.val()) & (uint64_t)Mask::LOW) == 
+			return ((group1_ >> rhs.val_) & (uint64_t)Mask::LOW) == 
 				     (uint64_t)Mask::LOW;
 		}
 
 		inline bool contains(Rh rhs) const {
-			return ((group1_ >> (rhs.val()-4)) & (uint64_t)Mask::HIGH) == 
+			return ((group1_ >> (rhs.val_-4)) & (uint64_t)Mask::HIGH) == 
 				     (uint64_t)Mask::HIGH;
 		}
 
 		inline bool contains(Rb rhs) const {
-			return ((group1_ >> rhs.val()) & (uint64_t)Mask::LOW) == 
+			return ((group1_ >> rhs.val_) & (uint64_t)Mask::LOW) == 
 				     (uint64_t)Mask::LOW;
 		}
 
 		inline bool contains(R16 rhs) const {
-			return ((group1_ >> rhs.val()) & (uint64_t)Mask::WORD) == 
+			return ((group1_ >> rhs.val_) & (uint64_t)Mask::WORD) == 
 				     (uint64_t)Mask::WORD;
 		}
 
 		inline bool contains(R32 rhs) const {
-			return ((group1_ >> rhs.val()) & (uint64_t)Mask::DOUBLE) == 
+			return ((group1_ >> rhs.val_) & (uint64_t)Mask::DOUBLE) == 
 				     (uint64_t)Mask::DOUBLE;
 		}
 
 		inline bool contains(R64 rhs) const {
-			return ((group1_ >> rhs.val()) & (uint64_t)Mask::QUAD) == 
+			return ((group1_ >> rhs.val_) & (uint64_t)Mask::QUAD) == 
 				     (uint64_t)Mask::QUAD;
 		}
 
 		inline bool contains(Xmm rhs) const {
-			return ((group2_ >> rhs.val()) & (uint64_t)Mask::XMM) == 
+			return ((group2_ >> rhs.val_) & (uint64_t)Mask::XMM) == 
 				     (uint64_t)Mask::XMM;
 		}
 
 		inline bool contains(Ymm rhs) const {
-			return ((group2_ >> rhs.val()) & (uint64_t)Mask::YMM) == 
+			return ((group2_ >> rhs.val_) & (uint64_t)Mask::YMM) == 
 				     (uint64_t)Mask::YMM;
 		}
 
 		inline bool contains(Mm rhs) const {
-			return ((group2_ >> rhs.val()) & (uint64_t)Mask::MM) == 
+			return ((group2_ >> rhs.val_) & (uint64_t)Mask::MM) == 
 				     (uint64_t)Mask::MM;
 		}
 
 		inline bool contains(St rhs) const {
-			return ((group2_ >> rhs.val()) & (uint64_t)Mask::ST) == 
+			return ((group2_ >> rhs.val_) & (uint64_t)Mask::ST) == 
 				     (uint64_t)Mask::ST;
 		}
 
 		inline bool contains(Sreg rhs) const {
-			return ((group2_ >> rhs.val()) & (uint64_t)Mask::SREG) == 
+			return ((group2_ >> rhs.val_) & (uint64_t)Mask::SREG) == 
 				     (uint64_t)Mask::SREG;
 		}
 
 		inline bool contains(FpuData rhs) const {
-			return ((group2_ >> rhs.val()) & (uint64_t)Mask::DATA) == 
+			return ((group2_ >> rhs.val_) & (uint64_t)Mask::DATA) == 
 				     (uint64_t)Mask::DATA;
 		}
 
 		inline bool contains(FpuInstruction rhs) const {
-			return ((group2_ >> rhs.val()) & (uint64_t)Mask::INSTR) == 
+			return ((group2_ >> rhs.val_) & (uint64_t)Mask::INSTR) == 
 				     (uint64_t)Mask::INSTR;
 		}
 
 		inline bool contains(FpuOpcode rhs) const {
-			return ((group2_ >> rhs.val()) & (uint64_t)Mask::OPCODE) == 
+			return ((group2_ >> rhs.val_) & (uint64_t)Mask::OPCODE) == 
 				     (uint64_t)Mask::OPCODE;
 		}
 
 		inline bool contains(Rip rhs) const {
-			return ((group2_ >> rhs.val()) & (uint64_t)Mask::RIP) == 
+			return ((group2_ >> rhs.val_) & (uint64_t)Mask::RIP) == 
 				     (uint64_t)Mask::RIP;
 		}
 
@@ -453,16 +453,11 @@ class OpSet {
 				     (uint64_t)Mask::MXCSR;
 		}
 
-		void write_att(std::ostream& os) const;
-		void write_intel(std::ostream& os) const;
-
 	private:
 		uint64_t group1_;
 		uint64_t group2_;
 		uint64_t group3_;
 		uint64_t group4_;
-
-		void write_txt(std::ostream& os, bool att) const;
 };
 
 } // namespace x64asm

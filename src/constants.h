@@ -327,12 +327,10 @@ extern const FpuTag tag7;
 
 extern const std::vector<FpuTag> fpu_tags;
 
-extern const Rip rip;
 extern const FpuData fpu_data;
 extern const FpuInstruction fpu_instruction;
 extern const FpuOpcode fpu_opcode;
-
-extern const std::vector<EnvReg> env_regs;
+extern const Rip rip;
 
 extern const Zero zero;
 extern const One one;

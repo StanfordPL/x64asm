@@ -16,48 +16,10 @@ limitations under the License.
 
 #include "env_reg.h"
 
-using namespace std;
-
 namespace x64asm {
 
 EnvReg::~EnvReg() {
 	// Does nothing.
-}
-
-void FpuData::write_att(ostream& os) const {
-	os << "%";
-	write_intel(os);
-}
-
-void FpuData::write_intel(ostream& os) const {
-	os << "fpu_data";
-}
-
-void FpuInstruction::write_att(ostream& os) const {
-	os << "%";
-	write_intel(os);
-}
-
-void FpuInstruction::write_intel(ostream& os) const {
-	os << "fpu_instruction";
-}
-
-void FpuOpcode::write_att(ostream& os) const {
-	os << "%";
-	write_intel(os);
-}
-
-void FpuOpcode::write_intel(ostream& os) const {
-	os << "fpu_opcode";
-}
-
-void Rip::write_att(ostream& os) const {
-	os << "%";
-	write_intel(os);
-}
-
-void Rip::write_intel(ostream& os) const {
-	os << "rip";
 }
 
 } // namespace x64asm

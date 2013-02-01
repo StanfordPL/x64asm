@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef X64ASM_ENV_REG_H
 #define X64ASM_ENV_REG_H
 
-#include <iostream>
+#include <stdint.h>
 
 namespace x64asm {
 
@@ -27,43 +27,36 @@ class EnvReg {
 	public:
 		inline EnvReg(uint64_t val) : val_{val} { }
 		virtual ~EnvReg() = 0;
-		virtual void write_att(std::ostream& os) const = 0;
-		virtual void write_intel(std::ostream& os) const = 0;
 	private:
-		inline uint64_t val() const { return val_; }
 		uint64_t val_;
 };
 
 /** The FPU Data register. */
 class FpuData : public EnvReg {
-	public:
+	friend class Constants;
+	private:
 		inline FpuData() : EnvReg{0} { }
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
 };
 
 /** The FPU Instruction register. */
 class FpuInstruction : public EnvReg {
-	public:
+	friend class Constants;
+	private:
 		inline FpuInstruction() : EnvReg{0} { }
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
 };
 
 /** The FPU Opcode regiter. */
 class FpuOpcode : public EnvReg {
-	public:
+	friend class Constants;
+	private:
 		inline FpuOpcode() : EnvReg{0} { }
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
 };
 
 /** The instruction pointer register. */
 class Rip : public EnvReg {
-	public:
+	friend class Constants;
+	private:
 		inline Rip() : EnvReg{0} { }
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
 };
 
 } // namespace x64asm

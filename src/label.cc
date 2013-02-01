@@ -25,7 +25,7 @@ OpType Label::type() const {
 }
 
 void Label::write_att(ostream& os) const {
-	os << ".LABEL_" << dec << val();
+	os << ".LABEL_" << dec << val_;
 }
 
 void Label::write_intel(ostream& os) const {

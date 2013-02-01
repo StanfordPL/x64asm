@@ -34,7 +34,7 @@ void Imm::write_att(ostream& os) const {
 }
 
 void Imm::write_intel(ostream& os) const {
-	os << "0x" << noshowbase << hex << val();
+	os << "0x" << noshowbase << hex << val_;
 }
 
 OpType Imm8::type() const {
@@ -42,7 +42,7 @@ OpType Imm8::type() const {
 }
 
 bool Imm8::check() const {
-	return (int64_t)val() >= -128 && (int64_t)val() < 128;
+	return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
 }
 
 OpType Imm16::type() const {
@@ -50,7 +50,7 @@ OpType Imm16::type() const {
 }
 
 bool Imm16::check() const {
-	return (int64_t)val() >= -32768 && (int64_t)val() < 32768;
+	return (int64_t)val_ >= -32768 && (int64_t)val_ < 32768;
 }
 
 OpType Imm32::type() const {
@@ -58,7 +58,7 @@ OpType Imm32::type() const {
 }
 
 bool Imm32::check() const {
-	return (int64_t)val() >= -2147483648 && (int64_t)val() < 2147483648;
+	return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
 }
 
 OpType Imm64::type() const {
@@ -70,7 +70,7 @@ OpType Zero::type() const {
 }
 
 bool Zero::check() const {
-	return val() == 0;
+	return val_ == 0;
 }
 
 OpType One::type() const {
@@ -78,7 +78,7 @@ OpType One::type() const {
 }
 
 bool One::check() const {
-	return val() == 1;
+	return val_ == 1;
 }
 
 OpType Three::type() const {
@@ -86,7 +86,7 @@ OpType Three::type() const {
 }
 
 bool Three::check() const {
-	return val() == 3;
+	return val_ == 3;
 }
 
 } // namespace x64asm

@@ -41,7 +41,7 @@ OpType Pref66::type() const {
 }
 
 bool Pref66::check() const {
-	return val() == 0;
+	return val_ == 0;
 }
 
 OpType PrefRexW::type() const {
@@ -49,7 +49,7 @@ OpType PrefRexW::type() const {
 }
 
 bool PrefRexW::check() const {
-	return val() == 0;
+	return val_ == 0;
 }
 
 OpType Far::type() const {
@@ -57,7 +57,7 @@ OpType Far::type() const {
 }
 
 bool Far::check() const {
-	return val() == 0;
+	return val_ == 0;
 }
 
 } // namespace x64asm

@@ -27,7 +27,7 @@ OpType Sreg::type() const {
 }
 
 bool Sreg::check() const {
-	return val() < 6;
+	return val_ < 6;
 }
 
 void Sreg::write_att(ostream& os) const {
@@ -36,7 +36,7 @@ void Sreg::write_att(ostream& os) const {
 }
 
 void Sreg::write_intel(ostream& os) const {
-	switch ( val() ) {
+	switch ( val_ ) {
 		case 0: os << "es"; break;
 		case 1: os << "cs"; break;
 		case 2: os << "ss"; break;
@@ -53,7 +53,7 @@ OpType Fs::type() const {
 }
 
 bool Fs::check() const {
-	return val() == 4;
+	return val_ == 4;
 }
 
 OpType Gs::type() const {
@@ -61,7 +61,7 @@ OpType Gs::type() const {
 }
 
 bool Gs::check() const {
-	return val() == 5;
+	return val_ == 5;
 }
 
 } // namespace x64asm
