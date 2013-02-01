@@ -31,6 +31,7 @@ limitations under the License.
 
 namespace x64asm {
 
+/** A compact bit set representation for registers. */
 class OpSet {
 	private:
 		enum class Mask : uint64_t {
