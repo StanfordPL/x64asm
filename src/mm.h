@@ -28,12 +28,12 @@ namespace x64asm {
 class Mm : public AtomicOperand {
 	friend class Constants;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check();
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	private:
-		inline Mm(uint64_t val) : AtomicOperand{val} { }
-		virtual OpType type() const;
+		constexpr Mm(uint64_t val) : AtomicOperand{val} { }
+		virtual constexpr OpType type();
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 

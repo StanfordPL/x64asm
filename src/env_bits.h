@@ -24,48 +24,48 @@ namespace x64asm {
 /** An environment register bit. */
 class EnvBits {
 	public:
-		inline EnvBits(size_t i, size_t w) : index_{i}, width_{w} { }
-		virtual ~EnvBits() = 0;
-		inline size_t index() const { return index_; }
-		inline size_t width() const { return width_; }
+		constexpr size_t index() { return index_; }
+		constexpr size_t width() { return width_; }
+	protected:
+		constexpr EnvBits(size_t i, size_t w) : index_{i}, width_{w} { }
 	private:
-		size_t index_;
-		size_t width_;
+		const size_t index_;
+		const size_t width_;
 };
 
 /** An EFLAGS register bit. */
 class Eflags : public EnvBits {
 	friend class Constants;
 	private:
-		inline Eflags(size_t i, size_t w) : EnvBits{i, w} { }
+		constexpr Eflags(size_t i, size_t w) : EnvBits{i, w} { }
 };
 
 /** An FPU control register bit. */
 class FpuControl : public EnvBits {
 	friend class Constants;
 	private:
-		inline FpuControl(size_t i, size_t w) : EnvBits{i, w} { }
+		constexpr FpuControl(size_t i, size_t w) : EnvBits{i, w} { }
 };
 
 /** An FPU status register bit. */
 class FpuStatus : public EnvBits {
 	friend class Constants;
 	private:
-		inline FpuStatus(size_t i, size_t w) : EnvBits{i, w} { }
+		constexpr FpuStatus(size_t i, size_t w) : EnvBits{i, w} { }
 };
 
 /** An FPU tag register. */
 class FpuTag : public EnvBits {
 	friend class Constants;
 	private:
-		inline FpuTag(size_t i, size_t w) : EnvBits{i, w} { }
+		constexpr FpuTag(size_t i, size_t w) : EnvBits{i, w} { }
 };
 
 /** An MXCSR register bit. */
 class Mxcsr : public EnvBits {
 	friend class Constants;
 	private:
-		inline Mxcsr(size_t i, size_t w) : EnvBits{i, w} { }
+		constexpr Mxcsr(size_t i, size_t w) : EnvBits{i, w} { }
 };
 
 } // namespace x64asm

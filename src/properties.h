@@ -24,55 +24,59 @@ namespace x64asm {
 enum class Property : uint32_t {
 	MUST_READ      = 0x00000003,
 	MAYBE_READ     = 0x00000001,
-	NO_READ        = 0x00000010,
 
 	MUST_WRITE_ZX  = 0x00000700,
 	MUST_WRITE     = 0x00000300,
 	MAYBE_WRITE_ZX = 0x00000500,
 	MAYBE_WRITE    = 0x00000100,
-	NO_WRITE       = 0x00001000,
 
 	MUST_UNDEF     = 0x00030000,
 	MAYBE_UNDEF    = 0x00010000,
-	NO_UNDEF       = 0x00100000
+
+	NONE           = 0x00000000,
+	ALL            = 0x00030703
 };
 
 class Properties {
 	private:
-		inline Properties(Property r, Property w, Property u) 
+		constexpr Properties(uint32_t p) 
+				: mask_{p} { 
+		}
+		constexpr Properties(Property r, Property w, Property u) 
 				: mask_{(uint32_t)r | (uint32_t)w | (uint32_t)u} {
 		}
 
 	public:
+		constexpr Properties() 
+				: mask_{(uint32_t)Property::NONE} {
+		}	
+
 		// Static Constants
-		static inline Properties none() {
-			return Properties(Property::NO_READ, Property::NO_WRITE, 
-					              Property::NO_UNDEF);
+		static constexpr Properties none() {
+			return Properties{(uint32_t)Property::NONE};
 		}
 
 		// Element Operators
-		inline Properties operator+(Property rhs) const {
-			auto ret = *this;
-			return ret += rhs;
+		constexpr Properties operator+(Property rhs) {
+			return Properties{(uint32_t)rhs};
 		}
 
-		inline Properties operator-(Property rhs) const {
-			auto ret = *this;
-			return ret -= rhs;
+		constexpr Properties operator-(Property rhs) {
+			return Properties{mask_ & ~(uint32_t)rhs};
 		}
 
-		inline Properties& operator+=(Property rhs) {
+		Properties& operator+=(Property rhs) {
 			mask_ |= ((uint32_t)rhs);
 			return *this;
 		}
 
-		inline Properties& operator-=(Property rhs) {
+		Properties& operator-=(Property rhs) {
 			mask_ &= ~((uint32_t)rhs);
 			return *this;
 		}
 
 		// Queries
-		inline bool contains(Property p) const {
+		constexpr bool contains(Property p) {
 			return (mask_ & (uint32_t)p) == (uint32_t)p;
 		}
 

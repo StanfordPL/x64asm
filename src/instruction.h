@@ -21,7 +21,6 @@ limitations under the License.
 #include <cassert>
 #include <initializer_list>
 #include <iostream>
-#include <vector>
 
 #include "src/opcode.h"
 #include "src/operand.h"
@@ -34,114 +33,114 @@ namespace x64asm {
 /** A hardware instruction. */
 class Instruction {
 	public:
-		inline Instruction(Opcode opcode) 
-				: opcode_(opcode), operands_{0,0,0,0} { 
+		Instruction(Opcode opcode) 
+				: opcode_(opcode), operands_{{0,0,0,0}} { 
 		}
 
-		inline Instruction(Opcode opcode, 
+		Instruction(Opcode opcode, 
 				               std::initializer_list<const Operand*> operands)
-				: opcode_(opcode), operands_{0,0,0,0} {
+				: opcode_(opcode), operands_{{0,0,0,0}} {
 			assert(operands.size() <= 4);
 			std::copy(operands.begin(), operands.end(), operands_.begin());
 		}
 
 		template <typename InItr>
-		inline Instruction(Opcode opcode, InItr begin, InItr end) 
-				: opcode_(opcode), operands_{0,0,0,0} {
+		Instruction(Opcode opcode, InItr begin, InItr end) 
+				: opcode_(opcode), operands_{{0,0,0,0}} {
 			assert(end-begin <= 4);		
 			std::copy(begin, end, operands_.begin());
 		}
 
-		inline Opcode get_opcode() const {
+		Opcode get_opcode() const {
 			return opcode_;
 		}
 
-		inline void set_opcode(Opcode o) {
+		void set_opcode(Opcode o) {
 			opcode_ = o;
 		}
 
-		inline const Operand* get_operand(size_t index) const {
+		const Operand* get_operand(size_t index) const {
 			assert(index < operands_.size());
 			return operands_[index];
 		}
 
-		inline void set_operand(const Operand* o, size_t index) {
+		void set_operand(const Operand* o, size_t index) {
 			assert(index < operands_.size());
 			operands_[index] = o;
 		}	
 
-		inline size_t arity() const {
+		size_t arity() const {
 			assert((size_t)get_opcode() < arity_.size());
 			return arity_[get_opcode()];
 		}
 
-		inline Properties properties(size_t index) const {
+		Properties properties(size_t index) const {
 			assert((size_t)get_opcode() < properties_.size());
 			assert(index < properties_[get_opcode()].size());
 			return properties_[get_opcode()][index];
 		}
 
-		inline OpType type(size_t index) const {
+		OpType type(size_t index) const {
 			assert((size_t)get_opcode() < type_.size());
 			assert(index < type_[get_opcode()].size());
 			return type_[get_opcode()][index];
 		}
 
-		inline bool is_label_defn() const {
+		bool is_label_defn() const {
 			return get_opcode() == Opcode::LABEL_DEFN;
 		}
 
-		inline bool is_return() const {
+		bool is_return() const {
 			assert((size_t)get_opcode() < is_return_.size());
 			return is_return_[get_opcode()];
 		}
 
-		inline bool is_nop() const {
+		bool is_nop() const {
 			assert((size_t)get_opcode() < is_nop_.size());
 			return is_nop_[get_opcode()];
 		}
 
-		inline bool is_jump() const {
+		bool is_jump() const {
 			assert((size_t)get_opcode() < is_jump_.size());
 			return is_jump_[get_opcode()];
 		}
 
-		inline bool is_cond_jump() const {
+		bool is_cond_jump() const {
 			assert((size_t)get_opcode() < is_cond_jump_.size());
 			return is_cond_jump_[get_opcode()];
 		}
 
-		inline bool is_uncond_jump() const {
+		bool is_uncond_jump() const {
 			assert((size_t)get_opcode() < is_uncond_jump_.size());
 			return is_uncond_jump_[get_opcode()];
 		}
 
-		inline const RegSet& implicit_must_read_set() const {
+		const RegSet& implicit_must_read_set() const {
 			assert((size_t)get_opcode() < implicit_must_read_set_.size());
 			return implicit_must_read_set_[get_opcode()];
 		}
 
-		inline const RegSet& implicit_maybe_read_set() const {
+		const RegSet& implicit_maybe_read_set() const {
 			assert((size_t)get_opcode() < implicit_maybe_read_set_.size());
 			return implicit_maybe_read_set_[get_opcode()];
 		}
 
-		inline const RegSet& implicit_must_write_set() const {
+		const RegSet& implicit_must_write_set() const {
 			assert((size_t)get_opcode() < implicit_must_write_set_.size());
 			return implicit_must_write_set_[get_opcode()];
 		}
 
-		inline const RegSet& implicit_maybe_write_set() const {
+		const RegSet& implicit_maybe_write_set() const {
 			assert((size_t)get_opcode() < implicit_maybe_write_set_.size());
 			return implicit_maybe_write_set_[get_opcode()];
 		}
 
-		inline const RegSet& implicit_must_undef_set() const {
+		const RegSet& implicit_must_undef_set() const {
 			assert((size_t)get_opcode() < implicit_must_undef_set_.size());
 			return implicit_must_undef_set_[get_opcode()];
 		}
 
-		inline const RegSet& implicit_maybe_undef_set() const {
+		const RegSet& implicit_maybe_undef_set() const {
 			assert((size_t)get_opcode() < implicit_maybe_undef_set_.size());
 			return implicit_maybe_undef_set_[get_opcode()];
 		}
@@ -153,27 +152,27 @@ class Instruction {
 		RegSet explicit_must_undef_set() const ;
 		RegSet explicit_maybe_undef_set() const ;
 
-		inline RegSet must_read_set() const {
+		RegSet must_read_set() const {
 			return implicit_must_read_set() | explicit_must_read_set();
 		}
 
-		inline RegSet maybe_read_set() const {
+		RegSet maybe_read_set() const {
 			return implicit_maybe_read_set() | explicit_maybe_read_set();
 		}
 
-		inline RegSet must_write_set() const {
+		RegSet must_write_set() const {
 			return implicit_must_write_set() | explicit_must_write_set();
 		}
 
-		inline RegSet maybe_write_set() const {
+		RegSet maybe_write_set() const {
 			return implicit_maybe_write_set() | explicit_maybe_write_set();
 		}
 
-		inline RegSet must_undef_set() const {
+		RegSet must_undef_set() const {
 			return implicit_must_undef_set() | explicit_must_undef_set();
 		}
 
-		inline RegSet maybe_undef_set() const {
+		RegSet maybe_undef_set() const {
 			return implicit_maybe_undef_set() | explicit_maybe_undef_set();
 		}
 
@@ -184,22 +183,22 @@ class Instruction {
 
 	private:
 		Opcode opcode_;
-		std::vector<const Operand*> operands_;
+		std::array<const Operand*, 4> operands_;
 
-		static std::array<size_t, 3257> arity_;
-		static std::array<std::vector<Properties>, 3257> properties_;
-		static std::array<std::vector<OpType>, 3257> type_;
-		static std::array<bool, 3257> is_return_;
-		static std::array<bool, 3257> is_nop_;
-		static std::array<bool, 3257> is_jump_;
-		static std::array<bool, 3257> is_cond_jump_;
-		static std::array<bool, 3257> is_uncond_jump_;
-		static std::array<RegSet, 3257> implicit_must_read_set_;
-		static std::array<RegSet, 3257> implicit_maybe_read_set_;
-		static std::array<RegSet, 3257> implicit_must_write_set_;
-		static std::array<RegSet, 3257> implicit_maybe_write_set_;
-		static std::array<RegSet, 3257> implicit_must_undef_set_;
-		static std::array<RegSet, 3257> implicit_maybe_undef_set_;
+		static const std::array<size_t, 3257> arity_;
+		static const std::array<std::array<Properties, 4>, 3257> properties_;
+		static const std::array<std::array<OpType, 4>, 3257> type_;
+		static const std::array<bool, 3257> is_return_;
+		static const std::array<bool, 3257> is_nop_;
+		static const std::array<bool, 3257> is_jump_;
+		static const std::array<bool, 3257> is_cond_jump_;
+		static const std::array<bool, 3257> is_uncond_jump_;
+		static const std::array<RegSet, 3257> implicit_must_read_set_;
+		static const std::array<RegSet, 3257> implicit_maybe_read_set_;
+		static const std::array<RegSet, 3257> implicit_must_write_set_;
+		static const std::array<RegSet, 3257> implicit_maybe_write_set_;
+		static const std::array<RegSet, 3257> implicit_must_undef_set_;
+		static const std::array<RegSet, 3257> implicit_maybe_undef_set_;
 };
 
 } // namespace x64asm

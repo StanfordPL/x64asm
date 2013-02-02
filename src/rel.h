@@ -25,13 +25,10 @@ namespace x64asm {
 /** A relative address. */
 class Rel : public AtomicOperand {
 	public:
-		inline Rel(uint64_t val) : AtomicOperand{val} { }
-		virtual ~Rel() = 0;
-		virtual bool check() const = 0;
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
-	private:
-		virtual OpType type() const = 0;
+	protected:
+		constexpr Rel(uint64_t val) : AtomicOperand{val} { }
 };
 
 /** A relative address in the range from 128 bytes before the end of the 
@@ -39,10 +36,14 @@ class Rel : public AtomicOperand {
 */
 class Rel8 : public Rel {
 	public:
-		inline Rel8(int8_t val) : Rel{(uint64_t)val} { }
-		virtual bool check() const;
+		constexpr Rel8(int8_t val) : Rel{(uint64_t)val} { }
+		virtual constexpr bool check() {
+			return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
+		}
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::REL_8;
+		}
 };
 
 /** A relative address within the same code segment as the instruction 
@@ -51,10 +52,14 @@ class Rel8 : public Rel {
 */
 class Rel32 : public Rel {
 	public:
-		inline Rel32(int64_t val) : Rel{(uint64_t)val} { }
-		virtual bool check() const;
+		constexpr Rel32(int64_t val) : Rel{(uint64_t)val} { }
+		virtual constexpr bool check() {
+			return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
+		}
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::REL_32;
+		}
 };
 
 } // namespace x64asm

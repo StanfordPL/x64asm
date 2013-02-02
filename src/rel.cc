@@ -20,31 +20,12 @@ using namespace std;
 
 namespace x64asm {
 
-Rel::~Rel() {
-	// Does nothing.
-}
-
 void Rel::write_att(ostream& os) const {
 	os << hex << showbase << val_;
 }
 
 void Rel::write_intel(ostream& os) const {
-}
-
-bool Rel8::check() const {
-	return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
-}
-
-OpType Rel8::type() const {
-	return OpType::REL_8;
-}
-
-bool Rel32::check() const {
-	return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
-}
-
-OpType Rel32::type() const {
-	return OpType::REL_32;
+	os << hex << noshowbase << val_;
 }
 
 } // namespace x64asm

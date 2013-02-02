@@ -24,7 +24,7 @@ using namespace std;
 
 namespace x64asm {
 
-bool Mm::check() const {
+constexpr bool Mm::check() {
 	return val_ < 8;
 }
 
@@ -42,7 +42,7 @@ void Mm::insert_in(RegSet& os, bool promote) const {
 	os += *this;
 }
 
-OpType Mm::type() const {
+constexpr OpType Mm::type() {
 	return OpType::MM;
 }
 

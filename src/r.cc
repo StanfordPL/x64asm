@@ -24,16 +24,8 @@ using namespace std;
 
 namespace x64asm {
 
-R::~R() {
-	// Does nothing.
-}
-
 R64 R::parent() const {
 	return R64{val_};
-}
-
-bool Rl::check() const {
-	return val_ < 4;
 }
 
 void Rl::write_att(ostream& os) const {
@@ -59,12 +51,8 @@ void Rl::insert_in(RegSet& os, bool promote) const {
 		os += *this;
 }
 
-OpType Rl::type() const {
-	return OpType::RL;
-}
-
-bool Rh::check() const {
-	return val_ >= 4 && val_ < 8;
+R64 Rh::parent() const {
+	return R64{val_-4};
 }
 
 void Rh::write_att(ostream& os) const {
@@ -88,18 +76,6 @@ void Rh::insert_in(RegSet& os, bool promote) const {
 		os += parent();
 	else
 		os += *this;
-}
-
-OpType Rh::type() const {
-	return OpType::RH;
-}
-
-R64 Rh::parent() const {
-	return R64{val_-4};
-}
-
-bool Rb::check() const {
-	return val_ >= 4 && val_ < 16;
 }
 
 void Rb::write_att(ostream& os) const {
@@ -133,30 +109,6 @@ void Rb::insert_in(RegSet& os, bool promote) const {
 		os += *this;
 }
 
-OpType Rb::type() const {
-	return OpType::RB;
-}
-
-bool Al::check() const {
-	return val_ == 0;
-}
-
-OpType Al::type() const {
-	return OpType::AL;
-}
-
-bool Cl::check() const {
-	return val_ == 0;
-}
-
-OpType Cl::type() const {
-	return OpType::CL;
-}
-
-bool R16::check() const {
-	return val_ < 16;
-}
-
 void R16::write_att(ostream& os) const {
 	os << "%";
 	write_intel(os);
@@ -185,39 +137,11 @@ void R16::write_intel(ostream& os) const {
 	}
 }
 
-OpType R16::type() const {
-	return OpType::R_16;
-}
-
 void R16::insert_in(RegSet& os, bool promote) const {
 	if ( promote )
 		os += parent();
 	else
 		os += *this;
-}
-
-bool Ax::check() const {
-	return val_ == 0;
-}
-
-OpType Ax::type() const {
-	return OpType::AX;
-}
-
-bool Dx::check() const {
-	return val_ == 0;
-}
-
-OpType Dx::type() const {
-	return OpType::DX;
-}
-
-AddrR::~AddrR() {
-	// Does nothing.
-}
-
-bool R32::check() const {
-	return val_ < 16;
 }
 
 void R32::write_att(ostream& os) const {
@@ -248,27 +172,11 @@ void R32::write_intel(ostream& os) const {
 	}
 }
 
-OpType R32::type() const {
-	return OpType::R_32;
-}
-
 void R32::insert_in(RegSet& os, bool promote) const {
 	if ( promote )
 		os += parent();
 	else
 		os += *this;
-}
-
-bool Eax::check() const {
-	return val_ == 0;
-}
-
-OpType Eax::type() const {
-	return OpType::EAX;
-}
-
-bool R64::check() const {
-	return val_ < 16;
 }
 
 void R64::write_att(ostream& os) const {
@@ -299,23 +207,11 @@ void R64::write_intel(ostream& os) const {
 	}
 }
 
-OpType R64::type() const {
-	return OpType::R_64;
-}
-
 void R64::insert_in(RegSet& os, bool promote) const {
 	if ( promote )
 		os += parent();
 	else
 		os += *this;
-}
-
-bool Rax::check() const {
-	return val_ == 0;
-}
-
-OpType Rax::type() const {
-	return OpType::RAX;
 }
 
 } // namespace x64asm

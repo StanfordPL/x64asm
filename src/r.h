@@ -29,27 +29,26 @@ class R64;
 /** A general-purpose register. */
 class R : public AtomicOperand {
 	public:
-		inline R(uint64_t val) : AtomicOperand{val} { }
-		virtual ~R() = 0;
 		virtual R64 parent() const;
-		virtual bool check() const = 0;
-		virtual void write_att(std::ostream& os) const = 0;
-		virtual void write_intel(std::ostream& os) const = 0;
-	private:
-		virtual OpType type() const = 0;
+	protected:	
+		constexpr R(uint64_t val) : AtomicOperand{val} { }
 };
 
 /** One of the byte general-purpose registers: AL, CL, DL, BL. */
 class Rl : public R {
 	friend class Constants;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ < 4;
+		}
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
-		inline Rl(uint64_t val) : R{val} { }
+		constexpr Rl(uint64_t val) : R{val} { }
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::RL;
+		}
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
@@ -58,12 +57,16 @@ class Rh : public R {
 	friend class Constants;
 	public:
 		virtual R64 parent() const;
-		virtual bool check() const;
+		virtual constexpr bool check() const {
+			return val_ >= 4 && val_ < 8;
+		}
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	private:
-		inline Rh(uint64_t val) : R{val} { }
-		virtual OpType type() const;
+		constexpr Rh(uint64_t val) : R{val} { }
+		virtual constexpr OpType type() {
+			return OpType::RH;
+		}
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
@@ -73,12 +76,16 @@ class Rh : public R {
 class Rb : public R {
 	friend class Constants;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ >= 4 && val_ < 16;
+		}
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	private:
-		inline Rb(uint64_t val) : R{val} { }
-		virtual OpType type() const;
+		constexpr Rb(uint64_t val) : R{val} { }
+		virtual constexpr OpType type() {
+			return OpType::RB;
+		}
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
@@ -86,20 +93,28 @@ class Rb : public R {
 class Al : public Rl {
 	friend class Constants;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ == 0;
+		}
 	private:
-		inline Al() : Rl{0} { }
-		virtual OpType type() const;
+		constexpr Al() : Rl{0} { }
+		virtual constexpr OpType type() {
+			return OpType::AL;
+		}
 };
 
 /** The byte general-purpose register CL. */
 class Cl : public Rl {
 	friend class Constants;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ == 0;
+		}
 	private:
-		inline Cl() : Rl{1} { }
-		virtual OpType type() const;
+		constexpr Cl() : Rl{1} { }
+		virtual constexpr OpType type() {
+			return OpType::CL;
+		}
 };
 
 /** One of the word general-purpose registers: AX, CX, DX, BX, SP, BP, SI, DI; 
@@ -109,13 +124,17 @@ class Cl : public Rl {
 class R16 : public R {
 	friend class Constants;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ < 16;
+		}
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
-		inline R16(uint64_t val) : R{val} { }
+		constexpr R16(uint64_t val) : R{val} { }
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::R_16;
+		}
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
@@ -123,34 +142,36 @@ class R16 : public R {
 class Ax : public R16 {
 	friend class Constants;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ == 0;
+		}
 	private:
-		inline Ax() : R16{0} { }
-		virtual OpType type() const;
+		constexpr Ax() : R16{0} { }
+		virtual constexpr OpType type() {
+			return OpType::AX;
+		}
 };
 
 /** The word general-purpose register DX. */
 class Dx : public R16 {
 	friend class Constants;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ == 0;
+		}
 	private:
-		inline Dx() : R16{2} { }
-		virtual OpType type() const;
+		constexpr Dx() : R16{2} { }
+		virtual constexpr OpType type() {
+			return OpType::DX;
+		}
 };
 
 /** One of the double or quadword general-purpose register which may
 	  be used to form an address in memory.
 */
 class AddrR : public R {
-	public:
-		AddrR(uint64_t val) : R{val} { }
-		virtual ~AddrR() = 0;
-		virtual bool check() const = 0;
-		virtual void write_att(std::ostream& os) const = 0;
-		virtual void write_intel(std::ostream& os) const = 0;
-	private:
-		virtual OpType type() const = 0;
+	protected:
+		constexpr AddrR(uint64_t val) : R{val} { }
 };
 
 /** One of the doubleword general-purpose registers: EAX, ECX, EDX, EBX, ESP, 
@@ -160,13 +181,17 @@ class AddrR : public R {
 class R32 : public AddrR {
 	friend class Constants;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ < 16;
+		}
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
-		inline R32(uint64_t val) : AddrR{val} { }
+		constexpr R32(uint64_t val) : AddrR{val} { }
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::R_32;
+		}
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
@@ -174,10 +199,14 @@ class R32 : public AddrR {
 class Eax : public R32 {
 	friend class Constants;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ == 0;
+		}
 	private:
-		inline Eax() : R32{0} { }
-		virtual OpType type() const;
+		constexpr Eax() : R32{0} { }
+		virtual constexpr OpType type() {
+			return OpType::EAX;
+		}
 };
 
 /** One of the quadword general-purpose registers: RAX, RBX, RCX, RDX, RDI, RSI,
@@ -188,13 +217,17 @@ class R64 : public AddrR {
 	friend class R;
 	friend class Rh;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ < 16;
+		}
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
-		inline R64(uint64_t val) : AddrR{val} { }
+		constexpr R64(uint64_t val) : AddrR{val} { }
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::R_64;
+		}
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
@@ -202,10 +235,14 @@ class R64 : public AddrR {
 class Rax : public R64 {
 	friend class Constants;
 	public:	
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ == 0;
+		}
 	private:
-		inline Rax() : R64{0} { }
-		virtual OpType type() const;
+		constexpr Rax() : R64{0} { }
+		virtual constexpr OpType type() {
+			return OpType::RAX;
+		}
 };
 
 } // namespace x64asm

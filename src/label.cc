@@ -20,7 +20,7 @@ using namespace std;
 
 namespace x64asm {
 
-bool Label::check() const {
+constexpr bool Label::check() {
 	return true;
 }
 
@@ -32,7 +32,7 @@ void Label::write_intel(ostream& os) const {
 	os << ".LABEL_" << dec << val_;
 }
 
-OpType Label::type() const {
+constexpr OpType Label::type() {
 	return OpType::LABEL;
 }
 

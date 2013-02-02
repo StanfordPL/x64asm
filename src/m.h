@@ -40,154 +40,87 @@ enum class Scale {
 /** An operand in memory. */
 class M : public CompoundOperand {
 	public:
-		inline M(const AddrR* b, bool addr_or = false)
-				: seg_(0), base_(b), index_(0), scale_(Scale::TIMES_1), disp_(0),
-				  addr_or_(addr_or) {
-		}
-
-		inline M(const Sreg* s, const AddrR* b, bool addr_or = false)
-				: seg_(s), base_(b), index_(0), scale_(Scale::TIMES_1), disp_(0),
-				  addr_or_(addr_or) {
-		}
-
-		inline M(const AddrR* b, const Imm32* d, bool addr_or = false)
-				: seg_(0), base_(b), index_(0), scale_(Scale::TIMES_1), disp_(d),
-				  addr_or_(addr_or) {
-		}
-
-		inline M(const Sreg* s, const AddrR* b, const Imm32* d, 
-				     bool addr_or = false)
-				: seg_(s), base_(b), index_(0), scale_(Scale::TIMES_1), disp_(d),
-				  addr_or_(addr_or) {
-		}
-
-		inline M(const AddrR* i, Scale sc, bool addr_or = false)
-				: seg_(0), base_(0), index_(i), scale_(sc), disp_(0), 
-				  addr_or_(addr_or) {
-		}
-
-		inline M(const Sreg* s, const AddrR* i, Scale sc, bool addr_or = false)
-				: seg_(s), base_(0), index_(i), scale_(sc), disp_(0), 
-				  addr_or_(addr_or) {
-		}
-
-		inline M(const AddrR* i, Scale sc, const Imm32* d, bool addr_or = false) 
-				: seg_(0), base_(0), index_(i), scale_(sc), disp_(d), 
-				  addr_or_(addr_or) {
-		}
-
-		inline M(const Sreg* s, const AddrR* i, Scale sc, const Imm32* d, 
-				     bool addr_or = false)
-				: seg_(s), base_(0), index_(i), scale_(sc), disp_(d), 
-				  addr_or_(addr_or) {
-		}
-
-		inline M(const AddrR* b, const AddrR* i, Scale sc, bool addr_or = false)
-				: seg_(0), base_(b), index_(i), scale_(sc), disp_(0), 
-				  addr_or_(addr_or) {
-		}
-
-		inline M(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, 
-				     bool addr_or = false)
-				: seg_(s), base_(b), index_(i), scale_(sc), disp_(0), 
-				  addr_or_(addr_or) {
-		}
-
-		inline M(const AddrR* b, const AddrR* i, Scale sc, const Imm32* d, 
-				     bool addr_or = false)
-				: seg_(0), base_(b), index_(i), scale_(sc), disp_(d), 
-				  addr_or_(addr_or) {
-		}
-
-		inline M(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, 
-				     const Imm32* d, bool addr_or = false)
-				: seg_(s), base_(b), index_(i), scale_(sc), disp_(d), 
-				  addr_or_(addr_or) {
-		}
-
-		virtual ~M() = 0;
-
-		inline bool contains_seg() const {
+		bool contains_seg() const {
 			return seg_ != 0;
 		}
 
-		inline bool contains_base() const {
+		bool contains_base() const {
 			return base_ != 0;
 		}
 
-		inline bool contains_index() const {
+		bool contains_index() const {
 			return index_ != 0;
 		}
 
-		inline bool contains_disp() const {
+		bool contains_disp() const {
 			return disp_ != 0;
 		}
 
-		inline const Sreg* get_seg() const {
+		const Sreg* get_seg() const {
 			assert(contains_seg());
 			return seg_;
 		}
 
-		inline const AddrR* get_base() const {
+		const AddrR* get_base() const {
 			assert(contains_base());
 			return base_;
 		}
 
-		inline const AddrR* get_index() const {
+		const AddrR* get_index() const {
 			assert(contains_index());
 			return index_;
 		}
 
-		inline Scale get_scale() const {
+		Scale get_scale() const {
 			return scale_;
 		}
 
-		inline const Imm32* get_disp() const {
+		const Imm32* get_disp() const {
 			assert(contains_disp());
 			return disp_;
 		}
 
-		inline bool get_addr_or() const {
+		bool get_addr_or() const {
 			return addr_or_;
 		}
 
-		inline void set_set(const Sreg* seg) {
+		void set_set(const Sreg* seg) {
 			seg_ = seg;
 		}
 
-		inline void set_base(const AddrR* base) {
+		void set_base(const AddrR* base) {
 			base_ = base;
 		}
 
-		inline void set_index(const AddrR* index) {
+		void set_index(const AddrR* index) {
 			index_ = index;
 		}
 
-		inline void set_scale(Scale scale) {
+		void set_scale(Scale scale) {
 			scale_ = scale;
 		}
 
-		inline void set_disp(const Imm32* disp) {
+		void set_disp(const Imm32* disp) {
 			disp_ = disp;
 		}
 
-		inline void set_addr_or(bool addr_or) {
+		void set_addr_or(bool addr_or) {
 			addr_or_ = addr_or;
 		}
 
-		inline void clear_seg() {
+		void clear_seg() {
 			seg_ = 0;
 		}
 
-		inline void clear_base() {
+		void clear_base() {
 			base_ = 0;
 		}
 
-		inline void clear_index() {
+		void clear_index() {
 			index_ = 0;
 		}
 
-		inline void clear_disp() {
+		void clear_disp() {
 			disp_ = 0;
 		}
 
@@ -196,10 +129,74 @@ class M : public CompoundOperand {
 		virtual void write_intel(std::ostream& os) const;
 
 	protected:
-		virtual void write_intel_width(std::ostream& os) const = 0;
+		constexpr M(const AddrR* b, bool addr_or = false)
+				: CompoundOperand{}, seg_(0), base_(b), index_(0), 
+			    scale_(Scale::TIMES_1), disp_(0), addr_or_(addr_or) {
+		}
+
+		constexpr M(const Sreg* s, const AddrR* b, bool addr_or = false)
+				: CompoundOperand{}, seg_(s), base_(b), index_(0), 
+			    scale_(Scale::TIMES_1), disp_(0), addr_or_(addr_or) {
+		}
+
+		constexpr M(const AddrR* b, const Imm32* d, bool addr_or = false)
+				: CompoundOperand{}, seg_(0), base_(b), index_(0), 
+			    scale_(Scale::TIMES_1), disp_(d), addr_or_(addr_or) {
+		}
+
+		constexpr M(const Sreg* s, const AddrR* b, const Imm32* d, 
+				     bool addr_or = false)
+				: CompoundOperand{}, seg_(s), base_(b), index_(0), 
+			    scale_(Scale::TIMES_1), disp_(d), addr_or_(addr_or) {
+		}
+
+		constexpr M(const AddrR* i, Scale sc, bool addr_or = false)
+				: CompoundOperand{}, seg_(0), base_(0), index_(i), scale_(sc), 
+			    disp_(0), addr_or_(addr_or) {
+		}
+
+		constexpr M(const Sreg* s, const AddrR* i, Scale sc, bool addr_or = false)
+				: CompoundOperand{}, seg_(s), base_(0), index_(i), scale_(sc), 
+			    disp_(0), addr_or_(addr_or) {
+		}
+
+		constexpr M(const AddrR* i, Scale sc, const Imm32* d, bool addr_or = false) 
+				: CompoundOperand{}, seg_(0), base_(0), index_(i), scale_(sc), 
+			    disp_(d), addr_or_(addr_or) {
+		}
+
+		constexpr M(const Sreg* s, const AddrR* i, Scale sc, const Imm32* d, 
+				     bool addr_or = false)
+				: CompoundOperand{}, seg_(s), base_(0), index_(i), scale_(sc), 
+			    disp_(d), addr_or_(addr_or) {
+		}
+
+		constexpr M(const AddrR* b, const AddrR* i, Scale sc, bool addr_or = false)
+				: CompoundOperand{}, seg_(0), base_(b), index_(i), scale_(sc), 
+			    disp_(0), addr_or_(addr_or) {
+		}
+
+		constexpr M(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, 
+				     bool addr_or = false)
+				: CompoundOperand{}, seg_(s), base_(b), index_(i), scale_(sc), 
+			    disp_(0), addr_or_(addr_or) {
+		}
+
+		constexpr M(const AddrR* b, const AddrR* i, Scale sc, const Imm32* d, 
+				     bool addr_or = false)
+				: CompoundOperand{}, seg_(0), base_(b), index_(i), scale_(sc), 
+			    disp_(d), addr_or_(addr_or) {
+		}
+
+		constexpr M(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, 
+				     const Imm32* d, bool addr_or = false)
+				: CompoundOperand{}, seg_(s), base_(b), index_(i), scale_(sc), 
+			    disp_(d), addr_or_(addr_or) {
+		}
+
+		virtual void write_intel_width(std::ostream& os) const;
 
 	private:
-		virtual OpType type() const = 0;
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 
 		const Sreg* seg_;
@@ -212,18 +209,18 @@ class M : public CompoundOperand {
 
 // NOTE: This ugliness can be replaced using inherited constructors come gcc 4.8
 #define CONSTRUCTORS(T) \
-	inline T(const AddrR* b, bool o = false) : M{b, o} { } \
-	inline T(const Sreg* s, const AddrR* b, bool o = false) : M{s, b, o} { } \
-	inline T(const AddrR* b, const Imm32* d, bool o = false) : M{b, d, o} { } \
-	inline T(const Sreg* s, const AddrR* b, const Imm32* d, bool o = false) : M{s, b, d, o} { } \
-	inline T(const AddrR* i, Scale s, bool o = false) : M{i, s, o} { } \
-	inline T(const Sreg* s, const AddrR* i, Scale sc, bool o = false) : M{s, i, sc, o} { } \
-	inline T(const AddrR* i, Scale s, const Imm32* d, bool o = false) : M{i, s, d, o} { } \
-	inline T(const Sreg* s, const AddrR* i, Scale sc, const Imm32* d, bool o = false) : M{s, i, sc, d, o} { } \
-	inline T(const AddrR* b, const AddrR* i, Scale s, bool o = false) : M{b, i, s, o} { } \
-	inline T(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, bool o = false) : M{s, b, i, sc, o} { } \
-	inline T(const AddrR* b, const AddrR* i, Scale s, const Imm32* d, bool o = false) : M{b, i, s, d, o} { } \
-	inline T(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, const Imm32* d, bool o = false) : M{s, b, i, sc, d, o} { } \
+	constexpr T(const AddrR* b, bool o = false) : M{b, o} { } \
+	constexpr T(const Sreg* s, const AddrR* b, bool o = false) : M{s, b, o} { } \
+	constexpr T(const AddrR* b, const Imm32* d, bool o = false) : M{b, d, o} { } \
+	constexpr T(const Sreg* s, const AddrR* b, const Imm32* d, bool o = false) : M{s, b, d, o} { } \
+	constexpr T(const AddrR* i, Scale s, bool o = false) : M{i, s, o} { } \
+	constexpr T(const Sreg* s, const AddrR* i, Scale sc, bool o = false) : M{s, i, sc, o} { } \
+	constexpr T(const AddrR* i, Scale s, const Imm32* d, bool o = false) : M{i, s, d, o} { } \
+	constexpr T(const Sreg* s, const AddrR* i, Scale sc, const Imm32* d, bool o = false) : M{s, i, sc, d, o} { } \
+	constexpr T(const AddrR* b, const AddrR* i, Scale s, bool o = false) : M{b, i, s, o} { } \
+	constexpr T(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, bool o = false) : M{s, b, i, sc, o} { } \
+	constexpr T(const AddrR* b, const AddrR* i, Scale s, const Imm32* d, bool o = false) : M{b, i, s, d, o} { } \
+	constexpr T(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, const Imm32* d, bool o = false) : M{s, b, i, sc, d, o} { } \
 
 /** A byte operand in memory, usually expressed as a variable or array name, 
 	  but pointed to by the DS:(E)SI or ES:(E)DI registers. 
@@ -235,7 +232,9 @@ class M8 : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_8;
+		}
 };
 
 /** A word operand in memory, usually expressed as a variable or array name, 
@@ -248,7 +247,9 @@ class M16 : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_16;
+		}
 };
 
 /** A doubleword operand in memory, usually expressed as a variable or array 
@@ -261,7 +262,9 @@ class M32 : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_32;
+		}
 };
 
 /** A memory quadword operand in memory. */
@@ -271,7 +274,9 @@ class M64 : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_64;
+		}
 };
 
 /** A memory double quadword operand in memory. */
@@ -281,7 +286,9 @@ class M128 : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_128;
+		}
 };
 
 /** A 32-byte operand in memory. This nomenclature is used only with AVX 
@@ -293,7 +300,9 @@ class M256 : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_256;
+		}
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -306,7 +315,9 @@ class MPtr1616 : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_PTR_16_16;
+		}
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -319,7 +330,9 @@ class MPtr1632 : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_PTR_16_32;
+		}
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -332,7 +345,9 @@ class MPtr1664 : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_PTR_16_64;
+		}
 };
 
 /** A word integer operand in memory. This symbol designates integers that are 
@@ -344,7 +359,9 @@ class M16Int : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_16_INT;
+		}
 };
 
 /** A doubleword integer operand in memory. This symbol designates integers 
@@ -356,7 +373,9 @@ class M32Int : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_32_INT;
+		}
 };
 
 /** A quadword integer operand in memory. This symbol designates integers 
@@ -368,7 +387,9 @@ class M64Int : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_64_INT;
+		}
 };
 
 /** A single-precision floating-point operand in memory. This symbol designates 
@@ -381,7 +402,9 @@ class M32Fp : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_32_FP;
+		}
 };
 
 /** A double-precision floating-point operand in memory. This symbol designates 
@@ -394,7 +417,9 @@ class M64Fp : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_64_FP;
+		}
 };
 
 /** A double extended-precision floating-point operand in memory. This symbol 
@@ -407,7 +432,9 @@ class M80Fp : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_80_FP;
+		}
 };
 
 /** A double extended-precision binary-coded-decimaly operand in memory. */
@@ -417,7 +444,9 @@ class M80Bcd : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_80_BCD;
+		}
 };
 
 /** A 2 byte operand in memory. */
@@ -427,7 +456,9 @@ class M2Byte : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_2_BYTE;
+		}
 };
 
 /** A 14 byte operand in memory. */
@@ -437,7 +468,9 @@ class M14Byte : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_14_BYTE;
+		}
 };
 
 /** A 28 byte operand in memory. */
@@ -447,7 +480,9 @@ class M28Byte : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_28_BYTE;
+		}
 };
 
 /** A 94 byte operand in memory. */
@@ -457,7 +492,9 @@ class M94Byte : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_94_BYTE;
+		}
 };
 
 /** A 108 byte operand in memory. */
@@ -467,7 +504,9 @@ class M108Byte : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_108_BYTE;
+		}
 };
 
 /** A 5122 byte operand in memory. */
@@ -477,7 +516,9 @@ class M512Byte : public M {
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::M_512_BYTE;
+		}
 };
 
 #undef CONSTRUCTORS

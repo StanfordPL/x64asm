@@ -24,10 +24,6 @@ using namespace std;
 
 namespace x64asm {
 
-bool Xmm::check() const {
-	return val_ < 16;
-}
-
 void Xmm::write_att(ostream& os) const {
 	os << "%";
 	write_intel(os);
@@ -38,27 +34,11 @@ void Xmm::write_intel(ostream& os) const {
 	os << "xmm" << dec << val_;
 }
 
-OpType Xmm::type() const {
-	return OpType::XMM;
-}
-
 void Xmm::insert_in(RegSet& os, bool promote) const {
 	if ( promote )
 		os += parent();
 	else
 		os += *this;
-}
-
-Ymm Xmm::parent() const {
-	return Ymm{val_};
-}
-
-bool Xmm0::check() const {
-	return val_ == 0;
-}
-
-OpType Xmm0::type() const {
-	return OpType::XMM_0;
 }
 
 } // namespace x64asm

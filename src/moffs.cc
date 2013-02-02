@@ -20,35 +20,12 @@ using namespace std;
 
 namespace x64asm {
 
-Moffs::~Moffs() {
-	// Does nothing.
-}
-
-bool Moffs::check() const {
-	return true;
-}
-
 void Moffs::write_att(ostream& os) const {
 	os << hex << showbase << val_;
 }
 
 void Moffs::write_intel(ostream& os) const {
-}
-
-OpType Moffs8::type() const {
-	return OpType::MOFFS_8;
-}
-
-OpType Moffs16::type() const {
-	return OpType::MOFFS_16;
-}
-
-OpType Moffs32::type() const {
-	return OpType::MOFFS_32;
-}
-
-OpType Moffs64::type() const {
-	return OpType::MOFFS_64;
+	os << hex << showbase << val_;
 }
 
 } // namespace x64asm

@@ -780,7 +780,7 @@ property_elem (t,p) = "Properties::none()" ++ (concat (map (elem t) p))
 
 -- Converts an instruction to properties table row
 properties_row :: Instr -> String
-properties_row i = "{" ++ intercalate "," ps ++ "}"
+properties_row i = "{{" ++ intercalate "," ps ++ "}}"
   where ps = map property_elem $ zip (operands i) (properties i)
 
 -- Converts all instruction to properties table
@@ -792,7 +792,7 @@ type_elem o = "OpType::" ++ (op2tag o)
 
 -- Converts an instruction to type table row
 type_row :: Instr -> String
-type_row i = "{" ++ intercalate "," (map type_elem (operands i)) ++ "}"
+type_row i = "{{" ++ intercalate "," (map type_elem (operands i)) ++ "}}"
 
 -- Converts all instruction to type table
 type_table is = to_table is type_row 
@@ -859,22 +859,23 @@ is_must o = any isUpper o
 
 -- Converts an operand to its fully qualified name
 qualify_imp :: String -> String
-qualify_imp s = rep "FPUDATA" "fpu_data" $
-                rep "FPUINSTR" "fpu_instruction" $
-                rep "FPUOPCODE" "fpu_opcode" $
-                rep "ST\\((.)\\)" "ST\\1" $
-                rep "st\\((.)\\)" "st\\1" $
-                rep "TAG\\((.)\\)" "TAG\\1" $
-                rep "tag\\((.)\\)" "tag\\1" $
-                rep "E\\." "eflags_" $
-                rep "e\\." "eflags_" $
-                rep "C\\." "fpu_control_" $
-                rep "c\\." "fpu_control_" $ 
-                rep "S\\." "fpu_status_" $
-                rep "s\\." "fpu_status_" $
-                rep "M\\." "mxcsr_" $
-                rep "m\\." "mxcsr_" $ s
+qualify_imp s = rename s
   where rep x y s = subRegex (mkRegex x) s y
+        rename s = rep "FPUDATA" "fpu_data" $
+                   rep "FPUINSTR" "fpu_instruction" $
+                   rep "FPUOPCODE" "fpu_opcode" $
+                   rep "ST\\((.)\\)" "ST\\1" $
+                   rep "st\\((.)\\)" "st\\1" $
+                   rep "TAG\\((.)\\)" "TAG\\1" $
+                   rep "tag\\((.)\\)" "tag\\1" $
+                   rep "E\\." "eflags_" $
+                   rep "e\\." "eflags_" $
+                   rep "C\\." "fpu_control_" $
+                   rep "c\\." "fpu_control_" $ 
+                   rep "S\\." "fpu_status_" $
+                   rep "s\\." "fpu_status_" $
+                   rep "M\\." "mxcsr_" $
+                   rep "m\\." "mxcsr_" $ s
 
 -- Converts an instruction to implicit_read table row
 must_read_row :: Instr -> String
@@ -882,7 +883,7 @@ must_read_row i
   | "???" `elem` (implicit_reads i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (irs i)))
     where irs i = filter is_must $ map qualify_imp $ implicit_reads i
-          val s = "+" ++ (low s) 
+          val s = "+Constants::" ++ (low s) ++ "()"
 
 -- Converts all instructions to implicit_read table
 must_read_table :: [Instr] -> String
@@ -894,7 +895,7 @@ maybe_read_row i
   | "???" `elem` (implicit_reads i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (irs i)))
     where irs i = map qualify_imp $ implicit_reads i
-          val s = "+" ++ (low s) 
+          val s = "+Constants::" ++ (low s) ++ "()"
 
 -- Converts all instructions to implicit_read table
 maybe_read_table :: [Instr] -> String
@@ -906,7 +907,7 @@ must_write_row i
   | "???" `elem` (implicit_writes i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (iws i)))
     where iws i = filter is_must $ map qualify_imp $ implicit_writes i
-          val s = "+" ++ (low s)
+          val s = "+Constants::" ++ (low s) ++ "()"
 
 -- Converts all instructions to implicit_write table
 must_write_table :: [Instr] -> String
@@ -918,7 +919,7 @@ maybe_write_row i
   | "???" `elem` (implicit_writes i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (iws i)))
     where iws i = map qualify_imp $ implicit_writes i
-          val s = "+" ++ (low s)
+          val s = "+Constants::" ++ (low s) ++ "()"
 
 -- Converts all instructions to implicit_write table
 maybe_write_table :: [Instr] -> String
@@ -930,7 +931,7 @@ must_undef_row i
   | "???" `elem` (implicit_undefs i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (ius i)))
     where ius i = filter is_must $ map qualify_imp $ implicit_undefs i
-          val s = "+" ++ (low s)
+          val s = "+Constants::" ++ (low s) ++ "()"
 
 -- Converts all instructions to implicit_undef table
 must_undef_table :: [Instr] -> String
@@ -942,7 +943,7 @@ maybe_undef_row i
   | "???" `elem` (implicit_undefs i) = "RegSet::universe()"
   | otherwise = "RegSet::empty()" ++ (concat (map val (ius i)))
     where ius i = map qualify_imp $ implicit_undefs i
-          val s = "+" ++ (low s)
+          val s = "+Constants::" ++ (low s) ++ "()"
 
 -- Converts all instructions to implicit_undef table
 maybe_undef_table :: [Instr] -> String

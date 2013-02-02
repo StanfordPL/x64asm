@@ -24,9 +24,8 @@ namespace x64asm {
 /** An environment register. */
 class EnvReg {
 	friend class RegSet;
-	public:
-		inline EnvReg(uint64_t val) : val_{val} { }
-		virtual ~EnvReg() = 0;
+	protected:
+		constexpr EnvReg(uint64_t val) : val_{val} { }
 	private:
 		uint64_t val_;
 };
@@ -35,28 +34,28 @@ class EnvReg {
 class FpuData : public EnvReg {
 	friend class Constants;
 	private:
-		inline FpuData() : EnvReg{0} { }
+		constexpr FpuData() : EnvReg{0} { }
 };
 
 /** The FPU Instruction register. */
 class FpuInstruction : public EnvReg {
 	friend class Constants;
 	private:
-		inline FpuInstruction() : EnvReg{0} { }
+		constexpr FpuInstruction() : EnvReg{0} { }
 };
 
 /** The FPU Opcode regiter. */
 class FpuOpcode : public EnvReg {
 	friend class Constants;
 	private:
-		inline FpuOpcode() : EnvReg{0} { }
+		constexpr FpuOpcode() : EnvReg{0} { }
 };
 
 /** The instruction pointer register. */
 class Rip : public EnvReg {
 	friend class Constants;
 	private:
-		inline Rip() : EnvReg{0} { }
+		constexpr Rip() : EnvReg{0} { }
 };
 
 } // namespace x64asm

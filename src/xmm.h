@@ -31,14 +31,20 @@ namespace x64asm {
 class Xmm : public AtomicOperand {
 	friend class Constants;
 	public:
-		Ymm parent() const;
-		virtual bool check() const;
+		constexpr Ymm parent() { 
+			return Ymm{val_}; 
+		}
+		virtual constexpr bool check() {
+			return val_ < 16;
+		}
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
-		inline Xmm(uint64_t val) : AtomicOperand{val} { } 
+		constexpr Xmm(uint64_t val) : AtomicOperand{val} { } 
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::XMM;
+		}
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
@@ -46,10 +52,14 @@ class Xmm : public AtomicOperand {
 class Xmm0 : public Xmm {
 	friend class Constants;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ == 0;
+		}
 	private:
-		inline Xmm0() : Xmm{0} { }
-		virtual OpType type() const;
+		constexpr Xmm0() : Xmm{0} { }
+		virtual constexpr OpType type() {
+			return OpType::XMM_0;
+		}
 };
 
 } // namespace x64asm

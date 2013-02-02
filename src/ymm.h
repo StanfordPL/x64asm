@@ -31,12 +31,12 @@ class Ymm : public AtomicOperand {
 	friend class Constants;
 	friend class Xmm;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check();
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	private:
-		inline Ymm(uint64_t val) : AtomicOperand{val} { } 
-		virtual OpType type() const;
+		constexpr Ymm(uint64_t val) : AtomicOperand{val} { } 
+		virtual constexpr OpType type();
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 

@@ -22,10 +22,6 @@ using namespace std;
 
 namespace x64asm {
 
-bool St::check() const {
-	return val_ < 8;
-}
-
 void St::write_att(ostream& os) const {
 	os << "%";
 	write_intel(os);
@@ -37,18 +33,6 @@ void St::write_intel(ostream& os) const {
 		os << "st";	
 	else
 		os << "st(" << dec << val_ << ")";
-}
-
-OpType St::type() const {
-	return OpType::ST;
-}
-
-bool St0::check() const {
-	return val_ == 0;
-}
-
-OpType St0::type() const {
-	return OpType::ST_0;
 }
 
 } // namespace x64asm

@@ -22,10 +22,6 @@ using namespace std;
 
 namespace x64asm {
 
-M::~M() {
-	// Does nothing.
-}
-
 bool M::check() const {
 	// Check seg
 	if ( contains_seg() && !get_seg()->check() )
@@ -124,6 +120,10 @@ void M::write_intel(ostream& os) const {
 	os << "]";
 }
 
+void M::write_intel_width(ostream& os) const {
+	assert(false);
+}
+
 void M::insert_in(RegSet& os, bool promote) const {
 	os += *this;
 }
@@ -132,176 +132,88 @@ void M8::write_intel_width(ostream& os) const {
 	os << "BYTE ";
 }
 
-OpType M8::type() const {
-	return OpType::M_8;
-}
-
 void M16::write_intel_width(ostream& os) const {
 	os << "WORD ";
-}
-
-OpType M16::type() const {
-	return OpType::M_16;
 }
 
 void M32::write_intel_width(ostream& os) const {
 	os << "DWORD ";
 }
 
-OpType M32::type() const {
-	return OpType::M_32;
-}
-
 void M64::write_intel_width(ostream& os) const {
 	os << "QWORD ";
-}
-
-OpType M64::type() const {
-	return OpType::M_64;
 }
 
 void M128::write_intel_width(ostream& os) const {
 	os << "XMMWORD ";
 }
 
-OpType M128::type() const {
-	return OpType::M_128;
-}
-
 void M256::write_intel_width(ostream& os) const {
 	os << "YMMWORD ";
-}
-
-OpType M256::type() const {
-	return OpType::M_256;
 }
 
 void MPtr1616::write_intel_width(ostream& os) const {
 	os << "";
 }
 
-OpType MPtr1616::type() const {
-	return OpType::M_PTR_16_16;
-}
-
 void MPtr1632::write_intel_width(ostream& os) const {
 	os << "";
-}
-
-OpType MPtr1632::type() const {
-	return OpType::M_PTR_16_32;
 }
 
 void MPtr1664::write_intel_width(ostream& os) const {
 	os << "";
 }
 
-OpType MPtr1664::type() const {
-	return OpType::M_PTR_16_64;
-}
-
 void M16Int::write_intel_width(ostream& os) const {
 	os << "WORD ";
-}
-
-OpType M16Int::type() const {
-	return OpType::M_16_INT;
 }
 
 void M32Int::write_intel_width(ostream& os) const {
 	os << "DWORD ";
 }
 
-OpType M32Int::type() const {
-	return OpType::M_32_INT;
-}
-
 void M64Int::write_intel_width(ostream& os) const {
 	os << "QWORD ";
-}
-
-OpType M64Int::type() const {
-	return OpType::M_64_INT;
 }
 
 void M32Fp::write_intel_width(ostream& os) const {
 	os << "DWORD ";
 }
 
-OpType M32Fp::type() const {
-	return OpType::M_32_FP;
-}
-
 void M64Fp::write_intel_width(ostream& os) const {
 	os << "QWORD ";
-}
-
-OpType M64Fp::type() const {
-	return OpType::M_64_FP;
 }
 
 void M80Fp::write_intel_width(ostream& os) const {
 	os << "TBYTE ";
 }
 
-OpType M80Fp::type() const {
-	return OpType::M_80_FP;
-}
-
 void M80Bcd::write_intel_width(ostream& os) const {
 	os << "TBYTE ";
-}
-
-OpType M80Bcd::type() const {
-	return OpType::M_80_BCD;
 }
 
 void M2Byte::write_intel_width(ostream& os) const {
 	os << "";
 }
 
-OpType M2Byte::type() const {
-	return OpType::M_2_BYTE;
-}
-
 void M14Byte::write_intel_width(ostream& os) const {
 	os << "";
-}
-
-OpType M14Byte::type() const {
-	return OpType::M_14_BYTE;
 }
 
 void M28Byte::write_intel_width(ostream& os) const {
 	os << "";
 }
 
-OpType M28Byte::type() const {
-	return OpType::M_28_BYTE;
-}
-
 void M94Byte::write_intel_width(ostream& os) const {
 	os << "";
-}
-
-OpType M94Byte::type() const {
-	return OpType::M_94_BYTE;
 }
 
 void M108Byte::write_intel_width(ostream& os) const {
 	os << "";
 }
 
-OpType M108Byte::type() const {
-	return OpType::M_108_BYTE;
-}
-
 void M512Byte::write_intel_width(ostream& os) const {
 	os << "";
-}
-
-OpType M512Byte::type() const {
-	return OpType::M_512_BYTE;
 }
 
 } // namespace x64asm

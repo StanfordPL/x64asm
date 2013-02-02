@@ -30,33 +30,45 @@ namespace x64asm {
 class Sreg : public AtomicOperand {
 	friend class Constants;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ < 6;
+		}
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
-		inline Sreg(uint64_t val) : AtomicOperand{val} { }
+		constexpr Sreg(uint64_t val) : AtomicOperand{val} { }
 	private:
-		virtual OpType type() const;
+		virtual constexpr OpType type() {
+			return OpType::SREG;
+		}
 };
 
 /** The segment register FS. */
 class Fs : public Sreg {
 	friend class Constants;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ == 4;
+		}
 	private:
-		inline Fs() : Sreg{4} { }
-		virtual OpType type() const;
+		constexpr Fs() : Sreg{4} { }
+		virtual constexpr OpType type() {
+			return OpType::FS;
+		}
 };
 
 /** The segment register GS. */
 class Gs : public Sreg {
 	friend class Constants;
 	public:
-		virtual bool check() const;
+		virtual constexpr bool check() {
+			return val_ == 5;
+		}
 	private:
-		inline Gs() : Sreg{5} { }
-		virtual OpType type() const;
+		constexpr Gs() : Sreg{5} { }
+		virtual constexpr OpType type() {
+			return OpType::GS;
+		}
 };
 
 } // namespace x64asm

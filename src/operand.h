@@ -17,6 +17,7 @@ limitations under the License.
 #ifndef X64ASM_SRC_OPERAND_H
 #define X64ASM_SRC_OPERAND_H
 
+#include <cassert>
 #include <iostream>
 #include <stdint.h>
 
@@ -30,12 +31,17 @@ class RegSet;
 class Operand {
 	friend class Instruction;
 	public:
-		virtual ~Operand() = 0; 
-		virtual bool check() const = 0;
-		virtual void write_att(std::ostream& os) const = 0;
-		virtual void write_intel(std::ostream& os) const = 0;
+		virtual constexpr bool check() {
+			return true;
+		}
+		virtual void write_att(std::ostream& os) const;
+		virtual void write_intel(std::ostream& os) const;
+	protected:
+		constexpr Operand() { }	
 	private:
-		virtual OpType type() const = 0;
+		virtual constexpr OpType type() {
+			return OpType::HINT;
+		}
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
@@ -44,27 +50,15 @@ class AtomicOperand : public Operand {
 	friend class Assembler;
 	friend class M;
 	friend class RegSet;
-	public:
-		inline AtomicOperand(uint64_t val) : val_{val} { }
-		virtual ~AtomicOperand() = 0;
-		virtual bool check() const = 0;
-		virtual void write_att(std::ostream& os) const = 0;
-		virtual void write_intel(std::ostream& os) const = 0;
 	protected:
-		uint64_t val_;	
-	private:
-		virtual OpType type() const = 0;
+		constexpr AtomicOperand(uint64_t val) : Operand{}, val_{val} { }
+		const uint64_t val_;	
 };
 
 /** Aggregate Operand Type. */
 class CompoundOperand : public Operand {
-	public:
-		virtual ~CompoundOperand() = 0;
-		virtual bool check() const = 0;
-		virtual void write_att(std::ostream& os) const = 0;
-		virtual void write_intel(std::ostream& os) const = 0;
-	private:
-		virtual OpType type() const = 0;
+	protected:
+		constexpr CompoundOperand() : Operand{} { }
 };
 
 } // namespace x64asm

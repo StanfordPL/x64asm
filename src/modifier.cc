@@ -20,40 +20,12 @@ using namespace std;
 
 namespace x64asm {
 
-Modifier::~Modifier() {
-	// Does nothing.
-}
-
 void Modifier::write_att(ostream& os) const {
 	// Does nothing.
 }
 
 void Modifier::write_intel(ostream& os) const {
 	// Does nothing.
-}
-
-bool Pref66::check() const {
-	return val_ == 0;
-}
-
-OpType Pref66::type() const {
-	return OpType::PREF_66;
-}
-
-bool PrefRexW::check() const {
-	return val_ == 0;
-}
-
-OpType PrefRexW::type() const {
-	return OpType::PREF_REX_W;
-}
-
-bool Far::check() const {
-	return val_ == 0;
-}
-
-OpType Far::type() const {
-	return OpType::FAR;
 }
 
 } // namespace x64asm

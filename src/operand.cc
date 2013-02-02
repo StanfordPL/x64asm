@@ -16,22 +16,22 @@ limitations under the License.
 
 #include "src/operand.h"
 
+#include <cassert>
+
+using namespace std;
+
 namespace x64asm {
 
-Operand::~Operand() {
-	// Does nothing.
-}	
-
-void Operand::insert_in(RegSet& os, bool promote) const {
-	// Does nothing.
+void Operand::write_att(ostream& os) const {
+	assert(false);
 }
 
-AtomicOperand::~AtomicOperand() {
-	// Does nothing.
-}	
+void Operand::write_intel(ostream& os) const {
+	assert(false);
+}
 
-CompoundOperand::~CompoundOperand() {
-	// Does nothing.
-}	
+void Operand::insert_in(RegSet& os, bool promote) const {
+	assert(false);
+}
 
 } // namespace x64asm

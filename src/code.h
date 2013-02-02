@@ -28,12 +28,12 @@ namespace x64asm {
 /** A sequence of Instructions. */
 class Code : public std::vector<Instruction> {
 	public:
-		inline Code()
+		Code()
 				: std::vector<Instruction>{} { }
-		inline Code(std::initializer_list<Instruction> is) 
+		Code(std::initializer_list<Instruction> is) 
 				: std::vector<Instruction>{is} { }
 		template <typename InItr>
-		inline Code(InItr begin, InItr end) 
+		Code(InItr begin, InItr end) 
 				: std::vector<Instruction>{begin, end} { }
 
 		bool check() const;

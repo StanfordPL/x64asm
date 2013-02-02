@@ -21,8 +21,6 @@ INC=-I./
 OBJ=src/assembler.o \
 		src/code.o \
 		src/constants.o \
-		src/env_bits.o \
-		src/env_reg.o \
 		src/imm.o \
 		src/instruction.o \
 		src/label.o \
