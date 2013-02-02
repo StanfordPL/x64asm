@@ -254,15 +254,10 @@ to variants with shorter encodings.
 
 TODO:
 
-assembler.h
-
-- write_elf()
-
 instruction.h
 
 - read_att()
 - read_intel()
-- write_intel()
 
 test/
 
