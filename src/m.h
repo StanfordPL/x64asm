@@ -129,6 +129,16 @@ class M : public CompoundOperand {
 		virtual void write_intel(std::ostream& os) const;
 
 	protected:
+		constexpr M(const Imm32* d, bool addr_or = false)
+				: CompoundOperand{}, seg_{0}, base_{0}, index_{0},
+			    scale_{Scale::TIMES_1}, disp_{d}, addr_or_{addr_or} {
+		}
+
+		constexpr M(const Sreg* s, const Imm32* d, bool addr_or = false)
+				: CompoundOperand{}, seg_{s}, base_{0}, index_{0},
+					scale_{Scale::TIMES_1}, disp_{d}, addr_or_{addr_or} {
+		}
+
 		constexpr M(const AddrR* b, bool addr_or = false)
 				: CompoundOperand{}, seg_(0), base_(b), index_(0), 
 			    scale_(Scale::TIMES_1), disp_(0), addr_or_(addr_or) {
@@ -209,6 +219,8 @@ class M : public CompoundOperand {
 
 // NOTE: This ugliness can be replaced using inherited constructors come gcc 4.8
 #define CONSTRUCTORS(T) \
+	constexpr T(const Imm32* d, bool o = false) : M{d, o} { } \
+	constexpr T(const Sreg* s, const Imm32* d, bool o = false) : M{s, d, o} { } \
 	constexpr T(const AddrR* b, bool o = false) : M{b, o} { } \
 	constexpr T(const Sreg* s, const AddrR* b, bool o = false) : M{s, b, o} { } \
 	constexpr T(const AddrR* b, const Imm32* d, bool o = false) : M{b, d, o} { } \
@@ -302,51 +314,6 @@ class M256 : public M {
 	private:
 		virtual constexpr OpType type() {
 			return OpType::M_256;
-		}
-};
-
-/** A memory operand containing a far pointer composed of two numbers. The
-		number to the left of the colon corresponds to the pointer's segment 
-		selector. The number to the right corresponds to its offset.
-*/
-class MPtr1616 : public M {
-	public:
-		CONSTRUCTORS(MPtr1616)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
-		virtual constexpr OpType type() {
-			return OpType::M_PTR_16_16;
-		}
-};
-
-/** A memory operand containing a far pointer composed of two numbers. The
-		number to the left of the colon corresponds to the pointer's segment 
-		selector. The number to the right corresponds to its offset.
-*/
-class MPtr1632 : public M {
-	public:
-		CONSTRUCTORS(MPtr1632)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
-		virtual constexpr OpType type() {
-			return OpType::M_PTR_16_32;
-		}
-};
-
-/** A memory operand containing a far pointer composed of two numbers. The
-		number to the left of the colon corresponds to the pointer's segment 
-		selector. The number to the right corresponds to its offset.
-*/
-class MPtr1664 : public M {
-	public:
-		CONSTRUCTORS(MPtr1664)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
-		virtual constexpr OpType type() {
-			return OpType::M_PTR_16_64;
 		}
 };
 
@@ -518,6 +485,51 @@ class M512Byte : public M {
 	private:
 		virtual constexpr OpType type() {
 			return OpType::M_512_BYTE;
+		}
+};
+
+/** A memory operand containing a far pointer composed of two numbers. The
+		number to the left of the colon corresponds to the pointer's segment 
+		selector. The number to the right corresponds to its offset.
+*/
+class FarPtr1616 : public M {
+	public:
+		CONSTRUCTORS(FarPtr1616)
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
+		virtual constexpr OpType type() {
+			return OpType::FAR_PTR_16_16;
+		}
+};
+
+/** A memory operand containing a far pointer composed of two numbers. The
+		number to the left of the colon corresponds to the pointer's segment 
+		selector. The number to the right corresponds to its offset.
+*/
+class FarPtr1632 : public M {
+	public:
+		CONSTRUCTORS(FarPtr1632)
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
+		virtual constexpr OpType type() {
+			return OpType::FAR_PTR_16_32;
+		}
+};
+
+/** A memory operand containing a far pointer composed of two numbers. The
+		number to the left of the colon corresponds to the pointer's segment 
+		selector. The number to the right corresponds to its offset.
+*/
+class FarPtr1664 : public M {
+	public:
+		CONSTRUCTORS(FarPtr1664)
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
+	private:
+		virtual constexpr OpType type() {
+			return OpType::FAR_PTR_16_64;
 		}
 };
 

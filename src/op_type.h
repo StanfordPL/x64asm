@@ -39,9 +39,6 @@ enum class OpType {
 	M_64,
 	M_128,
 	M_256,
-	M_PTR_16_16,
-	M_PTR_16_32,
-	M_PTR_16_64,
 	M_16_INT,
 	M_32_INT,
 	M_64_INT,
@@ -55,6 +52,9 @@ enum class OpType {
 	M_94_BYTE,
 	M_108_BYTE,
 	M_512_BYTE,
+	FAR_PTR_16_16,
+	FAR_PTR_16_32,
+	FAR_PTR_16_64,
 
 	MM,
 

@@ -38,6 +38,7 @@ void all() {
 	cout << M64(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
 	cout << M128(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
 	cout << M256(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
+	cout << FarPtr1616(&fs, &disp) << endl;
 }
 
 int main() {

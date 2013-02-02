@@ -36,9 +36,6 @@ bool M::check() const {
 	if ( contains_disp() && !get_disp()->check() )
 		return false;
 
-	// Both base and index can't both be null
-	if ( !contains_base() && !contains_index() ) 
-		return false;
 	// Index cannot be rsp/esp
 	if ( contains_index() && get_index()->val_ == rsp.val_ )
 		return false;
@@ -52,7 +49,11 @@ void M::write_att(ostream& os) const {
 		os << ":";
 	}
 	if ( contains_disp() )
-		get_disp()->write_att(os);
+		get_disp()->write_intel(os); // Not a bug
+
+	if ( !contains_base() && !contains_index() )
+		return;
+
 	os << "(";
 	if ( contains_base() ) {
 		const auto b = get_base();
@@ -88,6 +89,13 @@ void M::write_intel(ostream& os) const {
 		get_seg()->write_intel(os);
 		os << ":";
 	}
+
+	if ( !contains_base() && !contains_index() ) {
+		assert(contains_disp());
+		get_disp()->write_intel(os);
+		return;
+	}
+
 	os << "[";
 	if ( contains_base() ) {
 		const auto b = get_base();
@@ -152,18 +160,6 @@ void M256::write_intel_width(ostream& os) const {
 	os << "YMMWORD ";
 }
 
-void MPtr1616::write_intel_width(ostream& os) const {
-	os << "";
-}
-
-void MPtr1632::write_intel_width(ostream& os) const {
-	os << "";
-}
-
-void MPtr1664::write_intel_width(ostream& os) const {
-	os << "";
-}
-
 void M16Int::write_intel_width(ostream& os) const {
 	os << "WORD ";
 }
@@ -214,6 +210,18 @@ void M108Byte::write_intel_width(ostream& os) const {
 
 void M512Byte::write_intel_width(ostream& os) const {
 	os << "";
+}
+
+void FarPtr1616::write_intel_width(ostream& os) const {
+	os << "WORD ";
+}
+
+void FarPtr1632::write_intel_width(ostream& os) const {
+	os << "DWORD ";
+}
+
+void FarPtr1664::write_intel_width(ostream& os) const {
+	os << "QWORD ";
 }
 
 } // namespace x64asm
