@@ -42,7 +42,7 @@ LIB=lib/libx64asm.a
 
 TEST=test/constants
 
-BIN=bin/x64asm
+BIN=
 
 DOC=doc/html
 
@@ -62,8 +62,7 @@ erthing: $(LIB) $(TEST) $(BIN) $(DOC)
 ##### TEST TARGETS
 
 test: erthing
-	cd test/stokeasm_py; python setup.py build; rm *.so; find -name "*.so" -print0 | xargs -0 /bin/cp -f -t .
-	cd test; ./run_tests.sh
+	echo "TODO..."
 
 ##### BUILD TARGETS
 
@@ -110,6 +109,3 @@ clean:
 	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN) $(TEST)
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.intel src/*.enum src/*.table
 	rm -f test/*.s
-	rm -rf test/enumerate_all.hi test/enumerate_all.o test/tmp/* test/enumerate_all
-	rm -f test/stokeasm_py/*.so
-	rm -rf test/stokeasm_py/build

@@ -59,5 +59,7 @@ int main() {
 	};
 	cout << c << endl;
 
+	cout << sizeof(RegSet) << endl;
+
 	return 0;
 }
