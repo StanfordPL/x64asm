@@ -32,6 +32,14 @@ bool M::check() const {
 	// Check index
 	if ( contains_index() && !get_index()->check() )
 		return false;
+	// Check scale
+	switch ( scale_ ) {
+		case Scale::TIMES_1:
+		case Scale::TIMES_2:
+		case Scale::TIMES_4:
+		case Scale::TIMES_8: break;
+		default:      return false;
+	}
 	// Check disp
 	if ( contains_disp() && !get_disp()->check() )
 		return false;
@@ -49,7 +57,7 @@ void M::write_att(ostream& os) const {
 		os << ":";
 	}
 	if ( contains_disp() )
-		get_disp()->write_intel(os); // Not a bug
+		get_disp()->write_intel(os);
 
 	if ( !contains_base() && !contains_index() )
 		return;

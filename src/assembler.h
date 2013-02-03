@@ -141,15 +141,37 @@ class Assembler {
 			fxn_->emit_byte(o3);
 		}
 
-		template <typename T>
-		typename std::enable_if<!std::is_same<T,Label>::value, void>::type 
-				disp_imm(T t) {
-			fxn_->emit_byte(t.val_);
+		void disp_imm(Imm8 i) {
+			fxn_->emit_byte(i.val_);
+		}
+
+		void disp_imm(Imm16 i) {
+			fxn_->emit_word(i.val_);
+		}
+
+		void disp_imm(Imm32 i) {
+			fxn_->emit_long(i.val_);
+		}
+
+		void disp_imm(Imm64 i) {
+			fxn_->emit_quad(i.val_);
 		}
 
 		void disp_imm(Label l) {
 			label_rels_.push_back(std::make_pair(fxn_->size(), l.val_));
 			fxn_->advance_long();
+		}
+
+		void disp_imm(const Moffs& m) {
+			disp_imm(*m.get_offset());
+		}
+
+		void disp_imm(Rel8 r) {
+			fxn_->emit_byte(r.val_);
+		}
+
+		void disp_imm(Rel32 r) {
+			fxn_->emit_long(r.val_);
 		}
 
 		// Figure 2.4: Intel Manual Vol 2A 2-8

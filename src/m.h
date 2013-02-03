@@ -130,77 +130,77 @@ class M : public CompoundOperand {
 
 	protected:
 		constexpr M(const Imm32* d, bool addr_or = false)
-				: CompoundOperand{}, seg_{0}, base_{0}, index_{0},
+				: seg_{0}, base_{0}, index_{0},
 			    scale_{Scale::TIMES_1}, disp_{d}, addr_or_{addr_or} {
 		}
 
 		constexpr M(const Sreg* s, const Imm32* d, bool addr_or = false)
-				: CompoundOperand{}, seg_{s}, base_{0}, index_{0},
+				: seg_{s}, base_{0}, index_{0},
 					scale_{Scale::TIMES_1}, disp_{d}, addr_or_{addr_or} {
 		}
 
 		constexpr M(const AddrR* b, bool addr_or = false)
-				: CompoundOperand{}, seg_(0), base_(b), index_(0), 
+				: seg_(0), base_(b), index_(0), 
 			    scale_(Scale::TIMES_1), disp_(0), addr_or_(addr_or) {
 		}
 
 		constexpr M(const Sreg* s, const AddrR* b, bool addr_or = false)
-				: CompoundOperand{}, seg_(s), base_(b), index_(0), 
+				: seg_(s), base_(b), index_(0), 
 			    scale_(Scale::TIMES_1), disp_(0), addr_or_(addr_or) {
 		}
 
 		constexpr M(const AddrR* b, const Imm32* d, bool addr_or = false)
-				: CompoundOperand{}, seg_(0), base_(b), index_(0), 
+				: seg_(0), base_(b), index_(0), 
 			    scale_(Scale::TIMES_1), disp_(d), addr_or_(addr_or) {
 		}
 
 		constexpr M(const Sreg* s, const AddrR* b, const Imm32* d, 
 				     bool addr_or = false)
-				: CompoundOperand{}, seg_(s), base_(b), index_(0), 
+				: seg_(s), base_(b), index_(0), 
 			    scale_(Scale::TIMES_1), disp_(d), addr_or_(addr_or) {
 		}
 
 		constexpr M(const AddrR* i, Scale sc, bool addr_or = false)
-				: CompoundOperand{}, seg_(0), base_(0), index_(i), scale_(sc), 
+				: seg_(0), base_(0), index_(i), scale_(sc), 
 			    disp_(0), addr_or_(addr_or) {
 		}
 
 		constexpr M(const Sreg* s, const AddrR* i, Scale sc, bool addr_or = false)
-				: CompoundOperand{}, seg_(s), base_(0), index_(i), scale_(sc), 
+				: seg_(s), base_(0), index_(i), scale_(sc), 
 			    disp_(0), addr_or_(addr_or) {
 		}
 
 		constexpr M(const AddrR* i, Scale sc, const Imm32* d, bool addr_or = false) 
-				: CompoundOperand{}, seg_(0), base_(0), index_(i), scale_(sc), 
+				: seg_(0), base_(0), index_(i), scale_(sc), 
 			    disp_(d), addr_or_(addr_or) {
 		}
 
 		constexpr M(const Sreg* s, const AddrR* i, Scale sc, const Imm32* d, 
 				     bool addr_or = false)
-				: CompoundOperand{}, seg_(s), base_(0), index_(i), scale_(sc), 
+				: seg_(s), base_(0), index_(i), scale_(sc), 
 			    disp_(d), addr_or_(addr_or) {
 		}
 
 		constexpr M(const AddrR* b, const AddrR* i, Scale sc, bool addr_or = false)
-				: CompoundOperand{}, seg_(0), base_(b), index_(i), scale_(sc), 
+				: seg_(0), base_(b), index_(i), scale_(sc), 
 			    disp_(0), addr_or_(addr_or) {
 		}
 
 		constexpr M(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, 
 				     bool addr_or = false)
-				: CompoundOperand{}, seg_(s), base_(b), index_(i), scale_(sc), 
+				: seg_(s), base_(b), index_(i), scale_(sc), 
 			    disp_(0), addr_or_(addr_or) {
 		}
 
 		constexpr M(const AddrR* b, const AddrR* i, Scale sc, const Imm32* d, 
 				     bool addr_or = false)
-				: CompoundOperand{}, seg_(0), base_(b), index_(i), scale_(sc), 
+				: seg_(0), base_(b), index_(i), scale_(sc), 
 			    disp_(d), addr_or_(addr_or) {
 		}
 
 		constexpr M(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, 
 				     const Imm32* d, bool addr_or = false)
-				: CompoundOperand{}, seg_(s), base_(b), index_(i), scale_(sc), 
+				: seg_(s), base_(b), index_(i), scale_(sc), 
 			    disp_(d), addr_or_(addr_or) {
 		}
 

@@ -51,14 +51,14 @@ class AtomicOperand : public Operand {
 	friend class M;
 	friend class RegSet;
 	protected:
-		constexpr AtomicOperand(uint64_t val) : Operand{}, val_{val} { }
+		constexpr AtomicOperand(uint64_t val) : val_{val} { }
 		const uint64_t val_;	
 };
 
 /** Aggregate Operand Type. */
 class CompoundOperand : public Operand {
 	protected:
-		constexpr CompoundOperand() : Operand{} { }
+		constexpr CompoundOperand() { }
 };
 
 } // namespace x64asm
