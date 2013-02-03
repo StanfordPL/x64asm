@@ -72,6 +72,7 @@ codegen:
 		./Codegen && \
 		rm -f *.hi *.o Codegen
 	cat src/att.1.l src/att.2.l src/att.3.l > src/att.l		
+	cat src/att.1.y src/att.2.y src/att.3.y src/att.4.y src/att.5.y > src/att.y
 	flex $(FLEXOPS) -Patt src/att.l && mv lex.att.c src/
 	bison $(BISONOPS) -batt -patt --defines src/att.y && mv att.tab.* src
 		
@@ -103,5 +104,5 @@ bin/%: tools/%.cc $(LIB)
 clean:
 	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN) $(TEST)
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.intel src/*.enum src/*.table
-	rm -f src/att.2.l src/att.l
+	rm -f src/att.2.l src/att.l src/att.1.y src/att.3.y src/att.5.y src/att.y
 	rm -f test/*.s
