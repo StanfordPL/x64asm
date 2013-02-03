@@ -40,7 +40,6 @@ class Rel8 : public Rel {
 		virtual constexpr bool check() {
 			return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
 		}
-	private:
 		virtual constexpr OpType type() {
 			return OpType::REL_8;
 		}
@@ -56,7 +55,6 @@ class Rel32 : public Rel {
 		virtual constexpr bool check() {
 			return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
 		}
-	private:
 		virtual constexpr OpType type() {
 			return OpType::REL_32;
 		}

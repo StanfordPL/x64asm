@@ -45,7 +45,6 @@ class Imm8 : public Imm {
 		virtual constexpr bool check() {
 			return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
 		}
-	private:
 		virtual constexpr OpType type() {
 			return OpType::IMM_8;
 		}
@@ -60,7 +59,6 @@ class Imm16 : public Imm {
 		virtual constexpr bool check() {
 			return (int64_t)val_ >= -32768 && (int64_t)val_ < 32768;
 		}
-	private:
 		virtual constexpr OpType type() {
 			return OpType::IMM_16;
 		}
@@ -76,7 +74,6 @@ class Imm32 : public Imm {
 		virtual constexpr bool check() {
 			return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
 		}
-	private:
 		virtual constexpr OpType type() {
 			return OpType::IMM_32;
 		}
@@ -94,7 +91,6 @@ class Imm64 : public Imm {
 		virtual constexpr bool check() {
 			return true;
 		}
-	private:
 		virtual constexpr OpType type() {
 			return OpType::IMM_64;
 		}
@@ -107,11 +103,11 @@ class Zero : public Imm8 {
 		virtual constexpr bool check() {
 			return val_ == 0;
 		}
-	private:
-		constexpr Zero() : Imm8{0} { }
 		virtual constexpr OpType type() {
 			return OpType::ZERO;
 		}
+	private:
+		constexpr Zero() : Imm8{0} { }
 };
 
 /** The immediate constant value one */
@@ -121,11 +117,11 @@ class One : public Imm8 {
 		virtual constexpr bool check() {
 			return val_ == 1;
 		}
-	private:
-		constexpr One() : Imm8{1} { }
 		virtual constexpr OpType type() {
 			return OpType::ONE;
 		}
+	private:
+		constexpr One() : Imm8{1} { }
 };
 
 /** The immediate constant value three */
@@ -135,11 +131,11 @@ class Three : public Imm8 {
 		virtual constexpr bool check() {
 			return val_ == 3;
 		}
-	private:
-		constexpr Three() : Imm8{3} { }
 		virtual constexpr OpType type() {
 			return OpType::THREE;
 		}
+	private:
+		constexpr Three() : Imm8{3} { }
 };
 
 } // namespace x64asm

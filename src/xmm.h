@@ -37,14 +37,14 @@ class Xmm : public AtomicOperand {
 		virtual constexpr bool check() {
 			return val_ < 16;
 		}
+		virtual constexpr OpType type() {
+			return OpType::XMM;
+		}
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
 		constexpr Xmm(uint64_t val) : AtomicOperand{val} { } 
 	private:
-		virtual constexpr OpType type() {
-			return OpType::XMM;
-		}
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
@@ -55,11 +55,11 @@ class Xmm0 : public Xmm {
 		virtual constexpr bool check() {
 			return val_ == 0;
 		}
-	private:
-		constexpr Xmm0() : Xmm{0} { }
 		virtual constexpr OpType type() {
 			return OpType::XMM_0;
 		}
+	private:
+		constexpr Xmm0() : Xmm{0} { }
 };
 
 } // namespace x64asm

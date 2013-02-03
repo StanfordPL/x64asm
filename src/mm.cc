@@ -24,10 +24,6 @@ using namespace std;
 
 namespace x64asm {
 
-constexpr bool Mm::check() {
-	return val_ < 8;
-}
-
 void Mm::write_att(ostream& os) const {
 	os << "%";
  	write_intel(os);
@@ -40,10 +36,6 @@ void Mm::write_intel(ostream& os) const {
 
 void Mm::insert_in(RegSet& os, bool promote) const {
 	os += *this;
-}
-
-constexpr OpType Mm::type() {
-	return OpType::MM;
 }
 
 } // namespace x64asm

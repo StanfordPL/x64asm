@@ -33,14 +33,13 @@ class Sreg : public AtomicOperand {
 		virtual constexpr bool check() {
 			return val_ < 6;
 		}
+		virtual constexpr OpType type() {
+			return OpType::SREG;
+		}
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
 		constexpr Sreg(uint64_t val) : AtomicOperand{val} { }
-	private:
-		virtual constexpr OpType type() {
-			return OpType::SREG;
-		}
 };
 
 /** The segment register FS. */
@@ -50,11 +49,11 @@ class Fs : public Sreg {
 		virtual constexpr bool check() {
 			return val_ == 4;
 		}
-	private:
-		constexpr Fs() : Sreg{4} { }
 		virtual constexpr OpType type() {
 			return OpType::FS;
 		}
+	private:
+		constexpr Fs() : Sreg{4} { }
 };
 
 /** The segment register GS. */
@@ -64,11 +63,11 @@ class Gs : public Sreg {
 		virtual constexpr bool check() {
 			return val_ == 5;
 		}
-	private:
-		constexpr Gs() : Sreg{5} { }
 		virtual constexpr OpType type() {
 			return OpType::GS;
 		}
+	private:
+		constexpr Gs() : Sreg{5} { }
 };
 
 } // namespace x64asm

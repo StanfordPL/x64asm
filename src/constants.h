@@ -348,7 +348,7 @@ extern const Mm mm7;
 extern const std::vector<Mm> mms;
 
 extern const Pref66 pref_66;
-extern const PrefRexW pref_rexw;
+extern const PrefRexW pref_rex_w;
 extern const Far far;
 
 extern const Al al;

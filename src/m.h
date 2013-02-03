@@ -241,12 +241,11 @@ class M : public CompoundOperand {
 class M8 : public M {
 	public:
 		CONSTRUCTORS(M8)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_8;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A word operand in memory, usually expressed as a variable or array name, 
@@ -256,12 +255,11 @@ class M8 : public M {
 class M16 : public M {
 	public:
 		CONSTRUCTORS(M16)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_16;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A doubleword operand in memory, usually expressed as a variable or array 
@@ -271,36 +269,33 @@ class M16 : public M {
 class M32 : public M {
 	public:
 		CONSTRUCTORS(M32)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_32;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A memory quadword operand in memory. */
 class M64 : public M {
 	public:
 		CONSTRUCTORS(M64)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_64;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A memory double quadword operand in memory. */
 class M128 : public M {
 	public:
 		CONSTRUCTORS(M128)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_128;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A 32-byte operand in memory. This nomenclature is used only with AVX 
@@ -309,12 +304,11 @@ class M128 : public M {
 class M256 : public M {
 	public:
 		CONSTRUCTORS(M256)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_256;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A word integer operand in memory. This symbol designates integers that are 
@@ -323,12 +317,11 @@ class M256 : public M {
 class M16Int : public M {
 	public:
 		CONSTRUCTORS(M16Int)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_16_INT;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A doubleword integer operand in memory. This symbol designates integers 
@@ -337,12 +330,11 @@ class M16Int : public M {
 class M32Int : public M {
 	public:
 		CONSTRUCTORS(M32Int)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_32_INT;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A quadword integer operand in memory. This symbol designates integers 
@@ -351,12 +343,11 @@ class M32Int : public M {
 class M64Int : public M {
 	public:
 		CONSTRUCTORS(M64Int)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_64_INT;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A single-precision floating-point operand in memory. This symbol designates 
@@ -366,12 +357,11 @@ class M64Int : public M {
 class M32Fp : public M {
 	public:
 		CONSTRUCTORS(M32Fp)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_32_FP;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A double-precision floating-point operand in memory. This symbol designates 
@@ -381,12 +371,11 @@ class M32Fp : public M {
 class M64Fp : public M {
 	public:
 		CONSTRUCTORS(M64Fp)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_64_FP;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A double extended-precision floating-point operand in memory. This symbol 
@@ -396,96 +385,88 @@ class M64Fp : public M {
 class M80Fp : public M {
 	public:
 		CONSTRUCTORS(M80Fp)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_80_FP;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A double extended-precision binary-coded-decimaly operand in memory. */
 class M80Bcd : public M {
 	public:
 		CONSTRUCTORS(M80Bcd)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_80_BCD;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A 2 byte operand in memory. */
 class M2Byte : public M {
 	public:
 		CONSTRUCTORS(M2Byte)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_2_BYTE;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A 14 byte operand in memory. */
 class M14Byte : public M {
 	public:
 		CONSTRUCTORS(M14Byte)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_14_BYTE;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A 28 byte operand in memory. */
 class M28Byte : public M {
 	public:
 		CONSTRUCTORS(M28Byte)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_28_BYTE;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A 94 byte operand in memory. */
 class M94Byte : public M {
 	public:
 		CONSTRUCTORS(M94Byte)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_94_BYTE;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A 108 byte operand in memory. */
 class M108Byte : public M {
 	public:
 		CONSTRUCTORS(M108Byte)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_108_BYTE;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
-/** A 5122 byte operand in memory. */
+/** A 512 byte operand in memory. */
 class M512Byte : public M {
 	public:
 		CONSTRUCTORS(M512Byte)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::M_512_BYTE;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -495,12 +476,11 @@ class M512Byte : public M {
 class FarPtr1616 : public M {
 	public:
 		CONSTRUCTORS(FarPtr1616)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::FAR_PTR_16_16;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -510,12 +490,11 @@ class FarPtr1616 : public M {
 class FarPtr1632 : public M {
 	public:
 		CONSTRUCTORS(FarPtr1632)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::FAR_PTR_16_32;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -525,12 +504,11 @@ class FarPtr1632 : public M {
 class FarPtr1664 : public M {
 	public:
 		CONSTRUCTORS(FarPtr1664)
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-	private:
 		virtual constexpr OpType type() {
 			return OpType::FAR_PTR_16_64;
 		}
+	protected:
+		virtual void write_intel_width(std::ostream& os) const;
 };
 
 #undef CONSTRUCTORS

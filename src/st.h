@@ -33,14 +33,13 @@ class St : public AtomicOperand {
 		virtual constexpr bool check() {
 			return val_ < 8;
 		}
+		virtual constexpr OpType type() {
+			return OpType::ST;
+		}
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
 		constexpr St(uint64_t val) : AtomicOperand{val} { } 
-	private:
-		virtual constexpr OpType type() {
-			return OpType::ST;
-		}
 };
 
 /** The top element of the FPU register stack. */
@@ -50,11 +49,11 @@ class St0 : public St {
 		virtual constexpr bool check() {
 			return val_ == 0;
 		}
-	private:
-		constexpr St0() : St{0} { }
 		virtual constexpr OpType type() {
 			return OpType::ST_0;
 		}
+	private:
+		constexpr St0() : St{0} { }
 };
 
 } // namespace x64asm

@@ -36,7 +36,10 @@ OBJ=src/assembler.o \
 		src/stream.o \
 		src/st.o \
 		src/xmm.o \
-		src/ymm.o
+		src/ymm.o \
+		\
+		src/lex.att.o \
+		src/att.tab.o 
 
 LIB=lib/libx64asm.a
 
@@ -73,13 +76,15 @@ src/assembler.defn: src/Codegen.hs src/x86.csv
 		ghc Codegen.hs && \
 		./Codegen && \
 		rm -f *.hi *.o Codegen
-
-#	flex $(FLEXOPS) -Patt src/codegen/att.l && \
-		mv lex.att.c src/gen
-#	bison $(BISONOPS) -batt -patt --defines src/codegen/att.y && \
-		mv att.tab.h src/gen && \
-		mv att.tab.c src/gen
+	flex $(FLEXOPS) -Patt src/att.l && mv lex.att.c src/
+	bison $(BISONOPS) -batt -patt --defines src/att.y && mv att.tab.* src
 		
+src/att.tab.o: src/att.tab.c src/att.tab.h
+	$(GCC) $(OPT) $(INC) -c $< -o $@
+
+src/lex.att.o: src/lex.att.c src/att.tab.h
+	$(GCC) $(OPT) $(INC) -c $< -o $@
+
 src/%.o: src/%.cc src/%.h codegen
 	$(GCC) $(OPT) $(INC) -c $< -o $@
 
@@ -108,4 +113,5 @@ bin/%: tools/%.cc $(LIB)
 clean:
 	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN) $(TEST)
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.intel src/*.enum src/*.table
+	rm -f src/*.tab.* src/*.att.*
 	rm -f test/*.s

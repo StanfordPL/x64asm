@@ -71,7 +71,6 @@ class Moffs8 : public Moffs {
 	public:
 		constexpr Moffs8(Sreg* seg, Imm64* offset) : Moffs{seg, offset} { }
 		constexpr Moffs8(Imm64* offset) : Moffs{offset} { }
-	private:
 		virtual constexpr OpType type() {
 			return OpType::MOFFS_8;
 		}
@@ -82,7 +81,6 @@ class Moffs16 : public Moffs {
 	public:
 		constexpr Moffs16(Sreg* seg, Imm64* offset) : Moffs{seg, offset} { }
 		constexpr Moffs16(Imm64* offset) : Moffs{offset} { }
-	private:
 		virtual constexpr OpType type() {
 			return OpType::MOFFS_16;
 		}
@@ -93,7 +91,6 @@ class Moffs32 : public Moffs {
 	public:
 		constexpr Moffs32(Sreg* seg, Imm64* offset) : Moffs{seg, offset} { }
 		constexpr Moffs32(Imm64* offset) : Moffs{offset} { }
-	private:
 		virtual constexpr OpType type() {
 			return OpType::MOFFS_32;
 		}
@@ -104,7 +101,6 @@ class Moffs64 : public Moffs {
 	public:
 		constexpr Moffs64(Sreg* seg, Imm64* offset) : Moffs{seg, offset} { }
 		constexpr Moffs64(Imm64* offset) : Moffs{offset} { }
-	private:
 		virtual constexpr OpType type() {
 			return OpType::MOFFS_64;
 		}

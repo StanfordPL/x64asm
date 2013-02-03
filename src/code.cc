@@ -16,6 +16,8 @@ limitations under the License.
 
 #include "src/code.h"
 
+#include "src/att.tab.h"
+
 using namespace std;
 
 namespace x64asm {
@@ -28,7 +30,7 @@ bool Code::check() const {
 }
 
 void Code::read_att(istream& is) {
-	// TODO
+	attparse(is, *this);
 }
 
 void Code::read_intel(istream& is) {

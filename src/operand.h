@@ -34,14 +34,14 @@ class Operand {
 		virtual constexpr bool check() {
 			return true;
 		}
+		virtual constexpr OpType type() {
+			return OpType::HINT;
+		}
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
 		constexpr Operand() { }	
 	private:
-		virtual constexpr OpType type() {
-			return OpType::HINT;
-		}
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 

@@ -30,11 +30,14 @@ namespace x64asm {
 class Label : public AtomicOperand {
 	public:
 		constexpr Label(uint64_t val) : AtomicOperand{val} { } 
-		virtual constexpr bool check();
+		virtual constexpr bool check() {
+			return true;
+		}
+		virtual constexpr OpType type() {
+			return OpType::LABEL;
+		}
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
-	private:
-		virtual constexpr OpType type();
 };
 
 } // namespace x64asm

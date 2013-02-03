@@ -39,31 +39,34 @@ class Modifier : public AtomicOperand {
 /** The 32-bit memory address override prefix: 0x66. */
 class Pref66 : public Modifier {
 	friend class Constants;
-	private:
-		constexpr Pref66() : Modifier{0} { }
+	public:
 		virtual constexpr OpType type() {
 			return OpType::PREF_66;
 		}
+	private:
+		constexpr Pref66() : Modifier{0} { }
 };
 
 /** The REX.w prefix: 0x48. */
 class PrefRexW : public Modifier {
 	friend class Constants;
-	private:
-		constexpr PrefRexW() : Modifier{0} { }
+	public:
 		virtual constexpr OpType type() {
 			return OpType::PREF_REX_W;
 		}
+	private:
+		constexpr PrefRexW() : Modifier{0} { }
 };
 
 /** Far instruction variant. */
 class Far : public Modifier {
 	friend class Constants;
-	private:
-		constexpr Far() : Modifier{0} { }
+	public:
 		virtual constexpr OpType type() {
 			return OpType::FAR;
 		}
+	private:
+		constexpr Far() : Modifier{0} { }
 };
 
 } // namespace x64asm

@@ -38,7 +38,7 @@ class Instruction {
 		}
 
 		Instruction(Opcode opcode, 
-				               std::initializer_list<const Operand*> operands)
+				        std::initializer_list<const Operand*> operands)
 				: opcode_(opcode), operands_{{0,0,0,0}} {
 			assert(operands.size() <= 4);
 			std::copy(operands.begin(), operands.end(), operands_.begin());
