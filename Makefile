@@ -36,16 +36,13 @@ OBJ=src/assembler.o \
 		src/stream.o \
 		src/st.o \
 		src/xmm.o \
-		src/ymm.o \
-		\
-		src/lex.att.o \
-		src/att.tab.o 
+		src/ymm.o 
 
 LIB=lib/libx64asm.a
 
 TEST=test/constants
 
-BIN=
+BIN=bin/x64asm
 
 DOC=doc/html
 
@@ -69,9 +66,9 @@ test: erthing
 
 ##### BUILD TARGETS
 
-codegen: src/assembler.defn src/Codegen.hs src/x86.csv
+codegen: src/assembler.defn
 
-src/assembler.defn: src/Codegen.hs src/x86.csv 
+src/assembler.defn: src/Codegen.hs src/x86.csv src/att.l src/att.y
 	cd src && \
 		ghc Codegen.hs && \
 		./Codegen && \
@@ -79,12 +76,6 @@ src/assembler.defn: src/Codegen.hs src/x86.csv
 	flex $(FLEXOPS) -Patt src/att.l && mv lex.att.c src/
 	bison $(BISONOPS) -batt -patt --defines src/att.y && mv att.tab.* src
 		
-src/att.tab.o: src/att.tab.c src/att.tab.h
-	$(GCC) $(OPT) $(INC) -c $< -o $@
-
-src/lex.att.o: src/lex.att.c src/att.tab.h
-	$(GCC) $(OPT) $(INC) -c $< -o $@
-
 src/%.o: src/%.cc src/%.h codegen
 	$(GCC) $(OPT) $(INC) -c $< -o $@
 

@@ -14,7 +14,7 @@ extern int yy_line_number;
 
 void yyerror(std::istream& is, x64asm::Code& code, const char* s) { 
 	is.setstate(std::ios::failbit); 
-  cerr << "ERROR (line " << yy_line_number << "): " << s << endl;
+	cerr << "Error on line " << yy_line_number << ": "  << s << endl;
 }
 
 %}
@@ -93,7 +93,7 @@ void yyerror(std::istream& is, x64asm::Code& code, const char* s) {
 
 blank : /* empty */ | blank ENDL { }
 
-code : blank instrs { code.assign($2->begin(), $2->end()); delete $2; }
+code : blank instrs blank { code.assign($2->begin(), $2->end()); delete $2; }
 		 ;
 
 instrs : instr { 
@@ -107,10 +107,10 @@ instrs : instr {
 			 }
 		   ;
 
-instr : ADCB IMM_8 COMMA AL {
+instr : ADCB IMM_8 COMMA AL ENDL {
         $$ = new Instruction{Opcode::ADC_AL_IMM8, {$4, $2}};
 			}
-      | ADCW IMM_16 COMMA AX { 
+      | ADCW IMM_16 COMMA AX ENDL { 
 				$$ = new Instruction{Opcode::ADC_AX_IMM16, {$4, $2}};
 			} 
       ;

@@ -62,5 +62,10 @@ int main() {
 
 	cout << sizeof(RegSet) << endl;
 
+	Code cc;
+	cin >> cc;
+	cout << cc << endl;
+
+
 	return 0;
 }

@@ -13,9 +13,6 @@
 using namespace std;
 using namespace x64asm;
 
-extern YYLTYPE yylloc;
-extern YYSTYPE yylval;
-
 int yy_line_number = 1;
 static int colnum = 0;
 #define YY_USER_ACTION {        \
@@ -93,15 +90,15 @@ const Operand* to_imm(const char* c, bool is_hex, bool is_neg) {
 "$3"     { yylval.operand = &three; return THREE; }
 "$0x3"   { yylval.operand = &three; return THREE; }
 
-"$-0x"[0-9a-f]+ { yylval.operand = to_imm(yytext+2, true, true);   offset_ret(yylval.operand) }
-"$-"[0-9]+      { yylval.operand = to_imm(yytext+2, false, true);  offset_ret(yylval.operand) }
-"$0x"[0-9a-f]+  { yylval.operand = to_imm(yytext+1, true, false);  offset_ret(yylval.operand) }
-"$"[0-9]+       { yylval.operand = to_imm(yytext+1, false, false); offset_ret(yylval.operand) }
+"$-0x"[0-9a-f]+ { yylval.operand = to_imm(yytext+2, true, true);   imm_ret(yylval.operand) }
+"$-"[0-9]+      { yylval.operand = to_imm(yytext+2, false, true);  imm_ret(yylval.operand) }
+"$0x"[0-9a-f]+  { yylval.operand = to_imm(yytext+1, true, false);  imm_ret(yylval.operand) }
+"$"[0-9]+       { yylval.operand = to_imm(yytext+1, false, false); imm_ret(yylval.operand) }
 
-"-0x"[0-9a-f]+ { yylval.operand = to_imm(yytext+1, true, true);  imm_ret(yylval.operand) }
-"-"[0-9]+      { yylval.operand = to_imm(yytext+1, false, true); imm_ret(yylval.operand) }
-"0x"[0-9a-f]+  { yylval.operand = to_imm(yytext, true, false);   imm_ret(yylval.operand) }
-[0-9]+         { yylval.operand = to_imm(yytext, false, false);  imm_ret(yylval.operand) }
+"-0x"[0-9a-f]+ { yylval.operand = to_imm(yytext+1, true, true);  offset_ret(yylval.operand) }
+"-"[0-9]+      { yylval.operand = to_imm(yytext+1, false, true); offset_ret(yylval.operand) }
+"0x"[0-9a-f]+  { yylval.operand = to_imm(yytext, true, false);   offset_ret(yylval.operand) }
+[0-9]+         { yylval.operand = to_imm(yytext, false, false);  offset_ret(yylval.operand) }
 
 "<66>"   { yylval.operand = &pref_66; return PREF_66; }
 "<rexw>" { yylval.operand = &pref_rex_w; return PREF_REX_W; }
