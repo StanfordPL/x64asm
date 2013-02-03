@@ -66,13 +66,12 @@ test: erthing
 
 ##### BUILD TARGETS
 
-codegen: src/assembler.defn
-
-src/assembler.defn: src/Codegen.hs src/x86.csv src/att.l src/att.y
+codegen:
 	cd src && \
 		ghc Codegen.hs && \
 		./Codegen && \
 		rm -f *.hi *.o Codegen
+	cat src/att.1.l src/att.2.l src/att.3.l > src/att.l		
 	flex $(FLEXOPS) -Patt src/att.l && mv lex.att.c src/
 	bison $(BISONOPS) -batt -patt --defines src/att.y && mv att.tab.* src
 		
@@ -104,5 +103,5 @@ bin/%: tools/%.cc $(LIB)
 clean:
 	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN) $(TEST)
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.intel src/*.enum src/*.table
-	rm -f src/*.tab.* src/*.att.*
+	rm -f src/*.att.2.l src/*.att.l
 	rm -f test/*.s

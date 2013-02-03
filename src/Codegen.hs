@@ -1236,6 +1236,14 @@ assm_case i = "case " ++ (opcode_enum i) ++ ":\n" ++
 assm_cases :: [Instr] -> String
 assm_cases is = intercalate "\n" $ map assm_case is
 
+-- Read AT&T code
+--------------------------------------------------------------------------------
+
+-- Lexer rules for AT&T opcodes
+att_lex :: [Instr] -> String
+att_lex is = (intercalate "\n" $ map lex $ nub $ map att is) ++ "\n\n"
+  where lex o = "\"" ++ o ++ "\" { return " ++ (up o) ++ "; }"
+
 -- Write code
 --------------------------------------------------------------------------------
 
@@ -1260,6 +1268,7 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "opcode.enum"       $ opcode_enums is
                    writeFile "opcode.att"        $ att_mnemonics is
                    writeFile "opcode.intel"      $ intel_mnemonics is
+                   writeFile "att.2.l"           $ att_lex is									 
 
 --------------------------------------------------------------------------------
 -- Test Codegen
