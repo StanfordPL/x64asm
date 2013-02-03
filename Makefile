@@ -103,5 +103,5 @@ bin/%: tools/%.cc $(LIB)
 clean:
 	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN) $(TEST)
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.intel src/*.enum src/*.table
-	rm -f src/*.att.2.l src/*.att.l
+	rm -f src/att.2.l src/att.l
 	rm -f test/*.s
