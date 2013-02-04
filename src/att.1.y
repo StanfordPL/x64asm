@@ -54,8 +54,6 @@ void yyerror(std::istream& is, x64asm::Code& code, const char* s) {
 %token <int> CLOSE
 %token <int> ENDL
 
-%token <opcode>  OPCODE
-
 %token <operand> ZERO 
 %token <operand> ONE 
 %token <operand> THREE 

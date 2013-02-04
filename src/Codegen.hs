@@ -1239,10 +1239,23 @@ assm_cases is = intercalate "\n" $ map assm_case is
 -- Read AT&T code
 --------------------------------------------------------------------------------
 
+-- Fixes AT&T token
+fix_att_token :: String -> String
+fix_att_token t = -- TODO!!! 
+
 -- Lexer rules for AT&T opcodes
 att_lex :: [Instr] -> String
 att_lex is = (intercalate "\n" $ map lex $ nub $ map att is) ++ "\n\n"
   where lex o = "\"" ++ o ++ "\" { return " ++ (up o) ++ "; }"
+
+-- Lexer tokens for AT&T opcodes
+att_token :: [Instr] -> String
+att_token is = (intercalate "\n" $ map token $ nub $ map att is) ++ "\n\n"
+  where token o = "%token<opcode> " ++ (up o)
+
+-- Parser rules for AT&T instructions
+att_parse :: [Instr] -> String
+att_parse is = ""
 
 -- Write code
 --------------------------------------------------------------------------------
@@ -1269,6 +1282,8 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "opcode.att"        $ att_mnemonics is
                    writeFile "opcode.intel"      $ intel_mnemonics is
                    writeFile "att.2.l"           $ att_lex is									 
+                   writeFile "att.2.y"           $ att_token is									 
+                   writeFile "att.4.y"           $ att_parse is									 
 
 --------------------------------------------------------------------------------
 -- Test Codegen
