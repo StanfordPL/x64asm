@@ -168,6 +168,10 @@ is_cond_jump i = let mn = raw_mnemonic i in
 is_uncond_jump :: Instr -> Bool
 is_uncond_jump i = raw_mnemonic i == "JMP"
 
+-- Extract arity
+arity :: Instr -> Int
+arity i = length $ operands i
+
 -- Extract operands 
 operands :: Instr -> [String]
 operands i = let x = (splitOn ",") $ concat $ tail $ words (instruction i) in
@@ -765,7 +769,7 @@ opcode_enums is = to_table is opcode_enum
 
 -- Converts an instruction to arity table row
 arity_row :: Instr -> String
-arity_row i = show $ length $ operands i
+arity_row i = show $ arity i
 
 -- Converts all instructions to arity table
 arity_table :: [Instr] -> String
@@ -1273,9 +1277,20 @@ att_bison_defns :: [Instr] -> String
 att_bison_defns is = (intercalate "\n" $ defns is) ++ "\n\n"
   where defns is = map att_bison_defn $ nub $ map att is
 
+-- Parser rule for an AT&T instruction
+att_bison_rule :: Instr -> String
+att_bison_rule i = "| " ++ (mn i) ++ " " ++ (ops i) ++ " ENDL {\n" ++ 
+                   "  " ++ (body i) ++ "\n" ++
+                   "}"
+  where mn i = att_token (att i)
+        ops i = intercalate " COMMA " $ map (up.op2type) $ reverse (operands i)
+        args i = take (arity i) [2*(arity i)-x | x <- [0,2..]]
+        body i = "$$ = new Instruction{Opcode::" ++ (opcode_enum i) ++ ", " ++
+                 "{" ++ (intercalate "," (map (("$"++).show) (args i))) ++ "}};"
+
 -- Parser rules for AT&T instructions
 att_bison_rules :: [Instr] -> String
-att_bison_rules is = ""
+att_bison_rules is = (intercalate "\n" $ map att_bison_rule is) ++ ";\n\n"
 
 -- Write code
 --------------------------------------------------------------------------------
