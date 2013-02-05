@@ -68,12 +68,12 @@ const Operand* to_imm(const char* c, bool is_hex, bool is_neg) {
 		return new Imm64{(int64_t)ival};
 }
 
-#define imm_ret(o)                      \
-  switch ( o->type() ) {                \
-    case OpType::IMM_8:  return IMM_8;  \
-    case OpType::IMM_16: return IMM_16; \
-    case OpType::IMM_32: return IMM_32; \
-    default            : return IMM_64; \
+#define imm_ret(o)                         \
+  switch ( o->type() ) {                   \
+    case OpType::IMM_8:  return AN_IMM_8;  \
+    case OpType::IMM_16: return AN_IMM_16; \
+    case OpType::IMM_32: return AN_IMM_32; \
+    default            : return AN_IMM_64; \
 	}
 
 #define offset_ret(o)                      \
@@ -131,8 +131,8 @@ const Operand* to_imm(const char* c, bool is_hex, bool is_neg) {
 
 "%al"           { yylval.operand = &al; return AL; }
 "%cl"           { yylval.operand = &cl; return CL; }
-"%dl"           { yylval.operand = &dl; return RL; }
-"%bl"           { yylval.operand = &bl; return RL; }
+"%dl"           { yylval.operand = &dl; return AN_RL; }
+"%bl"           { yylval.operand = &bl; return AN_RL; }
 
 "%ah"           { yylval.operand = &ah; return RH; }
 "%ch"           { yylval.operand = &ch; return RH; }
@@ -153,89 +153,89 @@ const Operand* to_imm(const char* c, bool is_hex, bool is_neg) {
 "%r15b"         { yylval.operand = &r15b; return RB; }
 
 "%ax"           { yylval.operand = &ax;   return AX; }
-"%cx"           { yylval.operand = &cx;   return CX; }
-"%dx"           { yylval.operand = &dx;   return R_16; }
-"%bx"           { yylval.operand = &bx;   return R_16; }
-"%sp"           { yylval.operand = &sp;   return R_16; }
-"%bp"           { yylval.operand = &bp;   return R_16; }
-"%si"           { yylval.operand = &si;   return R_16; }
-"%di"           { yylval.operand = &di;   return R_16; }
-"%r8w"          { yylval.operand = &r8w;  return R_16; }
-"%r9w"          { yylval.operand = &r9w;  return R_16; }
-"%r10w"         { yylval.operand = &r10w; return R_16; }
-"%r11w"         { yylval.operand = &r11w; return R_16; }
-"%r12w"         { yylval.operand = &r12w; return R_16; }
-"%r13w"         { yylval.operand = &r13w; return R_16; }
-"%r14w"         { yylval.operand = &r14w; return R_16; }
-"%r15w"         { yylval.operand = &r15w; return R_16; }
+"%cx"           { yylval.operand = &cx;   return AN_R_16; }
+"%dx"           { yylval.operand = &dx;   return DX; }
+"%bx"           { yylval.operand = &bx;   return AN_R_16; }
+"%sp"           { yylval.operand = &sp;   return AN_R_16; }
+"%bp"           { yylval.operand = &bp;   return AN_R_16; }
+"%si"           { yylval.operand = &si;   return AN_R_16; }
+"%di"           { yylval.operand = &di;   return AN_R_16; }
+"%r8w"          { yylval.operand = &r8w;  return AN_R_16; }
+"%r9w"          { yylval.operand = &r9w;  return AN_R_16; }
+"%r10w"         { yylval.operand = &r10w; return AN_R_16; }
+"%r11w"         { yylval.operand = &r11w; return AN_R_16; }
+"%r12w"         { yylval.operand = &r12w; return AN_R_16; }
+"%r13w"         { yylval.operand = &r13w; return AN_R_16; }
+"%r14w"         { yylval.operand = &r14w; return AN_R_16; }
+"%r15w"         { yylval.operand = &r15w; return AN_R_16; }
 
-"%eax"          { yylval.operand = &eax; return AX; }
-"%ecx"          { yylval.operand = &ecx; return R_32; }
-"%edx"          { yylval.operand = &edx; return R_32; }
-"%ebx"          { yylval.operand = &ebx; return R_32; }
-"%esp"          { yylval.operand = &esp; return R_32; }
-"%ebp"          { yylval.operand = &ebp; return R_32; }
-"%esi"          { yylval.operand = &esi; return R_32; }
-"%edi"          { yylval.operand = &edi; return R_32; }
-"%r8d"          { yylval.operand = &r8d;  return R_32; }
-"%r9d"          { yylval.operand = &r9d;  return R_32; }
-"%r10d"         { yylval.operand = &r10d; return R_32; }
-"%r11d"         { yylval.operand = &r11d; return R_32; }
-"%r12d"         { yylval.operand = &r12d; return R_32; }
-"%r13d"         { yylval.operand = &r13d; return R_32; }
-"%r14d"         { yylval.operand = &r14d; return R_32; }
-"%r15d"         { yylval.operand = &r15d; return R_32; }
+"%eax"          { yylval.operand = &eax; return EAX; }
+"%ecx"          { yylval.operand = &ecx; return AN_R_32; }
+"%edx"          { yylval.operand = &edx; return AN_R_32; }
+"%ebx"          { yylval.operand = &ebx; return AN_R_32; }
+"%esp"          { yylval.operand = &esp; return AN_R_32; }
+"%ebp"          { yylval.operand = &ebp; return AN_R_32; }
+"%esi"          { yylval.operand = &esi; return AN_R_32; }
+"%edi"          { yylval.operand = &edi; return AN_R_32; }
+"%r8d"          { yylval.operand = &r8d;  return AN_R_32; }
+"%r9d"          { yylval.operand = &r9d;  return AN_R_32; }
+"%r10d"         { yylval.operand = &r10d; return AN_R_32; }
+"%r11d"         { yylval.operand = &r11d; return AN_R_32; }
+"%r12d"         { yylval.operand = &r12d; return AN_R_32; }
+"%r13d"         { yylval.operand = &r13d; return AN_R_32; }
+"%r14d"         { yylval.operand = &r14d; return AN_R_32; }
+"%r15d"         { yylval.operand = &r15d; return AN_R_32; }
 
 "%rax"          { yylval.operand = &rax; return RAX; }
-"%rcx"          { yylval.operand = &rcx; return R_64; }
-"%rdx"          { yylval.operand = &rdx; return R_64; }
-"%rbx"          { yylval.operand = &rbx; return R_64; }
-"%rsp"          { yylval.operand = &rsp; return R_64; }
-"%rbp"          { yylval.operand = &rbp; return R_64; }
-"%rsi"          { yylval.operand = &rsi; return R_64; }
-"%rdi"          { yylval.operand = &rdi; return R_64; }
-"%r8"           { yylval.operand = &r8;  return R_64; }
-"%r9"           { yylval.operand = &r9;  return R_64; }
-"%r10"          { yylval.operand = &r10; return R_64; }
-"%r11"          { yylval.operand = &r11; return R_64; }
-"%r12"          { yylval.operand = &r12; return R_64; }
-"%r13"          { yylval.operand = &r13; return R_64; }
-"%r14"          { yylval.operand = &r14; return R_64; }
-"%r15"          { yylval.operand = &r15; return R_64; }
+"%rcx"          { yylval.operand = &rcx; return AN_R_64; }
+"%rdx"          { yylval.operand = &rdx; return AN_R_64; }
+"%rbx"          { yylval.operand = &rbx; return AN_R_64; }
+"%rsp"          { yylval.operand = &rsp; return AN_R_64; }
+"%rbp"          { yylval.operand = &rbp; return AN_R_64; }
+"%rsi"          { yylval.operand = &rsi; return AN_R_64; }
+"%rdi"          { yylval.operand = &rdi; return AN_R_64; }
+"%r8"           { yylval.operand = &r8;  return AN_R_64; }
+"%r9"           { yylval.operand = &r9;  return AN_R_64; }
+"%r10"          { yylval.operand = &r10; return AN_R_64; }
+"%r11"          { yylval.operand = &r11; return AN_R_64; }
+"%r12"          { yylval.operand = &r12; return AN_R_64; }
+"%r13"          { yylval.operand = &r13; return AN_R_64; }
+"%r14"          { yylval.operand = &r14; return AN_R_64; }
+"%r15"          { yylval.operand = &r15; return AN_R_64; }
 
-"%es"           { yylval.operand = &es; return SREG; }
-"%cs"           { yylval.operand = &cs; return SREG; }
-"%ss"           { yylval.operand = &ss; return SREG; }
-"%ds"           { yylval.operand = &ds; return SREG; }
+"%es"           { yylval.operand = &es; return AN_SREG; }
+"%cs"           { yylval.operand = &cs; return AN_SREG; }
+"%ss"           { yylval.operand = &ss; return AN_SREG; }
+"%ds"           { yylval.operand = &ds; return AN_SREG; }
 "%fs"           { yylval.operand = &fs; return FS; }
 "%gs"           { yylval.operand = &gs; return GS; }
 
 "%st"           { yylval.operand = &st0; return ST_0; }
-"%st(0)"        { yylval.operand = &st0; return ST; }
-"%st(1)"        { yylval.operand = &st1; return ST; }
-"%st(2)"        { yylval.operand = &st2; return ST; }
-"%st(3)"        { yylval.operand = &st3; return ST; }
-"%st(4)"        { yylval.operand = &st4; return ST; }
-"%st(5)"        { yylval.operand = &st5; return ST; }
-"%st(6)"        { yylval.operand = &st6; return ST; }
-"%st(7)"        { yylval.operand = &st7; return ST; }
+"%st(0)"        { yylval.operand = &st0; return AN_ST; }
+"%st(1)"        { yylval.operand = &st1; return AN_ST; }
+"%st(2)"        { yylval.operand = &st2; return AN_ST; }
+"%st(3)"        { yylval.operand = &st3; return AN_ST; }
+"%st(4)"        { yylval.operand = &st4; return AN_ST; }
+"%st(5)"        { yylval.operand = &st5; return AN_ST; }
+"%st(6)"        { yylval.operand = &st6; return AN_ST; }
+"%st(7)"        { yylval.operand = &st7; return AN_ST; }
 
 "%xmm0"         { yylval.operand = &xmm0;  return XMM_0; }
-"%xmm1"         { yylval.operand = &xmm1;  return XMM; }
-"%xmm2"         { yylval.operand = &xmm2;  return XMM; }
-"%xmm3"         { yylval.operand = &xmm3;  return XMM; }
-"%xmm4"         { yylval.operand = &xmm4;  return XMM; }
-"%xmm5"         { yylval.operand = &xmm5;  return XMM; }
-"%xmm6"         { yylval.operand = &xmm6;  return XMM; }
-"%xmm7"         { yylval.operand = &xmm7;  return XMM; }
-"%xmm8"         { yylval.operand = &xmm8;  return XMM; }
-"%xmm9"         { yylval.operand = &xmm9;  return XMM; }
-"%xmm10"        { yylval.operand = &xmm10; return XMM; }
-"%xmm11"        { yylval.operand = &xmm11; return XMM; }
-"%xmm12"        { yylval.operand = &xmm12; return XMM; }
-"%xmm13"        { yylval.operand = &xmm13; return XMM; }
-"%xmm14"        { yylval.operand = &xmm14; return XMM; }
-"%xmm15"        { yylval.operand = &xmm15; return XMM; }
+"%xmm1"         { yylval.operand = &xmm1;  return AN_XMM; }
+"%xmm2"         { yylval.operand = &xmm2;  return AN_XMM; }
+"%xmm3"         { yylval.operand = &xmm3;  return AN_XMM; }
+"%xmm4"         { yylval.operand = &xmm4;  return AN_XMM; }
+"%xmm5"         { yylval.operand = &xmm5;  return AN_XMM; }
+"%xmm6"         { yylval.operand = &xmm6;  return AN_XMM; }
+"%xmm7"         { yylval.operand = &xmm7;  return AN_XMM; }
+"%xmm8"         { yylval.operand = &xmm8;  return AN_XMM; }
+"%xmm9"         { yylval.operand = &xmm9;  return AN_XMM; }
+"%xmm10"        { yylval.operand = &xmm10; return AN_XMM; }
+"%xmm11"        { yylval.operand = &xmm11; return AN_XMM; }
+"%xmm12"        { yylval.operand = &xmm12; return AN_XMM; }
+"%xmm13"        { yylval.operand = &xmm13; return AN_XMM; }
+"%xmm14"        { yylval.operand = &xmm14; return AN_XMM; }
+"%xmm15"        { yylval.operand = &xmm15; return AN_XMM; }
 
 "%ymm0"         { yylval.operand = &ymm0;  return YMM; }
 "%ymm1"         { yylval.operand = &ymm1;  return YMM; }

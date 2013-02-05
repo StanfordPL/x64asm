@@ -1283,7 +1283,7 @@ att_bison_rule i = "| " ++ (mn i) ++ " " ++ (ops i) ++ " ENDL {\n" ++
                    "  " ++ (body i) ++ "\n" ++
                    "}"
   where mn i = att_token (att i)
-        ops i = intercalate " COMMA " $ map (up.op2type) $ reverse (operands i)
+        ops i = intercalate " COMMA " $ map op2tag $ reverse (operands i)
         args i = take (arity i) [2*(arity i)-x | x <- [0,2..]]
         body i = "$$ = new Instruction{Opcode::" ++ (opcode_enum i) ++ ", " ++
                  "{" ++ (intercalate "," (map (("$"++).show) (args i))) ++ "}};"
