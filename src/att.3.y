@@ -43,10 +43,10 @@ instrs : instr {
 			 }
 		   ;
 
-instr : ADCB IMM_8 COMMA AL ENDL {
+instr : OPC_ADCB IMM_8 COMMA AL ENDL {
         $$ = new Instruction{Opcode::ADC_AL_IMM8, {$4, $2}};
 			}
-      | ADCW IMM_16 COMMA AX ENDL { 
+      | OPC_ADCW IMM_16 COMMA AX ENDL { 
 				$$ = new Instruction{Opcode::ADC_AX_IMM16, {$4, $2}};
 			} 
       ;

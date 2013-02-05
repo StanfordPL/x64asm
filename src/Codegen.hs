@@ -64,6 +64,16 @@ low s = map toLower s
 up :: String -> String
 up s = map toUpper s
 
+-- Replaces whitespace by underscore
+kill_ws :: Char -> Char
+kill_ws c
+  | isSpace c = '_'
+  | otherwise = c
+
+-- Replace whitespace by underscore
+to_id :: String -> String
+to_id s = map kill_ws s
+
 -- Instruction modification
 --------------------------------------------------------------------------------
 
@@ -1140,7 +1150,7 @@ vex_opcode i = "opcode(0x" ++ (low ((opcode_terms i)!!1)) ++ ");\n"
 
 -- Emits code for non-VEX encoded opcode bytes
 non_vex_opcode :: Instr -> String
-non_vex_opcode i = "opcode(" ++ (bytes i) ++ (code i) ++ ");" ++ "// " ++ (intercalate "-" (opcode_bytes i)) ++ "&&&" ++ (intercalate "-" (opcode_suffix i)) ++ "\n" 
+non_vex_opcode i = "opcode(" ++ (bytes i) ++ (code i) ++ ");\n" 
   where bytes i = intercalate "," $ map (("0x"++).low) (opcode_bytes i)
         code i = case findIndex (=='O') (op_en i) of
                       (Just idx) -> ",arg" ++ (show idx)
@@ -1239,23 +1249,33 @@ assm_cases is = intercalate "\n" $ map assm_case is
 -- Read AT&T code
 --------------------------------------------------------------------------------
 
--- Fixes AT&T token
-fix_att_token :: String -> String
-fix_att_token t = -- TODO!!! 
+-- Transforms an instruction mnemonic into a bison-appropriate token
+att_token :: String -> String
+att_token m 
+  | last m == '*' = "OPC_" ++ (up $ init $ init m)
+  | otherwise = "OPC_" ++ (up $ to_id m)
 
--- Lexer rules for AT&T opcodes
-att_lex :: [Instr] -> String
-att_lex is = (intercalate "\n" $ map lex $ nub $ map att is) ++ "\n\n"
-  where lex o = "\"" ++ o ++ "\" { return " ++ (up o) ++ "; }"
+-- Flex rule for an AT&T opcode
+att_flex_rule :: String -> String
+att_flex_rule m = "\"" ++ m ++ "\" { return " ++ (att_token m) ++ "; }"
 
--- Lexer tokens for AT&T opcodes
-att_token :: [Instr] -> String
-att_token is = (intercalate "\n" $ map token $ nub $ map att is) ++ "\n\n"
-  where token o = "%token<opcode> " ++ (up o)
+-- Flex rules for all AT&T opcodes
+att_flex_rules :: [Instr] -> String
+att_flex_rules is = (intercalate "\n" $ rules is) ++ "\n\n"
+  where rules is = map att_flex_rule $ nub $ map att is
+
+-- Token definitions for an AT&T opcode
+att_bison_defn :: String -> String
+att_bison_defn m = "%token <opcode> " ++ (att_token m)
+
+-- Token definitions for aall AT&T opcodes
+att_bison_defns :: [Instr] -> String
+att_bison_defns is = (intercalate "\n" $ defns is) ++ "\n\n"
+  where defns is = map att_bison_defn $ nub $ map att is
 
 -- Parser rules for AT&T instructions
-att_parse :: [Instr] -> String
-att_parse is = ""
+att_bison_rules :: [Instr] -> String
+att_bison_rules is = ""
 
 -- Write code
 --------------------------------------------------------------------------------
@@ -1281,9 +1301,9 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "opcode.enum"       $ opcode_enums is
                    writeFile "opcode.att"        $ att_mnemonics is
                    writeFile "opcode.intel"      $ intel_mnemonics is
-                   writeFile "att.2.l"           $ att_lex is									 
-                   writeFile "att.2.y"           $ att_token is									 
-                   writeFile "att.4.y"           $ att_parse is									 
+                   writeFile "att.2.l"           $ att_flex_rules is				
+                   writeFile "att.2.y"           $ att_bison_defns is
+                   writeFile "att.4.y"           $ att_bison_rules is		
 
 --------------------------------------------------------------------------------
 -- Test Codegen
@@ -1309,7 +1329,6 @@ test_operand "m32"      = ["(%eax)"]
 test_operand "m64"      = ["(%eax)"]
 test_operand "m128"     = ["(%eax)"]
 test_operand "m256"     = ["(%eax)"]
-test_operand "m16&64"   = ["(%eax)"]
 test_operand "m16:16"   = ["*(%eax)"]
 test_operand "m16:32"   = ["*(%eax)"]
 test_operand "m16:64"   = ["*(%eax)"]
@@ -1345,9 +1364,6 @@ test_operand "moffs8"   = ["0x1"]
 test_operand "moffs16"  = ["0x1"]
 test_operand "moffs32"  = ["0x1"]
 test_operand "moffs64"  = ["0x1"]
-test_operand "CR0-CR7"  = ["%cr0","%cr2","%cr3","%cr4"]
-test_operand "CR8"      = ["%cr8"]
-test_operand "DR0-DR7"  = ["%db0","%db2","%db4","%db6"]
 test_operand "Sreg"     = ["%es","%cs","%ss","%ds","%fs","%gs"]
 test_operand "FS"       = ["%fs"]
 test_operand "GS"       = ["%gs"]
