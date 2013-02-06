@@ -84,7 +84,7 @@ class M : public CompoundOperand {
 			return addr_or_;
 		}
 
-		void set_set(const Sreg* seg) {
+		void set_seg(const Sreg* seg) {
 			seg_ = seg;
 		}
 

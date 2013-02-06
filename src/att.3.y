@@ -14,49 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-%type <operand> HINT 
-%type <operand> LABEL 
-%type <operand> FAR_PTR_16_16 
-%type <operand> FAR_PTR_16_32 
-%type <operand> FAR_PTR_16_64 
-%type <operand> M_8 
-%type <operand> M_16
-%type <operand> M_32 
-%type <operand> M_64 
-%type <operand> M_128 
-%type <operand> M_256 
-%type <operand> M_32_FP 
-%type <operand> M_64_FP 
-%type <operand> M_80_FP 
-%type <operand> M_16_INT 
-%type <operand> M_32_INT 
-%type <operand> M_64_INT 
-%type <operand> M_80_BCD 
-%type <operand> M_2_BYTE 
-%type <operand> M_14_BYTE 
-%type <operand> M_28_BYTE 
-%type <operand> M_94_BYTE 
-%type <operand> M_108_BYTE 
-%type <operand> M_512_BYTE 
-%type <operand> MOFFS_8 
-%type <operand> MOFFS_16 
-%type <operand> MOFFS_32 
-%type <operand> MOFFS_64 
-%type <operand> REL_8 
-%type <operand> REL_32 
-
-%type <operand> IMM_8
-%type <operand> IMM_16
-%type <operand> IMM_32
-%type <operand> IMM_64
-%type <operand> RL
-%type <operand> R_16
-%type <operand> R_32
-%type <operand> R_64
-%type <operand> SREG
-%type <operand> ST
-%type <operand> XMM
-
 %type <instr> instr
 %type <instrs> instrs
 
@@ -70,48 +27,86 @@ limitations under the License.
 
 %%
 
-HINT : RAX { $$ = new Constants::rax{}; }
-LABEL : RAX { $$ = new Constants::rax{}; }
-FAR_PTR_16_16 : RAX { $$ = new Constants::rax{}; }
-FAR_PTR_16_32 : RAX { $$ = new Constants::rax{}; }
-FAR_PTR_16_64 : RAX { $$ = new Constants::rax{}; }
-M_8 : RAX { $$ = new Constants::rax{}; }
-M_16 : RAX { $$ = new Constants::rax{}; }
-M_32 : RAX { $$ = new Constants::rax{}; }
-M_64 : RAX { $$ = new Constants::rax{}; }
-M_128 : RAX { $$ = new Constants::rax{}; }
-M_256 : RAX { $$ = new Constants::rax{}; }
-M_32_FP : RAX { $$ = new Constants::rax{}; }
-M_64_FP : RAX { $$ = new Constants::rax{}; }
-M_80_FP : RAX { $$ = new Constants::rax{}; }
-M_16_INT : RAX { $$ = new Constants::rax{}; }
-M_32_INT : RAX { $$ = new Constants::rax{}; }
-M_64_INT : RAX { $$ = new Constants::rax{}; }
-M_80_BCD : RAX { $$ = new Constants::rax{}; }
-M_2_BYTE : RAX { $$ = new Constants::rax{}; }
-M_14_BYTE : RAX { $$ = new Constants::rax{}; }
-M_28_BYTE : RAX { $$ = new Constants::rax{}; }
-M_94_BYTE : RAX { $$ = new Constants::rax{}; }
-M_108_BYTE : RAX { $$ = new Constants::rax{}; }
-M_512_BYTE : RAX { $$ = new Constants::rax{}; }
-MOFFS_8 : RAX { $$ = new Constants::rax{}; }
-MOFFS_16 : RAX { $$ = new Constants::rax{}; }
-MOFFS_32 : RAX { $$ = new Constants::rax{}; }
-MOFFS_64 : RAX { $$ = new Constants::rax{}; }
-REL_8 : RAX { $$ = new Constants::rax{}; }
-REL_32 : RAX { $$ = new Constants::rax{}; }
+HINT : RAX { $$ = &rax; }
+LABEL : RAX { $$ = &rax; }
 
-IMM_8  : ZERO   | ONE       | THREE   | AN_IMM_8 ;
-IMM_16 : IMM_8  | AN_IMM_16 ;
-IMM_32 : IMM_16 | AN_IMM_16 ;
-IMM_64 : IMM_32 | AN_IMM_64 ;
-RL     : AL     | CL        | AN_RL   ;
-R_16   : AX     | DX        | AN_R_16 ;
-R_32   : EAX    | AN_R_32   ;
-R_64   : RAX    | AN_R_64   ;
-SREG   : FS     | GS        | AN_SREG ;
-ST     : ST_0   | AN_ST     ;
-XMM    : XMM_0  | AN_XMM    ;
+MEM : 
+  OFFSET_32 { $$ = new M8{disp($1)}; }
+| SREG COLON OFFSET_32 { $$ = new M8{seg($1), disp($3)}; }
+| OPEN R_32 CLOSE { $$ = new M8{base($2), true}; }
+| OPEN R_64 CLOSE { $$ = new M8{base($2), false}; }
+| SREG COLON OPEN R_32 CLOSE { $$ = new M8{seg($1), base($4), true}; }
+| SREG COLON OPEN R_64 CLOSE { $$ = new M8{seg($1), base($4), false}; }
+| OFFSET_32 OPEN R_32 CLOSE { $$ = new M8{base($3), disp($1), true}; }
+| OFFSET_32 OPEN R_64 CLOSE { $$ = new M8{base($3), disp($1), false}; }
+| SREG COLON OFFSET_32 OPEN R_32 CLOSE { $$ = new M8{seg($1), base($5), disp($3), true}; }
+| SREG COLON OFFSET_32 OPEN R_64 CLOSE { $$ = new M8{seg($1), base($5), disp($3), false}; }
+| OPEN R_32 SCALE CLOSE { $$ = new M8{index($2), $3, true}; }
+| OPEN R_64 SCALE CLOSE { $$ = new M8{index($2), $3, false}; }
+| SREG COLON OPEN R_32 SCALE CLOSE { $$ = new M8{seg($1), index($4), $5, true}; }
+| SREG COLON OPEN R_64 SCALE CLOSE { $$ = new M8{seg($1), index($4), $5, false}; }
+| OFFSET_32 OPEN R_32 SCALE CLOSE { $$ = new M8{index($3), $4, disp($1), true}; }
+| OFFSET_32 OPEN R_64 SCALE CLOSE { $$ = new M8{index($3), $4, disp($1), false}; }
+| SREG COLON OFFSET_32 OPEN R_32 SCALE CLOSE { $$ = new M8{seg($1), index($5), $6, disp($3), true}; }
+| SREG COLON OFFSET_32 OPEN R_64 SCALE CLOSE { $$ = new M8{seg($1), index($5), $6, disp($3), false}; }
+| OPEN R_32 COMMA R_32 SCALE CLOSE { $$ = new M8{base($2), index($4), $5, true}; }
+| OPEN R_64 COMMA R_64 SCALE CLOSE { $$ = new M8{base($2), index($4), $5, false}; }
+| SREG COLON OPEN R_32 COMMA R_32 SCALE CLOSE { $$ = new M8{seg($1), base($4), index($6), $7, true}; }
+| SREG COLON OPEN R_64 COMMA R_64 SCALE CLOSE { $$ = new M8{seg($1), base($4), index($6), $7, false}; }
+| OFFSET_32 OPEN R_32 COMMA R_32 SCALE CLOSE { $$ = new M8{base($3), index($5), $6, disp($1), true}; }
+| OFFSET_32 OPEN R_64 COMMA R_64 SCALE CLOSE { $$ = new M8{base($3), index($5), $6, disp($1), false}; }
+| SREG COLON OFFSET_32 OPEN R_32 COMMA R_32 SCALE CLOSE { $$ = new M8{seg($1), base($5), index($7), $8, disp($3), true}; }
+| SREG COLON OFFSET_32 OPEN R_64 COMMA R_64 SCALE CLOSE { $$ = new M8{seg($1), base($5), index($7), $8, disp($3), false}; }
+
+FAR_PTR_16_16 : MEM { $$ = make_mem<FarPtr1616>(m($1)); delete $1; }
+FAR_PTR_16_32 : MEM { $$ = make_mem<FarPtr1632>(m($1)); delete $1; }
+FAR_PTR_16_64 : MEM { $$ = make_mem<FarPtr1664>(m($1)); delete $1; }
+M_8           : MEM { $$ = make_mem<M8>(m($1)); delete $1; }
+M_16          : MEM { $$ = make_mem<M16>(m($1)); delete $1; }
+M_32          : MEM { $$ = make_mem<M32>(m($1)); delete $1; }
+M_64          : MEM { $$ = make_mem<M64>(m($1)); delete $1; }
+M_128         : MEM { $$ = make_mem<M128>(m($1)); delete $1; }
+M_256         : MEM { $$ = make_mem<M256>(m($1)); delete $1; }
+M_32_FP       : MEM { $$ = make_mem<M32Fp>(m($1)); delete $1; }
+M_64_FP       : MEM { $$ = make_mem<M64Fp>(m($1)); delete $1; }
+M_80_FP       : MEM { $$ = make_mem<M80Fp>(m($1)); delete $1; }
+M_16_INT      : MEM { $$ = make_mem<M16Int>(m($1)); delete $1; }
+M_32_INT      : MEM { $$ = make_mem<M32Int>(m($1)); delete $1; }
+M_64_INT      : MEM { $$ = make_mem<M64Int>(m($1)); delete $1; }
+M_80_BCD      : MEM { $$ = make_mem<M80Bcd>(m($1)); delete $1; }
+M_2_BYTE      : MEM { $$ = make_mem<M2Byte>(m($1)); delete $1; }
+M_14_BYTE     : MEM { $$ = make_mem<M14Byte>(m($1)); delete $1; }
+M_28_BYTE     : MEM { $$ = make_mem<M28Byte>(m($1)); delete $1; }
+M_94_BYTE     : MEM { $$ = make_mem<M94Byte>(m($1)); delete $1; }
+M_108_BYTE    : MEM { $$ = make_mem<M108Byte>(m($1)); delete $1; }
+M_512_BYTE    : MEM { $$ = make_mem<M512Byte>(m($1)); delete $1; }
+
+MOFFS : 
+  OFFSET_64 { $$ = new Moffs8{offset($1)}; }
+| SREG COLON OFFSET_64 { $$ = new Moffs8{seg($1), offset($3)}; }
+
+MOFFS_8  : MOFFS { $$ = make_moffs<Moffs8>(moffs($1)); delete $1; }
+MOFFS_16 : MOFFS { $$ = make_moffs<Moffs16>(moffs($1)); delete $1; }
+MOFFS_32 : MOFFS { $$ = make_moffs<Moffs32>(moffs($1)); delete $1; }
+MOFFS_64 : MOFFS { $$ = make_moffs<Moffs64>(moffs($1)); delete $1; }
+
+REL_8 : OFFSET_8 { $$ = new Rel8{0}; delete $1; }
+REL_32 : OFFSET_32 { $$ = new Rel32{0}; delete $1; }
+
+IMM_8     : ZERO        | ONE          | THREE   | AN_IMM_8 ;
+IMM_16    : IMM_8       | AN_IMM_16    ;
+IMM_32    : IMM_16      | AN_IMM_32    ;
+IMM_64    : IMM_32      | AN_IMM_64    ;
+OFFSET_8  : AN_OFFSET_8 ;
+OFFSET_32 : OFFSET_8    | AN_OFFSET_32 ;
+OFFSET_64 : OFFSET_32   | AN_OFFSET_64 ;
+RL        : AL          | CL           | AN_RL   ;
+R_16      : AX          | DX           | AN_R_16 ;
+R_32      : EAX         | AN_R_32      ;
+R_64      : RAX         | AN_R_64      ;
+SREG      : FS          | GS           | AN_SREG ;
+ST        : ST_0        | AN_ST        ;
+XMM       : XMM_0       | AN_XMM       ;
 
 blank : /* empty */ | blank ENDL { }
 
@@ -131,5 +126,5 @@ instrs : instr {
 
  /* Dummy rule -- replace this with label_defn */
 instr : OPC_ADCB IMM_8 AL ENDL {
-  $$ = new Instruction{Opcode::ADC_AL_IMM8, {$4, $2}};
+  $$ = new Instruction{Opcode::ADC_AL_IMM8, {$3, $2}};
 }

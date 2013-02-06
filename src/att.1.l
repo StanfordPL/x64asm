@@ -73,15 +73,15 @@ const Operand* to_imm(const char* c, bool is_hex, bool is_neg) {
     case OpType::IMM_8:  return AN_IMM_8;  \
     case OpType::IMM_16: return AN_IMM_16; \
     case OpType::IMM_32: return AN_IMM_32; \
-    default            : return AN_IMM_64; \
+    default:             return AN_IMM_64; \
 	}
 
-#define offset_ret(o)                      \
-  switch ( o->type() ) {                   \
-    case OpType::IMM_8:  return OFFSET_8;  \
-    case OpType::IMM_16:                   \
-    case OpType::IMM_32: return OFFSET_32; \
-    default            : return OFFSET_64; \
+#define offset_ret(o)                         \
+  switch ( o->type() ) {                      \
+    case OpType::IMM_8:  return AN_OFFSET_8;  \
+    case OpType::IMM_16:                      \
+    case OpType::IMM_32: return AN_OFFSET_32; \
+    default:             return AN_OFFSET_64; \
 	}
 																				
 %}
@@ -90,6 +90,11 @@ const Operand* to_imm(const char* c, bool is_hex, bool is_neg) {
 %option yylineno
 
 %%
+
+"1"             { yylval.scale = Scale::TIMES_1; return SCALE; }
+"2"             { yylval.scale = Scale::TIMES_2; return SCALE; }
+"4"             { yylval.scale = Scale::TIMES_4; return SCALE; }
+"8"             { yylval.scale = Scale::TIMES_8; return SCALE; }
 
 ","             { return COMMA; }
 ":"             { return COLON; }
