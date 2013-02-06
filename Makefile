@@ -71,8 +71,6 @@ codegen:
 		ghc Codegen.hs && \
 		./Codegen && \
 		rm -f *.hi *.o Codegen
-	cat src/att.1.l src/att.2.l src/att.3.l > src/att.l		
-	cat src/att.1.y src/att.2.y src/att.3.y src/att.4.y src/att.5.y > src/att.y
 	flex $(FLEXOPS) -Patt src/att.l 
 	bison $(BISONOPS) -batt -patt --defines src/att.y && touch att.output 
 	mv lex.*.* src/ && mv *.tab.* src/ && mv *.output src/
@@ -108,6 +106,5 @@ bin/%: tools/%.cc $(LIB)
 clean:
 	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN) $(TEST)
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.intel src/*.enum src/*.table
-	rm -f src/att.2.l src/att.l src/att.2.y src/att.4.y src/att.y
 	rm -f src/*.tab.c src/*.tab.h src/lex.*.c src/*.output
 	rm -f test/*.s

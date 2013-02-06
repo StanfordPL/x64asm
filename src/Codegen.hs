@@ -1255,17 +1255,17 @@ att_group is = groupBy (\x y -> (att x) == (att y)) is'
 att_row_elem :: Instr -> String
 att_row_elem i = "{" ++ e ++ ", {" ++ ops ++ "}}"
   where e = opcode_enum i
-        ops = intercalate "," $ map op2tag $ reverse $ operands i
+        ops = intercalate "," $ map (("OpType::"++).op2tag) $ reverse $ operands i
 
 -- Generates a row in the at&t parse table
 att_row :: [Instr] -> String
-att_row is = ",\t{\"" ++ (mn is) ++ "\", {\n\t\t " ++ (body is) ++ "\n}}"
+att_row is = " \t{\"" ++ (mn is) ++ "\", {\n\t\t " ++ (body is) ++ "\n}}"
   where mn is = (att (head is))
         body is = intercalate "\n\t\t," $ map att_row_elem is
 
 -- Generates the entire at&t parse table
 att_table :: [Instr] -> String
-att_table is = intercalate "\n" $ map att_row $ att_group is
+att_table is = intercalate "\n, " $ map att_row $ att_group is
 
 -- Read Intel code
 --------------------------------------------------------------------------------
@@ -1295,48 +1295,6 @@ intel_row is = ",\t{\"" ++ (mn is) ++ "\", {\n\t\t " ++ (body is) ++ "\n}}"
 intel_table :: [Instr] -> String
 intel_table is = intercalate "\n" $ map intel_row $ intel_group is
 
--- OLD IDEAS FOR PARSING (Keep some?)
---------------------------------------------------------------------------------
-
--- Transforms an instruction mnemonic into a bison-appropriate token
-att_token :: String -> String
-att_token m 
-  | last m == '*' = "OPC_" ++ (up $ init $ init m)
-  | otherwise = "OPC_" ++ (up $ to_id m)
-
--- Flex rule for an AT&T opcode
-att_flex_rule :: String -> String
-att_flex_rule m = "\"" ++ m ++ "\" { return " ++ (att_token m) ++ "; }"
-
--- Flex rules for all AT&T opcodes
-att_flex_rules :: [Instr] -> String
-att_flex_rules is = (intercalate "\n" $ rules is) ++ "\n\n"
-  where rules is = map att_flex_rule $ nub $ map att is
-
--- Token definitions for an AT&T opcode
-att_bison_defn :: String -> String
-att_bison_defn m = "%token <opcode> " ++ (att_token m)
-
--- Token definitions for aall AT&T opcodes
-att_bison_defns :: [Instr] -> String
-att_bison_defns is = (intercalate "\n" $ defns is) ++ "\n\n"
-  where defns is = map att_bison_defn $ nub $ map att is
-
--- Parser rule for an AT&T instruction
-att_bison_rule :: Instr -> String
-att_bison_rule i = "| " ++ (mn i) ++ " " ++ (ops i) ++ " ENDL {\n" ++ 
-                   "  " ++ (body i) ++ "\n" ++
-                   "}"
-  where mn i = att_token (att i)
-        ops i = intercalate " COMMA " $ map op2tag $ reverse (operands i)
-        args i = take (arity i) [2*(arity i)-x | x <- [0,2..]]
-        body i = "$$ = new Instruction{Opcode::" ++ (opcode_enum i) ++ ", " ++
-                 "{" ++ (intercalate "," (map (("$"++).show) (args i))) ++ "}};"
-
--- Parser rules for AT&T instructions
-att_bison_rules :: [Instr] -> String
-att_bison_rules is = (intercalate "\n" $ map att_bison_rule is) ++ ";\n\n"
-
 -- Write code
 --------------------------------------------------------------------------------
 
@@ -1361,9 +1319,6 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "opcode.enum"       $ opcode_enums is
                    writeFile "opcode.att"        $ att_mnemonics is
                    writeFile "opcode.intel"      $ intel_mnemonics is
-                   writeFile "att.2.l"           $ att_flex_rules is				
-                   writeFile "att.2.y"           $ att_bison_defns is
-                   writeFile "att.4.y"           $ att_bison_rules is		
                    writeFile "att.table"         $ att_table is		
                    writeFile "intel.table"       $ intel_table is		
 
