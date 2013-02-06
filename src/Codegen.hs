@@ -275,17 +275,6 @@ xmm_op "xmm"    = True
 xmm_op "<XMM0>" = True
 xmm_op _        = False
 
--- Returns true for modifer operands
-mod_op :: String -> Bool
-mod_op "p66" = True
-mod_op "pw"  = True
-mod_op "far" = True
-mod_op _ = False
-
--- Returns true for hint operands
-hint_op :: String -> Bool
-hint_op s = s == "hint"
-
 -- Transform operand into c++ type
 op2type :: String -> String
 op2type "rl"       = "Rl"
@@ -1250,20 +1239,63 @@ assm_case i = "case " ++ (opcode_enum i) ++ ":\n" ++
 assm_cases :: [Instr] -> String
 assm_cases is = intercalate "\n" $ map assm_case is
 
--- Identify parseable instruction variants -- TODO: Maybe not necessary?
+-- Read AT&T code
 --------------------------------------------------------------------------------
 
--- Is this a non-standard op
-non_standard_op :: String -> Bool
-non_standard_op o = (mod_op o) || (hint_op o)
+-- Sort instructions by at&t mnemonic
+att_sort :: [Instr] -> [Instr]
+att_sort is = sortBy (\x y -> compare (att x) (att y)) is
 
--- Is this instruction parseable?
-is_parseable :: Instr -> Bool
-is_parseable i = case findIndex non_standard_op (operands i) of
-  (Just _) -> False
-  Nothing -> True
+-- Group instructions by at&t mnemonic
+att_group :: [Instr] -> [[Instr]]
+att_group is = groupBy (\x y -> (att x) == (att y)) is'
+  where is' = att_sort is
 
--- Read AT&T code
+-- Generates a part of a row in the at&t parse table
+att_row_elem :: Instr -> String
+att_row_elem i = "{" ++ e ++ ", {" ++ ops ++ "}}"
+  where e = opcode_enum i
+        ops = intercalate "," $ map op2tag $ reverse $ operands i
+
+-- Generates a row in the at&t parse table
+att_row :: [Instr] -> String
+att_row is = ",\t{\"" ++ (mn is) ++ "\", {\n\t\t " ++ (body is) ++ "\n}}"
+  where mn is = (att (head is))
+        body is = intercalate "\n\t\t," $ map att_row_elem is
+
+-- Generates the entire at&t parse table
+att_table :: [Instr] -> String
+att_table is = intercalate "\n" $ map att_row $ att_group is
+
+-- Read Intel code
+--------------------------------------------------------------------------------
+
+-- Sort instructions by intel mnemonic
+intel_sort :: [Instr] -> [Instr]
+intel_sort is = sortBy (\x y -> compare (raw_mnemonic x) (raw_mnemonic y)) is
+
+-- Group instructions by intel mnemonic
+intel_group :: [Instr] -> [[Instr]]
+intel_group is = groupBy (\x y -> (raw_mnemonic x) == (raw_mnemonic y)) $ is'
+  where is' = intel_sort is
+
+-- Generates a part of a row in the intel parse table
+intel_row_elem :: Instr -> String
+intel_row_elem i = "{" ++ e ++ ", {" ++ ops ++ "}}"
+  where e = opcode_enum i
+        ops = intercalate "," $ map op2tag $ operands i
+
+-- Generates a row in the intel parse table
+intel_row :: [Instr] -> String
+intel_row is = ",\t{\"" ++ (mn is) ++ "\", {\n\t\t " ++ (body is) ++ "\n}}"
+  where mn is = (raw_mnemonic (head is))
+        body is = intercalate "\n\t\t," $ map intel_row_elem is
+
+-- Generates the entire intel parse table
+intel_table :: [Instr] -> String
+intel_table is = intercalate "\n" $ map intel_row $ intel_group is
+
+-- OLD IDEAS FOR PARSING (Keep some?)
 --------------------------------------------------------------------------------
 
 -- Transforms an instruction mnemonic into a bison-appropriate token
@@ -1332,6 +1364,8 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "att.2.l"           $ att_flex_rules is				
                    writeFile "att.2.y"           $ att_bison_defns is
                    writeFile "att.4.y"           $ att_bison_rules is		
+                   writeFile "att.table"         $ att_table is		
+                   writeFile "intel.table"       $ intel_table is		
 
 --------------------------------------------------------------------------------
 -- Test Codegen

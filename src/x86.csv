@@ -210,15 +210,15 @@ REX.W+ 0F AB	BTS r/m64, r64 	MR	RW, R		E.CF	E.OF E.SF E.AF E.PF			V	NE		btsq	Sto
 REX.W+ 0F BA /5 ib	BTS r/m64, imm8	MI	RW, R		E.CF	E.OF E.SF E.AF E.PF			V	NE		btsq	Store selected bit in CF flag and set.
 													
 E8 cw 	CALL rel16 								NS	V			Call near, relative, displacement relative to next instruction.
-E8 cd	CALL rel32	D	R	???	???	???			V	V		Callq *	Call near, relative, displacement relative to next instruction. 32-bit displacement sign extended to 64-bits in 64-bit mode.
+E8 cd	CALL rel32	D	R	???	???	???			V	V		callq *	Call near, relative, displacement relative to next instruction. 32-bit displacement sign extended to 64-bits in 64-bit mode.
 FF /2	CALL r/m16								NE	V			Call near, absolute indirect, address given in r/m16.
 FF /2	CALL r/m32								NE	V			Call near, absolute indirect, address given in r/m32.
-FF /2	CALL r/m64	M	R	???	???	???			V	NE		Callq *	Call near, absolute indirect, address given in r/m64.
+FF /2	CALL r/m64	M	R	???	???	???			V	NE		callq *	Call near, absolute indirect, address given in r/m64.
 9A cd 	CALL ptr16:16 								I	V			Call far, absolute, address given in operand.
 9A cp 	CALL ptr16:32 								I	V			Call far, absolute, address given in operand.
-FF /3	CALL m16:16	M	R	???	???	???			V	V		Callq *	Call far, absolute indirect address given in m16:16. In 32-bit mode: if selector points to a gate, then RIP = 32-bit zero extended displacement taken from gate; else RIP = zero extended 16- bit offset from far pointer referenced in the instruction.
-FF /3	CALL m16:32	M	R	???	???	???			V	V		Callq *	In 64-bit mode: If selector points to a gate, then RIP = 64-bit displacement taken from gate; else RIP = zero extended 32-bit offset from far pointer referenced in the instruction.
-REX.W+ FF /3	CALL m16:64	M	R	???	???	???			V	NE		Callq *	In 64-bit mode: If selector points to a gate, then RIP = 64-bit displacement taken from gate; else RIP = 64-bit offset from far pointer referenced in the instruction.
+FF /3	CALL m16:16	M	R	???	???	???			V	V		callq *	Call far, absolute indirect address given in m16:16. In 32-bit mode: if selector points to a gate, then RIP = 32-bit zero extended displacement taken from gate; else RIP = zero extended 16- bit offset from far pointer referenced in the instruction.
+FF /3	CALL m16:32	M	R	???	???	???			V	V		callq *	In 64-bit mode: If selector points to a gate, then RIP = 64-bit displacement taken from gate; else RIP = zero extended 32-bit offset from far pointer referenced in the instruction.
+REX.W+ FF /3	CALL m16:64	M	R	???	???	???			V	NE		callq *	In 64-bit mode: If selector points to a gate, then RIP = 64-bit displacement taken from gate; else RIP = 64-bit offset from far pointer referenced in the instruction.
 													
 98	CBW	NP		AL	AX				V	V		cbtw	AX = sign-extend of AL.
 98	CWDE	NP		AX	EAX				V	V		cwtl	EAX = sign-extend of AX.
@@ -906,17 +906,17 @@ E3 cb 	JRCXZ rel8 	D	R	RCX					V	NE		jrcxz	Jump short if RCX register is 0.
 0F 84 cw 	JZ rel16 								NS	V			Jump near if 0 (ZF=1). Not supported in 64-bit mode.
 0F 84 cd 	JZ rel32 	D	R	E.ZF					V	V		jz	Jump near if 0 (ZF=1).
 													
-EB cb 	JMP rel8 	D	R	???	???	???			V	V		Jmpq *	Jump short, RIP = RIP + 8-bit displacement sign extended to 64-bits
+EB cb 	JMP rel8 	D	R	???	???	???			V	V		jmpq *	Jump short, RIP = RIP + 8-bit displacement sign extended to 64-bits
 E9 cw 	JMP rel16 								NS	V			Jump near, relative, displacement relative to next instruction. Not supported in 64-bit mode.
-E9 cd 	JMP rel32 	D	R	???	???	???			V	V		Jmpq *	Jump near, relative, RIP = RIP + 32-bit displacement sign extended to 64-bits
+E9 cd 	JMP rel32 	D	R	???	???	???			V	V		jmpq *	Jump near, relative, RIP = RIP + 32-bit displacement sign extended to 64-bits
 FF /4 	JMP r/m16 								NS	V			Jump near, absolute indirect, address = zero-extended r/m16. Not supported in 64-bit mode.
 FF /4 	JMP r/m32 								NS	V			Jump near, absolute indirect, address given in r/m32. Not supported in 64-bit mode.
-FF /4 	JMP r/m64 	M	R	???	???	???			V	NE		Jmpq *	Jump near, absolute indirect, RIP = 64-Bit offset from register or memory
+FF /4 	JMP r/m64 	M	R	???	???	???			V	NE		jmpq *	Jump near, absolute indirect, RIP = 64-Bit offset from register or memory
 EA cd 	JMP ptr16:16 								I	V			Jump far, absolute, address given in operand
 EA cp 	JMP ptr16:32 								I	V			Jump far, absolute, address given in operand
-FF /5 	JMP m16:16 	D	R	???	???	???			V	V		Jmpq *	Jump far, absolute indirect, address given in m16:16
-FF /5 	JMP m16:32 	D	R	???	???	???			V	V		Jmpq *	Jump far, absolute indirect, address given in m16:32.
-REX.W+ FF /5 	JMP m16:64 	D	R	???	???	???			V	NE		Jmpq *	Jump far, absolute indirect, address given in m16:64.
+FF /5 	JMP m16:16 	D	R	???	???	???			V	V		jmpq *	Jump far, absolute indirect, address given in m16:16
+FF /5 	JMP m16:32 	D	R	???	???	???			V	V		jmpq *	Jump far, absolute indirect, address given in m16:32.
+REX.W+ FF /5 	JMP m16:64 	D	R	???	???	???			V	NE		jmpq *	Jump far, absolute indirect, address given in m16:64.
 													
 9F 	LAHF 	NP		E.SF E.ZF E.PF E.AF E.CF	AH				V	V		lahf	Load: AH = EFLAGS(SF:ZF:0:AF:0:PF:1:CF).
 													

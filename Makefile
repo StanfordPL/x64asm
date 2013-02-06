@@ -85,7 +85,7 @@ src/%.o: src/%.cc src/%.h codegen
 
 ##### DOCUMENTATION TARGETS
 
-doc/html: doc/doxyfile src/* 
+doc/html: doc/doxyfile src/*
 	doxygen doc/doxyfile
 
 ##### LIBRARY TARGET
