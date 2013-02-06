@@ -14,7 +14,7 @@
 
 ##### CONSTANT DEFINITIONS
 
-GCC=ccache g++
+GCC=ccache g++ -std=c++0x -Wall
 
 INC=-I./
 		
@@ -51,11 +51,11 @@ DOC=doc/html
 all: release
 
 debug:
-	make -C . erthing FLEXOPS="-d" BISONOPS="-t" OPT="-std=c++0x -Wall -fPIC -g"
+	make -C . erthing FLEXOPS="-d" BISONOPS="-t --report=state" OPT="-g"
 release:
-	make -C . erthing OPT="-std=c++0x -Wall -fPIC -DNDEBUG -O3 -funroll-all-loops"
+	make -C . erthing OPT="-DNDEBUG -O3 -funroll-all-loops"
 profile:
-	make -C . erthing OPT="-std=c++0x -Wall -fPIC -DNDEBUG -O3 -funroll-all-loops -pg"
+	make -C . erthing OPT="-DNDEBUG -O3 -funroll-all-loops -pg"
 
 erthing: $(LIB) $(TEST) $(BIN) $(DOC)
 
@@ -73,9 +73,13 @@ codegen:
 		rm -f *.hi *.o Codegen
 	cat src/att.1.l src/att.2.l src/att.3.l > src/att.l		
 	cat src/att.1.y src/att.2.y src/att.3.y src/att.4.y src/att.5.y > src/att.y
-	flex $(FLEXOPS) -Patt src/att.l && mv lex.att.c src/
-	bison $(BISONOPS) -batt -patt --defines src/att.y && mv att.tab.* src
+	flex $(FLEXOPS) -Patt src/att.l 
+	bison $(BISONOPS) -batt -patt --defines src/att.y && touch att.output 
+	mv lex.*.* src/ && mv *.tab.* src/ && mv *.output src/
 		
+src/code.o: src/code.cc src/code.h codegen
+	$(GCC) -O0 $(INC) -c $< -o $@
+
 src/%.o: src/%.cc src/%.h codegen
 	$(GCC) $(OPT) $(INC) -c $< -o $@
 
@@ -105,5 +109,5 @@ clean:
 	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN) $(TEST)
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.intel src/*.enum src/*.table
 	rm -f src/att.2.l src/att.l src/att.2.y src/att.4.y src/att.y
-	rm -f src/*.tab.cc src/*.tab.h src/lex.*.c
+	rm -f src/*.tab.c src/*.tab.h src/lex.*.c src/*.output
 	rm -f test/*.s
