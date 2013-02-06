@@ -248,9 +248,9 @@ REX.W+ 0F 42 /r 	CMOVB r64, r/m64 	RM	w, R	E.CF					V	NE		cmovbq	Move if below (
 0F 46 /r	CMOVBE r16, r/m16 	RM	w, R	E.CF E.ZF					V	V		cmovbew	Move if below or equal (CF=1 or ZF=1).
 0F 46 /r 	CMOVBE r32, r/m32 	RM	w, R	E.CF E.ZF					V	V		cmovbel	Move if below or equal (CF=1 or ZF=1).
 REX.W+ 0F 46 /r 	CMOVBE r64, r/m64	RM	w, R	E.CF E.ZF					V	NE		cmovbeq	Move if below or equal (CF=1 or ZF=1).
-0F 42 /r	CMOVC r16, r/m16 	RM	w, R	E.CF					V	V		cmovbw	Move if carry (CF=1).
-0F 42 /r 	CMOVC r32, r/m32 	RM	w, R	E.CF					V	V		cmovbl	Move if carry (CF=1).
-REX.W+ 0F 42 /r 	CMOVC r64, r/m64 	RM	w, R	E.CF					V	NE		cmovbq	Move if carry (CF=1).
+0F 42 /r	CMOVC r16, r/m16 	RM	w, R	E.CF					V	V		cmovcw	Move if carry (CF=1).
+0F 42 /r 	CMOVC r32, r/m32 	RM	w, R	E.CF					V	V		cmovcl	Move if carry (CF=1).
+REX.W+ 0F 42 /r 	CMOVC r64, r/m64 	RM	w, R	E.CF					V	NE		cmovcq	Move if carry (CF=1).
 0F 44 /r	CMOVE r16, r/m16 	RM	w, R	E.ZF					V	V		cmovew	Move if equal (ZF=1).
 0F 44 /r 	CMOVE r32, r/m32 	RM	w, R	E.ZF					V	V		cmovel	Move if equal (ZF=1).
 REX.W+ 0F 44 /r 	CMOVE r64, r/m64 	RM	w, R	E.ZF					V	NE		cmoveq	Move if equal (ZF=1).
@@ -266,36 +266,36 @@ REX.W+ 0F 4C /r 	CMOVL r64, r/m64 	RM	w, R	E.SF E.OF					V	NE		cmovlq	Move if le
 0F 4E /r	CMOVLE r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovlew	Move if less or equal (ZF=1 or SF!= OF).
 0F 4E /r 	CMOVLE r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovlel	Move if less or equal (ZF=1 or SF!= OF).
 REX.W+ 0F 4E /r 	CMOVLE r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE		cmovleq	Move if less or equal (ZF=1 or SF!= OF).
-0F 46 /r	CMOVNA r16, r/m16 	RM	w, R	E.CF E.ZF					V	V		cmovbew	Move if not above (CF=1 or ZF=1).
-0F 46 /r 	CMOVNA r32, r/m32 	RM	w, R	E.CF E.ZF					V	V		cmovbel	Move if not above (CF=1 or ZF=1).
-REX.W+ 0F 46 /r	CMOVNA r64, r/m64 	RM	w, R	E.CF E.ZF					V	NE		cmovbeq	Move if not above (CF=1 or ZF=1).
-0F 42 /r	CMOVNAE r16, r/m16 	RM	w, R	E.CF					V	V		cmovbw	Move if not above or equal (CF=1).
-0F 42 /r 	CMOVNAE r32, r/m32 	RM	w, R	E.CF					V	V		cmovbl	Move if not above or equal (CF=1).
-REX.W+ 0F 42 /r 	CMOVNAE r64, r/m64 	RM	w, R	E.CF					V	NE		cmovbq	Move if not above or equal (CF=1).
-0F 43 /r	CMOVNB r16, r/m16 	RM	w, R	E.CF					V	V		cmovbw	Move if not below (CF=0).
-0F 43 /r 	CMOVNB r32, r/m32 	RM	w, R	E.CF					V	V		cmovbl	Move if not below (CF=0).
-REX.W+ 0F 43 /r 	CMOVNB r64, r/m64 	RM	w, R	E.CF					V	NE		cmovbq	Move if not below (CF=0).
-0F 47 /r	CMOVNBE r16, r/m16	RM	w, R	E.CF E.ZF					V	V		cmovbew	Move if not below or equal (CF=0 and ZF=0).
-0F 47 /r 	CMOVNBE r32, r/m32 	RM	w, R	E.CF E.ZF					V	V		cmovbel	Move if not below or equal (CF=0 and ZF=0).
-REX.W+ 0F 47 /r 	CMOVNBE r64, r/m64 	RM	w, R	E.CF E.ZF					V	NE		cmovbeq	Move if not below or equal (CF=0 and ZF=0).
-0F 43 /r	CMOVNC r16, r/m16 	RM	w, R	E.CF					V	V		cmovaew	Move if not carry (CF=0).
-0F 43 /r 	CMOVNC r32, r/m32 	RM	w, R	E.CF					V	V		cmovael	Move if not carry (CF=0).
-REX.W+ 0F 43 /r 	CMOVNC r64, r/m64 	RM	w, R	E.CF					V	NE		cmovaeq	Move if not carry (CF=0).
+0F 46 /r	CMOVNA r16, r/m16 	RM	w, R	E.CF E.ZF					V	V		cmovnaw	Move if not above (CF=1 or ZF=1).
+0F 46 /r 	CMOVNA r32, r/m32 	RM	w, R	E.CF E.ZF					V	V		cmovnal	Move if not above (CF=1 or ZF=1).
+REX.W+ 0F 46 /r	CMOVNA r64, r/m64 	RM	w, R	E.CF E.ZF					V	NE		cmovnaq	Move if not above (CF=1 or ZF=1).
+0F 42 /r	CMOVNAE r16, r/m16 	RM	w, R	E.CF					V	V		cmovnaew	Move if not above or equal (CF=1).
+0F 42 /r 	CMOVNAE r32, r/m32 	RM	w, R	E.CF					V	V		cmovnael	Move if not above or equal (CF=1).
+REX.W+ 0F 42 /r 	CMOVNAE r64, r/m64 	RM	w, R	E.CF					V	NE		cmovnaeq	Move if not above or equal (CF=1).
+0F 43 /r	CMOVNB r16, r/m16 	RM	w, R	E.CF					V	V		cmovnbw	Move if not below (CF=0).
+0F 43 /r 	CMOVNB r32, r/m32 	RM	w, R	E.CF					V	V		cmovnbl	Move if not below (CF=0).
+REX.W+ 0F 43 /r 	CMOVNB r64, r/m64 	RM	w, R	E.CF					V	NE		cmovnbq	Move if not below (CF=0).
+0F 47 /r	CMOVNBE r16, r/m16	RM	w, R	E.CF E.ZF					V	V		cmovnbew	Move if not below or equal (CF=0 and ZF=0).
+0F 47 /r 	CMOVNBE r32, r/m32 	RM	w, R	E.CF E.ZF					V	V		cmovnbel	Move if not below or equal (CF=0 and ZF=0).
+REX.W+ 0F 47 /r 	CMOVNBE r64, r/m64 	RM	w, R	E.CF E.ZF					V	NE		cmovnbeq	Move if not below or equal (CF=0 and ZF=0).
+0F 43 /r	CMOVNC r16, r/m16 	RM	w, R	E.CF					V	V		cmovncw	Move if not carry (CF=0).
+0F 43 /r 	CMOVNC r32, r/m32 	RM	w, R	E.CF					V	V		cmovncl	Move if not carry (CF=0).
+REX.W+ 0F 43 /r 	CMOVNC r64, r/m64 	RM	w, R	E.CF					V	NE		cmovncq	Move if not carry (CF=0).
 0F 45 /r	CMOVNE r16, r/m16 	RM	w, R	E.ZF					V	V		cmovnew	Move if not equal (ZF=0).
 0F 45 /r 	CMOVNE r32, r/m32 	RM	w, R	E.ZF					V	V		cmovnel	Move if not equal (ZF=0).
 REX.W+ 0F 45 /r 	CMOVNE r64, r/m64 	RM	w, R	E.ZF					V	NE		cmovneq	Move if not equal (ZF=0).
-0F 4E /r	CMOVNG r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovlew	Move if not greater (ZF=1 or SF!= OF).
-0F 4E /r 	CMOVNG r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovlel	Move if not greater (ZF=1 or SF!= OF).
-REX.W+ 0F 4E /r 	CMOVNG r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE		cmovleq	Move if not greater (ZF=1 or SF!= OF).
-0F 4C /r	CMOVNGE r16, r/m16 	RM	w, R	E.SF E.OF					V	V		cmovlw	Move if not greater or equal (SF!= OF).
-0F 4C /r 	CMOVNGE r32, r/m32 	RM	w, R	E.SF E.OF					V	V		cmovll	Move if not greater or equal (SF!= OF).
-REX.W+ 0F 4C /r 	CMOVNGE r64, r/m64 	RM	w, R	E.SF E.OF					V	NE		cmovlq	Move if not greater or equal (SF!= OF).
-0F 4D /r	CMOVNL r16, r/m16 	RM	w, R	E.SF E.OF					V	V		cmovgew	Move if not less (SF=OF).
-0F 4D /r 	CMOVNL r32, r/m32 	RM	w, R	E.SF E.OF					V	V		cmovgel	Move if not less (SF=OF).
-REX.W+ 0F 4D /r 	CMOVNL r64, r/m64 	RM	w, R	E.SF E.OF					V	NE		cmovgeq	Move if not less (SF=OF).
-0F 4F /r	CMOVNLE r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovgw	Move if not less or equal (ZF=0 and SF=OF).
-0F 4F /r 	CMOVNLE r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovgl	Move if not less or equal (ZF=0 and SF=OF).
-REX.W+ 0F 4F /r 	CMOVNLE r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE		cmovgq	Move if not less or equal (ZF=0 and SF=OF).
+0F 4E /r	CMOVNG r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovngw	Move if not greater (ZF=1 or SF!= OF).
+0F 4E /r 	CMOVNG r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovngl	Move if not greater (ZF=1 or SF!= OF).
+REX.W+ 0F 4E /r 	CMOVNG r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE		cmovngq	Move if not greater (ZF=1 or SF!= OF).
+0F 4C /r	CMOVNGE r16, r/m16 	RM	w, R	E.SF E.OF					V	V		cmovngew	Move if not greater or equal (SF!= OF).
+0F 4C /r 	CMOVNGE r32, r/m32 	RM	w, R	E.SF E.OF					V	V		cmovngel	Move if not greater or equal (SF!= OF).
+REX.W+ 0F 4C /r 	CMOVNGE r64, r/m64 	RM	w, R	E.SF E.OF					V	NE		cmovngeq	Move if not greater or equal (SF!= OF).
+0F 4D /r	CMOVNL r16, r/m16 	RM	w, R	E.SF E.OF					V	V		cmovnlw	Move if not less (SF=OF).
+0F 4D /r 	CMOVNL r32, r/m32 	RM	w, R	E.SF E.OF					V	V		cmovnll	Move if not less (SF=OF).
+REX.W+ 0F 4D /r 	CMOVNL r64, r/m64 	RM	w, R	E.SF E.OF					V	NE		cmovnlq	Move if not less (SF=OF).
+0F 4F /r	CMOVNLE r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovnlew	Move if not less or equal (ZF=0 and SF=OF).
+0F 4F /r 	CMOVNLE r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovnlel	Move if not less or equal (ZF=0 and SF=OF).
+REX.W+ 0F 4F /r 	CMOVNLE r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE		cmovnleq	Move if not less or equal (ZF=0 and SF=OF).
 0F 41 /r	CMOVNO r16, r/m16 	RM	w, R	E.OF					V	V		cmovnow	Move if not overflow (OF=0).
 0F 41 /r 	CMOVNO r32, r/m32 	RM	w, R	E.OF					V	V		cmovnol	Move if not overflow (OF=0).
 REX.W+ 0F 41 /r 	CMOVNO r64, r/m64 	RM	w, R	E.OF					V	NE		cmovnoq	Move if not overflow (OF=0).
@@ -305,27 +305,27 @@ REX.W+ 0F 4B /r 	CMOVNP r64, r/m64 	RM	w, R	E.PF					V	NE		cmovnpq	Move if not p
 0F 49 /r	CMOVNS r16, r/m16 	RM	w, R	E.SF					V	V		cmovnsw	Move if not sign (SF=0).
 0F 49 /r 	CMOVNS r32, r/m32 	RM	w, R	E.SF					V	V		cmovnsl	Move if not sign (SF=0).
 REX.W+ 0F 49 /r 	CMOVNS r64, r/m64 	RM	w, R	E.SF					V	NE		cmovnsq	Move if not sign (SF=0).
-0F 45 /r	CMOVNZ r16, r/m16 	RM	w, R	E.ZF					V	V		cmovnew	Move if not zero (ZF=0).
-0F 45 /r 	CMOVNZ r32, r/m32 	RM	w, R	E.ZF					V	V		cmovnel	Move if not zero (ZF=0).
-REX.W+ 0F 45 /r 	CMOVNZ r64, r/m64 	RM	w, R	E.ZF					V	NE		cmovneq	Move if not zero (ZF=0).
+0F 45 /r	CMOVNZ r16, r/m16 	RM	w, R	E.ZF					V	V		cmovnzw	Move if not zero (ZF=0).
+0F 45 /r 	CMOVNZ r32, r/m32 	RM	w, R	E.ZF					V	V		cmovnzl	Move if not zero (ZF=0).
+REX.W+ 0F 45 /r 	CMOVNZ r64, r/m64 	RM	w, R	E.ZF					V	NE		cmovnzq	Move if not zero (ZF=0).
 0F 40 /r	CMOVO r16, r/m16 	RM	w, R	E.OF					V	V		cmovow	Move if overflow (OF=1).
 0F 40 /r 	CMOVO r32, r/m32 	RM	w, R	E.OF					V	V		cmovol	Move if overflow (OF=1).
 REX.W+ 0F 40 /r 	CMOVO r64, r/m64 	RM	w, R	E.OF					V	NE		cmovoq	Move if overflow (OF=1).
 0F 4A /r	CMOVP r16, r/m16 	RM	w, R	E.PF					V	V		cmovpw	Move if parity (PF=1).
 0F 4A /r 	CMOVP r32, r/m32 	RM	w, R	E.PF					V	V		cmovpl	Move if parity (PF=1).
 REX.W+ 0F 4A /r 	CMOVP r64, r/m64 	RM	w, R	E.PF					V	NE		cmovpq	Move if parity (PF=1).
-0F 4A /r	CMOVPE r16, r/m16 	RM	w, R	E.PF					V	V		cmovpw	Move if parity even (PF=1).
-0F 4A /r 	CMOVPE r32, r/m32 	RM	w, R	E.PF					V	V		cmovpl	Move if parity even (PF=1).
-REX.W+ 0F 4A /r	CMOVPE r64, r/m64	RM	w, R	E.PF					V	NE		cmovpq	Move if parity even (PF=1).
-0F 4B /r	CMOVPO r16, r/m16 	RM	w, R	E.PF					V	V		cmovnpw	Move if parity odd (PF=0).
-0F 4B /r	CMOVPO r32, r/m32 	RM	w, R	E.PF					V	V		cmovnpl	Move if parity odd (PF=0).
-REX.W+ 0F 4B /r 	CMOVPO r64, r/m64 	RM	w, R	E.PF					V	NE		cmovnpq	Move if parity odd (PF=0).
+0F 4A /r	CMOVPE r16, r/m16 	RM	w, R	E.PF					V	V		cmovpew	Move if parity even (PF=1).
+0F 4A /r 	CMOVPE r32, r/m32 	RM	w, R	E.PF					V	V		cmovpel	Move if parity even (PF=1).
+REX.W+ 0F 4A /r	CMOVPE r64, r/m64	RM	w, R	E.PF					V	NE		cmovpeq	Move if parity even (PF=1).
+0F 4B /r	CMOVPO r16, r/m16 	RM	w, R	E.PF					V	V		cmovnpow	Move if parity odd (PF=0).
+0F 4B /r	CMOVPO r32, r/m32 	RM	w, R	E.PF					V	V		cmovnpol	Move if parity odd (PF=0).
+REX.W+ 0F 4B /r 	CMOVPO r64, r/m64 	RM	w, R	E.PF					V	NE		cmovnpoq	Move if parity odd (PF=0).
 0F 48 /r	CMOVS r16, r/m16 	RM	w, R	E.SF					V	V		cmovsw	Move if sign (SF=1).
 0F 48 /r	CMOVS r32, r/m32 	RM	w, R	E.SF					V	V		cmovsl	Move if sign (SF=1).
 REX.W+ 0F 48 /r 	CMOVS r64, r/m64 	RM	w, R	E.SF					V	NE		cmovsq	Move if sign (SF=1).
-0F 44 /r	CMOVZ r16, r/m16 	RM	w, R	E.ZF					V	V		cmovew	Move if zero (ZF=1).
-0F 44 /r	CMOVZ r32, r/m32 	RM	w, R	E.ZF					V	V		cmovel	Move if zero (ZF=1).
-REX.W+ 0F 44 /r	CMOVZ r64, r/m64	RM	w, R	E.ZF					V	NE		cmoveq	Move if zero (ZF=1).
+0F 44 /r	CMOVZ r16, r/m16 	RM	w, R	E.ZF					V	V		cmovzw	Move if zero (ZF=1).
+0F 44 /r	CMOVZ r32, r/m32 	RM	w, R	E.ZF					V	V		cmovzl	Move if zero (ZF=1).
+REX.W+ 0F 44 /r	CMOVZ r64, r/m64	RM	w, R	E.ZF					V	NE		cmovzq	Move if zero (ZF=1).
 													
 3C ib	CMP AL, imm8 	I	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpb	Compare imm8 with AL.
 3D iw	CMP AX, imm16	I	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpw	Compare imm16 with AX.
@@ -638,7 +638,7 @@ D9 EE 	FLDZ 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldz	Push +0.0 onto the FPU reg
 													
 D9 /5 	FLDCW m2byte 		R			S.C0 S.C1 S.C2 S.C3			V	V		fldcw	Load FPU control word from m2byte.
 													
-D9 /4 	FLDENV m14/28byte 		R		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE				V	V		fldenv	Load FPU environment from m14byte or m28byte.
+D9 /4 	FLDENV m28byte 		R		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE				V	V		fldenv	Load FPU environment from m14byte or m28byte.
 													
 D8 /1 	FMUL m32fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fmuls	Multiply ST(0) by m32fp and store result in ST(0).
 DC /1 	FMUL m64fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fmull	Multiply ST(0) by m64fp and store result in ST(0).
@@ -661,10 +661,10 @@ D9 F2 	FPTAN 			ST(0)	ST(0) S.C1 S.C2	S.C0 S.C3			V	V		fptan	Replace ST(0) with 
 													
 D9 FC 	FRNDINT 			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		frndint	Round ST(0) to an integer.
 													
-DD /4 	FRSTOR m94/108byte 		R		ST(*) TAG(*) FPUDATA FPUINSTR S.* M.*				V	V		frstor	Load FPU state from m94byte or m108byte.
+DD /4 	FRSTOR m108byte 		R		ST(*) TAG(*) FPUDATA FPUINSTR S.* M.*				V	V		frstor	Load FPU state from m94byte or m108byte.
 													
-9B DD /6 	FSAVE m94/108byte 		W	ST(*) S.* FPUDATA FPUINSTR FPUOPCODE	ST(*) TAG(*) S.* FPUDATA FPUINSTR FPUOPCODE				V	V		fsave	Store FPU state to m94byte or m108byte after checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
-DD /6 	FNSAVE m94/108byte 		W	ST(*) S.* FPUDATA FPUINSTR FPUOPCODE	ST(*) TAG(*) S.* FPUDATA FPUINSTR FPUOPCODE				V	V		fnsave	Store FPU environment to m94byte or m108byte without checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
+9B DD /6 	FSAVE m108byte 		W	ST(*) S.* FPUDATA FPUINSTR FPUOPCODE	ST(*) TAG(*) S.* FPUDATA FPUINSTR FPUOPCODE				V	V		fsave	Store FPU state to m94byte or m108byte after checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
+DD /6 	FNSAVE m108byte 		W	ST(*) S.* FPUDATA FPUINSTR FPUOPCODE	ST(*) TAG(*) S.* FPUDATA FPUINSTR FPUOPCODE				V	V		fnsave	Store FPU environment to m94byte or m108byte without checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
 													
 D9 FD 	FSCALE 			ST(0) ST(1)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fscale	Scale ST(0) by ST(1).
 													
@@ -685,8 +685,8 @@ DD D8 +i 	FSTP ST(i) 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstp	Copy ST(0) to ST(
 9B D9 /7 	FSTCW m2byte 		W			S.C0 S.C1 S.C2 S.C3			V	V		fstcw	Store FPU control word to m2byte after checking for pending unmasked floating-point exceptions.
 D9 /7 	FNSTCW m2byte 		W			S.C0 S.C1 S.C2 S.C3			V	V		fnstcw	Store FPU control word to m2byte without checking for pending unmasked floating-point exceptions.
 													
-9B D9 /6 	FSTENV m14/28byte 		W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V		fstenv	Store FPU environment to m14byte or m28byte after checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
-D9 /6 	FNSTENV m14/28byte 		W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V		fnstenv	Store FPU environment to m14byte or m28byte without checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
+9B D9 /6 	FSTENV m28byte 		W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V		fstenv	Store FPU environment to m14byte or m28byte after checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
+D9 /6 	FNSTENV m28byte 		W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V		fnstenv	Store FPU environment to m14byte or m28byte without checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
 													
 9B DD /7 	FSTSW m2byte 		W		S.*	S.C0 S.C1 S.C2 S.C3			V	V		fstsw	Store FPU status word at m2byte after checking for pending unmasked floating-point exceptions.
 9B DF E0 	FSTSW AX 		W		S.*	S.C0 S.C1 S.C2 S.C3			V	V		fstsw	Store FPU status word in AX register after checking for pending unmasked floating-point exceptions.
@@ -705,7 +705,7 @@ DE /4 	FISUB m16int 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisub	Subtract m1
 D8 /5 	FSUBR m32fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubrs	Subtract ST(0) from m32fp and store result in ST(0).
 DC /5 	FSUBR m64fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubrl	Subtract ST(0) from m64fp and store result in ST(0).
 D8 E8 +i 	FSUBR ST(0), ST(i) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubr	Subtract ST(0) from ST(i) and store result in ST(0).
-DC E0 +i 	FSUBR ST(i), ST(0) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubrp	Subtract ST(i) from ST(0) and store result in ST(i).
+DC E0 +i 	FSUBR ST(i), ST(0) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubr	Subtract ST(i) from ST(0) and store result in ST(i).
 DE E0 +i 	FSUBRP ST(i), ST(0) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubrp	Subtract ST(i) from ST(0), store result in ST(i), and pop register stack.
 DE E1 	FSUBRP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fsubrp	Subtract ST(1) from ST(0), store result in ST(1), and pop register stack.
 DA /5 	FISUBR m32int 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisubrl	Subtract ST(0) from m32int and store result in ST(0).
@@ -818,7 +818,7 @@ REX.W+ CF 	IRETQ 	NP		???	???	???			V	NE		iretq	Interrupt return (64-bit operand
 73 cb 	JAE rel8 	D	R	E.CF					V	V		jae	Jump short if above or equal (CF=0).
 72 cb 	JB rel8 	D	R	E.CF					V	V		jb	Jump short if below (CF=1).
 76 cb 	JBE rel8 	D	R	E.CF E.ZF					V	V		jbe	Jump short if below or equal (CF=1 or ZF=1).
-72 cb 	JC rel8 	D	R	E.CF					V	V		jb	Jump short if carry (CF=1).
+72 cb 	JC rel8 	D	R	E.CF					V	V		jc	Jump short if carry (CF=1).
 E3 cb 	JCXZ rel8 								NE	V			Jump short if CX register is 0.
 E3 cb 	JECXZ rel8 	D	R	ECX					V	V		jecxz	Jump short if ECX register is 0.
 E3 cb 	JRCXZ rel8 	D	R	RCX					V	NE		jrcxz	Jump short if RCX register is 0.
@@ -827,26 +827,26 @@ E3 cb 	JRCXZ rel8 	D	R	RCX					V	NE		jrcxz	Jump short if RCX register is 0.
 7D cb 	JGE rel8 	D	R	E.SF E.OF					V	V		jge	Jump short if greater or equal (SF=OF).
 7C cb 	JL rel8 	D	R	E.SF E.OF					V	V		jl	Jump short if less (SF!= OF).
 7E cb 	JLE rel8 	D	R	E.ZF E.SF E.OF					V	V		jle	Jump short if less or equal (ZF=1 or SF!= OF).
-76 cb 	JNA rel8 	D	R	E.CF E.ZF					V	V		jbe	Jump short if not above (CF=1 or ZF=1).
-72 cb 	JNAE rel8 	D	R	E.CF					V	V		jb	Jump short if not above or equal (CF=1).
-73 cb 	JNB rel8 	D	R	E.CF					V	V		jae	Jump short if not below (CF=0).
-77 cb 	JNBE rel8 	D	R	E.CF E.ZF					V	V		ja	Jump short if not below or equal (CF=0 and ZF=0).
-73 cb 	JNC rel8 	D	R	E.CF					V	V		jae	Jump short if not carry (CF=0).
+76 cb 	JNA rel8 	D	R	E.CF E.ZF					V	V		jna	Jump short if not above (CF=1 or ZF=1).
+72 cb 	JNAE rel8 	D	R	E.CF					V	V		jnae	Jump short if not above or equal (CF=1).
+73 cb 	JNB rel8 	D	R	E.CF					V	V		jnb	Jump short if not below (CF=0).
+77 cb 	JNBE rel8 	D	R	E.CF E.ZF					V	V		jnbe	Jump short if not below or equal (CF=0 and ZF=0).
+73 cb 	JNC rel8 	D	R	E.CF					V	V		jnc	Jump short if not carry (CF=0).
 75 cb 	JNE rel8 	D	R	E.ZF					V	V		jne	Jump short if not equal (ZF=0).
-7E cb 	JNG rel8 	D	R	E.ZF E.SF E.OF					V	V		jle	Jump short if not greater (ZF=1 or SF!= OF).
-7C cb 	JNGE rel8 	D	R	E.SF E.OF					V	V		jl	Jump short if not greater or equal (SF!= OF).
-7D cb 	JNL rel8 	D	R	E.SF E.OF					V	V		jge	Jump short if not less (SF=OF).
-7F cb 	JNLE rel8 	D	R	E.ZF E.SF E.OF					V	V		jg	Jump short if not less or equal (ZF=0 and SF=OF).
+7E cb 	JNG rel8 	D	R	E.ZF E.SF E.OF					V	V		jng	Jump short if not greater (ZF=1 or SF!= OF).
+7C cb 	JNGE rel8 	D	R	E.SF E.OF					V	V		jnge	Jump short if not greater or equal (SF!= OF).
+7D cb 	JNL rel8 	D	R	E.SF E.OF					V	V		jnl	Jump short if not less (SF=OF).
+7F cb 	JNLE rel8 	D	R	E.ZF E.SF E.OF					V	V		jnle	Jump short if not less or equal (ZF=0 and SF=OF).
 71 cb 	JNO rel8 	D	R	E.OF					V	V		jno	Jump short if not overflow (OF=0).
 7B cb 	JNP rel8 	D	R	E.PF					V	V		jnp	Jump short if not parity (PF=0).
 79 cb 	JNS rel8 	D	R	E.SF					V	V		jns	Jump short if not sign (SF=0).
-75 cb 	JNZ rel8 	D	R	E.ZF					V	V		jne	Jump short if not zero (ZF=0).
+75 cb 	JNZ rel8 	D	R	E.ZF					V	V		jnz	Jump short if not zero (ZF=0).
 70 cb 	JO rel8 	D	R	E.OF					V	V		jo	Jump short if overflow (OF=1).
 7A cb 	JP rel8 	D	R	E.PF					V	V		jp	Jump short if parity (PF=1).
-7A cb 	JPE rel8 	D	R	E.PF					V	V		jp	Jump short if parity even (PF=1).
-7B cb 	JPO rel8 	D	R	E.PF					V	V		jnp	Jump short if parity odd (PF=0).
+7A cb 	JPE rel8 	D	R	E.PF					V	V		jpe	Jump short if parity even (PF=1).
+7B cb 	JPO rel8 	D	R	E.PF					V	V		jpo	Jump short if parity odd (PF=0).
 78 cb 	JS rel8 	D	R	E.SF					V	V		js	Jump short if sign (SF=1).
-74 cb 	JZ rel8 	D	R	E.ZF					V	V		je	Jump short if zero (ZF = 1).
+74 cb 	JZ rel8 	D	R	E.ZF					V	V		jz	Jump short if zero (ZF = 1).
 0F 87 cw 	JA rel16 								NS	V			Jump near if above (CF=0 and ZF=0). Not supported in 64-bit mode.
 0F 87 cd 	JA rel32 	D	R	E.CF E.ZF					V	V		ja	Jump near if above (CF=0 and ZF=0).
 0F 83 cw 	JAE rel16 								NS	V			Jump near if above or equal (CF=0). Not supported in 64-bit mode.
@@ -856,7 +856,7 @@ E3 cb 	JRCXZ rel8 	D	R	RCX					V	NE		jrcxz	Jump short if RCX register is 0.
 0F 86 cw 	JBE rel16 								NS	V			Jump near if below or equal (CF=1 or ZF=1). Not supported in 64-bit mode.
 0F 86 cd 	JBE rel32 	D	R	E.CF E.ZF					V	V		jbe	Jump near if below or equal (CF=1 or ZF=1).
 0F 82 cw 	JC rel16 								NS	V			Jump near if carry (CF=1). Not supported in 64-bit mode.
-0F 82 cd 	JC rel32 	D	R	E.CF					V	V		jb	Jump near if carry (CF=1).
+0F 82 cd 	JC rel32 	D	R	E.CF					V	V		jc	Jump near if carry (CF=1).
 0F 84 cw 	JE rel16 								NS	V			Jump near if equal (ZF=1). Not supported in 64-bit mode.
 0F 84 cd 	JE rel32 	D	R	E.ZF					V	V		je	Jump near if 0 (ZF=1).
 0F 8F cw 	JG rel16 								NS	V			Jump near if greater (ZF=0 and SF=OF). Not supported in 64-bit mode.
@@ -868,25 +868,25 @@ E3 cb 	JRCXZ rel8 	D	R	RCX					V	NE		jrcxz	Jump short if RCX register is 0.
 0F 8E cw 	JLE rel16 								NS	V			Jump near if less or equal (ZF=1 or SF!= OF).  Not supported in 64-bit mode.
 0F 8E cd 	JLE rel32 	D	R	E.ZF E.SF E.OF					V	V		jle	Jump near if less or equal (ZF=1 or SF!= OF).
 0F 86 cw 	JNA rel16 								NS	V			Jump near if not above (CF=1 or ZF=1). Not supported in 64-bit mode.
-0F 86 cd 	JNA rel32 	D	R	E.CF E.ZF					V	V		jbe	Jump near if not above (CF=1 or ZF=1).
+0F 86 cd 	JNA rel32 	D	R	E.CF E.ZF					V	V		jna	Jump near if not above (CF=1 or ZF=1).
 0F 82 cw 	JNAE rel16 								NS	V			Jump near if not above or equal (CF=1). Not supported in 64-bit mode.
-0F 82 cd 	JNAE rel32 	D	R	E.CF					V	V		jb	Jump near if not above or equal (CF=1).
+0F 82 cd 	JNAE rel32 	D	R	E.CF					V	V		jnae	Jump near if not above or equal (CF=1).
 0F 83 cw 	JNB rel16 								NS	V			Jump near if not below (CF=0). Not supported in 64-bit mode.
-0F 83 cd 	JNB rel32 	D	R	E.CF					V	V		jae	Jump near if not below (CF=0).
+0F 83 cd 	JNB rel32 	D	R	E.CF					V	V		jnb	Jump near if not below (CF=0).
 0F 87 cw 	JNBE rel16 								NS	V			Jump near if not below or equal (CF=0 and ZF=0). Not supported in 64-bit mode.
-0F 87 cd 	JNBE rel32 	D	R	E.CF E.ZF					V	V		ja	Jump near if not below or equal (CF=0 and ZF=0). 
+0F 87 cd 	JNBE rel32 	D	R	E.CF E.ZF					V	V		jnbe	Jump near if not below or equal (CF=0 and ZF=0). 
 0F 83 cw 	JNC rel16 								NS	V			Jump near if not carry (CF=0). Not supported in 64-bit mode.
-0F 83 cd 	JNC rel32 	D	R	E.CF					V	V		jae	Jump near if not carry (CF=0).
+0F 83 cd 	JNC rel32 	D	R	E.CF					V	V		jnc	Jump near if not carry (CF=0).
 0F 85 cw 	JNE rel16 								NS	V			Jump near if not equal (ZF=0). Not supported in 64-bit mode.
 0F 85 cd 	JNE rel32 	D	R	E.ZF					V	V		jne	Jump near if not equal (ZF=0).
 0F 8E cw 	JNG rel16 								NS	V			Jump near if not greater (ZF=1 or SF != OF). Not supported in 64-bit mode.
-0F 8E cd 	JNG rel32 	D	R	E.ZF E.SF E.OF					V	V		jle	Jump near if not greater (ZF=1 or SF != OF).
+0F 8E cd 	JNG rel32 	D	R	E.ZF E.SF E.OF					V	V		jng	Jump near if not greater (ZF=1 or SF != OF).
 0F 8C cw 	JNGE rel16 								NS	V			Jump near if not greater or equal (SF != OF). Not supported in 64-bit mode.
-0F 8C cd 	JNGE rel32 	D	R	E.SF E.OF					V	V		jl	Jump near if not greater or equal (SF != OF).
+0F 8C cd 	JNGE rel32 	D	R	E.SF E.OF					V	V		jnge	Jump near if not greater or equal (SF != OF).
 0F 8D cw 	JNL rel16 								NS	V			Jump near if not less (SF=OF). Not supported in 64-bit mode.
-0F 8D cd 	JNL rel32 	D	R	E.SF E.OF					V	V		jge	Jump near if not less (SF=OF).
+0F 8D cd 	JNL rel32 	D	R	E.SF E.OF					V	V		jnl	Jump near if not less (SF=OF).
 0F 8F cw 	JNLE rel16 								NS	V			Jump near if not less or equal (ZF=0 and SF=OF). Not supported in 64-bit mode.
-0F 8F cd 	JNLE rel32 	D	R	E.ZF E.SF E.OF					V	V		jg	Jump near if not less or equal (ZF=0 and SF=OF).
+0F 8F cd 	JNLE rel32 	D	R	E.ZF E.SF E.OF					V	V		jnle	Jump near if not less or equal (ZF=0 and SF=OF).
 0F 81 cw 	JNO rel16 								NS	V			Jump near if not overflow (OF=0). Not supported in 64-bit mode.
 0F 81 cd 	JNO rel32 	D	R	E.OF					V	V		jno	Jump near if not overflow (OF=0).
 0F 8B cw 	JNP rel16 								NS	V			Jump near if not parity (PF=0). Not supported in 64-bit mode.
@@ -894,17 +894,17 @@ E3 cb 	JRCXZ rel8 	D	R	RCX					V	NE		jrcxz	Jump short if RCX register is 0.
 0F 89 cw 	JNS rel16 								NS	V			Jump near if not sign (SF=0). Not supported in 64-bit mode.
 0F 89 cd 	JNS rel32 	D	R	E.SF					V	V		jns	Jump near if not sign (SF=0).
 0F 85 cw 	JNZ rel16 								NS	V			Jump near if not zero (ZF=0). Not supported in 64-bit mode.
-0F 85 cd 	JNZ rel32 	D	R	E.ZF					V	V		jne	Jump near if not zero (ZF=0).
+0F 85 cd 	JNZ rel32 	D	R	E.ZF					V	V		jnz	Jump near if not zero (ZF=0).
 0F 80 cw 	JO rel16 								NS	V			Jump near if overflow (OF=1). Not supported in 64-bit mode.
 0F 80 cd 	JO rel32 	D	R	E.OF					V	V		jo	Jump near if overflow (OF=1).
 0F 8A cw 	JP rel16 								NS	V			Jump near if parity (PF=1). Not supported in 64-bit mode.
-0F 8A cd 	JPE rel32 	D	R	E.PF					V	V		jp	Jump near if parity even (PF=1).
+0F 8A cd 	JPE rel32 	D	R	E.PF					V	V		jpe	Jump near if parity even (PF=1).
 0F 8B cw 	JPO rel16 								NS	V			Jump near if parity odd (PF=0). Not supported in 64-bit mode.
-0F 8B cd 	JPO rel32 	D	R	E.PF					V	V		jnp	Jump near if parity odd (PF=0).
+0F 8B cd 	JPO rel32 	D	R	E.PF					V	V		jpo	Jump near if parity odd (PF=0).
 0F 88 cw 	JS rel16 								NS	V			Jump near if sign (SF=1). Not supported in 64-bit mode.
 0F 88 cd 	JS rel32 	D	R	E.SF					V	V		js	Jump near if sign (SF=1).
 0F 84 cw 	JZ rel16 								NS	V			Jump near if 0 (ZF=1). Not supported in 64-bit mode.
-0F 84 cd 	JZ rel32 	D	R	E.ZF					V	V		je	Jump near if 0 (ZF=1).
+0F 84 cd 	JZ rel32 	D	R	E.ZF					V	V		jz	Jump near if 0 (ZF=1).
 													
 EB cb 	JMP rel8 	D	R	???	???	???			V	V		Jmpq *	Jump short, RIP = RIP + 8-bit displacement sign extended to 64-bits
 E9 cw 	JMP rel16 								NS	V			Jump near, relative, displacement relative to next instruction. Not supported in 64-bit mode.
@@ -1572,8 +1572,8 @@ VEX.128.66.0F38.WIG 25 /r 	VPMOVSXDQ xmm1, xmm2/m64 	RM	Z, R						V	V	AVX	vpmovs
 66 0f 38 35 /r 	PMOVZXDQ xmm1, xmm2/m64 	RM	W, R						V	V	SSE4_1	pmovzxdq	Zero extend 2 packed 32-bit integers in the low 8 bytes of xmm2/m64 to 2 packed 64-bit integers in xmm1.
 VEX.128.66.0F38.WIG 30 /r 	VPMOVZXBW xmm1, xmm2/m64 	RM	Z, R						V	V	AVX	vpmovzxbw	Zero extend 8 packed 8-bit integers in the low 8 bytes of xmm2/m64 to 8 packed 16-bit integers in xmm1.
 VEX.128.66.0F38.WIG 31 /r 	VPMOVZXBD xmm1, xmm2/m32 	RM	Z, R						V	V	AVX	vpmovzxbd	Zero extend 4 packed 8-bit integers in the low 4 bytes of xmm2/m32 to 4 packed 32-bit integers in xmm1.
-VEX.128.66.0F38.WIG 32 /r 	VPMOVZXBQ xmm1, xmm2/m16 	RM	Z, R						V	V	AVX	vpmovzxwd	Zero extend 2 packed 8-bit integers in the low 2 bytes of xmm2/m16 to 2 packed 64-bit integers in xmm1.
-VEX.128.66.0F38.WIG 33 /r 	VPMOVZXWD xmm1, xmm2/m64 	RM	Z, R						V	V	AVX	vpmovzxwq	Zero extend 4 packed 16-bit integers in the low 8 bytes of xmm2/m64 to 4 packed 32-bit integers in xmm1.
+VEX.128.66.0F38.WIG 32 /r 	VPMOVZXBQ xmm1, xmm2/m16 	RM	Z, R						V	V	AVX	vpmovzxbq	Zero extend 2 packed 8-bit integers in the low 2 bytes of xmm2/m16 to 2 packed 64-bit integers in xmm1.
+VEX.128.66.0F38.WIG 33 /r 	VPMOVZXWD xmm1, xmm2/m64 	RM	Z, R						V	V	AVX	vpmovzxwd	Zero extend 4 packed 16-bit integers in the low 8 bytes of xmm2/m64 to 4 packed 32-bit integers in xmm1.
 VEX.128.66.0F38.WIG 34 /r 	VPMOVZXWQ xmm1, xmm2/m32 	RM	Z, R						V	V	AVX	vpmovzxwq	Zero extend 2 packed 16-bit integers in the low 4 bytes of xmm2/m32 to 2 packed 64-bit integers in xmm1.
 VEX.128.66.0F38.WIG 35 /r 	VPMOVZXDQ xmm1, xmm2/m64 	RM	Z, R						V	V	AVX	vpmovzxdq	Zero extend 2 packed 32-bit integers in the low 8 bytes of xmm2/m64 to 2 packed 64-bit integers in xmm1.
 													
@@ -1710,18 +1710,18 @@ VEX.NDD.128.66.0F.WIG 73 /3 ib	VPSRLDQ xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX
 66 0F D1 /r	PSRLW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psrlw	Shift words in xmm1 right by amount specified in xmm2/m128 while shifting in 0s.
 0F 71 /2 ib	PSRLW mm, imm8	MI	RW, R						V	V	MMX	psrlw	Shift words in mm right by imm8 while shifting in 0s.
 66 0F 71 /2 ib	PSRLW xmm1, imm8	MI	RW, R						V	V	SSE2	psrlw	Shift words in xmm1 right by imm8 while shifting in 0s.
-0F D2 /r	PSRLD mm, mm/m64	RM	RW, R						V	V	MMX	psrldq	Shift doublewords in mm right by amount specified in mm/m64 while shifting in 0s.
-66 0F D2 /r	PSRLD xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psrldq	Shift doublewords in xmm1 right by amount specified in xmm2 /m128 while shifting in 0s.
-0F 72 /2 ib	PSRLD mm, imm8	MI	RW, R						V	V	MMX	psrldq	Shift doublewords in mm right by imm8 while shifting in 0s.
-66 0F 72 /2 ib	PSRLD xmm1, imm8	MI	RW, R						V	V	SSE2	psrldq	Shift doublewords in xmm1 right by imm8 while shifting in 0s.
+0F D2 /r	PSRLD mm, mm/m64	RM	RW, R						V	V	MMX	psrld	Shift doublewords in mm right by amount specified in mm/m64 while shifting in 0s.
+66 0F D2 /r	PSRLD xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psrld	Shift doublewords in xmm1 right by amount specified in xmm2 /m128 while shifting in 0s.
+0F 72 /2 ib	PSRLD mm, imm8	MI	RW, R						V	V	MMX	psrld	Shift doublewords in mm right by imm8 while shifting in 0s.
+66 0F 72 /2 ib	PSRLD xmm1, imm8	MI	RW, R						V	V	SSE2	psrld	Shift doublewords in xmm1 right by imm8 while shifting in 0s.
 0F D3 /r	PSRLQ mm, mm/m64	RM	RW, R						V	V	MMX	psrlq	Shift mm right by amount specified in mm/m64 while shifting in 0s.
 66 0F D3 /r	PSRLQ xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psrlq	Shift quadwords in xmm1 right by amount specified in xmm2/m128 while shifting in 0s.
 0F 73 /2 ib	PSRLQ mm, imm8	MI	RW, R						V	V	MMX	psrlq	Shift mm right by imm8 while shifting in 0s. 
 66 0F 73 /2 ib	PSRLQ xmm1, imm8	MI	RW, R						V	V	SSE2	psrlq	Shift quadwords in xmm1 right by imm8 while shifting in 0s.
 VEX.NDS.128.66.0F.WIG D1 /r	VPSRLW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsrlw	Shift words in xmm2 right by amount specified in xmm3/m128 while shifting in 0s.
 VEX.NDD.128.66.0F.WIG 71 /2 ib	VPSRLW xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX	vpsrlw	Shift words in xmm2 right by imm8 while shifting in 0s.
-VEX.NDS.128.66.0F.WIG D2 /r	VPSRLD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsrldq	Shift doublewords in xmm2 right by amount specified in xmm3/m128 while shifting in 0s.
-VEX.NDD.128.66.0F.WIG 72 /2 ib	VPSRLD xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX	vpsrldq	Shift doublewords in xmm2 right by imm8 while shifting in 0s.
+VEX.NDS.128.66.0F.WIG D2 /r	VPSRLD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsrld	Shift doublewords in xmm2 right by amount specified in xmm3/m128 while shifting in 0s.
+VEX.NDD.128.66.0F.WIG 72 /2 ib	VPSRLD xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX	vpsrld	Shift doublewords in xmm2 right by imm8 while shifting in 0s.
 VEX.NDS.128.66.0F.WIG D3 /r	VPSRLQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsrlq	Shift quadwords in xmm2 right by amount specified in xmm3/m128 while shifting in 0s.
 VEX.NDD.128.66.0F.WIG 73 /2 ib	VPSRLQ xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX	vpsrlq	Shift quadwords in xmm2 right by imm8 while shifting in 0s.
 													
@@ -2070,8 +2070,8 @@ REX+ 0F 93 /0	SETAE r/m8	M	w	E.CF					V	NE		setae	Set byte if above or equal (CF
 REX+ 0F 92 /0	SETB r/m8	M	w	E.CF					V	NE		setb	Set byte if below (CF=1).
 0F 96 /0	SETBE r/m8	M	w	E.CF E.ZF					V	V		setbe	Set byte if below or equal (CF=1 or ZF=1).
 REX+ 0F 96 /0	SETBE r/m8	M	w	E.CF E.ZF					V	NE		setbe	Set byte if below or equal (CF=1 or ZF=1).
-0F 92 /0	SETC r/m8	M	w	E.CF					V	V		setb	Set byte if carry (CF=1).
-REX+ 0F 92 /0	SETC r/m8	M	w	E.CF					V	NE		setb	Set byte if carry (CF=1).
+0F 92 /0	SETC r/m8	M	w	E.CF					V	V		setc	Set byte if carry (CF=1).
+REX+ 0F 92 /0	SETC r/m8	M	w	E.CF					V	NE		setc	Set byte if carry (CF=1).
 0F 94 /0	SETE r/m8	M	w	E.ZF					V	V		sete	Set byte if equal (ZF=1).
 REX+ 0F 94 /0	SETE r/m8	M	w	E.ZF					V	NE		sete	Set byte if equal (ZF=1).
 0F 9F /0	SETG r/m8	M	w	E.ZF E.SF E.OF					V	V		setg	Set byte if greater (ZF=0 and SF=OF).
@@ -2082,46 +2082,46 @@ REX+ 0F 9D /0	SETGE r/m8	M	w	E.SF E.OF					V	NE		setge	Set byte if greater or eq
 REX+ 0F 9C /0	SETL r/m8	M	w	E.SF E.OF					V	NE		setl	Set byte if less (SF!= OF).
 0F 9E /0	SETLE r/m8	M	w	E.ZF E.SF E.OF					V	V		setle	Set byte if less or equal (ZF=1 or SF!= OF).
 REX+ 0F 9E /0	SETLE r/m8	M	w	E.ZF E.SF E.OF					V	NE		setle	Set byte if less or equal (ZF=1 or SF!= OF).
-0F 96 /0	SETNA r/m8	M	w	E.CF E.ZF					V	V		setbe	Set byte if not above (CF=1 or ZF=1).
-REX+ 0F 96 /0	SETNA r/m8	M	w	E.CF E.ZF					V	NE		setbe	Set byte if not above (CF=1 or ZF=1).
-0F 92 /0	SETNAE r/m8	M	w	E.CF					V	V		setbe	Set byte if not above or equal (CF=1).
-REX+ 0F 92 /0	SETNAE r/m8	M	w	E.CF					V	NE		setbe	Set byte if not above or equal (CF=1).
-0F 93 /0	SETNB r/m8	M	w	E.CF					V	V		setae	Set byte if not below (CF=0).
-REX+ 0F 93 /0	SETNB r/m8	M	w	E.CF					V	NE		setae	Set byte if not below (CF=0).
-0F 97 /0	SETNBE r/m8	M	w	E.CF E.ZF					V	V		seta	Set byte if not below or equal (CF=0 and ZF=0).
-REX+ 0F 97 /0	SETNBE r/m8	M	w	E.CF E.ZF					V	NE		seta	Set byte if not below or equal (CF=0 and ZF=0).
-0F 93 /0	SETNC r/m8	M	w	E.CF					V	V		setae	Set byte if not carry (CF=0).
-REX+ 0F 93 /0	SETNC r/m8	M	w	E.CF					V	NE		setae	Set byte if not carry (CF=0).
+0F 96 /0	SETNA r/m8	M	w	E.CF E.ZF					V	V		setna	Set byte if not above (CF=1 or ZF=1).
+REX+ 0F 96 /0	SETNA r/m8	M	w	E.CF E.ZF					V	NE		setna	Set byte if not above (CF=1 or ZF=1).
+0F 92 /0	SETNAE r/m8	M	w	E.CF					V	V		setnae	Set byte if not above or equal (CF=1).
+REX+ 0F 92 /0	SETNAE r/m8	M	w	E.CF					V	NE		setnae	Set byte if not above or equal (CF=1).
+0F 93 /0	SETNB r/m8	M	w	E.CF					V	V		setnb	Set byte if not below (CF=0).
+REX+ 0F 93 /0	SETNB r/m8	M	w	E.CF					V	NE		setnb	Set byte if not below (CF=0).
+0F 97 /0	SETNBE r/m8	M	w	E.CF E.ZF					V	V		setnbe	Set byte if not below or equal (CF=0 and ZF=0).
+REX+ 0F 97 /0	SETNBE r/m8	M	w	E.CF E.ZF					V	NE		setnbe	Set byte if not below or equal (CF=0 and ZF=0).
+0F 93 /0	SETNC r/m8	M	w	E.CF					V	V		setnc	Set byte if not carry (CF=0).
+REX+ 0F 93 /0	SETNC r/m8	M	w	E.CF					V	NE		setnc	Set byte if not carry (CF=0).
 0F 95 /0	SETNE r/m8	M	w	E.ZF					V	V		setne	Set byte if not equal (ZF=0).
 REX+ 0F 95 /0	SETNE r/m8	M	w	E.ZF					V	NE		setne	Set byte if not equal (ZF=0).
-0F 9E /0	SETNG r/m8	M	w	E.ZF E.SF E.OF					V	V		setle	Set byte if not greater (ZF=1 or SF!= OF)
-REX+ 0F 9E /0	SETNG r/m8	M	w	E.ZF E.SF E.OF					V	NE		setle	Set byte if not greater (ZF=1 or SF!= OF)
-0F 9C /0	SETNGE r/m8	M	w	E.SF E.OF					V	V		setl	Set byte if not greater or equal (SF!= OF).
-REX+ 0F 9C /0	SETNGE r/m8	M	w	E.SF E.OF					V	NE		setl	Set byte if not greater or equal (SF!= OF).
-0F 9D /0	SETNL r/m8	M	w	E.SF E.OF					V	V		setge	Set byte if not less (SF=OF).
-REX+ 0F 9D /0	SETNL r/m8	M	w	E.SF E.OF					V	NE		setge	Set byte if not less (SF=OF).
-0F 9F /0	SETNLE r/m8	M	w	E.ZF E.SF E.OF					V	V		setg	Set byte if not less or equal (ZF=0 and SF=OF).
-REX+ 0F 9F /0	SETNLE r/m8	M	w	E.ZF E.SF E.OF					V	NE		setg	Set byte if not less or equal (ZF=0 and SF=OF).
+0F 9E /0	SETNG r/m8	M	w	E.ZF E.SF E.OF					V	V		setng	Set byte if not greater (ZF=1 or SF!= OF)
+REX+ 0F 9E /0	SETNG r/m8	M	w	E.ZF E.SF E.OF					V	NE		setng	Set byte if not greater (ZF=1 or SF!= OF)
+0F 9C /0	SETNGE r/m8	M	w	E.SF E.OF					V	V		setnge	Set byte if not greater or equal (SF!= OF).
+REX+ 0F 9C /0	SETNGE r/m8	M	w	E.SF E.OF					V	NE		setnge	Set byte if not greater or equal (SF!= OF).
+0F 9D /0	SETNL r/m8	M	w	E.SF E.OF					V	V		setnl	Set byte if not less (SF=OF).
+REX+ 0F 9D /0	SETNL r/m8	M	w	E.SF E.OF					V	NE		setnl	Set byte if not less (SF=OF).
+0F 9F /0	SETNLE r/m8	M	w	E.ZF E.SF E.OF					V	V		setnle	Set byte if not less or equal (ZF=0 and SF=OF).
+REX+ 0F 9F /0	SETNLE r/m8	M	w	E.ZF E.SF E.OF					V	NE		setnle	Set byte if not less or equal (ZF=0 and SF=OF).
 0F 91 /0	SETNO r/m8	M	w	E.OF					V	V		setno	Set byte if not overflow (OF=0).
 REX+ 0F 91 /0	SETNO r/m8	M	w	E.OF					V	NE		setno	Set byte if not overflow (OF=0).
 0F 9B /0	SETNP r/m8	M	w	E.PF					V	V		setnp	Set byte if not parity (PF=0).
 REX+ 0F 9B /0	SETNP r/m8	M	w	E.PF					V	NE		setnp	Set byte if not parity (PF=0).
 0F 99 /0	SETNS r/m8	M	w	E.SF					V	V		setns	Set byte if not sign (SF=0).
 REX+ 0F 99 /0	SETNS r/m8	M	w	E.SF					V	NE		setns	Set byte if not sign (SF=0).
-0F 95 /0	SETNZ r/m8	M	w	E.ZF					V	V		setne	Set byte if not zero (ZF=0).
-REX+ 0F 95 /0	SETNZ r/m8	M	w	E.ZF					V	NE		setne	Set byte if not zero (ZF=0).
+0F 95 /0	SETNZ r/m8	M	w	E.ZF					V	V		setnz	Set byte if not zero (ZF=0).
+REX+ 0F 95 /0	SETNZ r/m8	M	w	E.ZF					V	NE		setnz	Set byte if not zero (ZF=0).
 0F 90 /0	SETO r/m8	M	w	E.OF					V	V		seto	Set byte if overflow (OF=1)
 REX+ 0F 90 /0	SETO r/m8	M	w	E.OF					V	NE		seto	Set byte if overflow (OF=1)
 0F 9A /0	SETP r/m8	M	w	E.PF					V	V		setp	Set byte if parity (PF=1).
 REX+ 0F 9A /0	SETP r/m8	M	w	E.PF					V	NE		setp	Set byte if parity (PF=1).
-0F 9A /0	SETPE r/m8	M	w	E.PF					V	V		setp	Set byte if parity even (PF=1).
-REX+ 0F 9A /0	SETPE r/m8	M	w	E.PF					V	NE		setp	Set byte if parity even (PF=1).
-0F 9B /0	SETPO r/m8	M	w	E.PF					V	V		setnp	Set byte if parity odd (PF=0).
-REX+ 0F 9B /0	SETPO r/m8	M	w	E.PF					V	NE		setnp	Set byte if parity odd (PF=0).
+0F 9A /0	SETPE r/m8	M	w	E.PF					V	V		setpe	Set byte if parity even (PF=1).
+REX+ 0F 9A /0	SETPE r/m8	M	w	E.PF					V	NE		setpe	Set byte if parity even (PF=1).
+0F 9B /0	SETPO r/m8	M	w	E.PF					V	V		setpo	Set byte if parity odd (PF=0).
+REX+ 0F 9B /0	SETPO r/m8	M	w	E.PF					V	NE		setpo	Set byte if parity odd (PF=0).
 0F 98 /0	SETS r/m8	M	w	E.SF					V	V		sets	Set byte if sign (SF=1).
 REX+ 0F 98 /0	SETS r/m8	M	w	E.SF					V	NE		sets	Set byte if sign (SF=1).
-0F 94 /0	SETZ r/m8	M	w	E.ZF					V	V		sete	Set byte if zero (ZF=1).
-REX+ 0F 94 /0	SETZ r/m8	M	w	E.ZF					V	NE		sete	Set byte if zero (ZF=1).
+0F 94 /0	SETZ r/m8	M	w	E.ZF					V	V		setz	Set byte if zero (ZF=1).
+REX+ 0F 94 /0	SETZ r/m8	M	w	E.ZF					V	NE		setz	Set byte if zero (ZF=1).
 													
 0F AE /7	SFENCE	NP							V	V		sfence	Serializes store operations.
 													
@@ -2335,8 +2335,8 @@ VEX.128.0F.WIG 77	VZEROUPPER	NP							V	V	AVX	vzeroupper	Zero upper 128 bits of 
 													
 F3 0F AE /2	WRFSBASE r32	M	R						V	I	FSGSBASE	wrfsbase	Load the FS base address with the 32-bit value in the source register.
 REX.W+ F3 0F AE /2	WRFSBASE r64	M	R						V	I	FSGSBASE	wrfsbase	Load the FS base address with the 64-bit value in the source register.
-F3 0F AE /3	WRGSBASE r32	M	R						V	I	FSGSBASE	wrfsbase	Load the GS base address with the 32-bit value in the source register.
-REX.W+ F3 0F AE /3	WRGSBASE r64	M	R						V	I	FSGSBASE	wrfsbase	Load the GS base address with the 64-bit value in the source register.
+F3 0F AE /3	WRGSBASE r32	M	R						V	I	FSGSBASE	wrgsbase	Load the GS base address with the 32-bit value in the source register.
+REX.W+ F3 0F AE /3	WRGSBASE r64	M	R						V	I	FSGSBASE	wrgsbase	Load the GS base address with the 64-bit value in the source register.
 													
 0F 30	WRMSR						NO	YES	V	V			Write the value in EDX:EAX to MSR specified by ECX.
 													

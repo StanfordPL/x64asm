@@ -163,9 +163,7 @@ const T* make_moffs(const Moffs* m) {
 %type <operand> M_64_INT 
 %type <operand> M_80_BCD 
 %type <operand> M_2_BYTE 
-%type <operand> M_14_BYTE 
 %type <operand> M_28_BYTE 
-%type <operand> M_94_BYTE 
 %type <operand> M_108_BYTE 
 %type <operand> M_512_BYTE 
 %type <operand> MOFFS_8 

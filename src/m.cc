@@ -200,15 +200,7 @@ void M2Byte::write_intel_width(ostream& os) const {
 	os << "";
 }
 
-void M14Byte::write_intel_width(ostream& os) const {
-	os << "";
-}
-
 void M28Byte::write_intel_width(ostream& os) const {
-	os << "";
-}
-
-void M94Byte::write_intel_width(ostream& os) const {
 	os << "";
 }
 

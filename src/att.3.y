@@ -75,9 +75,7 @@ M_32_INT      : MEM { $$ = make_mem<M32Int>(m($1)); delete $1; }
 M_64_INT      : MEM { $$ = make_mem<M64Int>(m($1)); delete $1; }
 M_80_BCD      : MEM { $$ = make_mem<M80Bcd>(m($1)); delete $1; }
 M_2_BYTE      : MEM { $$ = make_mem<M2Byte>(m($1)); delete $1; }
-M_14_BYTE     : MEM { $$ = make_mem<M14Byte>(m($1)); delete $1; }
 M_28_BYTE     : MEM { $$ = make_mem<M28Byte>(m($1)); delete $1; }
-M_94_BYTE     : MEM { $$ = make_mem<M94Byte>(m($1)); delete $1; }
 M_108_BYTE    : MEM { $$ = make_mem<M108Byte>(m($1)); delete $1; }
 M_512_BYTE    : MEM { $$ = make_mem<M512Byte>(m($1)); delete $1; }
 
@@ -93,13 +91,13 @@ MOFFS_64 : MOFFS { $$ = make_moffs<Moffs64>(moffs($1)); delete $1; }
 REL_8 : OFFSET_8 { $$ = new Rel8{0}; delete $1; }
 REL_32 : OFFSET_32 { $$ = new Rel32{0}; delete $1; }
 
-IMM_8     : ZERO        | ONE          | THREE   | AN_IMM_8 ;
-IMM_16    : IMM_8       | AN_IMM_16    ;
-IMM_32    : IMM_16      | AN_IMM_32    ;
-IMM_64    : IMM_32      | AN_IMM_64    ;
+IMM_64    : AN_IMM_64 | AN_IMM_32 | AN_IMM_16 | AN_IMM_8 | ZERO | ONE | THREE ;
+IMM_32    : AN_IMM_32 | AN_IMM_16 | AN_IMM_8 | ZERO | ONE | THREE ;
+IMM_16    : AN_IMM_16 | AN_IMM_8 | ZERO | ONE | THREE ;
+IMM_8     : AN_IMM_8 | ZERO | ONE | THREE ;
+OFFSET_64 : AN_OFFSET_64 | AN_OFFSET_32 | AN_OFFSET_8 ;
+OFFSET_32 : AN_OFFSET_32 | AN_OFFSET_8 ;
 OFFSET_8  : AN_OFFSET_8 ;
-OFFSET_32 : OFFSET_8    | AN_OFFSET_32 ;
-OFFSET_64 : OFFSET_32   | AN_OFFSET_64 ;
 RL        : AL          | CL           | AN_RL   ;
 R_16      : AX          | DX           | AN_R_16 ;
 R_32      : EAX         | AN_R_32      ;

@@ -414,34 +414,12 @@ class M2Byte : public M {
 		virtual void write_intel_width(std::ostream& os) const;
 };
 
-/** A 14 byte operand in memory. */
-class M14Byte : public M {
-	public:
-		CONSTRUCTORS(M14Byte)
-		virtual constexpr OpType type() {
-			return OpType::M_14_BYTE;
-		}
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-};
-
 /** A 28 byte operand in memory. */
 class M28Byte : public M {
 	public:
 		CONSTRUCTORS(M28Byte)
 		virtual constexpr OpType type() {
 			return OpType::M_28_BYTE;
-		}
-	protected:
-		virtual void write_intel_width(std::ostream& os) const;
-};
-
-/** A 94 byte operand in memory. */
-class M94Byte : public M {
-	public:
-		CONSTRUCTORS(M94Byte)
-		virtual constexpr OpType type() {
-			return OpType::M_94_BYTE;
 		}
 	protected:
 		virtual void write_intel_width(std::ostream& os) const;
