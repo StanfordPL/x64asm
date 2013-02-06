@@ -99,9 +99,15 @@ const T* make_moffs(const Moffs* m) {
 %token <int> CLOSE
 %token <int> ENDL
 
+/** Atomic operands. */
+
 %token <scale> SCALE
 
-/** Atomic operands. */
+%token <operand> HINT
+%token <operand> PREF_66
+%token <operand> PREF_REX_W
+%token <operand> FAR
+%token <operand> LABEL
 
 %token <operand> ZERO 
 %token <operand> ONE 
@@ -113,9 +119,6 @@ const T* make_moffs(const Moffs* m) {
 %token <operand> AN_OFFSET_8
 %token <operand> AN_OFFSET_32
 %token <operand> AN_OFFSET_64
-%token <operand> PREF_66
-%token <operand> PREF_REX_W
-%token <operand> FAR
 %token <operand> MM
 %token <operand> AL
 %token <operand> CL
@@ -139,9 +142,6 @@ const T* make_moffs(const Moffs* m) {
 %token <operand> YMM
 
 /** Compound operands. */
-
-%type <operand> HINT 
-%type <operand> LABEL 
 
 %type <operand> MEM
 %type <operand> MOFFS

@@ -27,9 +27,6 @@ limitations under the License.
 
 %%
 
-HINT : RAX { $$ = &rax; }
-LABEL : RAX { $$ = &rax; }
-
 MEM : 
   OFFSET_32 { $$ = new M8{disp($1)}; }
 | SREG COLON OFFSET_32 { $$ = new M8{seg($1), disp($3)}; }
@@ -98,13 +95,13 @@ IMM_8     : AN_IMM_8 | ZERO | ONE | THREE ;
 OFFSET_64 : AN_OFFSET_64 | AN_OFFSET_32 | AN_OFFSET_8 ;
 OFFSET_32 : AN_OFFSET_32 | AN_OFFSET_8 ;
 OFFSET_8  : AN_OFFSET_8 ;
-RL        : AL          | CL           | AN_RL   ;
-R_16      : AX          | DX           | AN_R_16 ;
-R_32      : EAX         | AN_R_32      ;
-R_64      : RAX         | AN_R_64      ;
-SREG      : FS          | GS           | AN_SREG ;
-ST        : ST_0        | AN_ST        ;
-XMM       : XMM_0       | AN_XMM       ;
+RL        : AL | CL | AN_RL ;
+R_16      : AX | DX | AN_R_16 ;
+R_32      : EAX | AN_R_32 ;
+R_64      : RAX | AN_R_64 ;
+SREG      : FS | GS | AN_SREG ;
+ST        : ST_0 | AN_ST ;
+XMM       : XMM_0 | AN_XMM ;
 
 blank : /* empty */ | blank ENDL { }
 
@@ -122,7 +119,6 @@ instrs : instr {
 			 }
 		   ;
 
- /* Dummy rule -- replace this with label_defn */
-instr : OPC_ADCB IMM_8 AL ENDL {
-  $$ = new Instruction{Opcode::ADC_AL_IMM8, {$3, $2}};
+instr : LABEL COLON ENDL {
+  $$ = new Instruction{Opcode::LABEL_DEFN, {$1}};
 }

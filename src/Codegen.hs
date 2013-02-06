@@ -275,6 +275,17 @@ xmm_op "xmm"    = True
 xmm_op "<XMM0>" = True
 xmm_op _        = False
 
+-- Returns true for modifer operands
+mod_op :: String -> Bool
+mod_op "p66" = True
+mod_op "pw"  = True
+mod_op "far" = True
+mod_op _ = False
+
+-- Returns true for hint operands
+hint_op :: String -> Bool
+hint_op s = s == "hint"
+
 -- Transform operand into c++ type
 op2type :: String -> String
 op2type "rl"       = "Rl"
@@ -1238,6 +1249,19 @@ assm_case i = "case " ++ (opcode_enum i) ++ ":\n" ++
 -- All assembler switch cases
 assm_cases :: [Instr] -> String
 assm_cases is = intercalate "\n" $ map assm_case is
+
+-- Identify parseable instruction variants -- TODO: Maybe not necessary?
+--------------------------------------------------------------------------------
+
+-- Is this a non-standard op
+non_standard_op :: String -> Bool
+non_standard_op o = (mod_op o) || (hint_op o)
+
+-- Is this instruction parseable?
+is_parseable :: Instr -> Bool
+is_parseable i = case findIndex non_standard_op (operands i) of
+  (Just _) -> False
+  Nothing -> True
 
 -- Read AT&T code
 --------------------------------------------------------------------------------

@@ -39,7 +39,7 @@ static int colnum = 0;
 	yylloc.last_line = yylineno;  \
 }
 
-const Operand* to_label(const char* c) {
+const Label* to_label(const char* c) {
 	static map<string, Label*> labels;
 	if ( labels.find(c) == labels.end() ) {
 		Label* l = new Label(labels.size());
@@ -56,6 +56,9 @@ const Operand* to_imm(const char* c, bool is_hex, bool is_neg) {
 		iss >> hex >> val;
 	else
 		iss >> dec >> val;
+
+	if ( is_neg )
+		val *= -1;
 
 	int64_t ival = (int64_t)val;
 	if ( ival >= -128 && ival < 128 )
@@ -91,10 +94,18 @@ const Operand* to_imm(const char* c, bool is_hex, bool is_neg) {
 
 %%
 
-"1"             { yylval.scale = Scale::TIMES_1; return SCALE; }
-"2"             { yylval.scale = Scale::TIMES_2; return SCALE; }
-"4"             { yylval.scale = Scale::TIMES_4; return SCALE; }
-"8"             { yylval.scale = Scale::TIMES_8; return SCALE; }
+"<taken>"       { yylval.operand = &rax; return HINT; }
+"<not taken>"   { yylval.operand = &rax; return HINT; }
+"<66>"          { yylval.operand = &pref_66; return PREF_66; }
+"<rexw>"        { yylval.operand = &pref_rex_w; return PREF_REX_W; }
+"<far>"         { yylval.operand = &far; return FAR; }
+
+"."[a-z][a-zA-Z0-9]+ { yylval.operand = to_label(yytext); return LABEL; }
+
+"#1"             { yylval.scale = Scale::TIMES_1; return SCALE; }
+"#2"             { yylval.scale = Scale::TIMES_2; return SCALE; }
+"#4"             { yylval.scale = Scale::TIMES_4; return SCALE; }
+"#8"             { yylval.scale = Scale::TIMES_8; return SCALE; }
 
 ","             { return COMMA; }
 ":"             { return COLON; }
@@ -120,10 +131,6 @@ const Operand* to_imm(const char* c, bool is_hex, bool is_neg) {
 "-"[0-9]+       { yylval.operand = to_imm(yytext+1, false, true); offset_ret(yylval.operand) }
 "0x"[0-9a-f]+   { yylval.operand = to_imm(yytext, true, false);   offset_ret(yylval.operand) }
 [0-9]+          { yylval.operand = to_imm(yytext, false, false);  offset_ret(yylval.operand) }
-
-"<66>"          { yylval.operand = &pref_66; return PREF_66; }
-"<rexw>"        { yylval.operand = &pref_rex_w; return PREF_REX_W; }
-"<far>"         { yylval.operand = &far; return FAR; }
 
 "%mm0"          { yylval.operand = &mm0; return MM; }
 "%mm1"          { yylval.operand = &mm1; return MM; }
