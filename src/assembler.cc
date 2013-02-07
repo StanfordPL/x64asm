@@ -57,29 +57,19 @@ void Assembler::mod_rm_sib(const M& rm, const AtomicOperand& r) {
 	// Every path we take needs these bits for the mod/rm byte
 	const auto rrr = (r.val_ << 3) & 0x38;
 
-	// These following special cases simplify all subsequent logic --
+	// This special cases simplifies all subsequent logic --
 	if ( !rm.contains_base() ) { 
+		const auto mod_byte = 0x00 | rrr | 0x4;
+		const auto sib_byte = rm.contains_index() ? 
+			((int)rm.get_scale() & 0xc0) | ((rm.get_index()->val_ << 3) & 0x38) | 0x5 :
+			0x00 | 0x24 | 0x4; 
 
-		// This corresponds to RIP + disp32 form
-		if ( !rm.contains_index() ) {
-			assert(rm.contains_disp());
-			const auto mod_byte = 0x00 | rrr | 0x5;
+		fxn_->emit_byte(mod_byte);
+		fxn_->emit_byte(sib_byte);
 
-			fxn_->emit_byte(mod_byte);
+		// This form always emits a 32-bit displacement
+		if ( rm.contains_disp() )
 			disp_imm(*rm.get_disp());
-		}
-
-		// This corresponds to [sib] form (which always uses 4 byte disps)
-		else {
-			const auto mod_byte = 0x00 | rrr | 0x4;
-			const auto sib_byte = ((int)rm.get_scale() & 0xc0) | 
-				                    ((rm.get_index()->val_ << 3) & 0x38) | 0x5;
-		
-			fxn_->emit_byte(mod_byte);
-			fxn_->emit_byte(sib_byte);
-			if ( rm.contains_disp() )
-				disp_imm(*rm.get_disp());
-		}
 
 		return;
 	}

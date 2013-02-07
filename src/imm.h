@@ -41,7 +41,7 @@ class Imm : public AtomicOperand {
 */
 class Imm8 : public Imm {
 	public:
-		constexpr Imm8(int8_t i) : Imm{(uint64_t)i} { }
+		constexpr Imm8(uint64_t i) : Imm{i} { }
 		virtual constexpr bool check() {
 			return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
 		}
@@ -55,7 +55,7 @@ class Imm8 : public Imm {
 */
 class Imm16 : public Imm {
 	public:
-		constexpr Imm16(int16_t i) : Imm{(uint64_t)i} { }
+		constexpr Imm16(uint64_t i) : Imm{i} { }
 		virtual constexpr bool check() {
 			return (int64_t)val_ >= -32768 && (int64_t)val_ < 32768;
 		}
@@ -70,7 +70,7 @@ class Imm16 : public Imm {
 */
 class Imm32 : public Imm {
 	public:
-		constexpr Imm32(int32_t i) : Imm{(uint64_t)i} { }
+		constexpr Imm32(uint64_t i) : Imm{i} { }
 		virtual constexpr bool check() {
 			return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
 		}
@@ -85,7 +85,7 @@ class Imm32 : public Imm {
 */
 class Imm64 : public Imm {
 	public:
-		constexpr Imm64(int64_t i) : Imm{(uint64_t)i} { }
+		constexpr Imm64(uint64_t i) : Imm{i} { }
 		template <typename T>
 		constexpr Imm64(T* t) : Imm{(uint64_t)t} { }
 		virtual constexpr bool check() {
