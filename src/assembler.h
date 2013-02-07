@@ -104,7 +104,7 @@ class Assembler {
 		}
 
 		void pref_group2(const Hint h) {
-			fxn_->emit_byte(h == Hint::TAKEN ? 0x3e : 0x2e);
+			fxn_->emit_byte(h.val_ == 0 ? 0x3e : 0x2e);
 		}
 
 		void pref_group3() {

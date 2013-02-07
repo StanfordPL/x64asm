@@ -19,6 +19,7 @@ limitations under the License.
 
 #include "src/env_bits.h"
 #include "src/env_reg.h"
+#include "src/hint.h"
 #include "src/imm.h"
 #include "src/mm.h"
 #include "src/modifier.h"
@@ -106,6 +107,9 @@ class Constants {
 		static constexpr FpuData fpu_data() { return FpuData{}; }
 		static constexpr FpuInstruction fpu_instruction() { return FpuInstruction{}; }
 		static constexpr FpuOpcode fpu_opcode() { return FpuOpcode{}; }
+
+		static constexpr Hint taken() { return Hint{0}; }
+		static constexpr Hint not_taken() { return Hint{1}; }
 
 		static constexpr Zero zero() { return Zero{}; }
 		static constexpr One one() { return One{}; }
@@ -331,6 +335,9 @@ extern const FpuData fpu_data;
 extern const FpuInstruction fpu_instruction;
 extern const FpuOpcode fpu_opcode;
 extern const Rip rip;
+
+extern const Hint taken;
+extern const Hint not_taken;
 
 extern const Zero zero;
 extern const One one;

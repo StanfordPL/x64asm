@@ -125,6 +125,9 @@ const FpuInstruction fpu_instruction{Constants::fpu_instruction()};
 const FpuOpcode fpu_opcode{Constants::fpu_opcode()};
 const Rip rip{Constants::rip()};
 
+const Hint taken{Constants::taken()};
+const Hint not_taken{Constants::not_taken()};
+
 const Zero zero{Constants::zero()};
 const One one{Constants::one()};
 const Three three{Constants::three()};

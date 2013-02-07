@@ -243,8 +243,8 @@ MOFFS :
   OFFSET_64 { $$ = new Moffs8{offset($1)}; }
 | SREG COLON OFFSET_64 { $$ = new Moffs8{seg($1), offset($3)}; }
 
-REL_8 : OFFSET_8 { $$ = new Rel8{0}; delete $1; }
 REL_32 : OFFSET_32 { $$ = new Rel32{0}; delete $1; }
+REL_8 : OFFSET_8 { $$ = new Rel8{0}; delete $1; }
 
 blank : /* empty */ | blank ENDL { }
 
@@ -303,7 +303,6 @@ operand :
   PREF_66 | PREF_REX_W | FAR |
 	LABEL |
 	ZERO | ONE | THREE | IMM_8 | IMM_16 | IMM_32 | IMM_64 |
-	OFFSET_8 | OFFSET_32 | OFFSET_64 |
 	MM |
 	AL | CL | RL | RH | RB | AX | DX | R_16 | EAX | R_32 | RAX | R_64 |
 	SREG | FS | GS |

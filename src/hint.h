@@ -17,12 +17,28 @@ limitations under the License.
 #ifndef X64ASM_SRC_HINT_H
 #define X64ASM_SRC_HINT_H
 
+#include <iostream>
+
+#include "src/op_type.h"
+#include "src/operand.h"
+
 namespace x64asm {
 
 /** A taken/not-taken hint for conditional jumps. */
-enum class Hint {
-	TAKEN = 0,
-	NOT_TAKEN
+class Hint : public AtomicOperand {
+	friend class Assembler;
+	friend class Constants;
+	public:
+		virtual constexpr bool check() {
+			return val_ < 2;
+		}
+		virtual constexpr OpType type() {
+			return OpType::HINT;
+		}
+		virtual void write_att(std::ostream& os) const;
+		virtual void write_intel(std::ostream& os) const;
+	private:
+		constexpr Hint(uint64_t val) : AtomicOperand{val} { }
 };
 
 } // namespace x64asm
