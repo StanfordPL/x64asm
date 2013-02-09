@@ -24,16 +24,16 @@ namespace x64asm {
 
 bool M::check() const {
 	// Check seg
-	if ( contains_seg() && !get_seg()->check() )
+	if ( contains_seg() && !get_seg().check() )
 		return false;
 	// Check base
-	if ( contains_base() && !get_base()->check() )
+	if ( contains_base() && !get_base().check() )
 		return false;
 	// Check index
-	if ( contains_index() && !get_index()->check() )
+	if ( contains_index() && !get_index().check() )
 		return false;
 	// Check scale
-	switch ( scale_ ) {
+	switch ( get_scale() ) {
 		case Scale::TIMES_1:
 		case Scale::TIMES_2:
 		case Scale::TIMES_4:
@@ -41,11 +41,15 @@ bool M::check() const {
 		default:      return false;
 	}
 	// Check disp
-	if ( contains_disp() && !get_disp()->check() )
+	if ( !get_disp().check() )
 		return false;
 
 	// Index cannot be rsp/esp
-	if ( contains_index() && get_index()->val_ == rsp.val_ )
+	if ( contains_index() && get_index().val_ == esp.val_ )
+		return false;
+
+	// Check for absence of base/index for RIP+offset form
+	if ( rip_offset() && (contains_base() || contains_index()) )
 		return false;
 
 	return true;
@@ -53,31 +57,33 @@ bool M::check() const {
 
 void M::write_att(ostream& os) const {
 	if ( contains_seg() ) {
-		get_seg()->write_att(os);
+		get_seg().write_att(os);
 		os << ":";
 	}
-	if ( contains_disp() )
-		get_disp()->write_intel(os);
+	if ( get_disp().val_ != 0 )
+		get_disp().write_intel(os);
 
-	if ( !contains_base() && !contains_index() )
+	if ( !contains_base() && !contains_index() && !rip_offset() )
 		return;
 
 	os << "(";
+	if ( rip_offset() ) 
+		os << "%rip";
 	if ( contains_base() ) {
 		const auto b = get_base();
 		if ( get_addr_or() )
-			((R32*)b)->write_att(os);
+			b.write_att(os);
 		else
-			((R64*)b)->write_att(os);
+			b.parent().write_att(os);
 	}
 	if ( contains_base() && contains_index() )
 		os << ",";
 	if ( contains_index() ) {
 		const auto i = get_index();
 		if ( get_addr_or() )
-			((R32*)i)->write_att(os);
+			i.write_att(os);
 		else
-			((R64*)i)->write_att(os);
+			i.parent().write_att(os);
 		os << ",";
 		switch ( get_scale() ) {
 			case Scale::TIMES_1: os << "1"; break;
@@ -94,32 +100,33 @@ void M::write_intel(ostream& os) const {
 	write_intel_width(os);
 	os << "PTR ";
 	if ( contains_seg() ) {
-		get_seg()->write_intel(os);
+		get_seg().write_intel(os);
 		os << ":";
 	}
 
-	if ( !contains_base() && !contains_index() ) {
-		assert(contains_disp());
-		get_disp()->write_intel(os);
+	if ( !contains_base() && !contains_index() && !rip_offset()) {
+		get_disp().write_intel(os);
 		return;
 	}
 
 	os << "[";
+	if ( rip_offset() ) 
+		os << "rip";
 	if ( contains_base() ) {
 		const auto b = get_base();
 		if ( get_addr_or() )
-			((R32*)b)->write_intel(os);
+			b.write_intel(os);
 		else
-			((R64*)b)->write_intel(os);
+			b.parent().write_intel(os);
 	}
 	if ( contains_base() && contains_index() )
 		os << "+";
 	if ( contains_index() ) {
 		const auto i = get_index();
 		if ( get_addr_or() )
-			((R32*)i)->write_intel(os);
+			i.write_intel(os);
 		else
-			((R64*)i)->write_intel(os);
+			i.parent().write_intel(os);
 		os << "*";
 		switch ( get_scale() ) {
 			case Scale::TIMES_1: os << "1"; break;
@@ -129,9 +136,9 @@ void M::write_intel(ostream& os) const {
 			default: assert(false);
 		}
 	}
-	if ( contains_disp() ) {
+	if ( get_disp().val_ != 0 ) {
 		os << "+";
-		get_disp()->write_intel(os);
+		get_disp().write_intel(os);
 	}
 	os << "]";
 }

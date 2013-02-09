@@ -23,15 +23,15 @@ namespace x64asm {
 RegSet& RegSet::operator+=(const M& rhs) {
 	if ( rhs.get_addr_or() ) {
 		if ( rhs.contains_base() )
-			*this += *((R32*)rhs.get_base());
+			*this += rhs.get_base();
 		if ( rhs.contains_index() )
-			*this += *((R32*)rhs.get_index());
+			*this += rhs.get_index();
 	}
 	else {
 		if ( rhs.contains_base() )
-			*this += *((R64*)rhs.get_base());
+			*this += rhs.get_base().parent();
 		if ( rhs.contains_index() )
-			*this += *((R64*)rhs.get_index());
+			*this += rhs.get_index().parent();
 	}
 	return *this;
 }

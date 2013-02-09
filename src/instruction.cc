@@ -43,11 +43,11 @@ namespace x64asm {
 RegSet Instruction::explicit_must_read_set() const {
 	auto ret = RegSet::empty();
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
-		const auto o = get_operand(i);
-		if ( const auto m = dynamic_cast<const M*>(o) )
+		const auto& o = get_operand(i);
+		if ( const auto m = dynamic_cast<const M*>(&o) )
 			ret += *m;
 		else if ( properties(i).contains(Property::MUST_READ) )
-			o->insert_in(ret, false);
+			o.insert_in(ret, false);
 	}
 
 	return ret;
@@ -56,11 +56,11 @@ RegSet Instruction::explicit_must_read_set() const {
 RegSet Instruction::explicit_maybe_read_set() const {
 	auto ret = RegSet::empty();
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
-		const auto o = get_operand(i);
-		if ( const auto m = dynamic_cast<const M*>(o) )
+		const auto& o = get_operand(i);
+		if ( const auto m = dynamic_cast<const M*>(&o) )
 			ret += *m;
 		else if ( properties(i).contains(Property::MAYBE_READ) )
-			o->insert_in(ret, false);
+			o.insert_in(ret, false);
 	}
 
 	return ret;
@@ -69,12 +69,12 @@ RegSet Instruction::explicit_maybe_read_set() const {
 RegSet Instruction::explicit_must_write_set() const {
 	auto ret = RegSet::empty();
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
-		const auto o = get_operand(i);
+		const auto& o = get_operand(i);
 		const auto p = properties(i);
 		if ( p.contains(Property::MUST_WRITE_ZX) )
-			o->insert_in(ret, true);
+			o.insert_in(ret, true);
 		else if ( p.contains(Property::MUST_WRITE) )
-			o->insert_in(ret, false);
+			o.insert_in(ret, false);
 	}
 
 	return ret;
@@ -83,12 +83,12 @@ RegSet Instruction::explicit_must_write_set() const {
 RegSet Instruction::explicit_maybe_write_set() const {
 	auto ret = RegSet::empty();
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
-		const auto o = get_operand(i);
+		const auto& o = get_operand(i);
 		const auto p = properties(i);
 		if ( p.contains(Property::MAYBE_WRITE_ZX) )
-			o->insert_in(ret, true);
+			o.insert_in(ret, true);
 		else if ( p.contains(Property::MAYBE_WRITE) )
-			o->insert_in(ret, false);
+			o.insert_in(ret, false);
 	}
 
 	return ret;
@@ -98,7 +98,7 @@ RegSet Instruction::explicit_must_undef_set() const {
 	auto ret = RegSet::empty();
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) 
 		if ( properties(i).contains(Property::MUST_UNDEF) )
-			get_operand(i)->insert_in(ret, false);
+			get_operand(i).insert_in(ret, false);
 
 	return ret;
 }
@@ -107,18 +107,18 @@ RegSet Instruction::explicit_maybe_undef_set() const {
 	auto ret = RegSet::empty();
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) 
 		if ( properties(i).contains(Property::MAYBE_UNDEF) )
-			get_operand(i)->insert_in(ret, false);
+			get_operand(i).insert_in(ret, false);
 
 	return ret;
 }
 
 bool Instruction::check() const {
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
-		const auto o = get_operand(i);
-		if ( !o->check() )
+		const auto& o = get_operand(i);
+		if ( !o.check() )
 			return false;
 
-		const auto t = o->type();
+		const auto t = o.type();
 		switch ( type(i) ) {
 			case OpType::IMM_8: 
 				if ( t != OpType::IMM_8 && t != OpType::ZERO && t != OpType::ONE &&
@@ -164,7 +164,7 @@ void Instruction::write_att(ostream& os) const {
 
 	if ( arity() > 0 )
 		for ( int i = arity()-1; i >= 0; --i ) {
-			get_operand(i)->write_att(os);
+			get_operand(i).write_att(os);
 			if ( i != 0 )
 				os << ", ";
 		}
@@ -175,7 +175,7 @@ void Instruction::write_intel(ostream& os) const {
 	os << intel_[get_opcode()] << " ";
 
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
-		get_operand(i)->write_intel(os);
+		get_operand(i).write_intel(os);
 		if ( (i+1) != ie )
 			os << ", ";
 	}

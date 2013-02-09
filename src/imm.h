@@ -25,12 +25,12 @@ limitations under the License.
 namespace x64asm {
 
 /** An immediate value. */
-class Imm : public AtomicOperand {
+class Imm : public Operand {
 	public:
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:	
-		constexpr Imm(uint64_t val) : AtomicOperand{val} { }
+		constexpr Imm(uint64_t val) : Operand{val} { }
 };
 
 /** An immediate byte value. The imm8 symbol is a signed number between –128 

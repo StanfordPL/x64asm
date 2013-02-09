@@ -25,7 +25,7 @@ limitations under the License.
 namespace x64asm {
 
 /** A modifier. */
-class Modifier : public AtomicOperand {
+class Modifier : public Operand {
 	public:
 		virtual constexpr bool check() {
 			return val_ == 0;
@@ -33,7 +33,7 @@ class Modifier : public AtomicOperand {
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
-		constexpr Modifier(uint64_t val) : AtomicOperand{val} { }
+		constexpr Modifier(uint64_t val) : Operand{val} { }
 };
 
 /** The 32-bit memory address override prefix: 0x66. */

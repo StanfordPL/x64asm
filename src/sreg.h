@@ -27,8 +27,10 @@ namespace x64asm {
 /** A segment register. The segment register bit assignments are ES = 0, 
 	  CS = 1, SS = 2, DS = 3, FS = 4, and GS = 5.
 */
-class Sreg : public AtomicOperand {
+class Sreg : public Operand {
 	friend class Constants;
+	friend class M;
+	friend class Moffs;
 	public:
 		virtual constexpr bool check() {
 			return val_ < 6;
@@ -39,7 +41,7 @@ class Sreg : public AtomicOperand {
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
-		constexpr Sreg(uint64_t val) : AtomicOperand{val} { }
+		constexpr Sreg(uint64_t val) : Operand{val} { }
 };
 
 /** The segment register FS. */

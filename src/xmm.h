@@ -28,7 +28,7 @@ namespace x64asm {
 /** An XMM register. The 128-bit XMM registers are: XMM0 through XMM7; XMM8 
 	  through XMM15 are available using REX.R in 64-bit mode.
 */
-class Xmm : public AtomicOperand {
+class Xmm : public Operand {
 	friend class Constants;
 	public:
 		constexpr Ymm parent() { 
@@ -43,7 +43,7 @@ class Xmm : public AtomicOperand {
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
-		constexpr Xmm(uint64_t val) : AtomicOperand{val} { } 
+		constexpr Xmm(uint64_t val) : Operand{val} { } 
 	private:
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };

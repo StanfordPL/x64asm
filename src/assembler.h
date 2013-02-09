@@ -100,7 +100,7 @@ class Assembler {
 		void pref_group2(const M& m) {
 			static uint8_t pref[6] {0x26, 0x2e, 0x36, 0x3e, 0x64, 0x65};
 			if ( m.contains_seg() )
-				fxn_->emit_byte(pref[m.get_seg()->val_]);
+				fxn_->emit_byte(pref[m.get_seg().val_]);
 		}
 
 		void pref_group2(const Hint h) {
@@ -120,7 +120,7 @@ class Assembler {
 			fxn_->emit_byte(o1);
 		}
 
-		void opcode(uint8_t o1, AtomicOperand& rcode) {
+		void opcode(uint8_t o1, const Operand& rcode) {
 			const auto delta = rcode.val_ & 0x7;
 			opcode(o1+delta);
 		}
@@ -130,7 +130,7 @@ class Assembler {
 			fxn_->emit_byte(o2);
 		}
 
-		void opcode(uint8_t o1, uint8_t o2, AtomicOperand& rcode) {
+		void opcode(uint8_t o1, uint8_t o2, const Operand& rcode) {
 			const auto delta = rcode.val_ & 0x7;
 			opcode(o1, o2+delta);
 		}
@@ -163,7 +163,7 @@ class Assembler {
 		}
 
 		void disp_imm(const Moffs& m) {
-			disp_imm(*m.get_offset());
+			disp_imm(m.get_offset());
 		}
 
 		void disp_imm(Rel8 r) {
@@ -175,7 +175,7 @@ class Assembler {
 		}
 
 		// Figure 2.4: Intel Manual Vol 2A 2-8
-		void rex(const M& rm, const AtomicOperand& r, uint8_t val) {
+		void rex(const M& rm, const Operand& r, uint8_t val) {
 			assert(r.check());
 			rex(rm, val | ((r.val_ >> 1) & 0x4));
 		}
@@ -185,30 +185,30 @@ class Assembler {
 			assert(rm.check());
 
 			if ( rm.contains_base() )
-				val |= (rm.get_base()->val_ >> 3);
+				val |= (rm.get_base().val_ >> 3);
 			if ( rm.contains_index() )
-				val |= ((rm.get_index()->val_ >> 2) & 0x2);
+				val |= ((rm.get_index().val_ >> 2) & 0x2);
 			if ( val )
 				fxn_->emit_byte(val | 0x40);
 		}
 
 		// Figure 2.5: Intel Manual Vol 2A 2-8
-		void rex(const AtomicOperand& rm, const AtomicOperand& r, 
+		void rex(const Operand& rm, const Operand& r, 
 				            uint8_t val) {
 			assert(r.check());
 			rex(rm, val | ((r.val_ >> 1) & 0x4));
 		}
 
 		// Figure 2.7: Intel Manual Vol 2A 2-9
-		void rex(const AtomicOperand& rm, uint8_t val) {
+		void rex(const Operand& rm, uint8_t val) {
 			assert(rm.check());
 			if ( val |= (rm.val_ >> 3) )
 				fxn_->emit_byte(val | 0x40);	
 		}
 
-		void mod_rm_sib(const M& rm, const AtomicOperand& r);
+		void mod_rm_sib(const M& rm, const Operand& r);
 		
-		void mod_rm_sib(const AtomicOperand& rm, const AtomicOperand& r) {
+		void mod_rm_sib(const Operand& rm, const Operand& r) {
 			auto mod = 0xc0 | ((r.val_ << 3) & 0x38) | (rm.val_ & 0x7);
 			fxn_->emit_byte(mod);
 		}
@@ -222,7 +222,7 @@ class Assembler {
 		// For simplicity, we always emit a three-byte rex prefix. 
 		// If we want, we could change the logic here, I believe.
 		void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
-				            const AtomicOperand& vvvv) {
+				            const Operand& vvvv) {
 			assert(vvvv.check());
 
 			fxn_->emit_byte(0xc4);
@@ -232,24 +232,24 @@ class Assembler {
 
 		// Figure 2-9: Intel Manual Vol 2A 2-14
 		void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
-				            const AtomicOperand& vvvv, const M& rm, 
-										const AtomicOperand& r) {
+				            const Operand& vvvv, const M& rm, 
+										const Operand& r) {
 			assert(rm.check());
 			assert(r.check());	
 
 			mmmmm |= ((~r.val_ << 4) & 0x80);
 			if ( rm.contains_base() )
-				mmmmm |= ((~rm.get_base()->val_ << 3) & 0x40);
+				mmmmm |= ((~rm.get_base().val_ << 3) & 0x40);
 			if ( rm.contains_index() )
-				mmmmm |= ((~rm.get_index()->val_ << 2) & 0x20);
+				mmmmm |= ((~rm.get_index().val_ << 2) & 0x20);
 
 			vex(mmmmm, l, pp, w, vvvv);
 		}
 
 		// Figure 2-9: Intel Manual Vol 2A 2-14
 		void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
-				            const AtomicOperand& vvvv, const AtomicOperand& rm, 
-										const AtomicOperand& r) {
+				            const Operand& vvvv, const Operand& rm, 
+										const Operand& r) {
 			assert(rm.check());
 			assert(r.check());
 

@@ -25,7 +25,7 @@ limitations under the License.
 namespace x64asm {
 
 /** A taken/not-taken hint for conditional jumps. */
-class Hint : public AtomicOperand {
+class Hint : public Operand {
 	friend class Assembler;
 	friend class Constants;
 	public:
@@ -38,7 +38,7 @@ class Hint : public AtomicOperand {
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	private:
-		constexpr Hint(uint64_t val) : AtomicOperand{val} { }
+		constexpr Hint(uint64_t val) : Operand{val} { }
 };
 
 } // namespace x64asm

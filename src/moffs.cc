@@ -21,27 +21,27 @@ using namespace std;
 namespace x64asm {
 
 bool Moffs::check() const {
-	if ( contains_seg() && !get_seg()->check() )
+	if ( contains_seg() && !get_seg().check() )
 		return false;
-	if ( !get_offset()->check() )
+	if ( !get_offset().check() )
 		return false;
 	return true;
 }
 
 void Moffs::write_att(ostream& os) const {
 	if ( contains_seg() ) {
-		get_seg()->write_att(os);
+		get_seg().write_att(os);
 		os << ":";
 	}
-	get_offset()->write_intel(os);
+	get_offset().write_intel(os);
 }
 
 void Moffs::write_intel(ostream& os) const {
 	if ( contains_seg() ) {
-		get_seg()->write_intel(os);
+		get_seg().write_intel(os);
 		os << ":";
 	}
-	get_offset()->write_intel(os);
+	get_offset().write_intel(os);
 }
 
 } // namespace x64asm

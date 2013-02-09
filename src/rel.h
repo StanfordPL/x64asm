@@ -23,12 +23,12 @@ limitations under the License.
 namespace x64asm {
 
 /** A relative address. */
-class Rel : public AtomicOperand {
+class Rel : public Operand {
 	public:
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
-		constexpr Rel(uint64_t val) : AtomicOperand{val} { }
+		constexpr Rel(uint64_t val) : Operand{val} { }
 };
 
 /** A relative address in the range from 128 bytes before the end of the 

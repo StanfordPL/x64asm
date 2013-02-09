@@ -22,6 +22,7 @@ limitations under the License.
 #include <initializer_list>
 #include <iostream>
 
+#include "src/imm.h"
 #include "src/opcode.h"
 #include "src/operand.h"
 #include "src/op_type.h"
@@ -34,20 +35,19 @@ namespace x64asm {
 class Instruction {
 	public:
 		Instruction(Opcode opcode) 
-				: opcode_(opcode), operands_{{0,0,0,0}} { 
+				: opcode_{opcode}, operands_{} { 
 		}
 
-		Instruction(Opcode opcode, 
-				        std::initializer_list<const Operand*> operands)
-				: opcode_(opcode), operands_{{0,0,0,0}} {
+		Instruction(Opcode opcode, std::initializer_list<Operand> operands)
+				: opcode_{opcode}, operands_{} { 
 			assert(operands.size() <= 4);
-			std::copy(operands.begin(), operands.end(), operands_.begin());
+			std::copy(operands.begin(), operands.end(), operands_.begin());		
 		}
 
 		template <typename InItr>
-		Instruction(Opcode opcode, InItr begin, InItr end) 
-				: opcode_(opcode), operands_{{0,0,0,0}} {
-			assert(end-begin <= 4);		
+		Instruction(Opcode opcode, InItr begin, InItr end)
+				: opcode_{opcode}, operands_{} { 
+			assert(end - begin <= 4);		
 			std::copy(begin, end, operands_.begin());
 		}
 
@@ -59,12 +59,12 @@ class Instruction {
 			opcode_ = o;
 		}
 
-		const Operand* get_operand(size_t index) const {
+		const Operand& get_operand(size_t index) const {
 			assert(index < operands_.size());
 			return operands_[index];
 		}
 
-		void set_operand(const Operand* o, size_t index) {
+		void set_operand(size_t index, const Operand& o) {
 			assert(index < operands_.size());
 			operands_[index] = o;
 		}	
@@ -183,7 +183,7 @@ class Instruction {
 
 	private:
 		Opcode opcode_;
-		std::array<const Operand*, 4> operands_;
+		std::array<Operand, 4> operands_;
 
 		static const std::array<size_t, 3257> arity_;
 		static const std::array<std::array<Properties, 4>, 3257> properties_;

@@ -989,9 +989,7 @@ assm_doxy i = "/** " ++ (description i) ++ " */"
 
 -- Assembler arg type
 assm_arg_type :: String -> String
-assm_arg_type a
-  | mem_op a = "const " ++ (op2type a) ++ "&"
-  | otherwise = op2type a
+assm_arg_type a = "const " ++ (op2type a) ++ "&"
 
 -- Assembler declaration arg list
 assm_arg_list :: Instr -> String
@@ -1222,7 +1220,7 @@ assm_src_defns is = intercalate "\n\n" $ map assm_src_defn is
 -- Assembler switch args
 assm_call_arg_list :: Instr -> String
 assm_call_arg_list i = intercalate ", " $ map arg $ zip [0..] (operands i)
-  where arg (i,a) = "*((" ++ (op2type a) ++ "*)" ++ (elem i) ++ ")"
+  where arg (i,a) = "*((" ++ (op2type a) ++ "*)&" ++ (elem i) ++ ")"
         elem idx = "instr.get_operand(" ++ (show idx) ++ ")"
 
 -- Assembler switch call

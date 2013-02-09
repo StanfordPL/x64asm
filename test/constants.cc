@@ -31,14 +31,13 @@ void all() {
 
 	cout << zero << " " << one << " " << three << endl;
 
-	Imm32 disp(100);
-	cout << M8(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
-	cout << M16(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
-	cout << M32(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
-	cout << M64(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
-	cout << M128(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
-	cout << M256(&fs, &r15d, &ebx, Scale::TIMES_2, &disp) << endl;
-	cout << FarPtr1616(&fs, &disp) << endl;
+	cout << M8(fs, r15d, ebx, Scale::TIMES_2, Imm32{17}) << endl;
+	cout << M16(fs, r15d, ebx, Scale::TIMES_2, Imm32{17}) << endl;
+	cout << M32(fs, r15d, ebx, Scale::TIMES_2, Imm32{17}) << endl;
+	cout << M64(fs, r15d, ebx, Scale::TIMES_2, Imm32{17}) << endl;
+	cout << M128(fs, r15d, ebx, Scale::TIMES_2, Imm32{17}) << endl;
+	cout << M256(fs, r15d, ebx, Scale::TIMES_2, Imm32{17}) << endl;
+	cout << FarPtr1616(fs, Imm32{177}) << endl;
 }
 
 int main() {
@@ -52,20 +51,19 @@ int main() {
 	all();
 	cout << endl;
 
+	cout << "NOW HERE" << endl;
+
+	cout << Instruction{Opcode::NOP} << endl;
+	Instruction{Opcode::ADD_R16_R16, {ax, ax}}.write_att(cout);
 
 	cout << Syntax::ATT;
 	Code c {
  		  Instruction{Opcode::NOP}
-		, Instruction{Opcode::ADD_R16_R16, {&ax, &ax}}
+		, Instruction{Opcode::ADD_R16_R16, {ax, ax}}
 	};
 	cout << c << endl;
 
 	cout << sizeof(RegSet) << endl;
-
-	Code cc;
-	cin >> cc;
-	cout << cc << endl;
-
 
 	return 0;
 }

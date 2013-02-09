@@ -27,9 +27,9 @@ namespace x64asm {
 /** A symbolic representation of a Rel32.
 	  For simplicity, we do not provide a Rel8 equivalent.
 */
-class Label : public AtomicOperand {
+class Label : public Operand {
 	public:
-		constexpr Label(uint64_t val) : AtomicOperand{val} { } 
+		constexpr Label(uint64_t val) : Operand{val} { } 
 		virtual constexpr bool check() {
 			return true;
 		}

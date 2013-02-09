@@ -24,10 +24,12 @@ namespace x64asm {
 
 void Operand::write_att(ostream& os) const {
 	assert(false);
+	os << "<operand>";
 }
 
 void Operand::write_intel(ostream& os) const {
 	assert(false);
+	os << "<operand>";
 }
 
 void Operand::insert_in(RegSet& os, bool promote) const {

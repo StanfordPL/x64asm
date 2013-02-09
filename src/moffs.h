@@ -27,30 +27,38 @@ limitations under the License.
 namespace x64asm {
 
 /** A simple memory variable. */
-class Moffs : public CompoundOperand {
+class Moffs : public Operand {
+	private:
+		enum class Null : uint64_t {
+			SEG = 0x0000000000000007
+		};
+		enum class Mask : uint64_t {
+			SEG = 0x0000000000000007
+		};
+
 	public:
 		bool contains_seg() const {
-			return seg_ != 0;
+			return (val2_ & (uint64_t)Mask::SEG) != (uint64_t)Null::SEG;
 		}
 
-		const Sreg* get_seg() const {
-			return seg_;
+		Sreg get_seg() const {
+			return Sreg{val2_};
 		}
 
-		const Imm64* get_offset() const {
-			return offset_;
+		Imm64 get_offset() const {
+			return Imm64{val_};
 		}
 
-		void set_seg(const Sreg* seg) {
-			seg_ = seg;
+		void set_seg(const Sreg& seg) {
+			val2_ = seg.val_;
 		}
 
-		void set_offset(const Imm64* offset) {
-			offset_ = offset;
+		void set_offset(const Imm64& offset) {
+			val_ = offset.val_;
 		}
 
 		void clear_seg() {
-			seg_ = 0;
+			set_seg(Sreg{(uint64_t)Null::SEG});
 		}
 
 		virtual bool check() const; 
@@ -58,25 +66,21 @@ class Moffs : public CompoundOperand {
 		virtual void write_intel(std::ostream& os) const;
 
 	protected:
-		constexpr Moffs(const Sreg* seg, const Imm64* offset) 
-				: seg_{seg}, offset_{offset} { 
+		constexpr Moffs(const Sreg& seg, const Imm64& offset) 
+				: Operand{offset.val_, seg.val_} { 
 		}
-		constexpr Moffs(const Imm64* offset) 
-				: seg_{0}, offset_{offset} { 
+		constexpr Moffs(const Imm64& offset) 
+				: Operand{offset.val_, (uint64_t)Null::SEG} { 
 		}
-
-	private:
-		const Sreg* seg_;
-		const Imm64* offset_;
 };
 
 /** A simple memory variable (memory offset) of type byte. */
 class Moffs8 : public Moffs {
 	public:
-		constexpr Moffs8(const Sreg* seg, const Imm64* offset) 
+		constexpr Moffs8(const Sreg& seg, const Imm64& offset) 
 				: Moffs{seg, offset} { 
 		}
-		constexpr Moffs8(const Imm64* offset) 
+		constexpr Moffs8(const Imm64& offset) 
 				: Moffs{offset} { 
 		}
 		virtual constexpr OpType type() {
@@ -87,10 +91,10 @@ class Moffs8 : public Moffs {
 /** A simple memory variable (memory offset) of type word. */
 class Moffs16 : public Moffs {
 	public:
-		constexpr Moffs16(const Sreg* seg, const Imm64* offset) 
+		constexpr Moffs16(const Sreg& seg, const Imm64& offset) 
 				: Moffs{seg, offset} { 
 		}
-		constexpr Moffs16(const Imm64* offset) 
+		constexpr Moffs16(const Imm64& offset) 
 				: Moffs{offset} { 
 		}
 		virtual constexpr OpType type() {
@@ -101,10 +105,10 @@ class Moffs16 : public Moffs {
 /** A simple memory variable (memory offset) of type doubleword. */
 class Moffs32 : public Moffs {
 	public:
-		constexpr Moffs32(const Sreg* seg, const Imm64* offset) 
+		constexpr Moffs32(const Sreg& seg, const Imm64& offset) 
 				: Moffs{seg, offset} { 
 		}
-		constexpr Moffs32(const Imm64* offset) 
+		constexpr Moffs32(const Imm64& offset) 
 				: Moffs{offset} { 
 		}
 		virtual constexpr OpType type() {
@@ -115,10 +119,10 @@ class Moffs32 : public Moffs {
 /** A simple memory variable (memory offset) of type quadword. */
 class Moffs64 : public Moffs {
 	public:
-		constexpr Moffs64(const Sreg* seg, const Imm64* offset) 
+		constexpr Moffs64(const Sreg& seg, const Imm64& offset) 
 				: Moffs{seg, offset} { 
 		}
-		constexpr Moffs64(const Imm64* offset) 
+		constexpr Moffs64(const Imm64& offset) 
 				: Moffs{offset} { 
 		}
 		virtual constexpr OpType type() {

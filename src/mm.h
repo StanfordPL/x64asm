@@ -25,7 +25,7 @@ limitations under the License.
 namespace x64asm {
 
 /** An MMX register. The 64-bit MMX registers are: MM0 through MM7. */
-class Mm : public AtomicOperand {
+class Mm : public Operand {
 	friend class Constants;
 	public:
 		virtual constexpr bool check() {
@@ -37,7 +37,7 @@ class Mm : public AtomicOperand {
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	private:
-		constexpr Mm(uint64_t val) : AtomicOperand{val} { }
+		constexpr Mm(uint64_t val) : Operand{val} { }
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 

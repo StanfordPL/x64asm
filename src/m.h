@@ -21,6 +21,7 @@ limitations under the License.
 #include <iostream>
 
 #include "src/constants.h"
+#include "src/env_reg.h"
 #include "src/r.h"
 #include "src/imm.h"
 #include "src/op_type.h"
@@ -38,90 +39,122 @@ enum class Scale {
 };
 
 /** An operand in memory. */
-class M : public CompoundOperand {
+class M : public Operand {
+	private:
+		enum class Null : uint64_t {
+			BASE  = 0x0000001000000000,
+			INDEX = 0x0000100000000000,
+			SEG   = 0x0700000000000000
+		};
+		enum class Mask : uint64_t {
+			DISP    = 0x00000000ffffffff,
+			BASE    = 0x0000001f00000000,
+			INDEX   = 0x00001f0000000000,
+			SCALE   = 0x0003000000000000,
+			SEG     = 0x0700000000000000,
+			ADDR_OR = 0x1000000000000000,
+			RIP     = 0x2000000000000000
+		};
+		enum class Index {
+			DISP    = 0,
+			BASE    = 32,
+			INDEX   = 40,
+			SCALE   = 48,
+			SEG     = 56,
+			ADDR_OR = 60,
+			RIP     = 61
+		};
+
 	public:
 		bool contains_seg() const {
-			return seg_ != 0;
+			return (val_ & (uint64_t)Mask::SEG) != (uint64_t)Null::SEG;
 		}
 
 		bool contains_base() const {
-			return base_ != 0;
+			return (val_ & (uint64_t)Mask::BASE) != (uint64_t)Null::BASE;
 		}
 
 		bool contains_index() const {
-			return index_ != 0;
+			return (val_ & (uint64_t)Mask::INDEX) != (uint64_t)Null::INDEX;
 		}
 
-		bool contains_disp() const {
-			return disp_ != 0;
+		Sreg get_seg() const {
+			return Sreg{(val_ & (uint64_t)Mask::SEG) >> (uint64_t)Index::SEG};
 		}
 
-		const Sreg* get_seg() const {
-			assert(contains_seg());
-			return seg_;
+		R32 get_base() const {
+			return R32{(val_ & (uint64_t)Mask::BASE) >> (uint64_t)Index::BASE};
 		}
 
-		const AddrR* get_base() const {
-			assert(contains_base());
-			return base_;
-		}
-
-		const AddrR* get_index() const {
-			assert(contains_index());
-			return index_;
+		R32 get_index() const {
+			return R32{(val_ & (uint64_t)Mask::INDEX) >> (uint64_t)Index::INDEX};
 		}
 
 		Scale get_scale() const {
-			return scale_;
+			return (Scale)((val_ & (uint64_t)Mask::INDEX) >> (uint64_t)Index::INDEX);
 		}
 
-		const Imm32* get_disp() const {
-			assert(contains_disp());
-			return disp_;
+		Imm32 get_disp() const {
+			return Imm32{val_ & (uint64_t)Mask::DISP};
 		}
 
 		bool get_addr_or() const {
-			return addr_or_;
+			return val_ & (uint64_t)Mask::ADDR_OR;
 		}
 
-		void set_seg(const Sreg* seg) {
-			seg_ = seg;
+		bool rip_offset() const {
+			return val_ & (uint64_t)Mask::RIP;
 		}
 
-		void set_base(const AddrR* base) {
-			base_ = base;
+		void set_seg(const Sreg& seg) {
+			val_ &= ~(uint64_t)Mask::SEG;
+			val_ |= seg.val_ << (uint64_t)Index::SEG;
 		}
 
-		void set_index(const AddrR* index) {
-			index_ = index;
+		void set_base(const R& base) {
+			val_ &= ~(uint64_t)Mask::BASE;
+			val_ |= base.val_ << (uint64_t)Index::BASE;
+		}
+
+		void set_index(const R& index) {
+			val_ &= ~(uint64_t)Mask::INDEX;
+			val_ |= index.val_ << (uint64_t)Index::INDEX;
 		}
 
 		void set_scale(Scale scale) {
-			scale_ = scale;
+			val_ &= ~(uint64_t)Mask::SCALE;
+			val_ |= (uint64_t)scale << (uint64_t)Index::SCALE;
 		}
 
-		void set_disp(const Imm32* disp) {
-			disp_ = disp;
+		void set_disp(const Imm32& disp) {
+			val_ &= ~(uint64_t)Mask::DISP;
+			val_ |= (uint64_t)disp.val_ << (uint64_t)Index::DISP;
 		}
 
 		void set_addr_or(bool addr_or) {
-			addr_or_ = addr_or;
+			if ( addr_or )
+				val_ |= (uint64_t)Mask::ADDR_OR;
+			else
+				val_ &= ~(uint64_t)Mask::ADDR_OR;
+		}
+
+		void set_rip_offset(bool rip) {
+			if ( rip )
+				val_ |= (uint64_t)Mask::RIP;
+			else
+				val_ &= ~(uint64_t)Mask::RIP;
 		}
 
 		void clear_seg() {
-			seg_ = 0;
+			set_seg(Sreg{(uint64_t)Null::SEG});
 		}
 
 		void clear_base() {
-			base_ = 0;
+			set_seg(Sreg{(uint64_t)Null::BASE});
 		}
 
 		void clear_index() {
-			index_ = 0;
-		}
-
-		void clear_disp() {
-			disp_ = 0;
+			set_seg(Sreg{(uint64_t)Null::INDEX});
 		}
 
 		virtual bool check() const;
@@ -129,110 +162,178 @@ class M : public CompoundOperand {
 		virtual void write_intel(std::ostream& os) const;
 
 	protected:
-		constexpr M(const Imm32* d, bool addr_or = false)
-				: seg_{0}, base_{0}, index_{0},
-			    scale_{Scale::TIMES_1}, disp_{d}, addr_or_{addr_or} {
+		static constexpr 
+		uint64_t init(uint64_t d, uint64_t b, uint64_t i, uint64_t sc, uint64_t s, 
+				          uint64_t addr_or, uint64_t rip) {
+			return (d  << (uint64_t)Index::DISP) |
+				     (b  << (uint64_t)Index::BASE) |
+						 (i  << (uint64_t)Index::INDEX) |
+						 ((uint64_t)sc << (uint64_t)Index::SCALE) |
+						 (s  << (uint64_t)Index::SEG) |
+						 (addr_or << (uint64_t)Index::ADDR_OR) |
+						 (rip << (uint64_t)Index::RIP);
 		}
 
-		constexpr M(const Sreg* s, const Imm32* d, bool addr_or = false)
-				: seg_{s}, base_{0}, index_{0},
-					scale_{Scale::TIMES_1}, disp_{d}, addr_or_{addr_or} {
+		constexpr M(const Imm32& d)
+				: Operand{init(d.val_, 0, 0, (uint64_t)Scale::TIMES_1, 0, 0, 0)} {
 		}
 
-		constexpr M(const AddrR* b, bool addr_or = false)
-				: seg_(0), base_(b), index_(0), 
-			    scale_(Scale::TIMES_1), disp_(0), addr_or_(addr_or) {
+		constexpr M(const Sreg& s, const Imm32& d)
+				: Operand{init(d.val_, 0, 0, (uint64_t)Scale::TIMES_1, s.val_, 0, 0)} {
 		}
 
-		constexpr M(const Sreg* s, const AddrR* b, bool addr_or = false)
-				: seg_(s), base_(b), index_(0), 
-			    scale_(Scale::TIMES_1), disp_(0), addr_or_(addr_or) {
+		constexpr M(const R32& b)
+				: Operand{init(0, b.val_, 0, (uint64_t)Scale::TIMES_1, 0, 1, 0)} {
 		}
 
-		constexpr M(const AddrR* b, const Imm32* d, bool addr_or = false)
-				: seg_(0), base_(b), index_(0), 
-			    scale_(Scale::TIMES_1), disp_(d), addr_or_(addr_or) {
+		constexpr M(const R64& b)
+				: Operand{init(0, b.val_, 0, (uint64_t)Scale::TIMES_1, 0, 0, 0)} {
 		}
 
-		constexpr M(const Sreg* s, const AddrR* b, const Imm32* d, 
-				     bool addr_or = false)
-				: seg_(s), base_(b), index_(0), 
-			    scale_(Scale::TIMES_1), disp_(d), addr_or_(addr_or) {
+		constexpr M(Rip rip)
+				: Operand{init(0, 0, 0, (uint64_t)Scale::TIMES_1, 0, 0, 1)} {
 		}
 
-		constexpr M(const AddrR* i, Scale sc, bool addr_or = false)
-				: seg_(0), base_(0), index_(i), scale_(sc), 
-			    disp_(0), addr_or_(addr_or) {
+		constexpr M(const Sreg& s, const R32& b)
+				: Operand{init(0, b.val_, 0, (uint64_t)Scale::TIMES_1, s.val_, 1, 0)} {
 		}
 
-		constexpr M(const Sreg* s, const AddrR* i, Scale sc, bool addr_or = false)
-				: seg_(s), base_(0), index_(i), scale_(sc), 
-			    disp_(0), addr_or_(addr_or) {
+		constexpr M(const Sreg& s, const R64& b)
+				: Operand{init(0, b.val_, 0, (uint64_t)Scale::TIMES_1, s.val_, 0, 0)} {
 		}
 
-		constexpr M(const AddrR* i, Scale sc, const Imm32* d, bool addr_or = false) 
-				: seg_(0), base_(0), index_(i), scale_(sc), 
-			    disp_(d), addr_or_(addr_or) {
+		constexpr M(const Sreg& s, Rip rip)
+				: Operand{init(0, 0, 0, (uint64_t)Scale::TIMES_1, s.val_, 0, 1)} {
 		}
 
-		constexpr M(const Sreg* s, const AddrR* i, Scale sc, const Imm32* d, 
-				     bool addr_or = false)
-				: seg_(s), base_(0), index_(i), scale_(sc), 
-			    disp_(d), addr_or_(addr_or) {
+		constexpr M(const R32& b, const Imm32& d)
+				: Operand{init(d.val_, b.val_, 0, (uint64_t)Scale::TIMES_1, 0, 1, 0)} {
 		}
 
-		constexpr M(const AddrR* b, const AddrR* i, Scale sc, bool addr_or = false)
-				: seg_(0), base_(b), index_(i), scale_(sc), 
-			    disp_(0), addr_or_(addr_or) {
+		constexpr M(const R64& b, const Imm32& d)
+				: Operand{init(d.val_, b.val_, 0, (uint64_t)Scale::TIMES_1, 0, 0, 0)} {
 		}
 
-		constexpr M(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, 
-				     bool addr_or = false)
-				: seg_(s), base_(b), index_(i), scale_(sc), 
-			    disp_(0), addr_or_(addr_or) {
+		constexpr M(Rip rip, const Imm32& d)
+				: Operand{init(d.val_, 0, 0, (uint64_t)Scale::TIMES_1, 0, 0, 1)} {
 		}
 
-		constexpr M(const AddrR* b, const AddrR* i, Scale sc, const Imm32* d, 
-				     bool addr_or = false)
-				: seg_(0), base_(b), index_(i), scale_(sc), 
-			    disp_(d), addr_or_(addr_or) {
+		constexpr M(const Sreg& s, const R32& b, const Imm32& d)
+				: Operand{init(d.val_, b.val_, 0, (uint64_t)Scale::TIMES_1, s.val_, 1, 0)} {
 		}
 
-		constexpr M(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, 
-				     const Imm32* d, bool addr_or = false)
-				: seg_(s), base_(b), index_(i), scale_(sc), 
-			    disp_(d), addr_or_(addr_or) {
+		constexpr M(const Sreg& s, const R64& b, const Imm32& d)
+				: Operand{init(d.val_, b.val_, 0, (uint64_t)Scale::TIMES_1, s.val_, 0, 0)} {
+		}
+
+		constexpr M(const Sreg& s, Rip rip, const Imm32& d)
+				: Operand{init(d.val_, 0, 0, (uint64_t)Scale::TIMES_1, s.val_, 0, 1)} {
+		}
+
+		constexpr M(const R32& i, Scale sc)
+				: Operand{init(0, 0, i.val_, (uint64_t)sc, 0, 1, 0)} {
+		}
+
+		constexpr M(const R64& i, Scale sc)
+				: Operand{init(0, 0, i.val_, (uint64_t)sc, 0, 0, 0)} {
+		}
+
+		constexpr M(const Sreg& s, const R32& i, Scale sc)
+				: Operand{init(0, 0, i.val_, (uint64_t)sc, s.val_, 1, 0)} {
+		}
+
+		constexpr M(const Sreg& s, const R64& i, Scale sc)
+				: Operand{init(0, 0, i.val_, (uint64_t)sc, s.val_, 0, 0)} {
+		}
+
+		constexpr M(const R32& i, Scale sc, const Imm32& d)
+				: Operand{init(d.val_, 0, i.val_, (uint64_t)sc, 0, 1, 0)} {
+		}
+
+		constexpr M(const R64& i, Scale sc, const Imm32& d)
+				: Operand{init(d.val_, 0, i.val_, (uint64_t)sc, 0, 0, 0)} {
+		}
+
+		constexpr M(const Sreg& s, const R32& i, Scale sc, const Imm32& d)
+				: Operand{init(d.val_, 0, i.val_, (uint64_t)sc, s.val_, 1, 0)} {
+		}
+
+		constexpr M(const Sreg& s, const R64& i, Scale sc, const Imm32& d)
+				: Operand{init(d.val_, 0, i.val_, (uint64_t)sc, s.val_, 0, 0)} {
+		}
+
+		constexpr M(const R32& b, const R32& i, Scale sc)
+				: Operand{init(0, b.val_, i.val_, (uint64_t)sc, 0, 1, 0)} {
+		}
+
+		constexpr M(const R64& b, const R64& i, Scale sc)
+				: Operand{init(0, b.val_, i.val_, (uint64_t)sc, 0, 0, 0)} {
+		}
+
+		constexpr M(const Sreg& s, const R32& b, const R32& i, Scale sc)
+				: Operand{init(0, b.val_, i.val_, (uint64_t)sc, s.val_, 1, 0)} {
+		}
+
+		constexpr M(const Sreg& s, const R64& b, const R64& i, Scale sc) 
+				: Operand{init(0, b.val_, i.val_, (uint64_t)sc, s.val_, 0, 0)} {
+		}
+
+		constexpr M(const R32& b, const R32& i, Scale sc, const Imm32& d)
+				: Operand{init(d.val_, b.val_, i.val_, (uint64_t)sc, 0, 1, 0)} {
+		}
+
+		constexpr M(const R64& b, const R64& i, Scale sc, const Imm32& d)
+				: Operand{init(d.val_, b.val_, i.val_, (uint64_t)sc, 0, 0, 0)} {
+		}
+
+		constexpr M(const Sreg& s, const R32& b, const R32& i, Scale sc, 
+				        const Imm32& d)
+				: Operand{init(d.val_, b.val_, i.val_, (uint64_t)sc, s.val_, 1, 0)} {
+		}
+
+		constexpr M(const Sreg& s, const R64& b, const R64& i, Scale sc, 
+				        const Imm32& d)
+				: Operand{init(d.val_, b.val_, i.val_, (uint64_t)sc, s.val_, 0, 0)} {
 		}
 
 		virtual void write_intel_width(std::ostream& os) const;
 
 	private:
 		virtual void insert_in(RegSet& os, bool promote = false) const;
-
-		const Sreg* seg_;
-		const AddrR* base_;
-		const AddrR* index_;
-		Scale scale_;
-		const Imm32* disp_;
-		bool addr_or_;
 };
 
 // NOTE: This ugliness can be replaced using inherited constructors come gcc 4.8
 #define CONSTRUCTORS(T) \
-	constexpr T(const Imm32* d, bool o = false) : M{d, o} { } \
-	constexpr T(const Sreg* s, const Imm32* d, bool o = false) : M{s, d, o} { } \
-	constexpr T(const AddrR* b, bool o = false) : M{b, o} { } \
-	constexpr T(const Sreg* s, const AddrR* b, bool o = false) : M{s, b, o} { } \
-	constexpr T(const AddrR* b, const Imm32* d, bool o = false) : M{b, d, o} { } \
-	constexpr T(const Sreg* s, const AddrR* b, const Imm32* d, bool o = false) : M{s, b, d, o} { } \
-	constexpr T(const AddrR* i, Scale s, bool o = false) : M{i, s, o} { } \
-	constexpr T(const Sreg* s, const AddrR* i, Scale sc, bool o = false) : M{s, i, sc, o} { } \
-	constexpr T(const AddrR* i, Scale s, const Imm32* d, bool o = false) : M{i, s, d, o} { } \
-	constexpr T(const Sreg* s, const AddrR* i, Scale sc, const Imm32* d, bool o = false) : M{s, i, sc, d, o} { } \
-	constexpr T(const AddrR* b, const AddrR* i, Scale s, bool o = false) : M{b, i, s, o} { } \
-	constexpr T(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, bool o = false) : M{s, b, i, sc, o} { } \
-	constexpr T(const AddrR* b, const AddrR* i, Scale s, const Imm32* d, bool o = false) : M{b, i, s, d, o} { } \
-	constexpr T(const Sreg* s, const AddrR* b, const AddrR* i, Scale sc, const Imm32* d, bool o = false) : M{s, b, i, sc, d, o} { } \
+	constexpr T(const Imm32& d) : M{d} { } \
+	constexpr T(const Sreg& s, const Imm32& d) : M{s, d} { } \
+	constexpr T(const R32& b) : M{b} { } \
+	constexpr T(const R64& b) : M{b} { } \
+	constexpr T(Rip rip) : M{rip} {} \
+	constexpr T(const Sreg& s, const R32& b) : M{s, b} { } \
+	constexpr T(const Sreg& s, const R64& b) : M{s, b} { } \
+	constexpr T(const Sreg& s, Rip rip) : M{s, rip} { } \
+	constexpr T(const R32& b, const Imm32& d) : M{b, d} { } \
+	constexpr T(const R64& b, const Imm32& d) : M{b, d} { } \
+	constexpr T(Rip rip, const Imm32& d) : M{rip, d} { } \
+	constexpr T(const Sreg& s, const R32& b, const Imm32& d) : M{s, b, d} { } \
+	constexpr T(const Sreg& s, const R64& b, const Imm32& d) : M{s, b, d} { } \
+	constexpr T(const Sreg& s, Rip rip, const Imm32& d) : M{s, rip, d} { } \
+	constexpr T(const R32& i, Scale s) : M{i, s} { } \
+	constexpr T(const R64& i, Scale s) : M{i, s} { } \
+	constexpr T(const Sreg& s, const R32& i, Scale sc) : M{s, i, sc} { } \
+	constexpr T(const Sreg& s, const R64& i, Scale sc) : M{s, i, sc} { } \
+	constexpr T(const R32& i, Scale s, const Imm32& d) : M{i, s, d} { } \
+	constexpr T(const R64& i, Scale s, const Imm32& d) : M{i, s, d} { } \
+	constexpr T(const Sreg& s, const R32& i, Scale sc, const Imm32& d) : M{s, i, sc, d} { } \
+	constexpr T(const Sreg& s, const R64& i, Scale sc, const Imm32& d) : M{s, i, sc, d} { } \
+	constexpr T(const R32& b, const R32& i, Scale s) : M{b, i, s} { } \
+	constexpr T(const R64& b, const R64& i, Scale s) : M{b, i, s} { } \
+	constexpr T(const Sreg& s, const R32& b, const R32& i, Scale sc) : M{s, b, i, sc} { } \
+	constexpr T(const Sreg& s, const R64& b, const R64& i, Scale sc) : M{s, b, i, sc} { } \
+	constexpr T(const R32& b, const R32& i, Scale s, const Imm32& d) : M{b, i, s, d} { } \
+	constexpr T(const R64& b, const R64& i, Scale s, const Imm32& d) : M{b, i, s, d} { } \
+	constexpr T(const Sreg& s, const R32& b, const R32& i, Scale sc, const Imm32& d) : M{s, b, i, sc, d} { } \
+	constexpr T(const Sreg& s, const R64& b, const R64& i, Scale sc, const Imm32& d) : M{s, b, i, sc, d} { } \
 
 /** A byte operand in memory, usually expressed as a variable or array name, 
 	  but pointed to by the DS:(E)SI or ES:(E)DI registers. 

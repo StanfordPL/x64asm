@@ -23,6 +23,7 @@ limitations under the License.
 #include "src/code.h"
 #include "src/env_reg.h"
 #include "src/instruction.h"
+#include "src/label.h"
 #include "src/m.h"
 #include "src/moffs.h"
 #include "src/opcode.h"
@@ -40,24 +41,32 @@ void yyerror(std::istream& is, x64asm::Code& code, const char* s) {
 	cerr << "Error on line " << yy_line_number << ": "  << s << endl;
 }
 
-const AddrR* base(const Operand* o) { 
-	return dynamic_cast<const AddrR*>(o); 
+R32 base32(const Operand* o) { 
+	return *((R32*)o);
 }
 
-const AddrR* index(const Operand* o) { 
-	return dynamic_cast<const AddrR*>(o); 
+R64 base64(const Operand* o) { 
+	return *((R64*)o);
 }
 
-const Imm32* disp(uint64_t o) { 
-	return new Imm32{o};
+R32 index32(const Operand* o) { 
+	return *((R32*)o);
 }
 
-const Sreg* seg(const Operand* o) { 
-	return dynamic_cast<const Sreg*>(o); 
+R64 index64(const Operand* o) { 
+	return *((R64*)o);
 }
 
-const Imm64* offset(uint64_t o) { 
-	return new Imm64{o};
+Imm32 disp(uint64_t o) { 
+	return Imm32{o};
+}
+
+Sreg seg(const Operand* o) { 
+	return *((Sreg*)o);
+}
+
+Imm64 offset(uint64_t o) { 
+	return Imm64{o};
 }
 
 typedef std::pair<x64asm::Opcode, std::vector<x64asm::OpType>> Entry;
@@ -91,31 +100,29 @@ bool is_a(OpType a, OpType b) {
 }
 
 template <typename T>
-const T* promote_to(const M* m) {
-	T* t = new T{&rax};
+T promote_to(const M* m) {
+	T t{Imm32{0}};
 	if ( m->contains_seg() )
-		t->set_seg(m->get_seg());
+		t.set_seg(m->get_seg());
 	if ( m->contains_base() )
-		t->set_base(m->get_base());
-	else
-		t->clear_base();
-	if ( m->contains_index() ) {
-		t->set_index(m->get_index());
-		t->set_scale(m->get_scale());
-	}
-	if ( m->contains_disp() )
-		t->set_disp(m->get_disp());
-	t->set_addr_or(m->get_addr_or());
+		t.set_base(m->get_base());
+	if ( m->contains_index() )
+		t.set_index(m->get_index());
+
+	t.set_scale(m->get_scale());
+	t.set_disp(m->get_disp());
+	t.set_addr_or(m->get_addr_or());
+	t.set_rip_offset(m->rip_offset());
 
 	return t;
 }
 
 template <typename T>
-const T* promote_to(const Moffs* m) {
+T promote_to(const Moffs* m) {
 	if ( m->contains_seg() )
-		return new T{m->get_seg(), m->get_offset()};
+		return T{m->get_seg(), m->get_offset()};
 	else
-		return new T{m->get_offset()};
+		return T{m->get_offset()};
 }
 
 // Returns a poorly formed instruction on error
@@ -123,7 +130,7 @@ const Instruction* to_instr(const std::string& opc,
                             const std::vector<const Operand*>& ops) {
 	const auto itr = att_table.find(opc.c_str());
 	if ( itr == att_table.end() )
-		return new Instruction{x64asm::NOP, {&ymm0}};
+		return new Instruction{x64asm::NOP, {xmm0}};
 
 	for ( const auto& entry : itr->second ) {
 		const auto arity = entry.second.size();
@@ -134,11 +141,17 @@ const Instruction* to_instr(const std::string& opc,
 		for ( size_t i = 0; i < arity; ++i ) 
 			match &= is_a(ops[i]->type(), entry.second[i]);
 
-		if ( match ) 
-			return new Instruction{entry.first, ops.begin(), ops.end()};
+		if ( match ) {
+			// Promotion goes here.
+			Instruction* instr = new Instruction{entry.first};
+			for ( size_t i = 0, ie = ops.size(); i < ie; ++i )
+				instr->set_operand(i, *ops[i]);
+
+			return instr;
+		}
 	}
 
-	return new Instruction{x64asm::NOP, {&ymm0}};
+	return new Instruction{x64asm::NOP, {xmm0}};
 }
 
 %}
@@ -230,34 +243,34 @@ const Instruction* to_instr(const std::string& opc,
 m : 
   OFFSET { $$ = new M8{disp($1)}; }
 | SREG COLON OFFSET { $$ = new M8{seg($1), disp($3)}; }
-| OPEN R_32 CLOSE { $$ = new M8{base($2), true}; }
-| OPEN R_64 CLOSE { $$ = new M8{base($2), false}; }
-| OPEN RIP CLOSE { $$ = new M8{base(&rax), false}; }
-| SREG COLON OPEN R_32 CLOSE { $$ = new M8{seg($1), base($4), true}; }
-| SREG COLON OPEN R_64 CLOSE { $$ = new M8{seg($1), base($4), false}; }
-| SREG COLON OPEN RIP CLOSE { $$ = new M8{seg($1), base(&rax), false}; }
-| OFFSET OPEN R_32 CLOSE { $$ = new M8{base($3), disp($1), true}; }
-| OFFSET OPEN R_64 CLOSE { $$ = new M8{base($3), disp($1), false}; }
-| OFFSET OPEN RIP CLOSE { $$ = new M8{base(&rax), disp($1), false}; }
-| SREG COLON OFFSET OPEN R_32 CLOSE { $$ = new M8{seg($1), base($5), disp($3), true}; }
-| SREG COLON OFFSET OPEN R_64 CLOSE { $$ = new M8{seg($1), base($5), disp($3), false}; }
-| SREG COLON OFFSET OPEN RIP CLOSE { $$ = new M8{seg($1), base(&rax), disp($3), false}; }
-| OPEN R_32 COMMA SCALE CLOSE { $$ = new M8{index($2), $4, true}; }
-| OPEN R_64 COMMA SCALE CLOSE { $$ = new M8{index($2), $4, false}; }
-| SREG COLON OPEN R_32 COMMA SCALE CLOSE { $$ = new M8{seg($1), index($4), $6, true}; }
-| SREG COLON OPEN R_64 COMMA SCALE CLOSE { $$ = new M8{seg($1), index($4), $6, false}; }
-| OFFSET OPEN R_32 COMMA SCALE CLOSE { $$ = new M8{index($3), $5, disp($1), true}; }
-| OFFSET OPEN R_64 COMMA SCALE CLOSE { $$ = new M8{index($3), $5, disp($1), false}; }
-| SREG COLON OFFSET OPEN R_32 COMMA SCALE CLOSE { $$ = new M8{seg($1), index($5), $7, disp($3), true}; }
-| SREG COLON OFFSET OPEN R_64 COMMA SCALE CLOSE { $$ = new M8{seg($1), index($5), $7, disp($3), false}; }
-| OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{base($2), index($4), $6, true}; }
-| OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{base($2), index($4), $6, false}; }
-| SREG COLON OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{seg($1), base($4), index($6), $8, true}; }
-| SREG COLON OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{seg($1), base($4), index($6), $8, false}; }
-| OFFSET OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{base($3), index($5), $7, disp($1), true}; }
-| OFFSET OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{base($3), index($5), $7, disp($1), false}; }
-| SREG COLON OFFSET OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{seg($1), base($5), index($7), $9, disp($3), true}; }
-| SREG COLON OFFSET OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{seg($1), base($5), index($7), $9, disp($3), false}; }
+| OPEN R_32 CLOSE { $$ = new M8{base32($2)}; }
+| OPEN R_64 CLOSE { $$ = new M8{base64($2)}; }
+| OPEN RIP CLOSE { $$ = new M8{rip}; }
+| SREG COLON OPEN R_32 CLOSE { $$ = new M8{seg($1), base32($4)}; }
+| SREG COLON OPEN R_64 CLOSE { $$ = new M8{seg($1), base64($4)}; }
+| SREG COLON OPEN RIP CLOSE { $$ = new M8{seg($1), rip}; }
+| OFFSET OPEN R_32 CLOSE { $$ = new M8{base32($3), disp($1)}; }
+| OFFSET OPEN R_64 CLOSE { $$ = new M8{base64($3), disp($1)}; }
+| OFFSET OPEN RIP CLOSE { $$ = new M8{rip, disp($1)}; }
+| SREG COLON OFFSET OPEN R_32 CLOSE { $$ = new M8{seg($1), base32($5), disp($3)}; }
+| SREG COLON OFFSET OPEN R_64 CLOSE { $$ = new M8{seg($1), base64($5), disp($3)}; }
+| SREG COLON OFFSET OPEN RIP CLOSE { $$ = new M8{seg($1), rip, disp($3)}; }
+| OPEN R_32 COMMA SCALE CLOSE { $$ = new M8{index32($2), $4}; }
+| OPEN R_64 COMMA SCALE CLOSE { $$ = new M8{index64($2), $4}; }
+| SREG COLON OPEN R_32 COMMA SCALE CLOSE { $$ = new M8{seg($1), index32($4), $6}; }
+| SREG COLON OPEN R_64 COMMA SCALE CLOSE { $$ = new M8{seg($1), index64($4), $6}; }
+| OFFSET OPEN R_32 COMMA SCALE CLOSE { $$ = new M8{index32($3), $5, disp($1)}; }
+| OFFSET OPEN R_64 COMMA SCALE CLOSE { $$ = new M8{index64($3), $5, disp($1)}; }
+| SREG COLON OFFSET OPEN R_32 COMMA SCALE CLOSE { $$ = new M8{seg($1), index32($5), $7, disp($3)}; }
+| SREG COLON OFFSET OPEN R_64 COMMA SCALE CLOSE { $$ = new M8{seg($1), index64($5), $7, disp($3)}; }
+| OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{base32($2), index32($4), $6}; }
+| OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{base64($2), index64($4), $6}; }
+| SREG COLON OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{seg($1), base32($4), index32($6), $8}; }
+| SREG COLON OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{seg($1), base64($4), index64($6), $8}; }
+| OFFSET OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{base32($3), index32($5), $7, disp($1)}; }
+| OFFSET OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{base64($3), index64($5), $7, disp($1)}; }
+| SREG COLON OFFSET OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{seg($1), base32($5), index32($7), $9, disp($3)}; }
+| SREG COLON OFFSET OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{seg($1), base64($5), index64($7), $9, disp($3)}; }
 
 blank : /* empty */ | blank ENDL { }
 
@@ -276,10 +289,20 @@ instrs : instr {
 }
 
 instr : LABEL COLON ENDL blank {
-  $$ = new Instruction{Opcode::LABEL_DEFN, {$1}};
+  $$ = new Instruction{Opcode::LABEL_DEFN, {*$1}};
 }
 | OPCODE operands ENDL blank {
 	$$ = to_instr(*$1, *$2);
+
+	for ( const auto o : *$2 ) {
+		if ( dynamic_cast<const Imm*>(o) != 0 )
+			delete o;
+		if ( dynamic_cast<const Label*>(o) != 0 )
+			delete o;
+		if ( dynamic_cast<const M*>(o) != 0 )
+			delete o;
+	}
+		
 	delete $1;
 	delete $2;
 

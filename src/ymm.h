@@ -27,7 +27,7 @@ namespace x64asm {
 /** A YMM register. The 256-bit YMM registers are: YMM0 through YMM7; YMM8 
 	  through YMM15 are available in 64-bit mode.
 */
-class Ymm : public AtomicOperand {
+class Ymm : public Operand {
 	friend class Constants;
 	friend class Xmm;
 	public:
@@ -40,7 +40,7 @@ class Ymm : public AtomicOperand {
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	private:
-		constexpr Ymm(uint64_t val) : AtomicOperand{val} { } 
+		constexpr Ymm(uint64_t val) : Operand{val} { } 
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 

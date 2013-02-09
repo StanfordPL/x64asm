@@ -21,7 +21,9 @@ namespace x64asm {
 
 /** Any of the types which appear in the Intel Manual. */
 enum class OpType {
-	HINT = 0,
+	OPERAND = 0,
+
+	HINT,
 
 	IMM_8,
 	IMM_16,

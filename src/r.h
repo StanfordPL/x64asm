@@ -27,11 +27,11 @@ namespace x64asm {
 class R64;
 
 /** A general-purpose register. */
-class R : public AtomicOperand {
+class R : public Operand {
 	public:
 		virtual R64 parent() const;
 	protected:	
-		constexpr R(uint64_t val) : AtomicOperand{val} { }
+		constexpr R(uint64_t val) : Operand{val} { }
 };
 
 /** One of the byte general-purpose registers: AL, CL, DL, BL. */
@@ -166,20 +166,13 @@ class Dx : public R16 {
 		constexpr Dx() : R16{2} { }
 };
 
-/** One of the double or quadword general-purpose register which may
-	  be used to form an address in memory.
-*/
-class AddrR : public R {
-	protected:
-		constexpr AddrR(uint64_t val) : R{val} { }
-};
-
 /** One of the doubleword general-purpose registers: EAX, ECX, EDX, EBX, ESP, 
 	  EBP, ESI, EDI; or one of the doubleword registers (R8D - R15D) available 
 		when using REX.R in 64-bit mode.
 */
-class R32 : public AddrR {
+class R32 : public R {
 	friend class Constants;
+	friend class M;
 	public:
 		virtual constexpr bool check() {
 			return val_ < 16;
@@ -190,7 +183,7 @@ class R32 : public AddrR {
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
-		constexpr R32(uint64_t val) : AddrR{val} { }
+		constexpr R32(uint64_t val) : R{val} { }
 	private:
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
@@ -212,7 +205,7 @@ class Eax : public R32 {
 /** One of the quadword general-purpose registers: RAX, RBX, RCX, RDX, RDI, RSI,
 	  RBP, RSP, R8–R15. These are available when using REX.R and 64-bit mode.
 */
-class R64 : public AddrR {
+class R64 : public R {
 	friend class Constants;
 	friend class R;
 	friend class Rh;
@@ -226,7 +219,7 @@ class R64 : public AddrR {
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
-		constexpr R64(uint64_t val) : AddrR{val} { }
+		constexpr R64(uint64_t val) : R{val} { }
 	private:
 		virtual void insert_in(RegSet& os, bool promote = false) const;
 };

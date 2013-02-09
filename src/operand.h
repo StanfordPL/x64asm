@@ -17,6 +17,7 @@ limitations under the License.
 #ifndef X64ASM_SRC_OPERAND_H
 #define X64ASM_SRC_OPERAND_H
 
+#include <array>
 #include <cassert>
 #include <iostream>
 #include <stdint.h>
@@ -29,36 +30,29 @@ class RegSet;
 
 /** Base operand type. */
 class Operand {
+	friend class std::array<Operand, 4>;
+	friend class Assembler;
 	friend class Instruction;
+	friend class M;
+	friend class Moffs;
+	friend class RegSet;
 	public:
 		virtual constexpr bool check() {
 			return true;
 		}
 		virtual constexpr OpType type() {
-			return OpType::HINT;
+			return OpType::OPERAND;
 		}
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
-		constexpr Operand() { }	
+		constexpr Operand() : val_{0}, val2_{0} { }	
+		constexpr Operand(uint64_t val) : val_{val}, val2_{0} { }	
+		constexpr Operand(uint64_t val, uint64_t val2) : val_{val}, val2_{val2} { }
+		uint64_t val_;
+		uint64_t val2_;
 	private:
 		virtual void insert_in(RegSet& os, bool promote = false) const;
-};
-
-/** Atomic Operand Type. */
-class AtomicOperand : public Operand {
-	friend class Assembler;
-	friend class M;
-	friend class RegSet;
-	protected:
-		constexpr AtomicOperand(uint64_t val) : val_{val} { }
-		const uint64_t val_;	
-};
-
-/** Aggregate Operand Type. */
-class CompoundOperand : public Operand {
-	protected:
-		constexpr CompoundOperand() { }
 };
 
 } // namespace x64asm

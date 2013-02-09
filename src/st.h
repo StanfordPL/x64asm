@@ -27,7 +27,7 @@ namespace x64asm {
 /** The ith element from the top of the FPU register stack 
 	  (i = 0 through 7). 
 */
-class St : public AtomicOperand {
+class St : public Operand {
 	friend class Constants;
 	public:
 		virtual constexpr bool check() {
@@ -39,7 +39,7 @@ class St : public AtomicOperand {
 		virtual void write_att(std::ostream& os) const;
 		virtual void write_intel(std::ostream& os) const;
 	protected:
-		constexpr St(uint64_t val) : AtomicOperand{val} { } 
+		constexpr St(uint64_t val) : Operand{val} { } 
 };
 
 /** The top element of the FPU register stack. */
