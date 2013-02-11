@@ -33,7 +33,6 @@ limitations under the License.
 #include "src/moffs.h"
 #include "src/opcode.h"
 #include "src/operand.h"
-#include "src/properties.h"
 #include "src/r.h"
 #include "src/reg_set.h"
 #include "src/rel.h"

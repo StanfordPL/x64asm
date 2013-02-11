@@ -25,7 +25,6 @@ limitations under the License.
 
 #include "src/opcode.h"
 #include "src/operand.h"
-#include "src/properties.h"
 #include "src/reg_set.h"
 #include "src/type.h"
 #include "src/type_traits.h"

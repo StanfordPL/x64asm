@@ -33,6 +33,7 @@ limitations under the License.
 
 namespace x64asm {
 
+/** Predefined constants. */
 class Constants {
 	public:
 		static constexpr Eflags eflags_cf()   { return Eflags{0,1}; }
