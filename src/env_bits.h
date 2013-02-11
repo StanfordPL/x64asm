@@ -26,8 +26,10 @@ class EnvBits {
 	public:
 		constexpr size_t index() { return index_; }
 		constexpr size_t width() { return width_; }
+
 	protected:
 		constexpr EnvBits(size_t i, size_t w) : index_{i}, width_{w} { }
+
 	private:
 		const size_t index_;
 		const size_t width_;
@@ -36,6 +38,7 @@ class EnvBits {
 /** An EFLAGS register bit. */
 class Eflags : public EnvBits {
 	friend class Constants;
+
 	private:
 		constexpr Eflags(size_t i, size_t w) : EnvBits{i, w} { }
 };
@@ -43,6 +46,7 @@ class Eflags : public EnvBits {
 /** An FPU control register bit. */
 class FpuControl : public EnvBits {
 	friend class Constants;
+
 	private:
 		constexpr FpuControl(size_t i, size_t w) : EnvBits{i, w} { }
 };
@@ -50,6 +54,7 @@ class FpuControl : public EnvBits {
 /** An FPU status register bit. */
 class FpuStatus : public EnvBits {
 	friend class Constants;
+
 	private:
 		constexpr FpuStatus(size_t i, size_t w) : EnvBits{i, w} { }
 };
@@ -57,6 +62,7 @@ class FpuStatus : public EnvBits {
 /** An FPU tag register. */
 class FpuTag : public EnvBits {
 	friend class Constants;
+
 	private:
 		constexpr FpuTag(size_t i, size_t w) : EnvBits{i, w} { }
 };
@@ -64,6 +70,7 @@ class FpuTag : public EnvBits {
 /** An MXCSR register bit. */
 class Mxcsr : public EnvBits {
 	friend class Constants;
+
 	private:
 		constexpr Mxcsr(size_t i, size_t w) : EnvBits{i, w} { }
 };

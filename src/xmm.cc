@@ -34,11 +34,4 @@ void Xmm::write_intel(ostream& os) const {
 	os << "xmm" << dec << val_;
 }
 
-void Xmm::insert_in(RegSet& os, bool promote) const {
-	if ( promote )
-		os += parent();
-	else
-		os += *this;
-}
-
 } // namespace x64asm

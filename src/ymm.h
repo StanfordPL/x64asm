@@ -19,7 +19,6 @@ limitations under the License.
 
 #include <iostream>
 
-#include "src/op_type.h"
 #include "src/operand.h"
 
 namespace x64asm {
@@ -30,18 +29,19 @@ namespace x64asm {
 class Ymm : public Operand {
 	friend class Constants;
 	friend class Xmm;
+
 	public:
-		virtual constexpr bool check() {
+		constexpr bool check() {
 			return val_ < 16;
 		}
-		virtual constexpr OpType type() {
-			return OpType::YMM;
-		}
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
+
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
+
 	private:
-		constexpr Ymm(uint64_t val) : Operand{val} { } 
-		virtual void insert_in(RegSet& os, bool promote = false) const;
+		constexpr Ymm(uint64_t val) 
+				: Operand{val} { 
+		} 
 };
 
 } // namespace x64asm

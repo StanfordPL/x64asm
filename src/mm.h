@@ -19,7 +19,6 @@ limitations under the License.
 
 #include <iostream>
 
-#include "src/op_type.h"
 #include "src/operand.h"
 
 namespace x64asm {
@@ -27,18 +26,17 @@ namespace x64asm {
 /** An MMX register. The 64-bit MMX registers are: MM0 through MM7. */
 class Mm : public Operand {
 	friend class Constants;
+
 	public:
-		virtual constexpr bool check() {
+		constexpr bool check() {
 			return val_ < 8;
 		}
-		virtual constexpr OpType type() {
-			return OpType::MM;
-		}
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
+
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
+
 	private:
 		constexpr Mm(uint64_t val) : Operand{val} { }
-		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
 } // namespace x64asm

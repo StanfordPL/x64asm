@@ -29,16 +29,23 @@ namespace x64asm {
 class Code : public std::vector<Instruction> {
 	public:
 		Code()
-				: std::vector<Instruction>{} { }
+				: std::vector<Instruction>{} { 
+		}
+
 		Code(std::initializer_list<Instruction> is) 
-				: std::vector<Instruction>{is} { }
+				: std::vector<Instruction>{is} { 
+		}
+
 		template <typename InItr>
 		Code(InItr begin, InItr end) 
-				: std::vector<Instruction>{begin, end} { }
+				: std::vector<Instruction>{begin, end} { 
+		}
 
 		bool check() const;
+
 		void read_att(std::istream& is);
 		void read_intel(std::istream& is);
+
 		void write_att(std::ostream& os) const;
 		void write_intel(std::ostream& os) const;
 };

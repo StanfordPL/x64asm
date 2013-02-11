@@ -27,46 +27,68 @@ namespace x64asm {
 /** A modifier. */
 class Modifier : public Operand {
 	public:
-		virtual constexpr bool check() {
+		constexpr bool check() {
 			return val_ == 0;
 		}
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
+
 	protected:
-		constexpr Modifier(uint64_t val) : Operand{val} { }
+		constexpr Modifier(uint64_t val) 
+				: Operand{val} { 
+		}
 };
 
 /** The 32-bit memory address override prefix: 0x66. */
 class Pref66 : public Modifier {
 	friend class Constants;
+
 	public:
-		virtual constexpr OpType type() {
+		constexpr OpType type() {
 			return OpType::PREF_66;
 		}
+
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
+
 	private:
-		constexpr Pref66() : Modifier{0} { }
+		constexpr Pref66() 
+				: Modifier{0} { 
+		}
 };
 
 /** The REX.w prefix: 0x48. */
 class PrefRexW : public Modifier {
 	friend class Constants;
+
 	public:
-		virtual constexpr OpType type() {
+		constexpr OpType type() {
 			return OpType::PREF_REX_W;
 		}
+
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
+
 	private:
-		constexpr PrefRexW() : Modifier{0} { }
+		constexpr PrefRexW() 
+				: Modifier{0} { 
+		}
 };
 
 /** Far instruction variant. */
 class Far : public Modifier {
 	friend class Constants;
+
 	public:
-		virtual constexpr OpType type() {
+		constexpr OpType type() {
 			return OpType::FAR;
 		}
+
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
+
 	private:
-		constexpr Far() : Modifier{0} { }
+		constexpr Far() 
+				: Modifier{0} { 
+		}
 };
 
 } // namespace x64asm

@@ -19,7 +19,6 @@ limitations under the License.
 
 #include <iostream>
 
-#include "src/op_type.h"
 #include "src/operand.h"
 
 namespace x64asm {
@@ -29,31 +28,34 @@ namespace x64asm {
 */
 class St : public Operand {
 	friend class Constants;
+
 	public:
-		virtual constexpr bool check() {
+		constexpr bool check() {
 			return val_ < 8;
 		}
-		virtual constexpr OpType type() {
-			return OpType::ST;
-		}
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
+
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
+
 	protected:
-		constexpr St(uint64_t val) : Operand{val} { } 
+		constexpr St(uint64_t val) 
+				: Operand{val} { 
+		} 
 };
 
 /** The top element of the FPU register stack. */
 class St0 : public St {
 	friend class Constants;
+
 	public:
-		virtual constexpr bool check() {
+		constexpr bool check() {
 			return val_ == 0;
 		}
-		virtual constexpr OpType type() {
-			return OpType::ST_0;
-		}
+
 	private:
-		constexpr St0() : St{0} { }
+		constexpr St0() 
+				: St{0} { 
+		}
 };
 
 } // namespace x64asm

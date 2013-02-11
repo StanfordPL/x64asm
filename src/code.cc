@@ -18,8 +18,10 @@ limitations under the License.
 
 #include <sstream>
 
+/*
 #include "src/att.tab.c"
 #include "src/lex.att.c"
+*/
 
 using namespace std;
 
@@ -33,6 +35,7 @@ bool Code::check() const {
 }
 
 void Code::read_att(istream& is) {
+	/*
 	stringstream ss;
 	ss << is.rdbuf();
 
@@ -40,6 +43,7 @@ void Code::read_att(istream& is) {
 	att_switch_to_buffer(buffer);
 	attparse(is, *this);
 	att_delete_buffer(buffer);
+	*/
 }
 
 void Code::read_intel(istream& is) {

@@ -23,6 +23,7 @@ limitations under the License.
 #include "src/env_reg.h"
 #include "src/m.h"
 #include "src/mm.h"
+#include "src/moffs.h"
 #include "src/r.h"
 #include "src/sreg.h"
 #include "src/st.h"
@@ -356,6 +357,12 @@ class RegSet {
 		}
 
 		RegSet& operator+=(const M& rhs);
+
+		RegSet& operator+=(const Moffs& rhs) {
+			if ( rhs.contains_seg() )
+				*this += rhs.get_seg();
+			return *this;
+		}
 
 		// Queries
 

@@ -19,7 +19,6 @@ limitations under the License.
 
 #include <iostream>
 
-#include "src/op_type.h"
 #include "src/operand.h"
 
 namespace x64asm {
@@ -28,15 +27,15 @@ namespace x64asm {
 class Hint : public Operand {
 	friend class Assembler;
 	friend class Constants;
+
 	public:
-		virtual constexpr bool check() {
+		constexpr bool check() {
 			return val_ < 2;
 		}
-		virtual constexpr OpType type() {
-			return OpType::HINT;
-		}
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
+
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
+
 	private:
 		constexpr Hint(uint64_t val) : Operand{val} { }
 };

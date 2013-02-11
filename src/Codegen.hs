@@ -1220,8 +1220,7 @@ assm_src_defns is = intercalate "\n\n" $ map assm_src_defn is
 -- Assembler switch args
 assm_call_arg_list :: Instr -> String
 assm_call_arg_list i = intercalate ", " $ map arg $ zip [0..] (operands i)
-  where arg (i,a) = "*((" ++ (op2type a) ++ "*)&" ++ (elem i) ++ ")"
-        elem idx = "instr.get_operand(" ++ (show idx) ++ ")"
+  where arg (i,a) = "instr.get_operand<" ++ (op2type a) ++ ">(" ++ (show i) ++ ")"
 
 -- Assembler switch call
 assm_call :: Instr -> String

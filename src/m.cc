@@ -16,8 +16,6 @@ limitations under the License.
 
 #include "src/m.h"
 
-#include "src/reg_set.h"
-
 using namespace std;
 
 namespace x64asm {
@@ -145,10 +143,6 @@ void M::write_intel(ostream& os) const {
 
 void M::write_intel_width(ostream& os) const {
 	assert(false);
-}
-
-void M::insert_in(RegSet& os, bool promote) const {
-	os += *this;
 }
 
 void M8::write_intel_width(ostream& os) const {

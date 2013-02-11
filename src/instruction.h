@@ -21,13 +21,14 @@ limitations under the License.
 #include <cassert>
 #include <initializer_list>
 #include <iostream>
+#include <type_traits>
 
-#include "src/imm.h"
 #include "src/opcode.h"
 #include "src/operand.h"
 #include "src/op_type.h"
 #include "src/properties.h"
 #include "src/reg_set.h"
+#include "src/type_traits.h"
 
 namespace x64asm {
 
@@ -59,9 +60,11 @@ class Instruction {
 			opcode_ = o;
 		}
 
-		const Operand& get_operand(size_t index) const {
+		template <typename T>
+		typename std::enable_if<is_operand<T>::value, const T&>::type
+		get_operand(size_t index) const {
 			assert(index < operands_.size());
-			return operands_[index];
+			return reinterpret_cast<const T&>(operands_[index]);
 		}
 
 		void set_operand(size_t index, const Operand& o) {

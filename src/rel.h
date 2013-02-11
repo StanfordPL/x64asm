@@ -17,7 +17,8 @@ limitations under the License.
 #ifndef X64ASM_SRC_REL_H
 #define X64ASM_SRC_REL_H
 
-#include "src/op_type.h"
+#include <iostream>
+
 #include "src/operand.h"
 
 namespace x64asm {
@@ -25,10 +26,13 @@ namespace x64asm {
 /** A relative address. */
 class Rel : public Operand {
 	public:
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
+
 	protected:
-		constexpr Rel(uint64_t val) : Operand{val} { }
+		constexpr Rel(uint64_t val) 
+				: Operand{val} { 
+		}
 };
 
 /** A relative address in the range from 128 bytes before the end of the 
@@ -36,12 +40,12 @@ class Rel : public Operand {
 */
 class Rel8 : public Rel {
 	public:
-		constexpr Rel8(int8_t val) : Rel{(uint64_t)val} { }
-		virtual constexpr bool check() {
-			return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
+		constexpr Rel8(int8_t val) 
+				: Rel{(uint64_t)val} { 
 		}
-		virtual constexpr OpType type() {
-			return OpType::REL_8;
+
+		constexpr bool check() {
+			return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
 		}
 };
 
@@ -51,12 +55,12 @@ class Rel8 : public Rel {
 */
 class Rel32 : public Rel {
 	public:
-		constexpr Rel32(int64_t val) : Rel{(uint64_t)val} { }
-		virtual constexpr bool check() {
-			return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
+		constexpr Rel32(int64_t val) 
+				: Rel{(uint64_t)val} { 
 		}
-		virtual constexpr OpType type() {
-			return OpType::REL_32;
+
+		constexpr bool check() {
+			return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
 		}
 };
 

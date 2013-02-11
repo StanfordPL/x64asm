@@ -71,23 +71,29 @@ class Function {
 		uint64_t operator()() {
 			return ((f0_type)(buffer_))();
 		}
+
 		uint64_t operator()(uint64_t rdi) {
 			return ((f1_type)(buffer_))(rdi);
 		}
+
 		uint64_t operator()(uint64_t rdi, uint64_t rsi) {
 			return ((f2_type)(buffer_))(rdi, rsi);
 		}
+
 		uint64_t operator()(uint64_t rdi, uint64_t rsi, uint64_t rdx) {
 			return ((f3_type)(buffer_))(rdi, rsi, rdx);
 		}
+
 		uint64_t operator()(uint64_t rdi, uint64_t rsi, uint64_t rdx,
 				                       uint64_t rcx) {
 			return ((f4_type)(buffer_))(rdi, rsi, rdx, rcx);
 		}
+
 		uint64_t operator()(uint64_t rdi, uint64_t rsi, uint64_t rdx,
 				                       uint64_t rcx, uint64_t r8) {
 			return ((f5_type)(buffer_))(rdi, rsi, rdx, rcx, r8);
 		}
+
 		uint64_t operator()(uint64_t rdi, uint64_t rsi, uint64_t rdx,
 				                       uint64_t rcx, uint64_t r8,  uint64_t r9) {
 			return ((f6_type)(buffer_))(rdi, rsi, rdx, rcx, r8, r9);

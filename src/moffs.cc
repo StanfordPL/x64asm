@@ -20,14 +20,6 @@ using namespace std;
 
 namespace x64asm {
 
-bool Moffs::check() const {
-	if ( contains_seg() && !get_seg().check() )
-		return false;
-	if ( !get_offset().check() )
-		return false;
-	return true;
-}
-
 void Moffs::write_att(ostream& os) const {
 	if ( contains_seg() ) {
 		get_seg().write_att(os);

@@ -21,10 +21,20 @@ limitations under the License.
 #include <stdint.h>
 
 #include "src/code.h"
-#include "src/env_bits.h"
-#include "src/env_reg.h"
+#include "src/hint.h"
+#include "src/imm.h"
 #include "src/instruction.h"
-#include "src/operand.h"
+#include "src/label.h"
+#include "src/m.h"
+#include "src/mm.h"
+#include "src/modifier.h"
+#include "src/moffs.h"
+#include "src/r.h"
+#include "src/rel.h"
+#include "src/sreg.h"
+#include "src/st.h"
+#include "src/xmm.h"
+#include "src/ymm.h"
 
 namespace x64asm {
 
@@ -42,7 +52,61 @@ std::ostream& operator<<(std::ostream& os, const x64asm::Syntax s);
 std::istream& operator>>(std::istream& is, x64asm::Code& c);
 
 std::ostream& operator<<(std::ostream& os, const x64asm::Code& c);
+std::ostream& operator<<(std::ostream& os, const x64asm::Hint& h);
+std::ostream& operator<<(std::ostream& os, const x64asm::Imm8& i);
+std::ostream& operator<<(std::ostream& os, const x64asm::Imm16& i);
+std::ostream& operator<<(std::ostream& os, const x64asm::Imm32& i);
+std::ostream& operator<<(std::ostream& os, const x64asm::Imm64& i);
+std::ostream& operator<<(std::ostream& os, const x64asm::Zero& z);
+std::ostream& operator<<(std::ostream& os, const x64asm::One& o);
+std::ostream& operator<<(std::ostream& os, const x64asm::Three& t);
 std::ostream& operator<<(std::ostream& os, const x64asm::Instruction& i);
-std::ostream& operator<<(std::ostream& os, const x64asm::Operand& o);
+std::ostream& operator<<(std::ostream& os, const x64asm::Label& l);
+std::ostream& operator<<(std::ostream& os, const x64asm::M8& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::M16& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::M32& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::M64& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::M128& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::M256& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::M16Int& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::M32Int& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::M64Int& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::M32Fp& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::M64Fp& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::M80Fp& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::M80Bcd& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::FarPtr1616& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::FarPtr1632& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::FarPtr1664& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::Mm& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::Pref66& p);
+std::ostream& operator<<(std::ostream& os, const x64asm::PrefRexW& p);
+std::ostream& operator<<(std::ostream& os, const x64asm::Far& f);
+std::ostream& operator<<(std::ostream& os, const x64asm::Moffs8& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::Moffs16& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::Moffs32& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::Moffs64& m);
+std::ostream& operator<<(std::ostream& os, const x64asm::Rl& r);
+std::ostream& operator<<(std::ostream& os, const x64asm::Rh& r);
+std::ostream& operator<<(std::ostream& os, const x64asm::Rb& r);
+std::ostream& operator<<(std::ostream& os, const x64asm::Al& r);
+std::ostream& operator<<(std::ostream& os, const x64asm::Cl& r);
+std::ostream& operator<<(std::ostream& os, const x64asm::R16& r);
+std::ostream& operator<<(std::ostream& os, const x64asm::Ax& r);
+std::ostream& operator<<(std::ostream& os, const x64asm::Dx& r);
+std::ostream& operator<<(std::ostream& os, const x64asm::R32& r);
+std::ostream& operator<<(std::ostream& os, const x64asm::Eax& r);
+std::ostream& operator<<(std::ostream& os, const x64asm::R64& r);
+std::ostream& operator<<(std::ostream& os, const x64asm::Rax& r);
+std::ostream& operator<<(std::ostream& os, const x64asm::Rel8& r);
+std::ostream& operator<<(std::ostream& os, const x64asm::Rel32& r);
+std::ostream& operator<<(std::ostream& os, const x64asm::Sreg& s);
+std::ostream& operator<<(std::ostream& os, const x64asm::Fs& s);
+std::ostream& operator<<(std::ostream& os, const x64asm::Gs& s);
+std::ostream& operator<<(std::ostream& os, const x64asm::St& s);
+std::ostream& operator<<(std::ostream& os, const x64asm::St0& s);
+std::ostream& operator<<(std::ostream& os, const x64asm::Xmm& x);
+std::ostream& operator<<(std::ostream& os, const x64asm::Xmm0& x);
+std::ostream& operator<<(std::ostream& os, const x64asm::Ymm& y);
 
 #endif

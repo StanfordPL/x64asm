@@ -40,7 +40,7 @@ void Assembler::write_hex(std::ostream& os, const Code& c) {
 void Assembler::assemble(const Instruction& instr) {
 	switch ( instr.get_opcode() ) {
 		case LABEL_DEFN:
-			bind(instr.get_operand(0).val_);
+			bind(instr.get_operand<Label>(0));
 			break;
    	// 4000-way switch
 		#include "src/assembler.switch"

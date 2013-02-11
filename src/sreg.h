@@ -19,7 +19,6 @@ limitations under the License.
 
 #include <iostream>
 
-#include "src/op_type.h"
 #include "src/operand.h"
 
 namespace x64asm {
@@ -31,45 +30,49 @@ class Sreg : public Operand {
 	friend class Constants;
 	friend class M;
 	friend class Moffs;
+
 	public:
-		virtual constexpr bool check() {
+		constexpr bool check() {
 			return val_ < 6;
 		}
-		virtual constexpr OpType type() {
-			return OpType::SREG;
-		}
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
+
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
+
 	protected:
-		constexpr Sreg(uint64_t val) : Operand{val} { }
+		constexpr Sreg(uint64_t val) 
+				: Operand{val} { 
+		}
 };
 
 /** The segment register FS. */
 class Fs : public Sreg {
 	friend class Constants;
+
 	public:
-		virtual constexpr bool check() {
+		constexpr bool check() {
 			return val_ == 4;
 		}
-		virtual constexpr OpType type() {
-			return OpType::FS;
-		}
+
 	private:
-		constexpr Fs() : Sreg{4} { }
+		constexpr Fs() 
+				: Sreg{4} { 
+		}
 };
 
 /** The segment register GS. */
 class Gs : public Sreg {
 	friend class Constants;
+
 	public:
-		virtual constexpr bool check() {
+		constexpr bool check() {
 			return val_ == 5;
 		}
-		virtual constexpr OpType type() {
-			return OpType::GS;
-		}
+
 	private:
-		constexpr Gs() : Sreg{5} { }
+		constexpr Gs() 
+				: Sreg{5} { 
+		}
 };
 
 } // namespace x64asm

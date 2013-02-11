@@ -19,7 +19,6 @@ limitations under the License.
 
 #include <iostream>
 
-#include "src/op_type.h"
 #include "src/operand.h"
 
 namespace x64asm {
@@ -27,8 +26,9 @@ namespace x64asm {
 /** An immediate value. */
 class Imm : public Operand {
 	public:
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
+
 	protected:	
 		constexpr Imm(uint64_t val) : Operand{val} { }
 };
@@ -41,12 +41,12 @@ class Imm : public Operand {
 */
 class Imm8 : public Imm {
 	public:
-		constexpr Imm8(uint64_t i) : Imm{i} { }
-		virtual constexpr bool check() {
-			return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
+		constexpr Imm8(uint64_t i) 
+				: Imm{i} { 
 		}
-		virtual constexpr OpType type() {
-			return OpType::IMM_8;
+
+		constexpr bool check() {
+			return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
 		}
 };
 
@@ -55,12 +55,12 @@ class Imm8 : public Imm {
 */
 class Imm16 : public Imm {
 	public:
-		constexpr Imm16(uint64_t i) : Imm{i} { }
-		virtual constexpr bool check() {
-			return (int64_t)val_ >= -32768 && (int64_t)val_ < 32768;
+		constexpr Imm16(uint64_t i) 
+				: Imm{i} { 
 		}
-		virtual constexpr OpType type() {
-			return OpType::IMM_16;
+
+		constexpr bool check() {
+			return (int64_t)val_ >= -32768 && (int64_t)val_ < 32768;
 		}
 };
 
@@ -70,12 +70,12 @@ class Imm16 : public Imm {
 */
 class Imm32 : public Imm {
 	public:
-		constexpr Imm32(uint64_t i) : Imm{i} { }
-		virtual constexpr bool check() {
-			return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
+		constexpr Imm32(uint64_t i) 
+				: Imm{i} { 
 		}
-		virtual constexpr OpType type() {
-			return OpType::IMM_32;
+
+		constexpr bool check() {
+			return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
 		}
 };
 
@@ -85,57 +85,63 @@ class Imm32 : public Imm {
 */
 class Imm64 : public Imm {
 	public:
-		constexpr Imm64(uint64_t i) : Imm{i} { }
-		template <typename T>
-		constexpr Imm64(T* t) : Imm{(uint64_t)t} { }
-		virtual constexpr bool check() {
-			return true;
+		constexpr Imm64(uint64_t i) 
+				: Imm{i} { 
 		}
-		virtual constexpr OpType type() {
-			return OpType::IMM_64;
+
+		template <typename T>
+		constexpr Imm64(T* t) 
+				: Imm{(uint64_t)t} { 
+		}
+
+		constexpr bool check() {
+			return true;
 		}
 };
 
 /** The immediate constant value zero */
 class Zero : public Imm8 {
 	friend class Constants;
+
 	public:	
-		virtual constexpr bool check() {
+		constexpr bool check() {
 			return val_ == 0;
 		}
-		virtual constexpr OpType type() {
-			return OpType::ZERO;
-		}
+
 	private:
-		constexpr Zero() : Imm8{0} { }
+		constexpr Zero() 
+				: Imm8{0} { 
+		}
 };
 
 /** The immediate constant value one */
 class One : public Imm8 {
 	friend class Constants;
+
 	public:
-		virtual constexpr bool check() {
+		constexpr bool check() {
 			return val_ == 1;
 		}
-		virtual constexpr OpType type() {
-			return OpType::ONE;
-		}
+
 	private:
-		constexpr One() : Imm8{1} { }
+		constexpr One() 
+				: Imm8{1} { 
+		}
 };
 
 /** The immediate constant value three */
 class Three : public Imm8 {
 	friend class Constants;
+
 	public:
-		virtual constexpr bool check() {
+		constexpr bool check() {
 			return val_ == 3;
 		}
-		virtual constexpr OpType type() {
-			return OpType::THREE;
-		}
+
 	private:
-		constexpr Three() : Imm8{3} { }
+		constexpr Three() 
+				: Imm8{3} { 
+		}
 };
 
 } // namespace x64asm

@@ -44,13 +44,6 @@ void Rl::write_intel(ostream& os) const {
 	}
 }
 
-void Rl::insert_in(RegSet& os, bool promote) const {
-	if ( promote )
-		os += parent();
-	else
-		os += *this;
-}
-
 R64 Rh::parent() const {
 	return R64{val_-4};
 }
@@ -69,13 +62,6 @@ void Rh::write_intel(ostream& os) const {
 
 		default: assert(false);
 	}
-}
-
-void Rh::insert_in(RegSet& os, bool promote) const {
-	if ( promote )
-		os += parent();
-	else
-		os += *this;
 }
 
 void Rb::write_att(ostream& os) const {
@@ -100,13 +86,6 @@ void Rb::write_intel(ostream& os) const {
 
 		default: assert(false);
 	}
-}
-
-void Rb::insert_in(RegSet& os, bool promote) const {
-	if ( promote )
-		os += parent();
-	else
-		os += *this;
 }
 
 void R16::write_att(ostream& os) const {
@@ -137,13 +116,6 @@ void R16::write_intel(ostream& os) const {
 	}
 }
 
-void R16::insert_in(RegSet& os, bool promote) const {
-	if ( promote )
-		os += parent();
-	else
-		os += *this;
-}
-
 void R32::write_att(ostream& os) const {
 	os << "%";
 	write_intel(os);
@@ -172,13 +144,6 @@ void R32::write_intel(ostream& os) const {
 	}
 }
 
-void R32::insert_in(RegSet& os, bool promote) const {
-	if ( promote )
-		os += parent();
-	else
-		os += *this;
-}
-
 void R64::write_att(ostream& os) const {
 	os << "%";
 	write_intel(os);
@@ -205,13 +170,6 @@ void R64::write_intel(ostream& os) const {
 
 		default: assert(false);
 	}
-}
-
-void R64::insert_in(RegSet& os, bool promote) const {
-	if ( promote )
-		os += parent();
-	else
-		os += *this;
 }
 
 } // namespace x64asm

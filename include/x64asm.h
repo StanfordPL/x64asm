@@ -41,6 +41,7 @@ limitations under the License.
 #include "src/sreg.h"
 #include "src/stream.h"
 #include "src/st.h"
+#include "src/type_traits.h"
 #include "src/xmm.h"
 #include "src/ymm.h"
 

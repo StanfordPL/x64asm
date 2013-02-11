@@ -19,7 +19,6 @@ limitations under the License.
 
 #include <iostream>
 
-#include "src/op_type.h"
 #include "src/operand.h"
 
 namespace x64asm {
@@ -29,15 +28,16 @@ namespace x64asm {
 */
 class Label : public Operand {
 	public:
-		constexpr Label(uint64_t val) : Operand{val} { } 
-		virtual constexpr bool check() {
+		constexpr Label(uint64_t val) 
+				: Operand{val} { 
+		}
+
+		constexpr bool check() {
 			return true;
 		}
-		virtual constexpr OpType type() {
-			return OpType::LABEL;
-		}
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
+
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 } // namespace x64asm

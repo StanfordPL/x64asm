@@ -32,20 +32,21 @@ class Moffs : public Operand {
 		enum class Null : uint64_t {
 			SEG = 0x0000000000000007
 		};
+
 		enum class Mask : uint64_t {
 			SEG = 0x0000000000000007
 		};
 
 	public:
-		bool contains_seg() const {
+		constexpr bool contains_seg() {
 			return (val2_ & (uint64_t)Mask::SEG) != (uint64_t)Null::SEG;
 		}
 
-		Sreg get_seg() const {
+		constexpr Sreg get_seg() {
 			return Sreg{val2_};
 		}
 
-		Imm64 get_offset() const {
+		constexpr Imm64 get_offset() {
 			return Imm64{val_};
 		}
 
@@ -61,14 +62,18 @@ class Moffs : public Operand {
 			set_seg(Sreg{(uint64_t)Null::SEG});
 		}
 
-		virtual bool check() const; 
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
+		constexpr bool check() {
+			return (!contains_seg() || get_seg().check()) && get_offset().check();
+		}
+
+		void write_att(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 
 	protected:
 		constexpr Moffs(const Sreg& seg, const Imm64& offset) 
 				: Operand{offset.val_, seg.val_} { 
 		}
+
 		constexpr Moffs(const Imm64& offset) 
 				: Operand{offset.val_, (uint64_t)Null::SEG} { 
 		}
@@ -80,10 +85,12 @@ class Moffs8 : public Moffs {
 		constexpr Moffs8(const Sreg& seg, const Imm64& offset) 
 				: Moffs{seg, offset} { 
 		}
+
 		constexpr Moffs8(const Imm64& offset) 
 				: Moffs{offset} { 
 		}
-		virtual constexpr OpType type() {
+
+		constexpr OpType type() {
 			return OpType::MOFFS_8;
 		}
 };
@@ -94,10 +101,12 @@ class Moffs16 : public Moffs {
 		constexpr Moffs16(const Sreg& seg, const Imm64& offset) 
 				: Moffs{seg, offset} { 
 		}
+
 		constexpr Moffs16(const Imm64& offset) 
 				: Moffs{offset} { 
 		}
-		virtual constexpr OpType type() {
+
+		constexpr OpType type() {
 			return OpType::MOFFS_16;
 		}
 };
@@ -108,10 +117,12 @@ class Moffs32 : public Moffs {
 		constexpr Moffs32(const Sreg& seg, const Imm64& offset) 
 				: Moffs{seg, offset} { 
 		}
+
 		constexpr Moffs32(const Imm64& offset) 
 				: Moffs{offset} { 
 		}
-		virtual constexpr OpType type() {
+
+		constexpr OpType type() {
 			return OpType::MOFFS_32;
 		}
 };
@@ -122,10 +133,12 @@ class Moffs64 : public Moffs {
 		constexpr Moffs64(const Sreg& seg, const Imm64& offset) 
 				: Moffs{seg, offset} { 
 		}
+
 		constexpr Moffs64(const Imm64& offset) 
 				: Moffs{offset} { 
 		}
-		virtual constexpr OpType type() {
+
+		constexpr OpType type() {
 			return OpType::MOFFS_64;
 		}
 };

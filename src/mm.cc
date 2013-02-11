@@ -16,8 +16,6 @@ limitations under the License.
 
 #include "src/mm.h"
 
-#include "src/reg_set.h"
-
 #include <cassert>
 
 using namespace std;
@@ -32,10 +30,6 @@ void Mm::write_att(ostream& os) const {
 void Mm::write_intel(ostream& os) const {
 	assert(check());
 	os << "mm" << dec << val_;
-}
-
-void Mm::insert_in(RegSet& os, bool promote) const {
-	os += *this;
 }
 
 } // namespace x64asm

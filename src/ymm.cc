@@ -16,8 +16,6 @@ limitations under the License.
 
 #include "src/ymm.h"
 
-#include "src/reg_set.h"
-
 #include <cassert>
 
 using namespace std;
@@ -32,10 +30,6 @@ void Ymm::write_att(ostream& os) const {
 void Ymm::write_intel(ostream& os) const {
 	assert(check());
 	os << "ymm" << dec << val_;
-}
-
-void Ymm::insert_in(RegSet& os, bool promote) const {
-	os += *this;
 }
 
 } // namespace x64asm

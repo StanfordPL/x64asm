@@ -29,7 +29,6 @@ OBJ=src/assembler.o \
 		src/mm.o \
 		src/modifier.o \
 		src/moffs.o \
-		src/operand.o \
 		src/r.o \
 		src/reg_set.o \
 		src/rel.o \

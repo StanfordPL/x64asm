@@ -139,7 +139,7 @@ const Instruction* to_instr(const std::string& opc,
 
 		auto match = true;
 		for ( size_t i = 0; i < arity; ++i ) 
-			match &= is_a(ops[i]->type(), entry.second[i]);
+			//match &= is_a(ops[i]->type(), entry.second[i]);
 
 		if ( match ) {
 			// Promotion goes here.

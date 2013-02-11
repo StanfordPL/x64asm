@@ -18,11 +18,7 @@ limitations under the License.
 #define X64ASM_SRC_OPERAND_H
 
 #include <array>
-#include <cassert>
-#include <iostream>
 #include <stdint.h>
-
-#include "src/op_type.h"
 
 namespace x64asm {
 
@@ -36,23 +32,14 @@ class Operand {
 	friend class M;
 	friend class Moffs;
 	friend class RegSet;
-	public:
-		virtual constexpr bool check() {
-			return true;
-		}
-		virtual constexpr OpType type() {
-			return OpType::OPERAND;
-		}
-		virtual void write_att(std::ostream& os) const;
-		virtual void write_intel(std::ostream& os) const;
+
 	protected:
 		constexpr Operand() : val_{0}, val2_{0} { }	
 		constexpr Operand(uint64_t val) : val_{val}, val2_{0} { }	
 		constexpr Operand(uint64_t val, uint64_t val2) : val_{val}, val2_{val2} { }
+
 		uint64_t val_;
 		uint64_t val2_;
-	private:
-		virtual void insert_in(RegSet& os, bool promote = false) const;
 };
 
 } // namespace x64asm
