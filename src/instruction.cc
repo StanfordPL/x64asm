@@ -47,8 +47,7 @@ array<const char*, 3257> intel_ {{
 
 namespace x64asm {
 
-RegSet Instruction::explicit_must_read_set() const {
-	auto ret = RegSet::empty();
+RegSet& Instruction::explicit_must_read_set(RegSet& ret) const {
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
 		switch ( type(i) ) {
 			case Type::M_8:
@@ -80,7 +79,7 @@ RegSet Instruction::explicit_must_read_set() const {
 			default: break;
 		}
 
-		if ( !properties(i).contains(Property::MUST_READ) )
+		if ( !must_read(i) )
 			continue;
 
 		switch ( type(i) ) {
@@ -113,8 +112,7 @@ RegSet Instruction::explicit_must_read_set() const {
 	return ret;
 }
 
-RegSet Instruction::explicit_maybe_read_set() const {
-	auto ret = RegSet::empty();
+RegSet& Instruction::explicit_maybe_read_set(RegSet& ret) const {
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
 		switch ( type(i) ) {
 			case Type::M_8:
@@ -146,7 +144,7 @@ RegSet Instruction::explicit_maybe_read_set() const {
 			default: break;
 		}
 
-		if ( !properties(i).contains(Property::MAYBE_READ) )
+		if ( !maybe_read(i) )
 			continue;
 
 		switch ( type(i) ) {
@@ -179,10 +177,9 @@ RegSet Instruction::explicit_maybe_read_set() const {
 	return ret;
 }
 
-RegSet Instruction::explicit_must_write_set() const {
-	auto ret = RegSet::empty();
+RegSet& Instruction::explicit_must_write_set(RegSet& ret) const {
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
-		if ( properties(i).contains(Property::MUST_WRITE_ZX) )
+		if ( must_extend(i) ) 
 			switch ( type(i) ) {
 				case Type::EAX: 
 				case Type::R_32: ret += get_operand<R64>(i); break;
@@ -190,7 +187,7 @@ RegSet Instruction::explicit_must_write_set() const {
 				case Type::XMM: ret += get_operand<Ymm>(i); break;
 				default: assert(false); break;
 			}
-		else if ( properties(i).contains(Property::MUST_WRITE) )
+		else if ( must_write(i) ) 
 			switch ( type(i) ) {
 				case Type::MM: ret += get_operand<Mm>(i); break;
 				case Type::RH: ret += get_operand<Rh>(i); break;
@@ -221,10 +218,9 @@ RegSet Instruction::explicit_must_write_set() const {
 	return ret;
 }
 
-RegSet Instruction::explicit_maybe_write_set() const {
-	auto ret = RegSet::empty();
+RegSet& Instruction::explicit_maybe_write_set(RegSet& ret) const {
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
-		if ( properties(i).contains(Property::MAYBE_WRITE_ZX) )
+		if ( maybe_extend(i) ) 
 			switch ( type(i) ) {
 				case Type::EAX: 
 				case Type::R_32: ret += get_operand<R64>(i); break;
@@ -232,7 +228,7 @@ RegSet Instruction::explicit_maybe_write_set() const {
 				case Type::XMM: ret += get_operand<Ymm>(i); break;
 				default: assert(false); break;
 			}
-		else if ( properties(i).contains(Property::MAYBE_WRITE) )
+		else if ( maybe_write(i) )
 			switch ( type(i) ) {
 				case Type::MM: ret += get_operand<Mm>(i); break;
 				case Type::RH: ret += get_operand<Rh>(i); break;
@@ -263,10 +259,9 @@ RegSet Instruction::explicit_maybe_write_set() const {
 	return ret;
 }
 
-RegSet Instruction::explicit_must_undef_set() const {
-	auto ret = RegSet::empty();
+RegSet& Instruction::explicit_must_undef_set(RegSet& ret) const {
 	for ( size_t i = 0, ie = arity(); i < ie; ++i )
-		if ( properties(i).contains(Property::MUST_UNDEF) )
+		if ( must_undef(i) )
 			switch ( type(i) ) {
 				case Type::MM: ret += get_operand<Mm>(i); break;
 				case Type::RH: ret += get_operand<Rh>(i); break;
@@ -296,10 +291,9 @@ RegSet Instruction::explicit_must_undef_set() const {
 	return ret;
 }
 
-RegSet Instruction::explicit_maybe_undef_set() const {
-	auto ret = RegSet::empty();
+RegSet& Instruction::explicit_maybe_undef_set(RegSet& ret) const {
 	for ( size_t i = 0, ie = arity(); i < ie; ++i )
-		if ( properties(i).contains(Property::MAYBE_UNDEF) )
+		if ( maybe_undef(i) )
 			switch ( type(i) ) {
 				case Type::MM: ret += get_operand<Mm>(i); break;
 				case Type::RH: ret += get_operand<Rh>(i); break;
@@ -703,7 +697,7 @@ const array<size_t, 3257> Instruction::arity_ {{
 	#include "src/arity.table"
 }};
 
-const array<array<Properties, 4>, 3257> Instruction::properties_ {{
+const array<array<Instruction::Properties, 4>, 3257> Instruction::properties_ {{
 	// Internal mnemonics
 	{{}}
 	// Auto-generated mnemonics

@@ -41,7 +41,6 @@ limitations under the License.
 #include "src/stream.h"
 #include "src/st.h"
 #include "src/type.h"
-#include "src/type_traits.h"
 #include "src/xmm.h"
 #include "src/ymm.h"
 
