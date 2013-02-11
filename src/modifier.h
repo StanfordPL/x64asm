@@ -19,7 +19,6 @@ limitations under the License.
 
 #include <iostream>
 
-#include "src/op_type.h"
 #include "src/operand.h"
 
 namespace x64asm {
@@ -42,10 +41,6 @@ class Pref66 : public Modifier {
 	friend class Constants;
 
 	public:
-		constexpr OpType type() {
-			return OpType::PREF_66;
-		}
-
 		void write_att(std::ostream& os) const;
 		void write_intel(std::ostream& os) const;
 
@@ -60,10 +55,6 @@ class PrefRexW : public Modifier {
 	friend class Constants;
 
 	public:
-		constexpr OpType type() {
-			return OpType::PREF_REX_W;
-		}
-
 		void write_att(std::ostream& os) const;
 		void write_intel(std::ostream& os) const;
 
@@ -78,10 +69,6 @@ class Far : public Modifier {
 	friend class Constants;
 
 	public:
-		constexpr OpType type() {
-			return OpType::FAR;
-		}
-
 		void write_att(std::ostream& os) const;
 		void write_intel(std::ostream& os) const;
 

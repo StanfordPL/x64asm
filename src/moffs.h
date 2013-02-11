@@ -19,7 +19,6 @@ limitations under the License.
 
 #include <iostream>
 
-#include "src/op_type.h"
 #include "src/operand.h"
 #include "src/sreg.h"
 #include "src/imm.h"
@@ -89,10 +88,6 @@ class Moffs8 : public Moffs {
 		constexpr Moffs8(const Imm64& offset) 
 				: Moffs{offset} { 
 		}
-
-		constexpr OpType type() {
-			return OpType::MOFFS_8;
-		}
 };
 
 /** A simple memory variable (memory offset) of type word. */
@@ -104,10 +99,6 @@ class Moffs16 : public Moffs {
 
 		constexpr Moffs16(const Imm64& offset) 
 				: Moffs{offset} { 
-		}
-
-		constexpr OpType type() {
-			return OpType::MOFFS_16;
 		}
 };
 
@@ -121,10 +112,6 @@ class Moffs32 : public Moffs {
 		constexpr Moffs32(const Imm64& offset) 
 				: Moffs{offset} { 
 		}
-
-		constexpr OpType type() {
-			return OpType::MOFFS_32;
-		}
 };
 
 /** A simple memory variable (memory offset) of type quadword. */
@@ -136,10 +123,6 @@ class Moffs64 : public Moffs {
 
 		constexpr Moffs64(const Imm64& offset) 
 				: Moffs{offset} { 
-		}
-
-		constexpr OpType type() {
-			return OpType::MOFFS_64;
 		}
 };
 

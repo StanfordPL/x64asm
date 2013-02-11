@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef X64ASM_SRC_OP_TYPE_H
-#define X64ASM_SRC_OP_TYPE_H
+#ifndef X64ASM_SRC_TYPE_H
+#define X64ASM_SRC_TYPE_H
 
 namespace x64asm {
 
 /** Any of the types which appear in the Intel Manual. */
-enum class OpType {
+enum class Type {
 	HINT = 0,
 
 	IMM_8,

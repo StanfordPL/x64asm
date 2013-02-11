@@ -25,9 +25,9 @@ limitations under the License.
 
 #include "src/opcode.h"
 #include "src/operand.h"
-#include "src/op_type.h"
 #include "src/properties.h"
 #include "src/reg_set.h"
+#include "src/type.h"
 #include "src/type_traits.h"
 
 namespace x64asm {
@@ -83,7 +83,7 @@ class Instruction {
 			return properties_[get_opcode()][index];
 		}
 
-		OpType type(size_t index) const {
+		Type type(size_t index) const {
 			assert((size_t)get_opcode() < type_.size());
 			assert(index < type_[get_opcode()].size());
 			return type_[get_opcode()][index];
@@ -190,7 +190,7 @@ class Instruction {
 
 		static const std::array<size_t, 3257> arity_;
 		static const std::array<std::array<Properties, 4>, 3257> properties_;
-		static const std::array<std::array<OpType, 4>, 3257> type_;
+		static const std::array<std::array<Type, 4>, 3257> type_;
 		static const std::array<bool, 3257> is_return_;
 		static const std::array<bool, 3257> is_nop_;
 		static const std::array<bool, 3257> is_jump_;

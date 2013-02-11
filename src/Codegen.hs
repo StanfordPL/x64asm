@@ -791,7 +791,7 @@ properties_table is = to_table is properties_row
 
 -- Creates an entry for a type row
 type_elem :: String -> String
-type_elem o = "OpType::" ++ (op2tag o)
+type_elem o = "Type::" ++ (op2tag o)
 
 -- Converts an instruction to type table row
 type_row :: Instr -> String
@@ -1252,7 +1252,7 @@ att_group is = groupBy (\x y -> (att x) == (att y)) is'
 att_row_elem :: Instr -> String
 att_row_elem i = "{" ++ e ++ ", {" ++ ops ++ "}}"
   where e = opcode_enum i
-        ops = intercalate "," $ map (("OpType::"++).op2tag) $ reverse $ operands i
+        ops = intercalate "," $ map (("Type::"++).op2tag) $ reverse $ operands i
 
 -- Generates a row in the at&t parse table
 att_row :: [Instr] -> String

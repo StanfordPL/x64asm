@@ -51,31 +51,31 @@ RegSet Instruction::explicit_must_read_set() const {
 	auto ret = RegSet::empty();
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
 		switch ( type(i) ) {
-			case OpType::M_8:
-			case OpType::M_16:
-			case OpType::M_32:
-			case OpType::M_64:
-			case OpType::M_128:
-			case OpType::M_256:
-			case OpType::M_16_INT:
-			case OpType::M_32_INT:
-			case OpType::M_64_INT:
-			case OpType::M_32_FP:
-			case OpType::M_64_FP:
-			case OpType::M_80_FP:
-			case OpType::M_80_BCD:
-			case OpType::M_2_BYTE:
-			case OpType::M_28_BYTE:
-			case OpType::M_108_BYTE:
-			case OpType::M_512_BYTE:
-			case OpType::FAR_PTR_16_16:
-			case OpType::FAR_PTR_16_32:
-			case OpType::FAR_PTR_16_64: ret += get_operand<M8>(i); continue;
+			case Type::M_8:
+			case Type::M_16:
+			case Type::M_32:
+			case Type::M_64:
+			case Type::M_128:
+			case Type::M_256:
+			case Type::M_16_INT:
+			case Type::M_32_INT:
+			case Type::M_64_INT:
+			case Type::M_32_FP:
+			case Type::M_64_FP:
+			case Type::M_80_FP:
+			case Type::M_80_BCD:
+			case Type::M_2_BYTE:
+			case Type::M_28_BYTE:
+			case Type::M_108_BYTE:
+			case Type::M_512_BYTE:
+			case Type::FAR_PTR_16_16:
+			case Type::FAR_PTR_16_32:
+			case Type::FAR_PTR_16_64: ret += get_operand<M8>(i); continue;
 
-			case OpType::MOFFS_8:
-			case OpType::MOFFS_16:
-			case OpType::MOFFS_32:
-			case OpType::MOFFS_64: ret += get_operand<Moffs8>(i); continue;
+			case Type::MOFFS_8:
+			case Type::MOFFS_16:
+			case Type::MOFFS_32:
+			case Type::MOFFS_64: ret += get_operand<Moffs8>(i); continue;
 
 			default: break;
 		}
@@ -84,27 +84,27 @@ RegSet Instruction::explicit_must_read_set() const {
 			continue;
 
 		switch ( type(i) ) {
-			case OpType::MM: ret += get_operand<Mm>(i); break;
-			case OpType::RH: ret += get_operand<Rh>(i); break;
-			case OpType::RB: ret += get_operand<Rb>(i); break;
-			case OpType::AL: 
-			case OpType::CL: 
-			case OpType::RL: ret += get_operand<Rl>(i); break;
-			case OpType::AX: 
-			case OpType::DX: 
-			case OpType::R_16: ret += get_operand<R16>(i); break;
-			case OpType::EAX: 
-			case OpType::R_32: ret += get_operand<R32>(i); break;
-			case OpType::RAX: 
-			case OpType::R_64: ret += get_operand<R64>(i); break;
-			case OpType::FS:
-			case OpType::GS: 
-			case OpType::SREG: ret += get_operand<Sreg>(i); break;
-			case OpType::ST_0:
-			case OpType::ST: ret += get_operand<St>(i); break;
-			case OpType::XMM_0:
-			case OpType::XMM: ret += get_operand<Xmm>(i); break;
-			case OpType::YMM: ret += get_operand<Ymm>(i); break;
+			case Type::MM: ret += get_operand<Mm>(i); break;
+			case Type::RH: ret += get_operand<Rh>(i); break;
+			case Type::RB: ret += get_operand<Rb>(i); break;
+			case Type::AL: 
+			case Type::CL: 
+			case Type::RL: ret += get_operand<Rl>(i); break;
+			case Type::AX: 
+			case Type::DX: 
+			case Type::R_16: ret += get_operand<R16>(i); break;
+			case Type::EAX: 
+			case Type::R_32: ret += get_operand<R32>(i); break;
+			case Type::RAX: 
+			case Type::R_64: ret += get_operand<R64>(i); break;
+			case Type::FS:
+			case Type::GS: 
+			case Type::SREG: ret += get_operand<Sreg>(i); break;
+			case Type::ST_0:
+			case Type::ST: ret += get_operand<St>(i); break;
+			case Type::XMM_0:
+			case Type::XMM: ret += get_operand<Xmm>(i); break;
+			case Type::YMM: ret += get_operand<Ymm>(i); break;
 
 			default: break;
 		}
@@ -117,31 +117,31 @@ RegSet Instruction::explicit_maybe_read_set() const {
 	auto ret = RegSet::empty();
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
 		switch ( type(i) ) {
-			case OpType::M_8:
-			case OpType::M_16:
-			case OpType::M_32:
-			case OpType::M_64:
-			case OpType::M_128:
-			case OpType::M_256:
-			case OpType::M_16_INT:
-			case OpType::M_32_INT:
-			case OpType::M_64_INT:
-			case OpType::M_32_FP:
-			case OpType::M_64_FP:
-			case OpType::M_80_FP:
-			case OpType::M_80_BCD:
-			case OpType::M_2_BYTE:
-			case OpType::M_28_BYTE:
-			case OpType::M_108_BYTE:
-			case OpType::M_512_BYTE:
-			case OpType::FAR_PTR_16_16:
-			case OpType::FAR_PTR_16_32:
-			case OpType::FAR_PTR_16_64: ret += get_operand<M8>(i); continue;
+			case Type::M_8:
+			case Type::M_16:
+			case Type::M_32:
+			case Type::M_64:
+			case Type::M_128:
+			case Type::M_256:
+			case Type::M_16_INT:
+			case Type::M_32_INT:
+			case Type::M_64_INT:
+			case Type::M_32_FP:
+			case Type::M_64_FP:
+			case Type::M_80_FP:
+			case Type::M_80_BCD:
+			case Type::M_2_BYTE:
+			case Type::M_28_BYTE:
+			case Type::M_108_BYTE:
+			case Type::M_512_BYTE:
+			case Type::FAR_PTR_16_16:
+			case Type::FAR_PTR_16_32:
+			case Type::FAR_PTR_16_64: ret += get_operand<M8>(i); continue;
 
-			case OpType::MOFFS_8:
-			case OpType::MOFFS_16:
-			case OpType::MOFFS_32:
-			case OpType::MOFFS_64: ret += get_operand<Moffs8>(i); continue;
+			case Type::MOFFS_8:
+			case Type::MOFFS_16:
+			case Type::MOFFS_32:
+			case Type::MOFFS_64: ret += get_operand<Moffs8>(i); continue;
 
 			default: break;
 		}
@@ -150,27 +150,27 @@ RegSet Instruction::explicit_maybe_read_set() const {
 			continue;
 
 		switch ( type(i) ) {
-			case OpType::MM: ret += get_operand<Mm>(i); break;
-			case OpType::RH: ret += get_operand<Rh>(i); break;
-			case OpType::RB: ret += get_operand<Rb>(i); break;
-			case OpType::AL: 
-			case OpType::CL: 
-			case OpType::RL: ret += get_operand<Rl>(i); break;
-			case OpType::AX: 
-			case OpType::DX: 
-			case OpType::R_16: ret += get_operand<R16>(i); break;
-			case OpType::EAX: 
-			case OpType::R_32: ret += get_operand<R32>(i); break;
-			case OpType::RAX: 
-			case OpType::R_64: ret += get_operand<R64>(i); break;
-			case OpType::FS:
-			case OpType::GS: 
-			case OpType::SREG: ret += get_operand<Sreg>(i); break;
-			case OpType::ST_0:
-			case OpType::ST: ret += get_operand<St>(i); break;
-			case OpType::XMM_0:
-			case OpType::XMM: ret += get_operand<Xmm>(i); break;
-			case OpType::YMM: ret += get_operand<Ymm>(i); break;
+			case Type::MM: ret += get_operand<Mm>(i); break;
+			case Type::RH: ret += get_operand<Rh>(i); break;
+			case Type::RB: ret += get_operand<Rb>(i); break;
+			case Type::AL: 
+			case Type::CL: 
+			case Type::RL: ret += get_operand<Rl>(i); break;
+			case Type::AX: 
+			case Type::DX: 
+			case Type::R_16: ret += get_operand<R16>(i); break;
+			case Type::EAX: 
+			case Type::R_32: ret += get_operand<R32>(i); break;
+			case Type::RAX: 
+			case Type::R_64: ret += get_operand<R64>(i); break;
+			case Type::FS:
+			case Type::GS: 
+			case Type::SREG: ret += get_operand<Sreg>(i); break;
+			case Type::ST_0:
+			case Type::ST: ret += get_operand<St>(i); break;
+			case Type::XMM_0:
+			case Type::XMM: ret += get_operand<Xmm>(i); break;
+			case Type::YMM: ret += get_operand<Ymm>(i); break;
 
 			default: break;
 		}
@@ -184,35 +184,35 @@ RegSet Instruction::explicit_must_write_set() const {
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
 		if ( properties(i).contains(Property::MUST_WRITE_ZX) )
 			switch ( type(i) ) {
-				case OpType::EAX: 
-				case OpType::R_32: ret += get_operand<R64>(i); break;
-				case OpType::XMM_0:
-				case OpType::XMM: ret += get_operand<Ymm>(i); break;
+				case Type::EAX: 
+				case Type::R_32: ret += get_operand<R64>(i); break;
+				case Type::XMM_0:
+				case Type::XMM: ret += get_operand<Ymm>(i); break;
 				default: assert(false); break;
 			}
 		else if ( properties(i).contains(Property::MUST_WRITE) )
 			switch ( type(i) ) {
-				case OpType::MM: ret += get_operand<Mm>(i); break;
-				case OpType::RH: ret += get_operand<Rh>(i); break;
-				case OpType::RB: ret += get_operand<Rb>(i); break;
-				case OpType::AL: 
-				case OpType::CL: 
-				case OpType::RL: ret += get_operand<Rl>(i); break;
-				case OpType::AX: 
-				case OpType::DX: 
-				case OpType::R_16: ret += get_operand<R16>(i); break;
-				case OpType::EAX: 
-				case OpType::R_32: ret += get_operand<R32>(i); break;
-				case OpType::RAX: 
-				case OpType::R_64: ret += get_operand<R64>(i); break;
-				case OpType::FS:
-				case OpType::GS: 
-				case OpType::SREG: ret += get_operand<Sreg>(i); break;
-				case OpType::ST_0:
-				case OpType::ST: ret += get_operand<St>(i); break;
-				case OpType::XMM_0:
-				case OpType::XMM: ret += get_operand<Ymm>(i); break;
-				case OpType::YMM: ret += get_operand<Ymm>(i); break;
+				case Type::MM: ret += get_operand<Mm>(i); break;
+				case Type::RH: ret += get_operand<Rh>(i); break;
+				case Type::RB: ret += get_operand<Rb>(i); break;
+				case Type::AL: 
+				case Type::CL: 
+				case Type::RL: ret += get_operand<Rl>(i); break;
+				case Type::AX: 
+				case Type::DX: 
+				case Type::R_16: ret += get_operand<R16>(i); break;
+				case Type::EAX: 
+				case Type::R_32: ret += get_operand<R32>(i); break;
+				case Type::RAX: 
+				case Type::R_64: ret += get_operand<R64>(i); break;
+				case Type::FS:
+				case Type::GS: 
+				case Type::SREG: ret += get_operand<Sreg>(i); break;
+				case Type::ST_0:
+				case Type::ST: ret += get_operand<St>(i); break;
+				case Type::XMM_0:
+				case Type::XMM: ret += get_operand<Ymm>(i); break;
+				case Type::YMM: ret += get_operand<Ymm>(i); break;
 
 				default: break;
 			}
@@ -226,35 +226,35 @@ RegSet Instruction::explicit_maybe_write_set() const {
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
 		if ( properties(i).contains(Property::MAYBE_WRITE_ZX) )
 			switch ( type(i) ) {
-				case OpType::EAX: 
-				case OpType::R_32: ret += get_operand<R64>(i); break;
-				case OpType::XMM_0:
-				case OpType::XMM: ret += get_operand<Ymm>(i); break;
+				case Type::EAX: 
+				case Type::R_32: ret += get_operand<R64>(i); break;
+				case Type::XMM_0:
+				case Type::XMM: ret += get_operand<Ymm>(i); break;
 				default: assert(false); break;
 			}
 		else if ( properties(i).contains(Property::MAYBE_WRITE) )
 			switch ( type(i) ) {
-				case OpType::MM: ret += get_operand<Mm>(i); break;
-				case OpType::RH: ret += get_operand<Rh>(i); break;
-				case OpType::RB: ret += get_operand<Rb>(i); break;
-				case OpType::AL: 
-				case OpType::CL: 
-				case OpType::RL: ret += get_operand<Rl>(i); break;
-				case OpType::AX: 
-				case OpType::DX: 
-				case OpType::R_16: ret += get_operand<R16>(i); break;
-				case OpType::EAX: 
-				case OpType::R_32: ret += get_operand<R32>(i); break;
-				case OpType::RAX: 
-				case OpType::R_64: ret += get_operand<R64>(i); break;
-				case OpType::FS:
-				case OpType::GS: 
-				case OpType::SREG: ret += get_operand<Sreg>(i); break;
-				case OpType::ST_0:
-				case OpType::ST: ret += get_operand<St>(i); break;
-				case OpType::XMM_0:
-				case OpType::XMM: ret += get_operand<Ymm>(i); break;
-				case OpType::YMM: ret += get_operand<Ymm>(i); break;
+				case Type::MM: ret += get_operand<Mm>(i); break;
+				case Type::RH: ret += get_operand<Rh>(i); break;
+				case Type::RB: ret += get_operand<Rb>(i); break;
+				case Type::AL: 
+				case Type::CL: 
+				case Type::RL: ret += get_operand<Rl>(i); break;
+				case Type::AX: 
+				case Type::DX: 
+				case Type::R_16: ret += get_operand<R16>(i); break;
+				case Type::EAX: 
+				case Type::R_32: ret += get_operand<R32>(i); break;
+				case Type::RAX: 
+				case Type::R_64: ret += get_operand<R64>(i); break;
+				case Type::FS:
+				case Type::GS: 
+				case Type::SREG: ret += get_operand<Sreg>(i); break;
+				case Type::ST_0:
+				case Type::ST: ret += get_operand<St>(i); break;
+				case Type::XMM_0:
+				case Type::XMM: ret += get_operand<Ymm>(i); break;
+				case Type::YMM: ret += get_operand<Ymm>(i); break;
 
 				default: break;
 			}
@@ -268,27 +268,27 @@ RegSet Instruction::explicit_must_undef_set() const {
 	for ( size_t i = 0, ie = arity(); i < ie; ++i )
 		if ( properties(i).contains(Property::MUST_UNDEF) )
 			switch ( type(i) ) {
-				case OpType::MM: ret += get_operand<Mm>(i); break;
-				case OpType::RH: ret += get_operand<Rh>(i); break;
-				case OpType::RB: ret += get_operand<Rb>(i); break;
-				case OpType::AL: 
-				case OpType::CL: 
-				case OpType::RL: ret += get_operand<Rl>(i); break;
-				case OpType::AX: 
-				case OpType::DX: 
-				case OpType::R_16: ret += get_operand<R16>(i); break;
-				case OpType::EAX: 
-				case OpType::R_32: ret += get_operand<R32>(i); break;
-				case OpType::RAX: 
-				case OpType::R_64: ret += get_operand<R64>(i); break;
-				case OpType::FS:
-				case OpType::GS: 
-				case OpType::SREG: ret += get_operand<Sreg>(i); break;
-				case OpType::ST_0:
-				case OpType::ST: ret += get_operand<St>(i); break;
-				case OpType::XMM_0:
-				case OpType::XMM: ret += get_operand<Ymm>(i); break;
-				case OpType::YMM: ret += get_operand<Ymm>(i); break;
+				case Type::MM: ret += get_operand<Mm>(i); break;
+				case Type::RH: ret += get_operand<Rh>(i); break;
+				case Type::RB: ret += get_operand<Rb>(i); break;
+				case Type::AL: 
+				case Type::CL: 
+				case Type::RL: ret += get_operand<Rl>(i); break;
+				case Type::AX: 
+				case Type::DX: 
+				case Type::R_16: ret += get_operand<R16>(i); break;
+				case Type::EAX: 
+				case Type::R_32: ret += get_operand<R32>(i); break;
+				case Type::RAX: 
+				case Type::R_64: ret += get_operand<R64>(i); break;
+				case Type::FS:
+				case Type::GS: 
+				case Type::SREG: ret += get_operand<Sreg>(i); break;
+				case Type::ST_0:
+				case Type::ST: ret += get_operand<St>(i); break;
+				case Type::XMM_0:
+				case Type::XMM: ret += get_operand<Ymm>(i); break;
+				case Type::YMM: ret += get_operand<Ymm>(i); break;
 
 				default: break;
 			}
@@ -301,27 +301,27 @@ RegSet Instruction::explicit_maybe_undef_set() const {
 	for ( size_t i = 0, ie = arity(); i < ie; ++i )
 		if ( properties(i).contains(Property::MAYBE_UNDEF) )
 			switch ( type(i) ) {
-				case OpType::MM: ret += get_operand<Mm>(i); break;
-				case OpType::RH: ret += get_operand<Rh>(i); break;
-				case OpType::RB: ret += get_operand<Rb>(i); break;
-				case OpType::AL: 
-				case OpType::CL: 
-				case OpType::RL: ret += get_operand<Rl>(i); break;
-				case OpType::AX: 
-				case OpType::DX: 
-				case OpType::R_16: ret += get_operand<R16>(i); break;
-				case OpType::EAX: 
-				case OpType::R_32: ret += get_operand<R32>(i); break;
-				case OpType::RAX: 
-				case OpType::R_64: ret += get_operand<R64>(i); break;
-				case OpType::FS:
-				case OpType::GS: 
-				case OpType::SREG: ret += get_operand<Sreg>(i); break;
-				case OpType::ST_0:
-				case OpType::ST: ret += get_operand<St>(i); break;
-				case OpType::XMM_0:
-				case OpType::XMM: ret += get_operand<Ymm>(i); break;
-				case OpType::YMM: ret += get_operand<Ymm>(i); break;
+				case Type::MM: ret += get_operand<Mm>(i); break;
+				case Type::RH: ret += get_operand<Rh>(i); break;
+				case Type::RB: ret += get_operand<Rb>(i); break;
+				case Type::AL: 
+				case Type::CL: 
+				case Type::RL: ret += get_operand<Rl>(i); break;
+				case Type::AX: 
+				case Type::DX: 
+				case Type::R_16: ret += get_operand<R16>(i); break;
+				case Type::EAX: 
+				case Type::R_32: ret += get_operand<R32>(i); break;
+				case Type::RAX: 
+				case Type::R_64: ret += get_operand<R64>(i); break;
+				case Type::FS:
+				case Type::GS: 
+				case Type::SREG: ret += get_operand<Sreg>(i); break;
+				case Type::ST_0:
+				case Type::ST: ret += get_operand<St>(i); break;
+				case Type::XMM_0:
+				case Type::XMM: ret += get_operand<Ymm>(i); break;
+				case Type::YMM: ret += get_operand<Ymm>(i); break;
 
 				default: break;
 			}
@@ -332,113 +332,113 @@ RegSet Instruction::explicit_maybe_undef_set() const {
 bool Instruction::check() const {
 	for ( size_t i = 0, ie = arity(); i < ie; ++i )
 		switch ( type(i) ) {
-			case OpType::HINT: 
+			case Type::HINT: 
 				if ( !get_operand<Hint>(i).check() ) return false; break;
 
-			case OpType::IMM_8: 
+			case Type::IMM_8: 
 				if ( !get_operand<Imm8>(i).check() ) return false; break;
-			case OpType::IMM_16: 
+			case Type::IMM_16: 
 				if ( !get_operand<Imm16>(i).check() ) return false; break;
-			case OpType::IMM_32: 
+			case Type::IMM_32: 
 				if ( !get_operand<Imm32>(i).check() ) return false; break;
-			case OpType::IMM_64: 
+			case Type::IMM_64: 
 				if ( !get_operand<Imm64>(i).check() ) return false; break;
-			case OpType::ZERO: 
+			case Type::ZERO: 
 				if ( !get_operand<Zero>(i).check() ) return false; break;
-			case OpType::ONE: 
+			case Type::ONE: 
 				if ( !get_operand<One>(i).check() ) return false; break;
-			case OpType::THREE: 
+			case Type::THREE: 
 				if ( !get_operand<Three>(i).check() ) return false; break;
 
-			case OpType::LABEL: 
+			case Type::LABEL: 
 				if ( !get_operand<Label>(i).check() ) return false; break;
 
-			case OpType::M_8:
-			case OpType::M_16:
-			case OpType::M_32:
-			case OpType::M_64:
-			case OpType::M_128:
-			case OpType::M_256:
-			case OpType::M_16_INT:
-			case OpType::M_32_INT:
-			case OpType::M_64_INT:
-			case OpType::M_32_FP:
-			case OpType::M_64_FP:
-			case OpType::M_80_FP:
-			case OpType::M_80_BCD:
-			case OpType::M_2_BYTE:
-			case OpType::M_28_BYTE:
-			case OpType::M_108_BYTE:
-			case OpType::M_512_BYTE:
-			case OpType::FAR_PTR_16_16:
-			case OpType::FAR_PTR_16_32:
-			case OpType::FAR_PTR_16_64: 
+			case Type::M_8:
+			case Type::M_16:
+			case Type::M_32:
+			case Type::M_64:
+			case Type::M_128:
+			case Type::M_256:
+			case Type::M_16_INT:
+			case Type::M_32_INT:
+			case Type::M_64_INT:
+			case Type::M_32_FP:
+			case Type::M_64_FP:
+			case Type::M_80_FP:
+			case Type::M_80_BCD:
+			case Type::M_2_BYTE:
+			case Type::M_28_BYTE:
+			case Type::M_108_BYTE:
+			case Type::M_512_BYTE:
+			case Type::FAR_PTR_16_16:
+			case Type::FAR_PTR_16_32:
+			case Type::FAR_PTR_16_64: 
 				if ( !get_operand<M8>(i).check() ) return false; break;
 
-			case OpType::MM: 
+			case Type::MM: 
 				if ( !get_operand<Mm>(i).check() ) return false;  break;
 
-			case OpType::MOFFS_8:
-			case OpType::MOFFS_16:
-			case OpType::MOFFS_32:
-			case OpType::MOFFS_64: 
+			case Type::MOFFS_8:
+			case Type::MOFFS_16:
+			case Type::MOFFS_32:
+			case Type::MOFFS_64: 
 				if ( !get_operand<Moffs8>(i).check() ) return false; break;
 
-			case OpType::PREF_66: 
+			case Type::PREF_66: 
 				if ( !get_operand<Pref66>(i).check() ) return false; break;
-			case OpType::PREF_REX_W: 
+			case Type::PREF_REX_W: 
 				if ( !get_operand<PrefRexW>(i).check() ) return false; break;
-			case OpType::FAR: 
+			case Type::FAR: 
 				if ( !get_operand<Far>(i).check() ) return false; break;
 
-			case OpType::RH: 
+			case Type::RH: 
 				if ( !get_operand<Rh>(i).check() ) return false; break;
-			case OpType::RB: 
+			case Type::RB: 
 				if ( !get_operand<Rb>(i).check() ) return false; break;
-			case OpType::AL: 
+			case Type::AL: 
 				if ( !get_operand<Al>(i).check() ) return false; break;
-			case OpType::CL: 
+			case Type::CL: 
 				if ( !get_operand<Cl>(i).check() ) return false; break;
-			case OpType::RL: 
+			case Type::RL: 
 				if ( !get_operand<Rl>(i).check() ) return false; break;
-			case OpType::AX: 
+			case Type::AX: 
 				if ( !get_operand<Ax>(i).check() ) return false; break;
-			case OpType::DX: 
+			case Type::DX: 
 				if ( !get_operand<Dx>(i).check() ) return false; break;
-			case OpType::R_16: 
+			case Type::R_16: 
 				if ( !get_operand<R16>(i).check() ) return false; break;
-			case OpType::EAX: 
+			case Type::EAX: 
 				if ( !get_operand<Eax>(i).check() ) return false; break;
-			case OpType::R_32: 
+			case Type::R_32: 
 				if ( !get_operand<R32>(i).check() ) return false; break;
-			case OpType::RAX: 
+			case Type::RAX: 
 				if ( !get_operand<Rax>(i).check() ) return false; break;
-			case OpType::R_64: 
+			case Type::R_64: 
 				if ( !get_operand<R64>(i).check() ) return false; break;
 
-			case OpType::REL_8: 
+			case Type::REL_8: 
 				if ( !get_operand<Rel8>(i).check() ) return false; break;
-			case OpType::REL_32: 
+			case Type::REL_32: 
 				if ( !get_operand<Rel32>(i).check() ) return false; break;
 
-			case OpType::FS: 
+			case Type::FS: 
 				if ( !get_operand<Fs>(i).check() ) return false; break;
-			case OpType::GS: 
+			case Type::GS: 
 				if ( !get_operand<Gs>(i).check() ) return false; break;
-			case OpType::SREG: 
+			case Type::SREG: 
 				if ( !get_operand<Sreg>(i).check() ) return false; break;
 
-			case OpType::ST_0: 
+			case Type::ST_0: 
 				if ( !get_operand<St0>(i).check() ) return false; break;
-			case OpType::ST: 
+			case Type::ST: 
 				if ( !get_operand<St>(i).check() ) return false; break;
 
-			case OpType::XMM_0: 
+			case Type::XMM_0: 
 				if ( !get_operand<Xmm0>(i).check() ) return false; break;
-			case OpType::XMM: 
+			case Type::XMM: 
 				if ( !get_operand<Ymm>(i).check() ) return false; break;
 
-			case OpType::YMM: 
+			case Type::YMM: 
 				if ( !get_operand<Ymm>(i).check() ) return false; break;
 
 			default: assert(false);
@@ -454,114 +454,114 @@ void Instruction::write_att(ostream& os) const {
 	if ( arity() > 0 )
 		for ( int i = arity()-1; i >= 0; --i ) {
 			switch ( type(i) ) {
-				case OpType::HINT: 
+				case Type::HINT: 
 					get_operand<Hint>(i).write_att(os); break;
-				case OpType::IMM_8: 
-				case OpType::IMM_16: 
-				case OpType::IMM_32: 
-				case OpType::IMM_64: 
-				case OpType::ZERO: 
-				case OpType::ONE: 
-				case OpType::THREE: 
+				case Type::IMM_8: 
+				case Type::IMM_16: 
+				case Type::IMM_32: 
+				case Type::IMM_64: 
+				case Type::ZERO: 
+				case Type::ONE: 
+				case Type::THREE: 
 					get_operand<Three>(i).write_att(os); break;
 
-				case OpType::LABEL: 
+				case Type::LABEL: 
 					get_operand<Label>(i).write_att(os); break;
 
-				case OpType::M_8:
+				case Type::M_8:
 					get_operand<M8>(i).write_att(os); break;
-				case OpType::M_16:
+				case Type::M_16:
 					get_operand<M16>(i).write_att(os); break;
-				case OpType::M_32:
+				case Type::M_32:
 					get_operand<M32>(i).write_att(os); break;
-				case OpType::M_64:
+				case Type::M_64:
 					get_operand<M64>(i).write_att(os); break;
-				case OpType::M_128:
+				case Type::M_128:
 					get_operand<M128>(i).write_att(os); break;
-				case OpType::M_256:
+				case Type::M_256:
 					get_operand<M256>(i).write_att(os); break;
-				case OpType::M_16_INT:
+				case Type::M_16_INT:
 					get_operand<M16Int>(i).write_att(os); break;
-				case OpType::M_32_INT:
+				case Type::M_32_INT:
 					get_operand<M32Int>(i).write_att(os); break;
-				case OpType::M_64_INT:
+				case Type::M_64_INT:
 					get_operand<M64Int>(i).write_att(os); break;
-				case OpType::M_32_FP:
+				case Type::M_32_FP:
 					get_operand<M32Fp>(i).write_att(os); break;
-				case OpType::M_64_FP:
+				case Type::M_64_FP:
 					get_operand<M64Fp>(i).write_att(os); break;
-				case OpType::M_80_FP:
+				case Type::M_80_FP:
 					get_operand<M80Fp>(i).write_att(os); break;
-				case OpType::M_80_BCD:
+				case Type::M_80_BCD:
 					get_operand<M80Bcd>(i).write_att(os); break;
-				case OpType::M_2_BYTE:
+				case Type::M_2_BYTE:
 					get_operand<M2Byte>(i).write_att(os); break;
-				case OpType::M_28_BYTE:
+				case Type::M_28_BYTE:
 					get_operand<M28Byte>(i).write_att(os); break;
-				case OpType::M_108_BYTE:
+				case Type::M_108_BYTE:
 					get_operand<M108Byte>(i).write_att(os); break;
-				case OpType::M_512_BYTE:
+				case Type::M_512_BYTE:
 					get_operand<M512Byte>(i).write_att(os); break;
-				case OpType::FAR_PTR_16_16:
+				case Type::FAR_PTR_16_16:
 					get_operand<FarPtr1616>(i).write_att(os); break;
-				case OpType::FAR_PTR_16_32:
+				case Type::FAR_PTR_16_32:
 					get_operand<FarPtr1632>(i).write_att(os); break;
-				case OpType::FAR_PTR_16_64: 
+				case Type::FAR_PTR_16_64: 
 					get_operand<FarPtr1664>(i).write_att(os); break;
 
-				case OpType::MM: 
+				case Type::MM: 
 					get_operand<Mm>(i).write_att(os); break;
 
-				case OpType::MOFFS_8:
-				case OpType::MOFFS_16:
-				case OpType::MOFFS_32:
-				case OpType::MOFFS_64: 
+				case Type::MOFFS_8:
+				case Type::MOFFS_16:
+				case Type::MOFFS_32:
+				case Type::MOFFS_64: 
 					get_operand<Moffs64>(i).write_att(os); break;
 
-				case OpType::PREF_66: 
+				case Type::PREF_66: 
 					get_operand<Pref66>(i).write_att(os); break;
-				case OpType::PREF_REX_W: 
+				case Type::PREF_REX_W: 
 					get_operand<PrefRexW>(i).write_att(os); break;
-				case OpType::FAR: 
+				case Type::FAR: 
 					get_operand<Far>(i).write_att(os); break;
 
-				case OpType::RH: 
+				case Type::RH: 
 					get_operand<Rh>(i).write_att(os); break;
-				case OpType::RB: 
+				case Type::RB: 
 					get_operand<Rb>(i).write_att(os); break;
-				case OpType::AL: 
-				case OpType::CL: 
-				case OpType::RL: 
+				case Type::AL: 
+				case Type::CL: 
+				case Type::RL: 
 					get_operand<Rl>(i).write_att(os); break;
-				case OpType::AX: 
-				case OpType::DX: 
-				case OpType::R_16: 
+				case Type::AX: 
+				case Type::DX: 
+				case Type::R_16: 
 					get_operand<R16>(i).write_att(os); break;
-				case OpType::EAX: 
-				case OpType::R_32: 
+				case Type::EAX: 
+				case Type::R_32: 
 					get_operand<R32>(i).write_att(os); break;
-				case OpType::RAX: 
-				case OpType::R_64: 
+				case Type::RAX: 
+				case Type::R_64: 
 					get_operand<R64>(i).write_att(os); break;
 
-				case OpType::REL_8: 
-				case OpType::REL_32: 
+				case Type::REL_8: 
+				case Type::REL_32: 
 					get_operand<Rel32>(i).write_att(os); break;
 
-				case OpType::FS: 
-				case OpType::GS: 
-				case OpType::SREG: 
+				case Type::FS: 
+				case Type::GS: 
+				case Type::SREG: 
 					get_operand<Sreg>(i).write_att(os); break;
 
-				case OpType::ST_0: 
-				case OpType::ST: 
+				case Type::ST_0: 
+				case Type::ST: 
 					get_operand<St>(i).write_att(os); break;
 
-				case OpType::XMM_0: 
-				case OpType::XMM: 
+				case Type::XMM_0: 
+				case Type::XMM: 
 					get_operand<Xmm>(i).write_att(os); break;
 
-				case OpType::YMM: 
+				case Type::YMM: 
 					get_operand<Ymm>(i).write_att(os); break;
 
 				default: assert(false);
@@ -578,114 +578,114 @@ void Instruction::write_intel(ostream& os) const {
 
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {
 		switch ( type(i) ) {
-			case OpType::HINT: 
+			case Type::HINT: 
 				get_operand<Hint>(i).write_att(os); break;
-			case OpType::IMM_8: 
-			case OpType::IMM_16: 
-			case OpType::IMM_32: 
-			case OpType::IMM_64: 
-			case OpType::ZERO: 
-			case OpType::ONE: 
-			case OpType::THREE: 
+			case Type::IMM_8: 
+			case Type::IMM_16: 
+			case Type::IMM_32: 
+			case Type::IMM_64: 
+			case Type::ZERO: 
+			case Type::ONE: 
+			case Type::THREE: 
 				get_operand<Three>(i).write_att(os); break;
 
-			case OpType::LABEL: 
+			case Type::LABEL: 
 				get_operand<Label>(i).write_att(os); break;
 
-			case OpType::M_8:
+			case Type::M_8:
 				get_operand<M8>(i).write_att(os); break;
-			case OpType::M_16:
+			case Type::M_16:
 				get_operand<M16>(i).write_att(os); break;
-			case OpType::M_32:
+			case Type::M_32:
 				get_operand<M32>(i).write_att(os); break;
-			case OpType::M_64:
+			case Type::M_64:
 				get_operand<M64>(i).write_att(os); break;
-			case OpType::M_128:
+			case Type::M_128:
 				get_operand<M128>(i).write_att(os); break;
-			case OpType::M_256:
+			case Type::M_256:
 				get_operand<M256>(i).write_att(os); break;
-			case OpType::M_16_INT:
+			case Type::M_16_INT:
 				get_operand<M16Int>(i).write_att(os); break;
-			case OpType::M_32_INT:
+			case Type::M_32_INT:
 				get_operand<M32Int>(i).write_att(os); break;
-			case OpType::M_64_INT:
+			case Type::M_64_INT:
 				get_operand<M64Int>(i).write_att(os); break;
-			case OpType::M_32_FP:
+			case Type::M_32_FP:
 				get_operand<M32Fp>(i).write_att(os); break;
-			case OpType::M_64_FP:
+			case Type::M_64_FP:
 				get_operand<M64Fp>(i).write_att(os); break;
-			case OpType::M_80_FP:
+			case Type::M_80_FP:
 				get_operand<M80Fp>(i).write_att(os); break;
-			case OpType::M_80_BCD:
+			case Type::M_80_BCD:
 				get_operand<M80Bcd>(i).write_att(os); break;
-			case OpType::M_2_BYTE:
+			case Type::M_2_BYTE:
 				get_operand<M2Byte>(i).write_att(os); break;
-			case OpType::M_28_BYTE:
+			case Type::M_28_BYTE:
 				get_operand<M28Byte>(i).write_att(os); break;
-			case OpType::M_108_BYTE:
+			case Type::M_108_BYTE:
 				get_operand<M108Byte>(i).write_att(os); break;
-			case OpType::M_512_BYTE:
+			case Type::M_512_BYTE:
 				get_operand<M512Byte>(i).write_att(os); break;
-			case OpType::FAR_PTR_16_16:
+			case Type::FAR_PTR_16_16:
 				get_operand<FarPtr1616>(i).write_att(os); break;
-			case OpType::FAR_PTR_16_32:
+			case Type::FAR_PTR_16_32:
 				get_operand<FarPtr1632>(i).write_att(os); break;
-			case OpType::FAR_PTR_16_64: 
+			case Type::FAR_PTR_16_64: 
 				get_operand<FarPtr1664>(i).write_att(os); break;
 
-			case OpType::MM: 
+			case Type::MM: 
 				get_operand<Mm>(i).write_att(os); break;
 
-			case OpType::MOFFS_8:
-			case OpType::MOFFS_16:
-			case OpType::MOFFS_32:
-			case OpType::MOFFS_64: 
+			case Type::MOFFS_8:
+			case Type::MOFFS_16:
+			case Type::MOFFS_32:
+			case Type::MOFFS_64: 
 				get_operand<Moffs64>(i).write_att(os); break;
 
-			case OpType::PREF_66: 
+			case Type::PREF_66: 
 				get_operand<Pref66>(i).write_att(os); break;
-			case OpType::PREF_REX_W: 
+			case Type::PREF_REX_W: 
 				get_operand<PrefRexW>(i).write_att(os); break;
-			case OpType::FAR: 
+			case Type::FAR: 
 				get_operand<Far>(i).write_att(os); break;
 
-			case OpType::RH: 
+			case Type::RH: 
 				get_operand<Rh>(i).write_att(os); break;
-			case OpType::RB: 
+			case Type::RB: 
 				get_operand<Rb>(i).write_att(os); break;
-			case OpType::AL: 
-			case OpType::CL: 
-			case OpType::RL: 
+			case Type::AL: 
+			case Type::CL: 
+			case Type::RL: 
 				get_operand<Rl>(i).write_att(os); break;
-			case OpType::AX: 
-			case OpType::DX: 
-			case OpType::R_16: 
+			case Type::AX: 
+			case Type::DX: 
+			case Type::R_16: 
 				get_operand<R16>(i).write_att(os); break;
-			case OpType::EAX: 
-			case OpType::R_32: 
+			case Type::EAX: 
+			case Type::R_32: 
 				get_operand<R32>(i).write_att(os); break;
-			case OpType::RAX: 
-			case OpType::R_64: 
+			case Type::RAX: 
+			case Type::R_64: 
 				get_operand<R64>(i).write_att(os); break;
 
-			case OpType::REL_8: 
-			case OpType::REL_32: 
+			case Type::REL_8: 
+			case Type::REL_32: 
 				get_operand<Rel32>(i).write_att(os); break;
 
-			case OpType::FS: 
-			case OpType::GS: 
-			case OpType::SREG: 
+			case Type::FS: 
+			case Type::GS: 
+			case Type::SREG: 
 				get_operand<Sreg>(i).write_att(os); break;
 
-			case OpType::ST_0: 
-			case OpType::ST: 
+			case Type::ST_0: 
+			case Type::ST: 
 				get_operand<St>(i).write_att(os); break;
 
-			case OpType::XMM_0: 
-			case OpType::XMM: 
+			case Type::XMM_0: 
+			case Type::XMM: 
 				get_operand<Xmm>(i).write_att(os); break;
 
-			case OpType::YMM: 
+			case Type::YMM: 
 				get_operand<Ymm>(i).write_att(os); break;
 
 			default: assert(false);
@@ -710,7 +710,7 @@ const array<array<Properties, 4>, 3257> Instruction::properties_ {{
 	#include "src/properties.table"
 }};
 
-const array<array<OpType, 4>, 3257> Instruction::type_ {{
+const array<array<Type, 4>, 3257> Instruction::type_ {{
 	// Internal mnemonics
 	{{}}
 	// Auto-generated mnemonics
