@@ -17,7 +17,6 @@ limitations under the License.
 #ifndef X64ASM_SRC_ASSEMBLER_H
 #define X64ASM_SRC_ASSEMBLER_H
 
-#include <cassert>
 #include <iostream>
 #include <type_traits>
 #include <unordered_map>
@@ -176,14 +175,11 @@ class Assembler {
 
 		// Figure 2.4: Intel Manual Vol 2A 2-8
 		void rex(const M& rm, const Operand& r, uint8_t val) {
-			assert(r.check());
 			rex(rm, val | ((r.val_ >> 1) & 0x4));
 		}
 
 		// Figure 2.6: Intel Manual Vol 2A 2.9
 		void rex(const M& rm, uint8_t val) {
-			assert(rm.check());
-
 			if ( rm.contains_base() )
 				val |= (rm.get_base().val_ >> 3);
 			if ( rm.contains_index() )
@@ -195,13 +191,11 @@ class Assembler {
 		// Figure 2.5: Intel Manual Vol 2A 2-8
 		void rex(const Operand& rm, const Operand& r, 
 				            uint8_t val) {
-			assert(r.check());
 			rex(rm, val | ((r.val_ >> 1) & 0x4));
 		}
 
 		// Figure 2.7: Intel Manual Vol 2A 2-9
 		void rex(const Operand& rm, uint8_t val) {
-			assert(rm.check());
 			if ( val |= (rm.val_ >> 3) )
 				fxn_->emit_byte(val | 0x40);	
 		}
@@ -223,7 +217,6 @@ class Assembler {
 		// If we want, we could change the logic here, I believe.
 		void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
 				            const Operand& vvvv) {
-			assert(vvvv.check());
 
 			fxn_->emit_byte(0xc4);
 			fxn_->emit_byte(mmmmm);
@@ -234,9 +227,6 @@ class Assembler {
 		void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
 				            const Operand& vvvv, const M& rm, 
 										const Operand& r) {
-			assert(rm.check());
-			assert(r.check());	
-
 			mmmmm |= ((~r.val_ << 4) & 0x80);
 			if ( rm.contains_base() )
 				mmmmm |= ((~rm.get_base().val_ << 3) & 0x40);
@@ -250,9 +240,6 @@ class Assembler {
 		void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
 				            const Operand& vvvv, const Operand& rm, 
 										const Operand& r) {
-			assert(rm.check());
-			assert(r.check());
-
 			mmmmm |= ((~rm.val_ << 2) & 0x20);
 			mmmmm |= ((~r.val_  << 4) & 0x80);
 

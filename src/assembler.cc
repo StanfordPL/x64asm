@@ -16,6 +16,7 @@ limitations under the License.
 
 #include "src/assembler.h"
 
+#include <cassert>
 #include <iomanip>
 #include <vector>
 
@@ -28,7 +29,8 @@ namespace x64asm {
 void Assembler::write_hex(std::ostream& os, const Code& c) {
 	const auto fxn = assemble(c);
 	for ( size_t i = 0, ie = fxn.size(); i < ie; ++i ) {
-		os << hex << noshowbase << (int32_t)fxn.buffer_[i] << " ";
+		os << hex << noshowbase << setw(2) << setfill('0');
+		os << (int32_t)fxn.buffer_[i] << " ";
 		if ( ((i%8) == 7) && ((i+1) != ie) )
 			os << endl;
 	}
@@ -51,9 +53,6 @@ void Assembler::assemble(const Instruction& instr) {
 }
 
 void Assembler::mod_rm_sib(const M& rm, const Operand& r) {
-	assert(rm.check());
-	assert(r.check());
-
 	// Every path we take needs these bits for the mod/rm byte
 	const auto rrr = (r.val_ << 3) & 0x38;
 
