@@ -29,11 +29,11 @@ namespace x64asm {
 class Moffs : public Operand {
 	private:
 		enum class Null : uint64_t {
-			SEG = 0x0000000000000007
+			SEG = 0x7
 		};
 
 		enum class Mask : uint64_t {
-			SEG = 0x0000000000000007
+			SEG = 0xf
 		};
 
 	public:

@@ -94,8 +94,7 @@ void M::write_att(ostream& os) const {
 	os << ")";
 }
 
-void M::write_intel(ostream& os) const {
-	write_intel_width(os);
+void M::write_intel_base(ostream& os) const {
 	os << "PTR ";
 	if ( contains_seg() ) {
 		get_seg().write_intel(os);
@@ -141,88 +140,100 @@ void M::write_intel(ostream& os) const {
 	os << "]";
 }
 
-void M::write_intel_width(ostream& os) const {
-	assert(false);
-}
-
-void M8::write_intel_width(ostream& os) const {
+void M8::write_intel(ostream& os) const {
 	os << "BYTE ";
+	write_intel_base(os);
 }
 
-void M16::write_intel_width(ostream& os) const {
+void M16::write_intel(ostream& os) const {
 	os << "WORD ";
+	write_intel_base(os);
 }
 
-void M32::write_intel_width(ostream& os) const {
+void M32::write_intel(ostream& os) const {
 	os << "DWORD ";
+	write_intel_base(os);
 }
 
-void M64::write_intel_width(ostream& os) const {
+void M64::write_intel(ostream& os) const {
 	os << "QWORD ";
+	write_intel_base(os);
 }
 
-void M128::write_intel_width(ostream& os) const {
+void M128::write_intel(ostream& os) const {
 	os << "XMMWORD ";
+	write_intel_base(os);
 }
 
-void M256::write_intel_width(ostream& os) const {
+void M256::write_intel(ostream& os) const {
 	os << "YMMWORD ";
+	write_intel_base(os);
 }
 
-void M16Int::write_intel_width(ostream& os) const {
+void M16Int::write_intel(ostream& os) const {
 	os << "WORD ";
+	write_intel_base(os);
 }
 
-void M32Int::write_intel_width(ostream& os) const {
+void M32Int::write_intel(ostream& os) const {
 	os << "DWORD ";
+	write_intel_base(os);
 }
 
-void M64Int::write_intel_width(ostream& os) const {
+void M64Int::write_intel(ostream& os) const {
 	os << "QWORD ";
+	write_intel_base(os);
 }
 
-void M32Fp::write_intel_width(ostream& os) const {
+void M32Fp::write_intel(ostream& os) const {
 	os << "DWORD ";
+	write_intel_base(os);
 }
 
-void M64Fp::write_intel_width(ostream& os) const {
+void M64Fp::write_intel(ostream& os) const {
 	os << "QWORD ";
+	write_intel_base(os);
 }
 
-void M80Fp::write_intel_width(ostream& os) const {
+void M80Fp::write_intel(ostream& os) const {
 	os << "TBYTE ";
+	write_intel_base(os);
 }
 
-void M80Bcd::write_intel_width(ostream& os) const {
+void M80Bcd::write_intel(ostream& os) const {
 	os << "TBYTE ";
+	write_intel_base(os);
 }
 
-void M2Byte::write_intel_width(ostream& os) const {
-	os << "";
+void M2Byte::write_intel(ostream& os) const {
+	write_intel_base(os);
 }
 
-void M28Byte::write_intel_width(ostream& os) const {
-	os << "";
+void M28Byte::write_intel(ostream& os) const {
+	write_intel_base(os);
 }
 
-void M108Byte::write_intel_width(ostream& os) const {
-	os << "";
+void M108Byte::write_intel(ostream& os) const {
+	write_intel_base(os);
 }
 
-void M512Byte::write_intel_width(ostream& os) const {
-	os << "";
+void M512Byte::write_intel(ostream& os) const {
+	write_intel_base(os);
 }
 
-void FarPtr1616::write_intel_width(ostream& os) const {
+void FarPtr1616::write_intel(ostream& os) const {
 	os << "WORD ";
+	write_intel_base(os);
 }
 
-void FarPtr1632::write_intel_width(ostream& os) const {
+void FarPtr1632::write_intel(ostream& os) const {
 	os << "DWORD ";
+	write_intel_base(os);
 }
 
-void FarPtr1664::write_intel_width(ostream& os) const {
+void FarPtr1664::write_intel(ostream& os) const {
 	os << "QWORD ";
+	write_intel_base(os);
 }
 
 } // namespace x64asm

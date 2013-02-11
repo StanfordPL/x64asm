@@ -41,17 +41,17 @@ enum class Scale {
 class M : public Operand {
 	private:
 		enum class Null : uint64_t {
-			BASE  = 0x0000001000000000,
-			INDEX = 0x0000100000000000,
-			SEG   = 0x0700000000000000
+			BASE  = 0x10,
+			INDEX = 0x10,
+			SEG   = 0x7
 		};
 
 		enum class Mask : uint64_t {
 			DISP    = 0x00000000ffffffff,
-			BASE    = 0x0000001f00000000,
-			INDEX   = 0x00001f0000000000,
-			SCALE   = 0x0003000000000000,
-			SEG     = 0x0700000000000000,
+			BASE    = 0x000000ff00000000,
+			INDEX   = 0x0000ff0000000000,
+			SCALE   = 0x00ff000000000000,
+			SEG     = 0x0f00000000000000,
 			ADDR_OR = 0x1000000000000000,
 			RIP     = 0x2000000000000000
 		};
@@ -68,15 +68,18 @@ class M : public Operand {
 
 	public:
 		constexpr bool contains_seg() {
-			return (val_ & (uint64_t)Mask::SEG) != (uint64_t)Null::SEG;
+			return (val_ & (uint64_t)Mask::SEG) != 
+				     ((uint64_t)Null::SEG << (uint64_t)Index::SEG);
 		}
 
 		constexpr bool contains_base() {
-			return (val_ & (uint64_t)Mask::BASE) != (uint64_t)Null::BASE;
+			return (val_ & (uint64_t)Mask::BASE) != 
+				     ((uint64_t)Null::BASE << (uint64_t)Index::BASE);
 		}
 
 		constexpr bool contains_index() {
-			return (val_ & (uint64_t)Mask::INDEX) != (uint64_t)Null::INDEX;
+			return (val_ & (uint64_t)Mask::INDEX) != 
+				     ((uint64_t)Null::INDEX << (uint64_t)Index::INDEX);
 		}
 
 		constexpr Sreg get_seg() {
@@ -92,7 +95,7 @@ class M : public Operand {
 		}
 
 		constexpr Scale get_scale() {
-			return (Scale)((val_ & (uint64_t)Mask::INDEX) >> (uint64_t)Index::INDEX);
+			return (Scale)((val_ & (uint64_t)Mask::SCALE) >> (uint64_t)Index::SCALE);
 		}
 
 		constexpr Imm32 get_disp() {
@@ -159,8 +162,8 @@ class M : public Operand {
 		}
 
 		bool check() const;
+
 		void write_att(std::ostream& os) const;
-		void write_intel(std::ostream& os) const;
 
 	protected:
 		static constexpr 
@@ -176,99 +179,117 @@ class M : public Operand {
 		}
 
 		constexpr M(const Imm32& d)
-				: Operand{init(d.val_, 0, 0, (uint64_t)Scale::TIMES_1, 0, 0, 0)} {
+				: Operand{init(d.val_, (uint64_t)Null::BASE, (uint64_t)Null::INDEX, 
+						           (uint64_t)Scale::TIMES_1, (uint64_t)Null::SEG, 0, 0)} {
 		}
 
 		constexpr M(const Sreg& s, const Imm32& d)
-				: Operand{init(d.val_, 0, 0, (uint64_t)Scale::TIMES_1, s.val_, 0, 0)} {
+				: Operand{init(d.val_, (uint64_t)Null::BASE, (uint64_t)Null::INDEX, 
+						           (uint64_t)Scale::TIMES_1, s.val_, 0, 0)} {
 		}
 
 		constexpr M(const R32& b)
-				: Operand{init(0, b.val_, 0, (uint64_t)Scale::TIMES_1, 0, 1, 0)} {
+				: Operand{init(0, b.val_, (uint64_t)Null::INDEX, 
+						           (uint64_t)Scale::TIMES_1, (uint64_t)Null::SEG, 1, 0)} {
 		}
 
 		constexpr M(const R64& b)
-				: Operand{init(0, b.val_, 0, (uint64_t)Scale::TIMES_1, 0, 0, 0)} {
+				: Operand{init(0, b.val_, (uint64_t)Null::INDEX, 
+						           (uint64_t)Scale::TIMES_1, (uint64_t)Null::SEG, 0, 0)} {
 		}
 
 		constexpr M(Rip rip)
-				: Operand{init(0, 0, 0, (uint64_t)Scale::TIMES_1, 0, 0, 1)} {
+				: Operand{init(0, (uint64_t)Null::BASE, (uint64_t)Null::INDEX, 
+						           (uint64_t)Scale::TIMES_1, (uint64_t)Null::SEG, 0, 1)} {
 		}
 
 		constexpr M(const Sreg& s, const R32& b)
-				: Operand{init(0, b.val_, 0, (uint64_t)Scale::TIMES_1, s.val_, 1, 0)} {
+				: Operand{init(0, b.val_, (uint64_t)Null::INDEX, 
+						           (uint64_t)Scale::TIMES_1, s.val_, 1, 0)} {
 		}
 
 		constexpr M(const Sreg& s, const R64& b)
-				: Operand{init(0, b.val_, 0, (uint64_t)Scale::TIMES_1, s.val_, 0, 0)} {
+				: Operand{init(0, b.val_, (uint64_t)Null::INDEX, 
+						           (uint64_t)Scale::TIMES_1, s.val_, 0, 0)} {
 		}
 
 		constexpr M(const Sreg& s, Rip rip)
-				: Operand{init(0, 0, 0, (uint64_t)Scale::TIMES_1, s.val_, 0, 1)} {
+				: Operand{init(0, (uint64_t)Null::BASE, (uint64_t)Null::INDEX, 
+						           (uint64_t)Scale::TIMES_1, s.val_, 0, 1)} {
 		}
 
 		constexpr M(const R32& b, const Imm32& d)
-				: Operand{init(d.val_, b.val_, 0, (uint64_t)Scale::TIMES_1, 0, 1, 0)} {
+				: Operand{init(d.val_, b.val_, (uint64_t)Null::INDEX, 
+						           (uint64_t)Scale::TIMES_1, (uint64_t)Null::SEG, 1, 0)} {
 		}
 
 		constexpr M(const R64& b, const Imm32& d)
-				: Operand{init(d.val_, b.val_, 0, (uint64_t)Scale::TIMES_1, 0, 0, 0)} {
+				: Operand{init(d.val_, b.val_, (uint64_t)Null::INDEX, 
+						           (uint64_t)Scale::TIMES_1, (uint64_t)Null::SEG, 0, 0)} {
 		}
 
 		constexpr M(Rip rip, const Imm32& d)
-				: Operand{init(d.val_, 0, 0, (uint64_t)Scale::TIMES_1, 0, 0, 1)} {
+				: Operand{init(d.val_, (uint64_t)Null::BASE, (uint64_t)Null::INDEX, 
+						           (uint64_t)Scale::TIMES_1, (uint64_t)Null::SEG, 0, 1)} {
 		}
 
 		constexpr M(const Sreg& s, const R32& b, const Imm32& d)
-				: Operand{init(d.val_, b.val_, 0, (uint64_t)Scale::TIMES_1, s.val_, 1, 0)} {
+				: Operand{init(d.val_, b.val_, (uint64_t)Null::INDEX, 
+						           (uint64_t)Scale::TIMES_1, s.val_, 1, 0)} {
 		}
 
 		constexpr M(const Sreg& s, const R64& b, const Imm32& d)
-				: Operand{init(d.val_, b.val_, 0, (uint64_t)Scale::TIMES_1, s.val_, 0, 0)} {
+				: Operand{init(d.val_, b.val_, (uint64_t)Null::INDEX, 
+						           (uint64_t)Scale::TIMES_1, s.val_, 0, 0)} {
 		}
 
 		constexpr M(const Sreg& s, Rip rip, const Imm32& d)
-				: Operand{init(d.val_, 0, 0, (uint64_t)Scale::TIMES_1, s.val_, 0, 1)} {
+				: Operand{init(d.val_, (uint64_t)Null::BASE, (uint64_t)Null::INDEX, 
+						           (uint64_t)Scale::TIMES_1, s.val_, 0, 1)} {
 		}
 
 		constexpr M(const R32& i, Scale sc)
-				: Operand{init(0, 0, i.val_, (uint64_t)sc, 0, 1, 0)} {
+				: Operand{init(0, (uint64_t)Null::BASE, i.val_, (uint64_t)sc, 
+						           (uint64_t)Null::SEG, 1, 0)} {
 		}
 
 		constexpr M(const R64& i, Scale sc)
-				: Operand{init(0, 0, i.val_, (uint64_t)sc, 0, 0, 0)} {
+				: Operand{init(0, (uint64_t)Null::BASE, i.val_, (uint64_t)sc, 
+						           (uint64_t)Null::SEG, 0, 0)} {
 		}
 
 		constexpr M(const Sreg& s, const R32& i, Scale sc)
-				: Operand{init(0, 0, i.val_, (uint64_t)sc, s.val_, 1, 0)} {
+				: Operand{init(0, (uint64_t)Null::BASE, i.val_, (uint64_t)sc, s.val_, 1, 0)} {
 		}
 
 		constexpr M(const Sreg& s, const R64& i, Scale sc)
-				: Operand{init(0, 0, i.val_, (uint64_t)sc, s.val_, 0, 0)} {
+				: Operand{init(0, (uint64_t)Null::BASE, i.val_, (uint64_t)sc, s.val_, 0, 0)} {
 		}
 
 		constexpr M(const R32& i, Scale sc, const Imm32& d)
-				: Operand{init(d.val_, 0, i.val_, (uint64_t)sc, 0, 1, 0)} {
+				: Operand{init(d.val_, (uint64_t)Null::BASE, i.val_, (uint64_t)sc, 
+						           (uint64_t)Null::SEG, 1, 0)} {
 		}
 
 		constexpr M(const R64& i, Scale sc, const Imm32& d)
-				: Operand{init(d.val_, 0, i.val_, (uint64_t)sc, 0, 0, 0)} {
+				: Operand{init(d.val_, (uint64_t)Null::BASE, i.val_, (uint64_t)sc, 
+						           (uint64_t)Null::SEG, 0, 0)} {
 		}
 
 		constexpr M(const Sreg& s, const R32& i, Scale sc, const Imm32& d)
-				: Operand{init(d.val_, 0, i.val_, (uint64_t)sc, s.val_, 1, 0)} {
+				: Operand{init(d.val_, (uint64_t)Null::BASE, i.val_, (uint64_t)sc, s.val_, 1, 0)} {
 		}
 
 		constexpr M(const Sreg& s, const R64& i, Scale sc, const Imm32& d)
-				: Operand{init(d.val_, 0, i.val_, (uint64_t)sc, s.val_, 0, 0)} {
+				: Operand{init(d.val_, (uint64_t)Null::BASE, i.val_, (uint64_t)sc, s.val_, 0, 0)} {
 		}
 
 		constexpr M(const R32& b, const R32& i, Scale sc)
-				: Operand{init(0, b.val_, i.val_, (uint64_t)sc, 0, 1, 0)} {
+				: Operand{init(0, b.val_, i.val_, (uint64_t)sc, (uint64_t)Null::SEG, 1, 0)} {
 		}
 
 		constexpr M(const R64& b, const R64& i, Scale sc)
-				: Operand{init(0, b.val_, i.val_, (uint64_t)sc, 0, 0, 0)} {
+				: Operand{init(0, b.val_, i.val_, (uint64_t)sc, (uint64_t)Null::SEG, 0, 0)} {
 		}
 
 		constexpr M(const Sreg& s, const R32& b, const R32& i, Scale sc)
@@ -280,11 +301,11 @@ class M : public Operand {
 		}
 
 		constexpr M(const R32& b, const R32& i, Scale sc, const Imm32& d)
-				: Operand{init(d.val_, b.val_, i.val_, (uint64_t)sc, 0, 1, 0)} {
+				: Operand{init(d.val_, b.val_, i.val_, (uint64_t)sc, (uint64_t)Null::SEG, 1, 0)} {
 		}
 
 		constexpr M(const R64& b, const R64& i, Scale sc, const Imm32& d)
-				: Operand{init(d.val_, b.val_, i.val_, (uint64_t)sc, 0, 0, 0)} {
+				: Operand{init(d.val_, b.val_, i.val_, (uint64_t)sc, (uint64_t)Null::SEG, 0, 0)} {
 		}
 
 		constexpr M(const Sreg& s, const R32& b, const R32& i, Scale sc, 
@@ -297,7 +318,7 @@ class M : public Operand {
 				: Operand{init(d.val_, b.val_, i.val_, (uint64_t)sc, s.val_, 0, 0)} {
 		}
 
-		void write_intel_width(std::ostream& os) const;
+		void write_intel_base(std::ostream& os) const;
 };
 
 // NOTE: This ugliness can be replaced using inherited constructors come gcc 4.8
@@ -341,8 +362,7 @@ class M8 : public M {
 	public:
 		CONSTRUCTORS(M8);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A word operand in memory, usually expressed as a variable or array name, 
@@ -353,8 +373,7 @@ class M16 : public M {
 	public:
 		CONSTRUCTORS(M16);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A doubleword operand in memory, usually expressed as a variable or array 
@@ -365,8 +384,7 @@ class M32 : public M {
 	public:
 		CONSTRUCTORS(M32);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A memory quadword operand in memory. */
@@ -374,8 +392,7 @@ class M64 : public M {
 	public:
 		CONSTRUCTORS(M64);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A memory double quadword operand in memory. */
@@ -383,8 +400,7 @@ class M128 : public M {
 	public:
 		CONSTRUCTORS(M128);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A 32-byte operand in memory. This nomenclature is used only with AVX 
@@ -394,8 +410,7 @@ class M256 : public M {
 	public:
 		CONSTRUCTORS(M256);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A word integer operand in memory. This symbol designates integers that are 
@@ -405,8 +420,7 @@ class M16Int : public M {
 	public:
 		CONSTRUCTORS(M16Int);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A doubleword integer operand in memory. This symbol designates integers 
@@ -416,8 +430,7 @@ class M32Int : public M {
 	public:
 		CONSTRUCTORS(M32Int);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A quadword integer operand in memory. This symbol designates integers 
@@ -427,8 +440,7 @@ class M64Int : public M {
 	public:
 		CONSTRUCTORS(M64Int);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A single-precision floating-point operand in memory. This symbol designates 
@@ -439,8 +451,7 @@ class M32Fp : public M {
 	public:
 		CONSTRUCTORS(M32Fp);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A double-precision floating-point operand in memory. This symbol designates 
@@ -451,8 +462,7 @@ class M64Fp : public M {
 	public:
 		CONSTRUCTORS(M64Fp);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A double extended-precision floating-point operand in memory. This symbol 
@@ -463,8 +473,7 @@ class M80Fp : public M {
 	public:
 		CONSTRUCTORS(M80Fp);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A double extended-precision binary-coded-decimaly operand in memory. */
@@ -472,8 +481,7 @@ class M80Bcd : public M {
 	public:
 		CONSTRUCTORS(M80Bcd);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A 2 byte operand in memory. */
@@ -481,8 +489,7 @@ class M2Byte : public M {
 	public:
 		CONSTRUCTORS(M2Byte);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A 28 byte operand in memory. */
@@ -490,8 +497,7 @@ class M28Byte : public M {
 	public:
 		CONSTRUCTORS(M28Byte);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A 108 byte operand in memory. */
@@ -499,8 +505,7 @@ class M108Byte : public M {
 	public:
 		CONSTRUCTORS(M108Byte);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A 512 byte operand in memory. */
@@ -508,8 +513,7 @@ class M512Byte : public M {
 	public:
 		CONSTRUCTORS(M512Byte);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -520,8 +524,7 @@ class FarPtr1616 : public M {
 	public:
 		CONSTRUCTORS(FarPtr1616);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -532,8 +535,7 @@ class FarPtr1632 : public M {
 	public:
 		CONSTRUCTORS(FarPtr1632);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -544,8 +546,7 @@ class FarPtr1664 : public M {
 	public:
 		CONSTRUCTORS(FarPtr1664);
 
-	protected:
-		void write_intel_width(std::ostream& os) const;
+		void write_intel(std::ostream& os) const;
 };
 
 #undef CONSTRUCTORS
