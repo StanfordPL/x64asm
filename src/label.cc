@@ -28,4 +28,6 @@ void Label::write_intel(ostream& os) const {
 	os << ".LABEL_" << dec << val_;
 }
 
+map<string, Label> Label::labels_;
+
 } // namespace x64asm

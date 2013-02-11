@@ -90,7 +90,7 @@ int main() {
 	const char* source = "Hello, world!";
 	char* target = new char[32];
 
-	memcpy((uint64_t)target, (uint64_t)source, 14);
+	memcpy(target, source, 14);
 	cout << "Target: [" << target << "]" << endl;
 
 	delete target;

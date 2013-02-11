@@ -18,6 +18,8 @@ limitations under the License.
 #define X64ASM_SRC_LABEL_H
 
 #include <iostream>
+#include <map>
+#include <string>
 
 #include "src/operand.h"
 
@@ -38,6 +40,18 @@ class Label : public Operand {
 
 		void write_att(std::ostream& os) const;
 		void write_intel(std::ostream& os) const;
+
+		static Label get(const std::string& s) {
+			const auto itr = labels_.find(s);
+			if ( itr == labels_.end() ) {
+				const auto elem = std::make_pair(s, Label{labels_.size()});
+				return labels_.insert(elem).first->second;
+			}
+			return itr->second;
+		}
+
+	private:
+		static std::map<std::string, Label> labels_;	
 };
 
 } // namespace x64asm

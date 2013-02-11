@@ -72,31 +72,40 @@ class Function {
 			return ((f0_type)(buffer_))();
 		}
 
-		uint64_t operator()(uint64_t rdi) {
-			return ((f1_type)(buffer_))(rdi);
+		template <typename RDI>
+		uint64_t operator()(RDI rdi) {
+			return ((f1_type)(buffer_))((uint64_t)rdi);
 		}
 
-		uint64_t operator()(uint64_t rdi, uint64_t rsi) {
-			return ((f2_type)(buffer_))(rdi, rsi);
+		template <typename RDI, typename RSI>
+		uint64_t operator()(RDI rdi, RSI rsi) {
+			return ((f2_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi);
 		}
 
-		uint64_t operator()(uint64_t rdi, uint64_t rsi, uint64_t rdx) {
-			return ((f3_type)(buffer_))(rdi, rsi, rdx);
+		template <typename RDI, typename RSI, typename RDX_>
+		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx) {
+			return ((f3_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi, (uint64_t)rdx);
 		}
 
-		uint64_t operator()(uint64_t rdi, uint64_t rsi, uint64_t rdx,
-				                       uint64_t rcx) {
-			return ((f4_type)(buffer_))(rdi, rsi, rdx, rcx);
+		template <typename RDI, typename RSI, typename RDX_,
+						  typename RCX>
+		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx, RCX rcx) {
+			return ((f4_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi, (uint64_t)rdx,
+					                        (uint64_t)rcx);
 		}
 
-		uint64_t operator()(uint64_t rdi, uint64_t rsi, uint64_t rdx,
-				                       uint64_t rcx, uint64_t r8) {
-			return ((f5_type)(buffer_))(rdi, rsi, rdx, rcx, r8);
+		template <typename RDI, typename RSI, typename RDX_,
+						  typename RCX, typename R8>
+		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx, RCX rcx, R8 r8) {
+			return ((f5_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi, (uint64_t)rdx,
+					                        (uint64_t)rcx, (uint64_t)r8);
 		}
 
-		uint64_t operator()(uint64_t rdi, uint64_t rsi, uint64_t rdx,
-				                       uint64_t rcx, uint64_t r8,  uint64_t r9) {
-			return ((f6_type)(buffer_))(rdi, rsi, rdx, rcx, r8, r9);
+		template <typename RDI, typename RSI, typename RDX_,
+						  typename RCX, typename R8, typename R9>
+		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx, RCX rcx, R8 r8, R9 r9) {
+			return ((f6_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi, (uint64_t)rdx,
+					                        (uint64_t)rcx, (uint64_t)r8,  (uint64_t)r9);
 		}
 
 		bool good() const {
