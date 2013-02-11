@@ -41,7 +41,7 @@ class Label : public Operand {
 		void write_att(std::ostream& os) const;
 		void write_intel(std::ostream& os) const;
 
-		static Label get(const std::string& s) {
+		static const Label& get(const std::string& s) {
 			const auto itr = labels_.find(s);
 			if ( itr == labels_.end() ) {
 				const auto elem = std::make_pair(s, Label{labels_.size()});

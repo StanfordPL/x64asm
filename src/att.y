@@ -27,8 +27,8 @@ limitations under the License.
 #include "src/m.h"
 #include "src/moffs.h"
 #include "src/opcode.h"
-#include "src/op_type.h"
 #include "src/rel.h"
+#include "src/type.h"
 
 using namespace std;
 using namespace x64asm;
@@ -69,7 +69,7 @@ Imm64 offset(uint64_t o) {
 	return Imm64{o};
 }
 
-typedef std::pair<x64asm::Opcode, std::vector<x64asm::OpType>> Entry;
+typedef std::pair<x64asm::Opcode, std::vector<x64asm::Type>> Entry;
 typedef std::vector<Entry> Row;
 typedef std::map<const char*, Row> Table;
 
@@ -77,19 +77,19 @@ Table att_table = {
 	#include "src/att.table"
 };
 
-bool is_a(OpType a, OpType b) {
+bool is_a(Type a, Type b) {
 	switch ( b ) {
-		case OpType::IMM_8: 
-			return a == OpType::ZERO   ||
-						 a == OpType::ONE    ||
-						 a == OpType::THREE  ||
-						 a == OpType::IMM_8;
-		case OpType::IMM_16: 
-			return a == OpType::ZERO   ||
-						 a == OpType::ONE    ||
-						 a == OpType::THREE  ||
-						 a == OpType::IMM_8  ||
-						 a == OpType::IMM_16;
+		case Type::IMM_8: 
+			return a == Type::ZERO   ||
+						 a == Type::ONE    ||
+						 a == Type::THREE  ||
+						 a == Type::IMM_8;
+		case Type::IMM_16: 
+			return a == Type::ZERO   ||
+						 a == Type::ONE    ||
+						 a == Type::THREE  ||
+						 a == Type::IMM_8  ||
+						 a == Type::IMM_16;
 
 		//      -- Stupid LALR parser
 		// TODO -- Can promote offset-only memory form to rel_8 / rel_32	
@@ -223,7 +223,8 @@ const Instruction* to_instr(const std::string& opc,
 
 %token <opcode> OPCODE
 
-%type <operand>  m
+%type <operand> m
+%type <operand> imm
 
 %type <operand>  operand
 %type <operands> operands
@@ -295,11 +296,9 @@ instr : LABEL COLON ENDL blank {
 	$$ = to_instr(*$1, *$2);
 
 	for ( const auto o : *$2 ) {
-		if ( dynamic_cast<const Imm*>(o) != 0 )
-			delete o;
-		if ( dynamic_cast<const Label*>(o) != 0 )
-			delete o;
 		if ( dynamic_cast<const M*>(o) != 0 )
+			delete o;
+		if ( dynamic_cast<const Moffs*>(o) != 0 )
 			delete o;
 	}
 		

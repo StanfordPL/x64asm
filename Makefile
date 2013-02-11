@@ -72,7 +72,9 @@ codegen:
 		./Codegen && \
 		rm -f *.hi *.o Codegen
 	flex $(FLEXOPS) -Patt src/att.l 
+	flex $(FLEXOPS) -Pintel src/att.l 
 	bison $(BISONOPS) -batt -patt --defines src/att.y && touch att.output 
+	bison $(BISONOPS) -bintel -pintel --defines src/att.y && touch intel.output 
 	mv lex.*.* src/ && mv *.tab.* src/ && mv *.output src/
 		
 src/code.o: src/code.cc src/code.h codegen

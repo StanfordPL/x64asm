@@ -25,7 +25,7 @@ limitations under the License.
 #include "src/imm.h"
 #include "src/label.h"
 #include "src/opcode.h"
-#include "src/op_type.h"
+#include "src/type.h"
 #include "src/att.tab.h"
 
 using namespace std;
@@ -41,13 +41,12 @@ static int colnum = 0;
 	yylloc.last_line = yylineno;  \
 }
 
+const Imm* to_imm(const char* c, bool is_hex, bool is_neg) {
+	return new Imm8{to_offset(c, is_hex, is_neg)};
+}
+
 const Label* to_label(const char* c) {
-	static map<string, Label*> labels;
-	if ( labels.find(c) == labels.end() ) {
-		Label* l = new Label(labels.size());
-		labels[c] = l;	
-	}
-	return labels[c];
+	return &Label::get(c);
 }
 
 uint64_t to_offset(const char* c, bool is_hex, bool is_neg) {
@@ -62,31 +61,9 @@ uint64_t to_offset(const char* c, bool is_hex, bool is_neg) {
 	return is_neg ? val * -1 : val;
 }
 
-const Imm* to_imm(const char* c, bool is_hex, bool is_neg) {
-	const auto val = to_offset(c, is_hex, is_neg);
-	const auto ival = (int64_t)val;
-
-	if ( ival >= -128 && ival < 128 )
-		return new Imm8{val};
-	else if ( ival >= -32768 && ival < 32768 )
-		return new Imm16{val};
-	else if ( ival >= -2147483648 && ival < 2147483648 )
-		return new Imm32{val};
-	else
-		return new Imm64{val};
-}
-
 const std::string* to_str(const char* c, size_t len) {
 	return new std::string(c, len);
 }
-
-#define ret_imm(o)                      \
-  switch ( o->type() ) {                \
-    case OpType::IMM_8:  return IMM_8;  \
-    case OpType::IMM_16: return IMM_16; \
-    case OpType::IMM_32: return IMM_32; \
-    default:             return IMM_64; \
-	}
 
 %}
 
@@ -123,8 +100,8 @@ const std::string* to_str(const char* c, size_t len) {
 "$3"   { yylval.operand = &three; return THREE; }
 "$0x3" { yylval.operand = &three; return THREE; }
 
-"$-0x"[0-9a-f]+ { yylval.operand = to_imm(yytext+2, true, true);   ret_imm(yylval.operand) }
-"$0x"[0-9a-f]+  { yylval.operand = to_imm(yytext+1, true, false);  ret_imm(yylval.operand) }
+"$-0x"[0-9a-f]+ { yylval.operand = to_imm(yytext+2, true, true);  return IMM_8; }
+"$0x"[0-9a-f]+  { yylval.operand = to_imm(yytext+1, true, false); return IMM_8; }
 
 "."[a-z][a-zA-Z0-9]+ { yylval.operand = to_label(yytext); return LABEL; }
 
