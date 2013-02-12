@@ -19,9 +19,7 @@ limitations under the License.
 #include <sstream>
 
 #include "src/att.tab.c"
-#include "src/intel.tab.c"
 #include "src/lex.att.c"
-#include "src/lex.intel.c"
 
 using namespace std;
 
@@ -48,10 +46,7 @@ void Code::read_intel(istream& is) {
 	stringstream ss;
 	ss << is.rdbuf();
 
-	auto buffer = intel_scan_string(ss.str().c_str());
-	intel_switch_to_buffer(buffer);
-	intelparse(is, *this);
-	intel_delete_buffer(buffer);
+	// TODO...
 }
 
 void Code::write_att(ostream& os) const {

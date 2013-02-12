@@ -20,25 +20,24 @@ limitations under the License.
 using namespace std;
 using namespace x64asm;
 
-/*
-  Assemble and invoke a toy implementation of memcpy using the linux ABI.
-
-  <rdi> = target
-  <rsi> = source
-  <rdx> = n
-
-  .loop:
-	  cmpq $0x0, %rdx
-	  je .done
-
-	  movb (%rsi), %al
-	  movb %al, (%rdi)
-	  decq %rdx
-	  jmp .loop
-
-  .done:
-	  retq
-*/
+// This example shows how to assemble and execute a toy implementation
+// of the memcpy function, shown below, using the assembler API.
+//
+// <rdi> = target
+// <rsi> = source
+// <rdx> = n
+//
+// .loop:
+//   cmpq $0x0, %rdx
+//   je .done
+//
+//   movb (%rsi), %al
+//   movb %al, (%rdi)
+//   decq %rdx
+//   jmp .loop
+//
+// .done:
+//   retq
 
 int main() {
 	// Declare a function. By default this allocates an executable 1KB page.

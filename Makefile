@@ -53,9 +53,9 @@ all: release
 debug:
 	make -C . erthing FLEXOPS="-d" BISONOPS="-t --report=state" OPT="-g"
 release:
-	make -C . erthing OPT="-DNDEBUG -O3 -funroll-all-loops"
+	make -C . erthing OPT="-DNDEBUG -O3 -funroll-all-loops -fno-rtti"
 profile:
-	make -C . erthing OPT="-DNDEBUG -O3 -funroll-all-loops -pg"
+	make -C . erthing OPT="-DNDEBUG -O3 -funroll-all-loops -fno-rtti -pg"
 
 erthing: $(LIB) $(TEST) $(BIN) $(DOC)
 

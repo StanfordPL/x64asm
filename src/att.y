@@ -41,34 +41,6 @@ void yyerror(std::istream& is, x64asm::Code& code, const char* s) {
 	cerr << "Error on line " << yy_line_number << ": "  << s << endl;
 }
 
-R32 base32(const Operand* o) { 
-	return *((R32*)o);
-}
-
-R64 base64(const Operand* o) { 
-	return *((R64*)o);
-}
-
-R32 index32(const Operand* o) { 
-	return *((R32*)o);
-}
-
-R64 index64(const Operand* o) { 
-	return *((R64*)o);
-}
-
-Imm32 disp(uint64_t o) { 
-	return Imm32{o};
-}
-
-Sreg seg(const Operand* o) { 
-	return *((Sreg*)o);
-}
-
-Imm64 offset(uint64_t o) { 
-	return Imm64{o};
-}
-
 typedef std::pair<x64asm::Opcode, std::vector<x64asm::Type>> Entry;
 typedef std::vector<Entry> Row;
 typedef std::map<const char*, Row> Table;
@@ -77,52 +49,8 @@ Table att_table = {
 	#include "src/att.table"
 };
 
-bool is_a(Type a, Type b) {
-	switch ( b ) {
-		case Type::IMM_8: 
-			return a == Type::ZERO   ||
-						 a == Type::ONE    ||
-						 a == Type::THREE  ||
-						 a == Type::IMM_8;
-		case Type::IMM_16: 
-			return a == Type::ZERO   ||
-						 a == Type::ONE    ||
-						 a == Type::THREE  ||
-						 a == Type::IMM_8  ||
-						 a == Type::IMM_16;
-
-		//      -- Stupid LALR parser
-		// TODO -- Can promote offset-only memory form to rel_8 / rel_32	
-		// TODO -- Can promote offset-only or seg:offset to moffs8/16/32/64
-		default:
-			return a == b;	 
-	}
-}
-
-template <typename T>
-T promote_to(const M* m) {
-	T t{Imm32{0}};
-	if ( m->contains_seg() )
-		t.set_seg(m->get_seg());
-	if ( m->contains_base() )
-		t.set_base(m->get_base());
-	if ( m->contains_index() )
-		t.set_index(m->get_index());
-
-	t.set_scale(m->get_scale());
-	t.set_disp(m->get_disp());
-	t.set_addr_or(m->get_addr_or());
-	t.set_rip_offset(m->rip_offset());
-
-	return t;
-}
-
-template <typename T>
-T promote_to(const Moffs* m) {
-	if ( m->contains_seg() )
-		return T{m->get_seg(), m->get_offset()};
-	else
-		return T{m->get_offset()};
+bool is_a() {
+	return false;
 }
 
 // Returns a poorly formed instruction on error
@@ -139,10 +67,9 @@ const Instruction* to_instr(const std::string& opc,
 
 		auto match = true;
 		for ( size_t i = 0; i < arity; ++i ) 
-			//match &= is_a(ops[i]->type(), entry.second[i]);
+			match &= is_a();
 
 		if ( match ) {
-			// Promotion goes here.
 			Instruction* instr = new Instruction{entry.first};
 			for ( size_t i = 0, ie = ops.size(); i < ie; ++i )
 				instr->set_operand(i, *ops[i]);
@@ -152,6 +79,34 @@ const Instruction* to_instr(const std::string& opc,
 	}
 
 	return new Instruction{x64asm::NOP, {xmm0}};
+}
+
+R32 base32(const Operand* o) { 
+	return *((R32*)o);
+}
+
+R64 base64(const Operand* o) { 
+	return *((R64*)o);
+}
+
+R32 index32(const Operand* o) { 
+	return *((R32*)o);
+}
+
+R64 index64(const Operand* o) { 
+	return *((R64*)o);
+}
+
+Imm32 disp(const Operand* o) { 
+	return *((Imm32*)o);
+}
+
+Sreg seg(const Operand* o) { 
+	return *((Sreg*)o);
+}
+
+Imm64 offset(const Operand* o) { 
+	return *((Imm64*)o);
 }
 
 %}
@@ -168,7 +123,6 @@ const Instruction* to_instr(const std::string& opc,
 
 %union {
 	x64asm::Scale scale;
-	uint64_t offset;
 	const x64asm::Rip* rip;
 	const x64asm::Operand* operand;
 	std::vector<const Operand*>* operands;
@@ -183,18 +137,12 @@ const Instruction* to_instr(const std::string& opc,
 %token <int> CLOSE
 %token <int> ENDL
 
-%token <offset> OFFSET
 %token <scale>  SCALE
 %token <rip>    RIP
 
 %token <operand> HINT
-%token <operand> ZERO 
-%token <operand> ONE 
-%token <operand> THREE 
-%token <operand> IMM_8 
-%token <operand> IMM_16
-%token <operand> IMM_32 
-%token <operand> IMM_64
+%token <operand> IMM
+%token <operand> OFFSET
 %token <operand> LABEL
 %token <operand> PREF_66
 %token <operand> PREF_REX_W
@@ -223,8 +171,8 @@ const Instruction* to_instr(const std::string& opc,
 
 %token <opcode> OPCODE
 
+%type <operand> moffs
 %type <operand> m
-%type <operand> imm
 
 %type <operand>  operand
 %type <operands> operands
@@ -240,6 +188,10 @@ const Instruction* to_instr(const std::string& opc,
 %start code
 
 %%
+
+moffs :
+  OFFSET { $$ = new Moffs8{offset($1)}; }
+| SREG COLON OFFSET { $$ = new Moffs8{seg($1), offset($3)}; }
 
 m : 
   OFFSET { $$ = new M8{disp($1)}; }
@@ -295,14 +247,9 @@ instr : LABEL COLON ENDL blank {
 | OPCODE operands ENDL blank {
 	$$ = to_instr(*$1, *$2);
 
-	for ( const auto o : *$2 ) {
-		if ( dynamic_cast<const M*>(o) != 0 )
-			delete o;
-		if ( dynamic_cast<const Moffs*>(o) != 0 )
-			delete o;
-	}
-		
 	delete $1;
+	for ( const auto o : *$2 )
+		delete o;
 	delete $2;
 
 	if ( !$$->check() )
@@ -337,7 +284,7 @@ operands : /* empty */ {
 
 operand : 
 	HINT |
-	ZERO | ONE | THREE | IMM_8 | IMM_16 | IMM_32 | IMM_64 |
+	IMM | 
 	LABEL |
   PREF_66 | PREF_REX_W | FAR |
 	MM |
@@ -346,7 +293,7 @@ operand :
 	ST_0 | ST |
 	XMM_0 | XMM |
 	YMM |
-	m {
+	moffs | m {
 	$$ = $1;
 }
 

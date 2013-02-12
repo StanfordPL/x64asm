@@ -42,23 +42,19 @@ static int colnum = 0;
 }
 
 const Imm* to_imm(const char* c, bool is_hex, bool is_neg) {
-	return new Imm8{to_offset(c, is_hex, is_neg)};
-}
-
-const Label* to_label(const char* c) {
-	return &Label::get(c);
-}
-
-uint64_t to_offset(const char* c, bool is_hex, bool is_neg) {
-	istringstream iss(c);
 	uint64_t val = 0;
 
+	istringstream iss(c);
 	if ( is_hex ) 
 		iss >> hex >> val;
 	else
 		iss >> dec >> val;
 
-	return is_neg ? val * -1 : val;
+	return is_neg ? new Imm8{-val} : new Imm8{val};
+}
+
+const Label* to_label(const char* c) {
+	return new Label{Label::get(c)};
 }
 
 const std::string* to_str(const char* c, size_t len) {
@@ -80,168 +76,161 @@ const std::string* to_str(const char* c, size_t len) {
 [ \t]         { ; }
 "#"[^\n]*"\n" { yy_line_number++; return ENDL; }
 
-"-0x"[0-9a-f]+ { yylval.offset = to_offset(yytext+1, true, true); return OFFSET; }
-"0x"[0-9a-f]+  { yylval.offset = to_offset(yytext, true, false);  return OFFSET; }
-
 "1" { yylval.scale = Scale::TIMES_1; return SCALE; }
 "2" { yylval.scale = Scale::TIMES_2; return SCALE; }
 "4" { yylval.scale = Scale::TIMES_4; return SCALE; }
 "8" { yylval.scale = Scale::TIMES_8; return SCALE; }
 
-"%rip" { yylval.rip = &rip; return RIP; }
+"%rip" { yylval.rip = new Rip{rip}; return RIP; }
 
-"<taken>"     { yylval.operand = &rax; return HINT; }
-"<not taken>" { yylval.operand = &rax; return HINT; }
+"<taken>"     { yylval.operand = new Hint{taken}; return HINT; }
+"<not taken>" { yylval.operand = new Hint{not_taken}; return HINT; }
 
-"$0"   { yylval.operand = &zero;  return ZERO; }
-"$0x0" { yylval.operand = &zero;  return ZERO; }
-"$1"   { yylval.operand = &one;   return ONE; }
-"$0x1" { yylval.operand = &one;   return ONE; }
-"$3"   { yylval.operand = &three; return THREE; }
-"$0x3" { yylval.operand = &three; return THREE; }
+"-0x"[0-9a-f]+ { yylval.operand = to_imm(yytext+1, true, true); return OFFSET; }
+"0x"[0-9a-f]+  { yylval.operand = to_imm(yytext, true, false);  return OFFSET; }
 
-"$-0x"[0-9a-f]+ { yylval.operand = to_imm(yytext+2, true, true);  return IMM_8; }
-"$0x"[0-9a-f]+  { yylval.operand = to_imm(yytext+1, true, false); return IMM_8; }
+"$-0x"[0-9a-f]+ { yylval.operand = to_imm(yytext+2, true, true);  return IMM; }
+"$0x"[0-9a-f]+  { yylval.operand = to_imm(yytext+1, true, false); return IMM; }
 
 "."[a-z][a-zA-Z0-9]+ { yylval.operand = to_label(yytext); return LABEL; }
 
-"<66>"   { yylval.operand = &pref_66; return PREF_66; }
-"<rexw>" { yylval.operand = &pref_rex_w; return PREF_REX_W; }
-"<far>"  { yylval.operand = &far; return FAR; }
+"<66>"   { yylval.operand = new Modifier{pref_66}; return PREF_66; }
+"<rexw>" { yylval.operand = new Modifier{pref_rex_w}; return PREF_REX_W; }
+"<far>"  { yylval.operand = new Modifier{far}; return FAR; }
 
-"%mm0" { yylval.operand = &mm0; return MM; }
-"%mm1" { yylval.operand = &mm1; return MM; }
-"%mm2" { yylval.operand = &mm2; return MM; }
-"%mm3" { yylval.operand = &mm3; return MM; }
-"%mm4" { yylval.operand = &mm4; return MM; }
-"%mm5" { yylval.operand = &mm5; return MM; }
-"%mm6" { yylval.operand = &mm6; return MM; }
-"%mm7" { yylval.operand = &mm7; return MM; }
+"%mm0" { yylval.operand = new Mm{mm0}; return MM; }
+"%mm1" { yylval.operand = new Mm{mm1}; return MM; }
+"%mm2" { yylval.operand = new Mm{mm2}; return MM; }
+"%mm3" { yylval.operand = new Mm{mm3}; return MM; }
+"%mm4" { yylval.operand = new Mm{mm4}; return MM; }
+"%mm5" { yylval.operand = new Mm{mm5}; return MM; }
+"%mm6" { yylval.operand = new Mm{mm6}; return MM; }
+"%mm7" { yylval.operand = new Mm{mm7}; return MM; }
 
-"%al" { yylval.operand = &al; return AL; }
-"%cl" { yylval.operand = &cl; return CL; }
-"%dl" { yylval.operand = &dl; return RL; }
-"%bl" { yylval.operand = &bl; return RL; }
+"%al" { yylval.operand = new Al{al}; return AL; }
+"%cl" { yylval.operand = new Cl{cl}; return CL; }
+"%dl" { yylval.operand = new Rl{dl}; return RL; }
+"%bl" { yylval.operand = new Rl{bl}; return RL; }
 
-"%ah" { yylval.operand = &ah; return RH; }
-"%ch" { yylval.operand = &ch; return RH; }
-"%dh" { yylval.operand = &dh; return RH; }
-"%bh" { yylval.operand = &bh; return RH; }
+"%ah" { yylval.operand = new Rh{ah}; return RH; }
+"%ch" { yylval.operand = new Rh{ch}; return RH; }
+"%dh" { yylval.operand = new Rh{dh}; return RH; }
+"%bh" { yylval.operand = new Rh{bh}; return RH; }
  
-"%spl"  { yylval.operand = &spl;  return RB; }
-"%bpl"  { yylval.operand = &bpl;  return RB; }
-"%sil"  { yylval.operand = &sil;  return RB; }
-"%dil"  { yylval.operand = &dil;  return RB; }
-"%r8b"  { yylval.operand = &r8b;  return RB; }
-"%r9b"  { yylval.operand = &r9b;  return RB; }
-"%r10b" { yylval.operand = &r10b; return RB; }
-"%r11b" { yylval.operand = &r11b; return RB; }
-"%r12b" { yylval.operand = &r12b; return RB; }
-"%r13b" { yylval.operand = &r13b; return RB; }
-"%r14b" { yylval.operand = &r14b; return RB; }
-"%r15b" { yylval.operand = &r15b; return RB; }
+"%spl"  { yylval.operand = new Rb{spl};  return RB; }
+"%bpl"  { yylval.operand = new Rb{bpl};  return RB; }
+"%sil"  { yylval.operand = new Rb{sil};  return RB; }
+"%dil"  { yylval.operand = new Rb{dil};  return RB; }
+"%r8b"  { yylval.operand = new Rb{r8b};  return RB; }
+"%r9b"  { yylval.operand = new Rb{r9b};  return RB; }
+"%r10b" { yylval.operand = new Rb{r10b}; return RB; }
+"%r11b" { yylval.operand = new Rb{r11b}; return RB; }
+"%r12b" { yylval.operand = new Rb{r12b}; return RB; }
+"%r13b" { yylval.operand = new Rb{r13b}; return RB; }
+"%r14b" { yylval.operand = new Rb{r14b}; return RB; }
+"%r15b" { yylval.operand = new Rb{r15b}; return RB; }
 
-"%ax"   { yylval.operand = &ax;   return AX; }
-"%cx"   { yylval.operand = &cx;   return R_16; }
-"%dx"   { yylval.operand = &dx;   return DX; }
-"%bx"   { yylval.operand = &bx;   return R_16; }
-"%sp"   { yylval.operand = &sp;   return R_16; }
-"%bp"   { yylval.operand = &bp;   return R_16; }
-"%si"   { yylval.operand = &si;   return R_16; }
-"%di"   { yylval.operand = &di;   return R_16; }
-"%r8w"  { yylval.operand = &r8w;  return R_16; }
-"%r9w"  { yylval.operand = &r9w;  return R_16; }
-"%r10w" { yylval.operand = &r10w; return R_16; }
-"%r11w" { yylval.operand = &r11w; return R_16; }
-"%r12w" { yylval.operand = &r12w; return R_16; }
-"%r13w" { yylval.operand = &r13w; return R_16; }
-"%r14w" { yylval.operand = &r14w; return R_16; }
-"%r15w" { yylval.operand = &r15w; return R_16; }
+"%ax"   { yylval.operand = new Ax{ax};    return AX; }
+"%cx"   { yylval.operand = new R16{cx};   return R_16; }
+"%dx"   { yylval.operand = new Dx{dx};    return DX; }
+"%bx"   { yylval.operand = new R16{bx};   return R_16; }
+"%sp"   { yylval.operand = new R16{sp};   return R_16; }
+"%bp"   { yylval.operand = new R16{bp};   return R_16; }
+"%si"   { yylval.operand = new R16{si};   return R_16; }
+"%di"   { yylval.operand = new R16{di};   return R_16; }
+"%r8w"  { yylval.operand = new R16{r8w};  return R_16; }
+"%r9w"  { yylval.operand = new R16{r9w};  return R_16; }
+"%r10w" { yylval.operand = new R16{r10w}; return R_16; }
+"%r11w" { yylval.operand = new R16{r11w}; return R_16; }
+"%r12w" { yylval.operand = new R16{r12w}; return R_16; }
+"%r13w" { yylval.operand = new R16{r13w}; return R_16; }
+"%r14w" { yylval.operand = new R16{r14w}; return R_16; }
+"%r15w" { yylval.operand = new R16{r15w}; return R_16; }
 
-"%eax"  { yylval.operand = &eax; return EAX; }
-"%ecx"  { yylval.operand = &ecx; return R_32; }
-"%edx"  { yylval.operand = &edx; return R_32; }
-"%ebx"  { yylval.operand = &ebx; return R_32; }
-"%esp"  { yylval.operand = &esp; return R_32; }
-"%ebp"  { yylval.operand = &ebp; return R_32; }
-"%esi"  { yylval.operand = &esi; return R_32; }
-"%edi"  { yylval.operand = &edi; return R_32; }
-"%r8d"  { yylval.operand = &r8d;  return R_32; }
-"%r9d"  { yylval.operand = &r9d;  return R_32; }
-"%r10d" { yylval.operand = &r10d; return R_32; }
-"%r11d" { yylval.operand = &r11d; return R_32; }
-"%r12d" { yylval.operand = &r12d; return R_32; }
-"%r13d" { yylval.operand = &r13d; return R_32; }
-"%r14d" { yylval.operand = &r14d; return R_32; }
-"%r15d" { yylval.operand = &r15d; return R_32; }
+"%eax"  { yylval.operand = new Eax{eax}; return EAX; }
+"%ecx"  { yylval.operand = new R32{ecx}; return R_32; }
+"%edx"  { yylval.operand = new R32{edx}; return R_32; }
+"%ebx"  { yylval.operand = new R32{ebx}; return R_32; }
+"%esp"  { yylval.operand = new R32{esp}; return R_32; }
+"%ebp"  { yylval.operand = new R32{ebp}; return R_32; }
+"%esi"  { yylval.operand = new R32{esi}; return R_32; }
+"%edi"  { yylval.operand = new R32{edi}; return R_32; }
+"%r8d"  { yylval.operand = new R32{r8d};  return R_32; }
+"%r9d"  { yylval.operand = new R32{r9d};  return R_32; }
+"%r10d" { yylval.operand = new R32{r10d}; return R_32; }
+"%r11d" { yylval.operand = new R32{r11d}; return R_32; }
+"%r12d" { yylval.operand = new R32{r12d}; return R_32; }
+"%r13d" { yylval.operand = new R32{r13d}; return R_32; }
+"%r14d" { yylval.operand = new R32{r14d}; return R_32; }
+"%r15d" { yylval.operand = new R32{r15d}; return R_32; }
 
-"%rax" { yylval.operand = &rax; return RAX; }
-"%rcx" { yylval.operand = &rcx; return R_64; }
-"%rdx" { yylval.operand = &rdx; return R_64; }
-"%rbx" { yylval.operand = &rbx; return R_64; }
-"%rsp" { yylval.operand = &rsp; return R_64; }
-"%rbp" { yylval.operand = &rbp; return R_64; }
-"%rsi" { yylval.operand = &rsi; return R_64; }
-"%rdi" { yylval.operand = &rdi; return R_64; }
-"%r8"  { yylval.operand = &r8;  return R_64; }
-"%r9"  { yylval.operand = &r9;  return R_64; }
-"%r10" { yylval.operand = &r10; return R_64; }
-"%r11" { yylval.operand = &r11; return R_64; }
-"%r12" { yylval.operand = &r12; return R_64; }
-"%r13" { yylval.operand = &r13; return R_64; }
-"%r14" { yylval.operand = &r14; return R_64; }
-"%r15" { yylval.operand = &r15; return R_64; }
+"%rax" { yylval.operand = new Rax{rax}; return RAX; }
+"%rcx" { yylval.operand = new R64{rcx}; return R_64; }
+"%rdx" { yylval.operand = new R64{rdx}; return R_64; }
+"%rbx" { yylval.operand = new R64{rbx}; return R_64; }
+"%rsp" { yylval.operand = new R64{rsp}; return R_64; }
+"%rbp" { yylval.operand = new R64{rbp}; return R_64; }
+"%rsi" { yylval.operand = new R64{rsi}; return R_64; }
+"%rdi" { yylval.operand = new R64{rdi}; return R_64; }
+"%r8"  { yylval.operand = new R64{r8};  return R_64; }
+"%r9"  { yylval.operand = new R64{r9};  return R_64; }
+"%r10" { yylval.operand = new R64{r10}; return R_64; }
+"%r11" { yylval.operand = new R64{r11}; return R_64; }
+"%r12" { yylval.operand = new R64{r12}; return R_64; }
+"%r13" { yylval.operand = new R64{r13}; return R_64; }
+"%r14" { yylval.operand = new R64{r14}; return R_64; }
+"%r15" { yylval.operand = new R64{r15}; return R_64; }
 
-"%es" { yylval.operand = &es; return SREG; }
-"%cs" { yylval.operand = &cs; return SREG; }
-"%ss" { yylval.operand = &ss; return SREG; }
-"%ds" { yylval.operand = &ds; return SREG; }
-"%fs" { yylval.operand = &fs; return FS; }
-"%gs" { yylval.operand = &gs; return GS; }
+"%es" { yylval.operand = new Sreg{es}; return SREG; }
+"%cs" { yylval.operand = new Sreg{cs}; return SREG; }
+"%ss" { yylval.operand = new Sreg{ss}; return SREG; }
+"%ds" { yylval.operand = new Sreg{ds}; return SREG; }
+"%fs" { yylval.operand = new Fs{fs}; return FS; }
+"%gs" { yylval.operand = new Gs{gs}; return GS; }
 
-"%st"    { yylval.operand = &st0; return ST_0; }
-"%st(0)" { yylval.operand = &st0; return ST; }
-"%st(1)" { yylval.operand = &st1; return ST; }
-"%st(2)" { yylval.operand = &st2; return ST; }
-"%st(3)" { yylval.operand = &st3; return ST; }
-"%st(4)" { yylval.operand = &st4; return ST; }
-"%st(5)" { yylval.operand = &st5; return ST; }
-"%st(6)" { yylval.operand = &st6; return ST; }
-"%st(7)" { yylval.operand = &st7; return ST; }
+"%st"    { yylval.operand = new St0{st0}; return ST_0; }
+"%st(0)" { yylval.operand = new St0{st0}; return ST_0; }
+"%st(1)" { yylval.operand = new St{st1}; return ST; }
+"%st(2)" { yylval.operand = new St{st2}; return ST; }
+"%st(3)" { yylval.operand = new St{st3}; return ST; }
+"%st(4)" { yylval.operand = new St{st4}; return ST; }
+"%st(5)" { yylval.operand = new St{st5}; return ST; }
+"%st(6)" { yylval.operand = new St{st6}; return ST; }
+"%st(7)" { yylval.operand = new St{st7}; return ST; }
 
-"%xmm0"  { yylval.operand = &xmm0;  return XMM_0; }
-"%xmm1"  { yylval.operand = &xmm1;  return XMM; }
-"%xmm2"  { yylval.operand = &xmm2;  return XMM; }
-"%xmm3"  { yylval.operand = &xmm3;  return XMM; }
-"%xmm4"  { yylval.operand = &xmm4;  return XMM; }
-"%xmm5"  { yylval.operand = &xmm5;  return XMM; }
-"%xmm6"  { yylval.operand = &xmm6;  return XMM; }
-"%xmm7"  { yylval.operand = &xmm7;  return XMM; }
-"%xmm8"  { yylval.operand = &xmm8;  return XMM; }
-"%xmm9"  { yylval.operand = &xmm9;  return XMM; }
-"%xmm10" { yylval.operand = &xmm10; return XMM; }
-"%xmm11" { yylval.operand = &xmm11; return XMM; }
-"%xmm12" { yylval.operand = &xmm12; return XMM; }
-"%xmm13" { yylval.operand = &xmm13; return XMM; }
-"%xmm14" { yylval.operand = &xmm14; return XMM; }
-"%xmm15" { yylval.operand = &xmm15; return XMM; }
+"%xmm0"  { yylval.operand = new Xmm0{xmm0};  return XMM_0; }
+"%xmm1"  { yylval.operand = new Xmm{xmm1};  return XMM; }
+"%xmm2"  { yylval.operand = new Xmm{xmm2};  return XMM; }
+"%xmm3"  { yylval.operand = new Xmm{xmm3};  return XMM; }
+"%xmm4"  { yylval.operand = new Xmm{xmm4};  return XMM; }
+"%xmm5"  { yylval.operand = new Xmm{xmm5};  return XMM; }
+"%xmm6"  { yylval.operand = new Xmm{xmm6};  return XMM; }
+"%xmm7"  { yylval.operand = new Xmm{xmm7};  return XMM; }
+"%xmm8"  { yylval.operand = new Xmm{xmm8};  return XMM; }
+"%xmm9"  { yylval.operand = new Xmm{xmm9};  return XMM; }
+"%xmm10" { yylval.operand = new Xmm{xmm10}; return XMM; }
+"%xmm11" { yylval.operand = new Xmm{xmm11}; return XMM; }
+"%xmm12" { yylval.operand = new Xmm{xmm12}; return XMM; }
+"%xmm13" { yylval.operand = new Xmm{xmm13}; return XMM; }
+"%xmm14" { yylval.operand = new Xmm{xmm14}; return XMM; }
+"%xmm15" { yylval.operand = new Xmm{xmm15}; return XMM; }
 
-"%ymm0"  { yylval.operand = &ymm0;  return YMM; }
-"%ymm1"  { yylval.operand = &ymm1;  return YMM; }
-"%ymm2"  { yylval.operand = &ymm2;  return YMM; }
-"%ymm3"  { yylval.operand = &ymm3;  return YMM; }
-"%ymm4"  { yylval.operand = &ymm4;  return YMM; }
-"%ymm5"  { yylval.operand = &ymm5;  return YMM; }
-"%ymm6"  { yylval.operand = &ymm6;  return YMM; }
-"%ymm7"  { yylval.operand = &ymm7;  return YMM; }
-"%ymm8"  { yylval.operand = &ymm8;  return YMM; }
-"%ymm9"  { yylval.operand = &ymm9;  return YMM; }
-"%ymm10" { yylval.operand = &ymm10; return YMM; }
-"%ymm11" { yylval.operand = &ymm11; return YMM; }
-"%ymm12" { yylval.operand = &ymm12; return YMM; }
-"%ymm13" { yylval.operand = &ymm13; return YMM; }
-"%ymm14" { yylval.operand = &ymm14; return YMM; }
-"%ymm15" { yylval.operand = &ymm15; return YMM; }
+"%ymm0"  { yylval.operand = new Ymm{ymm0};  return YMM; }
+"%ymm1"  { yylval.operand = new Ymm{ymm1};  return YMM; }
+"%ymm2"  { yylval.operand = new Ymm{ymm2};  return YMM; }
+"%ymm3"  { yylval.operand = new Ymm{ymm3};  return YMM; }
+"%ymm4"  { yylval.operand = new Ymm{ymm4};  return YMM; }
+"%ymm5"  { yylval.operand = new Ymm{ymm5};  return YMM; }
+"%ymm6"  { yylval.operand = new Ymm{ymm6};  return YMM; }
+"%ymm7"  { yylval.operand = new Ymm{ymm7};  return YMM; }
+"%ymm8"  { yylval.operand = new Ymm{ymm8};  return YMM; }
+"%ymm9"  { yylval.operand = new Ymm{ymm9};  return YMM; }
+"%ymm10" { yylval.operand = new Ymm{ymm10}; return YMM; }
+"%ymm11" { yylval.operand = new Ymm{ymm11}; return YMM; }
+"%ymm12" { yylval.operand = new Ymm{ymm12}; return YMM; }
+"%ymm13" { yylval.operand = new Ymm{ymm13}; return YMM; }
+"%ymm14" { yylval.operand = new Ymm{ymm14}; return YMM; }
+"%ymm15" { yylval.operand = new Ymm{ymm15}; return YMM; }
 
 [a-z]+" *"?    { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
 "rep "[a-z]+   { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
