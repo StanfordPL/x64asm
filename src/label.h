@@ -30,28 +30,21 @@ namespace x64asm {
 */
 class Label : public Operand {
 	public:
-		constexpr Label(uint64_t val) 
-				: Operand{val} { 
+		Label(const std::string& s) {
+			val_ = labels_.find(s) == labels_.end() ?
+			  labels_.insert(std::make_pair(s, labels_.size())).first->second :
+			  labels_.find(s)->second;
 		}
 
-		constexpr bool check() {
+		bool check() const {
 			return true;
 		}
 
 		void write_att(std::ostream& os) const;
 		void write_intel(std::ostream& os) const;
 
-		static const Label& get(const std::string& s) {
-			const auto itr = labels_.find(s);
-			if ( itr == labels_.end() ) {
-				const auto elem = std::make_pair(s, Label{labels_.size()});
-				return labels_.insert(elem).first->second;
-			}
-			return itr->second;
-		}
-
 	private:
-		static std::map<std::string, Label> labels_;	
+		static std::map<std::string, uint64_t> labels_;	
 };
 
 } // namespace x64asm

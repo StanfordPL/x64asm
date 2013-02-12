@@ -25,9 +25,9 @@ void Label::write_att(ostream& os) const {
 }
 
 void Label::write_intel(ostream& os) const {
-	os << ".LABEL_" << dec << val_;
+	os << ".L_X64ASM_" << dec << val_;
 }
 
-map<string, Label> Label::labels_;
+map<string, uint64_t> Label::labels_;
 
 } // namespace x64asm

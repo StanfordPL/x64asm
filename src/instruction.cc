@@ -443,8 +443,14 @@ bool Instruction::check() const {
 
 void Instruction::write_att(ostream& os) const {
 	assert(get_opcode() < att_.size());
-	os << att_[get_opcode()] << " ";
 
+	if ( get_opcode() == LABEL_DEFN ) {
+		get_operand<Label>(0).write_att(os);
+		os << ":";
+		return;
+	}
+
+	os << att_[get_opcode()] << " ";
 	if ( arity() > 0 )
 		for ( int i = arity()-1; i >= 0; --i ) {
 			switch ( type(i) ) {
@@ -568,6 +574,13 @@ void Instruction::write_att(ostream& os) const {
 
 void Instruction::write_intel(ostream& os) const {
 	assert(get_opcode() < intel_.size());
+
+	if ( get_opcode() == LABEL_DEFN ) {
+		get_operand<Label>(0).write_intel(os);
+		os << ":";
+		return;
+	}
+
 	os << intel_[get_opcode()] << " ";
 
 	for ( size_t i = 0, ie = arity(); i < ie; ++i ) {

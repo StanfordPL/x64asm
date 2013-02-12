@@ -99,12 +99,13 @@ bool is_a(const Operand* o, Type parse, Type target) {
 	if ( parse == Type::XMM_0 )
 		return target == Type::XMM;
 
-	if ( parse == Type::MOFFS_8 && is_mem(target) ) {
+	if ( parse == Type::MOFFS_8 ) {
 		const auto offs = ((Moffs8*)o)->get_offset();
-		return ((const Imm32*)&offs)->check();
+		if ( is_mem(target) || target == Type::REL_32 )
+			return ((const Imm32*)&offs)->check();
+		if ( target == Type::REL_8 )
+			return ((const Imm8*)&offs)->check();
 	}
-
-	// Can convert a Moffs8 to a rel
 
 	if ( is_mem(parse) && is_mem(target) )
 		return true;
@@ -113,19 +114,21 @@ bool is_a(const Operand* o, Type parse, Type target) {
 }
 
 const Operand promote(const Operand* op, Type parse, Type target) {
-	if ( parse != Type::MOFFS_8 || ! is_mem(target) )
-		return *op;
+	if ( parse == Type::MOFFS_8 ) {
+		const auto moffs = (Moffs8*)op;
+		const auto offs = moffs->get_offset();
 
-	const auto moffs = (Moffs8*)op;
-	const auto offs = moffs->get_offset();
-		
-	M8 ret{*((Imm32*)(&offs))};
-	if ( moffs->contains_seg() )
-	  ret.set_seg(moffs->get_seg());
+		if ( is_mem(target) ) {
+			M8 ret{*((Imm32*)(&offs))};
+			if ( moffs->contains_seg() )
+	  		ret.set_seg(moffs->get_seg());
+			return ret;
+		}
+		if ( target == Type::REL_8 || target == Type::REL_32 )
+			return offs;
+	}
 
-	// Convert a moffs to a rel
-
-	return ret;
+	return *op;
 }
 
 // Returns a poorly formed instruction on error

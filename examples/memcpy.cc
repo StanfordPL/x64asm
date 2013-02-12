@@ -46,41 +46,36 @@ int main() {
 	// Declare an assembler.
 	Assembler assm;
 
-	// Declare labels
-	// Conceptually distinct labels should be assigned unique integer values.
-	Label loop{0};
-	Label done{1};
-
 	// The start() method configures the assembler to emit code into memcpy.
 	assm.start(memcpy);
 
 	// Emit code.  Note that the assembler API follows the intel convention
 	// for ordering operands.  This is the opposite of the (AT&T) code shown
 	// above.  Also note that labels do not have to be bound prior to reference.
-	assm.bind(loop);	
+	assm.bind(Label{"loop"});	
 		assm.cmp(rdx, Imm32{0});
-		assm.je(done);
+		assm.je(Label{"done"});
 
 		assm.mov(al, M8{rsi});
 		assm.mov(M8{rdi}, al);
 		assm.dec(rdx);
-		assm.jmp(loop);
+		assm.jmp(Label{"loop"});
 
-	assm.bind(done);
+	assm.bind(Label{"done"});
 		assm.ret();
 
 	// The finish() method finalizes code generation (ie: label resolution)
 	assm.finish();
 
 	Code c {
-		{LABEL_DEFN, {loop}},
+		{LABEL_DEFN, {Label{"loop"}}},
 		{CMP_R64_IMM32, {rdx, Imm32{0}}},
-		{JE_LABEL, {done}},
+		{JE_LABEL, {Label{"done"}}},
 		{MOV_RL_M8, {al, M8{rsi}}},
 		{MOV_M8_RL, {M8{rdi}, al}},
 		{DEC_R64, {rdx}},
-		{JMP_LABEL, {loop}},
-		{LABEL_DEFN, {done}},
+		{JMP_LABEL, {Label{"loop"}}},
+		{LABEL_DEFN, {Label{"done"}}},
 		{RET, {}}
 	};
 	assm.write_hex(cout, c);

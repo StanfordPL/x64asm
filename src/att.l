@@ -54,7 +54,7 @@ const Imm* to_imm(const char* c, bool is_hex, bool is_neg) {
 }
 
 const Label* to_label(const char* c) {
-	return new Label{Label::get(c)};
+	return new Label{Label{c}};
 }
 
 const std::string* to_str(const char* c, size_t len) {
@@ -92,7 +92,7 @@ const std::string* to_str(const char* c, size_t len) {
 "$-0x"[0-9a-f]+ { yylval.operand = to_imm(yytext+2, true, true);  return IMM; }
 "$0x"[0-9a-f]+  { yylval.operand = to_imm(yytext+1, true, false); return IMM; }
 
-"."[a-z][a-zA-Z0-9]+ { yylval.operand = to_label(yytext); return LABEL; }
+"."[a-zA-Z0-9]+ { yylval.operand = to_label(yytext); return LABEL; }
 
 "<66>"   { yylval.operand = new Modifier{pref_66}; return PREF_66; }
 "<rexw>" { yylval.operand = new Modifier{pref_rex_w}; return PREF_REX_W; }
