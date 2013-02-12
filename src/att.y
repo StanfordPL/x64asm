@@ -43,11 +43,24 @@ void yyerror(std::istream& is, x64asm::Code& code, const char* s) {
 
 typedef std::pair<x64asm::Opcode, std::vector<x64asm::Type>> Entry;
 typedef std::vector<Entry> Row;
-typedef std::map<const char*, Row> Table;
+typedef std::map<std::string, Row> Table;
 
 Table att_table = {
 	#include "src/att.table"
 };
+
+bool is_mem(Type t) {
+	return t == Type::M_8           || t == Type::M_16          || 
+		     t == Type::M_32          || t == Type::M_64          || 
+				 t == Type::M_128         || t == Type::M_256         ||
+				 t == Type::M_16_INT      || t == Type::M_32_INT      || 
+				 t == Type::M_64_INT      || t == Type::M_32_FP       || 
+				 t == Type::M_64_FP       || t == Type::M_80_FP       ||
+				 t == Type::M_80_BCD      || t == Type::M_2_BYTE      || 
+				 t == Type::M_28_BYTE     || t == Type::M_108_BYTE    || 
+				 t == Type::M_512_BYTE    || t == Type::FAR_PTR_16_16 ||
+		     t == Type::FAR_PTR_16_32 || t == Type::FAR_PTR_16_64;
+}
 
 bool is_a(const Operand* o, Type parse, Type target) {
 	if ( parse == target )
@@ -62,7 +75,7 @@ bool is_a(const Operand* o, Type parse, Type target) {
 			case Type::IMM_16: return ((const Imm16*)o)->check();
 			case Type::IMM_32: return ((const Imm32*)o)->check();
 			case Type::IMM_64: return ((const Imm64*)o)->check();
-			default:           assert(false);
+			default:           return false;
 		}
 
 	if ( parse == Type::AL || parse == Type::CL ) 
@@ -86,15 +99,44 @@ bool is_a(const Operand* o, Type parse, Type target) {
 	if ( parse == Type::XMM_0 )
 		return target == Type::XMM;
 
-	// TODO... finish this
+	if ( parse == Type::MOFFS_8 && is_mem(target) ) {
+		const auto offs = ((Moffs8*)o)->get_offset();
+		return ((const Imm32*)&offs)->check();
+	}
+
+	// Can convert a Moffs8 to a rel
+
+	if ( is_mem(parse) && is_mem(target) )
+		return true;
+
+	return false;
+}
+
+const Operand promote(const Operand* op, Type parse, Type target) {
+	if ( parse != Type::MOFFS_8 || ! is_mem(target) )
+		return *op;
+
+	const auto moffs = (Moffs8*)op;
+	const auto offs = moffs->get_offset();
+		
+	M8 ret{*((Imm32*)(&offs))};
+	if ( moffs->contains_seg() )
+	  ret.set_seg(moffs->get_seg());
+
+	// Convert a moffs to a rel
+
+	return ret;
 }
 
 // Returns a poorly formed instruction on error
 const Instruction* to_instr(const std::string& opc, 
     const std::vector<std::pair<const Operand*, x64asm::Type>*>& ops) {
-	const auto itr = att_table.find(opc.c_str());
+
+	cout << "Opcode: " << opc << endl;
+
+	const auto itr = att_table.find(opc);
 	if ( itr == att_table.end() )
-		return new Instruction{x64asm::NOP, {xmm0}};
+		return new Instruction{x64asm::ADC_R16_R16, {Imm8{64},Imm8{64}}};
 
 	for ( const auto& entry : itr->second ) {
 		const auto arity = entry.second.size();
@@ -102,19 +144,24 @@ const Instruction* to_instr(const std::string& opc,
 			continue;
 
 		auto match = true;
-		for ( size_t i = 0; i < arity; ++i ) 
+		for ( size_t i = 0; i < arity; ++i ) {
+			cout << "Attempting to match " << (int)ops[i]->second << " to " << (int)entry.second[i] << endl;
 			match &= is_a(ops[i]->first, ops[i]->second, entry.second[i]);
-
-		if ( match ) {
-			Instruction* instr = new Instruction{entry.first};
-			for ( size_t i = 0, ie = ops.size(); i < ie; ++i )
-				instr->set_operand(i, *(ops[i]->first));
-
-			return instr;
 		}
+		cout << "DONE" << endl;
+
+		if ( !match )
+			continue;
+
+		Instruction* instr = new Instruction{entry.first};
+		for ( size_t i = 0, ie = ops.size(); i < ie; ++i ) {
+			auto op = promote(ops[i]->first, ops[i]->second, entry.second[i]);
+			instr->set_operand(i, op);
+		}
+		return instr;
 	}
 
-	return new Instruction{x64asm::NOP, {xmm0}};
+	return new Instruction{x64asm::ADC_R16_R16, {Imm8{64},Imm8{64}}};
 }
 
 R32 base32(const Operand* o) { 

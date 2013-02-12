@@ -107,8 +107,8 @@ const std::string* to_str(const char* c, size_t len) {
 "%mm6" { yylval.operand = new Mm{mm6}; return MM; }
 "%mm7" { yylval.operand = new Mm{mm7}; return MM; }
 
-"%al" { yylval.operand = new Al{al}; return AL; }
-"%cl" { yylval.operand = new Cl{cl}; return CL; }
+"%al" { yylval.operand = new Al{al}; return RL; }
+"%cl" { yylval.operand = new Cl{cl}; return RL; }
 "%dl" { yylval.operand = new Rl{dl}; return RL; }
 "%bl" { yylval.operand = new Rl{bl}; return RL; }
 
@@ -130,9 +130,9 @@ const std::string* to_str(const char* c, size_t len) {
 "%r14b" { yylval.operand = new Rb{r14b}; return RB; }
 "%r15b" { yylval.operand = new Rb{r15b}; return RB; }
 
-"%ax"   { yylval.operand = new Ax{ax};    return AX; }
+"%ax"   { yylval.operand = new Ax{ax};    return R_16; }
 "%cx"   { yylval.operand = new R16{cx};   return R_16; }
-"%dx"   { yylval.operand = new Dx{dx};    return DX; }
+"%dx"   { yylval.operand = new Dx{dx};    return R_16; }
 "%bx"   { yylval.operand = new R16{bx};   return R_16; }
 "%sp"   { yylval.operand = new R16{sp};   return R_16; }
 "%bp"   { yylval.operand = new R16{bp};   return R_16; }
@@ -147,7 +147,7 @@ const std::string* to_str(const char* c, size_t len) {
 "%r14w" { yylval.operand = new R16{r14w}; return R_16; }
 "%r15w" { yylval.operand = new R16{r15w}; return R_16; }
 
-"%eax"  { yylval.operand = new Eax{eax}; return EAX; }
+"%eax"  { yylval.operand = new Eax{eax}; return R_32; }
 "%ecx"  { yylval.operand = new R32{ecx}; return R_32; }
 "%edx"  { yylval.operand = new R32{edx}; return R_32; }
 "%ebx"  { yylval.operand = new R32{ebx}; return R_32; }
@@ -164,7 +164,7 @@ const std::string* to_str(const char* c, size_t len) {
 "%r14d" { yylval.operand = new R32{r14d}; return R_32; }
 "%r15d" { yylval.operand = new R32{r15d}; return R_32; }
 
-"%rax" { yylval.operand = new Rax{rax}; return RAX; }
+"%rax" { yylval.operand = new Rax{rax}; return R_64; }
 "%rcx" { yylval.operand = new R64{rcx}; return R_64; }
 "%rdx" { yylval.operand = new R64{rdx}; return R_64; }
 "%rbx" { yylval.operand = new R64{rbx}; return R_64; }
@@ -185,11 +185,11 @@ const std::string* to_str(const char* c, size_t len) {
 "%cs" { yylval.operand = new Sreg{cs}; return SREG; }
 "%ss" { yylval.operand = new Sreg{ss}; return SREG; }
 "%ds" { yylval.operand = new Sreg{ds}; return SREG; }
-"%fs" { yylval.operand = new Fs{fs}; return FS; }
-"%gs" { yylval.operand = new Gs{gs}; return GS; }
+"%fs" { yylval.operand = new Fs{fs}; return SREG; }
+"%gs" { yylval.operand = new Gs{gs}; return SREG; }
 
-"%st"    { yylval.operand = new St0{st0}; return ST_0; }
-"%st(0)" { yylval.operand = new St0{st0}; return ST_0; }
+"%st"    { yylval.operand = new St0{st0}; return ST; }
+"%st(0)" { yylval.operand = new St0{st0}; return ST; }
 "%st(1)" { yylval.operand = new St{st1}; return ST; }
 "%st(2)" { yylval.operand = new St{st2}; return ST; }
 "%st(3)" { yylval.operand = new St{st3}; return ST; }
@@ -198,7 +198,7 @@ const std::string* to_str(const char* c, size_t len) {
 "%st(6)" { yylval.operand = new St{st6}; return ST; }
 "%st(7)" { yylval.operand = new St{st7}; return ST; }
 
-"%xmm0"  { yylval.operand = new Xmm0{xmm0};  return XMM_0; }
+"%xmm0"  { yylval.operand = new Xmm0{xmm0};  return XMM; }
 "%xmm1"  { yylval.operand = new Xmm{xmm1};  return XMM; }
 "%xmm2"  { yylval.operand = new Xmm{xmm2};  return XMM; }
 "%xmm3"  { yylval.operand = new Xmm{xmm3};  return XMM; }
