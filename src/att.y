@@ -50,8 +50,43 @@ Table att_table = {
 };
 
 bool is_a(const Operand* o, Type parse, Type target) {
+	if ( parse == target )
+		return true;
 
+	if ( parse == Type::IMM_8 )
+		switch ( target ) {
+			case Type::ZERO:   return ((const Zero*)o)->check();
+			case Type::ONE:    return ((const One*)o)->check();
+			case Type::THREE:  return ((const Three*)o)->check();
+			case Type::IMM_8:  return ((const Imm8*)o)->check();
+			case Type::IMM_16: return ((const Imm16*)o)->check();
+			case Type::IMM_32: return ((const Imm32*)o)->check();
+			case Type::IMM_64: return ((const Imm64*)o)->check();
+			default:           assert(false);
+		}
 
+	if ( parse == Type::AL || parse == Type::CL ) 
+		return target == Type::RL;
+
+	if ( parse == Type::AX || parse == Type::DX )
+		return target == Type::R_16;
+
+	if ( parse == Type::EAX )
+		return target == Type::R_32;
+
+	if ( parse == Type::RAX )
+		return target == Type::R_64;
+
+	if ( parse == Type::FS || parse == Type::GS )
+		return target == Type::SREG;
+
+	if ( parse == Type::ST_0 )
+		return target == Type::ST;
+
+	if ( parse == Type::XMM_0 )
+		return target == Type::XMM;
+
+	// TODO... finish this
 }
 
 // Returns a poorly formed instruction on error
