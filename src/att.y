@@ -63,8 +63,9 @@ bool is_mem(Type t) {
 }
 
 bool is_a(const Operand* o, Type parse, Type target) {
-	if ( parse == target )
-		return true;
+	
+	// These first two parses still have placeholder types.
+	// They should be checked before the generic equality test.
 
 	if ( parse == Type::IMM_8 )
 		switch ( target ) {
@@ -77,6 +78,21 @@ bool is_a(const Operand* o, Type parse, Type target) {
 			case Type::IMM_64: return ((const Imm64*)o)->check();
 			default:           return false;
 		}
+
+	if ( parse == Type::MOFFS_8 ) {
+		const auto offs = ((Moffs8*)o)->get_offset();
+		if ( is_mem(target) || target == Type::REL_32 )
+			return ((const Imm32*)&offs)->check();
+		if ( target == Type::REL_8 )
+			return ((const Imm8*)&offs)->check();
+	}
+
+	// Now it's alright to perform the generic check.
+
+	if ( parse == target )
+		return true;
+
+	// Now try simple promotions.
 
 	if ( parse == Type::AL || parse == Type::CL ) 
 		return target == Type::RL;
@@ -98,14 +114,6 @@ bool is_a(const Operand* o, Type parse, Type target) {
 
 	if ( parse == Type::XMM_0 )
 		return target == Type::XMM;
-
-	if ( parse == Type::MOFFS_8 ) {
-		const auto offs = ((Moffs8*)o)->get_offset();
-		if ( is_mem(target) || target == Type::REL_32 )
-			return ((const Imm32*)&offs)->check();
-		if ( target == Type::REL_8 )
-			return ((const Imm8*)&offs)->check();
-	}
 
 	if ( is_mem(parse) && is_mem(target) )
 		return true;
@@ -150,8 +158,10 @@ const Instruction* to_instr(const std::string& opc,
 		for ( size_t i = 0; i < arity; ++i ) {
 			cout << "Attempting to match " << (int)ops[i]->second << " to " << (int)entry.second[i] << endl;
 			match &= is_a(ops[i]->first, ops[i]->second, entry.second[i]);
+			if ( !match )
+				break;
 		}
-		cout << "DONE" << endl;
+		cout << (match ? "OKAY" : "FAILED") << endl;
 
 		if ( !match )
 			continue;

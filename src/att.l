@@ -86,11 +86,11 @@ const std::string* to_str(const char* c, size_t len) {
 "<taken>"     { yylval.operand = new Hint{taken}; return HINT; }
 "<not taken>" { yylval.operand = new Hint{not_taken}; return HINT; }
 
-"-0x"[0-9a-f]+ { yylval.operand = to_imm(yytext+1, true, true); return OFFSET; }
-"0x"[0-9a-f]+  { yylval.operand = to_imm(yytext, true, false);  return OFFSET; }
+"-0x"[0-9a-fA-F]+ { yylval.operand = to_imm(yytext+1, true, true); return OFFSET; }
+"0x"[0-9a-fA-F]+  { yylval.operand = to_imm(yytext, true, false);  return OFFSET; }
 
-"$-0x"[0-9a-f]+ { yylval.operand = to_imm(yytext+2, true, true);  return IMM; }
-"$0x"[0-9a-f]+  { yylval.operand = to_imm(yytext+1, true, false); return IMM; }
+"$-0x"[0-9a-fA-F]+ { yylval.operand = to_imm(yytext+2, true, true);  return IMM; }
+"$0x"[0-9a-fA-F]+  { yylval.operand = to_imm(yytext+1, true, false); return IMM; }
 
 "."[a-zA-Z0-9]+ { yylval.operand = to_label(yytext); return LABEL; }
 

@@ -1236,6 +1236,43 @@ assm_case i = "case " ++ (opcode_enum i) ++ ":\n" ++
 assm_cases :: [Instr] -> String
 assm_cases is = intercalate "\n" $ map assm_case is
 
+-- Instruction ordering
+--------------------------------------------------------------------------------
+
+-- Comparison ordering for operands (more specific appear first)
+op_order :: [String]
+op_order = ["hint",
+  "0","1","3","imm8","imm16","imm32","imm64",
+  "label",
+  "p66","pw","far",
+  "AL","CL","rl","rh","rb","AX","DX","r16","EAX","r32","RAX","r64",
+  "m8","m16","m32","m64","m128","m256","m16:16","m16:32","m16:64",
+  "m16int","m32int","m64int","m80bcd","m32fp","m64fp","m80fp",
+  "m2byte","m28byte","m108byte","m512byte",
+  "mm",
+  "moffs8","moffs16","moffs32","moffs64",
+  "rel8","rel32",
+  "FS","GS","Sreg",
+  "ST","ST(i)",
+  "<XMM0>","xmm",
+  "ymm"]
+
+-- Compare operands
+compare_op :: String -> String -> Ordering
+compare_op o1 o2 = compare (idx o1 op_order) (idx o2 op_order)
+  where idx x xs = let (Just i) = elemIndex x xs in i
+
+-- Compare instructions based on operands	
+compare_instr :: Instr -> Instr -> Ordering
+compare_instr i1 i2 = comp (operands i1) (operands i2)
+  where comp [] [] = EQ
+        comp [] (_:_) = LT
+        comp (_:_) [] = GT
+        comp (x:xs) (y:ys) = case compare_op x y of
+          LT -> LT
+          GT -> GT
+          EQ -> comp xs ys
+
 -- Read AT&T code
 --------------------------------------------------------------------------------
 
@@ -1258,7 +1295,7 @@ att_row_elem i = "{" ++ e ++ ", {" ++ ops ++ "}}"
 att_row :: [Instr] -> String
 att_row is = " \t{\"" ++ (mn is) ++ "\", {\n\t\t " ++ (body is) ++ "\n}}"
   where mn is = (att (head is))
-        body is = intercalate "\n\t\t," $ map att_row_elem is
+        body is = intercalate "\n\t\t," $ map att_row_elem $ sortBy compare_instr is
 
 -- Generates the entire at&t parse table
 att_table :: [Instr] -> String
@@ -1286,7 +1323,7 @@ intel_row_elem i = "{" ++ e ++ ", {" ++ ops ++ "}}"
 intel_row :: [Instr] -> String
 intel_row is = ",\t{\"" ++ (mn is) ++ "\", {\n\t\t " ++ (body is) ++ "\n}}"
   where mn is = (raw_mnemonic (head is))
-        body is = intercalate "\n\t\t," $ map intel_row_elem is
+        body is = intercalate "\n\t\t," $ map intel_row_elem $ sortBy compare_instr is
 
 -- Generates the entire intel parse table
 intel_table :: [Instr] -> String
