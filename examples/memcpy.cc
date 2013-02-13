@@ -26,7 +26,6 @@ using namespace x64asm;
 // memcpy.s
 
 // Example 1: Read from file 
-
 Function from_file() {
 	// Create an assembler.
 	Assembler assm;
@@ -42,7 +41,6 @@ Function from_file() {
 }
 
 // Example 2: Write code using in-memory RTL.
-
 Function from_code() {
 	// Create an assembler.
 	Assembler assm;
@@ -68,7 +66,6 @@ Function from_code() {
 }
 
 // Example 3: Use the assembler API.
-
 Function from_api() {
 	// Create an assembler and a function to compile code to.
 	Assembler assm;
