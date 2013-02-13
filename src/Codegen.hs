@@ -1424,7 +1424,7 @@ test_instr i = map (mn ++) $ test_operands i
 
 -- Convert an instruction into a test file
 write_test_file :: Instr -> IO ()
-write_test_file i = writeFile file $ intercalate "\n" $ test_instr i
+write_test_file i = writeFile file $ (intercalate "\n" $ test_instr i) ++ "\n"
   where file = "../test/" ++ (low (opcode_enum i)) ++ ".s"
 
 -- Convert all instructions into a list of instances for compilation

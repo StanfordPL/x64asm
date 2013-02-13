@@ -61,8 +61,8 @@ erthing: $(LIB) $(TEST) $(BIN) $(DOC)
 
 ##### TEST TARGETS
 
-test: erthing
-	echo "TODO..."
+check: 
+	cd test/ && ./test.sh && cd -
 
 ##### BUILD TARGETS
 
@@ -109,4 +109,4 @@ clean:
 	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN) $(TEST)
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.intel src/*.enum src/*.table
 	rm -f src/*.tab.c src/*.tab.h src/lex.*.c src/*.output
-	rm -f test/*.s
+	rm -f test/*.s test/error.log
