@@ -1455,16 +1455,16 @@ html_row i = "<tr>" ++
 html_table :: [Instr] -> String
 html_table is = "<table>" ++ 
                 "<tr>" ++
-                "<td>Hex Encoding</td>" ++
-                "<td>Intel Form</td>" ++
-                "<td>AT&T Form</td>" ++
-                "<td>Operand Encoding</td>" ++
-                "<td>Explicit Read/Write/Undef Properties</td>" ++
-                "<td>Implicit Reads</td>" ++
-                "<td>Implicit Write</td>" ++
-                "<td>Implicit Undefs</td>" ++
-                "<td>CPU ID Flag</td>" ++
-                "<td>Description</td>" ++
+                "<th>Hex Encoding</th>" ++
+                "<th>Intel Form</th>" ++
+                "<th>AT&T Form</th>" ++
+                "<th>Operand Encoding</th>" ++
+                "<th>Explicit Read/Write/Undef Properties</th>" ++
+                "<th>Implicit Reads</th>" ++
+                "<th>Implicit Write</th>" ++
+                "<th>Implicit Undefs</th>" ++
+                "<th>CPU ID Flag</th>" ++
+                "<th>Description</th>" ++
                 "</tr>\n" ++ 
                 intercalate "\n" (map html_row is) ++ 
                 "</table>"
