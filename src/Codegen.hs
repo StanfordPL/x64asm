@@ -1177,8 +1177,8 @@ assm_oth_defn :: Instr -> String
 assm_oth_defn i = "  // Non-VEX-Encoded Instruction: \n\n" ++
                   "  " ++ pref1 i ++
                   "  " ++ pref2 i ++ 
-                  "  " ++ pref3 i ++
-                  "  " ++ pref4 i ++
+                  "  " ++ pref4 i ++ -- gcc prefers this ordering
+                  "  " ++ pref3 i ++ -- gcc prefers this ordering
                   "  " ++ rex_prefix i ++
                   "  " ++ non_vex_opcode i ++
                   "  " ++ mod_rm_sib i ++

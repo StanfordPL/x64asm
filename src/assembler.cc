@@ -44,7 +44,15 @@ void Assembler::mod_rm_sib(const M& rm, const Operand& r) {
 	// Every path we take needs these bits for the mod/rm byte
 	const auto rrr = (r.val_ << 3) & 0x38;
 
-	// This special cases simplifies all subsequent logic --
+	// First special case check for RIP+disp32
+	if ( rm.rip_offset() ) {
+		const auto mod_byte = 0x00 | rrr | 0x5;
+		fxn_->emit_byte(mod_byte);
+		disp_imm(rm.get_disp());
+		return;
+	}
+
+	// Second special case check for no base register
 	if ( !rm.contains_base() ) { 
 		const auto mod_byte = 0x00 | rrr | 0x4;
 		const auto sib_byte = rm.contains_index() ? 
@@ -70,8 +78,8 @@ void Assembler::mod_rm_sib(const M& rm, const Operand& r) {
 	else if ( disp == 0 && bbb != 0x5 )
 		mod = 0x00;
 
-	// Is index null?
-	if ( !rm.contains_index() ) {
+	// Is index non-null?
+	if ( rm.contains_index() ) {
 		const auto mod_byte = mod | rrr | 0x4;
 		const auto sib_byte = ((int)rm.get_scale() & 0xc0) |
 			                    ((rm.get_index().val_ << 3) & 0x38) | bbb;
@@ -87,7 +95,7 @@ void Assembler::mod_rm_sib(const M& rm, const Operand& r) {
 		fxn_->emit_byte(mod_byte);
 		fxn_->emit_byte(sib_byte);
 	}
-	// Easy times
+	// No sib byte
 	else {
 		const auto mod_byte = mod | rrr | bbb;
 		fxn_->emit_byte(mod_byte);

@@ -36,7 +36,7 @@ do
 
 	if [ -e $src.log ]
 	then
-		echo "  "`grep "*" $src.log | wc -l`" errors"
+		echo "  Found "`grep "*" $src.log | wc -l`" errors"
 	fi
 done
 
