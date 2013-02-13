@@ -388,6 +388,7 @@ typed_operand : HINT { $$ = new pair<const Operand*, Type>{$1, Type::HINT}; }
 	| FAR { $$ = new pair<const Operand*, Type>{$1, Type::FAR}; }
 	| MM { $$ = new pair<const Operand*, Type>{$1, Type::MM}; }
 	| RL { $$ = new pair<const Operand*, Type>{$1, Type::RL}; }
+	| RH { $$ = new pair<const Operand*, Type>{$1, Type::RH}; }
 	| RB { $$ = new pair<const Operand*, Type>{$1, Type::RB}; }
 	| R_16 { $$ = new pair<const Operand*, Type>{$1, Type::R_16}; }
 	| R_32 { $$ = new pair<const Operand*, Type>{$1, Type::R_32}; }
