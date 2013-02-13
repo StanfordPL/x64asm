@@ -173,8 +173,7 @@ const Operand promote(const Operand* op, Type parse, Type target) {
 const Instruction* to_instr(const std::string& opc, 
     const std::vector<std::pair<const Operand*, x64asm::Type>*>& ops) {
 
-	cout << "Opcode: " << opc << endl;
-
+	//cout << "Opcode: " << opc << endl;
 	const auto itr = att_table.find(opc);
 	if ( itr == att_table.end() )
 		return new Instruction{x64asm::ADC_R16_R16, {Imm8{64},Imm8{64}}};
@@ -186,12 +185,12 @@ const Instruction* to_instr(const std::string& opc,
 
 		auto match = true;
 		for ( size_t i = 0; i < arity; ++i ) {
-			cout << "Attempting to match " << (int)ops[i]->second << " to " << (int)entry.second[i] << endl;
+			//cout << "Attempting to match " << (int)ops[i]->second << " to " << (int)entry.second[i] << endl;
 			match &= is_a(ops[i]->first, ops[i]->second, entry.second[i]);
 			if ( !match )
 				break;
 		}
-		cout << (match ? "OKAY" : "FAILED") << endl;
+		//cout << (match ? "OKAY" : "FAILED") << endl;
 
 		if ( !match )
 			continue;
