@@ -1275,7 +1275,7 @@ att_group is = groupBy (\x y -> (att x) == (att y)) is'
 
 -- Generates a part of a row in the at&t parse table
 att_row_elem :: Instr -> String
-att_row_elem i = "{" ++ e ++ ", {" ++ ops ++ "}}"
+att_row_elem i = "{" ++ e ++ ", vector<Type>{{" ++ ops ++ "}}}"
   where e = opcode_enum i
         ops = intercalate "," $ map (("Type::"++).op2tag) $ operands i
 
@@ -1303,7 +1303,7 @@ intel_group is = groupBy (\x y -> (raw_mnemonic x) == (raw_mnemonic y)) $ is'
 
 -- Generates a part of a row in the intel parse table
 intel_row_elem :: Instr -> String
-intel_row_elem i = "{" ++ e ++ ", {" ++ ops ++ "}}"
+intel_row_elem i = "{" ++ e ++ ", vector<Type>{{" ++ ops ++ "}}}"
   where e = opcode_enum i
         ops = intercalate "," $ map (("Type::"++).op2tag) $ operands i
 
