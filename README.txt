@@ -40,9 +40,14 @@ $ sudo apt-get install ghc
 $ sudo apt-get install cabal
 $ sudo apt-get install libghc-split-dev
 
-2. Type make (specify a build type to override the default 'release')
+2a. Type make (specify a build type to override the default 'release')
 
 $ make (release|profile|debug)
+
+2b. Optionally verify your compilation.
+    Warning: This will take a LONG TIME; consider taking the day off.
+
+$ make check
 
 3. Browse the documentation.
 

@@ -1348,40 +1348,48 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
 -- Test Codegen
 --------------------------------------------------------------------------------
 
+-- Representative memory values
+test_mem :: [String]
+test_mem = ["(%rip)","(%eax)"]
+
+-- Representative moffs values
+test_moffs :: [String]
+test_moffs = ["0x1"]
+
 -- Representative values for each operand type
 test_operand :: String -> [String]
 test_operand "rl"       = ["%al","%cl","%dl","%bl"] 
 test_operand "rh"       = ["%ah","%ch","%dh","%bh"] 
-test_operand "rb"       = ["%spl","%sil","%r8b","%r12b"]
-test_operand "r16"      = ["%ax","%cx","%dx","%bx","%sp","%si","%r8w","%r12w"]
-test_operand "r32"      = ["%eax","%ecx","%edx","%ebx","%esp","%esi","%r8d","%r12d"]
-test_operand "r64"      = ["%rax","%rcx","%rdx","%rbx","%rsp","%rsi","%r8","%r12"]
+test_operand "rb"       = ["%spl","%bpl","%sil","%dil","%r8b","%r9b","%r10b","%r11b","%r12b","%r13b","%r14b","%r15b"]
+test_operand "r16"      = ["%ax","%cx","%dx","%bx","%sp","%bp","%si","%di","%r8w","%r9w","%r10w","%r11w","%r12w","%r13w","%r14w","%r15w"]
+test_operand "r32"      = ["%eax","%ecx","%edx","%ebx","%esp","%ebp","%esi","%edi","%r8d","%r9d","%r10d","%r11d","%r12d","%r13d","%r14d","%r15d"]
+test_operand "r64"      = ["%rax","%rcx","%rdx","%rbx","%rsp","%rbp","%rsi","%rdi","%r8","%r9","%r10","%r11","%r12","%r13","%r14","%r15"]
 test_operand "AL"       = ["%al"]
 test_operand "CL"       = ["%cl"]
 test_operand "AX"       = ["%ax"]
 test_operand "DX"       = ["%dx"]
 test_operand "EAX"      = ["%eax"]
 test_operand "RAX"      = ["%rax"]
-test_operand "m8"       = ["(%eax)"]
-test_operand "m16"      = ["(%eax)"]
-test_operand "m32"      = ["(%eax)"]
-test_operand "m64"      = ["(%eax)"]
-test_operand "m128"     = ["(%eax)"]
-test_operand "m256"     = ["(%eax)"]
-test_operand "m16:16"   = ["*(%eax)"]
-test_operand "m16:32"   = ["*(%eax)"]
-test_operand "m16:64"   = ["*(%eax)"]
-test_operand "m16int"   = ["(%eax)"]
-test_operand "m32int"   = ["(%eax)"]
-test_operand "m64int"   = ["(%eax)"]
-test_operand "m80bcd"   = ["(%eax)"]
-test_operand "m32fp"    = ["(%eax)"]
-test_operand "m64fp"    = ["(%eax)"]
-test_operand "m80fp"    = ["(%eax)"]
-test_operand "m2byte"   = ["(%eax)"]
-test_operand "m28byte"  = ["(%eax)"]
-test_operand "m108byte" = ["(%eax)"]
-test_operand "m512byte" = ["(%eax)"]
+test_operand "m8"       = test_mem
+test_operand "m16"      = test_mem
+test_operand "m32"      = test_mem
+test_operand "m64"      = test_mem
+test_operand "m128"     = test_mem
+test_operand "m256"     = test_mem
+test_operand "m16:16"   = test_mem
+test_operand "m16:32"   = test_mem
+test_operand "m16:64"   = test_mem
+test_operand "m16int"   = test_mem
+test_operand "m32int"   = test_mem
+test_operand "m64int"   = test_mem
+test_operand "m80bcd"   = test_mem
+test_operand "m32fp"    = test_mem
+test_operand "m64fp"    = test_mem
+test_operand "m80fp"    = test_mem
+test_operand "m2byte"   = test_mem
+test_operand "m28byte"  = test_mem
+test_operand "m108byte" = test_mem
+test_operand "m512byte" = test_mem
 test_operand "imm8"     = ["$0x1","$-0x1"]
 test_operand "imm16"    = ["$0x1","$-0x1"]
 test_operand "imm32"    = ["$0x1","$-0x1"]
@@ -1389,18 +1397,18 @@ test_operand "imm64"    = ["$0x1","$-0x1"]
 test_operand "0"        = ["$0x0"]
 test_operand "1"        = ["$0x1"]
 test_operand "3"        = ["$0x3"]
-test_operand "mm"       = ["%mm0","%mm2","%mm4","%mm6"]
-test_operand "xmm"      = ["%xmm0","%xmm2","%xmm4","%xmm6","%xmm8","%xmm10","%xmm12","%xmm14"]
+test_operand "mm"       = map (("%mm"++).show) [0..7]
+test_operand "xmm"      = map (("%xmm"++).show) [0..15]
 test_operand "<XMM0>"   = ["%xmm0"]
-test_operand "ymm"      = ["%ymm0","%ymm2","%ymm4","%ymm6","%ymm8","%ymm10","%ymm12","%ymm14"]
+test_operand "ymm"      = map (("%ymm"++).show) [0..15]
 test_operand "ST"       = ["%st(0)"]
-test_operand "ST(i)"    = ["%st(1)","%st(2)","%st(3)","%st(4)","%st(5)","%st(6)","%st(7)"]
+test_operand "ST(i)"    = ["%st(0)","%st(1)","%st(2)","%st(3)","%st(4)","%st(5)","%st(6)","%st(7)"]
 test_operand "rel8"     = ["0x1"]
 test_operand "rel32"    = ["0x1"]
-test_operand "moffs8"   = ["0x1"]
-test_operand "moffs16"  = ["0x1"]
-test_operand "moffs32"  = ["0x1"]
-test_operand "moffs64"  = ["0x1"]
+test_operand "moffs8"   = test_moffs
+test_operand "moffs16"  = test_moffs
+test_operand "moffs32"  = test_moffs
+test_operand "moffs64"  = test_moffs
 test_operand "Sreg"     = ["%es","%cs","%ss","%ds","%fs","%gs"]
 test_operand "FS"       = ["%fs"]
 test_operand "GS"       = ["%gs"]

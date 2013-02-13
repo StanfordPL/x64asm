@@ -34,12 +34,15 @@ do
 
 	done < $src
 
-	echo "  Results: "`grep "*" $src.log | wc -l`" errors"
+	if [ -e $src.log ]
+	then
+		echo "  "`grep "*" $src.log | wc -l`" errors"
+	fi
 done
 
 echo "Done Running Tests"
 echo ""
-echo "  Results: "`grep "*" error.log | wc -l`" error (see .log files for details)"
+echo "  Results: "`cat *.log | grep "*" | wc -l`" error (see .log files for details)"
 echo "  Expected: [LOTS]"
 
 rm -f test.s test.o objdump.out x64asm.out
