@@ -31,7 +31,7 @@ Build Instructions:
 1. Dependency hell!
 
 Satisfy the following package dependencies.
-Equivalents are all available using MacPorts.
+Equivalents should all be available using MacPorts.
 
 $ sudo apt-get install ccache
 $ sudo apt-get install g++
@@ -49,10 +49,13 @@ $ make (release|profile|debug)
 $ <browser> doc/html/index.html
 
 4a. Play around with the command line app.
+    Input file formats are specified with the -i flag (att or intel)
+	  Output formats are specified with the -o flag (att, intel, or hex)
 
 $ x64asm -i att -o hex test.s
 
 4b. Write and compile some code.
+    See the examples directory for more.
 
 // code.cc
 #include "<path/to/here>/include/x64asm.h"
@@ -201,13 +204,6 @@ AND
 The op/en values for this instruction are likely incorrect and have been 
 modified to match those from ADC,SBB,etc.
 
-MOV
-
-The %cr8 variants of this instruction are annotated with a /0
-register code, which is technically correct, those inconsistent with the 
-rest of the manual with respect to codegen.  We have promoted this annotation
-to the more general, though still correct, /r.
-
 Misc:
 
 Various small typos, such as missing spaces in the opcode column have been
@@ -252,13 +248,6 @@ to variants with shorter encodings.
 
 -------------------------------------------------------------------------------
 
-TODO:
+Known Issues:
 
-instruction.h
-
-- read_att()
-- read_intel()
-
-test/
-
-- Test checker
+Intel parsing is incomplete.
