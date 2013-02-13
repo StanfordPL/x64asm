@@ -263,12 +263,6 @@ st_op "ST"    = True
 st_op "ST(i)" = True
 st_op _       = False
 
--- Returns true for cr operands
-cr_op :: String -> Bool
-cr_op "CR0-CR7" = True
-cr_op "CR8"     = True
-cr_op _         = False
-
 -- Returns true for xmm operands
 xmm_op :: String -> Bool
 xmm_op "xmm"    = True
@@ -328,9 +322,6 @@ op2type "moffs8"   = "Moffs8"
 op2type "moffs16"  = "Moffs16"
 op2type "moffs32"  = "Moffs32"
 op2type "moffs64"  = "Moffs64"
-op2type "CR0-CR7"  = "Cr0234" 
-op2type "CR8"      = "Cr8"
-op2type "DR0-DR7"  = "Dr" 
 op2type "Sreg"     = "Sreg"
 op2type "FS"       = "Fs"
 op2type "GS"       = "Gs"
@@ -395,9 +386,6 @@ op2tag "moffs8"   = "MOFFS_8"
 op2tag "moffs16"  = "MOFFS_16"
 op2tag "moffs32"  = "MOFFS_32"
 op2tag "moffs64"  = "MOFFS_64"
-op2tag "CR0-CR7"  = "CR_0234" 
-op2tag "CR8"      = "CR_8"
-op2tag "DR0-DR7"  = "DR" 
 op2tag "Sreg"     = "SREG"
 op2tag "FS"       = "FS"
 op2tag "GS"       = "GS"

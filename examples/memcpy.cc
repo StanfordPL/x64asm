@@ -99,11 +99,14 @@ void test(const Function& memcpy) {
 	const char* source = "Hello, world!";
 	char* target = new char[32];
 
+	// Functions can be passed to ostream objects to view their hex encoding.
+	cout << "Hex source: " << endl;
+	cout << memcpy << endl;
+
 	// A function can be called with up to six arguments, each of which must
 	// be castable to a unit64_t.  No explicit conversion is necessary.
 	memcpy(target, source, 14);
-
-	cout << "Should print \"Hello, world!\": [" << target << "]" << endl;
+	cout << "After return target = \"" << target << "\"" << endl;
 
 	delete target;
 }

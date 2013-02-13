@@ -49,8 +49,6 @@ class Assembler {
 			return fxn;
 		}
 
-		void write_hex(std::ostream& os, const Code& c);
-
 		void assemble(Function& fxn, const Code& code) {
 			start(fxn);
 			for ( const auto& instr : code )

@@ -42,11 +42,8 @@ int main(int argc, char** argv) {
 		cout << Syntax::ATT << c << endl;
 	else if ( out_type == "intel" )
 		cout << Syntax::INTEL << c << endl;
-	else if ( out_type == "hex" ) {
-		Assembler assm;
-		assm.write_hex(cout, c);
-		cout << endl;
-	}
+	else if ( out_type == "hex" )
+		cout << (Assembler().assemble(c)) << endl;
 	else
 		usage_error();
 

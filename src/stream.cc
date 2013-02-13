@@ -91,6 +91,11 @@ ostream& operator<<(ostream& os, const Code& c) {
 	return write(os, c);
 }
 
+ostream& operator<<(ostream& os, const Function& f) {
+	f.write_hex(os);
+	return os;
+}
+
 ostream& operator<<(ostream& os, const Hint& h) {
 	check(os, h);
 	return write(os, h);

@@ -17,24 +17,12 @@ limitations under the License.
 #include "src/assembler.h"
 
 #include <cassert>
-#include <iomanip>
-#include <vector>
 
 #include "src/constants.h"
 
 using namespace std;
 
 namespace x64asm {
-
-void Assembler::write_hex(std::ostream& os, const Code& c) {
-	const auto fxn = assemble(c);
-	for ( size_t i = 0, ie = fxn.size(); i < ie; ++i ) {
-		os << hex << noshowbase << setw(2) << setfill('0');
-		os << (int32_t)fxn.buffer_[i] << " ";
-		if ( ((i%8) == 7) && ((i+1) != ie) )
-			os << endl;
-	}
-}
 
 // void Assembler::adcb(Al arg0, Imm8 arg1) { } ...
 #include "src/assembler.defn"

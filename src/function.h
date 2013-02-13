@@ -19,6 +19,7 @@ limitations under the License.
 
 #include <cassert>
 #include <cstring>
+#include <iomanip>
 #include <iostream>
 #include <sys/mman.h>
 #include <stddef.h>
@@ -110,6 +111,15 @@ class Function {
 
 		bool good() const {
 			return (long) buffer_ != -1;
+		}
+
+		void write_hex(std::ostream& os) const {
+			for ( size_t i = 0, ie = size(); i < ie; ++i ) {
+				os << std::hex << std::noshowbase << std::setw(2) << std::setfill('0');
+				os << (int32_t)buffer_[i] << " ";
+				if ( ((i%8) == 7) && ((i+1) != ie) )
+					os << std::endl;
+			}
 		}
 
 	private:
