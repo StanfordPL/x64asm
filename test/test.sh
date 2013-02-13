@@ -25,7 +25,9 @@ do
 		if [ $? -ne 0 ]
 		then
 			cat test.s >> $src.log
+			echo "reference: " >> $src.log
 			cat objdump.out >> $src.log
+			echo "x64asm: " >> $src.log
 			cat x64asm.out >> $src.log
 			echo "****************************************" >> $src.log
 		fi
