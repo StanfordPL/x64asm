@@ -16,6 +16,25 @@ limitations under the License.
 
 %{
 
+ /*
+Some high level notes as this implementation isn't totally obvious.
+
+This parser has to deal with the fact that x86 assembly isn't LALR(1)
+parseable.  The high level way around this is to parse opcode, operand
+string pairs and then use those pairs as keys in a lookup table to resolve
+instruction form. 
+
+A side effect of this implementation is that some of the parsing rules for 
+memory operands shadow the parsing rules for moffs and rel operands.  This, 
+combined with the fact that the corresponding lexer stores least specific
+operand types is handled using a method to check whether operands can be 
+reinterpreted as the desired types and cast as necessary.
+
+This implementation relies on a table which is ordered such that most 
+specific operand orderings appear prior to less specific orderings, so that
+for instance, adc $0x10, %al is parsed as ADC_IMM8_AL rather than ADC_IMM32_R32.
+ */
+
 #include <map>
 #include <string>
 #include <vector>
@@ -65,7 +84,7 @@ bool is_mem(Type t) {
 bool is_a(const Operand* o, Type parse, Type target) {
 	
 	// These first two parses still have placeholder types.
-	// They should be checked before the generic equality test.
+	// They should be checked before the generic equality tests.
 
 	if ( parse == Type::IMM_8 )
 		switch ( target ) {
@@ -87,36 +106,47 @@ bool is_a(const Operand* o, Type parse, Type target) {
 			return ((const Imm8*)&offs)->check();
 	}
 
-	// Now it's alright to perform the generic check.
+	// Now it's alright to perform the generic checks.
 
 	if ( parse == target )
+		return true;
+	if ( is_mem(parse) && is_mem(target) )
 		return true;
 
 	// Now try simple promotions.
 
-	if ( parse == Type::AL || parse == Type::CL ) 
-		return target == Type::RL;
+	if ( parse == Type::RL ) {
+		if ( target == Type::AL )
+			return ((const Al*)o)->check();
+		if ( target == Type::CL )
+			return ((const Cl*)o)->check();
+	}
+	
+	if ( parse == Type::R_16 ) {
+		if ( target == Type::AX )
+			return ((const Ax*)o)->check();
+		if ( target == Type::DX )
+			return ((const Dx*)o)->check();
+	}
 
-	if ( parse == Type::AX || parse == Type::DX )
-		return target == Type::R_16;
+	if ( parse == Type::R_32 && target == Type::EAX )
+			return ((const Eax*)o)->check();
 
-	if ( parse == Type::EAX )
-		return target == Type::R_32;
+	if ( parse == Type::R_64 && target == Type::RAX )
+			return ((const Rax*)o)->check();
 
-	if ( parse == Type::RAX )
-		return target == Type::R_64;
+	if ( parse == Type::SREG ) {
+		if ( target == Type::FS )
+			return ((const Fs*)o)->check();
+		if ( target == Type::GS )
+			return ((const Gs*)o)->check();
+	}
 
-	if ( parse == Type::FS || parse == Type::GS )
-		return target == Type::SREG;
+	if ( parse == Type::ST && target == Type::ST_0 )
+			return ((const St0*)o)->check();
 
-	if ( parse == Type::ST_0 )
-		return target == Type::ST;
-
-	if ( parse == Type::XMM_0 )
-		return target == Type::XMM;
-
-	if ( is_mem(parse) && is_mem(target) )
-		return true;
+	if ( parse == Type::XMM && target == Type::XMM_0 )
+			return ((const Xmm0*)o)->check();
 
 	return false;
 }
@@ -259,24 +289,14 @@ Imm64 offset(const Operand* o) {
 %token <operand> PREF_REX_W
 %token <operand> FAR
 %token <operand> MM
-%token <operand> AL
-%token <operand> CL
 %token <operand> RL
 %token <operand> RH
 %token <operand> RB
-%token <operand> AX
-%token <operand> DX
 %token <operand> R_16
-%token <operand> EAX
 %token <operand> R_32
-%token <operand> RAX
 %token <operand> R_64
 %token <operand> SREG
-%token <operand> FS
-%token <operand> GS
-%token <operand> ST_0
 %token <operand> ST
-%token <operand> XMM_0
 %token <operand> XMM
 %token <operand> YMM
 
@@ -367,23 +387,13 @@ typed_operand : HINT { $$ = new pair<const Operand*, Type>{$1, Type::HINT}; }
 	| PREF_REX_W { $$ = new pair<const Operand*, Type>{$1, Type::PREF_REX_W}; }
 	| FAR { $$ = new pair<const Operand*, Type>{$1, Type::FAR}; }
 	| MM { $$ = new pair<const Operand*, Type>{$1, Type::MM}; }
-	| AL { $$ = new pair<const Operand*, Type>{$1, Type::AL}; }
-	| CL { $$ = new pair<const Operand*, Type>{$1, Type::CL}; }
 	| RL { $$ = new pair<const Operand*, Type>{$1, Type::RL}; }
 	| RB { $$ = new pair<const Operand*, Type>{$1, Type::RB}; }
-	| AX { $$ = new pair<const Operand*, Type>{$1, Type::AX}; }
-	| DX { $$ = new pair<const Operand*, Type>{$1, Type::DX}; }
 	| R_16 { $$ = new pair<const Operand*, Type>{$1, Type::R_16}; }
-	| EAX { $$ = new pair<const Operand*, Type>{$1, Type::EAX}; }
 	| R_32 { $$ = new pair<const Operand*, Type>{$1, Type::R_32}; }
-	| RAX { $$ = new pair<const Operand*, Type>{$1, Type::RAX}; }
 	| R_64 { $$ = new pair<const Operand*, Type>{$1, Type::R_64}; }
 	| SREG { $$ = new pair<const Operand*, Type>{$1, Type::SREG}; }
-	| FS { $$ = new pair<const Operand*, Type>{$1, Type::FS}; }
-	| GS { $$ = new pair<const Operand*, Type>{$1, Type::GS}; }
-	| ST_0 { $$ = new pair<const Operand*, Type>{$1, Type::ST_0}; }
 	| ST { $$ = new pair<const Operand*, Type>{$1, Type::ST}; }
-	| XMM_0 { $$ = new pair<const Operand*, Type>{$1, Type::XMM_0}; }
 	| XMM { $$ = new pair<const Operand*, Type>{$1, Type::XMM}; }
 	| YMM { $$ = new pair<const Operand*, Type>{$1, Type::YMM}; }
 	| moffs { $$ = new pair<const Operand*, Type>{$1, Type::MOFFS_8}; }
