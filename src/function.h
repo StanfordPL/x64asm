@@ -73,37 +73,37 @@ class Function {
 		}
 
 		template <typename RDI>
-		uint64_t operator()(RDI rdi) {
+		uint64_t operator()(RDI rdi) const {
 			return ((f1_type)(buffer_))((uint64_t)rdi);
 		}
 
 		template <typename RDI, typename RSI>
-		uint64_t operator()(RDI rdi, RSI rsi) {
+		uint64_t operator()(RDI rdi, RSI rsi) const {
 			return ((f2_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi);
 		}
 
 		template <typename RDI, typename RSI, typename RDX_>
-		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx) {
+		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx) const {
 			return ((f3_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi, (uint64_t)rdx);
 		}
 
 		template <typename RDI, typename RSI, typename RDX_,
 						  typename RCX>
-		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx, RCX rcx) {
+		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx, RCX rcx) const {
 			return ((f4_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi, (uint64_t)rdx,
 					                        (uint64_t)rcx);
 		}
 
 		template <typename RDI, typename RSI, typename RDX_,
 						  typename RCX, typename R8>
-		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx, RCX rcx, R8 r8) {
+		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx, RCX rcx, R8 r8) const {
 			return ((f5_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi, (uint64_t)rdx,
 					                        (uint64_t)rcx, (uint64_t)r8);
 		}
 
 		template <typename RDI, typename RSI, typename RDX_,
 						  typename RCX, typename R8, typename R9>
-		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx, RCX rcx, R8 r8, R9 r9) {
+		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx, RCX rcx, R8 r8, R9 r9) const {
 			return ((f6_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi, (uint64_t)rdx,
 					                        (uint64_t)rcx, (uint64_t)r8,  (uint64_t)r9);
 		}

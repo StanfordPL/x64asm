@@ -89,7 +89,7 @@ const std::string* to_str(const char* c, size_t len) {
 "("           { return OPEN; }
 ")"           { return CLOSE; }
 "\n"          { yy_line_number++; return ENDL; }
-[ \t]         { ; }
+[ \t*]        { ; }
 "#"[^\n]*"\n" { yy_line_number++; return ENDL; }
 
 "1" { yylval.scale = Scale::TIMES_1; return SCALE; }
@@ -248,7 +248,7 @@ const std::string* to_str(const char* c, size_t len) {
 "%ymm14" { yylval.operand = new Ymm{ymm14}; return YMM; }
 "%ymm15" { yylval.operand = new Ymm{ymm15}; return YMM; }
 
-[a-z]+" *"?    { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
+[a-z]+         { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
 "rep "[a-z]+   { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
 "repe "[a-z]+  { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
 "repne "[a-z]+ { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
