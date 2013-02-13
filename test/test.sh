@@ -2,7 +2,13 @@
 
 rm -f error.log
 
-for src in `ls adc*.s`
+if [ ! -e "adc_al_imm8.s" ]
+then
+	echo "Unable to run tests, try running make to generate inputs!"
+	exit 0
+fi
+
+for src in `ls *.s`
 do
 	echo "Running tests for "$src
 
@@ -30,3 +36,5 @@ echo "Results: "`grep "*" error.log | wc -l`" error (see error.log for details)"
 echo "Expected: [LOTS]"
 
 rm -f test.s test.o objdump.out x64asm.out
+
+exit 0
