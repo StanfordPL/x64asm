@@ -18,7 +18,7 @@ do
     echo $line > test.s
 		g++ -c test.s
 
-		objdump -d -Msuffix test.o | tail -n+8 | cut -c 7-27 | sed 's/ *$//' > objdump.out
+		objdump -d test.o | tail -n+8 | cut -c 7-27 | sed 's/ *$//' > objdump.out
 		cat test.s | ../bin/x64asm -i att -o hex | sed 's/ *$//' > x64asm.out
 
 		diff objdump.out x64asm.out > /dev/null
