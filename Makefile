@@ -109,4 +109,4 @@ clean:
 	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN) $(TEST)
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.intel src/*.enum src/*.table
 	rm -f src/*.tab.c src/*.tab.h src/lex.*.c src/*.output
-	rm -f test/*.s test/*.log
+	rm -f test/*.s test/*.log test/*.o test/*.out
