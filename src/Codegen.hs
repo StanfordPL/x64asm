@@ -1072,9 +1072,10 @@ def_rex i
 
 -- Emits code for REX Prefix 
 rex_prefix :: Instr -> String
-rex_prefix i = case rm_args i of
-    "" -> "// No REX Prefix\n"
-    _ -> "rex(" ++ (rm_args i) ++ (def_rex i) ++ ");\n"
+rex_prefix i 
+  | op_en i == "O"  = "rex(arg0" ++ (def_rex i) ++ ");\n"
+  | rm_args i /= "" = "rex(" ++ (rm_args i) ++ (def_rex i) ++ ");\n"
+  | otherwise = "// No REX Prefix\n"
 
 -- Explicit VEX mmmmm arg
 vex_mmmmm :: Instr -> String
