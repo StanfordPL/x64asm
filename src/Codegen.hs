@@ -1175,10 +1175,10 @@ assm_vex_defn i = "  // VEX-Encoded Instruction: \n\n" ++
 -- Other instruction definition
 assm_oth_defn :: Instr -> String
 assm_oth_defn i = "  // Non-VEX-Encoded Instruction: \n\n" ++
-                  "  " ++ pref1 i ++
                   "  " ++ pref2 i ++ 
                   "  " ++ pref4 i ++ -- gcc prefers this ordering
                   "  " ++ pref3 i ++ -- gcc prefers this ordering
+                  "  " ++ pref1 i ++ -- gcc prefers this ordering
                   "  " ++ rex_prefix i ++
                   "  " ++ non_vex_opcode i ++
                   "  " ++ mod_rm_sib i ++

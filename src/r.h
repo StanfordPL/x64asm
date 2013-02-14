@@ -117,7 +117,7 @@ class Cl : public Rl {
 
 	public:
 		constexpr bool check() {
-			return val_ == 0;
+			return val_ == 1;
 		}
 
 	private:
@@ -168,7 +168,7 @@ class Dx : public R16 {
 
 	public:
 		constexpr bool check() {
-			return val_ == 0;
+			return val_ == 2;
 		}
 
 	private:
