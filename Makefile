@@ -40,8 +40,6 @@ OBJ=src/assembler.o \
 
 LIB=lib/libx64asm.a
 
-TEST=test/constants
-
 BIN=bin/x64asm
 
 DOC=doc/html
@@ -57,12 +55,7 @@ release:
 profile:
 	make -C . erthing OPT="-DNDEBUG -O3 -funroll-all-loops -fno-rtti -pg"
 
-erthing: $(LIB) $(TEST) $(BIN) $(DOC)
-
-##### TEST TARGETS
-
-check: 
-	cd test/ && ./test.sh && cd -
+erthing: $(LIB) $(BIN) $(DOC)
 
 ##### BUILD TARGETS
 
@@ -93,20 +86,20 @@ doc/html: doc/doxyfile src/*
 $(LIB): $(OBJ)
 	ar rcs $@ $(OBJ)
 
-##### TEST TARGET
-
-test/constants: test/constants.cc $(LIB)
-	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
-
 ##### BINARY TARGET
 
 bin/%: tools/%.cc $(LIB)
 	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
 
+##### TEST TARGET
+
+check: 
+	cd test/ && ./test.sh && cd -
+
 ##### CLEAN TARGETS
 
 clean:
-	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN) $(TEST)
+	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN)
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.intel src/*.enum src/*.table
 	rm -f src/*.tab.c src/*.tab.h src/lex.*.c src/*.output
 	rm -f test/*.s test/*.log test/*.o test/*.out
