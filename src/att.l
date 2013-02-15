@@ -248,7 +248,7 @@ const std::string* to_str(const char* c, size_t len) {
 "%ymm14" { yylval.operand = new Ymm{ymm14}; return YMM; }
 "%ymm15" { yylval.operand = new Ymm{ymm15}; return YMM; }
 
-[a-z]+         { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
+[a-z][a-z0-9]* { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
 "rep "[a-z]+   { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
 "repe "[a-z]+  { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
 "repne "[a-z]+ { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
