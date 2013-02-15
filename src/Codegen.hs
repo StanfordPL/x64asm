@@ -116,6 +116,7 @@ is_prefix "REX.R+"   = True
 is_prefix "REX+"     = True
 is_prefix "F2"       = True -- Not the same as REP; different semantics
 is_prefix "F3"       = True -- Not the same as REP; different semantics
+is_prefix "9B"       = True -- The FWAIT prefix
 is_prefix ('V':_)    = True -- VEX Prefixes all start with a V
 is_prefix _ = False
 
@@ -625,6 +626,17 @@ remove_ambiguity is = map shortest $ groupBy eq $ sortBy srt is
 -- Step 7: Insert prefixes and operands
 --------------------------------------------------------------------------------
 
+-- Is this an instruction which does NOT require a 66 prefix despite operands?
+no_pref66 :: Instr -> Bool
+no_pref66 i = (is_vex_encoded i) || 
+              (op == "FSTSW") || (op == "FNSTSW") ||
+              (op == "LAR" ) ||
+              (op == "LDDQU") ||
+              (op == "LSL") ||
+              (op == "LEA") ||
+              (op == "PINSRW")
+  where op = raw_mnemonic i
+
 -- Inserts PREF.66+ for instructions with 16-bit operands
 -- This ignores DX which only appears as an implicit operand to string instrs
 -- VEX instructions are not modifed (the override is encoded differently)
@@ -633,7 +645,7 @@ insert_pref66 i = case r16 || m16 || ax || imm16 of
   True  -> i{opcode=("PREF.66+ " ++ (opcode i))}
   False -> i
   where r16   = "r16"   `elem` (operands i)
-        m16   = "m16"   `elem` (operands i) && not (is_vex_encoded i)
+        m16   = "m16"   `elem` (operands i) && not (no_pref66 i)
         ax    = "AX"    `elem` (operands i)
         imm16 = "imm16" `elem` (operands i)
 
@@ -1006,6 +1018,12 @@ assm_header_decls is = intercalate "\n\n" $ map assm_header_decl is
 -- Assembler source definitions
 --------------------------------------------------------------------------------
 
+-- Emits code for the FWAIT prefi
+pref_fwait :: Instr -> String
+pref_fwait i
+  | "9B" `elem` opcode_prefix i = "pref_fwait(0x9b);\n"
+  | otherwise = "// No FWAIT Prefix\n"
+
 -- Emits code for Prefix Group 1
 -- This doesn't check for the the lock prefix which we treat as an opcode
 pref1 :: Instr -> String
@@ -1130,11 +1148,13 @@ vex_opcode i = "opcode(0x" ++ (low ((opcode_terms i)!!1)) ++ ");\n"
 
 -- Emits code for non-VEX encoded opcode bytes
 non_vex_opcode :: Instr -> String
-non_vex_opcode i = "opcode(" ++ (bytes i) ++ (code i) ++ ");\n" 
-  where bytes i = intercalate "," $ map (("0x"++).low) (opcode_bytes i)
-        code i = case findIndex (=='O') (op_en i) of
-                      (Just idx) -> ",arg" ++ (show idx)
-                      Nothing -> ""
+non_vex_opcode i 
+  | (opcode_bytes i) == [] = "// No Opcode Bytes"
+  | otherwise = "opcode(" ++ (bytes i) ++ (code i) ++ ");\n" 
+    where bytes i = intercalate "," $ map (("0x"++).low) (opcode_bytes i)
+          code i = case findIndex (=='O') (op_en i) of
+                        (Just idx) -> ",arg" ++ (show idx)
+                        Nothing -> ""
 
 -- Emits code for mod/rm and sib bytes
 mod_rm_sib :: Instr -> String
@@ -1176,6 +1196,7 @@ assm_vex_defn i = "  // VEX-Encoded Instruction: \n\n" ++
 -- Other instruction definition
 assm_oth_defn :: Instr -> String
 assm_oth_defn i = "  // Non-VEX-Encoded Instruction: \n\n" ++
+                  "  " ++ pref_fwait i ++ 
                   "  " ++ pref2 i ++ 
                   "  " ++ pref4 i ++ -- gcc prefers this ordering
                   "  " ++ pref3 i ++ -- gcc prefers this ordering
