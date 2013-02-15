@@ -90,6 +90,10 @@ class Assembler {
 		std::unordered_map<uint64_t, size_t> label_defs_;
 		std::vector<std::pair<size_t, uint64_t>> label_rels_;
 
+		void pref_fwait(uint8_t c) {
+			fxn_->emit_byte(c);
+		}
+
 		void pref_group1(uint8_t c) {
 			fxn_->emit_byte(c);
 		}
