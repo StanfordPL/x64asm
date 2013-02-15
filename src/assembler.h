@@ -171,6 +171,10 @@ class Assembler {
 			fxn_->emit_long(r.val_);
 		}
 
+		void rex(uint8_t val) {
+			fxn_->emit_byte(val);
+		}
+
 		// Figure 2.4: Intel Manual Vol 2A 2-8
 		void rex(const M& rm, const Operand& r, uint8_t val) {
 			rex(rm, val | ((r.val_ >> 1) & 0x4));

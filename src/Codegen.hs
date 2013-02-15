@@ -1075,6 +1075,7 @@ rex_prefix :: Instr -> String
 rex_prefix i 
   | op_en i == "O"  = "rex(arg0" ++ (def_rex i) ++ ");\n"
   | rm_args i /= "" = "rex(" ++ (rm_args i) ++ (def_rex i) ++ ");\n"
+	| "REX.W+" `elem` (opcode_prefix i) = "rex(0x48);\n"
   | otherwise = "// No REX Prefix\n"
 
 -- Explicit VEX mmmmm arg
