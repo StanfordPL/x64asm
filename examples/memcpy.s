@@ -4,6 +4,6 @@ je .done
 movb (%rsi), %al
 movb %al, (%rdi)
 decq %rdx
-jmpq .loop
+jmp  .loop
 .done:
 retq

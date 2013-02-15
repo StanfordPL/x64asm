@@ -220,7 +220,7 @@ FF /3	CALL m16:16	M	R	???	???	???			V	V		callq	Call far, absolute indirect addre
 FF /3	CALL m16:32	M	R	???	???	???			V	V		callq	In 64-bit mode: If selector points to a gate, then RIP = 64-bit displacement taken from gate; else RIP = zero extended 32-bit offset from far pointer referenced in the instruction.
 REX.W+ FF /3	CALL m16:64	M	R	???	???	???			V	NE		callq	In 64-bit mode: If selector points to a gate, then RIP = 64-bit displacement taken from gate; else RIP = 64-bit offset from far pointer referenced in the instruction.
 													
-98	CBW	NP		AL	AX				V	V		cbtw	AX = sign-extend of AL.
+PREF.66+ 98	CBW	NP		AL	AX				V	V		cbtw	AX = sign-extend of AL.
 98	CWDE	NP		AX	EAX				V	V		cwtl	EAX = sign-extend of AX.
 REX.W+ 98	CDQE	NP		EAX	RAX				V	NE		cltq	RAX = sign-extend of EAX.
 													
@@ -317,9 +317,9 @@ REX.W+ 0F 4A /r 	CMOVP r64, r/m64 	RM	w, R	E.PF					V	NE		cmovpq	Move if parity 
 0F 4A /r	CMOVPE r16, r/m16 	RM	w, R	E.PF					V	V		cmovpew	Move if parity even (PF=1).
 0F 4A /r 	CMOVPE r32, r/m32 	RM	w, R	E.PF					V	V		cmovpel	Move if parity even (PF=1).
 REX.W+ 0F 4A /r	CMOVPE r64, r/m64	RM	w, R	E.PF					V	NE		cmovpeq	Move if parity even (PF=1).
-0F 4B /r	CMOVPO r16, r/m16 	RM	w, R	E.PF					V	V		cmovnpow	Move if parity odd (PF=0).
-0F 4B /r	CMOVPO r32, r/m32 	RM	w, R	E.PF					V	V		cmovnpol	Move if parity odd (PF=0).
-REX.W+ 0F 4B /r 	CMOVPO r64, r/m64 	RM	w, R	E.PF					V	NE		cmovnpoq	Move if parity odd (PF=0).
+0F 4B /r	CMOVPO r16, r/m16 	RM	w, R	E.PF					V	V		cmovpow	Move if parity odd (PF=0).
+0F 4B /r	CMOVPO r32, r/m32 	RM	w, R	E.PF					V	V		cmovpol	Move if parity odd (PF=0).
+REX.W+ 0F 4B /r 	CMOVPO r64, r/m64 	RM	w, R	E.PF					V	NE		cmovpoq	Move if parity odd (PF=0).
 0F 48 /r	CMOVS r16, r/m16 	RM	w, R	E.SF					V	V		cmovsw	Move if sign (SF=1).
 0F 48 /r	CMOVS r32, r/m32 	RM	w, R	E.SF					V	V		cmovsl	Move if sign (SF=1).
 REX.W+ 0F 48 /r 	CMOVS r64, r/m64 	RM	w, R	E.SF					V	NE		cmovsq	Move if sign (SF=1).
