@@ -641,11 +641,11 @@ no_pref66 i = (is_vex_encoded i) ||
 -- This ignores DX which only appears as an implicit operand to string instrs
 -- VEX instructions are not modifed (the override is encoded differently)
 insert_pref66 :: Instr -> Instr
-insert_pref66 i = case r16 || m16 || ax || imm16 of
+insert_pref66 i = case (not (no_pref66 i)) && (r16 || m16 || ax || imm16) of
   True  -> i{opcode=("PREF.66+ " ++ (opcode i))}
   False -> i
   where r16   = "r16"   `elem` (operands i)
-        m16   = "m16"   `elem` (operands i) && not (no_pref66 i)
+        m16   = "m16"   `elem` (operands i) 
         ax    = "AX"    `elem` (operands i)
         imm16 = "imm16" `elem` (operands i)
 
