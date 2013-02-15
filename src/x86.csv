@@ -582,18 +582,18 @@ D9 F6 	FDECSTP 			S.TOP	S.TOP S.C1	S.C0 S.C2 S.C3			V	V		fdecstp	Decrement TOP f
 D8 /6 	FDIV m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivs	Divide ST(0) by m32fp and store result in ST(0).
 DC /6 	FDIV m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivl	Compare ST(0) with ST(i), set status flags accordingly, and pop register stack.
 D8 F0 +i 	FDIV ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdiv	Divide ST(0) by ST(i) and store result in ST(0).
-DC F8 +i 	FDIV ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdiv	Divide ST(i) by ST(0) and store result in ST(i).
-DE F8 +i 	FDIVP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivp	Divide ST(i) by ST(0), store result in ST(i), and pop the register stack.
-DE F9 	FDIVP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fdivp	Divide ST(1) by ST(0), store result in ST(1), and pop the register stack.
+DC F0 +i 	FDIV ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdiv	Divide ST(i) by ST(0) and store result in ST(i).
+DE F0 +i 	FDIVP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivp	Divide ST(i) by ST(0), store result in ST(i), and pop the register stack.
+DE F1 	FDIVP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fdivp	Divide ST(1) by ST(0), store result in ST(1), and pop the register stack.
 DA /6 	FIDIV m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidivl	Divide ST(0) by m32int and store result in ST(0).
 DE /6 	FIDIV m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidiv	Divide ST(0) by m64int and store result in ST(0).
 													
 D8 /7 	FDIVR m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivrs	Divide m32fp by ST(0) and store result in ST(0).
 DC /7 	FDIVR m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivrl	Divide m64fp by ST(0) and store result in ST(0).
 D8 F8 +i 	FDIVR ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivr	Divide ST(i) by ST(0) and store result in ST(0).
-DC F0 +i 	FDIVR ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivr	Divide ST(0) by ST(i) and store result in ST(i).
-DE F0 +i 	FDIVRP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivrp	Divide ST(0) by ST(i), store result in ST(i), and pop the register stack.
-DE F1 	FDIVRP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fdivrp	Divide ST(0) by ST(1), store result in ST(1), and pop the register stack.
+DC F8 +i 	FDIVR ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivr	Divide ST(0) by ST(i) and store result in ST(i).
+DE F8 +i 	FDIVRP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivrp	Divide ST(0) by ST(i), store result in ST(i), and pop the register stack.
+DE F9	FDIVRP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fdivrp	Divide ST(0) by ST(1), store result in ST(1), and pop the register stack.
 DA /7 	FIDIVR m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidivrl	Divide m32int by ST(0) and store result in ST(0).
 DE /7 	FIDIVR m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidivr	Divide m16int by ST(0) and store result in ST(0).
 													
@@ -696,18 +696,18 @@ DF E0 	FNSTSW AX 		W		S.*	S.C0 S.C1 S.C2 S.C3			V	V		fnstsw	Store FPU status wor
 D8 /4 	FSUB m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubs	Subtract m32fp from ST(0) and store result in ST(0).
 DC /4 	FSUB m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubl	Subtract m64fp from ST(0) and store result in ST(0).
 D8 E0 +i 	FSUB ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsub	Subtract ST(i) from ST(0) and store result in ST(0).
-DC E8 +i 	FSUB ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsub	Subtract ST(0) from ST(i) and store result in ST(i).
-DE E8 +i 	FSUBP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubp	Subtract ST(0) from ST(i), store result in ST(i), and pop register stack.
-DE E9 	FSUBP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fsubp	Subtract ST(0) from ST(1), store result in ST(1), and pop register stack.
+DC E0 +i 	FSUB ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsub	Subtract ST(0) from ST(i) and store result in ST(i).
+DE E0 +i 	FSUBP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubp	Subtract ST(0) from ST(i), store result in ST(i), and pop register stack.
+DE E1 	FSUBP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fsubp	Subtract ST(0) from ST(1), store result in ST(1), and pop register stack.
 DA /4 	FISUB m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisubl	Subtract m32int from ST(0) and store result in ST(0).
 DE /4 	FISUB m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisub	Subtract m16int from ST(0) and store result in ST(0).
 													
 D8 /5 	FSUBR m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubrs	Subtract ST(0) from m32fp and store result in ST(0).
 DC /5 	FSUBR m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubrl	Subtract ST(0) from m64fp and store result in ST(0).
 D8 E8 +i 	FSUBR ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubr	Subtract ST(0) from ST(i) and store result in ST(0).
-DC E0 +i 	FSUBR ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubr	Subtract ST(i) from ST(0) and store result in ST(i).
-DE E0 +i 	FSUBRP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubrp	Subtract ST(i) from ST(0), store result in ST(i), and pop register stack.
-DE E1 	FSUBRP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fsubrp	Subtract ST(1) from ST(0), store result in ST(1), and pop register stack.
+DC E8 +i 	FSUBR ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubr	Subtract ST(i) from ST(0) and store result in ST(i).
+DE E8 +i 	FSUBRP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubrp	Subtract ST(i) from ST(0), store result in ST(i), and pop register stack.
+DE E9	FSUBRP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fsubrp	Subtract ST(1) from ST(0), store result in ST(1), and pop register stack.
 DA /5 	FISUBR m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisubrl	Subtract ST(0) from m32int and store result in ST(0).
 DE /5 	FISUBR m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisubr	Subtract ST(0) from m16int and store result in ST(0).
 													
@@ -934,15 +934,15 @@ C5 /r 	LDS r16, m16:16 								I	V			Load DS:r16 with far pointer from memory.
 C5 /r 	LDS r32, m16:32 								I	V			Load DS:r32 with far pointer from memory.
 0F B2 /r 	LSS r16, m16:16 	RM	W, R		SS				V	V		lssw	Load SS:r16 with far pointer from memory.
 0F B2 /r 	LSS r32, m16:32 	RM	W, R		SS				V	V		lssl	Load SS:r32 with far pointer from memory.
-REX+ 0F B2 /r 	LSS r64, m16:64 	RM	W, R		SS				V	NE		lssq	Load SS:r64 with far pointer from memory.
+REX+ 0F B2 /r 	LSS r64, m16:64 	RM	W, R		SS				V	NE		lss	Load SS:r64 with far pointer from memory.
 C4 /r 	LES r16, m16:16 								I	V			Load ES:r16 with far pointer from memory.
 C4 /r 	LES r32, m16:32 								I	V			Load ES:r32 with far pointer from memory.
 0F B4 /r 	LFS r16, m16:16 	RM	W, R		FS				V	V		lfsw	Load FS:r16 with far pointer from memory.
 0F B4 /r 	LFS r32, m16:32 	RM	W, R		FS				V	V		lfsl	Load FS:r32 with far pointer from memory.
-REX+ 0F B4 /r 	LFS r64, m16:64 	RM	W, R		FS				V	NE		lfsq	Load FS:r64 with far pointer from memory.
+REX+ 0F B4 /r 	LFS r64, m16:64 	RM	W, R		FS				V	NE		lfs	Load FS:r64 with far pointer from memory.
 0F B5 /r 	LGS r16, m16:16 	RM	W, R		GS				V	V		lgsw	Load GS:r16 with far pointer from memory.
 0F B5 /r 	LGS r32, m16:32 	RM	W, R		GS				V	V		lgsl	Load GS:r32 with far pointer from memory.
-REX+ 0F B5 /r 	LGS r64, m16:64 	RM	W, R		GS				V	NE		lgsq	Load GS:r64 with far pointer from memory.
+REX+ 0F B5 /r 	LGS r64, m16:64 	RM	W, R		GS				V	NE		lgs	Load GS:r64 with far pointer from memory.
 													
 8D /r 	LEA r16, m 	RM	W, I						V	V		leaw	Store effective address for m in register r16.
 8D /r 	LEA r32, m 	RM	W, I						V	V		leal	Store effective address for m in register r32.
@@ -952,7 +952,7 @@ PREF.66+ C9 	LEAVE p66	NP	I						V	V		leavew	Set SP to BP, then pop BP.
 C9 	LEAVE 								NE	V			Set ESP to EBP, then pop EBP.
 C9 	LEAVE 	NP							V	NE		leaveq	Set RSP to RBP, then pop RBP.
 													
-0F AE /5 	LFENCE 	NP							V	V		lfence	Serializes load operations.
+0F AE E8	LFENCE 	NP							V	V		lfence	Serializes load operations.
 													
 0F 01 /2 	LGDT m16&32 						NO	YES	NE	V			Load m into GDTR.
 0F 01 /3 	LIDT m16&32 						NO	YES	NE	V			Load m into IDTR.
@@ -975,7 +975,7 @@ AD 	LODSD 	NP		E.DF SI rsi	EAX				V	V		lodsl	For legacy mode, Load dword at addr
 REX.W+ AD 	LODSQ 	NP		E.DF SI rsi	RAX				V	NE		lodsq	Load qword at address (R)SI into RAX.
 													
 E2 cb 	LOOP rel8 	D	R	RCX E.ZF					V	V		loop	Decrement count; jump short if count != 0.
-E1 cb 	LOOPE rel8 	D	R	RCX E.ZF					V	V		loope	Decrement count; jump short if count != 0 and  ZF = 1.
+E0 cb 	LOOPE rel8 	D	R	RCX E.ZF					V	V		loope	Decrement count; jump short if count != 0 and  ZF = 1.
 E0 cb 	LOOPNE rel8 	D	R	RCX E.ZF					V	V		loopne	Decrement count; jump short if count != 0 and  ZF = 0.
 													
 0F 03 /r 	LSL r16, r16/m16 	RM	W, R		E.ZF		YES	NO	V	V		lslw	Load: r16 = segment limit, selector r16/m16.
@@ -1003,7 +1003,7 @@ VEX.NDS.LIG.F2.0F.WIG 5F /r	VMAXSD xmm1, xmm2, xmm3/m64	RVM	Z, R, R						V	V	AVX
 F3 0F 5F /r 	MAXSS xmm1, xmm2/m32	RM	RW, R						V	V	SSE	maxss	Return the maximum scalar single-precision floating-point value between xmm2/mem32 and xmm1.
 VEX.NDS.LIG.F3.0F.WIG 5F /r	VMAXSS xmm1, xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vmaxss	Return the maximum scalar single-precision floating-point value between xmm3/mem32 and xmm2.
 													
-0F AE /6 	MFENCE 	NP							V	V		mfence	Serializes load and store operations.
+0F AE F0	MFENCE 	NP							V	V		mfence	Serializes load and store operations.
 													
 66 0F 5D /r 	MINPD xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	minpd	Return the minimum double-precision floating-point values between xmm2/m128 and xmm1.
 VEX.NDS.128.66.0F.WIG 5D /r	VMINPD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vminpd	Return the minimum double-precision floating-point values between xmm2 and xmm3/mem.
