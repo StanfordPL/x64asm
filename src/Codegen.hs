@@ -1062,20 +1062,19 @@ digit i = case find is_digit (opcode_suffix i) of
   (Just ('/':d:[])) -> ",r64s[" ++ [d] ++ "]"
   Nothing -> ""
 
--- Default REX value (irrespective of explicit operands)
-def_rex :: Instr -> String
-def_rex i
-  | "REX.W+" `elem` (opcode_prefix i) = ",(uint8_t)0x48"
-  | "REX.R+" `elem` (opcode_prefix i) = ",(uint8_t)0x44"
-  | "REX+"   `elem` (opcode_prefix i) = ",(uint8_t)0x40"
-  | otherwise = ",(uint8_t)0x00"
+-- Implied rex values
+implied_rex :: Instr -> String
+implied_rex i
+  | "REX.W+" `elem` (opcode_prefix i) = "(uint8_t)0x48"
+  | "REX.R+" `elem` (opcode_prefix i) = "(uint8_t)0x44"
+  | "REX+"   `elem` (opcode_prefix i) = "(uint8_t)0x40"
+  | otherwise = "(uint8_t)0x00"
 
 -- Emits code for REX Prefix 
 rex_prefix :: Instr -> String
 rex_prefix i 
-  | op_en i == "O"  = "rex(arg0" ++ (def_rex i) ++ ");\n"
-  | rm_args i /= "" = "rex(" ++ (rm_args i) ++ (def_rex i) ++ ");\n"
-	| "REX.W+" `elem` (opcode_prefix i) = "rex(0x48);\n"
+  | rm_args i /= "" = "rex(" ++ (rm_args i) ++ "," ++ (implied_rex i) ++ ");\n"
+  | implied_rex i /= "(uint8_t)0x00" = "rex(" ++ (implied_rex i) ++ ");\n"
   | otherwise = "// No REX Prefix\n"
 
 -- Explicit VEX mmmmm arg
