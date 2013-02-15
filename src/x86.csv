@@ -533,100 +533,100 @@ D9 F0	F2XM1			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		f2xm1	Replace ST(0) with (2
 													
 D9 E1	FABS			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fabs	Replace ST with its absolute value.
 													
-D8 /0	FADD m32fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fadds	Add m32fp to ST(0) and store result in ST(0).
-DC /0	FADD m64fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		faddl	Add m64fp to ST(0) and store result in ST(0).
-D8 C0 +i	FADD ST(0), ST(i) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fadd	Add ST(0) to ST(i) and store result in ST(0).
-DC C0 +i	FADD ST(i), ST(0) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fadd	Add ST(i) to ST(0) and store result in ST(i).
-DE C0 +i	FADDP ST(i), ST(0)		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		faddp	Add ST(0) to ST(i), store result in ST(i), and pop the register stack.
+D8 /0	FADD m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fadds	Add m32fp to ST(0) and store result in ST(0).
+DC /0	FADD m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		faddl	Add m64fp to ST(0) and store result in ST(0).
+D8 C0 +i	FADD ST(0), ST(i) 	O2	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fadd	Add ST(0) to ST(i) and store result in ST(0).
+DC C0 +i	FADD ST(i), ST(0) 	O	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fadd	Add ST(i) to ST(0) and store result in ST(i).
+DE C0 +i	FADDP ST(i), ST(0)	O	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		faddp	Add ST(0) to ST(i), store result in ST(i), and pop the register stack.
 DE C1	FADDP			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		faddp	Add ST(0) to ST(1), store result in ST(1), and pop the register stack.
-DA /0	FIADD m32int		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fiaddl	Add m32int to ST(0) and store result in ST(0).
-DE /0	FIADD m16int		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fiadd	Add m16int to ST(0) and store result in ST(0).
+DA /0	FIADD m32int	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fiaddl	Add m32int to ST(0) and store result in ST(0).
+DE /0	FIADD m16int	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fiadd	Add m16int to ST(0) and store result in ST(0).
 													
-DF /4	FBLD m80bcd		R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fbld	Convert BCD value to floating-point and push onto the FPU stack.
+DF /4	FBLD m80bcd	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fbld	Convert BCD value to floating-point and push onto the FPU stack.
 													
-DF /6	FBSTP m80bcd		R	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fbstp	Store ST(0) in m80bcd and pop ST(0).
+DF /6	FBSTP m80bcd	M	R	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fbstp	Store ST(0) in m80bcd and pop ST(0).
 													
 D9 E0	FCHS			ST(0)	ST(0)				V	V		fchs	Complements sign of ST(0).
 													
 9B DB E2	FCLEX				S.PE S.UE S.OE S.ZE S.DE S.IE S.ES S.SF S.B	S.C0 S.C1 S.C2 S.C3			V	V		fclex	Clear floating-point exception flags after checking for pending unmasked floating-point exceptions.
 DB E2	FNCLEX				S.PE S.UE S.OE S.ZE S.DE S.IE S.ES S.SF S.B	S.C0 S.C1 S.C2 S.C3			V	V		fnclex	Clear floating-point exception flags without checking for pending unmasked floating-point exceptions.
 													
-DA C0 +i 	FCMOVB ST(0), ST(i) 		w, R	E.CF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovb	Move if below (CF=1).
-DA C8 +i 	FCMOVE ST(0), ST(i) 		w, R	E.ZF	S.C1	S.C0 S.C2 S.C3			V	V		fcmove	Move if equal (ZF=1).
-DA D0 +i 	FCMOVBE ST(0), ST(i) 		w, R	E.CF E.ZF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovbe	Move if below or equal (CF=1 or ZF=1).
-DA D8 +i 	FCMOVU ST(0), ST(i) 		w, R	E.PF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovu	Move if unordered (PF=1).
-DB C0 +i 	FCMOVNB ST(0), ST(i) 		w, R	E.CF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovnb	Move if not below (CF=0).
-DB C8 +i 	FCMOVNE ST(0), ST(i) 		w, R	E.ZF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovne	Move if not equal (ZF=0).
-DB D0 +i 	FCMOVNBE ST(0), ST(i) 		w, R	E.CF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovnbe	Move if not below or equal (CF=0 and ZF=0).
-DB D8 +i	FCMOVNU ST(0), ST(i)		w, R	E.PF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovnu	Move if not unordered (PF=0).
+DA C0 +i 	FCMOVB ST(0), ST(i) 	O2	w, R	E.CF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovb	Move if below (CF=1).
+DA C8 +i 	FCMOVE ST(0), ST(i) 	O2	w, R	E.ZF	S.C1	S.C0 S.C2 S.C3			V	V		fcmove	Move if equal (ZF=1).
+DA D0 +i 	FCMOVBE ST(0), ST(i) 	O2	w, R	E.CF E.ZF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovbe	Move if below or equal (CF=1 or ZF=1).
+DA D8 +i 	FCMOVU ST(0), ST(i) 	O2	w, R	E.PF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovu	Move if unordered (PF=1).
+DB C0 +i 	FCMOVNB ST(0), ST(i) 	O2	w, R	E.CF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovnb	Move if not below (CF=0).
+DB C8 +i 	FCMOVNE ST(0), ST(i) 	O2	w, R	E.ZF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovne	Move if not equal (ZF=0).
+DB D0 +i 	FCMOVNBE ST(0), ST(i) 	O2	w, R	E.CF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovnbe	Move if not below or equal (CF=0 and ZF=0).
+DB D8 +i	FCMOVNU ST(0), ST(i)	O2	w, R	E.PF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovnu	Move if not unordered (PF=0).
 													
-D8 /2 	FCOM m32fp 		R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcoms	Compare ST(0) with m32fp.
-DC /2 	FCOM m64fp 		R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcoml	Compare ST(0) with m64fp.
-D8 D0 +i 	FCOM ST(i) 		R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcom	Compare ST(0) with ST(i).
+D8 /2 	FCOM m32fp 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcoms	Compare ST(0) with m32fp.
+DC /2 	FCOM m64fp 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcoml	Compare ST(0) with m64fp.
+D8 D0 +i 	FCOM ST(i) 	O	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcom	Compare ST(0) with ST(i).
 D8 D1 	FCOM			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V		fcom	Compare ST(0) with ST(1).
-D8 /3 	FCOMP m32fp 		R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcomps	Compare ST(0) with m32fp and pop register stack.
-DC /3 	FCOMP m64fp 		R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcompl	Compare ST(0) with m64fp and pop register stack.
-D8 D8 +i 	FCOMP ST(i) 		R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcomp	Compare ST(0) with ST(i) and pop register stack.
+D8 /3 	FCOMP m32fp 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcomps	Compare ST(0) with m32fp and pop register stack.
+DC /3 	FCOMP m64fp 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcompl	Compare ST(0) with m64fp and pop register stack.
+D8 D8 +i 	FCOMP ST(i) 	O	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcomp	Compare ST(0) with ST(i) and pop register stack.
 D8 D9 	FCOMP 			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V		fcomp	Compare ST(0) with ST(1) and pop register stack.
 DE D9	FCOMPP			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V		fcompp	Compare ST(0) with ST(1) and pop register stack twice.
 													
-DB F0 +i 	FCOMI ST, ST(i) 		R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V		fcomi	Compare ST(0) with ST(i) and set status flags accordingly.
-DF F0 +i	FCOMIP ST, ST(i) 		R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V		fcomip	Compare ST(0) with ST(i), set status flags accordingly, and pop register stack.
-DB E8 +i 	FUCOMI ST, ST(i) 		R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V		fucomi	Compare ST(0) with ST(i), check for ordered values, and set status flags accordingly.
-DF E8 +i	FUCOMIP ST, ST(i) 		R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V		fucomip	Compare ST(0) with ST(i), check for ordered values, set status flags accordingly, and pop register stack.
+DB F0 +i 	FCOMI ST, ST(i) 	O2	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V		fcomi	Compare ST(0) with ST(i) and set status flags accordingly.
+DF F0 +i	FCOMIP ST, ST(i) 	O2	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V		fcomip	Compare ST(0) with ST(i), set status flags accordingly, and pop register stack.
+DB E8 +i 	FUCOMI ST, ST(i) 	O2	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V		fucomi	Compare ST(0) with ST(i), check for ordered values, and set status flags accordingly.
+DF E8 +i	FUCOMIP ST, ST(i) 	O2	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V		fucomip	Compare ST(0) with ST(i), check for ordered values, set status flags accordingly, and pop register stack.
 													
 D9 FF 	FCOS 			ST(0)	ST(0) s.c1 S.C2	s.c1 S.C0 S.C3			V	V		fcos	Replace ST(0) with its cosine.
 													
 D9 F6 	FDECSTP 			S.TOP	S.TOP S.C1	S.C0 S.C2 S.C3			V	V		fdecstp	Decrement TOP field in FPU status word.
 													
-D8 /6 	FDIV m32fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivs	Divide ST(0) by m32fp and store result in ST(0).
-DC /6 	FDIV m64fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivl	Compare ST(0) with ST(i), set status flags accordingly, and pop register stack.
-D8 F0 +i 	FDIV ST(0), ST(i) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdiv	Divide ST(0) by ST(i) and store result in ST(0).
-DC F8 +i 	FDIV ST(i), ST(0) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdiv	Divide ST(i) by ST(0) and store result in ST(i).
-DE F8 +i 	FDIVP ST(i), ST(0) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivp	Divide ST(i) by ST(0), store result in ST(i), and pop the register stack.
+D8 /6 	FDIV m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivs	Divide ST(0) by m32fp and store result in ST(0).
+DC /6 	FDIV m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivl	Compare ST(0) with ST(i), set status flags accordingly, and pop register stack.
+D8 F0 +i 	FDIV ST(0), ST(i) 	O2	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdiv	Divide ST(0) by ST(i) and store result in ST(0).
+DC F8 +i 	FDIV ST(i), ST(0) 	O	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdiv	Divide ST(i) by ST(0) and store result in ST(i).
+DE F8 +i 	FDIVP ST(i), ST(0) 	O	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivp	Divide ST(i) by ST(0), store result in ST(i), and pop the register stack.
 DE F9 	FDIVP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fdivp	Divide ST(1) by ST(0), store result in ST(1), and pop the register stack.
-DA /6 	FIDIV m32int 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidivl	Divide ST(0) by m32int and store result in ST(0).
-DE /6 	FIDIV m16int 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidiv	Divide ST(0) by m64int and store result in ST(0).
+DA /6 	FIDIV m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidivl	Divide ST(0) by m32int and store result in ST(0).
+DE /6 	FIDIV m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidiv	Divide ST(0) by m64int and store result in ST(0).
 													
-D8 /7 	FDIVR m32fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivrs	Divide m32fp by ST(0) and store result in ST(0).
-DC /7 	FDIVR m64fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivrl	Divide m64fp by ST(0) and store result in ST(0).
-D8 F8 +i 	FDIVR ST(0), ST(i) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivr	Divide ST(i) by ST(0) and store result in ST(0).
-DC F0 +i 	FDIVR ST(i), ST(0) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivr	Divide ST(0) by ST(i) and store result in ST(i).
-DE F0 +i 	FDIVRP ST(i), ST(0) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivrp	Divide ST(0) by ST(i), store result in ST(i), and pop the register stack.
+D8 /7 	FDIVR m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivrs	Divide m32fp by ST(0) and store result in ST(0).
+DC /7 	FDIVR m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivrl	Divide m64fp by ST(0) and store result in ST(0).
+D8 F8 +i 	FDIVR ST(0), ST(i) 	O2	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivr	Divide ST(i) by ST(0) and store result in ST(0).
+DC F0 +i 	FDIVR ST(i), ST(0) 	O	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivr	Divide ST(0) by ST(i) and store result in ST(i).
+DE F0 +i 	FDIVRP ST(i), ST(0) 	O	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivrp	Divide ST(0) by ST(i), store result in ST(i), and pop the register stack.
 DE F1 	FDIVRP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fdivrp	Divide ST(0) by ST(1), store result in ST(1), and pop the register stack.
-DA /7 	FIDIVR m32int 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidivrl	Divide m32int by ST(0) and store result in ST(0).
-DE /7 	FIDIVR m16int 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidivr	Divide m16int by ST(0) and store result in ST(0).
+DA /7 	FIDIVR m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidivrl	Divide m32int by ST(0) and store result in ST(0).
+DE /7 	FIDIVR m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidivr	Divide m16int by ST(0) and store result in ST(0).
 													
-DD C0 +i 	FFREE ST(i) 		I			S.C0 S.C1 s.c2 S.C3			V	V		ffree	Sets tag for ST(i) to empty.
+DD C0 +i 	FFREE ST(i) 	O	I			S.C0 S.C1 s.c2 S.C3			V	V		ffree	Sets tag for ST(i) to empty.
 													
-DE /2 	FICOM m16int 		R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		ficom	Compare ST(0) with m16int.
-DA /2 	FICOM m32int 		R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		ficoml	Compare ST(0) with m32int.
-DE /3 	FICOMP m16int 		R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		ficomp	Compare ST(0) with m16int and pop stack register.
-DA /3 	FICOMP m32int 		R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		ficompl	Compare ST(0) with m32int and pop stack register.
+DE /2 	FICOM m16int 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		ficom	Compare ST(0) with m16int.
+DA /2 	FICOM m32int 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		ficoml	Compare ST(0) with m32int.
+DE /3 	FICOMP m16int 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		ficomp	Compare ST(0) with m16int and pop stack register.
+DA /3 	FICOMP m32int 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		ficompl	Compare ST(0) with m32int and pop stack register.
 													
-DF /0 	FILD m16int 		R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fild	Push m16int onto the FPU register stack.
-DB /0 	FILD m32int 		R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fildl	Push m32int onto the FPU register stack.
-DF /5 	FILD m64int 		R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fildll	Push m64int onto the FPU register stack.
+DF /0 	FILD m16int 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fild	Push m16int onto the FPU register stack.
+DB /0 	FILD m32int 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fildl	Push m32int onto the FPU register stack.
+DF /5 	FILD m64int 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fildll	Push m64int onto the FPU register stack.
 													
 D9 F7 	FINCSTP 			S.TOP	S.TOP S.C1	S.C0 S.C2 S.C3			V	V		fincstp	Increment the TOP field in the FPU status register.
 													
 9B DB E3 	FINIT 				S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE				V	V		finit	Initialize FPU after checking for pending unmasked floating-point exceptions.
 DB E3 	FNINIT				S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE				V	V		fninit	Initialize FPU without checking for pending unmasked floating-point exceptions.
 													
-DF /2 	FIST m16int 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fist	Store ST(0) in m16int.
-DB /2 	FIST m32int 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fistl	Store ST(0) in m32int.
-DF /3 	FISTP m16int 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fistp	Store ST(0) in m16int and pop register stack.
-DB /3 	FISTP m32int 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fistpl	Store ST(0) in m32int and pop register stack.
-DF /7 	FISTP m64int 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fistpll	Store ST(0) in m64int and pop register stack.
+DF /2 	FIST m16int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fist	Store ST(0) in m16int.
+DB /2 	FIST m32int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fistl	Store ST(0) in m32int.
+DF /3 	FISTP m16int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fistp	Store ST(0) in m16int and pop register stack.
+DB /3 	FISTP m32int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fistpl	Store ST(0) in m32int and pop register stack.
+DF /7 	FISTP m64int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fistpll	Store ST(0) in m64int and pop register stack.
 													
-DF /1 	FISTTP m16int 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fisttp	Store ST(0) in m16int with truncation.
-DB /1 	FISTTP m32int 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fisttpl	Store ST(0) in m32int with truncation.
-DD /1 	FISTTP m64int 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fisttpll	Store ST(0) in m64int with truncation.
+DF /1 	FISTTP m16int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fisttp	Store ST(0) in m16int with truncation.
+DB /1 	FISTTP m32int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fisttpl	Store ST(0) in m32int with truncation.
+DD /1 	FISTTP m64int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fisttpll	Store ST(0) in m64int with truncation.
 													
-D9 /0 	FLD m32fp 		R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		flds	Push m32fp onto the FPU register stack.
-DD /0 	FLD m64fp 		R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldl	Push m64fp onto the FPU register stack.
-DB /5 	FLD m80fp 		R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldt	Push m80fp onto the FPU register stack.
-D9 C0 +i 	FLD ST(i) 		R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fld	Push ST(i) onto the FPU register stack.
+D9 /0 	FLD m32fp 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		flds	Push m32fp onto the FPU register stack.
+DD /0 	FLD m64fp 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldl	Push m64fp onto the FPU register stack.
+DB /5 	FLD m80fp 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldt	Push m80fp onto the FPU register stack.
+D9 C0 +i 	FLD ST(i) 	O	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fld	Push ST(i) onto the FPU register stack.
 													
 D9 E8 	FLD1 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fld1	Push +1.0 onto the FPU register stack.
 D9 E9 	FLDL2T 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldl2t	Push log210 onto the FPU register stack.
@@ -636,18 +636,18 @@ D9 EC 	FLDLG2 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldlg2	Push log102 onto the F
 D9 ED 	FLDLN2 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldln2	Push loge2 onto the FPU register stack.
 D9 EE 	FLDZ 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldz	Push +0.0 onto the FPU register stack.
 													
-D9 /5 	FLDCW m2byte 		R			S.C0 S.C1 S.C2 S.C3			V	V		fldcw	Load FPU control word from m2byte.
+D9 /5 	FLDCW m2byte 	M	R			S.C0 S.C1 S.C2 S.C3			V	V		fldcw	Load FPU control word from m2byte.
 													
-D9 /4 	FLDENV m28byte 		R		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE				V	V		fldenv	Load FPU environment from m14byte or m28byte.
+D9 /4 	FLDENV m28byte 	M	R		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE				V	V		fldenv	Load FPU environment from m14byte or m28byte.
 													
-D8 /1 	FMUL m32fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fmuls	Multiply ST(0) by m32fp and store result in ST(0).
-DC /1 	FMUL m64fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fmull	Multiply ST(0) by m64fp and store result in ST(0).
-D8 C8 +i 	FMUL ST(0), ST(i) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fmul	Multiply ST(0) by ST(i) and store result in ST(0).
-DC C8 +i 	FMUL ST(i), ST(0) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fmul	Multiply ST(i) by ST(0) and store result in ST(i).
-DE C8 +i 	FMULP ST(i), ST(0) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fmulp	Multiply ST(i) by ST(0), store result in ST(i), and pop the register stack.
+D8 /1 	FMUL m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fmuls	Multiply ST(0) by m32fp and store result in ST(0).
+DC /1 	FMUL m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fmull	Multiply ST(0) by m64fp and store result in ST(0).
+D8 C8 +i 	FMUL ST(0), ST(i) 	O2	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fmul	Multiply ST(0) by ST(i) and store result in ST(0).
+DC C8 +i 	FMUL ST(i), ST(0) 	O	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fmul	Multiply ST(i) by ST(0) and store result in ST(i).
+DE C8 +i 	FMULP ST(i), ST(0) 	O	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fmulp	Multiply ST(i) by ST(0), store result in ST(i), and pop the register stack.
 DE C9 	FMULP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fmulp	Multiply ST(1) by ST(0), store result in ST(1), and pop the register stack.
-DA /1 	FIMUL m32int 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fimull	Multiply ST(0) by m32int and store result in ST(0).
-DE /1 	FIMUL m16int 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fimul	Multiply ST(0) by m16int and store result in ST(0).
+DA /1 	FIMUL m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fimull	Multiply ST(0) by m32int and store result in ST(0).
+DE /1 	FIMUL m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fimul	Multiply ST(0) by m16int and store result in ST(0).
 													
 D9 D0 	FNOP 					S.C0 S.C1 S.C2 S.C3			V	V		fnop	No operation is performed.
 													
@@ -661,10 +661,10 @@ D9 F2 	FPTAN 			ST(0)	ST(0) S.C1 S.C2	S.C0 S.C3			V	V		fptan	Replace ST(0) with 
 													
 D9 FC 	FRNDINT 			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		frndint	Round ST(0) to an integer.
 													
-DD /4 	FRSTOR m108byte 		R		ST(*) TAG(*) FPUDATA FPUINSTR S.* M.*				V	V		frstor	Load FPU state from m94byte or m108byte.
+DD /4 	FRSTOR m108byte 	M	R		ST(*) TAG(*) FPUDATA FPUINSTR S.* M.*				V	V		frstor	Load FPU state from m94byte or m108byte.
 													
-9B DD /6 	FSAVE m108byte 		W	ST(*) S.* FPUDATA FPUINSTR FPUOPCODE	ST(*) TAG(*) S.* FPUDATA FPUINSTR FPUOPCODE				V	V		fsave	Store FPU state to m94byte or m108byte after checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
-DD /6 	FNSAVE m108byte 		W	ST(*) S.* FPUDATA FPUINSTR FPUOPCODE	ST(*) TAG(*) S.* FPUDATA FPUINSTR FPUOPCODE				V	V		fnsave	Store FPU environment to m94byte or m108byte without checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
+9B DD /6 	FSAVE m108byte 	M	W	ST(*) S.* FPUDATA FPUINSTR FPUOPCODE	ST(*) TAG(*) S.* FPUDATA FPUINSTR FPUOPCODE				V	V		fsave	Store FPU state to m94byte or m108byte after checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
+DD /6 	FNSAVE m108byte 	M	W	ST(*) S.* FPUDATA FPUINSTR FPUOPCODE	ST(*) TAG(*) S.* FPUDATA FPUINSTR FPUOPCODE				V	V		fnsave	Store FPU environment to m94byte or m108byte without checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
 													
 D9 FD 	FSCALE 			ST(0) ST(1)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fscale	Scale ST(0) by ST(1).
 													
@@ -674,61 +674,61 @@ D9 FB 	FSINCOS 			ST(0)	ST(0) S.C1 S.C2	S.C0 S.C3			V	V		fsincos	Compute the sin
 													
 D9 FA 	FSQRT 			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsqrt	Computes square root of ST(0) and stores the result in ST(0).
 													
-D9 /2 	FST m32fp 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fsts	Copy ST(0) to m32fp.
-DD /2 	FST m64fp 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstl	Copy ST(0) to m64fp.
-DD D0 +i 	FST ST(i) 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fst	Copy ST(0) to ST(i).
-D9 /3 	FSTP m32fp 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstps	Copy ST(0) to m32fp and pop register stack.
-DD /3 	FSTP m64fp 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstpl	Copy ST(0) to m64fp and pop register stack.
-DB /7 	FSTP m80fp 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstpt	Copy ST(0) to m80fp and pop register stack.
-DD D8 +i 	FSTP ST(i) 		W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstp	Copy ST(0) to ST(i) and pop register stack.
+D9 /2 	FST m32fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fsts	Copy ST(0) to m32fp.
+DD /2 	FST m64fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstl	Copy ST(0) to m64fp.
+DD D0 +i 	FST ST(i) 	O	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fst	Copy ST(0) to ST(i).
+D9 /3 	FSTP m32fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstps	Copy ST(0) to m32fp and pop register stack.
+DD /3 	FSTP m64fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstpl	Copy ST(0) to m64fp and pop register stack.
+DB /7 	FSTP m80fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstpt	Copy ST(0) to m80fp and pop register stack.
+DD D8 +i 	FSTP ST(i) 	O	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstp	Copy ST(0) to ST(i) and pop register stack.
 													
-9B D9 /7 	FSTCW m2byte 		W			S.C0 S.C1 S.C2 S.C3			V	V		fstcw	Store FPU control word to m2byte after checking for pending unmasked floating-point exceptions.
-D9 /7 	FNSTCW m2byte 		W			S.C0 S.C1 S.C2 S.C3			V	V		fnstcw	Store FPU control word to m2byte without checking for pending unmasked floating-point exceptions.
+9B D9 /7 	FSTCW m2byte 	M	W			S.C0 S.C1 S.C2 S.C3			V	V		fstcw	Store FPU control word to m2byte after checking for pending unmasked floating-point exceptions.
+D9 /7 	FNSTCW m2byte 	M	W			S.C0 S.C1 S.C2 S.C3			V	V		fnstcw	Store FPU control word to m2byte without checking for pending unmasked floating-point exceptions.
 													
-9B D9 /6 	FSTENV m28byte 		W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V		fstenv	Store FPU environment to m14byte or m28byte after checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
-D9 /6 	FNSTENV m28byte 		W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V		fnstenv	Store FPU environment to m14byte or m28byte without checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
+9B D9 /6 	FSTENV m28byte 	M	W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V		fstenv	Store FPU environment to m14byte or m28byte after checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
+D9 /6 	FNSTENV m28byte 	M	W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V		fnstenv	Store FPU environment to m14byte or m28byte without checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
 													
-9B DD /7 	FSTSW m2byte 		W		S.*	S.C0 S.C1 S.C2 S.C3			V	V		fstsw	Store FPU status word at m2byte after checking for pending unmasked floating-point exceptions.
+9B DD /7 	FSTSW m2byte 	M	W		S.*	S.C0 S.C1 S.C2 S.C3			V	V		fstsw	Store FPU status word at m2byte after checking for pending unmasked floating-point exceptions.
 9B DF E0 	FSTSW AX 		W		S.*	S.C0 S.C1 S.C2 S.C3			V	V		fstsw	Store FPU status word in AX register after checking for pending unmasked floating-point exceptions.
-DD /7 	FNSTSW m2byte 		W		S.*	S.C0 S.C1 S.C2 S.C3			V	V		fnstsw	Store FPU status word at m2byte without checking for pending unmasked floating-point exceptions.
+DD /7 	FNSTSW m2byte 	M	W		S.*	S.C0 S.C1 S.C2 S.C3			V	V		fnstsw	Store FPU status word at m2byte without checking for pending unmasked floating-point exceptions.
 DF E0 	FNSTSW AX 		W		S.*	S.C0 S.C1 S.C2 S.C3			V	V		fnstsw	Store FPU status word in AX register without checking for pending unmasked floating-point exceptions.
 													
-D8 /4 	FSUB m32fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubs	Subtract m32fp from ST(0) and store result in ST(0).
-DC /4 	FSUB m64fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubl	Subtract m64fp from ST(0) and store result in ST(0).
-D8 E0 +i 	FSUB ST(0), ST(i) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsub	Subtract ST(i) from ST(0) and store result in ST(0).
-DC E8 +i 	FSUB ST(i), ST(0) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsub	Subtract ST(0) from ST(i) and store result in ST(i).
-DE E8 +i 	FSUBP ST(i), ST(0) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubp	Subtract ST(0) from ST(i), store result in ST(i), and pop register stack.
+D8 /4 	FSUB m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubs	Subtract m32fp from ST(0) and store result in ST(0).
+DC /4 	FSUB m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubl	Subtract m64fp from ST(0) and store result in ST(0).
+D8 E0 +i 	FSUB ST(0), ST(i) 	O2	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsub	Subtract ST(i) from ST(0) and store result in ST(0).
+DC E8 +i 	FSUB ST(i), ST(0) 	O	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsub	Subtract ST(0) from ST(i) and store result in ST(i).
+DE E8 +i 	FSUBP ST(i), ST(0) 	O	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubp	Subtract ST(0) from ST(i), store result in ST(i), and pop register stack.
 DE E9 	FSUBP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fsubp	Subtract ST(0) from ST(1), store result in ST(1), and pop register stack.
-DA /4 	FISUB m32int 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisubl	Subtract m32int from ST(0) and store result in ST(0).
-DE /4 	FISUB m16int 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisub	Subtract m16int from ST(0) and store result in ST(0).
+DA /4 	FISUB m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisubl	Subtract m32int from ST(0) and store result in ST(0).
+DE /4 	FISUB m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisub	Subtract m16int from ST(0) and store result in ST(0).
 													
-D8 /5 	FSUBR m32fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubrs	Subtract ST(0) from m32fp and store result in ST(0).
-DC /5 	FSUBR m64fp 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubrl	Subtract ST(0) from m64fp and store result in ST(0).
-D8 E8 +i 	FSUBR ST(0), ST(i) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubr	Subtract ST(0) from ST(i) and store result in ST(0).
-DC E0 +i 	FSUBR ST(i), ST(0) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubr	Subtract ST(i) from ST(0) and store result in ST(i).
-DE E0 +i 	FSUBRP ST(i), ST(0) 		RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubrp	Subtract ST(i) from ST(0), store result in ST(i), and pop register stack.
+D8 /5 	FSUBR m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubrs	Subtract ST(0) from m32fp and store result in ST(0).
+DC /5 	FSUBR m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubrl	Subtract ST(0) from m64fp and store result in ST(0).
+D8 E8 +i 	FSUBR ST(0), ST(i) 	O2	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubr	Subtract ST(0) from ST(i) and store result in ST(0).
+DC E0 +i 	FSUBR ST(i), ST(0) 	O	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubr	Subtract ST(i) from ST(0) and store result in ST(i).
+DE E0 +i 	FSUBRP ST(i), ST(0) 	O	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubrp	Subtract ST(i) from ST(0), store result in ST(i), and pop register stack.
 DE E1 	FSUBRP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fsubrp	Subtract ST(1) from ST(0), store result in ST(1), and pop register stack.
-DA /5 	FISUBR m32int 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisubrl	Subtract ST(0) from m32int and store result in ST(0).
-DE /5 	FISUBR m16int 		R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisubr	Subtract ST(0) from m16int and store result in ST(0).
+DA /5 	FISUBR m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisubrl	Subtract ST(0) from m32int and store result in ST(0).
+DE /5 	FISUBR m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisubr	Subtract ST(0) from m16int and store result in ST(0).
 													
 D9 E4 	FTST 			ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		ftst	Compare ST(0) with 0.0.
 													
-DD E0 +i 	FUCOM ST(i) 		R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fucom	Compare ST(0) with ST(i).
+DD E0 +i 	FUCOM ST(i) 	O	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fucom	Compare ST(0) with ST(i).
 DD E1 	FUCOM 			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V		fucom	Compare ST(0) with ST(1).
-DD E8 +i 	FUCOMP ST(i) 		R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fucomp	Compare ST(0) with ST(i) and pop register stack.
+DD E8 +i 	FUCOMP ST(i) 	O	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fucomp	Compare ST(0) with ST(i) and pop register stack.
 DD E9 	FUCOMP 			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V		fucomp	Compare ST(0) with ST(1) and pop register stack.
 DA E9 	FUCOMPP 			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V		fucompp	Compare ST(0) with ST(1) and pop register stack twice.
 													
 D9 E5 	FXAM 			ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fxam	Classify value or number in ST(0).
 													
-D9 C8 +i 	FXCH ST(i) 		RW	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fxch	Exchange the contents of ST(0) and ST(i).
+D9 C8 +i 	FXCH ST(i) 	O	RW	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fxch	Exchange the contents of ST(0) and ST(i).
 D9 C9 	FXCH 			ST(0) ST(1)	ST(0) ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fxch	Exchange the contents of ST(0) and ST(1).
 													
-0F AE /1 	FXRSTOR m512byte		R		ST(*) MM* XMM* CS DS				V	V		fxrstor	Restore the x87 FPU, MMX, XMM, and MXCSR register state from m512byte.
-REX.W+ 0F AE /1	FXRSTOR64 m512byte		R		ST(*) MM* XMM*				V	NE		fxrstor64	Restore the x87 FPU, MMX, XMM, and MXCSR register state from m512byte.
+0F AE /1 	FXRSTOR m512byte	M	R		ST(*) MM* XMM* CS DS				V	V		fxrstor	Restore the x87 FPU, MMX, XMM, and MXCSR register state from m512byte.
+REX.W+ 0F AE /1	FXRSTOR64 m512byte	M	R		ST(*) MM* XMM*				V	NE		fxrstor64	Restore the x87 FPU, MMX, XMM, and MXCSR register state from m512byte.
 													
-0F AE /0 	FXSAVE m512byte		W	ST(*) MM* XMM* M.* CS DS					V	V		fxsave	Save the x87 FPU, MMX, XMM, and MXCSR register state to m512byte.
-REX.W+ 0F AE /0	FXSAVE64 m512byte		W	ST(*) MM* XMM* M.*					V	NE		fxsave64	Save the x87 FPU, MMX, XMM, and MXCSR register state to m512byte.
+0F AE /0 	FXSAVE m512byte	M	W	ST(*) MM* XMM* M.* CS DS					V	V		fxsave	Save the x87 FPU, MMX, XMM, and MXCSR register state to m512byte.
+REX.W+ 0F AE /0	FXSAVE64 m512byte	M	W	ST(*) MM* XMM* M.*					V	NE		fxsave64	Save the x87 FPU, MMX, XMM, and MXCSR register state to m512byte.
 													
 D9 F4 	FXTRACT			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fxtract	Separate value in ST(0) into exponent and significand, store exponent in ST(0), and push the significand onto the register stack.
 													
