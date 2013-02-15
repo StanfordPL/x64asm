@@ -810,7 +810,7 @@ CE 	INTO 								I	V			Interrupt 4—if overflow flag is 1.
 66 0F 38 82 /r 	INVPCID r32, m128								NE	V	INVPCID		Invalidates entries in the TLBs and paging-structure caches based on invalidation type in r32 and descriptor in m128.
 66 0F 38 82 /r	INVPCID r64, m128	RM	R, R						V	NE	INVPCID	invpcid	Invalidates entries in the TLBs and paging-structure caches based on invalidation type in r64 and descriptor in m128.
 													
-CF 	IRET 	NP		???	???	???			V	V		iretw	Interrupt return (16-bit operand size).
+PREF.66+ CF 	IRET 	NP		???	???	???			V	V		iretw	Interrupt return (16-bit operand size).
 CF 	IRETD 	NP		???	???	???			V	V		iretl	Interrupt return (32-bit operand size).
 REX.W+ CF 	IRETQ 	NP		???	???	???			V	NE		iretq	Interrupt return (64-bit operand size).
 													
@@ -921,7 +921,7 @@ REX.W+ FF /5 	JMP m16:64 	D	R	???	???	???			V	NE		jmpq	Jump far, absolute indire
 9F 	LAHF 	NP		E.SF E.ZF E.PF E.AF E.CF	AH				V	V		lahf	Load: AH = EFLAGS(SF:ZF:0:AF:0:PF:1:CF).
 													
 0F 02 /r 	LAR r16, r16/m16 	RM	W, R		E.ZF		YES	NO	V	V		larw	r16 = access rights referenced by r16/m16
-0F 02 /r 	LAR reg, r32/m16	RM	W, R		E.ZF		YES	NO	V	V		larl	reg = access rights referenced by r32/m16
+0F 02 /r 	LAR reg, r32/m16	RM	W, R		E.ZF		YES	NO	V	V		lar	reg = access rights referenced by r32/m16
 													
 F2 0F F0 /r 	LDDQU xmm1, mem	RM	W, R						V	V	SSE3	lddqu	Load unaligned data from mem and return double quadword in xmm1.
 VEX.128.F2.0F.WIG F0 /r	VLDDQU xmm1, m128	RM	Z, R						V	V	AVX	vlddqu	Load unaligned packed integer values from mem to xmm1.
@@ -934,15 +934,15 @@ C5 /r 	LDS r16, m16:16 								I	V			Load DS:r16 with far pointer from memory.
 C5 /r 	LDS r32, m16:32 								I	V			Load DS:r32 with far pointer from memory.
 0F B2 /r 	LSS r16, m16:16 	RM	W, R		SS				V	V		lssw	Load SS:r16 with far pointer from memory.
 0F B2 /r 	LSS r32, m16:32 	RM	W, R		SS				V	V		lssl	Load SS:r32 with far pointer from memory.
-REX+ 0F B2 /r 	LSS r64, m16:64 	RM	W, R		SS				V	NE		lss	Load SS:r64 with far pointer from memory.
+REX.W+ 0F B2 /r 	LSS r64, m16:64 	RM	W, R		SS				V	NE		lss	Load SS:r64 with far pointer from memory.
 C4 /r 	LES r16, m16:16 								I	V			Load ES:r16 with far pointer from memory.
 C4 /r 	LES r32, m16:32 								I	V			Load ES:r32 with far pointer from memory.
 0F B4 /r 	LFS r16, m16:16 	RM	W, R		FS				V	V		lfsw	Load FS:r16 with far pointer from memory.
 0F B4 /r 	LFS r32, m16:32 	RM	W, R		FS				V	V		lfsl	Load FS:r32 with far pointer from memory.
-REX+ 0F B4 /r 	LFS r64, m16:64 	RM	W, R		FS				V	NE		lfs	Load FS:r64 with far pointer from memory.
+REX.W+ 0F B4 /r 	LFS r64, m16:64 	RM	W, R		FS				V	NE		lfs	Load FS:r64 with far pointer from memory.
 0F B5 /r 	LGS r16, m16:16 	RM	W, R		GS				V	V		lgsw	Load GS:r16 with far pointer from memory.
 0F B5 /r 	LGS r32, m16:32 	RM	W, R		GS				V	V		lgsl	Load GS:r32 with far pointer from memory.
-REX+ 0F B5 /r 	LGS r64, m16:64 	RM	W, R		GS				V	NE		lgs	Load GS:r64 with far pointer from memory.
+REX.W+ 0F B5 /r 	LGS r64, m16:64 	RM	W, R		GS				V	NE		lgs	Load GS:r64 with far pointer from memory.
 													
 8D /r 	LEA r16, m 	RM	W, I						V	V		leaw	Store effective address for m in register r16.
 8D /r 	LEA r32, m 	RM	W, I						V	V		leal	Store effective address for m in register r32.
@@ -2123,7 +2123,7 @@ REX+ 0F 98 /0	SETS r/m8	M	w	E.SF					V	NE		sets	Set byte if sign (SF=1).
 0F 94 /0	SETZ r/m8	M	w	E.ZF					V	V		setz	Set byte if zero (ZF=1).
 REX+ 0F 94 /0	SETZ r/m8	M	w	E.ZF					V	NE		setz	Set byte if zero (ZF=1).
 													
-0F AE /7	SFENCE	NP							V	V		sfence	Serializes store operations.
+0F AE F8	SFENCE	NP							V	V		sfence	Serializes store operations.
 													
 0F 01 /0	SGDT m						NO	NO	V	V			Store GDTR to m.
 													
