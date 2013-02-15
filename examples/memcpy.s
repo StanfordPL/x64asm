@@ -1,9 +1,9 @@
 .loop:
 cmpq $0x0, %rdx
-je .done
+#je .done
 movb (%rsi), %al
 movb %al, (%rdi)
 decq %rdx
-jmp  .loop
+#jmp  .loop
 .done:
 retq
