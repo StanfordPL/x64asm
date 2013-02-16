@@ -30,9 +30,13 @@ namespace x64asm {
 */
 class Label : public Operand {
 	public:
+		Label() {
+			val_ = next_val_++;
+		}
+
 		Label(const std::string& s) {
 			val_ = labels_.find(s) == labels_.end() ?
-			  labels_.insert(std::make_pair(s, labels_.size())).first->second :
+			  labels_.insert(std::make_pair(s, next_val_++)).first->second :
 			  labels_.find(s)->second;
 		}
 
@@ -40,11 +44,16 @@ class Label : public Operand {
 			return true;
 		}
 
+		uint64_t val() const {
+			return val_;
+		}
+
 		void write_att(std::ostream& os) const;
 		void write_intel(std::ostream& os) const;
 
 	private:
 		static std::map<std::string, uint64_t> labels_;	
+		uint64_t next_val_;
 };
 
 } // namespace x64asm

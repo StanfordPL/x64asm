@@ -29,5 +29,6 @@ void Label::write_intel(ostream& os) const {
 }
 
 map<string, uint64_t> Label::labels_;
+uint64_t Label::next_val_;
 
 } // namespace x64asm
