@@ -1,9 +1,10 @@
+xorq %rcx, %rcx
 .loop:
-cmpq $0x0, %rdx
-#je .done
-movb (%rsi), %al
-movb %al, (%rdi)
-decq %rdx
-#jmp  .loop
+cmpq %rdx, %rcx
+je .done
+movb (%rsi, %rcx, 1), %al
+movb %al, (%rdi, %rcx, 1)
+incq %rcx
+jmp .loop
 .done:
 retq

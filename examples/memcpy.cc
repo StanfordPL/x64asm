@@ -50,12 +50,13 @@ Function from_code() {
 	// the Code class supports all all STL sequence container operations
 	// (ie: resize, find, clear...).
 	Code c {
+		{XOR_R64_R64, {rcx, rcx}},
 		{LABEL_DEFN, {Label{"loop"}}},
-		{CMP_R64_IMM32, {rdx, Imm32{0}}},
+		{CMP_R64_R64, {rcx, rdx}},
 		{JE_LABEL, {Label{"done"}}},
-		{MOV_RL_M8, {al, M8{rsi}}},
-		{MOV_M8_RL, {M8{rdi}, al}},
-		{DEC_R64, {rdx}},
+		{MOV_RL_M8, {al, M8{rsi, rcx, Scale::TIMES_1}}},
+		{MOV_M8_RL, {M8{rdi, rcx, Scale::TIMES_1}, al}},
+		{INC_R64, {rcx}},
 		{JMP_LABEL, {Label{"loop"}}},
 		{LABEL_DEFN, {Label{"done"}}},
 		{RET, {}}
@@ -76,13 +77,14 @@ Function from_api() {
 
 	// Instructions are inserted using type-safe API calls.
 	// Note that labels do not need to be bound prior to being referenced.
+	assm.xor_(rcx, rcx);
 	assm.bind(Label{"loop"});	
-	assm.cmp(rdx, Imm32{0});
+	assm.cmp(rcx, rdx);
 	assm.je(Label{"done"});
 
-	assm.mov(al, M8{rsi});
-	assm.mov(M8{rdi}, al);
-	assm.dec(rdx);
+	assm.mov(al, M8{rsi, rcx, Scale::TIMES_1});
+	assm.mov(M8{rdi, rcx, Scale::TIMES_1}, al);
+	assm.inc(rcx);
 	assm.jmp(Label{"loop"});
 
 	assm.bind(Label{"done"});

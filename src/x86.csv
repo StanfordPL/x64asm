@@ -908,7 +908,7 @@ E3 cb 	JRCXZ rel8 	D	R	RCX					V	NE		jrcxz	Jump short if RCX register is 0.
 													
 EB cb 	JMP rel8 	D	R	???	???	???			V	V		jmpq	Jump short, RIP = RIP + 8-bit displacement sign extended to 64-bits
 E9 cw 	JMP rel16 								NS	V			Jump near, relative, displacement relative to next instruction. Not supported in 64-bit mode.
-E9 cd 	JMP rel32 	D	R	???	???	???			V	V		jmpq	Jump near, relative, RIP = RIP + 32-bit displacement sign extended to 64-bits
+E9 cd 	JMP rel32 	D	R	???	???	???			V	V		jmp	Jump near, relative, RIP = RIP + 32-bit displacement sign extended to 64-bits
 FF /4 	JMP r/m16 								NS	V			Jump near, absolute indirect, address = zero-extended r/m16. Not supported in 64-bit mode.
 FF /4 	JMP r/m32 								NS	V			Jump near, absolute indirect, address given in r/m32. Not supported in 64-bit mode.
 FF /4 	JMP r/m64 	M	R	???	???	???			V	NE		jmpq	Jump near, absolute indirect, RIP = 64-Bit offset from register or memory

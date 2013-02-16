@@ -654,8 +654,7 @@ insert_label_variant :: Instr -> [Instr]
 insert_label_variant i
   | "rel32" `elem` (operands i) =
     [i
-    ,i{instruction=(subRegex (mkRegex "rel32") (instruction i) "label")
-      ,opcode=(subRegex (mkRegex "cd") (opcode i) "0d")}]	
+    ,i{instruction=(subRegex (mkRegex "rel32") (instruction i) "label")}]
 	| otherwise = [i]
 
 -- Inserts a hint variant for conditional jumps

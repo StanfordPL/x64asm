@@ -53,7 +53,7 @@ class Label : public Operand {
 
 	private:
 		static std::map<std::string, uint64_t> labels_;	
-		uint64_t next_val_;
+		static uint64_t next_val_;
 };
 
 } // namespace x64asm

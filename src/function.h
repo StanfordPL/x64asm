@@ -215,7 +215,7 @@ class Function {
 
 		void emit_long(uint64_t l, size_t index) {
 			assert(index <= size() - 4);
-			*((uint32_t*) (head_ + index)) = l;
+			*((uint32_t*) (buffer_ + index)) = l;
 		}
 
 		void emit_quad(uint64_t q) {
@@ -226,7 +226,7 @@ class Function {
 
 		void emit_quad(uint64_t q, size_t index) {
 			assert(index <= size() - 8);
-			*((uint64_t*) (head_ + index)) = q;
+			*((uint64_t*) (buffer_ + index)) = q;
 		}
 
 		void advance_byte() {
