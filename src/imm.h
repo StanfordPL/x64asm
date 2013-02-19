@@ -29,6 +29,18 @@ class Imm : public Operand {
 		void write_att(std::ostream& os) const;
 		void write_intel(std::ostream& os) const;
 
+		constexpr bool operator<(const Imm& rhs) {
+			return val_ < rhs.val_;
+		}
+
+		constexpr bool operator==(const Imm& rhs) {
+			return val_ == rhs.val_;
+		}
+
+		constexpr operator uint64_t() {
+			return val_;
+		}
+
 	protected:	
 		constexpr Imm(uint64_t val) : Operand{val} { }
 };

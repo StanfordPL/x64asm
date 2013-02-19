@@ -26,6 +26,18 @@ namespace x64asm {
 /** A relative address. */
 class Rel : public Operand {
 	public:
+		constexpr bool operator<(const Rel& rhs) {
+			return val_ < rhs.val_;
+		}
+
+		constexpr bool operator==(const Rel& rhs) {
+			return val_ == rhs.val_;
+		}
+
+		constexpr operator uint64_t() {
+			return val_;
+		}
+
 		void write_att(std::ostream& os) const;
 		void write_intel(std::ostream& os) const;
 

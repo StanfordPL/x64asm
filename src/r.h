@@ -30,6 +30,19 @@ class R : public Operand {
 	public:
 		R64 parent() const;
 
+	public:
+		constexpr bool operator<(const R& rhs) {
+			return val_ < rhs.val_;
+		}
+
+		constexpr bool operator==(const R& rhs) {
+			return val_ == rhs.val_;
+		}
+
+		constexpr operator uint64_t() {
+			return val_;
+		}
+
 	protected:	
 		constexpr R(uint64_t val) 
 				: Operand{val} { 

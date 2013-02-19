@@ -65,6 +65,14 @@ class Moffs : public Operand {
 			return (!contains_seg() || get_seg().check()) && get_offset().check();
 		}
 
+		constexpr bool operator<(const Moffs& rhs) {
+			return val_ < rhs.val_;
+		}
+
+		constexpr bool operator==(const Moffs& rhs) {
+			return val_ == rhs.val_;
+		}
+
 		void write_att(std::ostream& os) const;
 		void write_intel(std::ostream& os) const;
 

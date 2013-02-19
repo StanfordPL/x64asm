@@ -48,6 +48,18 @@ class Label : public Operand {
 			return val_;
 		}
 
+		bool operator<(const Label& rhs) const {
+			return val_ < rhs.val_;
+		}
+
+		bool operator==(const Label& rhs) const {
+			return val_ == val_;
+		}
+
+		operator uint64_t() const {
+			return val_;
+		}
+
 		void write_att(std::ostream& os) const;
 		void write_intel(std::ostream& os) const;
 

@@ -32,6 +32,18 @@ class Mm : public Operand {
 			return val_ < 8;
 		}
 
+		constexpr bool operator<(const Mm& rhs) {
+			return val_ < rhs.val_;
+		}
+
+		constexpr bool operator==(const Mm& rhs) {
+			return val_ == rhs.val_;
+		}
+
+		constexpr operator uint64_t() {
+			return val_;
+		}
+
 		void write_att(std::ostream& os) const;
 		void write_intel(std::ostream& os) const;
 

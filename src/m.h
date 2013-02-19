@@ -163,6 +163,14 @@ class M : public Operand {
 
 		bool check() const;
 
+		constexpr bool operator<(const M& rhs) {
+			return val_ == rhs.val_ ? val2_ < rhs.val2_ : val_ < rhs.val_;
+		}
+
+		constexpr bool operator==(const M& rhs) {
+			return val_ == rhs.val_ && val2_ == rhs.val2_;
+		}
+
 		void write_att(std::ostream& os) const;
 
 	protected:
