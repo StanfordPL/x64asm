@@ -705,21 +705,21 @@ void Instruction::write_intel(ostream& os) const {
 
 const array<size_t, 3257> Instruction::arity_ {{
 	// Internal mnemonics
-	0
+	1
 	// Auto-generated mnemonics
 	#include "src/arity.table"
 }};
 
 const array<array<Instruction::Properties, 4>, 3257> Instruction::properties_ {{
 	// Internal mnemonics
-	{{}}
+	{{Properties::none()+Property::MUST_READ}}
 	// Auto-generated mnemonics
 	#include "src/properties.table"
 }};
 
 const array<array<Type, 4>, 3257> Instruction::type_ {{
 	// Internal mnemonics
-	{{}}
+	{{Type::LABEL}}
 	// Auto-generated mnemonics
 	#include "src/type.table"
 }};
