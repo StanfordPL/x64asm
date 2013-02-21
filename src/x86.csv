@@ -906,12 +906,12 @@ E3 cb 	JRCXZ rel8 	D	R	RCX					V	NE		jrcxz	Jump short if RCX register is 0.
 0F 84 cw 	JZ rel16 								NS	V			Jump near if 0 (ZF=1). Not supported in 64-bit mode.
 0F 84 cd 	JZ rel32 	D	R	E.ZF					V	V		jz	Jump near if 0 (ZF=1).
 													
-EB cb 	JMP rel8 	D	R	???	???	???			V	V		jmpq	Jump short, RIP = RIP + 8-bit displacement sign extended to 64-bits
+EB cb 	JMP rel8 	D	R		RIP				V	V		jmpq	Jump short, RIP = RIP + 8-bit displacement sign extended to 64-bits
 E9 cw 	JMP rel16 								NS	V			Jump near, relative, displacement relative to next instruction. Not supported in 64-bit mode.
-E9 cd 	JMP rel32 	D	R	???	???	???			V	V		jmp	Jump near, relative, RIP = RIP + 32-bit displacement sign extended to 64-bits
+E9 cd 	JMP rel32 	D	R		RIP				V	V		jmp	Jump near, relative, RIP = RIP + 32-bit displacement sign extended to 64-bits
 FF /4 	JMP r/m16 								NS	V			Jump near, absolute indirect, address = zero-extended r/m16. Not supported in 64-bit mode.
 FF /4 	JMP r/m32 								NS	V			Jump near, absolute indirect, address given in r/m32. Not supported in 64-bit mode.
-FF /4 	JMP r/m64 	M	R	???	???	???			V	NE		jmpq	Jump near, absolute indirect, RIP = 64-Bit offset from register or memory
+FF /4 	JMP r/m64 	M	R		RIP				V	NE		jmpq	Jump near, absolute indirect, RIP = 64-Bit offset from register or memory
 EA cd 	JMP ptr16:16 								I	V			Jump far, absolute, address given in operand
 EA cp 	JMP ptr16:32 								I	V			Jump far, absolute, address given in operand
 FF /5 	JMP m16:16 	D	R	???	???	???			V	V		jmpq	Jump far, absolute indirect, address given in m16:16
@@ -1939,9 +1939,9 @@ F2 AF	REPNE_SCAS m16	NP	I	E.ZF E.DF RDI AX					V	V		repne scas	Find AX, starting
 F2 AF	REPNE_SCAS m32	NP	I	E.ZF E.DF RDI EAX					V	V		repne scas	Find EAX, starting at ES:[(E)DI].
 F2 REX.W+ AF	REPNE_SCAS m64	NP	I	E.ZF E.DF RDI RAX					V	NE		repne scas	Find RAX, starting at [RDI].
 													
-C3	RET	NP		???	???	???			V	V		retq	Near return to calling procedure.
+C3	RET	NP			RIP				V	V		retq	Near return to calling procedure.
 CB	RET far	NP	I	???	???	???			V	V		lretl	Far return to calling procedure.
-C2 iw	RET imm16	I	R	???	???	???			V	V		retq	Near return to calling procedure and pop imm16 bytes from stack.
+C2 iw	RET imm16	I	R		RIP RSP				V	V		retq	Near return to calling procedure and pop imm16 bytes from stack.
 CA iw	RET imm16, far	I	R, I	???	???	???			V	V		retq	Far return to calling procedure and pop imm16 bytes from stack.
 													
 66 0F 3A 09 /r ib	ROUNDPD xmm1, xmm2/m128, imm8	RMI	W, R, R	M.RC					V	V	SSE4_1	roundpd	Round packed double precision floating-point values in xmm2/m128 and place the result in xmm1. The rounding mode is determined by imm8.
