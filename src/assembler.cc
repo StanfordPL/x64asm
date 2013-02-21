@@ -110,7 +110,8 @@ void Assembler::mod_rm_sib(const M& rm, const Operand& r) {
 }
 
 void Assembler::debug(const Instruction& instr, size_t idx) const {
-	cerr << instr << " : ";
+	cerr << instr << endl;
+	cerr << "\t\t";
 
 	for ( ; idx < fxn_->size(); ++idx ) {
     cerr << hex << noshowbase << setw(2) << setfill('0');

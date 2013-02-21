@@ -48,10 +48,10 @@ class M : public Operand {
 
 		enum class Mask : uint64_t {
 			DISP    = 0x00000000ffffffff,
-			BASE    = 0x000000ff00000000,
-			INDEX   = 0x0000ff0000000000,
-			SCALE   = 0x00ff000000000000,
-			SEG     = 0x0f00000000000000,
+			BASE    = 0x0000001f00000000,
+			INDEX   = 0x00001f0000000000,
+			SCALE   = 0x0003000000000000,
+			SEG     = 0x0700000000000000,
 			ADDR_OR = 0x1000000000000000,
 			RIP     = 0x2000000000000000
 		};
@@ -177,11 +177,11 @@ class M : public Operand {
 		static constexpr 
 		uint64_t init(uint64_t d, uint64_t b, uint64_t i, uint64_t sc, uint64_t s, 
 				          uint64_t addr_or, uint64_t rip) {
-			return (d  << (uint64_t)Index::DISP) |
-				     (b  << (uint64_t)Index::BASE) |
-						 (i  << (uint64_t)Index::INDEX) |
+			return (d & (uint64_t)Mask::DISP) |
+				     (b << (uint64_t)Index::BASE) |
+						 (i << (uint64_t)Index::INDEX) |
 						 ((uint64_t)sc << (uint64_t)Index::SCALE) |
-						 (s  << (uint64_t)Index::SEG) |
+						 (s << (uint64_t)Index::SEG) |
 						 (addr_or << (uint64_t)Index::ADDR_OR) |
 						 (rip << (uint64_t)Index::RIP);
 		}
