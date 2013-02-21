@@ -866,6 +866,7 @@ qualify_imp s = rename s
         rename s = rep "FPUDATA" "fpu_data" $
                    rep "FPUINSTR" "fpu_instruction" $
                    rep "FPUOPCODE" "fpu_opcode" $
+                   rep "RIP" "rip" $
                    rep "ST\\((.)\\)" "ST\\1" $
                    rep "st\\((.)\\)" "st\\1" $
                    rep "TAG\\((.)\\)" "TAG\\1" $
