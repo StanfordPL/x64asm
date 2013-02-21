@@ -163,7 +163,7 @@ class Function {
 			return capacity_;
 		}
 
-		void resize(size_t capacity) {
+		void reserve(size_t capacity) {
 			if ( capacity <= capacity_ )
 				return;
 

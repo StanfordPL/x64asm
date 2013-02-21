@@ -1179,6 +1179,21 @@ vex_imm i = case "/is4" `elem` (opcode_suffix i) of
   True -> "disp_imm(arg3);\n"
   False -> "// No VEX Immediate\n"
 
+-- Emits pre-assembly debug statement
+assm_debug_begin :: Instr -> String
+assm_debug_begin i = "\t#ifndef NDEBUG\n" ++
+                     "\t\tsize_t debug_i = fxn_->size();\n" ++
+                     "\t#endif\n\n"
+
+-- Emits post-assembly debug statement
+assm_debug_end :: Instr -> String
+assm_debug_end i = "\t#ifndef NDEBUG\n" ++
+                   "\t\tdebug(" ++ instr ++ ", debug_i);\n" ++
+                   "\t#endif\n"
+  where instr = "Instruction{" ++ (opc i) ++ ",{" ++ (ops i) ++ "}}"
+        opc i = opcode_enum i 
+        ops i = intercalate "," $ map (("arg"++).show) $ take (arity i) [0..]
+
 -- VEX encoded instruction definition
 assm_vex_defn :: Instr -> String
 assm_vex_defn i = "  // VEX-Encoded Instruction: \n\n" ++
@@ -1191,7 +1206,7 @@ assm_vex_defn i = "  // VEX-Encoded Instruction: \n\n" ++
                   "  " ++ mod_rm_sib i ++
                   "  " ++ disp_imm i ++
                   "  " ++ vex_imm i ++
-                  "  resize();\n"
+                  "  reserve();\n\n"
 
 -- Other instruction definition
 assm_oth_defn :: Instr -> String
@@ -1205,7 +1220,7 @@ assm_oth_defn i = "  // Non-VEX-Encoded Instruction: \n\n" ++
                   "  " ++ non_vex_opcode i ++
                   "  " ++ mod_rm_sib i ++
                   "  " ++ disp_imm i ++
-                  "  resize();\n"
+                  "  reserve();\n\n"
 
 -- Assembler src definition
 assm_src_defn :: Instr -> String
@@ -1214,7 +1229,9 @@ assm_src_defn i = "void Assembler::" ++
                   "(" ++
                   (assm_arg_list i) ++
                   ") {\n" ++
+                  assm_debug_begin i ++
                   body i ++ 
+                  assm_debug_end i ++ 
                   "}"
   where body i = case is_vex_encoded i of
                       True  -> assm_vex_defn i

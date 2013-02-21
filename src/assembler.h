@@ -213,9 +213,9 @@ class Assembler {
 			fxn_->emit_byte(mod);
 		}
 
-		void resize() {
+		void reserve() {
 			if ( fxn_->capacity() - fxn_->size() < 15 ) 
-				fxn_->resize(fxn_->capacity()*2);
+				fxn_->reserve(fxn_->capacity()*2);
 		}
 
 		// Figure 2-9: Intel Manual Vol 2A 2-14
@@ -251,6 +251,9 @@ class Assembler {
 
 			vex(mmmmm, l, pp, w, vvvv);
 		}
+
+		// Debug printing method for last instruction assembled
+		void debug(const Instruction& instr, size_t start) const;
 };
 
 } // namespace x64asm

@@ -19,6 +19,7 @@ limitations under the License.
 #include <cassert>
 
 #include "src/constants.h"
+#include "src/stream.h"
 
 using namespace std;
 
@@ -106,6 +107,17 @@ void Assembler::mod_rm_sib(const M& rm, const Operand& r) {
 		disp_imm(Imm8(disp));
 	else if ( mod == 0x80 )
 		disp_imm(Imm32(disp));
+}
+
+void Assembler::debug(const Instruction& instr, size_t idx) const {
+	cerr << instr << " : ";
+
+	for ( ; idx < fxn_->size(); ++idx ) {
+    cerr << hex << noshowbase << setw(2) << setfill('0');
+ 		cerr << (int)fxn_->buffer_[idx] << " ";
+	}
+
+	cerr << endl;
 }
 
 } // namespace x64asm
