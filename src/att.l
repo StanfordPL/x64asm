@@ -66,7 +66,7 @@ const Imm* to_imm(const char* c, bool is_hex, bool is_neg) {
 	else
 		iss >> dec >> val;
 
-	return is_neg ? new Imm8{-val} : new Imm8{val};
+	return is_neg ? new Imm64{-val} : new Imm64{val};
 }
 
 const Label* to_label(const char* c) {

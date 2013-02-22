@@ -53,12 +53,12 @@ class Imm : public Operand {
 */
 class Imm8 : public Imm {
 	public:
-		constexpr Imm8(uint64_t i) 
+		constexpr Imm8(uint8_t i) 
 				: Imm{i} { 
 		}
 
 		constexpr bool check() {
-			return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
+			return (int8_t)val_ >= -128 && (int8_t)val_ < 128;
 		}
 };
 
@@ -67,12 +67,12 @@ class Imm8 : public Imm {
 */
 class Imm16 : public Imm {
 	public:
-		constexpr Imm16(uint64_t i) 
+		constexpr Imm16(uint16_t i) 
 				: Imm{i} { 
 		}
 
 		constexpr bool check() {
-			return (int64_t)val_ >= -32768 && (int64_t)val_ < 32768;
+			return (int16_t)val_ >= -32768 && (int16_t)val_ < 32768;
 		}
 };
 
@@ -82,12 +82,12 @@ class Imm16 : public Imm {
 */
 class Imm32 : public Imm {
 	public:
-		constexpr Imm32(uint64_t i) 
+		constexpr Imm32(uint32_t i) 
 				: Imm{i} { 
 		}
 
 		constexpr bool check() {
-			return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
+			return (int32_t)val_ >= -2147483648 && (int32_t)val_ < 2147483648;
 		}
 };
 

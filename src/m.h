@@ -99,7 +99,7 @@ class M : public Operand {
 		}
 
 		constexpr Imm32 get_disp() {
-			return Imm32{val_ & (uint64_t)Mask::DISP};
+			return Imm32{(uint32_t)(val_ & (uint64_t)Mask::DISP)};
 		}
 
 		constexpr bool get_addr_or()  {
