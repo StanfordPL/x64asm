@@ -47,7 +47,7 @@ int main() {
 	cout << endl;
 
 	// Example 2:
-	// Compile a function that will copy an intermediate value of rdx to x
+	// Compile a function that will copy the value of rdx to x as a side effect
 	// Note that rdx only escapes this function through the pointer to x
 	Code c2 {
 		{MOV_R64_IMM64, {rax, Imm64{&x}}},
