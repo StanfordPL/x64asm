@@ -21,7 +21,7 @@ limitations under the License.
 using namespace std;
 using namespace x64asm;
 
-// This program demonstrates the set of built-in constants supported by x64asm.
+// This example demonstrates the set of built-in constants supported by x64asm.
 
 // Write each of the elements in an array
 template <typename T>
@@ -93,7 +93,7 @@ void write() {
 
 int main() {
 	// Constants can be printed using either AT&T or Intel syntax.
-	// Modifiers are available to configure ostreams accordingly.
+	// Stream manipulators are provided for both options.
 
 	cout << "AT&T Constants:" << endl << endl;
 	cout << Syntax::ATT;

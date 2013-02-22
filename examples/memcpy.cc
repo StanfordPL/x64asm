@@ -21,7 +21,7 @@ limitations under the License.
 using namespace std;
 using namespace x64asm;
 
-// This program demonstrates three different methods of assembling and
+// This example demonstrates three different methods of assembling and
 // invoking a toy implementation of the memcpy function in this directory,
 // memcpy.s
 
@@ -59,7 +59,7 @@ Function from_code() {
 		{INC_R64, {rcx}},
 		{JMP_LABEL, {Label{"loop"}}},
 		{LABEL_DEFN, {Label{"done"}}},
-		{RET, {}}
+		{RET}
 	};
 
 	// Assemble the code and return the result.
@@ -76,7 +76,7 @@ Function from_api() {
 	assm.start(memcpy);
 
 	// Instructions are inserted using type-safe API calls.
-	// Note that labels do not need to be bound prior to being referenced.
+	// Note that as above, labels can be referenced before being bound.
 	assm.xor_(rcx, rcx);
 	assm.bind(Label{"loop"});	
 	assm.cmp(rcx, rdx);
@@ -96,7 +96,6 @@ Function from_api() {
 }
 
 // Example: Invokes an assembled version of the memcpy function.
-
 void test(const Function& memcpy) {
 	const char* source = "Hello, world!";
 	char* target = new char[32];

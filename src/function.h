@@ -69,7 +69,7 @@ class Function {
 			free_buffer();
 		}
 
-		uint64_t operator()() {
+		uint64_t operator()() const {
 			return ((f0_type)(buffer_))();
 		}
 
