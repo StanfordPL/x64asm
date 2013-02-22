@@ -48,7 +48,7 @@ int main() {
 
 	// Example 2:
 	// Compile a function that will copy an intermediate value of rdx to x
-	// Note that rdx only escapes this function throw the pointer to x
+	// Note that rdx only escapes this function through the pointer to x
 	Code c2 {
 		{MOV_R64_IMM64, {rax, Imm64{&x}}},
 		{MOV_R64_IMM64, {rdx, Imm64{12345678}}},
