@@ -108,6 +108,7 @@ void test(const Function& memcpy) {
 	// be castable to a unit64_t.  No explicit conversion is necessary.
 	memcpy(target, source, 14);
 	cout << "After return target = \"" << target << "\"" << endl;
+	cout << endl;
 
 	delete target;
 }
