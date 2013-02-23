@@ -19,6 +19,7 @@ limitations under the License.
 
 #include <iostream>
 
+#include "src/function.h"
 #include "src/operand.h"
 
 namespace x64asm {
@@ -104,6 +105,10 @@ class Imm64 : public Imm {
 		template <typename T>
 		constexpr Imm64(T* t) 
 				: Imm{(uint64_t)t} { 
+		}
+
+		Imm64(const Function& f)
+				: Imm{(uint64_t)f.buffer_} {
 		}
 
 		constexpr bool check() {

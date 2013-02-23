@@ -34,6 +34,7 @@ namespace x64asm {
 /** An executable buffer. */
 class Function {
 	friend class Assembler;
+	friend class Imm64;
 
 	private:
 		typedef uint64_t (*f0_type)();
@@ -111,10 +112,6 @@ class Function {
 
 		bool good() const {
 			return (long) buffer_ != -1;
-		}
-
-		operator uint64_t() const { 
-			return (uint64_t)buffer_;
 		}
 
 		void write_hex(std::ostream& os) const {
