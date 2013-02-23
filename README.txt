@@ -22,45 +22,52 @@ x64asm
 Supported Platforms:
 
 Ubuntu 12.04 LTS
-Mac OSX 10.8.x
 
 -------------------------------------------------------------------------------
 
 Build Instructions:
 
 1. Dependency hell!
-
-Satisfy the following package dependencies.
-Equivalents should all be available using MacPorts.
+   Please let me know if you discover a dependency I've missed.
 
 $ sudo apt-get install ccache
 $ sudo apt-get install g++
 $ sudo apt-get install g++-multilib
 $ sudo apt-get install ghc
-$ sudo apt-get install cabal
 $ sudo apt-get install libghc-split-dev
+$ sudo apt-get install flex
+$ sudo apt-get install bison
 
-2a. Type make (specify a build type to override the default 'release')
+2a. Type make (optionally specify a type to override the default 'release')
 
 $ make (release|profile|debug)
 
-2b. Optionally verify your compilation.
+2b. Verify your compilation by running the test suite.
     Warning: This will take a LONG TIME; consider taking the day off.
+		While you're waiting, see below.
 
 $ make check
 
-3. Browse the documentation.
+3a. Browse the examples/ folder
 
-$ <browser> doc/html/index.html
+examples/hello.cc:     How to use the assembler API; look here first.
+examples/constants.cc: Shows off the set of built-in assembler constants.
+examples/context.cc:   How to assemble functions that modify program state.
+examples/functions.cc: How to assemble functions that call other functions.
+examples/dataflow.cc:  How to use the dataflow API.
 
-4a. Play around with the command line app.
+3b. Browse the documentation.
+
+doc/html/index.html: API documentation.
+doc/ref/index.html:  x86_64 application programmer cheatsheet.
+
+4a. Try the command line app.
     Input file formats are specified with the -i flag (att or intel)
 	  Output formats are specified with the -o flag (att, intel, or hex)
 
 $ x64asm -i att -o hex test.s
 
-4b. Write and compile some code.
-    See the examples directory for more.
+4b. Write some code of your own.
 
 // code.cc
 #include "<path/to/here>/include/x64asm.h"
