@@ -88,7 +88,7 @@ int main() {
 	// Example 4:
 	// In princple, it is possible to assemble a self referential function.
 	// However if during the course of assembling, the internal buffer associated
-	// with c4 is exhausted and the assembler is forced to allocate a new buffer,
+	// with f4 is exhausted and the assembler is forced to allocate a new one,
 	// this may fail.  Use with caution.
 	Function f4;
 	Code c4 {
