@@ -113,6 +113,10 @@ class Function {
 			return (long) buffer_ != -1;
 		}
 
+		operator uint64_t() const { 
+			return (uint64_t)buffer_;
+		}
+
 		void write_hex(std::ostream& os) const {
 			for ( size_t i = 0, ie = size(); i < ie; ++i ) {
 				os << std::hex << std::noshowbase << std::setw(2) << std::setfill('0');
