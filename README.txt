@@ -25,7 +25,7 @@ Ubuntu 12.04 LTS
 
 -------------------------------------------------------------------------------
 
-Build Instructions:
+Getting started:
 
 1. Dependency hell!
    Please let me know if you discover a dependency I've missed.
@@ -77,6 +77,12 @@ int main() {
 }
 
 $ g++ code.cc -I<path/to/here> <path/to/here>/lib/x64.a
+
+5a. Contact me if you've found this code fun and/or useful.
+
+5b. Contact me if you've found a bug.
+
+5c. Contact me if you have a feature request.
 
 -------------------------------------------------------------------------------
 
