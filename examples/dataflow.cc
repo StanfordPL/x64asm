@@ -26,16 +26,19 @@ using namespace x64asm;
 // This function iterates over a branch-free code and checks that the read
 // set for each instruction is a subset of the def set at that code point.
 // The boundary condition to the analysis is provided as an input.
-bool undef_read(const Code& code, const RegSet& boundary) {
+// Returns -1 on success, the line number of the error on failure.
+int undef_read(const Code& code, const RegSet& boundary) {
 	RegSet def_set = boundary;
 
-	for ( const auto& instr : code ) {
+	for ( size_t i = 0, ie = code.size(); i < ie; ++i ) {
+		const auto& instr = code[i];
+
 		// Compute the read set for this instruction.
 		const auto read_set = instr.maybe_read_set();
 
 		// Check that the read set is a subset of the def set at this point
 		if ( (read_set & def_set) != read_set )
-			return true;
+			return i;
 
 		// Compute the transfer function of this instruction
 		def_set |= instr.maybe_write_set();
@@ -43,16 +46,31 @@ bool undef_read(const Code& code, const RegSet& boundary) {
 	}
 
 	// If control has reached here, no undefined reads can occur.
-	return false;
+	return -1;
+}
+
+// Perform the undef read check and report results
+void run(const Code& code, const RegSet& boundary) {
+	cout << "Performing undef read check for:" << endl;
+	cout << endl;
+	cout << code << endl;
+	cout << endl;
+
+	int res = undef_read(code, boundary);
+	if ( res >= 0 )
+		cout << "Check failed on line " << res << endl;
+	else
+		cout << "Check passed" << endl;
 }
 
 int main() {
 	// Boundary conditions:
-	// rax will be assumed live-in to both examples
+	// rax is assumed live-in to both examples
 	RegSet boundary = RegSet::empty();
 	boundary += rax;
 
-	// Example 1: No undefined reads.
+	// Example 1:
+	// This function should pass the undef read check.
 	Code c1 {
 		// write rdi
 		{MOV_R64_IMM64, {rdi, Imm64{0}}}, 
@@ -60,15 +78,11 @@ int main() {
 		{ADD_R64_R64, {rax, rdi}},    
 		{RET}
 	};
-
-	// Performing the analysis on this function should return true.
-	cout << c1 << endl;
-	cout << endl;
-	cout << "Undefined Read Check: ";
- 	cout << (undef_read(c1, boundary) ? "true" : "false") << endl;
+	run(c1, boundary);
 	cout << endl;
 
-	// Example 2: An undefined read.
+	// Example 2: 
+	// This function should fail the undef read check.
 	Code c2 {
 		// write rdi
 		{MOV_R64_IMM64, {rdi, Imm64{0}}}, 
@@ -78,12 +92,7 @@ int main() {
 		{ADD_R64_R64, {rax, r8}},
 		{RET}
 	};
-
-	// Performing the analsysi on this function should return false.
-	cout << c2 << endl;
-	cout << endl;
-	cout << "Undefined Read Check: ";
- 	cout << (undef_read(c2, boundary) ? "true" : "false") << endl;
+	run(c2, boundary);
 	cout << endl;
 
 	return 0;
