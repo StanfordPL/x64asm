@@ -18,10 +18,14 @@ limitations under the License.
 
 #include <sstream>
 
+using namespace std;
+
+namespace {
+
 #include "src/att.tab.c"
 #include "src/lex.att.c"
 
-using namespace std;
+} // namespace 
 
 namespace x64asm {
 
