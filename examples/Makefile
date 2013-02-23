@@ -1,4 +1,6 @@
-all: constants context dataflow functions hello
+EX = constants context dataflow functions hello
+
+all: $(EX)
 
 constants: constants.cc
 	g++ -std=c++0x constants.cc -I.. ../lib/libx64asm.a -o constants
@@ -16,4 +18,4 @@ hello: hello.cc
 	g++ -std=c++0x hello.cc -I.. ../lib/libx64asm.a -o hello
 
 clean:
-	rm -f constants context dataflow functions hello
+	rm -f $(EX)
