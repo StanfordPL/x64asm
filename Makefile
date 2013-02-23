@@ -83,8 +83,16 @@ src/%.o: src/%.cc src/%.h codegen
 
 ##### DOCUMENTATION TARGETS
 
-doc/html: doc/doxyfile src/*
+doc/html: doc/doxyfile src/* src/mainpage.dox
 	doxygen doc/doxyfile
+
+src/mainpage.dox: README.txt	
+	echo "/**" > src/mainpage.dox &&\
+	echo "\mainpage" >> src/mainpage.dox &&\
+	echo "\""verbatim" >> src/mainpage.dox &&\
+	cat README.txt >> src/mainpage.dox &&\
+	echo "\endverbatim" >> src/mainpage.dox &&\
+	echo "*/" >> src/mainpage.dox
 
 ##### LIBRARY TARGET
 
@@ -105,6 +113,7 @@ check:
 
 clean:
 	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN)
+	rm -f src/mainpage.dox
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.intel src/*.enum src/*.table
 	rm -f src/*.tab.c src/*.tab.h src/lex.*.c src/*.output
 	rm -f test/*.s test/*.log test/*.o test/*.out
