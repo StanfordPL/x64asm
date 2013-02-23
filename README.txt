@@ -17,6 +17,7 @@ limitations under the License.
 x64asm
 
 
+
 -------------------------------------------------------------------------------
 
 Supported Platforms:
@@ -28,7 +29,8 @@ Ubuntu 12.04 LTS
 Getting started:
 
 1. Dependency hell!
-   Please let me know if you discover a dependency I've missed.
+   
+Please let me know if you discover a dependency I've missed.
 
 $ sudo apt-get install ccache
 $ sudo apt-get install g++
@@ -38,13 +40,16 @@ $ sudo apt-get install libghc-split-dev
 $ sudo apt-get install flex
 $ sudo apt-get install bison
 
-2a. Type make (optionally specify a type to override the default 'release')
+2a. Build the code.
+
+Type make (optionally specify a type to override the default 'release')
 
 $ make (release|profile|debug)
 
-2b. Verify your compilation by running the test suite.
-    Warning: This will take a LONG TIME; consider taking the day off.
-		While you're waiting, see below.
+2b. Optionally check the build.
+
+Verify your compilation by running the test suite. Warning: This will take a 
+LONG TIME; consider taking the day off. While you're waiting, see below.
 
 $ make check
 
@@ -62,8 +67,9 @@ doc/html/index.html: API documentation.
 doc/ref/index.html:  x86_64 application programmer cheatsheet.
 
 4a. Try the command line app.
-    Input file formats are specified with the -i flag (att or intel)
-	  Output formats are specified with the -o flag (att, intel, or hex)
+    
+Input file formats are specified with the -i flag (att or intel). Output 
+formats are specified with the -o flag (att, intel, or hex).
 
 $ x64asm -i att -o hex test.s
 
@@ -86,37 +92,73 @@ $ g++ code.cc -I<path/to/here> <path/to/here>/lib/x64.a
 
 -------------------------------------------------------------------------------
 
-Undefined Assembler Behavior:
+Notes on undefined assembler behavior:
 
-Jumps to undefined labels are handled per g++ by emitting a 32-bit relative
+Jumps to undefined labels are handled by emitting a 32-bit relative 
 displacement of 0x00000000.
 
 -------------------------------------------------------------------------------
 
-Assembler Simplifications:
+Notes on assembler simplifications:
 
 Deciding between the 8- and 32-bit relative displacement forms of jump 
 instructions is known as the (NP hard) branch displacement problem. The primary
-consequence of the decision is code size. Most compilers solve this problem 
+consequence of this decision is code size. Most compilers solve this problem 
 using an iterative algorithm which initially assumes 8-bit displacements and
-then adjusts as necessary. As our design criteria is speed, we simply emit all 
-jumps to labels using the 32-bit form.
+then adjusts as necessary. We emit all jumps to labels using the 32-bit form.
 
 For certain operand combinations, it is possible to emit VEX instructions
 using a short 2-byte prefix.  Any 2-byte prefix can also be emitted using an
-equivalent version of the standard 3-byte prefix form.  As our design criteria
-is speed, we always use the 3-byte form.
-
-See (Codegen Notes -- Ambiguity) for notes on instructions with multiple
-encodings.
+equivalent version of the standard 3-byte prefix form. We always use the 3-byte
+form.
 
 -------------------------------------------------------------------------------
 
-Intel Specification Modifications:
+Notes on Codegen:
+
+Memory Types:
+	
+In many cases, the only thing distinguishing two otherwise identical 
+instructions is operand type. Furthermore, certain operand types (ie. M16) are 
+required for infering prefix bytes. We account for this by introducing a 
+distinct memory type for each operand type appearing in the Intel manual. 
+Barring these requirements, a single memory type would simplify our 
+implementation.
+
+REX+:
+
+Any instruction prefixed with REX+ has at least one 8-bit operand.
+We identify these instructions and replace them with as many variants as are
+necessary to represent all possible combinations of replacements by elements
+in the sets {rl,rb} and {rl,rh}. This follows from the x86_64 hardware, which
+prevents the user from specifying the simultaneous use of rh registers at the
+same time as operand or mnemonic which requires a REX prefix. As a result, 
+opting to use any of these high registers for any operand implies that any 
+other r8 registers must be drawn from {rl,rh}.
+
+Ambiguity:
+
+Even after we have (1) added the annotations described above, (2) ignored 
+the meaningless rows described above, and (3) rewritten rows that use the REX
++ prefix, we are still left with rows which are indistinguishable up to 
+mnemonic and operand. These ambiguities represent a distinction without a 
+difference. They are alternate hardware methods for performing the same 
+operation, which as far as we know, have no noticable performance tradeoffs.
+	
+We remove this redudancy by eliminating all but one row from each such 
+equivalence class. In the interest of encoding efficiency, preference is given 
+to variants with shorter encodings.
+
+-------------------------------------------------------------------------------
+
+Intel Eratta:
 
 Most of the source code in this project is automatically generated using the
 the x64.ods spreadsheet.  Unless otherwise noted below, the contents of the 
-spreadsheet are transcribed directly from the Intel Manual.
+spreadsheet are transcribed directly from the Intel manuals.
+
+If you discover an error, or an edit which has not been documented below,
+please contact me.
 
 LAHS/SAHF:
 
@@ -222,50 +264,19 @@ AND
 The op/en values for this instruction are likely incorrect and have been 
 modified to match those from ADC,SBB,etc.
 
+DATAFLOW VALUES:
+
+Some dataflow information is missing and/or incomplete. I'm only human. Fixing
+these is an ongoing process as I continue to learn about the x86 hardware.
+
 Misc:
 
-Various small typos, such as missing spaces in the opcode column have been
-silently fixed.
-
--------------------------------------------------------------------------------
-
-Codegen Notes:
-
-Memory Types:
-	
-In many cases, the only thing distinguishing two otherwise identical 
-instructions is operand type. Furthermore, certain operand types (ie. M16) are 
-required for infering prefix bytes. We account for this by introducing a 
-distinct memory type for each operand type appearing in the Intel manual. 
-Barring these requirements, a single memory type would certainly simplify 
-things.
-
-REX+:
-
-Any instruction prefixed with REX+ has at least one 8-bit operand.
-We identify these instructions and replace them with as many variants as are
-necessary to represent all possible combinations of replacements by elements
-in the sets {rl,rb} and {rl,rh}. This follows from the x86 hardware, which
-prevents the user from specifying the simultaneous use of rh registers at the
-same time as operand or mnemonic which requires a REX prefix. As a result, 
-opting to use any of these high registers for any operand implies that any 
-other r8 registers must be drawn from {rl,rh}.
-
-Ambiguity:
-
-Even after we have (1) added the annotations described above, (2) ignored 
-the meaningless rows described above, and (3) rewritten rows that use the REX
-+ prefix, we are still left with rows which are indistinguishable up to 
-mnemonic and operand. These ambiguities represent a distinction without a 
-difference. They are alternate hardware methods for performing the same 
-operation, which as far as we know, have no noticable performance tradeoffs.
-	
-We remove this redudancy by eliminating all but one row from each such 
-equivalence class. In the interest of encoding efficiency, preference is given 
-to variants with shorter encodings.
+Many small semantic errors and typos have been fixed. These and the above
+are annotated in x86.ods using bold red caps.
 
 -------------------------------------------------------------------------------
 
 Known Issues:
 
-Intel parsing is incomplete.
+Intel parsing is imcomplete.
+Hex for some instructions is still incorrect, run make check for details.
