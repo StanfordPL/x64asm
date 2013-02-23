@@ -16,16 +16,7 @@ limitations under the License.
 
 #include "src/code.h"
 
-#include <sstream>
-
 using namespace std;
-
-namespace {
-
-#include "src/att.tab.c"
-#include "src/lex.att.c"
-
-} // namespace 
 
 namespace x64asm {
 
@@ -34,23 +25,6 @@ bool Code::check() const {
 		if ( !i.check() )
 			return false;
 	return true;
-}
-
-void Code::read_att(istream& is) {
-	stringstream ss;
-	ss << is.rdbuf();
-
-	auto buffer = att_scan_string(ss.str().c_str());
-	att_switch_to_buffer(buffer);
-	attparse(is, *this);
-	att_delete_buffer(buffer);
-}
-
-void Code::read_intel(istream& is) {
-	stringstream ss;
-	ss << is.rdbuf();
-
-	// TODO...
 }
 
 void Code::write_att(ostream& os) const {

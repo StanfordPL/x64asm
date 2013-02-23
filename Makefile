@@ -14,12 +14,14 @@
 
 ##### CONSTANT DEFINITIONS
 
-GCC=ccache g++ -std=c++0x -Wall
+GCC=ccache g++ -std=c++0x
 
 INC=-I./
 		
 OBJ=src/assembler.o \
 		src/code.o \
+		src/code.att.o \
+		src/code.intel.o \
 		src/constants.o \
 		src/hint.o \
 		src/imm.o \
@@ -65,16 +67,19 @@ codegen:
 		./Codegen && \
 		rm -f *.hi *.o Codegen
 	flex $(FLEXOPS) -Patt src/att.l 
-	flex $(FLEXOPS) -Pintel src/att.l 
+	flex $(FLEXOPS) -Pintel src/intel.l 
 	bison $(BISONOPS) -batt -patt --defines src/att.y && touch att.output 
-	bison $(BISONOPS) -bintel -pintel --defines src/att.y && touch intel.output 
+	bison $(BISONOPS) -bintel -pintel --defines src/intel.y && touch intel.output 
 	mv lex.*.* src/ && mv *.tab.* src/ && mv *.output src/
 		
-src/code.o: src/code.cc src/code.h codegen
-	$(GCC) -O0 $(INC) -c $< -o $@
+src/code.att.o: src/code.att.cc src/code.h codegen
+	$(GCC) -w -O0 $(INC) -c $< -o $@
+
+src/code.intel.o: src/code.intel.cc src/code.h codegen
+	$(GCC) -w -O0 $(INC) -c $< -o $@
 
 src/%.o: src/%.cc src/%.h codegen
-	$(GCC) $(OPT) $(INC) -c $< -o $@
+	$(GCC) -Werror $(OPT) $(INC) -c $< -o $@
 
 ##### DOCUMENTATION TARGETS
 
