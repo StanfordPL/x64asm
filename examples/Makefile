@@ -1,4 +1,4 @@
-all: constants context fib memcpy 
+all: constants context functions hello
 
 constants: constants.cc
 	g++ -std=c++0x constants.cc -I.. ../lib/libx64asm.a -o constants
@@ -6,11 +6,11 @@ constants: constants.cc
 context: context.cc
 	g++ -std=c++0x context.cc -I.. ../lib/libx64asm.a -o context
 
-fib: fib.cc
-	g++ -std=c++0x fib.cc -I.. ../lib/libx64asm.a -o fib
+functions: functions.cc
+	g++ -std=c++0x functions.cc -I.. ../lib/libx64asm.a -o functions
 
-memcpy: memcpy.cc
-	g++ -std=c++0x memcpy.cc -I.. ../lib/libx64asm.a -o memcpy
+hello: hello.cc
+	g++ -std=c++0x hello.cc -I.. ../lib/libx64asm.a -o hello
 
 clean:
-	rm -f constants context fib memcpy 
+	rm -f constants context functions hello
