@@ -83,15 +83,15 @@ src/%.o: src/%.cc src/%.h codegen
 
 ##### DOCUMENTATION TARGETS
 
-doc/html: doc/doxyfile src/* src/mainpage.dox
-	doxygen doc/doxyfile
+doc/html: src/doxyfile src/* src/mainpage.dox
+	doxygen src/doxyfile
 
 src/mainpage.dox: README.txt	
 	echo "/**" > src/mainpage.dox &&\
-	echo "\mainpage" >> src/mainpage.dox &&\
-	echo "\""verbatim" >> src/mainpage.dox &&\
+	echo \\mainpage >> src/mainpage.dox &&\
+	echo "\\\verbatim" >> src/mainpage.dox &&\
 	cat README.txt >> src/mainpage.dox &&\
-	echo "\endverbatim" >> src/mainpage.dox &&\
+	echo \\endverbatim >> src/mainpage.dox &&\
 	echo "*/" >> src/mainpage.dox
 
 ##### LIBRARY TARGET
