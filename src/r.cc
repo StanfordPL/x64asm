@@ -24,10 +24,6 @@ using namespace std;
 
 namespace x64asm {
 
-R64 R::parent() const {
-	return R64{val_};
-}
-
 void Rl::write_att(ostream& os) const {
 	os << "%";
 	write_intel(os);
@@ -42,10 +38,6 @@ void Rl::write_intel(ostream& os) const {
 
 		default: assert(false);
 	}
-}
-
-R64 Rh::parent() const {
-	return R64{val_-4};
 }
 
 void Rh::write_att(ostream& os) const {

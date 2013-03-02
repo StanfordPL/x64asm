@@ -17,6 +17,7 @@ limitations under the License.
 #ifndef X64ASM_INCLUDE_X64_H
 #define X64ASM_INCLUDE_X64_H
 
+#include "src/alias.h"
 #include "src/assembler.h"
 #include "src/code.h"
 #include "src/constants.h"

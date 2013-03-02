@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#include "src/alias.h"
 #include "src/reg_set.h"
 
 using namespace std;
@@ -23,15 +24,15 @@ namespace x64asm {
 RegSet& RegSet::operator+=(const M& rhs) {
 	if ( rhs.get_addr_or() ) {
 		if ( rhs.contains_base() )
-			*this += rhs.get_base();
+			*this += Alias::to_double(rhs.get_base());
 		if ( rhs.contains_index() )
-			*this += rhs.get_index();
+			*this += Alias::to_double(rhs.get_index());
 	}
 	else {
 		if ( rhs.contains_base() )
-			*this += rhs.get_base().parent();
+			*this += rhs.get_base();
 		if ( rhs.contains_index() )
-			*this += rhs.get_index().parent();
+			*this += rhs.get_index();
 	}
 	return *this;
 }

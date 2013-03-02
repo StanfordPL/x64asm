@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#include "src/alias.h"
 #include "src/m.h"
 
 using namespace std;
@@ -70,18 +71,18 @@ void M::write_att(ostream& os) const {
 	if ( contains_base() ) {
 		const auto b = get_base();
 		if ( get_addr_or() )
-			b.write_att(os);
+			Alias::to_double(b).write_att(os);
 		else
-			b.parent().write_att(os);
+			b.write_att(os);
 	}
 	if ( contains_base() && contains_index() )
 		os << ",";
 	if ( contains_index() ) {
 		const auto i = get_index();
 		if ( get_addr_or() )
-			i.write_att(os);
+			Alias::to_double(i).write_att(os);
 		else
-			i.parent().write_att(os);
+			i.write_att(os);
 		os << ",";
 		switch ( get_scale() ) {
 			case Scale::TIMES_1: os << "1"; break;
@@ -112,18 +113,18 @@ void M::write_intel_base(ostream& os) const {
 	if ( contains_base() ) {
 		const auto b = get_base();
 		if ( get_addr_or() )
-			b.write_intel(os);
+			Alias::to_double(b).write_intel(os);
 		else
-			b.parent().write_intel(os);
+			b.write_intel(os);
 	}
 	if ( contains_base() && contains_index() )
 		os << "+";
 	if ( contains_index() ) {
 		const auto i = get_index();
 		if ( get_addr_or() )
-			i.write_intel(os);
+			Alias::to_double(i).write_intel(os);
 		else
-			i.parent().write_intel(os);
+			i.write_intel(os);
 		os << "*";
 		switch ( get_scale() ) {
 			case Scale::TIMES_1: os << "1"; break;

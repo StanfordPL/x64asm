@@ -20,7 +20,6 @@ limitations under the License.
 #include <iostream>
 
 #include "src/operand.h"
-#include "src/ymm.h"
 
 namespace x64asm {
 
@@ -31,10 +30,6 @@ class Xmm : public Operand {
 	friend class Constants;
 
 	public:
-		constexpr Ymm parent() { 
-			return Ymm{val_}; 
-		}
-
 		constexpr bool check() {
 			return val_ < 16;
 		}

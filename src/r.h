@@ -23,13 +23,8 @@ limitations under the License.
 
 namespace x64asm {
 
-class R64;
-
 /** A general-purpose register. */
 class R : public Operand {
-	public:
-		R64 parent() const;
-
 	public:
 		constexpr bool operator<(const R& rhs) {
 			return val_ < rhs.val_;
@@ -72,8 +67,6 @@ class Rh : public R {
 	friend class Constants;
 
 	public:
-		R64 parent() const;
-
 		constexpr bool check() {
 			return val_ >= 4 && val_ < 8;
 		}
@@ -196,7 +189,6 @@ class Dx : public R16 {
 */
 class R32 : public R {
 	friend class Constants;
-	friend class M;
 
 	public:
 		constexpr bool check() {
@@ -232,6 +224,7 @@ class Eax : public R32 {
 */
 class R64 : public R {
 	friend class Constants;
+	friend class M;
 	friend class R;
 	friend class Rh;
 

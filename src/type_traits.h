@@ -35,6 +35,8 @@ limitations under the License.
 
 namespace x64asm {
 
+// Is this a concrete operand type?
+
 template <typename T>
 struct is_operand : public std::false_type { };
 
@@ -168,6 +170,36 @@ struct is_operand<Xmm0> : public std::true_type { };
 
 template <>
 struct is_operand<Ymm> : public std::true_type { };
+
+// Is this a register type?
+
+template <typename T>
+struct is_reg : public std::false_type { };
+
+template <>
+struct is_reg<Rl> : public std::true_type { };
+template <>
+struct is_reg<Rh> : public std::true_type { };
+template <>
+struct is_reg<Rb> : public std::true_type { };
+template <>
+struct is_reg<Al> : public std::true_type { };
+template <>
+struct is_reg<Cl> : public std::true_type { };
+template <>
+struct is_reg<R16> : public std::true_type { };
+template <>
+struct is_reg<Ax> : public std::true_type { };
+template <>
+struct is_reg<Dx> : public std::true_type { };
+template <>
+struct is_reg<R32> : public std::true_type { };
+template <>
+struct is_reg<Eax> : public std::true_type { };
+template <>
+struct is_reg<R64> : public std::true_type { };
+template <>
+struct is_reg<Rax> : public std::true_type { };
 
 } // namespace x64asm
 

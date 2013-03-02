@@ -86,12 +86,12 @@ class M : public Operand {
 			return Sreg{(val_ & (uint64_t)Mask::SEG) >> (uint64_t)Index::SEG};
 		}
 
-		constexpr R32 get_base() {
-			return R32{(val_ & (uint64_t)Mask::BASE) >> (uint64_t)Index::BASE};
+		constexpr R64 get_base() {
+			return R64{(val_ & (uint64_t)Mask::BASE) >> (uint64_t)Index::BASE};
 		}
 
-		constexpr R32 get_index() {
-			return R32{(val_ & (uint64_t)Mask::INDEX) >> (uint64_t)Index::INDEX};
+		constexpr R64 get_index() {
+			return R64{(val_ & (uint64_t)Mask::INDEX) >> (uint64_t)Index::INDEX};
 		}
 
 		constexpr Scale get_scale() {
