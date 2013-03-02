@@ -16,7 +16,35 @@ limitations under the License.
 
 x64asm
 
+x64asm is a c++11 library for working with x86_64 assembly. It provides 
+parsers, an in memory assembler, and primitives for building data flow 
+analyses. x64asm was built with the following design goals in mind:
 
+Simplicity: 
+x64 asm does NOT include a register allocator, instruction scheduler, control 
+flow graph builder, or any of the features you would expect of a proper
+compiler. It is a low-level library for building YOUR optimizing compiler.
+
+Completeness: 
+x64asm supports the entire ring 3 application level subset of the x86_64 
+instruction set, including the most recent AVX extensions.
+
+Correctness:
+Compared to other x86 assemblers, the majority of the source in the x64asm
+repository is auto-generated using a declarative specification.  This means
+that bugs can be fixed quickly without major modifications to its codebase.
+
+Speed:
+x64 asm is fast enough for use in a JIT applications where compile time is at
+a premium.
+
+-------------------------------------------------------------------------------
+
+x64asm has been used as part of the following projects and publications:
+If you've found x64asm useful, please let me know and I will add a reference.
+
+Stochastic Superoptimization. Eric Schkufza, Rahul Sharma, Alex Aiken.
+To appear in ASPLOS 2013.
 
 -------------------------------------------------------------------------------
 
