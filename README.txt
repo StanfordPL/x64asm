@@ -60,13 +60,14 @@ Getting started:
    
 Please let me know if you discover a dependency I've missed.
 
+$ sudo apt-get install bison
 $ sudo apt-get install ccache
+$ sudo apt-get install doxygen
+$ sudo apt-get install flex
 $ sudo apt-get install g++
 $ sudo apt-get install g++-multilib
 $ sudo apt-get install ghc
 $ sudo apt-get install libghc-split-dev
-$ sudo apt-get install flex
-$ sudo apt-get install bison
 
 2a. Build the code.
 
