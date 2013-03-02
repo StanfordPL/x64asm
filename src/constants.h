@@ -33,7 +33,8 @@ limitations under the License.
 
 namespace x64asm {
 
-/** Predefined constants. */
+/** Predefined assembler constants. Direct access to the object constructors is
+    disallowed in general. */
 class Constants {
 	public:
 		static constexpr Eflags eflags_cf()   { return Eflags{0,1}; }
@@ -253,6 +254,8 @@ class Constants {
 		static constexpr Ymm ymm14() { return Ymm{14}; } 
 		static constexpr Ymm ymm15() { return Ymm{15}; } 
 };
+
+// Convenience definitions follow... 
 
 extern const FpuControl fpu_control_im;
 extern const FpuControl fpu_control_dm;

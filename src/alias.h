@@ -43,7 +43,7 @@ class Alias {
 																		   !std::is_same<T,Rb>::value, 
 			                               const Rl&>::type
 			to_low(const T& t) {
-				assert(r < 4);
+				assert(t < 4);
 				return rls[t];		
 			}
 
@@ -66,7 +66,7 @@ class Alias {
 																			 !std::is_same<T,Rb>::value, 
 			                               const Rh&>::type
 			to_high(const T& t) {
-				assert(r < 4);
+				assert(t < 4);
 				return rhs[t];		
 			}
 
@@ -89,7 +89,7 @@ class Alias {
 			                               const Rb&>::type
 			to_byte(const T& t) {
 				// The rbs array begins with rbp, which has an internal value of 4.
-				assert(r >= 4);
+				assert(t >= 4);
 				return rbs[t-4];		
 			}
 
