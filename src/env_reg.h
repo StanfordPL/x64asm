@@ -23,44 +23,55 @@ namespace x64asm {
 
 /** An environment register. */
 class EnvReg {
+	// Needs access to internal value.
 	friend class RegSet;
 
 	protected:
+		/** Direct access to this constructor is disallowed. */
 		constexpr EnvReg(uint64_t val) : val_{val} { }
 
 	private:
+		/** Globally unique id. */
 		uint64_t val_;
 };
 
 /** The FPU Data register. */
 class FpuData : public EnvReg {
+	// Needs access to constructor.
 	friend class Constants;
 
 	private:
+		/** Direct access to this constructor is disallowed. */
 		constexpr FpuData() : EnvReg{0} { }
 };
 
 /** The FPU Instruction register. */
 class FpuInstruction : public EnvReg {
+	// Needs access to constructor.
 	friend class Constants;
 
 	private:
+		/** Direct access to this constructor is disallowed. */
 		constexpr FpuInstruction() : EnvReg{0} { }
 };
 
 /** The FPU Opcode regiter. */
 class FpuOpcode : public EnvReg {
+	// Needs access to constructor.
 	friend class Constants;
 
 	private:
+		/** Direct access to this constructor is disallowed. */
 		constexpr FpuOpcode() : EnvReg{0} { }
 };
 
 /** The instruction pointer register. */
 class Rip : public EnvReg {
+	// Needs access to constructor.
 	friend class Constants;
 
 	private:
+		/** Direct access to this constructor is disallowed. */
 		constexpr Rip() : EnvReg{0} { }
 };
 

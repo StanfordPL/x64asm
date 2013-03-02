@@ -27,22 +27,28 @@ namespace x64asm {
 /** An immediate value. */
 class Imm : public Operand {
 	public:
+		/** Writes this immediate to an ostream using at&t syntax. */
 		void write_att(std::ostream& os) const;
+		/** Writes this immediate to an ostrema using intel syntax. */
 		void write_intel(std::ostream& os) const;
 
+		/** Comparison based on immediate value. */
 		constexpr bool operator<(const Imm& rhs) {
 			return val_ < rhs.val_;
 		}
 
+		/** Comparison based on immediate value. */
 		constexpr bool operator==(const Imm& rhs) {
 			return val_ == rhs.val_;
 		}
 
+		/** Converts immediate value to an equivalent unsigned int. */
 		constexpr operator uint64_t() {
 			return val_;
 		}
 
 	protected:	
+		/** Direct access to this constructor is disallowed. */
 		constexpr Imm(uint64_t val) : Operand{val} { }
 };
 
@@ -54,10 +60,12 @@ class Imm : public Operand {
 */
 class Imm8 : public Imm {
 	public:
+		/** Creates a 8-bit immediate. */
 		constexpr Imm8(uint8_t i) 
 				: Imm{i} { 
 		}
 
+		/** Checks that this immediate value fits in 8 bits. */
 		constexpr bool check() {
 			return (int8_t)val_ >= -128 && (int8_t)val_ < 128;
 		}
@@ -68,10 +76,12 @@ class Imm8 : public Imm {
 */
 class Imm16 : public Imm {
 	public:
+		/** Creates a 16-bit immediate. */
 		constexpr Imm16(uint16_t i) 
 				: Imm{i} { 
 		}
 
+		/** Checks that this immediate value fits in 16 bits. */
 		constexpr bool check() {
 			return (int16_t)val_ >= -32768 && (int16_t)val_ < 32768;
 		}
@@ -83,10 +93,12 @@ class Imm16 : public Imm {
 */
 class Imm32 : public Imm {
 	public:
+		/** Creates a 32-bit immediate. */
 		constexpr Imm32(uint32_t i) 
 				: Imm{i} { 
 		}
 
+		/** Check that this immediate value fits in 32 bits. */
 		constexpr bool check() {
 			return (int32_t)val_ >= -2147483648 && (int32_t)val_ < 2147483648;
 		}
@@ -98,19 +110,23 @@ class Imm32 : public Imm {
 */
 class Imm64 : public Imm {
 	public:
+		/** Creates a 64-bit immediate. */
 		constexpr Imm64(uint64_t i) 
 				: Imm{i} { 
 		}
 
+		/** Creates a 64-bit immediate from a 64-bit pointer. */
 		template <typename T>
 		constexpr Imm64(T* t) 
 				: Imm{(uint64_t)t} { 
 		}
 
+		/** Creates a 64-bit immediate from the address of a function. */
 		Imm64(const Function& f)
 				: Imm{(uint64_t)f.buffer_} {
 		}
 
+		/** Checks that this immediate value fits in 64-bits. */
 		constexpr bool check() {
 			return true;
 		}
@@ -118,14 +134,17 @@ class Imm64 : public Imm {
 
 /** The immediate constant value zero */
 class Zero : public Imm8 {
+	// Needs access to constructor.
 	friend class Constants;
 
 	public:	
+		/** Checks that this immediate value equals zero. */
 		constexpr bool check() {
 			return val_ == 0;
 		}
 
 	private:
+		/** Direct access to this constructor is disallowed. */
 		constexpr Zero() 
 				: Imm8{0} { 
 		}
@@ -133,14 +152,17 @@ class Zero : public Imm8 {
 
 /** The immediate constant value one */
 class One : public Imm8 {
+	// Needs access to constructor.
 	friend class Constants;
 
 	public:
+		/** Checks that this immediate value equals one. */
 		constexpr bool check() {
 			return val_ == 1;
 		}
 
 	private:
+		/** Direct access to this construcotr is disallowed. */
 		constexpr One() 
 				: Imm8{1} { 
 		}
@@ -148,14 +170,17 @@ class One : public Imm8 {
 
 /** The immediate constant value three */
 class Three : public Imm8 {
+	// Needs access to constructor.
 	friend class Constants;
 
 	public:
+		/** Checks that this immediate value equals three. */
 		constexpr bool check() {
 			return val_ == 3;
 		}
 
 	private:
+		/** Direct access to this constructor is disallosed. */
 		constexpr Three() 
 				: Imm8{3} { 
 		}
