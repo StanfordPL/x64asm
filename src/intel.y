@@ -16,24 +16,7 @@ limitations under the License.
 
 %{
 
- /*
-Some high level notes as this implementation isn't totally obvious.
-
-This parser has to deal with the fact that x86 assembly isn't LALR(1)
-parseable.  The high level way around this is to parse opcode, operand
-string pairs and then use those pairs as keys in a lookup table to resolve
-instruction form. 
-
-A side effect of this implementation is that some of the parsing rules for 
-memory operands shadow the parsing rules for moffs and rel operands.  This, 
-combined with the fact that the corresponding lexer stores least specific
-operand types is handled using a method to check whether operands can be 
-reinterpreted as the desired types and cast as necessary.
-
-This implementation relies on a table which is ordered such that most 
-specific operand orderings appear prior to less specific orderings, so that
-for instance, adc $0x10, %al is parsed as ADC_IMM8_AL rather than ADC_IMM32_R32.
- */
+ /** @todo This is currently a (possibly outdated) copy of att.y. */
 
 #include <map>
 #include <string>

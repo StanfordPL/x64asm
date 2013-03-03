@@ -35,6 +35,9 @@ limitations under the License.
 
 namespace x64asm {
 
+// Attributes for template meta-programming. This module is for internal
+// use only and not exposed as part of the public interface of x64asm.
+
 // Is this a concrete operand type?
 
 template <typename T>

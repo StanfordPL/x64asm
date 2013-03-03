@@ -26,22 +26,28 @@ namespace x64asm {
 /** A relative address. */
 class Rel : public Operand {
 	public:
+		/** Comparison based on relative value. */
 		constexpr bool operator<(const Rel& rhs) {
 			return val_ < rhs.val_;
 		}
 
+		/** Comparison based on relative value. */
 		constexpr bool operator==(const Rel& rhs) {
 			return val_ == rhs.val_;
 		}
 
+		/** Conversion based on relative value. */
 		constexpr operator uint64_t() {
 			return val_;
 		}
 
+		/** Writes this relative address to an ostream in at&t syntax. */
 		void write_att(std::ostream& os) const;
+		/** Writes this relative address to an ostream in at&t syntax. */
 		void write_intel(std::ostream& os) const;
 
 	protected:
+		/** Direct access to this constructor is disallowed. */
 		constexpr Rel(uint64_t val) 
 				: Operand{val} { 
 		}
@@ -52,10 +58,12 @@ class Rel : public Operand {
 */
 class Rel8 : public Rel {
 	public:
+		/** Creates an 8-bit relative offset. */
 		constexpr Rel8(int8_t val) 
 				: Rel{(uint64_t)val} { 
 		}
 
+		/** Checks that this offset fits in 8 bits. */
 		constexpr bool check() {
 			return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
 		}
@@ -67,10 +75,12 @@ class Rel8 : public Rel {
 */
 class Rel32 : public Rel {
 	public:
+		/** Creates a 32-bit relative offset. */
 		constexpr Rel32(int64_t val) 
 				: Rel{(uint64_t)val} { 
 		}
 
+		/** Checks that this offset value fits in 32-bits. */
 		constexpr bool check() {
 			return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
 		}

@@ -47,6 +47,8 @@ enum class Syntax : uint32_t {
 
 } // namespace x64asm
 
+// iostream overloads.  Note that these are in the global namespace.
+
 std::istream& operator>>(std::istream& is, const x64asm::Syntax s);
 std::ostream& operator<<(std::ostream& os, const x64asm::Syntax s);
 
