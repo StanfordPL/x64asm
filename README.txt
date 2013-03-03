@@ -48,6 +48,12 @@ To appear in ASPLOS 2013.
 
 -------------------------------------------------------------------------------
 
+Acknowledgements 
+
+Thanks to Rahul Sharma and Berkeley Churchill for implementation help.
+
+-------------------------------------------------------------------------------
+
 Supported Platforms:
 
 Ubuntu 12.04 LTS
