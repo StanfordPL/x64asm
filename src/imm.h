@@ -42,7 +42,7 @@ class Imm : public Operand {
 			return val_ == rhs.val_;
 		}
 
-		/** Converts immediate value to an equivalent unsigned int. */
+		/** Conversion based on underlying value. */
 		constexpr operator uint64_t() {
 			return val_;
 		}

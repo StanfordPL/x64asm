@@ -19,7 +19,7 @@ limitations under the License.
 
 namespace x64asm {
 
-/** An x64 mnemonic. */
+/** An instruction mnemonic. */
 enum Opcode : int32_t {
 	// Internal mnemonics
 	LABEL_DEFN = 0

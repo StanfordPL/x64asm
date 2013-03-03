@@ -59,7 +59,7 @@ class Label : public Operand {
 			return val_ == val_;
 		}
 
-		/** Converts underlying value to unsigned int. */
+		/** Conversion based on underlying value. */
 		operator uint64_t() const {
 			return val_;
 		}

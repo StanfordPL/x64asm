@@ -194,12 +194,12 @@ class M : public Operand {
 
 		/** Comparison based on underlying value. */
 		constexpr bool operator<(const M& rhs) {
-			return val_ == rhs.val_ ? val2_ < rhs.val2_ : val_ < rhs.val_;
+			return val_ < rhs.val_;
 		}
 
 		/** Comparison based on underlying value. */
 		constexpr bool operator==(const M& rhs) {
-			return val_ == rhs.val_ && val2_ == rhs.val2_;
+			return val_ == rhs.val_;
 		}
 
 		/** Writes this memory to an ostream using at&t syntax. */
@@ -395,35 +395,65 @@ class M : public Operand {
 
 // This ugliness can be replaced using inherited constructors come gcc 4.8
 #define CONSTRUCTORS(T) \
+	/** Creates a memory using disp form. */ \
 	constexpr T(const Imm32& d) : M{d} { } \
+	/** Creates a memory using seg:disp form. */ \
 	constexpr T(const Sreg& s, const Imm32& d) : M{s, d} { } \
+	/** Creates a memroy using (base64) form. */ \
 	constexpr T(const R32& b) : M{b} { } \
+	/** Creates a memory using (base32) form. */ \
 	constexpr T(const R64& b) : M{b} { } \
+	/** Creates a memory using RIP form. */ \
 	constexpr T(Rip rip) : M{rip} {} \
+	/** Creates a memory using seg:base32 form. */ \
 	constexpr T(const Sreg& s, const R32& b) : M{s, b} { } \
+	/** Creates a memory using seg:base64 form. */ \
 	constexpr T(const Sreg& s, const R64& b) : M{s, b} { } \
+	/** Creates a memory using seg:RIP form. */ \
 	constexpr T(const Sreg& s, Rip rip) : M{s, rip} { } \
+	/** Creates a memory using disp(base32) form. */ \
 	constexpr T(const R32& b, const Imm32& d) : M{b, d} { } \
+	/** Creates a memory using disp(base64) form. */ \
 	constexpr T(const R64& b, const Imm32& d) : M{b, d} { } \
+	/** Creates a memory using RIP+disp form. */ \
 	constexpr T(Rip rip, const Imm32& d) : M{rip, d} { } \
+	/** Creates a memory using seg:disp(base32) form. */ \
 	constexpr T(const Sreg& s, const R32& b, const Imm32& d) : M{s, b, d} { } \
+	/** Creates a memory using seg:disp(base64) form. */ \
 	constexpr T(const Sreg& s, const R64& b, const Imm32& d) : M{s, b, d} { } \
+	/** Creates a memory using seg:RIP+disp form. */ \
 	constexpr T(const Sreg& s, Rip rip, const Imm32& d) : M{s, rip, d} { } \
+	/** Creates a memory using (index32,scale) form. */ \
 	constexpr T(const R32& i, Scale s) : M{i, s} { } \
+	/** Creates a memory using (index64,scale) form. */ \
 	constexpr T(const R64& i, Scale s) : M{i, s} { } \
+	/** Creates a memory using seg:(index32,scale) form. */ \
 	constexpr T(const Sreg& s, const R32& i, Scale sc) : M{s, i, sc} { } \
+	/** Creates a memory using seg:(index64,scale) form. */ \
 	constexpr T(const Sreg& s, const R64& i, Scale sc) : M{s, i, sc} { } \
+	/** Creates a memory using disp(index32,scale) form. */ \
 	constexpr T(const R32& i, Scale s, const Imm32& d) : M{i, s, d} { } \
+	/** Creates a memory using disp(index64,scale) form. */ \
 	constexpr T(const R64& i, Scale s, const Imm32& d) : M{i, s, d} { } \
+	/** Creates a memory using seg:disp(index32,scale) form. */ \
 	constexpr T(const Sreg& s, const R32& i, Scale sc, const Imm32& d) : M{s, i, sc, d} { } \
+	/** Creates a memory using seg:disp(index64,scale) form. */ \
 	constexpr T(const Sreg& s, const R64& i, Scale sc, const Imm32& d) : M{s, i, sc, d} { } \
+	/** Creates a memory using (base32,index32,scale) form. */ \
 	constexpr T(const R32& b, const R32& i, Scale s) : M{b, i, s} { } \
+	/** Creates a memory using (base64,index64,scale) form. */ \
 	constexpr T(const R64& b, const R64& i, Scale s) : M{b, i, s} { } \
+	/** Creates a memory using seg:(base32,index32,scale) form. */ \
 	constexpr T(const Sreg& s, const R32& b, const R32& i, Scale sc) : M{s, b, i, sc} { } \
+	/** Creates a memory using seg:(base64,index64,scale) form. */ \
 	constexpr T(const Sreg& s, const R64& b, const R64& i, Scale sc) : M{s, b, i, sc} { } \
+	/** Creates a memory using disp(base32,index32,scale) form. */ \
 	constexpr T(const R32& b, const R32& i, Scale s, const Imm32& d) : M{b, i, s, d} { } \
+	/** Creates a memory using disp(base64,index64,scale) form. */ \
 	constexpr T(const R64& b, const R64& i, Scale s, const Imm32& d) : M{b, i, s, d} { } \
+	/** Creates a memory using seg:disp(base32,index32,scale) form. */ \
 	constexpr T(const Sreg& s, const R32& b, const R32& i, Scale sc, const Imm32& d) : M{s, b, i, sc, d} { } \
+	/** Creates a memory using seg:disp(base64,index64,scale) form. */ \
 	constexpr T(const Sreg& s, const R64& b, const R64& i, Scale sc, const Imm32& d) : M{s, b, i, sc, d} { } \
 
 /** A byte operand in memory, usually expressed as a variable or array name, 
