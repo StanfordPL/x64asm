@@ -23,10 +23,10 @@ This lexer associates lexemes with the most general possible type
 short of the universally applicable Operand type.  For example, %rax
 is tagged as an R64 rather than an RAX.  
 
-Immediates are assigned the generic type IMM (and stored in Imm8s).
+Immediates are assigned the generic type IMM (and stored in Imm64s).
 The OFFSET type is used to identify numeric constants which are semantically
 distinct from immediates.  These include memory offsets, moffs offsets, and
-rel operands.  These as well, are stored in Imm8s. 
+rel operands.  These as well, are stored in Imm64s. 
 
 This lexing scheme allows for a simpler parser implementation by removing
 the need to distinguish between general and special cases in parser rules.

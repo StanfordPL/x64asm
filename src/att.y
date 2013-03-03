@@ -82,10 +82,8 @@ bool is_mem(Type t) {
 }
 
 bool is_a(const Operand* o, Type parse, Type target) {
-	
 	// These first two parses still have placeholder types.
 	// They should be checked before the generic equality tests.
-
 	if ( parse == Type::IMM_8 )
 		switch ( target ) {
 			case Type::ZERO:   return ((const Zero*)o)->check();
@@ -107,14 +105,12 @@ bool is_a(const Operand* o, Type parse, Type target) {
 	}
 
 	// Now it's alright to perform the generic checks.
-
 	if ( parse == target )
 		return true;
 	if ( is_mem(parse) && is_mem(target) )
 		return true;
 
 	// Now try simple promotions.
-
 	if ( parse == Type::RL ) {
 		if ( target == Type::AL )
 			return ((const Al*)o)->check();
