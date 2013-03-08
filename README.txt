@@ -313,5 +313,5 @@ are annotated in x86.ods using bold red caps.
 
 Known Issues:
 
-Intel parsing is imcomplete.
+Intel parsing is incomplete.
 Hex for some instructions is still incorrect, run make check for details.
