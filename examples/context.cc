@@ -42,7 +42,7 @@ int main() {
 
 	// Calling the function should increment the value of x
 	cout << "Before: x = " << x << endl;
-	f1();
+	f1.call<int>();
 	cout << "After:  x = " << x << endl;
 	cout << endl;
 
@@ -59,7 +59,7 @@ int main() {
 
 	// Calling the function should place the value of rdx in x
 	cout << "Before: x = " << x << endl;
-	f2();
+	f2.call<int>();
 	cout << "After:  x = " << x << endl;
 	cout << endl;
 

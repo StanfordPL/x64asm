@@ -32,29 +32,16 @@ limitations under the License.
 namespace x64asm {
 
 /** An executable buffer. Supports zero to six argument calling conventions.
-    In general, a function can be called with arguments of any type which can
-    be implicitly converted to uint64_ts. Virtually all of the methods in 
-		this class are private. Direct access is granted only to the assembler
-		class, which is (in theory) guaranteed to be sound. 
+    In general, a function can be called with arguments of any type which are
+    or can be implicitly converted to native types. Virtually all of the 
+		methods in this class are private. Direct access is granted only to the 
+		assembler class, which is (in theory) guaranteed to be sound. 
 */
 class Function {
 	// Needs access to the private API.
 	friend class Assembler;
 	// Needs access to internal buffer address.
 	friend class Imm64;
-
-	private:
-		// Convenience typedefs for different calling conventions.
-		typedef uint64_t (*f0_type)();
-		typedef uint64_t (*f1_type)(uint64_t);
-		typedef uint64_t (*f2_type)(uint64_t, uint64_t);
-		typedef uint64_t (*f3_type)(uint64_t, uint64_t, uint64_t);
-		typedef uint64_t (*f4_type)(uint64_t, uint64_t, uint64_t,
-				                        uint64_t);
-		typedef uint64_t (*f5_type)(uint64_t, uint64_t, uint64_t,
-				                        uint64_t, uint64_t);
-		typedef uint64_t (*f6_type)(uint64_t, uint64_t, uint64_t,
-				                        uint64_t, uint64_t, uint64_t);
 
 	public:
 		/** Returns a new function with a default 1k internal buffer. 
@@ -86,50 +73,48 @@ class Function {
 		}
 
 		/** Zero argument usage form. */
-		uint64_t operator()() const {
-			return ((f0_type)(buffer_))();
+		template <typename Y>
+		Y call() const {
+			return ((Y(*)()) buffer_)();
 		}
 
 		/** One argument usage form. */
-		template <typename RDI>
-		uint64_t operator()(RDI rdi) const {
-			return ((f1_type)(buffer_))((uint64_t)rdi);
+		template <typename Y, typename X1>
+		Y call(X1 x1) const {
+			return ((Y(*)(X1)) buffer_)(x1);
 		}
 
 		/** Two argument usage form. */
-		template <typename RDI, typename RSI>
-		uint64_t operator()(RDI rdi, RSI rsi) const {
-			return ((f2_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi);
+		template <typename Y, typename X1, typename X2>
+		Y call(X1 x1, X2 x2) const {
+			return ((Y(*)(X1, X2)) buffer_)(x1, x2);
 		}
 
 		/** Three argument usage form. */
-		template <typename RDI, typename RSI, typename RDX_>
-		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx) const {
-			return ((f3_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi, (uint64_t)rdx);
+		template <typename Y, typename X1, typename X2, typename X3>
+		Y call(X1 x1, X2 x2, X3 x3) const {
+			return ((Y(*)(X1, X2, X3)) buffer_)(x1, x2, x3);
 		}
 
 		/** Four argument usage form. */
-		template <typename RDI, typename RSI, typename RDX_,
-						  typename RCX>
-		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx, RCX rcx) const {
-			return ((f4_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi, (uint64_t)rdx,
-					                        (uint64_t)rcx);
+		template <typename Y, typename X1, typename X2, typename X3, 
+						              typename X4>
+		Y call(X1 x1, X2 x2, X3 x3, X4 x4) const {
+			return ((Y(*)(X1, X2, X3, X4)) buffer_)(x1, x2, x3, x4);
 		}
 
 		/** Five argument usage form. */
-		template <typename RDI, typename RSI, typename RDX_,
-						  typename RCX, typename R8>
-		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx, RCX rcx, R8 r8) const {
-			return ((f5_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi, (uint64_t)rdx,
-					                        (uint64_t)rcx, (uint64_t)r8);
+		template <typename Y, typename X1, typename X2, typename X3, 
+						              typename X4, typename X5>
+		Y call(X1 x1, X2 x2, X3 x3, X4 x4, X5 x5) const {
+			return ((Y(*)(X1, X2, X3, X4, X5)) buffer_)(x1, x2, x3, x4, x5);
 		}
-
+		
 		/** Six argument usage form. */
-		template <typename RDI, typename RSI, typename RDX_,
-						  typename RCX, typename R8, typename R9>
-		uint64_t operator()(RDI rdi, RSI rsi, RDX_ rdx, RCX rcx, R8 r8, R9 r9) const {
-			return ((f6_type)(buffer_))((uint64_t)rdi, (uint64_t)rsi, (uint64_t)rdx,
-					                        (uint64_t)rcx, (uint64_t)r8,  (uint64_t)r9);
+		template <typename Y, typename X1, typename X2, typename X3, 
+						              typename X4, typename X5, typename X6>
+		Y call(X1 x1, X2 x2, X3 x3, X4 x4, X5 x5, X6 x6) const {
+			return ((Y(*)(X1, X2, X3, X4, X5, X6)) buffer_)(x1, x2, x3, x4, x5, x6);
 		}
 
 		/** Returns true iff the internal buffer associated with this function was

@@ -94,6 +94,7 @@ examples/hello.cc:     How to use the assembler API; look here first.
 examples/constants.cc: Shows off the set of built-in assembler constants.
 examples/context.cc:   How to assemble functions that modify program state.
 examples/functions.cc: How to assemble functions that call other functions.
+examples/abi.cc:       How the assembler API interacts with the linux ABI.
 examples/dataflow.cc:  How to use the dataflow API.
 
 3b. Browse the documentation.

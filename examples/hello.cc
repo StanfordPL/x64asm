@@ -105,8 +105,8 @@ void test(const Function& memcpy) {
 	cout << memcpy << endl;
 
 	// A function can be called with up to six arguments, each of which must
-	// be castable to a unit64_t.  No explicit conversion is necessary.
-	memcpy(target, source, 14);
+	// be or be castable to a native type. No explicit cast is necessary.
+	memcpy.call<int,char*,const char*,int>(target, source, 14);
 	cout << "After return target = \"" << target << "\"" << endl;
 	cout << endl;
 

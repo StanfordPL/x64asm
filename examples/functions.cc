@@ -42,7 +42,7 @@ int main() {
 	const auto f1 = assm.assemble(c1);
 
 	// Calling this function should invoke hello()
-	f1();
+	f1.call<int>();
 	cout << endl;
 
 	// Example 2:
@@ -55,7 +55,7 @@ int main() {
 	const auto f2 = assm.assemble(c2);
 
 	// Calling this function will indirectly invoke hello()
-	f2();
+	f2.call<int>();
 	cout << endl;
 
 	// Example 3:
@@ -82,7 +82,7 @@ int main() {
 	const auto f3 = assm.assemble(c3);
 
 	// Calling this function should compute fibbonaci
-	cout << "fib(5) = " << f3(5) << endl;
+	cout << "fib(5) = " << f3.call<int,int>(5) << endl;
 	cout << endl;
 
 	// Example 4:
@@ -112,7 +112,7 @@ int main() {
 	assm.assemble(f4, c4);
 
 	// Calling this function should compute fibbonaci as well
-	cout << "fib(5) = " << f4(5) << endl;
+	cout << "fib(5) = " << f4.call<int,int>(5) << endl;
 	cout << endl;
 
 	return 0;

@@ -1,6 +1,9 @@
-EX = constants context dataflow functions hello
+EX = abi constants context dataflow functions hello
 
 all: $(EX)
+
+abi: abi.cc
+	g++ -O3 -std=c++0x abi.cc -I.. ../lib/libx64asm.a -o abi
 
 constants: constants.cc
 	g++ -O3 -std=c++0x constants.cc -I.. ../lib/libx64asm.a -o constants
