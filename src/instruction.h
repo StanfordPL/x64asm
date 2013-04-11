@@ -85,7 +85,7 @@ class Instruction {
 
 				/** Inserts a property. */
 				constexpr Properties operator+(Property rhs) {
-					return Properties{(uint32_t)rhs};
+					return Properties{mask_ | (uint32_t)rhs};
 				}
 
 				/** Removes a property. */
