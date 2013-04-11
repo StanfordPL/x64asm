@@ -544,6 +544,11 @@ class RegSet {
 				     (uint64_t)Mask::MXCSR;
 		}
 
+		/** Returns true if this set contains another set. */
+		bool contains(const RegSet& rhs) const {
+			return (*this & rhs) == rhs;
+		}
+
 	private:
 		/** Internal bit mask group 1 (see Mask enum for details). */
 		uint64_t group1_;
