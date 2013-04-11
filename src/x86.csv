@@ -228,7 +228,7 @@ F8	CLC	NP			E.CF				V	V		clc	Clear CF flag.
 													
 FC	CLD	NP			E.DF				V	V		cld	Clear DF flag.
 													
-0F AE /7	CLFLUSH m8	M	I						V	V		clflush	Flushes cache line containing m8.
+0F AE /7	CLFLUSH m8	M	I						V	V	CLFLUSH	clflush	Flushes cache line containing m8.
 													
 FA	CLI	NP		E.VM E.IOPL E.VIP	e.if e.vif				V	V		cli	Clear interrupt flag; interrupts disabled when interrupt flag cleared.
 													
@@ -236,96 +236,96 @@ FA	CLI	NP		E.VM E.IOPL E.VIP	e.if e.vif				V	V		cli	Clear interrupt flag; interr
 													
 F5	CMC	NP		E.CF	E.CF				V	V		cmc	Complement CF flag.
 													
-0F 47 /r	CMOVA r16, r/m16 	RM	w, R	E.CF E.ZF					V	V		cmovaw	Move if above (CF=0 and ZF=0).
-0F 47 /r 	CMOVA r32, r/m32 	RM	w, R	E.CF E.ZF					V	V		cmoval	Move if above (CF=0 and ZF=0).
-REX.W+ 0F 47 /r 	CMOVA r64, r/m64 	RM	w, R	E.CF E.ZF					V	NE		cmovaq	Move if above (CF=0 and ZF=0).
-0F 43 /r	CMOVAE r16, r/m16 	RM	w, R	E.CF					V	V		cmovaew	Move if above or equal (CF=0).
-0F 43 /r 	CMOVAE r32, r/m32 	RM	w, R	E.CF					V	V		cmovael	Move if above or equal (CF=0).
-REX.W+ 0F 43 /r 	CMOVAE r64, r/m64 	RM	w, R	E.CF					V	NE		cmovaeq	Move if above or equal (CF=0).
-0F 42 /r	CMOVB r16, r/m16 	RM	w, R	E.CF					V	V		cmovbw	Move if below (CF=1).
-0F 42 /r 	CMOVB r32, r/m32 	RM	w, R	E.CF					V	V		cmovbl	Move if below (CF=1).
-REX.W+ 0F 42 /r 	CMOVB r64, r/m64 	RM	w, R	E.CF					V	NE		cmovbq	Move if below (CF=1).
-0F 46 /r	CMOVBE r16, r/m16 	RM	w, R	E.CF E.ZF					V	V		cmovbew	Move if below or equal (CF=1 or ZF=1).
-0F 46 /r 	CMOVBE r32, r/m32 	RM	w, R	E.CF E.ZF					V	V		cmovbel	Move if below or equal (CF=1 or ZF=1).
-REX.W+ 0F 46 /r 	CMOVBE r64, r/m64	RM	w, R	E.CF E.ZF					V	NE		cmovbeq	Move if below or equal (CF=1 or ZF=1).
-0F 42 /r	CMOVC r16, r/m16 	RM	w, R	E.CF					V	V		cmovcw	Move if carry (CF=1).
-0F 42 /r 	CMOVC r32, r/m32 	RM	w, R	E.CF					V	V		cmovcl	Move if carry (CF=1).
-REX.W+ 0F 42 /r 	CMOVC r64, r/m64 	RM	w, R	E.CF					V	NE		cmovcq	Move if carry (CF=1).
-0F 44 /r	CMOVE r16, r/m16 	RM	w, R	E.ZF					V	V		cmovew	Move if equal (ZF=1).
-0F 44 /r 	CMOVE r32, r/m32 	RM	w, R	E.ZF					V	V		cmovel	Move if equal (ZF=1).
-REX.W+ 0F 44 /r 	CMOVE r64, r/m64 	RM	w, R	E.ZF					V	NE		cmoveq	Move if equal (ZF=1).
-0F 4F /r	CMOVG r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovgw	Move if greater (ZF=0 and SF=OF).
-0F 4F /r 	CMOVG r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovgl	Move if greater (ZF=0 and SF=OF).
-REX.W+ 0F 4F /r 	CMOVG r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE		cmovgq	Move if greater (ZF=0 and SF=OF).
-0F 4D /r	CMOVGE r16, r/m16 	RM	w, R	E.SF E.OF					V	V		cmovgew	Move if greater or equal (SF=OF).
-0F 4D /r 	CMOVGE r32, r/m32 	RM	w, R	E.SF E.OF					V	V		cmovgel	Move if greater or equal (SF=OF).
-REX.W+ 0F 4D /r 	CMOVGE r64, r/m64 	RM	w, R	E.SF E.OF					V	NE		cmovgeq	Move if greater or equal (SF=OF).
-0F 4C /r	CMOVL r16, r/m16 	RM	w, R	E.SF E.OF					V	V		cmovlw	Move if less (SF != OF).
-0F 4C /r 	CMOVL r32, r/m32 	RM	w, R	E.SF E.OF					V	V		cmovll	Move if less (SF!= OF).
-REX.W+ 0F 4C /r 	CMOVL r64, r/m64 	RM	w, R	E.SF E.OF					V	NE		cmovlq	Move if less (SF!= OF).
-0F 4E /r	CMOVLE r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovlew	Move if less or equal (ZF=1 or SF!= OF).
-0F 4E /r 	CMOVLE r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovlel	Move if less or equal (ZF=1 or SF!= OF).
-REX.W+ 0F 4E /r 	CMOVLE r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE		cmovleq	Move if less or equal (ZF=1 or SF!= OF).
-0F 46 /r	CMOVNA r16, r/m16 	RM	w, R	E.CF E.ZF					V	V		cmovnaw	Move if not above (CF=1 or ZF=1).
-0F 46 /r 	CMOVNA r32, r/m32 	RM	w, R	E.CF E.ZF					V	V		cmovnal	Move if not above (CF=1 or ZF=1).
-REX.W+ 0F 46 /r	CMOVNA r64, r/m64 	RM	w, R	E.CF E.ZF					V	NE		cmovnaq	Move if not above (CF=1 or ZF=1).
-0F 42 /r	CMOVNAE r16, r/m16 	RM	w, R	E.CF					V	V		cmovnaew	Move if not above or equal (CF=1).
-0F 42 /r 	CMOVNAE r32, r/m32 	RM	w, R	E.CF					V	V		cmovnael	Move if not above or equal (CF=1).
-REX.W+ 0F 42 /r 	CMOVNAE r64, r/m64 	RM	w, R	E.CF					V	NE		cmovnaeq	Move if not above or equal (CF=1).
-0F 43 /r	CMOVNB r16, r/m16 	RM	w, R	E.CF					V	V		cmovnbw	Move if not below (CF=0).
-0F 43 /r 	CMOVNB r32, r/m32 	RM	w, R	E.CF					V	V		cmovnbl	Move if not below (CF=0).
-REX.W+ 0F 43 /r 	CMOVNB r64, r/m64 	RM	w, R	E.CF					V	NE		cmovnbq	Move if not below (CF=0).
-0F 47 /r	CMOVNBE r16, r/m16	RM	w, R	E.CF E.ZF					V	V		cmovnbew	Move if not below or equal (CF=0 and ZF=0).
-0F 47 /r 	CMOVNBE r32, r/m32 	RM	w, R	E.CF E.ZF					V	V		cmovnbel	Move if not below or equal (CF=0 and ZF=0).
-REX.W+ 0F 47 /r 	CMOVNBE r64, r/m64 	RM	w, R	E.CF E.ZF					V	NE		cmovnbeq	Move if not below or equal (CF=0 and ZF=0).
-0F 43 /r	CMOVNC r16, r/m16 	RM	w, R	E.CF					V	V		cmovncw	Move if not carry (CF=0).
-0F 43 /r 	CMOVNC r32, r/m32 	RM	w, R	E.CF					V	V		cmovncl	Move if not carry (CF=0).
-REX.W+ 0F 43 /r 	CMOVNC r64, r/m64 	RM	w, R	E.CF					V	NE		cmovncq	Move if not carry (CF=0).
-0F 45 /r	CMOVNE r16, r/m16 	RM	w, R	E.ZF					V	V		cmovnew	Move if not equal (ZF=0).
-0F 45 /r 	CMOVNE r32, r/m32 	RM	w, R	E.ZF					V	V		cmovnel	Move if not equal (ZF=0).
-REX.W+ 0F 45 /r 	CMOVNE r64, r/m64 	RM	w, R	E.ZF					V	NE		cmovneq	Move if not equal (ZF=0).
-0F 4E /r	CMOVNG r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovngw	Move if not greater (ZF=1 or SF!= OF).
-0F 4E /r 	CMOVNG r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovngl	Move if not greater (ZF=1 or SF!= OF).
-REX.W+ 0F 4E /r 	CMOVNG r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE		cmovngq	Move if not greater (ZF=1 or SF!= OF).
-0F 4C /r	CMOVNGE r16, r/m16 	RM	w, R	E.SF E.OF					V	V		cmovngew	Move if not greater or equal (SF!= OF).
-0F 4C /r 	CMOVNGE r32, r/m32 	RM	w, R	E.SF E.OF					V	V		cmovngel	Move if not greater or equal (SF!= OF).
-REX.W+ 0F 4C /r 	CMOVNGE r64, r/m64 	RM	w, R	E.SF E.OF					V	NE		cmovngeq	Move if not greater or equal (SF!= OF).
-0F 4D /r	CMOVNL r16, r/m16 	RM	w, R	E.SF E.OF					V	V		cmovnlw	Move if not less (SF=OF).
-0F 4D /r 	CMOVNL r32, r/m32 	RM	w, R	E.SF E.OF					V	V		cmovnll	Move if not less (SF=OF).
-REX.W+ 0F 4D /r 	CMOVNL r64, r/m64 	RM	w, R	E.SF E.OF					V	NE		cmovnlq	Move if not less (SF=OF).
-0F 4F /r	CMOVNLE r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovnlew	Move if not less or equal (ZF=0 and SF=OF).
-0F 4F /r 	CMOVNLE r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V		cmovnlel	Move if not less or equal (ZF=0 and SF=OF).
-REX.W+ 0F 4F /r 	CMOVNLE r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE		cmovnleq	Move if not less or equal (ZF=0 and SF=OF).
-0F 41 /r	CMOVNO r16, r/m16 	RM	w, R	E.OF					V	V		cmovnow	Move if not overflow (OF=0).
-0F 41 /r 	CMOVNO r32, r/m32 	RM	w, R	E.OF					V	V		cmovnol	Move if not overflow (OF=0).
-REX.W+ 0F 41 /r 	CMOVNO r64, r/m64 	RM	w, R	E.OF					V	NE		cmovnoq	Move if not overflow (OF=0).
-0F 4B /r	CMOVNP r16, r/m16 	RM	w, R	E.PF					V	V		cmovnpw	Move if not parity (PF=0).
-0F 4B /r 	CMOVNP r32, r/m32 	RM	w, R	E.PF					V	V		cmovnpl	Move if not parity (PF=0).
-REX.W+ 0F 4B /r 	CMOVNP r64, r/m64 	RM	w, R	E.PF					V	NE		cmovnpq	Move if not parity (PF=0).
-0F 49 /r	CMOVNS r16, r/m16 	RM	w, R	E.SF					V	V		cmovnsw	Move if not sign (SF=0).
-0F 49 /r 	CMOVNS r32, r/m32 	RM	w, R	E.SF					V	V		cmovnsl	Move if not sign (SF=0).
-REX.W+ 0F 49 /r 	CMOVNS r64, r/m64 	RM	w, R	E.SF					V	NE		cmovnsq	Move if not sign (SF=0).
-0F 45 /r	CMOVNZ r16, r/m16 	RM	w, R	E.ZF					V	V		cmovnzw	Move if not zero (ZF=0).
-0F 45 /r 	CMOVNZ r32, r/m32 	RM	w, R	E.ZF					V	V		cmovnzl	Move if not zero (ZF=0).
-REX.W+ 0F 45 /r 	CMOVNZ r64, r/m64 	RM	w, R	E.ZF					V	NE		cmovnzq	Move if not zero (ZF=0).
-0F 40 /r	CMOVO r16, r/m16 	RM	w, R	E.OF					V	V		cmovow	Move if overflow (OF=1).
-0F 40 /r 	CMOVO r32, r/m32 	RM	w, R	E.OF					V	V		cmovol	Move if overflow (OF=1).
-REX.W+ 0F 40 /r 	CMOVO r64, r/m64 	RM	w, R	E.OF					V	NE		cmovoq	Move if overflow (OF=1).
-0F 4A /r	CMOVP r16, r/m16 	RM	w, R	E.PF					V	V		cmovpw	Move if parity (PF=1).
-0F 4A /r 	CMOVP r32, r/m32 	RM	w, R	E.PF					V	V		cmovpl	Move if parity (PF=1).
-REX.W+ 0F 4A /r 	CMOVP r64, r/m64 	RM	w, R	E.PF					V	NE		cmovpq	Move if parity (PF=1).
-0F 4A /r	CMOVPE r16, r/m16 	RM	w, R	E.PF					V	V		cmovpew	Move if parity even (PF=1).
-0F 4A /r 	CMOVPE r32, r/m32 	RM	w, R	E.PF					V	V		cmovpel	Move if parity even (PF=1).
-REX.W+ 0F 4A /r	CMOVPE r64, r/m64	RM	w, R	E.PF					V	NE		cmovpeq	Move if parity even (PF=1).
-0F 4B /r	CMOVPO r16, r/m16 	RM	w, R	E.PF					V	V		cmovpow	Move if parity odd (PF=0).
-0F 4B /r	CMOVPO r32, r/m32 	RM	w, R	E.PF					V	V		cmovpol	Move if parity odd (PF=0).
-REX.W+ 0F 4B /r 	CMOVPO r64, r/m64 	RM	w, R	E.PF					V	NE		cmovpoq	Move if parity odd (PF=0).
-0F 48 /r	CMOVS r16, r/m16 	RM	w, R	E.SF					V	V		cmovsw	Move if sign (SF=1).
-0F 48 /r	CMOVS r32, r/m32 	RM	w, R	E.SF					V	V		cmovsl	Move if sign (SF=1).
-REX.W+ 0F 48 /r 	CMOVS r64, r/m64 	RM	w, R	E.SF					V	NE		cmovsq	Move if sign (SF=1).
-0F 44 /r	CMOVZ r16, r/m16 	RM	w, R	E.ZF					V	V		cmovzw	Move if zero (ZF=1).
-0F 44 /r	CMOVZ r32, r/m32 	RM	w, R	E.ZF					V	V		cmovzl	Move if zero (ZF=1).
-REX.W+ 0F 44 /r	CMOVZ r64, r/m64	RM	w, R	E.ZF					V	NE		cmovzq	Move if zero (ZF=1).
+0F 47 /r	CMOVA r16, r/m16 	RM	w, R	E.CF E.ZF					V	V	CMOV	cmovaw	Move if above (CF=0 and ZF=0).
+0F 47 /r 	CMOVA r32, r/m32 	RM	w, R	E.CF E.ZF					V	V	CMOV	cmoval	Move if above (CF=0 and ZF=0).
+REX.W+ 0F 47 /r 	CMOVA r64, r/m64 	RM	w, R	E.CF E.ZF					V	NE	CMOV	cmovaq	Move if above (CF=0 and ZF=0).
+0F 43 /r	CMOVAE r16, r/m16 	RM	w, R	E.CF					V	V	CMOV	cmovaew	Move if above or equal (CF=0).
+0F 43 /r 	CMOVAE r32, r/m32 	RM	w, R	E.CF					V	V	CMOV	cmovael	Move if above or equal (CF=0).
+REX.W+ 0F 43 /r 	CMOVAE r64, r/m64 	RM	w, R	E.CF					V	NE	CMOV	cmovaeq	Move if above or equal (CF=0).
+0F 42 /r	CMOVB r16, r/m16 	RM	w, R	E.CF					V	V	CMOV	cmovbw	Move if below (CF=1).
+0F 42 /r 	CMOVB r32, r/m32 	RM	w, R	E.CF					V	V	CMOV	cmovbl	Move if below (CF=1).
+REX.W+ 0F 42 /r 	CMOVB r64, r/m64 	RM	w, R	E.CF					V	NE	CMOV	cmovbq	Move if below (CF=1).
+0F 46 /r	CMOVBE r16, r/m16 	RM	w, R	E.CF E.ZF					V	V	CMOV	cmovbew	Move if below or equal (CF=1 or ZF=1).
+0F 46 /r 	CMOVBE r32, r/m32 	RM	w, R	E.CF E.ZF					V	V	CMOV	cmovbel	Move if below or equal (CF=1 or ZF=1).
+REX.W+ 0F 46 /r 	CMOVBE r64, r/m64	RM	w, R	E.CF E.ZF					V	NE	CMOV	cmovbeq	Move if below or equal (CF=1 or ZF=1).
+0F 42 /r	CMOVC r16, r/m16 	RM	w, R	E.CF					V	V	CMOV	cmovcw	Move if carry (CF=1).
+0F 42 /r 	CMOVC r32, r/m32 	RM	w, R	E.CF					V	V	CMOV	cmovcl	Move if carry (CF=1).
+REX.W+ 0F 42 /r 	CMOVC r64, r/m64 	RM	w, R	E.CF					V	NE	CMOV	cmovcq	Move if carry (CF=1).
+0F 44 /r	CMOVE r16, r/m16 	RM	w, R	E.ZF					V	V	CMOV	cmovew	Move if equal (ZF=1).
+0F 44 /r 	CMOVE r32, r/m32 	RM	w, R	E.ZF					V	V	CMOV	cmovel	Move if equal (ZF=1).
+REX.W+ 0F 44 /r 	CMOVE r64, r/m64 	RM	w, R	E.ZF					V	NE	CMOV	cmoveq	Move if equal (ZF=1).
+0F 4F /r	CMOVG r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovgw	Move if greater (ZF=0 and SF=OF).
+0F 4F /r 	CMOVG r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovgl	Move if greater (ZF=0 and SF=OF).
+REX.W+ 0F 4F /r 	CMOVG r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE	CMOV	cmovgq	Move if greater (ZF=0 and SF=OF).
+0F 4D /r	CMOVGE r16, r/m16 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovgew	Move if greater or equal (SF=OF).
+0F 4D /r 	CMOVGE r32, r/m32 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovgel	Move if greater or equal (SF=OF).
+REX.W+ 0F 4D /r 	CMOVGE r64, r/m64 	RM	w, R	E.SF E.OF					V	NE	CMOV	cmovgeq	Move if greater or equal (SF=OF).
+0F 4C /r	CMOVL r16, r/m16 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovlw	Move if less (SF != OF).
+0F 4C /r 	CMOVL r32, r/m32 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovll	Move if less (SF!= OF).
+REX.W+ 0F 4C /r 	CMOVL r64, r/m64 	RM	w, R	E.SF E.OF					V	NE	CMOV	cmovlq	Move if less (SF!= OF).
+0F 4E /r	CMOVLE r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovlew	Move if less or equal (ZF=1 or SF!= OF).
+0F 4E /r 	CMOVLE r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovlel	Move if less or equal (ZF=1 or SF!= OF).
+REX.W+ 0F 4E /r 	CMOVLE r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE	CMOV	cmovleq	Move if less or equal (ZF=1 or SF!= OF).
+0F 46 /r	CMOVNA r16, r/m16 	RM	w, R	E.CF E.ZF					V	V	CMOV	cmovnaw	Move if not above (CF=1 or ZF=1).
+0F 46 /r 	CMOVNA r32, r/m32 	RM	w, R	E.CF E.ZF					V	V	CMOV	cmovnal	Move if not above (CF=1 or ZF=1).
+REX.W+ 0F 46 /r	CMOVNA r64, r/m64 	RM	w, R	E.CF E.ZF					V	NE	CMOV	cmovnaq	Move if not above (CF=1 or ZF=1).
+0F 42 /r	CMOVNAE r16, r/m16 	RM	w, R	E.CF					V	V	CMOV	cmovnaew	Move if not above or equal (CF=1).
+0F 42 /r 	CMOVNAE r32, r/m32 	RM	w, R	E.CF					V	V	CMOV	cmovnael	Move if not above or equal (CF=1).
+REX.W+ 0F 42 /r 	CMOVNAE r64, r/m64 	RM	w, R	E.CF					V	NE	CMOV	cmovnaeq	Move if not above or equal (CF=1).
+0F 43 /r	CMOVNB r16, r/m16 	RM	w, R	E.CF					V	V	CMOV	cmovnbw	Move if not below (CF=0).
+0F 43 /r 	CMOVNB r32, r/m32 	RM	w, R	E.CF					V	V	CMOV	cmovnbl	Move if not below (CF=0).
+REX.W+ 0F 43 /r 	CMOVNB r64, r/m64 	RM	w, R	E.CF					V	NE	CMOV	cmovnbq	Move if not below (CF=0).
+0F 47 /r	CMOVNBE r16, r/m16	RM	w, R	E.CF E.ZF					V	V	CMOV	cmovnbew	Move if not below or equal (CF=0 and ZF=0).
+0F 47 /r 	CMOVNBE r32, r/m32 	RM	w, R	E.CF E.ZF					V	V	CMOV	cmovnbel	Move if not below or equal (CF=0 and ZF=0).
+REX.W+ 0F 47 /r 	CMOVNBE r64, r/m64 	RM	w, R	E.CF E.ZF					V	NE	CMOV	cmovnbeq	Move if not below or equal (CF=0 and ZF=0).
+0F 43 /r	CMOVNC r16, r/m16 	RM	w, R	E.CF					V	V	CMOV	cmovncw	Move if not carry (CF=0).
+0F 43 /r 	CMOVNC r32, r/m32 	RM	w, R	E.CF					V	V	CMOV	cmovncl	Move if not carry (CF=0).
+REX.W+ 0F 43 /r 	CMOVNC r64, r/m64 	RM	w, R	E.CF					V	NE	CMOV	cmovncq	Move if not carry (CF=0).
+0F 45 /r	CMOVNE r16, r/m16 	RM	w, R	E.ZF					V	V	CMOV	cmovnew	Move if not equal (ZF=0).
+0F 45 /r 	CMOVNE r32, r/m32 	RM	w, R	E.ZF					V	V	CMOV	cmovnel	Move if not equal (ZF=0).
+REX.W+ 0F 45 /r 	CMOVNE r64, r/m64 	RM	w, R	E.ZF					V	NE	CMOV	cmovneq	Move if not equal (ZF=0).
+0F 4E /r	CMOVNG r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovngw	Move if not greater (ZF=1 or SF!= OF).
+0F 4E /r 	CMOVNG r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovngl	Move if not greater (ZF=1 or SF!= OF).
+REX.W+ 0F 4E /r 	CMOVNG r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE	CMOV	cmovngq	Move if not greater (ZF=1 or SF!= OF).
+0F 4C /r	CMOVNGE r16, r/m16 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovngew	Move if not greater or equal (SF!= OF).
+0F 4C /r 	CMOVNGE r32, r/m32 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovngel	Move if not greater or equal (SF!= OF).
+REX.W+ 0F 4C /r 	CMOVNGE r64, r/m64 	RM	w, R	E.SF E.OF					V	NE	CMOV	cmovngeq	Move if not greater or equal (SF!= OF).
+0F 4D /r	CMOVNL r16, r/m16 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovnlw	Move if not less (SF=OF).
+0F 4D /r 	CMOVNL r32, r/m32 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovnll	Move if not less (SF=OF).
+REX.W+ 0F 4D /r 	CMOVNL r64, r/m64 	RM	w, R	E.SF E.OF					V	NE	CMOV	cmovnlq	Move if not less (SF=OF).
+0F 4F /r	CMOVNLE r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovnlew	Move if not less or equal (ZF=0 and SF=OF).
+0F 4F /r 	CMOVNLE r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovnlel	Move if not less or equal (ZF=0 and SF=OF).
+REX.W+ 0F 4F /r 	CMOVNLE r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE	CMOV	cmovnleq	Move if not less or equal (ZF=0 and SF=OF).
+0F 41 /r	CMOVNO r16, r/m16 	RM	w, R	E.OF					V	V	CMOV	cmovnow	Move if not overflow (OF=0).
+0F 41 /r 	CMOVNO r32, r/m32 	RM	w, R	E.OF					V	V	CMOV	cmovnol	Move if not overflow (OF=0).
+REX.W+ 0F 41 /r 	CMOVNO r64, r/m64 	RM	w, R	E.OF					V	NE	CMOV	cmovnoq	Move if not overflow (OF=0).
+0F 4B /r	CMOVNP r16, r/m16 	RM	w, R	E.PF					V	V	CMOV	cmovnpw	Move if not parity (PF=0).
+0F 4B /r 	CMOVNP r32, r/m32 	RM	w, R	E.PF					V	V	CMOV	cmovnpl	Move if not parity (PF=0).
+REX.W+ 0F 4B /r 	CMOVNP r64, r/m64 	RM	w, R	E.PF					V	NE	CMOV	cmovnpq	Move if not parity (PF=0).
+0F 49 /r	CMOVNS r16, r/m16 	RM	w, R	E.SF					V	V	CMOV	cmovnsw	Move if not sign (SF=0).
+0F 49 /r 	CMOVNS r32, r/m32 	RM	w, R	E.SF					V	V	CMOV	cmovnsl	Move if not sign (SF=0).
+REX.W+ 0F 49 /r 	CMOVNS r64, r/m64 	RM	w, R	E.SF					V	NE	CMOV	cmovnsq	Move if not sign (SF=0).
+0F 45 /r	CMOVNZ r16, r/m16 	RM	w, R	E.ZF					V	V	CMOV	cmovnzw	Move if not zero (ZF=0).
+0F 45 /r 	CMOVNZ r32, r/m32 	RM	w, R	E.ZF					V	V	CMOV	cmovnzl	Move if not zero (ZF=0).
+REX.W+ 0F 45 /r 	CMOVNZ r64, r/m64 	RM	w, R	E.ZF					V	NE	CMOV	cmovnzq	Move if not zero (ZF=0).
+0F 40 /r	CMOVO r16, r/m16 	RM	w, R	E.OF					V	V	CMOV	cmovow	Move if overflow (OF=1).
+0F 40 /r 	CMOVO r32, r/m32 	RM	w, R	E.OF					V	V	CMOV	cmovol	Move if overflow (OF=1).
+REX.W+ 0F 40 /r 	CMOVO r64, r/m64 	RM	w, R	E.OF					V	NE	CMOV	cmovoq	Move if overflow (OF=1).
+0F 4A /r	CMOVP r16, r/m16 	RM	w, R	E.PF					V	V	CMOV	cmovpw	Move if parity (PF=1).
+0F 4A /r 	CMOVP r32, r/m32 	RM	w, R	E.PF					V	V	CMOV	cmovpl	Move if parity (PF=1).
+REX.W+ 0F 4A /r 	CMOVP r64, r/m64 	RM	w, R	E.PF					V	NE	CMOV	cmovpq	Move if parity (PF=1).
+0F 4A /r	CMOVPE r16, r/m16 	RM	w, R	E.PF					V	V	CMOV	cmovpew	Move if parity even (PF=1).
+0F 4A /r 	CMOVPE r32, r/m32 	RM	w, R	E.PF					V	V	CMOV	cmovpel	Move if parity even (PF=1).
+REX.W+ 0F 4A /r	CMOVPE r64, r/m64	RM	w, R	E.PF					V	NE	CMOV	cmovpeq	Move if parity even (PF=1).
+0F 4B /r	CMOVPO r16, r/m16 	RM	w, R	E.PF					V	V	CMOV	cmovpow	Move if parity odd (PF=0).
+0F 4B /r	CMOVPO r32, r/m32 	RM	w, R	E.PF					V	V	CMOV	cmovpol	Move if parity odd (PF=0).
+REX.W+ 0F 4B /r 	CMOVPO r64, r/m64 	RM	w, R	E.PF					V	NE	CMOV	cmovpoq	Move if parity odd (PF=0).
+0F 48 /r	CMOVS r16, r/m16 	RM	w, R	E.SF					V	V	CMOV	cmovsw	Move if sign (SF=1).
+0F 48 /r	CMOVS r32, r/m32 	RM	w, R	E.SF					V	V	CMOV	cmovsl	Move if sign (SF=1).
+REX.W+ 0F 48 /r 	CMOVS r64, r/m64 	RM	w, R	E.SF					V	NE	CMOV	cmovsq	Move if sign (SF=1).
+0F 44 /r	CMOVZ r16, r/m16 	RM	w, R	E.ZF					V	V	CMOV	cmovzw	Move if zero (ZF=1).
+0F 44 /r	CMOVZ r32, r/m32 	RM	w, R	E.ZF					V	V	CMOV	cmovzl	Move if zero (ZF=1).
+REX.W+ 0F 44 /r	CMOVZ r64, r/m64	RM	w, R	E.ZF					V	NE	CMOV	cmovzq	Move if zero (ZF=1).
 													
 3C ib	CMP AL, imm8 	I	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpb	Compare imm8 with AL.
 3D iw	CMP AX, imm16	I	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpw	Compare imm16 with AX.
@@ -379,8 +379,8 @@ REX+ 0F B0 /r	CMPXCHG r/m8,r8	MR	Rw, R	AL	al E.ZF E.CF E.PF E.AF E.SF E.OF				V	
 0F B1 /r	CMPXCHG r/m32, r32	MR	Rw, R	EAX	eax E.ZF E.CF E.PF E.AF E.SF E.OF				V	V		cmpxchgl	Compare EAX with r/m32. If equal, ZF is set and r32 is loaded into r/m32. Else, clear ZF and load r/m32 into EAX.
 REX.W+ 0F B1 /r	CMPXCHG r/m64, r64	MR	Rw, R	RAX	Rax E.ZF E.CF E.PF E.AF E.SF E.OF				V	NE		cmpxchgq	Compare RAX with r/m64. If equal, ZF is set and r64 is loaded into r/m64. Else, clear ZF and load r/m64 into RAX.
 													
-0F C7 /1	CMPXCHG8B m64	M	Rw	EAX EDX	eax ebx ecx edx E.ZF				V	V		cmpxchg8b	Compare EDX:EAX with m64. If equal, set ZF and load ECX:EBX into m64. Else, clear ZF and load m64 into EDX:EAX.
-REX.W+ 0F C7 /1	CMPXCHG16B m128	M	Rw	RAX RDX	rax rbx rcx rdx E.ZF				V	NE		cmpxchg16b	Compare RDX:RAX with m128. If equal, set ZF and load RCX:RBX into m128. Else, clear ZF and load m128 into RDX:RAX.
+0F C7 /1	CMPXCHG8B m64	M	Rw	EAX EDX	eax ebx ecx edx E.ZF				V	V	CX8	cmpxchg8b	Compare EDX:EAX with m64. If equal, set ZF and load ECX:EBX into m64. Else, clear ZF and load m64 into EDX:EAX.
+REX.W+ 0F C7 /1	CMPXCHG16B m128	M	Rw	RAX RDX	rax rbx rcx rdx E.ZF				V	NE	CX16	cmpxchg16b	Compare RDX:RAX with m128. If equal, set ZF and load RCX:RBX into m128. Else, clear ZF and load m128 into RDX:RAX.
 													
 66 0F 2F /r	COMISD xmm1, xmm2/m64	RM	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V	SSE2	comisd	Compare low double-precision floating-point values in xmm1 and xmm2/mem64 and set the EFLAGS flags accordingly.
 VEX.LIG.66.0F.WIG 2F /r	VCOMISD xmm1, xmm2/m64	RM	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V	AVX	vcomisd	Compare low double precision floating-point values in xmm1 and xmm2/mem64 and set the EFLAGS flags accordingly.
@@ -529,212 +529,212 @@ C8 iw ib	ENTER imm16, imm8	II	R, R	???	???	???			V	V		enterq	Create a nested sta
 66 0F 3A 17 /r ib	EXTRACTPS reg/m32, xmm2, imm8	MRI	W, R, R						V	V	SSE4_1	extractps	Extract a single-precision floating-point value from xmm2 at the source offset specified by imm8 and store the result to reg or m32. The upper 32 bits of r64 is zeroed if reg is r64.
 VEX.128.66.0F3A.WIG 17 /r ib	VEXTRACTPS r/m32, xmm1, imm8	MRI	W, R, R						V	V	AVX	vextractps	Extract one single-precision floating-point value from xmm1 at the offset specified by imm8 and store the result in reg or m32. Zero extend the results in 64-bit register if applicable.
 													
-D9 F0	F2XM1			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		f2xm1	Replace ST(0) with (2^(ST(0)) – 1).
+D9 F0	F2XM1			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	f2xm1	Replace ST(0) with (2^(ST(0)) – 1).
 													
-D9 E1	FABS			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fabs	Replace ST with its absolute value.
+D9 E1	FABS			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fabs	Replace ST with its absolute value.
 													
-D8 /0	FADD m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fadds	Add m32fp to ST(0) and store result in ST(0).
-DC /0	FADD m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		faddl	Add m64fp to ST(0) and store result in ST(0).
-D8 C0 +i	FADD ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fadd	Add ST(0) to ST(i) and store result in ST(0).
-DC C0 +i	FADD ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fadd	Add ST(i) to ST(0) and store result in ST(i).
-DE C0 +i	FADDP ST(i), ST(0)	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		faddp	Add ST(0) to ST(i), store result in ST(i), and pop the register stack.
-DE C1	FADDP			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		faddp	Add ST(0) to ST(1), store result in ST(1), and pop the register stack.
-DA /0	FIADD m32int	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fiaddl	Add m32int to ST(0) and store result in ST(0).
-DE /0	FIADD m16int	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fiadd	Add m16int to ST(0) and store result in ST(0).
+D8 /0	FADD m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fadds	Add m32fp to ST(0) and store result in ST(0).
+DC /0	FADD m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	faddl	Add m64fp to ST(0) and store result in ST(0).
+D8 C0 +i	FADD ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fadd	Add ST(0) to ST(i) and store result in ST(0).
+DC C0 +i	FADD ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fadd	Add ST(i) to ST(0) and store result in ST(i).
+DE C0 +i	FADDP ST(i), ST(0)	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	faddp	Add ST(0) to ST(i), store result in ST(i), and pop the register stack.
+DE C1	FADDP			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	faddp	Add ST(0) to ST(1), store result in ST(1), and pop the register stack.
+DA /0	FIADD m32int	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fiaddl	Add m32int to ST(0) and store result in ST(0).
+DE /0	FIADD m16int	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fiadd	Add m16int to ST(0) and store result in ST(0).
 													
-DF /4	FBLD m80bcd	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fbld	Convert BCD value to floating-point and push onto the FPU stack.
+DF /4	FBLD m80bcd	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fbld	Convert BCD value to floating-point and push onto the FPU stack.
 													
-DF /6	FBSTP m80bcd	M	R	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fbstp	Store ST(0) in m80bcd and pop ST(0).
+DF /6	FBSTP m80bcd	M	R	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fbstp	Store ST(0) in m80bcd and pop ST(0).
 													
-D9 E0	FCHS			ST(0)	ST(0)				V	V		fchs	Complements sign of ST(0).
+D9 E0	FCHS			ST(0)	ST(0)				V	V	FPU	fchs	Complements sign of ST(0).
 													
-9B DB E2	FCLEX				S.PE S.UE S.OE S.ZE S.DE S.IE S.ES S.SF S.B	S.C0 S.C1 S.C2 S.C3			V	V		fclex	Clear floating-point exception flags after checking for pending unmasked floating-point exceptions.
-DB E2	FNCLEX				S.PE S.UE S.OE S.ZE S.DE S.IE S.ES S.SF S.B	S.C0 S.C1 S.C2 S.C3			V	V		fnclex	Clear floating-point exception flags without checking for pending unmasked floating-point exceptions.
+9B DB E2	FCLEX				S.PE S.UE S.OE S.ZE S.DE S.IE S.ES S.SF S.B	S.C0 S.C1 S.C2 S.C3			V	V	FPU	fclex	Clear floating-point exception flags after checking for pending unmasked floating-point exceptions.
+DB E2	FNCLEX				S.PE S.UE S.OE S.ZE S.DE S.IE S.ES S.SF S.B	S.C0 S.C1 S.C2 S.C3			V	V	FPU	fnclex	Clear floating-point exception flags without checking for pending unmasked floating-point exceptions.
 													
-DA C0 +i 	FCMOVB ST(0), ST(i) 	TO	w, R	E.CF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovb	Move if below (CF=1).
-DA C8 +i 	FCMOVE ST(0), ST(i) 	TO	w, R	E.ZF	S.C1	S.C0 S.C2 S.C3			V	V		fcmove	Move if equal (ZF=1).
-DA D0 +i 	FCMOVBE ST(0), ST(i) 	TO	w, R	E.CF E.ZF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovbe	Move if below or equal (CF=1 or ZF=1).
-DA D8 +i 	FCMOVU ST(0), ST(i) 	TO	w, R	E.PF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovu	Move if unordered (PF=1).
-DB C0 +i 	FCMOVNB ST(0), ST(i) 	TO	w, R	E.CF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovnb	Move if not below (CF=0).
-DB C8 +i 	FCMOVNE ST(0), ST(i) 	TO	w, R	E.ZF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovne	Move if not equal (ZF=0).
-DB D0 +i 	FCMOVNBE ST(0), ST(i) 	TO	w, R	E.CF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovnbe	Move if not below or equal (CF=0 and ZF=0).
-DB D8 +i	FCMOVNU ST(0), ST(i)	TO	w, R	E.PF	S.C1	S.C0 S.C2 S.C3			V	V		fcmovnu	Move if not unordered (PF=0).
+DA C0 +i 	FCMOVB ST(0), ST(i) 	TO	w, R	E.CF	S.C1	S.C0 S.C2 S.C3			V	V	FPU CMOV	fcmovb	Move if below (CF=1).
+DA C8 +i 	FCMOVE ST(0), ST(i) 	TO	w, R	E.ZF	S.C1	S.C0 S.C2 S.C3			V	V	FPU CMOV	fcmove	Move if equal (ZF=1).
+DA D0 +i 	FCMOVBE ST(0), ST(i) 	TO	w, R	E.CF E.ZF	S.C1	S.C0 S.C2 S.C3			V	V	FPU CMOV	fcmovbe	Move if below or equal (CF=1 or ZF=1).
+DA D8 +i 	FCMOVU ST(0), ST(i) 	TO	w, R	E.PF	S.C1	S.C0 S.C2 S.C3			V	V	FPU CMOV	fcmovu	Move if unordered (PF=1).
+DB C0 +i 	FCMOVNB ST(0), ST(i) 	TO	w, R	E.CF	S.C1	S.C0 S.C2 S.C3			V	V	FPU CMOV	fcmovnb	Move if not below (CF=0).
+DB C8 +i 	FCMOVNE ST(0), ST(i) 	TO	w, R	E.ZF	S.C1	S.C0 S.C2 S.C3			V	V	FPU CMOV	fcmovne	Move if not equal (ZF=0).
+DB D0 +i 	FCMOVNBE ST(0), ST(i) 	TO	w, R	E.CF	S.C1	S.C0 S.C2 S.C3			V	V	FPU CMOV	fcmovnbe	Move if not below or equal (CF=0 and ZF=0).
+DB D8 +i	FCMOVNU ST(0), ST(i)	TO	w, R	E.PF	S.C1	S.C0 S.C2 S.C3			V	V	FPU CMOV	fcmovnu	Move if not unordered (PF=0).
 													
-D8 /2 	FCOM m32fp 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcoms	Compare ST(0) with m32fp.
-DC /2 	FCOM m64fp 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcoml	Compare ST(0) with m64fp.
-D8 D0 +i 	FCOM ST(i) 	O	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcom	Compare ST(0) with ST(i).
-D8 D1 	FCOM			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V		fcom	Compare ST(0) with ST(1).
-D8 /3 	FCOMP m32fp 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcomps	Compare ST(0) with m32fp and pop register stack.
-DC /3 	FCOMP m64fp 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcompl	Compare ST(0) with m64fp and pop register stack.
-D8 D8 +i 	FCOMP ST(i) 	O	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fcomp	Compare ST(0) with ST(i) and pop register stack.
-D8 D9 	FCOMP 			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V		fcomp	Compare ST(0) with ST(1) and pop register stack.
-DE D9	FCOMPP			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V		fcompp	Compare ST(0) with ST(1) and pop register stack twice.
+D8 /2 	FCOM m32fp 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fcoms	Compare ST(0) with m32fp.
+DC /2 	FCOM m64fp 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fcoml	Compare ST(0) with m64fp.
+D8 D0 +i 	FCOM ST(i) 	O	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fcom	Compare ST(0) with ST(i).
+D8 D1 	FCOM			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fcom	Compare ST(0) with ST(1).
+D8 /3 	FCOMP m32fp 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fcomps	Compare ST(0) with m32fp and pop register stack.
+DC /3 	FCOMP m64fp 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fcompl	Compare ST(0) with m64fp and pop register stack.
+D8 D8 +i 	FCOMP ST(i) 	O	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fcomp	Compare ST(0) with ST(i) and pop register stack.
+D8 D9 	FCOMP 			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fcomp	Compare ST(0) with ST(1) and pop register stack.
+DE D9	FCOMPP			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fcompp	Compare ST(0) with ST(1) and pop register stack twice.
 													
-DB F0 +i 	FCOMI ST, ST(i) 	TO	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V		fcomi	Compare ST(0) with ST(i) and set status flags accordingly.
-DF F0 +i	FCOMIP ST, ST(i) 	TO	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V		fcomip	Compare ST(0) with ST(i), set status flags accordingly, and pop register stack.
-DB E8 +i 	FUCOMI ST, ST(i) 	TO	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V		fucomi	Compare ST(0) with ST(i), check for ordered values, and set status flags accordingly.
-DF E8 +i	FUCOMIP ST, ST(i) 	TO	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V		fucomip	Compare ST(0) with ST(i), check for ordered values, set status flags accordingly, and pop register stack.
+DB F0 +i 	FCOMI ST, ST(i) 	TO	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V	FPU	fcomi	Compare ST(0) with ST(i) and set status flags accordingly.
+DF F0 +i	FCOMIP ST, ST(i) 	TO	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V	FPU	fcomip	Compare ST(0) with ST(i), set status flags accordingly, and pop register stack.
+DB E8 +i 	FUCOMI ST, ST(i) 	TO	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V	FPU	fucomi	Compare ST(0) with ST(i), check for ordered values, and set status flags accordingly.
+DF E8 +i	FUCOMIP ST, ST(i) 	TO	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF S.C1				V	V	FPU	fucomip	Compare ST(0) with ST(i), check for ordered values, set status flags accordingly, and pop register stack.
 													
-D9 FF 	FCOS 			ST(0)	ST(0) s.c1 S.C2	s.c1 S.C0 S.C3			V	V		fcos	Replace ST(0) with its cosine.
+D9 FF 	FCOS 			ST(0)	ST(0) s.c1 S.C2	s.c1 S.C0 S.C3			V	V	FPU	fcos	Replace ST(0) with its cosine.
 													
-D9 F6 	FDECSTP 			S.TOP	S.TOP S.C1	S.C0 S.C2 S.C3			V	V		fdecstp	Decrement TOP field in FPU status word.
+D9 F6 	FDECSTP 			S.TOP	S.TOP S.C1	S.C0 S.C2 S.C3			V	V	FPU	fdecstp	Decrement TOP field in FPU status word.
 													
-D8 /6 	FDIV m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivs	Divide ST(0) by m32fp and store result in ST(0).
-DC /6 	FDIV m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivl	Compare ST(0) with ST(i), set status flags accordingly, and pop register stack.
-D8 F0 +i 	FDIV ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdiv	Divide ST(0) by ST(i) and store result in ST(0).
-DC F0 +i 	FDIV ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdiv	Divide ST(i) by ST(0) and store result in ST(i).
-DE F0 +i 	FDIVP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivp	Divide ST(i) by ST(0), store result in ST(i), and pop the register stack.
-DE F1 	FDIVP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fdivp	Divide ST(1) by ST(0), store result in ST(1), and pop the register stack.
-DA /6 	FIDIV m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidivl	Divide ST(0) by m32int and store result in ST(0).
-DE /6 	FIDIV m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidiv	Divide ST(0) by m64int and store result in ST(0).
+D8 /6 	FDIV m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fdivs	Divide ST(0) by m32fp and store result in ST(0).
+DC /6 	FDIV m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fdivl	Compare ST(0) with ST(i), set status flags accordingly, and pop register stack.
+D8 F0 +i 	FDIV ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fdiv	Divide ST(0) by ST(i) and store result in ST(0).
+DC F0 +i 	FDIV ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fdiv	Divide ST(i) by ST(0) and store result in ST(i).
+DE F0 +i 	FDIVP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fdivp	Divide ST(i) by ST(0), store result in ST(i), and pop the register stack.
+DE F1 	FDIVP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fdivp	Divide ST(1) by ST(0), store result in ST(1), and pop the register stack.
+DA /6 	FIDIV m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fidivl	Divide ST(0) by m32int and store result in ST(0).
+DE /6 	FIDIV m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fidiv	Divide ST(0) by m64int and store result in ST(0).
 													
-D8 /7 	FDIVR m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivrs	Divide m32fp by ST(0) and store result in ST(0).
-DC /7 	FDIVR m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fdivrl	Divide m64fp by ST(0) and store result in ST(0).
-D8 F8 +i 	FDIVR ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivr	Divide ST(i) by ST(0) and store result in ST(0).
-DC F8 +i 	FDIVR ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivr	Divide ST(0) by ST(i) and store result in ST(i).
-DE F8 +i 	FDIVRP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fdivrp	Divide ST(0) by ST(i), store result in ST(i), and pop the register stack.
-DE F9	FDIVRP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fdivrp	Divide ST(0) by ST(1), store result in ST(1), and pop the register stack.
-DA /7 	FIDIVR m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidivrl	Divide m32int by ST(0) and store result in ST(0).
-DE /7 	FIDIVR m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fidivr	Divide m16int by ST(0) and store result in ST(0).
+D8 /7 	FDIVR m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fdivrs	Divide m32fp by ST(0) and store result in ST(0).
+DC /7 	FDIVR m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fdivrl	Divide m64fp by ST(0) and store result in ST(0).
+D8 F8 +i 	FDIVR ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fdivr	Divide ST(i) by ST(0) and store result in ST(0).
+DC F8 +i 	FDIVR ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fdivr	Divide ST(0) by ST(i) and store result in ST(i).
+DE F8 +i 	FDIVRP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fdivrp	Divide ST(0) by ST(i), store result in ST(i), and pop the register stack.
+DE F9	FDIVRP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fdivrp	Divide ST(0) by ST(1), store result in ST(1), and pop the register stack.
+DA /7 	FIDIVR m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fidivrl	Divide m32int by ST(0) and store result in ST(0).
+DE /7 	FIDIVR m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fidivr	Divide m16int by ST(0) and store result in ST(0).
 													
-DD C0 +i 	FFREE ST(i) 	O	I			S.C0 S.C1 s.c2 S.C3			V	V		ffree	Sets tag for ST(i) to empty.
+DD C0 +i 	FFREE ST(i) 	O	I			S.C0 S.C1 s.c2 S.C3			V	V	FPU	ffree	Sets tag for ST(i) to empty.
 													
-DE /2 	FICOM m16int 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		ficom	Compare ST(0) with m16int.
-DA /2 	FICOM m32int 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		ficoml	Compare ST(0) with m32int.
-DE /3 	FICOMP m16int 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		ficomp	Compare ST(0) with m16int and pop stack register.
-DA /3 	FICOMP m32int 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		ficompl	Compare ST(0) with m32int and pop stack register.
+DE /2 	FICOM m16int 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	ficom	Compare ST(0) with m16int.
+DA /2 	FICOM m32int 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	ficoml	Compare ST(0) with m32int.
+DE /3 	FICOMP m16int 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	ficomp	Compare ST(0) with m16int and pop stack register.
+DA /3 	FICOMP m32int 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	ficompl	Compare ST(0) with m32int and pop stack register.
 													
-DF /0 	FILD m16int 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fild	Push m16int onto the FPU register stack.
-DB /0 	FILD m32int 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fildl	Push m32int onto the FPU register stack.
-DF /5 	FILD m64int 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fildll	Push m64int onto the FPU register stack.
+DF /0 	FILD m16int 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fild	Push m16int onto the FPU register stack.
+DB /0 	FILD m32int 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fildl	Push m32int onto the FPU register stack.
+DF /5 	FILD m64int 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fildll	Push m64int onto the FPU register stack.
 													
-D9 F7 	FINCSTP 			S.TOP	S.TOP S.C1	S.C0 S.C2 S.C3			V	V		fincstp	Increment the TOP field in the FPU status register.
+D9 F7 	FINCSTP 			S.TOP	S.TOP S.C1	S.C0 S.C2 S.C3			V	V	FPU	fincstp	Increment the TOP field in the FPU status register.
 													
-9B DB E3 	FINIT 				S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE				V	V		finit	Initialize FPU after checking for pending unmasked floating-point exceptions.
-DB E3 	FNINIT				S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE				V	V		fninit	Initialize FPU without checking for pending unmasked floating-point exceptions.
+9B DB E3 	FINIT 				S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE				V	V	FPU	finit	Initialize FPU after checking for pending unmasked floating-point exceptions.
+DB E3 	FNINIT				S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE				V	V	FPU	fninit	Initialize FPU without checking for pending unmasked floating-point exceptions.
 													
-DF /2 	FIST m16int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fist	Store ST(0) in m16int.
-DB /2 	FIST m32int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fistl	Store ST(0) in m32int.
-DF /3 	FISTP m16int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fistp	Store ST(0) in m16int and pop register stack.
-DB /3 	FISTP m32int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fistpl	Store ST(0) in m32int and pop register stack.
-DF /7 	FISTP m64int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fistpll	Store ST(0) in m64int and pop register stack.
+DF /2 	FIST m16int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fist	Store ST(0) in m16int.
+DB /2 	FIST m32int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fistl	Store ST(0) in m32int.
+DF /3 	FISTP m16int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fistp	Store ST(0) in m16int and pop register stack.
+DB /3 	FISTP m32int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fistpl	Store ST(0) in m32int and pop register stack.
+DF /7 	FISTP m64int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fistpll	Store ST(0) in m64int and pop register stack.
 													
-DF /1 	FISTTP m16int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fisttp	Store ST(0) in m16int with truncation.
-DB /1 	FISTTP m32int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fisttpl	Store ST(0) in m32int with truncation.
-DD /1 	FISTTP m64int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fisttpll	Store ST(0) in m64int with truncation.
+DF /1 	FISTTP m16int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fisttp	Store ST(0) in m16int with truncation.
+DB /1 	FISTTP m32int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fisttpl	Store ST(0) in m32int with truncation.
+DD /1 	FISTTP m64int 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fisttpll	Store ST(0) in m64int with truncation.
 													
-D9 /0 	FLD m32fp 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		flds	Push m32fp onto the FPU register stack.
-DD /0 	FLD m64fp 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldl	Push m64fp onto the FPU register stack.
-DB /5 	FLD m80fp 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldt	Push m80fp onto the FPU register stack.
-D9 C0 +i 	FLD ST(i) 	O	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fld	Push ST(i) onto the FPU register stack.
+D9 /0 	FLD m32fp 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	flds	Push m32fp onto the FPU register stack.
+DD /0 	FLD m64fp 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldl	Push m64fp onto the FPU register stack.
+DB /5 	FLD m80fp 	M	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldt	Push m80fp onto the FPU register stack.
+D9 C0 +i 	FLD ST(i) 	O	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fld	Push ST(i) onto the FPU register stack.
 													
-D9 E8 	FLD1 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fld1	Push +1.0 onto the FPU register stack.
-D9 E9 	FLDL2T 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldl2t	Push log210 onto the FPU register stack.
-D9 EA 	FLDL2E 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldl2e	Push log2e onto the FPU register stack.
-D9 EB 	FLDPI 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldpi	Push π onto the FPU register stack.
-D9 EC 	FLDLG2 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldlg2	Push log102 onto the FPU register stack.
-D9 ED 	FLDLN2 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldln2	Push loge2 onto the FPU register stack.
-D9 EE 	FLDZ 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fldz	Push +0.0 onto the FPU register stack.
+D9 E8 	FLD1 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fld1	Push +1.0 onto the FPU register stack.
+D9 E9 	FLDL2T 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldl2t	Push log210 onto the FPU register stack.
+D9 EA 	FLDL2E 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldl2e	Push log2e onto the FPU register stack.
+D9 EB 	FLDPI 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldpi	Push π onto the FPU register stack.
+D9 EC 	FLDLG2 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldlg2	Push log102 onto the FPU register stack.
+D9 ED 	FLDLN2 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldln2	Push loge2 onto the FPU register stack.
+D9 EE 	FLDZ 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldz	Push +0.0 onto the FPU register stack.
 													
-D9 /5 	FLDCW m2byte 	M	R			S.C0 S.C1 S.C2 S.C3			V	V		fldcw	Load FPU control word from m2byte.
+D9 /5 	FLDCW m2byte 	M	R			S.C0 S.C1 S.C2 S.C3			V	V	FPU	fldcw	Load FPU control word from m2byte.
 													
-D9 /4 	FLDENV m28byte 	M	R		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE				V	V		fldenv	Load FPU environment from m14byte or m28byte.
+D9 /4 	FLDENV m28byte 	M	R		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE				V	V	FPU	fldenv	Load FPU environment from m14byte or m28byte.
 													
-D8 /1 	FMUL m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fmuls	Multiply ST(0) by m32fp and store result in ST(0).
-DC /1 	FMUL m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fmull	Multiply ST(0) by m64fp and store result in ST(0).
-D8 C8 +i 	FMUL ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fmul	Multiply ST(0) by ST(i) and store result in ST(0).
-DC C8 +i 	FMUL ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fmul	Multiply ST(i) by ST(0) and store result in ST(i).
-DE C8 +i 	FMULP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fmulp	Multiply ST(i) by ST(0), store result in ST(i), and pop the register stack.
-DE C9 	FMULP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fmulp	Multiply ST(1) by ST(0), store result in ST(1), and pop the register stack.
-DA /1 	FIMUL m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fimull	Multiply ST(0) by m32int and store result in ST(0).
-DE /1 	FIMUL m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fimul	Multiply ST(0) by m16int and store result in ST(0).
+D8 /1 	FMUL m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fmuls	Multiply ST(0) by m32fp and store result in ST(0).
+DC /1 	FMUL m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fmull	Multiply ST(0) by m64fp and store result in ST(0).
+D8 C8 +i 	FMUL ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fmul	Multiply ST(0) by ST(i) and store result in ST(0).
+DC C8 +i 	FMUL ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fmul	Multiply ST(i) by ST(0) and store result in ST(i).
+DE C8 +i 	FMULP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fmulp	Multiply ST(i) by ST(0), store result in ST(i), and pop the register stack.
+DE C9 	FMULP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fmulp	Multiply ST(1) by ST(0), store result in ST(1), and pop the register stack.
+DA /1 	FIMUL m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fimull	Multiply ST(0) by m32int and store result in ST(0).
+DE /1 	FIMUL m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fimul	Multiply ST(0) by m16int and store result in ST(0).
 													
-D9 D0 	FNOP 					S.C0 S.C1 S.C2 S.C3			V	V		fnop	No operation is performed.
+D9 D0 	FNOP 					S.C0 S.C1 S.C2 S.C3			V	V	FPU	fnop	No operation is performed.
 													
-D9 F3 	FPATAN 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fpatan	Replace ST(1) with arctan(ST(1)/ST(0)) and pop the register stack.
+D9 F3 	FPATAN 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fpatan	Replace ST(1) with arctan(ST(1)/ST(0)) and pop the register stack.
 													
-D9 F8 	FPREM 			ST(0) ST(1)	ST(0) S.C0 S.C1 S.C2 S.C3				V	V		fprem	Replace ST(0) with the remainder obtained from dividing ST(0) by ST(1).
+D9 F8 	FPREM 			ST(0) ST(1)	ST(0) S.C0 S.C1 S.C2 S.C3				V	V	FPU	fprem	Replace ST(0) with the remainder obtained from dividing ST(0) by ST(1).
 													
-D9 F5 	FPREM1 			ST(0) ST(1)	ST(0) S.C0 S.C1 S.C2 S.C3				V	V		fprem1	Replace ST(0) with the IEEE remainder obtained from dividing ST(0) by ST(1).
+D9 F5 	FPREM1 			ST(0) ST(1)	ST(0) S.C0 S.C1 S.C2 S.C3				V	V	FPU	fprem1	Replace ST(0) with the IEEE remainder obtained from dividing ST(0) by ST(1).
 													
-D9 F2 	FPTAN 			ST(0)	ST(0) S.C1 S.C2	S.C0 S.C3			V	V		fptan	Replace ST(0) with its tangent and push 1 onto the FPU stack.
+D9 F2 	FPTAN 			ST(0)	ST(0) S.C1 S.C2	S.C0 S.C3			V	V	FPU	fptan	Replace ST(0) with its tangent and push 1 onto the FPU stack.
 													
-D9 FC 	FRNDINT 			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		frndint	Round ST(0) to an integer.
+D9 FC 	FRNDINT 			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	frndint	Round ST(0) to an integer.
 													
-DD /4 	FRSTOR m108byte 	M	R		ST(*) TAG(*) FPUDATA FPUINSTR S.* M.*				V	V		frstor	Load FPU state from m94byte or m108byte.
+DD /4 	FRSTOR m108byte 	M	R		ST(*) TAG(*) FPUDATA FPUINSTR S.* M.*				V	V	FPU	frstor	Load FPU state from m94byte or m108byte.
 													
-9B DD /6 	FSAVE m108byte 	M	W	ST(*) S.* FPUDATA FPUINSTR FPUOPCODE	ST(*) TAG(*) S.* FPUDATA FPUINSTR FPUOPCODE				V	V		fsave	Store FPU state to m94byte or m108byte after checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
-DD /6 	FNSAVE m108byte 	M	W	ST(*) S.* FPUDATA FPUINSTR FPUOPCODE	ST(*) TAG(*) S.* FPUDATA FPUINSTR FPUOPCODE				V	V		fnsave	Store FPU environment to m94byte or m108byte without checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
+9B DD /6 	FSAVE m108byte 	M	W	ST(*) S.* FPUDATA FPUINSTR FPUOPCODE	ST(*) TAG(*) S.* FPUDATA FPUINSTR FPUOPCODE				V	V	FPU	fsave	Store FPU state to m94byte or m108byte after checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
+DD /6 	FNSAVE m108byte 	M	W	ST(*) S.* FPUDATA FPUINSTR FPUOPCODE	ST(*) TAG(*) S.* FPUDATA FPUINSTR FPUOPCODE				V	V	FPU	fnsave	Store FPU environment to m94byte or m108byte without checking for pending unmasked floating-point exceptions. Then re-initialize the FPU.
 													
-D9 FD 	FSCALE 			ST(0) ST(1)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fscale	Scale ST(0) by ST(1).
+D9 FD 	FSCALE 			ST(0) ST(1)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fscale	Scale ST(0) by ST(1).
 													
-D9 FE 	FSIN 			ST(0)	ST(0) S.C1 S.C2	S.C0 S.C3			V	V		fsin	Replace ST(0) with its sine.
+D9 FE 	FSIN 			ST(0)	ST(0) S.C1 S.C2	S.C0 S.C3			V	V	FPU	fsin	Replace ST(0) with its sine.
 													
-D9 FB 	FSINCOS 			ST(0)	ST(0) S.C1 S.C2	S.C0 S.C3			V	V		fsincos	Compute the sine and cosine of ST(0); replace ST(0) with the sine, and push the cosine onto the register stack.
+D9 FB 	FSINCOS 			ST(0)	ST(0) S.C1 S.C2	S.C0 S.C3			V	V	FPU	fsincos	Compute the sine and cosine of ST(0); replace ST(0) with the sine, and push the cosine onto the register stack.
 													
-D9 FA 	FSQRT 			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsqrt	Computes square root of ST(0) and stores the result in ST(0).
+D9 FA 	FSQRT 			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fsqrt	Computes square root of ST(0) and stores the result in ST(0).
 													
-D9 /2 	FST m32fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fsts	Copy ST(0) to m32fp.
-DD /2 	FST m64fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstl	Copy ST(0) to m64fp.
-DD D0 +i 	FST ST(i) 	O	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fst	Copy ST(0) to ST(i).
-D9 /3 	FSTP m32fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstps	Copy ST(0) to m32fp and pop register stack.
-DD /3 	FSTP m64fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstpl	Copy ST(0) to m64fp and pop register stack.
-DB /7 	FSTP m80fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstpt	Copy ST(0) to m80fp and pop register stack.
-DD D8 +i 	FSTP ST(i) 	O	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V		fstp	Copy ST(0) to ST(i) and pop register stack.
+D9 /2 	FST m32fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fsts	Copy ST(0) to m32fp.
+DD /2 	FST m64fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fstl	Copy ST(0) to m64fp.
+DD D0 +i 	FST ST(i) 	O	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fst	Copy ST(0) to ST(i).
+D9 /3 	FSTP m32fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fstps	Copy ST(0) to m32fp and pop register stack.
+DD /3 	FSTP m64fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fstpl	Copy ST(0) to m64fp and pop register stack.
+DB /7 	FSTP m80fp 	M	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fstpt	Copy ST(0) to m80fp and pop register stack.
+DD D8 +i 	FSTP ST(i) 	O	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fstp	Copy ST(0) to ST(i) and pop register stack.
 													
-9B D9 /7 	FSTCW m2byte 	M	W			S.C0 S.C1 S.C2 S.C3			V	V		fstcw	Store FPU control word to m2byte after checking for pending unmasked floating-point exceptions.
-D9 /7 	FNSTCW m2byte 	M	W			S.C0 S.C1 S.C2 S.C3			V	V		fnstcw	Store FPU control word to m2byte without checking for pending unmasked floating-point exceptions.
+9B D9 /7 	FSTCW m2byte 	M	W			S.C0 S.C1 S.C2 S.C3			V	V	FPU	fstcw	Store FPU control word to m2byte after checking for pending unmasked floating-point exceptions.
+D9 /7 	FNSTCW m2byte 	M	W			S.C0 S.C1 S.C2 S.C3			V	V	FPU	fnstcw	Store FPU control word to m2byte without checking for pending unmasked floating-point exceptions.
 													
-9B D9 /6 	FSTENV m28byte 	M	W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V		fstenv	Store FPU environment to m14byte or m28byte after checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
-D9 /6 	FNSTENV m28byte 	M	W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V		fnstenv	Store FPU environment to m14byte or m28byte without checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
+9B D9 /6 	FSTENV m28byte 	M	W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V	FPU	fstenv	Store FPU environment to m14byte or m28byte after checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
+D9 /6 	FNSTENV m28byte 	M	W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V	FPU	fnstenv	Store FPU environment to m14byte or m28byte without checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
 													
-9B DD /7 	FSTSW m2byte 	M	W		S.*	S.C0 S.C1 S.C2 S.C3			V	V		fstsw	Store FPU status word at m2byte after checking for pending unmasked floating-point exceptions.
-9B DF E0 	FSTSW AX 		W		S.*	S.C0 S.C1 S.C2 S.C3			V	V		fstsw	Store FPU status word in AX register after checking for pending unmasked floating-point exceptions.
-DD /7 	FNSTSW m2byte 	M	W		S.*	S.C0 S.C1 S.C2 S.C3			V	V		fnstsw	Store FPU status word at m2byte without checking for pending unmasked floating-point exceptions.
-DF E0 	FNSTSW AX 		W		S.*	S.C0 S.C1 S.C2 S.C3			V	V		fnstsw	Store FPU status word in AX register without checking for pending unmasked floating-point exceptions.
+9B DD /7 	FSTSW m2byte 	M	W		S.*	S.C0 S.C1 S.C2 S.C3			V	V	FPU	fstsw	Store FPU status word at m2byte after checking for pending unmasked floating-point exceptions.
+9B DF E0 	FSTSW AX 		W		S.*	S.C0 S.C1 S.C2 S.C3			V	V	FPU	fstsw	Store FPU status word in AX register after checking for pending unmasked floating-point exceptions.
+DD /7 	FNSTSW m2byte 	M	W		S.*	S.C0 S.C1 S.C2 S.C3			V	V	FPU	fnstsw	Store FPU status word at m2byte without checking for pending unmasked floating-point exceptions.
+DF E0 	FNSTSW AX 		W		S.*	S.C0 S.C1 S.C2 S.C3			V	V	FPU	fnstsw	Store FPU status word in AX register without checking for pending unmasked floating-point exceptions.
 													
-D8 /4 	FSUB m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubs	Subtract m32fp from ST(0) and store result in ST(0).
-DC /4 	FSUB m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubl	Subtract m64fp from ST(0) and store result in ST(0).
-D8 E0 +i 	FSUB ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsub	Subtract ST(i) from ST(0) and store result in ST(0).
-DC E0 +i 	FSUB ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsub	Subtract ST(0) from ST(i) and store result in ST(i).
-DE E0 +i 	FSUBP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubp	Subtract ST(0) from ST(i), store result in ST(i), and pop register stack.
-DE E1 	FSUBP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fsubp	Subtract ST(0) from ST(1), store result in ST(1), and pop register stack.
-DA /4 	FISUB m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisubl	Subtract m32int from ST(0) and store result in ST(0).
-DE /4 	FISUB m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisub	Subtract m16int from ST(0) and store result in ST(0).
+D8 /4 	FSUB m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fsubs	Subtract m32fp from ST(0) and store result in ST(0).
+DC /4 	FSUB m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fsubl	Subtract m64fp from ST(0) and store result in ST(0).
+D8 E0 +i 	FSUB ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fsub	Subtract ST(i) from ST(0) and store result in ST(0).
+DC E0 +i 	FSUB ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fsub	Subtract ST(0) from ST(i) and store result in ST(i).
+DE E0 +i 	FSUBP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fsubp	Subtract ST(0) from ST(i), store result in ST(i), and pop register stack.
+DE E1 	FSUBP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fsubp	Subtract ST(0) from ST(1), store result in ST(1), and pop register stack.
+DA /4 	FISUB m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fisubl	Subtract m32int from ST(0) and store result in ST(0).
+DE /4 	FISUB m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fisub	Subtract m16int from ST(0) and store result in ST(0).
 													
-D8 /5 	FSUBR m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubrs	Subtract ST(0) from m32fp and store result in ST(0).
-DC /5 	FSUBR m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fsubrl	Subtract ST(0) from m64fp and store result in ST(0).
-D8 E8 +i 	FSUBR ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubr	Subtract ST(0) from ST(i) and store result in ST(0).
-DC E8 +i 	FSUBR ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubr	Subtract ST(i) from ST(0) and store result in ST(i).
+D8 /5 	FSUBR m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fsubrs	Subtract ST(0) from m32fp and store result in ST(0).
+DC /5 	FSUBR m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fsubrl	Subtract ST(0) from m64fp and store result in ST(0).
+D8 E8 +i 	FSUBR ST(0), ST(i) 	TO	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fsubr	Subtract ST(0) from ST(i) and store result in ST(0).
+DC E8 +i 	FSUBR ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V	FPU	fsubr	Subtract ST(i) from ST(0) and store result in ST(i).
 DE E8 +i 	FSUBRP ST(i), ST(0) 	OT	RW, R		S.C1	S.C0 S.C2 S.C3			V	V		fsubrp	Subtract ST(i) from ST(0), store result in ST(i), and pop register stack.
-DE E9	FSUBRP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fsubrp	Subtract ST(1) from ST(0), store result in ST(1), and pop register stack.
-DA /5 	FISUBR m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisubrl	Subtract ST(0) from m32int and store result in ST(0).
-DE /5 	FISUBR m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fisubr	Subtract ST(0) from m16int and store result in ST(0).
+DE E9	FSUBRP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fsubrp	Subtract ST(1) from ST(0), store result in ST(1), and pop register stack.
+DA /5 	FISUBR m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fisubrl	Subtract ST(0) from m32int and store result in ST(0).
+DE /5 	FISUBR m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fisubr	Subtract ST(0) from m16int and store result in ST(0).
 													
-D9 E4 	FTST 			ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		ftst	Compare ST(0) with 0.0.
+D9 E4 	FTST 			ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	ftst	Compare ST(0) with 0.0.
 													
-DD E0 +i 	FUCOM ST(i) 	O	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fucom	Compare ST(0) with ST(i).
-DD E1 	FUCOM 			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V		fucom	Compare ST(0) with ST(1).
-DD E8 +i 	FUCOMP ST(i) 	O	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fucomp	Compare ST(0) with ST(i) and pop register stack.
-DD E9 	FUCOMP 			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V		fucomp	Compare ST(0) with ST(1) and pop register stack.
-DA E9 	FUCOMPP 			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V		fucompp	Compare ST(0) with ST(1) and pop register stack twice.
+DD E0 +i 	FUCOM ST(i) 	O	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fucom	Compare ST(0) with ST(i).
+DD E1 	FUCOM 			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fucom	Compare ST(0) with ST(1).
+DD E8 +i 	FUCOMP ST(i) 	O	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fucomp	Compare ST(0) with ST(i) and pop register stack.
+DD E9 	FUCOMP 			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fucomp	Compare ST(0) with ST(1) and pop register stack.
+DA E9 	FUCOMPP 			ST(0) ST(1)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fucompp	Compare ST(0) with ST(1) and pop register stack twice.
 													
-D9 E5 	FXAM 			ST(0)	S.C0 S.C1 S.C2 S.C3				V	V		fxam	Classify value or number in ST(0).
+D9 E5 	FXAM 			ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	fxam	Classify value or number in ST(0).
 													
-D9 C8 +i 	FXCH ST(i) 	O	RW	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fxch	Exchange the contents of ST(0) and ST(i).
-D9 C9 	FXCH 			ST(0) ST(1)	ST(0) ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fxch	Exchange the contents of ST(0) and ST(1).
+D9 C8 +i 	FXCH ST(i) 	O	RW	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fxch	Exchange the contents of ST(0) and ST(i).
+D9 C9 	FXCH 			ST(0) ST(1)	ST(0) ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fxch	Exchange the contents of ST(0) and ST(1).
 													
-0F AE /1 	FXRSTOR m512byte	M	R		ST(*) MM* XMM* CS DS				V	V		fxrstor	Restore the x87 FPU, MMX, XMM, and MXCSR register state from m512byte.
-REX.W+ 0F AE /1	FXRSTOR64 m512byte	M	R		ST(*) MM* XMM*				V	NE		fxrstor64	Restore the x87 FPU, MMX, XMM, and MXCSR register state from m512byte.
+0F AE /1 	FXRSTOR m512byte	M	R		ST(*) MM* XMM* CS DS				V	V	FPU FXSR	fxrstor	Restore the x87 FPU, MMX, XMM, and MXCSR register state from m512byte.
+REX.W+ 0F AE /1	FXRSTOR64 m512byte	M	R		ST(*) MM* XMM*				V	NE	FPU FXSR	fxrstor64	Restore the x87 FPU, MMX, XMM, and MXCSR register state from m512byte.
 													
-0F AE /0 	FXSAVE m512byte	M	W	ST(*) MM* XMM* M.* CS DS					V	V		fxsave	Save the x87 FPU, MMX, XMM, and MXCSR register state to m512byte.
-REX.W+ 0F AE /0	FXSAVE64 m512byte	M	W	ST(*) MM* XMM* M.*					V	NE		fxsave64	Save the x87 FPU, MMX, XMM, and MXCSR register state to m512byte.
+0F AE /0 	FXSAVE m512byte	M	W	ST(*) MM* XMM* M.* CS DS					V	V	FPU FXSR	fxsave	Save the x87 FPU, MMX, XMM, and MXCSR register state to m512byte.
+REX.W+ 0F AE /0	FXSAVE64 m512byte	M	W	ST(*) MM* XMM* M.*					V	NE	FPU FXSR	fxsave64	Save the x87 FPU, MMX, XMM, and MXCSR register state to m512byte.
 													
-D9 F4 	FXTRACT			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V		fxtract	Separate value in ST(0) into exponent and significand, store exponent in ST(0), and push the significand onto the register stack.
+D9 F4 	FXTRACT			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fxtract	Separate value in ST(0) into exponent and significand, store exponent in ST(0), and push the significand onto the register stack.
 													
-D9 F1 	FYL2X 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fyl2x	Replace ST(1) with (ST(1) ∗ log2ST(0)) and pop the register stack.
+D9 F1 	FYL2X 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fyl2x	Replace ST(1) with (ST(1) ∗ log2ST(0)) and pop the register stack.
 													
-D9 F9 	FYL2XP1 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V		fyl2xp1	Replace ST(1) with ST(1) ∗ log2(ST(0) + 1.0) and pop the register stack.
+D9 F9 	FYL2XP1 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fyl2xp1	Replace ST(1) with ST(1) ∗ log2(ST(0) + 1.0) and pop the register stack.
 													
 66 0F 7C /r 	HADDPD xmm1, xmm2/m128	RM	RW, R						V	V	SSE3	haddpd	Horizontal add packed double-precision floating-point values from xmm2/m128 to xmm1.
 VEX.NDS.128.66.0F.WIG 7C /r	VHADDPD xmm1, xmm2, xmm3/m128	RVM	W, R, R						V	V	AVX	vhaddpd	Horizontal add packed double-precision floating-point values from xmm2 and xmm3/mem.
@@ -1019,7 +1019,7 @@ VEX.NDS.LIG.F2.0F.WIG 5D /r	VMINSD xmm1, xmm2, xmm3/m64	RVM	Z, R, R						V	V	AVX
 F3 0F 5D /r 	MINSS xmm1, xmm2/m32	RM	RW, R						V	V	SSE	minss	Return the minimum scalar single-precision floating-point value between xmm2/mem32 and xmm1.
 VEX.NDS.LIG.F3.0F.WIG 5D /r	VMINSS xmm1,xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vminss	Return the minimum scalar single precision floating-point value between xmm3/mem32 and xmm2.
 													
-0F 01 C8 	MONITOR 	NP							V	V		monitor	Sets up a linear address range to be monitored by hardware and activates the monitor. The address range should be a write-back memory caching type. The address is DS:EAX (DS:RAX in 64-bit mode).
+0F 01 C8 	MONITOR 	NP							V	V	MONITOR	monitor	Sets up a linear address range to be monitored by hardware and activates the monitor. The address range should be a write-back memory caching type. The address is DS:EAX (DS:RAX in 64-bit mode).
 													
 88 /r 	MOV r/m8, r8 	MR	W, R						V	V		movb	Move r8 to r/m8.
 REX+ 88 /r 	MOV r/m8, r8	MR	W, R						V	NE		movb	Move r8 to r/m8.
@@ -1082,12 +1082,12 @@ VEX.128.0F.WIG 29 /r	VMOVAPS xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovaps	Move a
 VEX.256.0F.WIG 28 /r	VMOVAPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovaps	Move aligned packed single-precision floating-point values from ymm2/mem to ymm1.
 VEX.256.0F.WIG 29 /r	VMOVAPS ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovaps	Move aligned packed single-precision floating-point values from ymm1 to ymm2/mem.
 													
-0F 38 F0 /r 	MOVBE r16, m16 	RM	W, R						V	V		movbew	Reverse byte order in m16 and move to r16
-0F 38 F0 /r 	MOVBE r32, m32 	RM	W, R						V	V		movbel	Reverse byte order in m32 and move to r32
-REX.W+ 0F 38 F0 /r 	MOVBE r64, m64 	RM	W, R						V	NE		movbeq	Reverse byte order in m64 and move to r64.
-0F 38 F1 /r 	MOVBE m16, r16 	MR	W, R						V	V		movbew	Reverse byte order in r16 and move to m16
-0F 38 F1 /r 	MOVBE m32, r32 	MR	W, R						V	V		movbel	Reverse byte order in r32 and move to m32
-REX.W+ 0F 38 F1 /r 	MOVBE m64, r64 	MR	W, R						V	NE		movbeq	Reverse byte order in r64 and move to m64.
+0F 38 F0 /r 	MOVBE r16, m16 	RM	W, R						V	V	MOVBE	movbew	Reverse byte order in m16 and move to r16
+0F 38 F0 /r 	MOVBE r32, m32 	RM	W, R						V	V	MOVBE	movbel	Reverse byte order in m32 and move to r32
+REX.W+ 0F 38 F0 /r 	MOVBE r64, m64 	RM	W, R						V	NE	MOVBE	movbeq	Reverse byte order in m64 and move to r64.
+0F 38 F1 /r 	MOVBE m16, r16 	MR	W, R						V	V	MOVBE	movbew	Reverse byte order in r16 and move to m16
+0F 38 F1 /r 	MOVBE m32, r32 	MR	W, R						V	V	MOVBE	movbel	Reverse byte order in r32 and move to m32
+REX.W+ 0F 38 F1 /r 	MOVBE m64, r64 	MR	W, R						V	NE	MOVBE	movbeq	Reverse byte order in r64 and move to m64.
 													
 0F 6E /r 	MOVD mm, r/m32	RM	W, R						V	V	MMX	movd	Move doubleword from r/m32 to mm.
 REX.W+ 0F 6E /r	MOVQ mm, r/m64	RM	W, R						V	NE	MMX	movq	Move quadword from r/m64 to mm.
@@ -1267,7 +1267,7 @@ VEX.NDS.LIG.F2.0F.WIG 59 /r	VMULSD xmm1,xmm2, xmm3/m64	RVM	Z, R, R						V	V	AVX	
 F3 0F 59 /r 	MULSS xmm1, xmm2/m32	RM	W, R						V	V	SSE	mulss	Multiply the low single-precision floating-point value in xmm2/mem by the low single-precision floating-point value in xmm1.
 VEX.NDS.LIG.F3.0F.WIG 59 /r	VMULSS xmm1,xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vmulss	Multiply the low single-precision floating-point value in xmm3/mem by the low single-precision floating-point value in xmm2.
 													
-0F 01 C9 	MWAIT 	NP		EAX ECX					V	V		mwait	A hint that allow the processor to stop instruction execution and enter an implementation-dependent optimized state until occurrence of a class of events.
+0F 01 C9 	MWAIT 	NP		EAX ECX					V	V	MONITOR	mwait	A hint that allow the processor to stop instruction execution and enter an implementation-dependent optimized state until occurrence of a class of events.
 													
 F6 /3 	NEG r/m8 	M	RW		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		negb	Two's complement negate r/m8.
 REX+ F6 /3 	NEG r/m8	M	RW		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		negb	Two's complement negate r/m8.
@@ -1409,8 +1409,8 @@ VEX.NDS.128.66.0F3A.W0 4C /r /is4 	VPBLENDVB xmm1, xmm2, xmm3/m128, xmm4 	RVMR	Z
 66 0F 3A 0E /r ib 	PBLENDW xmm1, xmm2/m128, imm8 	RMI	RW, R, R						V	V	SSE4_1	pblendw	Select words from xmm1 and xmm2/m128 from mask specified in imm8 and store the values into xmm1.
 VEX.NDS.128.66.0F3A.WIG 0E /r ib 	VPBLENDW xmm1, xmm2, xmm3/m128, imm8 	RVMI	Z, R, R, R						V	V	AVX	vpblendw	Select words from xmm2 and xmm3/m128 from mask specified in imm8 and store the values into xmm1.
 													
-66 0F 3A 44 /r ib 	PCLMULQDQ xmm1, xmm2/m128, imm8 	RMI	RW, R, R						V	V	CLMUL	pclmulqdq	Carry-less multiplication of one quadword of xmm1 by one quadword of xmm2/m128, stores the 128-bit result in xmm1. The immediate is used to determine which quadwords of xmm1 and xmm2/m128 should be used.
-VEX.NDS.128.66.0F3A.WIG 44 /r ib 	VPCLMULQDQ xmm1, xmm2, xmm3/m128, imm8 	RVMI	Z, R, R, R						V	V	CLMUL AVX	vpclmulqdq	Carry-less multiplication of one quadword of xmm2 by one quadword of xmm3/m128, stores the 128-bit result in xmm1. The immediate is used to determine which quadwords of xmm2 and xmm3/m128 should be used.
+66 0F 3A 44 /r ib 	PCLMULQDQ xmm1, xmm2/m128, imm8 	RMI	RW, R, R						V	V	PCLMULQDQ	pclmulqdq	Carry-less multiplication of one quadword of xmm1 by one quadword of xmm2/m128, stores the 128-bit result in xmm1. The immediate is used to determine which quadwords of xmm1 and xmm2/m128 should be used.
+VEX.NDS.128.66.0F3A.WIG 44 /r ib 	VPCLMULQDQ xmm1, xmm2, xmm3/m128, imm8 	RVMI	Z, R, R, R						V	V	PCLMULQDQ AVX	vpclmulqdq	Carry-less multiplication of one quadword of xmm2 by one quadword of xmm3/m128, stores the 128-bit result in xmm1. The immediate is used to determine which quadwords of xmm2 and xmm3/m128 should be used.
 													
 0F 74 /r 	PCMPEQB mm, mm/m64	RM	RW, R						V	V	MMX	pcmpeqb	Compare packed bytes in mm/m64 and mm for equality.
 66 0F 74 /r	PCMPEQB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pcmpeqb	Compare packed bytes in xmm2/m128 and xmm1 for equality.
@@ -1622,9 +1622,9 @@ PREF.66+ 0F A9 	POP GS, p66	NP	W, I						V	V		popq	Pop top of stack into GS; inc
 61	POPA 								I	V			Pop DI, SI, BP, BX, DX, CX, and AX.
 61	POPAD 								I	V			Pop EDI, ESI, EBP, EBX, EDX, ECX, and EAX.
 													
-F3 0F B8 /r 	POPCNT r16, r/m16 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		popcntb	POPCNT on r/m16
-F3 0F B8 /r 	POPCNT r32, r/m32 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		popcntl	POPCNT on r/m32
-F3 REX.W+ 0F B8 /r 	POPCNT r64, r/m64 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		popcntq	POPCNT on r/m64
+F3 0F B8 /r 	POPCNT r16, r/m16 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	POPCNT	popcntb	POPCNT on r/m16
+F3 0F B8 /r 	POPCNT r32, r/m32 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	POPCNT	popcntl	POPCNT on r/m32
+F3 REX.W+ 0F B8 /r 	POPCNT r64, r/m64 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE	POPCNT	popcntq	POPCNT on r/m64
 													
 PREF.66+ 9D 	POPF 	NP			E.*				V	V		popf	Pop top of stack into lower 16 bits of EFLAGS.
 9D 	POPFD 								NE	V			Pop top of stack into EFLAGS.
@@ -2233,10 +2233,10 @@ VEX.NDS.LIG.F3.0F.WIG 5C /r	VSUBSS xmm1, xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX
 													
 0F 05	SYSCALL	NP		???	???	???			V	I		syscall	Fast call to privilege level 0 system procedures.
 													
-0F 34	SYSENTER	NP		???	???	???			V	V		sysenter	Fast call to privilege level 0 system procedures.
+0F 34	SYSENTER	NP		???	???	???			V	V	SEP	sysenter	Fast call to privilege level 0 system procedures.
 													
-0F 35	SYSEXIT	NP		???	???	???			V	V		sysexit	Fast return to privilege level 3 user code.
-REX.W+ 0F 35	SYSEXIT pw	NP	I	???	???	???			V	V		sysexit	Fast return to 64-bit mode privilege level 3 user code.
+0F 35	SYSEXIT	NP		???	???	???			V	V	SEP	sysexit	Fast return to privilege level 3 user code.
+REX.W+ 0F 35	SYSEXIT pw	NP	I	???	???	???			V	V	SEP	sysexit	Fast return to 64-bit mode privilege level 3 user code.
 													
 0F 07	SYSRET	NP		???	???	???			V	I		sysret	Return to compatibility mode from fast system call
 REX.W+ 0F 07	SYSRET pw	NP	I						V	I		sysret	Return to 64-bit mode from fast system call
@@ -2363,7 +2363,7 @@ REX.W+ 87 /r	XCHG r/m64, r64	MR	W, W						V	NE		xchgq	Exchange r64 with quadword
 87 /r	XCHG r32, r/m32	RM	W, W						V	V		xchgl	Exchange doubleword from r/m32 with r32.
 REX.W+ 87 /r	XCHG r64, r/m64	RM	W, W						V	NE		xchgq	Exchange quadword from r/m64 with r64.
 													
-0F 01 D0	XGETBV	NP		ECX	EAX EDX		YES	NO	V	V		xgetbv	Reads an XCR specified by ECX into EDX:EAX.
+0F 01 D0	XGETBV	NP		ECX	EAX EDX		YES	NO	V	V	XSAVE	xgetbv	Reads an XCR specified by ECX into EDX:EAX.
 													
 D7	XLAT m8	NP	I	AL DS BX ebx	AL				V	V		xlat	Set AL to memory byte DS:[(E)BX + unsigned AL].
 D7	XLATB	NP		AL DS BX ebx	AL				V	V		xlatb	Set AL to memory byte DS:[(E)BX + unsigned AL].
@@ -2400,11 +2400,11 @@ VEX.NDS.256.66.0F.WIG 57 /r	VXORPD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AV
 VEX.NDS.128.0F.WIG 57 /r	VXORPS xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vxorps	Return the bitwise logical XOR of packed single-precision floating-point values in xmm2 and xmm3/mem.
 VEX.NDS.256.0F.WIG 57 /r	VXORPS ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	vxorps	Return the bitwise logical XOR of packed single-precision floating-point values in ymm2 and ymm3/mem.
 													
-0F AE /5	XRSTOR mem	M	R	???	???	???			V	V		xrstor	Restore processor extended states from memory. The states are specified by EDX:EAX
-REX.W+ 0F AE /5	XRSTOR64 mem	M	R	???	???	???			V	NE		xrstor64	Restore processor extended states from memory. The states are specified by EDX:EAX
+0F AE /5	XRSTOR mem	M	R	???	???	???			V	V	XSAVE	xrstor	Restore processor extended states from memory. The states are specified by EDX:EAX
+REX.W+ 0F AE /5	XRSTOR64 mem	M	R	???	???	???			V	NE	XSAVE	xrstor64	Restore processor extended states from memory. The states are specified by EDX:EAX
 													
-0F AE /4	XSAVE mem	M	W	???	???	???			V	V		xsave	Save processor extended states to memory. The states are specified by EDX:EAX
-REX.W+ 0F AE /4	XSAVE64 mem	M	W	???	???	???			V	NE		xsave64	Save processor extended states to memory. The states are specified by EDX:EAX
+0F AE /4	XSAVE mem	M	W	???	???	???			V	V	XSAVE	xsave	Save processor extended states to memory. The states are specified by EDX:EAX
+REX.W+ 0F AE /4	XSAVE64 mem	M	W	???	???	???			V	NE	XSAVE	xsave64	Save processor extended states to memory. The states are specified by EDX:EAX
 													
 0F AE /6	XSAVEOPT mem	M	W	???	???	???			V	V	XSAVEOPT	xsaveopt	Save processor extended states specified in EDX:EAX to memory, optimizing the state save operation if possible.
 REX.W+ 0F AE /6	XSAVEOPT64 mem	M	W	???	???	???			V	V	XSAVEOPT	xsaveopt64	Save processor extended states specified in EDX:EAX to memory, optimizing the state save operation if possible.
