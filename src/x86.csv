@@ -2340,28 +2340,28 @@ REX.W+ F3 0F AE /3	WRGSBASE r64	M	R						V	I	FSGSBASE	wrgsbase	Load the GS base 
 													
 0F 30	WRMSR						NO	YES	V	V			Write the value in EDX:EAX to MSR specified by ECX.
 													
-0F C0 /r	XADD r/m8, r8	MR	W, W		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		xaddb	Exchange r8 and r/m8; load sum into r/m8.
-REX+ 0F C0 /r	XADD r/m8, r8	MR	W, W		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		xaddb	Exchange r8 and r/m8; load sum into r/m8.
-0F C1 /r	XADD r/m16, r16	MR	W, W		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		xaddw	Exchange r16 and r/m16; load sum into r/m16.
-0F C1 /r	XADD r/m32, r32	MR	W, W		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		xaddl	Exchange r32 and r/m32; load sum into r/m32.
-REX.W+ 0F C1 /r	XADD r/m64, r64	MR	W, W		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		xaddq	Exchange r64 and r/m64; load sum into r/m64.
+0F C0 /r	XADD r/m8, r8	MR	RW, RW		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		xaddb	Exchange r8 and r/m8; load sum into r/m8.
+REX+ 0F C0 /r	XADD r/m8, r8	MR	RW, RW		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		xaddb	Exchange r8 and r/m8; load sum into r/m8.
+0F C1 /r	XADD r/m16, r16	MR	RW, RW		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		xaddw	Exchange r16 and r/m16; load sum into r/m16.
+0F C1 /r	XADD r/m32, r32	MR	RW, RW		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		xaddl	Exchange r32 and r/m32; load sum into r/m32.
+REX.W+ 0F C1 /r	XADD r/m64, r64	MR	RW, RW		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		xaddq	Exchange r64 and r/m64; load sum into r/m64.
 													
-90 +rw	XCHG AX, r16	O	W, W						V	V		xchgw	Exchange r16 with AX.
-90 +rw	XCHG r16, AX	O	W, W						V	V		xchgw	Exchange AX with r16.
-90 +rd	XCHG EAX, r32	O	W, W						V	V		xchgl	Exchange r32 with EAX.
-REX.W+ 90 +rd	XCHG RAX, r64	O	W, W						V	NE		xchgq	Exchange r64 with RAX.
-90 +rd	XCHG r32, EAX	O	W, W						V	V		xchgl	Exchange EAX with r32.
-REX.W+ 90 +rd	XCHG r64, RAX	O	W, W						V	NE		xchgq	Exchange RAX with r64.
-86 /r	XCHG r/m8, r8	MR	W, W						V	V		xchgb	Exchange r8 (byte register) with byte from r/m8.
-REX+ 86 /r	XCHG r/m8, r8	MR	W, W						V	NE		xchgb	Exchange r8 (byte register) with byte from r/m8.
-86 /r	XCHG r8, r/m8	RM	W, W						V	V		xchgb	Exchange byte from r/m8 with r8 (byte register).
-REX+ 86 /r	XCHG r8, r/m8	RM	W, W						V	NE		xchgb	Exchange byte from r/m8 with r8 (byte register).
-87 /r	XCHG r/m16, r16	MR	W, W						V	V		xchgw	Exchange r16 with word from r/m16.
-87 /r	XCHG r16, r/m16	RM	W, W						V	V		xchgw	Exchange word from r/m16 with r16.
-87 /r	XCHG r/m32, r32	MR	W, W						V	V		xchgl	Exchange r32 with doubleword from r/m32.
-REX.W+ 87 /r	XCHG r/m64, r64	MR	W, W						V	NE		xchgq	Exchange r64 with quadword from r/m64.
-87 /r	XCHG r32, r/m32	RM	W, W						V	V		xchgl	Exchange doubleword from r/m32 with r32.
-REX.W+ 87 /r	XCHG r64, r/m64	RM	W, W						V	NE		xchgq	Exchange quadword from r/m64 with r64.
+90 +rw	XCHG AX, r16	O	RW, RW						V	V		xchgw	Exchange r16 with AX.
+90 +rw	XCHG r16, AX	O	RW, RW						V	V		xchgw	Exchange AX with r16.
+90 +rd	XCHG EAX, r32	O	RW, RW						V	V		xchgl	Exchange r32 with EAX.
+REX.W+ 90 +rd	XCHG RAX, r64	O	RW, RW						V	NE		xchgq	Exchange r64 with RAX.
+90 +rd	XCHG r32, EAX	O	RW, RW						V	V		xchgl	Exchange EAX with r32.
+REX.W+ 90 +rd	XCHG r64, RAX	O	RW, RW						V	NE		xchgq	Exchange RAX with r64.
+86 /r	XCHG r/m8, r8	MR	RW, RW						V	V		xchgb	Exchange r8 (byte register) with byte from r/m8.
+REX+ 86 /r	XCHG r/m8, r8	MR	RW, RW						V	NE		xchgb	Exchange r8 (byte register) with byte from r/m8.
+86 /r	XCHG r8, r/m8	RM	RW, RW						V	V		xchgb	Exchange byte from r/m8 with r8 (byte register).
+REX+ 86 /r	XCHG r8, r/m8	RM	RW, RW						V	NE		xchgb	Exchange byte from r/m8 with r8 (byte register).
+87 /r	XCHG r/m16, r16	MR	RW, RW						V	V		xchgw	Exchange r16 with word from r/m16.
+87 /r	XCHG r16, r/m16	RM	RW, RW						V	V		xchgw	Exchange word from r/m16 with r16.
+87 /r	XCHG r/m32, r32	MR	RW, RW						V	V		xchgl	Exchange r32 with doubleword from r/m32.
+REX.W+ 87 /r	XCHG r/m64, r64	MR	RW, RW						V	NE		xchgq	Exchange r64 with quadword from r/m64.
+87 /r	XCHG r32, r/m32	RM	RW, RW						V	V		xchgl	Exchange doubleword from r/m32 with r32.
+REX.W+ 87 /r	XCHG r64, r/m64	RM	RW, RW						V	NE		xchgq	Exchange quadword from r/m64 with r64.
 													
 0F 01 D0	XGETBV	NP		ECX	EAX EDX		YES	NO	V	V	XSAVE	xgetbv	Reads an XCR specified by ECX into EDX:EAX.
 													
