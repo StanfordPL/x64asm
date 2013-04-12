@@ -43,8 +43,8 @@ a premium.
 x64asm has been used as part of the following projects and publications:
 If you've found x64asm useful, please let me know and I will add a reference.
 
-Stochastic Superoptimization. Eric Schkufza, Rahul Sharma, Alex Aiken.
-To appear in ASPLOS 2013.
+Stochastic Superoptimization. Eric Schkufza, Rahul Sharma, Alex Aiken. 
+ASPLOS 2013.
 
 -------------------------------------------------------------------------------
 
