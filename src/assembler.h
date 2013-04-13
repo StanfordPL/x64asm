@@ -40,12 +40,29 @@ limitations under the License.
 
 namespace x64asm {
 
-/** An in-memory assembler. */
+/** An in-memory assembler. This class can be thought of as an expert
+	  user of the Function api. 
+*/
 class Assembler {
 	public:
-		/** Compiles a function into a freshly allocated function. */
+		/** Resize's a function's internal buffer to guarantee sufficient
+			  space for assembling an instruction.
+		*/
+		void reserve(Function& fxn, const Instruction& instr) {
+			fxn.reserve(fxn.size() + 15);
+		}
+
+		/** Resize's a function's internal buffer to guarantee sufficient
+			  space for assembling a code.
+		*/
+		void reserve(Function& fxn, const Code& code) {
+			fxn.reserve(fxn.size() + 15*code.size());
+		}
+
+		/** Convenience method; compiles a code into a newly allocated function. */
 		Function assemble(const Code& code) {
 			Function fxn;
+			reserve(fxn, code);
 			assemble(fxn, code);
 			return fxn;
 		}
@@ -259,12 +276,6 @@ class Assembler {
 		void mod_rm_sib(const Operand& rm, const Operand& r) {
 			auto mod = 0xc0 | ((r.val_ << 3) & 0x38) | (rm.val_ & 0x7);
 			fxn_->emit_byte(mod);
-		}
-
-		/** Doubles the size of the function's internal buffer if necessar. */
-		void reserve() {
-			if ( fxn_->capacity() - fxn_->size() < 15 ) 
-				fxn_->reserve(fxn_->capacity()*2);
 		}
 
 		/** Emits a vex prefix.  See Figure 2-9: Intel Manual Vol 2A 2-14

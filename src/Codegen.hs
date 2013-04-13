@@ -1206,7 +1206,7 @@ assm_vex_defn i = "  // VEX-Encoded Instruction: \n\n" ++
                   "  " ++ mod_rm_sib i ++
                   "  " ++ disp_imm i ++
                   "  " ++ vex_imm i ++
-                  "  reserve();\n\n"
+									"  \n"
 
 -- Other instruction definition
 assm_oth_defn :: Instr -> String
@@ -1220,7 +1220,7 @@ assm_oth_defn i = "  // Non-VEX-Encoded Instruction: \n\n" ++
                   "  " ++ non_vex_opcode i ++
                   "  " ++ mod_rm_sib i ++
                   "  " ++ disp_imm i ++
-                  "  reserve();\n\n"
+                  "  \n"
 
 -- Assembler src definition
 assm_src_defn :: Instr -> String

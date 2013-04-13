@@ -31,14 +31,12 @@ limitations under the License.
 
 namespace x64asm {
 
-/** An executable buffer. Supports zero to six argument calling conventions.
-    In general, a function can be called with arguments of any type which are
-    or can be implicitly converted to native types. Virtually all of the 
-		methods in this class are private. Direct access is granted only to the 
-		assembler class, which is (in theory) guaranteed to be sound. 
+/** An executable hex buffer. Supports zero to six argument calling 
+	  conventions. In general, a function can be called with arguments of any 
+		type which are or can be implicitly converted to native types. 
 */
 class Function {
-	// Needs access to the private API.
+	// Needs access to internal buffer.
 	friend class Assembler;
 	// Needs access to internal buffer address.
 	friend class Imm64;
@@ -119,60 +117,10 @@ class Function {
 
 		/** Returns true iff the internal buffer associated with this function was
 			  allocated correctly.  Does NOT guarantee that this function does 
-				something safe or sensible.  That's on you.
+				something safe or sensible.  That's up to you.
 		*/
 		bool good() const {
 			return (long) buffer_ != -1;
-		}
-
-		/** Writes this function to an ostream in human-readable hex. */
-		void write_hex(std::ostream& os) const {
-			for ( size_t i = 0, ie = size(); i < ie; ++i ) {
-				os << std::hex << std::noshowbase << std::setw(2) << std::setfill('0');
-				os << (int32_t)buffer_[i] << " ";
-				if ( ((i%8) == 7) && ((i+1) != ie) )
-					os << std::endl;
-			}
-		}
-
-	private:
-		/** The size of the internal buffer. */
-		size_t capacity_;
-		/** The internal buffer. */
-		unsigned char* buffer_;
-		/** The current write position in the internal buffer. */
-		unsigned char* head_;
-
-		/** Rounds an integer up to the nearest multiple of 1024. */
-		size_t round_up(size_t size) const {
-			if ( size == 0 )
-				return 1024;
-			else if ( size % 1024 == 0 )
-				return size;
-			else
-				return ((size/1024)+1) * 1024;
-		}
-
-		/** Allocates an executable buffer of at least size bytes. */
-		unsigned char* make_buffer(size_t size) const {
-			return (unsigned char*) mmap(0, size,
-					PROT_READ | PROT_WRITE | PROT_EXEC,
-					MAP_PRIVATE | MAP_ANONYMOUS,
-					-1, 0);
-		}
-
-		/** Performs a deep copy of a buffer. */
-		void copy_buffer(const Function& rhs) {
-			capacity_ = rhs.capacity_;
-			buffer_ = make_buffer(rhs.capacity_);
-			if ( good() )
-				memcpy(buffer_, rhs.buffer_, rhs.size());	
-		}
-
-		/** Deallocates a buffer. */
-		void free_buffer() {
-			if ( good() )
-				munmap(buffer_, capacity_);
 		}
 
 		/** Returns the number of bytes written to the internal buffer. */
@@ -200,11 +148,6 @@ class Function {
 			free_buffer();
 			capacity_ = capacity;
 			buffer_ = buf;
-		}
-
-		/** Returns the number of bytes remaining in the internal buffer. */
-		size_t remaining() const {
-			return capacity() - size();
 		}
 
 		/** Resets the write pointer to the beginning of the internal pointer. */
@@ -286,6 +229,61 @@ class Function {
 		void advance_quad() {
 			assert(remaining() >= 8);
 			head_ += 8;
+		}
+
+		/** Writes this function to an ostream in human-readable hex. */
+		void write_hex(std::ostream& os) const {
+			for ( size_t i = 0, ie = size(); i < ie; ++i ) {
+				os << std::hex << std::noshowbase << std::setw(2) << std::setfill('0');
+				os << (int32_t)buffer_[i] << " ";
+				if ( ((i%8) == 7) && ((i+1) != ie) )
+					os << std::endl;
+			}
+		}
+
+	private:
+		/** The size of the internal buffer. */
+		size_t capacity_;
+		/** The internal buffer. */
+		unsigned char* buffer_;
+		/** The current write position in the internal buffer. */
+		unsigned char* head_;
+
+		/** Returns the number of bytes remaining in the internal buffer. */
+		size_t remaining() const {
+			return capacity() - size();
+		}
+
+		/** Rounds an integer up to the nearest multiple of 1024. */
+		size_t round_up(size_t size) const {
+			if ( size == 0 )
+				return 1024;
+			else if ( size % 1024 == 0 )
+				return size;
+			else
+				return ((size/1024)+1) * 1024;
+		}
+
+		/** Allocates an executable buffer of at least size bytes. */
+		unsigned char* make_buffer(size_t size) const {
+			return (unsigned char*) mmap(0, size,
+					PROT_READ | PROT_WRITE | PROT_EXEC,
+					MAP_PRIVATE | MAP_ANONYMOUS,
+					-1, 0);
+		}
+
+		/** Performs a deep copy of a buffer. */
+		void copy_buffer(const Function& rhs) {
+			capacity_ = rhs.capacity_;
+			buffer_ = make_buffer(rhs.capacity_);
+			if ( good() )
+				memcpy(buffer_, rhs.buffer_, rhs.size());	
+		}
+
+		/** Deallocates a buffer. */
+		void free_buffer() {
+			if ( good() )
+				munmap(buffer_, capacity_);
 		}
 };
 
