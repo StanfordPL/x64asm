@@ -13,4 +13,4 @@ trace.o: trace.cc
 	$(CC) $(OPT) -I../../ -c trace.cc -o trace.o
 
 state.o: state.h state.cc
-	$(CC) $(OPT) -I../../	-c state.cc -o state.o
+	$(CC) $(OPT) -I../../ -c state.cc -o state.o
