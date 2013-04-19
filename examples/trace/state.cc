@@ -96,7 +96,7 @@ void write_128(ostream& os, __uint128_t x) {
 	const auto upper = x >> 64;
 	write_64(os, upper);
 	os << " ";
-	const auto lower = x & 0xffffffff;
+	const auto lower = x & 0xffffffffffffffff;
 	write_64(os, lower);
 }
 
