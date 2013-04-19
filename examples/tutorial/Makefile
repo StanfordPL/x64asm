@@ -1,24 +1,26 @@
-EX = abi constants context dataflow functions hello
+CC  = g++ -std=c++0x
+OPT = -Werror -O3
+EX  = abi constants context dataflow functions hello
 
 all: $(EX)
 
 abi: abi.cc
-	g++ -O3 -std=c++0x abi.cc -I../../ ../../lib/libx64asm.a -o abi
+	$(CC) $(OPT) abi.cc -I../../ ../../lib/libx64asm.a -o abi
 
 constants: constants.cc
-	g++ -O3 -std=c++0x constants.cc -I../../ ../../lib/libx64asm.a -o constants
+	$(CC) $(OPT) constants.cc -I../../ ../../lib/libx64asm.a -o constants
 
 context: context.cc
-	g++ -O3 -std=c++0x context.cc -I../../ ../../lib/libx64asm.a -o context
+	$(CC) $(OPT) context.cc -I../../ ../../lib/libx64asm.a -o context
 
 dataflow: dataflow.cc
-	g++ -O3 -std=c++0x dataflow.cc -I../../ ../../lib/libx64asm.a -o dataflow
+	$(CC) $(OPT) dataflow.cc -I../../ ../../lib/libx64asm.a -o dataflow
 
 functions: functions.cc
-	g++ -O3 -std=c++0x functions.cc -I../../ ../../lib/libx64asm.a -o functions
+	$(CC) $(OPT) functions.cc -I../../ ../../lib/libx64asm.a -o functions
 
 hello: hello.cc
-	g++ -O3 -std=c++0x hello.cc -I../../ ../../lib/libx64asm.a -o hello
+	$(CC) $(OPT) hello.cc -I../../ ../../lib/libx64asm.a -o hello
 
 clean:
 	rm -f $(EX)

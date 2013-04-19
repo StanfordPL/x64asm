@@ -1,5 +1,5 @@
-CC=g++ -std=c++0x
-OPT=-g
+CC  = g++ -std=c++0x
+OPT = -Werror -O3
 
 all: trace
 
