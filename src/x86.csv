@@ -1244,7 +1244,7 @@ REX.W+ 0F B6 /r 	MOVZX r64, r/m8	RM	W, R						V	NE		movzbq	Move byte to quadword
 0F B7 /r 	MOVZX r32, r/m16 	RM	W, R						V	V		movzwl	Move word to doubleword, zero-extension.
 REX.W+ 0F B7 /r 	MOVZX r64, r/m16 	RM	W, R						V	NE		movzwq	Move word to quadword, zero-extension.
 													
-66 0F 3A 42 /r ib 	MPSADBW xmm1, xmm2/m128, imm8	RMI	W, R, R						V	V	SSE4_1	mpsadbw	Sums absolute 8-bit integer difference of adjacent groups of 4 byte integers in xmm1 and xmm2/m128 and writes the results in xmm1. Starting offsets within xmm1 and xmm2/m128 are determined by imm8.
+66 0F 3A 42 /r ib 	MPSADBW xmm1, xmm2/m128, imm8	RMI	RW, R, R						V	V	SSE4_1	mpsadbw	Sums absolute 8-bit integer difference of adjacent groups of 4 byte integers in xmm1 and xmm2/m128 and writes the results in xmm1. Starting offsets within xmm1 and xmm2/m128 are determined by imm8.
 VEX.NDS.128.66.0F3A.WIG 42 /r ib	VMPSADBW xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R						V	V	AVX	vmpsadbw	Sums absolute 8-bit integer difference of adjacent groups of 4 byte integers in xmm2 and xmm3/m128 and writes the results in xmm1. Starting offsets within xmm2 and xmm3/m128 are determined by imm8.
 													
 F6 /4 	MUL r/m8 	M	R	AL	AX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	V		mulb	Unsigned multiply (AX = AL ∗ r/m8).
@@ -1253,18 +1253,18 @@ F7 /4 	MUL r/m16 	M	R	AX	AX DX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	V		mulw	Unsigne
 F7 /4 	MUL r/m32 	M	R	EAX	EAX EDX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	V		mull	Unsigned multiply (EDX:EAX = EAX ∗ r/m32).
 REX.W+ F7 /4 	MUL r/m64 	M	R	RAX	RAX RDX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	NE		mulq	Unsigned multiply (RDX:RAX = RAX ∗ r/m64.
 													
-66 0F 59 /r 	MULPD xmm1, xmm2/m128	RM	W, R						V	V	SSE2	mulpd	Multiply packed double-precision floating-point values in xmm2/m128 by xmm1.
+66 0F 59 /r 	MULPD xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	mulpd	Multiply packed double-precision floating-point values in xmm2/m128 by xmm1.
 VEX.NDS.128.66.0F.WIG 59 /r	VMULPD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vmulpd	Multiply packed double-precision floating-point values from xmm3/mem to xmm2 and stores result in xmm1.
 VEX.NDS.256.66.0F.WIG 59 /r	VMULPD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	vmulpd	Multiply packed double-precision floating-point values from ymm3/mem to ymm2 and stores result in ymm1.
 													
-0F 59 /r 	MULPS xmm1, xmm2/m128	RM	W, R						V	V	SSE	mulps	Multiply packed single-precision floating-point values in xmm2/mem by xmm1.
+0F 59 /r 	MULPS xmm1, xmm2/m128	RM	RW, R						V	V	SSE	mulps	Multiply packed single-precision floating-point values in xmm2/mem by xmm1.
 VEX.NDS.128.0F.WIG 59 /r	VMULPS xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vmulps	Multiply packed single-precision floating-point values from xmm3/mem to xmm2 and stores result in xmm1.
 VEX.NDS.256.0F.WIG 59 /r	VMULPS ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	vmulps	Multiply packed single-precision floating-point values from ymm3/mem to ymm2 and stores result in ymm1.
 													
-F2 0F 59 /r 	MULSD xmm1, xmm2/m64	RM	W, R						V	V	SSE2	mulsd	Multiply the low double-precision floating-point value in xmm2/mem64 by low double-precision floating-point value in xmm1.
+F2 0F 59 /r 	MULSD xmm1, xmm2/m64	RM	RW, R						V	V	SSE2	mulsd	Multiply the low double-precision floating-point value in xmm2/mem64 by low double-precision floating-point value in xmm1.
 VEX.NDS.LIG.F2.0F.WIG 59 /r	VMULSD xmm1,xmm2, xmm3/m64	RVM	Z, R, R						V	V	AVX	vmulsd	Multiply the low double-precision floating-point value in xmm3/mem64 by low double precision floating-point value in xmm2.
 													
-F3 0F 59 /r 	MULSS xmm1, xmm2/m32	RM	W, R						V	V	SSE	mulss	Multiply the low single-precision floating-point value in xmm2/mem by the low single-precision floating-point value in xmm1.
+F3 0F 59 /r 	MULSS xmm1, xmm2/m32	RM	RW, R						V	V	SSE	mulss	Multiply the low single-precision floating-point value in xmm2/mem by the low single-precision floating-point value in xmm1.
 VEX.NDS.LIG.F3.0F.WIG 59 /r	VMULSS xmm1,xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vmulss	Multiply the low single-precision floating-point value in xmm3/mem by the low single-precision floating-point value in xmm2.
 													
 0F 01 C9 	MWAIT 	NP		EAX ECX					V	V	MONITOR	mwait	A hint that allow the processor to stop instruction execution and enter an implementation-dependent optimized state until occurrence of a class of events.
@@ -1308,11 +1308,11 @@ REX+ 0A /r 	OR r8, r/m8	RM	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		orb	r8 O
 0B /r 	OR r32, r/m32 	RM	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orl	r32 OR r/m32.
 REX.W+ 0B /r 	OR r64, r/m64 	RM	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		orq	r64 OR r/m64.
 													
-66 0F 56 /r 	ORPD xmm1, xmm2/m128	RM	W, R						V	V	SSE2	orpd	Bitwise OR of xmm2/m128 and xmm1.
+66 0F 56 /r 	ORPD xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	orpd	Bitwise OR of xmm2/m128 and xmm1.
 VEX.NDS.128.66.0F.WIG 56 /r 	VORPD xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vorpd	Return the bitwise logical OR of packed double-precision floating-point values in xmm2 and xmm3/mem.
 VEX.NDS.256.66.0F.WIG 56 /r 	VORPD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	vorpd	Return the bitwise logical OR of packed double-precision floating-point values in ymm2 and ymm3/mem.
 													
-0F 56 /r 	ORPS xmm1, xmm2/m128	RM	W, R						V	V	SSE	orps	Bitwise OR of xmm1 and xmm2/m128.
+0F 56 /r 	ORPS xmm1, xmm2/m128	RM	RW, R						V	V	SSE	orps	Bitwise OR of xmm1 and xmm2/m128.
 VEX.NDS.128.0F.WIG 56 /r	VORPS xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vorps	Return the bitwise logical OR of packed single-precision floating-point values in xmm2 and xmm3/mem.
 VEX.NDS.256.0F.WIG 56 /r	VORPS ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	vorps	Return the bitwise logical OR of packed single-precision floating-point values in ymm2 and ymm3/mem.
 													
@@ -1644,7 +1644,7 @@ VEX.NDS.128.66.0F.WIG EB /r	VPOR xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	
 VEX.NDS.128.66.0F.WIG F6 /r	VPSADBW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsadbw	Computes the absolute differences of the packed unsigned byte integers from xmm3 /m128 and xmm2; the 8 low differences and 8 high differences are then summed separately to produce two unsigned word integer results.
 													
 0F 38 00 /r 	PSHUFB mm1, mm2/m64	RM	RW, R						V	V	SSE3	pshufb	Shuffle bytes in mm1 according to contents of mm2/m64.
-66 0F 38 00 /r	PSHUFB xmm1, xmm2/m128	RM	ZW, R						V	V	SSE3	pshufb	Shuffle bytes in xmm1 according to contents of xmm2/m128.
+66 0F 38 00 /r	PSHUFB xmm1, xmm2/m128	RM	RZ, R						V	V	SSE3	pshufb	Shuffle bytes in xmm1 according to contents of xmm2/m128.
 VEX.NDS.128.66.0F38.WIG 00 /r	VPSHUFB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpshufb	Shuffle bytes in xmm2 according to contents of xmm3/m128.
 													
 66 0F 70 /r ib 	PSHUFD xmm1, xmm2/m128, imm8	RMI	W, R, R						V	V	SSE2	pshufd	Shuffle the doublewords in xmm2/m128 based on the encoding in imm8 and store the result in xmm1.
