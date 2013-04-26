@@ -746,7 +746,7 @@ VEX.NDS.256.F2.0F.WIG 7C /r	VHADDPS ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	A
 													
 F4 	HLT 						NO	YES	V	V			Halt
 													
-66 0F 7D /r 	HSUBPD xmm1, xmm2/m128	RM	RW, W						V	V	SSE3	hsubpd	Horizontal subtract packed double-precision floating-point values from xmm2/m128 to xmm1.
+66 0F 7D /r 	HSUBPD xmm1, xmm2/m128	RM	RW, R						V	V	SSE3	hsubpd	Horizontal subtract packed double-precision floating-point values from xmm2/m128 to xmm1.
 VEX.NDS.128.66.0F.WIG 7D /r 	VHSUBPD xmm1, xmm2, xmm3/m128 	RVM	W, R, R						V	V	AVX	vhsubpd	Horizontal subtract packed double-precision floating-point values from xmm2 and xmm3/mem.
 VEX.NDS.256.66.0F.WIG 7D /r 	VHSUBPD ymm1, ymm2, ymm3/m256 	RVM	W, R, R						V	V	AVX	vhsubpd	Horizontal subtract packed double-precision floating-point values from ymm2 and ymm3/mem.
 													
@@ -1340,18 +1340,18 @@ VEX.128.66.0F38.WIG 1C /r	VPABSB xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vpabsb	Com
 VEX.128.66.0F38.WIG 1D /r	VPABSW xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vpabsw	Compute the absolute value of 16- bit integers in xmm2/m128 and store UNSIGNED result in xmm1.
 VEX.128.66.0F38.WIG 1E /r	VPABSD xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vpabsd	Compute the absolute value of 32- bit integers in xmm2/m128 and store UNSIGNED result in xmm1.
 													
-0F 63 /r 	PACKSSWB mm1, mm2/m64	RM	W, R						V	V	MMX	packsswb	Converts 4 packed signed word integers from mm1 and from mm2/m64 into 8 packed signed byte integers in mm1 using signed saturation.
-66 0F 63 /r	PACKSSWB xmm1, xmm2/m128	RM	W, R						V	V	SSE2	packsswb	Converts 8 packed signed word integers from xmm1 and from xxm2/m128 into 16 packed signed byte integers in xxm1 using signed saturation.
-0F 6B /r	PACKSSDW mm1, mm2/m64	RM	W, R						V	V	MMX	packssdw	Converts 2 packed signed doubleword integers from mm1 and from mm2/m64 into 4 packed signed word integers in mm1 using signed saturation.
-66 0F 6B /r	PACKSSDW xmm1, xmm2/m128	RM	W, R						V	V	SSE2	packssdw	Converts 4 packed signed doubleword integers from xmm1 and from xxm2/m128 into 8 packed signed word integers in xxm1 using signed saturation.
+0F 63 /r 	PACKSSWB mm1, mm2/m64	RM	RW, R						V	V	MMX	packsswb	Converts 4 packed signed word integers from mm1 and from mm2/m64 into 8 packed signed byte integers in mm1 using signed saturation.
+66 0F 63 /r	PACKSSWB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	packsswb	Converts 8 packed signed word integers from xmm1 and from xxm2/m128 into 16 packed signed byte integers in xxm1 using signed saturation.
+0F 6B /r	PACKSSDW mm1, mm2/m64	RM	RW, R						V	V	MMX	packssdw	Converts 2 packed signed doubleword integers from mm1 and from mm2/m64 into 4 packed signed word integers in mm1 using signed saturation.
+66 0F 6B /r	PACKSSDW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	packssdw	Converts 4 packed signed doubleword integers from xmm1 and from xxm2/m128 into 8 packed signed word integers in xxm1 using signed saturation.
 VEX.NDS.128.66.0F.WIG 63 /r	VPACKSSWB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpacksswb	Converts 8 packed signed word integers from xmm2 and from xmm3/m128 into 16 packed signed byte integers in xmm1 using signed saturation.
 VEX.NDS.128.66.0F.WIG 6B /r	VPACKSSDW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpackssdw	Converts 4 packed signed doubleword integers from xmm2 and from xmm3/m128 into 8 packed signed word integers in xmm1 using signed saturation.
 													
 66 0F 38 2B /r 	PACKUSDW xmm1, xmm2/m128 	RM	W, R						V	V	SSE4_1	packusdw	Convert 4 packed signed doubleword integers from xmm1 and 4 packed signed doubleword integers from xmm2/m128 into 8 packed unsigned word integers in xmm1 using unsigned saturation.
 VEX.NDS.128.66.0F38.WIG 2B /r 	PACKUSDW xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	packusdw	Convert 4 packed signed doubleword integers from xmm2 and 4 packed signed doubleword integers from xmm3/m128 into 8 packed unsigned word integers in xmm1 using unsigned saturation.
 													
-0F 67 /r 	PACKUSWB mm, mm/m64	RM	W, R						V	V	MMX	packuswb	Converts 4 signed word integers from mm and 4 signed word integers from mm/m64 into 8 unsigned byte integers in mm using unsigned saturation.
-66 0F 67 /r	PACKUSWB xmm1, xmm2/m128	RM	W, R						V	V	SSE2	packuswb	Converts 8 signed word integers from xmm1 and 8 signed word integers from xmm2/m128 into 16 unsigned byte integers in xmm1 using unsigned saturation.
+0F 67 /r 	PACKUSWB mm, mm/m64	RM	RW, R						V	V	MMX	packuswb	Converts 4 signed word integers from mm and 4 signed word integers from mm/m64 into 8 unsigned byte integers in mm using unsigned saturation.
+66 0F 67 /r	PACKUSWB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	packuswb	Converts 8 signed word integers from xmm1 and 8 signed word integers from xmm2/m128 into 16 unsigned byte integers in xmm1 using unsigned saturation.
 VEX.NDS.128.66.0F.WIG 67 /r	VPACKUSWB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpackuswb	Converts 8 signed word integers from xmm2 and 8 signed word integers from xmm3/m128 into 16 unsigned byte integers in xmm1 using unsigned saturation.
 													
 0F FC /r 	PADDB mm, mm/m64	RM	RW, R						V	V	MMX	paddb	Add packed byte integers from mm/m64 and mm.
