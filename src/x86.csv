@@ -2030,28 +2030,28 @@ REX.W+ D3 /5	SHR r/m64, CL	MC	RW, R	e.cf	e.of E.SF E.ZF E.PF	e.of e.cf E.AF			V	
 C1 /5 ib	SHR r/m32, imm8	MI	RW, R	e.cf	e.of E.SF E.ZF E.PF	e.of e.cf E.AF			V	V		shrl	Unsigned divide r/m32 by 2, imm8 times.
 REX.W+ C1 /5 ib	SHR r/m64, imm8	MI	RW, R	e.cf	e.of E.SF E.ZF E.PF	e.of e.cf E.AF			V	NE		shrq	Unsigned divide r/m32 by 2, imm8 times.
 													
-1C ib	SBB AL, imm8	I	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbb	Subtract with borrow imm8 from AL.
-1D iw	SBB AX, imm16	I	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw	Subtract with borrow imm16 from AX.
-1D id	SBB EAX, imm32	I	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl	Subtract with borrow imm32 from EAX.
-REX.W+ 1D id	SBB RAX, imm32	I	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq	Subtract with borrow sign-extended imm.32 to 64-bits from RAX.
-80 /3 ib	SBB r/m8, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbb	Subtract with borrow imm8 from r/m8.
-REX+ 80 /3 ib	SBB r/m8, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbb	Subtract with borrow imm8 from r/m8.
-81 /3 iw	SBB r/m16, imm16	MI	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw	Subtract with borrow imm16 from r/m16.
-81 /3 id	SBB r/m32, imm32	MI	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl	Subtract with borrow imm32 from r/m32.
-REX.W+ 81 /3 id	SBB r/m64, imm32	MI	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq	Subtract with borrow sign-extended imm32 to 64-bits from r/m64.
-83 /3 ib	SBB r/m16, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw	Subtract with borrow sign-extended imm8 from r/m16.
-83 /3 ib	SBB r/m32, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl	Subtract with borrow sign-extended imm8 from r/m32.
-REX.W+ 83 /3 ib	SBB r/m64, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq	Subtract with borrow sign-extended imm8 from r/m64.
-18 /r	SBB r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbb	Subtract with borrow r8 from r/m8.
-REX+ 18 /r	SBB r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbb	Subtract with borrow r8 from r/m8.
-19 /r	SBB r/m16, r16	MR	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw	Subtract with borrow r16 from r/m16.
-19 /r	SBB r/m32, r32	MR	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl	Subtract with borrow r32 from r/m32.
-REX.W+ 19 /r	SBB r/m64, r64	MR	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq	Subtract with borrow r64 from r/m64.
-1A /r	SBB r8, r/m8	RM	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbb	Subtract with borrow r/m8 from r8.
-REX+ 1A /r	SBB r8, r/m8	RM	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbb	Subtract with borrow r/m8 from r8.
-1B /r	SBB r16, r/m16	RM	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw	Subtract with borrow r/m16 from r16.
-1B /r	SBB r32, r/m32	RM	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl	Subtract with borrow r/m32 from r32.
-REX.W+ 1B /r	SBB r64, r/m64	RM	RW, R		E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq	Subtract with borrow r/m64 from r64.
+1C ib	SBB AL, imm8	I	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbb	Subtract with borrow imm8 from AL.
+1D iw	SBB AX, imm16	I	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw	Subtract with borrow imm16 from AX.
+1D id	SBB EAX, imm32	I	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl	Subtract with borrow imm32 from EAX.
+REX.W+ 1D id	SBB RAX, imm32	I	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq	Subtract with borrow sign-extended imm.32 to 64-bits from RAX.
+80 /3 ib	SBB r/m8, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbb	Subtract with borrow imm8 from r/m8.
+REX+ 80 /3 ib	SBB r/m8, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbb	Subtract with borrow imm8 from r/m8.
+81 /3 iw	SBB r/m16, imm16	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw	Subtract with borrow imm16 from r/m16.
+81 /3 id	SBB r/m32, imm32	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl	Subtract with borrow imm32 from r/m32.
+REX.W+ 81 /3 id	SBB r/m64, imm32	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq	Subtract with borrow sign-extended imm32 to 64-bits from r/m64.
+83 /3 ib	SBB r/m16, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw	Subtract with borrow sign-extended imm8 from r/m16.
+83 /3 ib	SBB r/m32, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl	Subtract with borrow sign-extended imm8 from r/m32.
+REX.W+ 83 /3 ib	SBB r/m64, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq	Subtract with borrow sign-extended imm8 from r/m64.
+18 /r	SBB r/m8, r8	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbb	Subtract with borrow r8 from r/m8.
+REX+ 18 /r	SBB r/m8, r8	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbb	Subtract with borrow r8 from r/m8.
+19 /r	SBB r/m16, r16	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw	Subtract with borrow r16 from r/m16.
+19 /r	SBB r/m32, r32	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl	Subtract with borrow r32 from r/m32.
+REX.W+ 19 /r	SBB r/m64, r64	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq	Subtract with borrow r64 from r/m64.
+1A /r	SBB r8, r/m8	RM	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbb	Subtract with borrow r/m8 from r8.
+REX+ 1A /r	SBB r8, r/m8	RM	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbb	Subtract with borrow r/m8 from r8.
+1B /r	SBB r16, r/m16	RM	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw	Subtract with borrow r/m16 from r16.
+1B /r	SBB r32, r/m32	RM	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl	Subtract with borrow r/m32 from r32.
+REX.W+ 1B /r	SBB r64, r/m64	RM	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq	Subtract with borrow r/m64 from r64.
 													
 AE	SCAS m8	NP	I	E.DF RDI AL					V	V		scas	Compare AL with byte at ES:(E)DI or RDI, then set status flags.
 AF	SCAS m16	NP	I	E.DF RDI AX					V	V		scas	Compare AX with word at ES:(E)DI or RDI, then set status flags.
