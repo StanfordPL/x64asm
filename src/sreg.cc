@@ -23,21 +23,34 @@ using namespace std;
 namespace x64asm {
 
 void Sreg::write_att(ostream& os) const {
-	os << "%";
-	write_intel(os);
+  os << "%";
+  write_intel(os);
 }
 
 void Sreg::write_intel(ostream& os) const {
-	switch ( val_ ) {
-		case 0: os << "es"; break;
-		case 1: os << "cs"; break;
-		case 2: os << "ss"; break;
-		case 3: os << "ds"; break;
-		case 4: os << "fs"; break;
-		case 5: os << "gs"; break;
+  switch (val_) {
+    case 0:
+      os << "es";
+      break;
+    case 1:
+      os << "cs";
+      break;
+    case 2:
+      os << "ss";
+      break;
+    case 3:
+      os << "ds";
+      break;
+    case 4:
+      os << "fs";
+      break;
+    case 5:
+      os << "gs";
+      break;
 
-		default: assert(false);
-	}
+    default:
+      assert(false);
+  }
 }
 
 } // namespace x64asm

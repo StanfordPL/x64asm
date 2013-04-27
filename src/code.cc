@@ -21,26 +21,29 @@ using namespace std;
 namespace x64asm {
 
 bool Code::check() const {
-	for ( const auto& i : *this )
-		if ( !i.check() )
-			return false;
-	return true;
+  for (const auto & i : *this)
+    if (!i.check()) {
+      return false;
+    }
+  return true;
 }
 
 void Code::write_att(ostream& os) const {
-	for ( size_t i = 0, ie = size(); i < ie; ++i ) {
-		(*this)[i].write_att(os);
-		if ( i+1 != ie )
-			os << endl;	
-	}
+  for (size_t i = 0, ie = size(); i < ie; ++i) {
+    (*this)[i].write_att(os);
+    if (i + 1 != ie) {
+      os << endl;
+    }
+  }
 }
 
 void Code::write_intel(ostream& os) const {
-	for ( size_t i = 0, ie = size(); i < ie; ++i ) {
-		(*this)[i].write_intel(os);
-		if ( i+1 != ie )
-			os << endl;	
-	}
+  for (size_t i = 0, ie = size(); i < ie; ++i) {
+    (*this)[i].write_intel(os);
+    if (i + 1 != ie) {
+      os << endl;
+    }
+  }
 }
 
 } // namespace x64asm

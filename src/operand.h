@@ -25,37 +25,37 @@ namespace x64asm {
 class RegSet;
 
 /** Base operand type. This class is provisioned with enough storage space
-    for an operand of any type. This prevents object slicing from losing 
+    for an operand of any type. This prevents object slicing from losing
     information if an object is cast back and form to/from an Operand.
-		The only operand type which requires more than 64-bits to store its 
+		The only operand type which requires more than 64-bits to store its
 		internal representation is the Moffs type.
  */
 class Operand {
-	// Needs access to default constructor.
-	friend class std::array<Operand, 4>;
-	// Needs access to underlying value.
-	friend class Assembler;
-	// Needs access to non-default constructor.
-	friend class Instruction;
-	// Needs access to non-default constructor.
-	friend class M;
-	// Needs access to non-default constructor.
-	friend class Moffs;
-	// Needs access to underlying value.
-	friend class RegSet;
+    // Needs access to default constructor.
+    friend class std::array<Operand, 4>;
+    // Needs access to underlying value.
+    friend class Assembler;
+    // Needs access to non-default constructor.
+    friend class Instruction;
+    // Needs access to non-default constructor.
+    friend class M;
+    // Needs access to non-default constructor.
+    friend class Moffs;
+    // Needs access to underlying value.
+    friend class RegSet;
 
-	protected:
-		/** Creates an operand with no underlying value. */
-		constexpr Operand() : val_{0}, val2_{0} { }	
-		/** Creates an operand with one underlying value. */
-		constexpr Operand(uint64_t val) : val_{val}, val2_{0} { }	
-		/** Creates an operand with two underlying values. */
-		constexpr Operand(uint64_t val, uint64_t val2) : val_{val}, val2_{val2} { }
+  protected:
+    /** Creates an operand with no underlying value. */
+    constexpr Operand() : val_ {0}, val2_ {0} { }
+    /** Creates an operand with one underlying value. */
+    constexpr Operand(uint64_t val) : val_ {val}, val2_ {0} { }
+    /** Creates an operand with two underlying values. */
+    constexpr Operand(uint64_t val, uint64_t val2) : val_ {val}, val2_ {val2} { }
 
-		/** Underlying value. */
-		uint64_t val_;
-		/** Extended storage space for underlying value. */
-		uint64_t val2_;
+    /** Underlying value. */
+    uint64_t val_;
+    /** Extended storage space for underlying value. */
+    uint64_t val2_;
 };
 
 } // namespace x64asm

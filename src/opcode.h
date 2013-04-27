@@ -21,10 +21,10 @@ namespace x64asm {
 
 /** An instruction mnemonic. */
 enum Opcode : int32_t {
-	// Internal mnemonics
-	LABEL_DEFN = 0
-	// Auto-generated mnemonics
-	#include "src/opcode.enum"
+  // Internal mnemonics
+  LABEL_DEFN = 0
+               // Auto-generated mnemonics
+#include "src/opcode.enum"
 };
 
 } // namespace x64asm

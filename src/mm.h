@@ -25,38 +25,38 @@ namespace x64asm {
 
 /** An MMX register. The 64-bit MMX registers are: MM0 through MM7. */
 class Mm : public Operand {
-	// Needs access to constructor.
-	friend class Constants;
+    // Needs access to constructor.
+    friend class Constants;
 
-	public:
-		/** Returns true if this is a valid mmx register. */
-		constexpr bool check() {
-			return val_ < 8;
-		}
+  public:
+    /** Returns true if this is a valid mmx register. */
+    constexpr bool check() {
+      return val_ < 8;
+    }
 
-		/** Comparison based on underlying value. */
-		constexpr bool operator<(const Mm& rhs) {
-			return val_ < rhs.val_;
-		}
+    /** Comparison based on underlying value. */
+    constexpr bool operator<(const Mm& rhs) {
+      return val_ < rhs.val_;
+    }
 
-		/** Comparison based on underlying value. */
-		constexpr bool operator==(const Mm& rhs) {
-			return val_ == rhs.val_;
-		}
+    /** Comparison based on underlying value. */
+    constexpr bool operator==(const Mm& rhs) {
+      return val_ == rhs.val_;
+    }
 
-		/** Conversion based on underlying value. */
-		constexpr operator uint64_t() {
-			return val_;
-		}
+    /** Conversion based on underlying value. */
+    constexpr operator uint64_t() {
+      return val_;
+    }
 
-		/** Writes this mmx register to an ostream using at&t syntax. */
-		void write_att(std::ostream& os) const;
-		/** Writes this mmx register to an ostream using intel syntax. */
-		void write_intel(std::ostream& os) const;
+    /** Writes this mmx register to an ostream using at&t syntax. */
+    void write_att(std::ostream& os) const;
+    /** Writes this mmx register to an ostream using intel syntax. */
+    void write_intel(std::ostream& os) const;
 
-	private:
-		/** Direct access to this contructor is disallowed. */
-		constexpr Mm(uint64_t val) : Operand{val} { }
+  private:
+    /** Direct access to this contructor is disallowed. */
+    constexpr Mm(uint64_t val) : Operand {val} { }
 };
 
 } // namespace x64asm

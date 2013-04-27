@@ -41,8 +41,8 @@ namespace x64asm {
 
 /** I/O syntax for iostreams. */
 enum class Syntax : uint32_t {
-	ATT = 0,
-	INTEL
+  ATT = 0,
+  INTEL
 };
 
 } // namespace x64asm

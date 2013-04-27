@@ -28,71 +28,71 @@ namespace x64asm {
  	  specification.
 */
 class Modifier : public Operand {
-	public:
-		/** Returns true if this modifier is well-formed. */
-		constexpr bool check() {
-			return val_ == 0;
-		}
+  public:
+    /** Returns true if this modifier is well-formed. */
+    constexpr bool check() {
+      return val_ == 0;
+    }
 
-	protected:
-		/** Direct access to this constructor is disallowed. */
-		constexpr Modifier(uint64_t val) 
-				: Operand{val} { 
-		}
+  protected:
+    /** Direct access to this constructor is disallowed. */
+    constexpr Modifier(uint64_t val)
+      : Operand {val} {
+    }
 };
 
 /** The 32-bit memory address override prefix: 0x66. */
 class Pref66 : public Modifier {
-	// Needs access to constructor.
-	friend class Constants;
+    // Needs access to constructor.
+    friend class Constants;
 
-	public:
-		/** Writes this modifier to an ostream using (something like) at&t syntax. */
-		void write_att(std::ostream& os) const;
-		/** Writes this modifier to an ostream using (something like) intel syntax. */
-		void write_intel(std::ostream& os) const;
+  public:
+    /** Writes this modifier to an ostream using (something like) at&t syntax. */
+    void write_att(std::ostream& os) const;
+    /** Writes this modifier to an ostream using (something like) intel syntax. */
+    void write_intel(std::ostream& os) const;
 
-	private:
-		/** Direct access to this constructor is disallowed. */
-		constexpr Pref66() 
-				: Modifier{0} { 
-		}
+  private:
+    /** Direct access to this constructor is disallowed. */
+    constexpr Pref66()
+      : Modifier {0} {
+    }
 };
 
 /** The REX.w prefix: 0x48. */
 class PrefRexW : public Modifier {
-	// Needs access to constructor.
-	friend class Constants;
+    // Needs access to constructor.
+    friend class Constants;
 
-	public:
-		/** Writes this modifier to an ostream using (something like) at&t syntax. */
-		void write_att(std::ostream& os) const;
-		/** Writes this modifier to an ostream using (something like) intel syntax. */
-		void write_intel(std::ostream& os) const;
+  public:
+    /** Writes this modifier to an ostream using (something like) at&t syntax. */
+    void write_att(std::ostream& os) const;
+    /** Writes this modifier to an ostream using (something like) intel syntax. */
+    void write_intel(std::ostream& os) const;
 
-	private:
-		/** Direct access to this constructor is disallowed. */
-		constexpr PrefRexW() 
-				: Modifier{0} { 
-		}
+  private:
+    /** Direct access to this constructor is disallowed. */
+    constexpr PrefRexW()
+      : Modifier {0} {
+    }
 };
 
 /** Far instruction variant. */
 class Far : public Modifier {
-	// Needs access to constructor.
-	friend class Constants;
+    // Needs access to constructor.
+    friend class Constants;
 
-	public:
-		/** Writes this modifier to an ostream using (something like) at&t syntax. */
-		void write_att(std::ostream& os) const;
-		/** Writes this modifier to an ostream using (something like) intel syntax. */
-		void write_intel(std::ostream& os) const;
+  public:
+    /** Writes this modifier to an ostream using (something like) at&t syntax. */
+    void write_att(std::ostream& os) const;
+    /** Writes this modifier to an ostream using (something like) intel syntax. */
+    void write_intel(std::ostream& os) const;
 
-	private:
-		/** Direct access to this constructor is disallowed. */
-		constexpr Far() 
-				: Modifier{0} { 
-		}
+  private:
+    /** Direct access to this constructor is disallowed. */
+    constexpr Far()
+      : Modifier {0} {
+    }
 };
 
 } // namespace x64asm

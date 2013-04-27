@@ -29,39 +29,39 @@ namespace x64asm {
 	  class supports all of the behvaior of an STL sequence container.
 */
 class Code : public std::vector<Instruction> {
-	public:
-		/** Creates an empty code sequence. */
-		Code()
-				: std::vector<Instruction>{} { 
-		}
+  public:
+    /** Creates an empty code sequence. */
+    Code()
+      : std::vector<Instruction> {} {
+    }
 
-		/** Creates a code sequence using initializer list syntax. */
-		Code(const std::initializer_list<Instruction>& is) 
-				: std::vector<Instruction>{is} { 
-		}
+    /** Creates a code sequence using initializer list syntax. */
+    Code(const std::initializer_list<Instruction>& is)
+      : std::vector<Instruction> {is} {
+    }
 
-		/** Creates a code sequence using the instruction in an stl container. */
-		template <typename InItr>
-		Code(InItr begin, InItr end) 
-				: std::vector<Instruction>{begin, end} { 
-		}
+    /** Creates a code sequence using the instruction in an stl container. */
+    template <typename InItr>
+    Code(InItr begin, InItr end)
+      : std::vector<Instruction> {begin, end} {
+    }
 
-		/** Returns true iff each of the instruction in this sequence are
-			  well-formed. 
-		*/
-		bool check() const;
+    /** Returns true iff each of the instruction in this sequence are
+    	  well-formed.
+    */
+    bool check() const;
 
-		/** Reads a code sequence in at&t syntax from an istream. */
-		void read_att(std::istream& is);
-		/** Reads a code sequence in intel syntax from an istream. 
-			  @todo This method is currently incomplete.
-		*/
-		void read_intel(std::istream& is);
+    /** Reads a code sequence in at&t syntax from an istream. */
+    void read_att(std::istream& is);
+    /** Reads a code sequence in intel syntax from an istream.
+    	  @todo This method is currently incomplete.
+    */
+    void read_intel(std::istream& is);
 
-		/** Writes a code sequence to an ostream using at&t syntax. */
-		void write_att(std::ostream& os) const;
-		/** Writes a code sequence to an ostream using intel syntax. */
-		void write_intel(std::ostream& os) const;
+    /** Writes a code sequence to an ostream using at&t syntax. */
+    void write_att(std::ostream& os) const;
+    /** Writes a code sequence to an ostream using intel syntax. */
+    void write_intel(std::ostream& os) const;
 };
 
 } // namespace x64asm

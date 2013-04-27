@@ -29,51 +29,51 @@ namespace x64asm {
 	  is provided.
 */
 class Label : public Operand {
-	public:
-		/** Creates a new, globally unique label. */
-		Label() {
-			val_ = next_val_++;
-		}
+  public:
+    /** Creates a new, globally unique label. */
+    Label() {
+      val_ = next_val_++;
+    }
 
-		/** Creates a named label. Repeated calls with identical arguments are
-			  guaranteed to return the same Label.
-		*/
-		Label(const std::string& s) {
-			val_ = labels_.find(s) == labels_.end() ?
-			  labels_.insert(std::make_pair(s, next_val_++)).first->second :
-			  labels_.find(s)->second;
-		}
+    /** Creates a named label. Repeated calls with identical arguments are
+    	  guaranteed to return the same Label.
+    */
+    Label(const std::string& s) {
+      val_ = labels_.find(s) == labels_.end() ?
+             labels_.insert(std::make_pair(s, next_val_++)).first->second :
+             labels_.find(s)->second;
+    }
 
-		/** Returns true if this label is well-formed. */
-		bool check() const {
-			return true;
-		}
+    /** Returns true if this label is well-formed. */
+    bool check() const {
+      return true;
+    }
 
-		/** Comparison based on underlying value. */
-		bool operator<(const Label& rhs) const {
-			return val_ < rhs.val_;
-		}
+    /** Comparison based on underlying value. */
+    bool operator<(const Label& rhs) const {
+      return val_ < rhs.val_;
+    }
 
-		/** Comparison based on underlying value. */
-		bool operator==(const Label& rhs) const {
-			return val_ == val_;
-		}
+    /** Comparison based on underlying value. */
+    bool operator==(const Label& rhs) const {
+      return val_ == val_;
+    }
 
-		/** Conversion based on underlying value. */
-		operator uint64_t() const {
-			return val_;
-		}
+    /** Conversion based on underlying value. */
+    operator uint64_t() const {
+      return val_;
+    }
 
-		/** Writes this label to an ostream using at&t syntax. */
-		void write_att(std::ostream& os) const;
-		/** Writes this label to an ostream using intel syntax. */
-		void write_intel(std::ostream& os) const;
+    /** Writes this label to an ostream using at&t syntax. */
+    void write_att(std::ostream& os) const;
+    /** Writes this label to an ostream using intel syntax. */
+    void write_intel(std::ostream& os) const;
 
-	private:
-		/** Global map of named labels. */
-		static std::map<std::string, uint64_t> labels_;	
-		/** The next previously unused label value. */
-		static uint64_t next_val_;
+  private:
+    /** Global map of named labels. */
+    static std::map<std::string, uint64_t> labels_;
+    /** The next previously unused label value. */
+    static uint64_t next_val_;
 };
 
 } // namespace x64asm

@@ -25,25 +25,25 @@ namespace x64asm {
 
 /** A taken/not-taken hint for conditional jumps. */
 class Hint : public Operand {
-	// Needs access to internal value for emitting prefixes.
-	friend class Assembler;
-	// Needs access to constructor.
-	friend class Constants;
+    // Needs access to internal value for emitting prefixes.
+    friend class Assembler;
+    // Needs access to constructor.
+    friend class Constants;
 
-	public:
-		/** Checks that this hint is well-formed. */
-		constexpr bool check() {
-			return val_ < 2;
-		}
+  public:
+    /** Checks that this hint is well-formed. */
+    constexpr bool check() {
+      return val_ < 2;
+    }
 
-		/** Writes this hint to an ostream using (something like) at&t syntax. */
-		void write_att(std::ostream& os) const;
-		/** Writes this hint to an ostream using (something like) intel syntax. */
-		void write_intel(std::ostream& os) const;
+    /** Writes this hint to an ostream using (something like) at&t syntax. */
+    void write_att(std::ostream& os) const;
+    /** Writes this hint to an ostream using (something like) intel syntax. */
+    void write_intel(std::ostream& os) const;
 
-	private:
-		/** Direct access to this constructor is disallowed. */
-		constexpr Hint(uint64_t val) : Operand{val} { }
+  private:
+    /** Direct access to this constructor is disallowed. */
+    constexpr Hint(uint64_t val) : Operand {val} { }
 };
 
 } // namespace x64asm

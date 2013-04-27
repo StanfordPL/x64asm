@@ -23,44 +23,44 @@ limitations under the License.
 
 namespace x64asm {
 
-/** A YMM register. The 256-bit YMM registers are: YMM0 through YMM7; YMM8 
+/** A YMM register. The 256-bit YMM registers are: YMM0 through YMM7; YMM8
 	  through YMM15 are available in 64-bit mode.
 */
 class Ymm : public Operand {
-	// Needs access to constructor.
-	friend class Constants;
+    // Needs access to constructor.
+    friend class Constants;
 
-	public:
-		/** Returns true if this ymm register is well-formed. */
-		constexpr bool check() {
-			return val_ < 16;
-		}
+  public:
+    /** Returns true if this ymm register is well-formed. */
+    constexpr bool check() {
+      return val_ < 16;
+    }
 
-		/** Comparison based on underlying value. */
-		constexpr bool operator<(const Ymm& rhs) {
-			return val_ < rhs.val_;
-		}
+    /** Comparison based on underlying value. */
+    constexpr bool operator<(const Ymm& rhs) {
+      return val_ < rhs.val_;
+    }
 
-		/** Comparison based on underlying value. */
-		constexpr bool operator==(const Ymm& rhs) {
-			return val_ == rhs.val_;
-		}
+    /** Comparison based on underlying value. */
+    constexpr bool operator==(const Ymm& rhs) {
+      return val_ == rhs.val_;
+    }
 
-		/** Conversion based on underlying value. */
-		constexpr operator uint64_t() {
-			return val_;
-		}
+    /** Conversion based on underlying value. */
+    constexpr operator uint64_t() {
+      return val_;
+    }
 
-		/** Writes this ymm register to an ostream using at&t syntax. */
-		void write_att(std::ostream& os) const;
-		/** Writes this ymm register to an ostream using intel syntax. */
-		void write_intel(std::ostream& os) const;
+    /** Writes this ymm register to an ostream using at&t syntax. */
+    void write_att(std::ostream& os) const;
+    /** Writes this ymm register to an ostream using intel syntax. */
+    void write_intel(std::ostream& os) const;
 
-	private:
-		/** Direct access to this constructor is disallosed. */
-		constexpr Ymm(uint64_t val) 
-				: Operand{val} { 
-		} 
+  private:
+    /** Direct access to this constructor is disallosed. */
+    constexpr Ymm(uint64_t val)
+      : Operand {val} {
+    }
 };
 
 } // namespace x64asm

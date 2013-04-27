@@ -21,19 +21,19 @@ using namespace std;
 namespace x64asm {
 
 void Moffs::write_att(ostream& os) const {
-	if ( contains_seg() ) {
-		get_seg().write_att(os);
-		os << ":";
-	}
-	get_offset().write_intel(os);
+  if (contains_seg()) {
+    get_seg().write_att(os);
+    os << ":";
+  }
+  get_offset().write_intel(os);
 }
 
 void Moffs::write_intel(ostream& os) const {
-	if ( contains_seg() ) {
-		get_seg().write_intel(os);
-		os << ":";
-	}
-	get_offset().write_intel(os);
+  if (contains_seg()) {
+    get_seg().write_intel(os);
+    os << ":";
+  }
+  get_offset().write_intel(os);
 }
 
 } // namespace x64asm

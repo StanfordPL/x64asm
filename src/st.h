@@ -23,62 +23,62 @@ limitations under the License.
 
 namespace x64asm {
 
-/** The ith element from the top of the FPU register stack 
-	  (i = 0 through 7). 
+/** The ith element from the top of the FPU register stack
+	  (i = 0 through 7).
 */
 class St : public Operand {
-	// Needs access to constructor.
-	friend class Constants;
+    // Needs access to constructor.
+    friend class Constants;
 
-	public:
-		/** Checks whether this floating point stack register is well-formed. */
-		constexpr bool check() {
-			return val_ < 8;
-		}
+  public:
+    /** Checks whether this floating point stack register is well-formed. */
+    constexpr bool check() {
+      return val_ < 8;
+    }
 
-		/** Comparison based on underlying value. */
-		constexpr bool operator<(const St& rhs) {
-			return val_ < rhs.val_;
-		}
+    /** Comparison based on underlying value. */
+    constexpr bool operator<(const St& rhs) {
+      return val_ < rhs.val_;
+    }
 
-		/** Comparison based on underlying value. */
-		constexpr bool operator==(const St& rhs) {
-			return val_ == rhs.val_;
-		}
+    /** Comparison based on underlying value. */
+    constexpr bool operator==(const St& rhs) {
+      return val_ == rhs.val_;
+    }
 
-		/** Conversion based on underlying value. */
-		constexpr operator uint64_t() {
-			return val_;
-		}
+    /** Conversion based on underlying value. */
+    constexpr operator uint64_t() {
+      return val_;
+    }
 
-		/** Writes this stack register to an ostream using at&t syntax. */
-		void write_att(std::ostream& os) const;
-		/** Writes this stack register to an ostream using intel syntax. */
-		void write_intel(std::ostream& os) const;
+    /** Writes this stack register to an ostream using at&t syntax. */
+    void write_att(std::ostream& os) const;
+    /** Writes this stack register to an ostream using intel syntax. */
+    void write_intel(std::ostream& os) const;
 
-	protected:
-		/** Direct access to this constructor is disallowed. */
-		constexpr St(uint64_t val) 
-				: Operand{val} { 
-		} 
+  protected:
+    /** Direct access to this constructor is disallowed. */
+    constexpr St(uint64_t val)
+      : Operand {val} {
+    }
 };
 
 /** The top element of the FPU register stack. */
 class St0 : public St {
-	// Needs access to constructor.
-	friend class Constants;
+    // Needs access to constructor.
+    friend class Constants;
 
-	public:
-		/** Returns true if this stack register is %st(0). */
-		constexpr bool check() {
-			return val_ == 0;
-		}
+  public:
+    /** Returns true if this stack register is %st(0). */
+    constexpr bool check() {
+      return val_ == 0;
+    }
 
-	private:
-		/** Direct access to this constructor is disallowed. */
-		constexpr St0() 
-				: St{0} { 
-		}
+  private:
+    /** Direct access to this constructor is disallowed. */
+    constexpr St0()
+      : St {0} {
+    }
 };
 
 } // namespace x64asm

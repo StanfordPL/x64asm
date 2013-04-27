@@ -21,11 +21,11 @@ using namespace std;
 namespace x64asm {
 
 void Label::write_att(ostream& os) const {
-	write_intel(os);
+  write_intel(os);
 }
 
 void Label::write_intel(ostream& os) const {
-	os << ".L_X64ASM_" << dec << val_;
+  os << ".L_X64ASM_" << dec << val_;
 }
 
 map<string, uint64_t> Label::labels_;

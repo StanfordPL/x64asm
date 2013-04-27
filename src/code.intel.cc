@@ -25,18 +25,18 @@ namespace {
 #include "src/intel.tab.c"
 #include "src/lex.intel.c"
 
-} // namespace 
+} // namespace
 
 namespace x64asm {
 
 void Code::read_intel(istream& is) {
-	stringstream ss;
-	ss << is.rdbuf();
+  stringstream ss;
+  ss << is.rdbuf();
 
-	auto buffer = intel_scan_string(ss.str().c_str());
-	intel_switch_to_buffer(buffer);
-	intelparse(is, *this);
-	intel_delete_buffer(buffer);
+  auto buffer = intel_scan_string(ss.str().c_str());
+  intel_switch_to_buffer(buffer);
+  intelparse(is, *this);
+  intel_delete_buffer(buffer);
 }
 
 } // namespace x64asm

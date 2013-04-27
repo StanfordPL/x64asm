@@ -21,12 +21,12 @@ using namespace std;
 namespace x64asm {
 
 void Imm::write_att(ostream& os) const {
-	os << "$";
-	write_intel(os);
+  os << "$";
+  write_intel(os);
 }
 
 void Imm::write_intel(ostream& os) const {
-	os << "0x" << noshowbase << hex << val_;
+  os << "0x" << noshowbase << hex << val_;
 }
 
 } // namespace x64asm

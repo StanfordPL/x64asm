@@ -23,62 +23,62 @@ limitations under the License.
 
 namespace x64asm {
 
-/** An XMM register. The 128-bit XMM registers are: XMM0 through XMM7; XMM8 
+/** An XMM register. The 128-bit XMM registers are: XMM0 through XMM7; XMM8
 	  through XMM15 are available using REX.R in 64-bit mode.
 */
 class Xmm : public Operand {
-	// Needs access to constructor.
-	friend class Constants;
+    // Needs access to constructor.
+    friend class Constants;
 
-	public:
-		/** Returns true if this xmm register is well-formed. */
-		constexpr bool check() {
-			return val_ < 16;
-		}
+  public:
+    /** Returns true if this xmm register is well-formed. */
+    constexpr bool check() {
+      return val_ < 16;
+    }
 
-		/** Comparison based on underlying value. */
-		constexpr bool operator<(const Xmm& rhs) {
-			return val_ < rhs.val_;
-		}
+    /** Comparison based on underlying value. */
+    constexpr bool operator<(const Xmm& rhs) {
+      return val_ < rhs.val_;
+    }
 
-		/** Comparison based on underlying value. */
-		constexpr bool operator==(const Xmm& rhs) {
-			return val_ == rhs.val_;
-		}
+    /** Comparison based on underlying value. */
+    constexpr bool operator==(const Xmm& rhs) {
+      return val_ == rhs.val_;
+    }
 
-		/** Conversion based on underlying value. */
-		constexpr operator uint64_t() {
-			return val_;
-		}
+    /** Conversion based on underlying value. */
+    constexpr operator uint64_t() {
+      return val_;
+    }
 
-		/** Writes this xmm register to an ostream using at&t syntax. */
-		void write_att(std::ostream& os) const;
-		/** Writes this xmm register to an ostream using intel syntax. */
-		void write_intel(std::ostream& os) const;
+    /** Writes this xmm register to an ostream using at&t syntax. */
+    void write_att(std::ostream& os) const;
+    /** Writes this xmm register to an ostream using intel syntax. */
+    void write_intel(std::ostream& os) const;
 
-	protected:
-		/** Direct access to this constructor is disallowed. */
-		constexpr Xmm(uint64_t val) 
-				: Operand{val} { 
-		} 
+  protected:
+    /** Direct access to this constructor is disallowed. */
+    constexpr Xmm(uint64_t val)
+      : Operand {val} {
+    }
 };
 
 /** The XMM register XMM0. */
 class Xmm0 : public Xmm {
-	// Needs access to constructor.
-	friend class Constants;
+    // Needs access to constructor.
+    friend class Constants;
 
-	public:
-		/** Returns true if this xmm register is %xmm0. */
-		constexpr bool check() {
-			return val_ == 0;
-		}
+  public:
+    /** Returns true if this xmm register is %xmm0. */
+    constexpr bool check() {
+      return val_ == 0;
+    }
 
-	private:
-		/** Direct access to this constructor is disallosed. */
-		constexpr Xmm0() 
-				: Xmm{0} { 
-		}
+  private:
+    /** Direct access to this constructor is disallosed. */
+    constexpr Xmm0()
+      : Xmm {0} {
+    }
 };
 
 } // namespace x64asm

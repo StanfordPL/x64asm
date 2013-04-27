@@ -23,71 +23,75 @@ namespace x64asm {
 
 /** An environment register bit. */
 class EnvBits {
-	public:
-		/** Returns this bit's upper register index. */
-		constexpr size_t index() { return index_; }
-		/** Returns the number of bits this register bit spans. */
-		constexpr size_t width() { return width_; }
+  public:
+    /** Returns this bit's upper register index. */
+    constexpr size_t index() {
+      return index_;
+    }
+    /** Returns the number of bits this register bit spans. */
+    constexpr size_t width() {
+      return width_;
+    }
 
-	protected:
-		/** Direct access to this constructor is disallowed. */
-		constexpr EnvBits(size_t i, size_t w) : index_{i}, width_{w} { }
+  protected:
+    /** Direct access to this constructor is disallowed. */
+    constexpr EnvBits(size_t i, size_t w) : index_ {i}, width_ {w} { }
 
-	private:
-		/** This bit's upper register index. */
-		const size_t index_;
-		/** The number of bits this register bit spans. */
-		const size_t width_;
+  private:
+    /** This bit's upper register index. */
+    const size_t index_;
+    /** The number of bits this register bit spans. */
+    const size_t width_;
 };
 
 /** An EFLAGS register bit. */
 class Eflags : public EnvBits {
-	// Needs access to constructor.
-	friend class Constants; 
+    // Needs access to constructor.
+    friend class Constants;
 
-	private:
-		/** Direct access to this constructor is disallowed. */
-		constexpr Eflags(size_t i, size_t w) : EnvBits{i, w} { }
+  private:
+    /** Direct access to this constructor is disallowed. */
+    constexpr Eflags(size_t i, size_t w) : EnvBits {i, w} { }
 };
 
 /** An FPU control register bit. */
 class FpuControl : public EnvBits {
-	// Needs access to constructor.
-	friend class Constants;
+    // Needs access to constructor.
+    friend class Constants;
 
-	private:
-		/** Direct access to this constructor is disallowed. */
-		constexpr FpuControl(size_t i, size_t w) : EnvBits{i, w} { }
+  private:
+    /** Direct access to this constructor is disallowed. */
+    constexpr FpuControl(size_t i, size_t w) : EnvBits {i, w} { }
 };
 
 /** An FPU status register bit. */
 class FpuStatus : public EnvBits {
-	// Needs access to constructor.
-	friend class Constants;
+    // Needs access to constructor.
+    friend class Constants;
 
-	private:
-		/** Direct access to this constructor is disallowed. */
-		constexpr FpuStatus(size_t i, size_t w) : EnvBits{i, w} { }
+  private:
+    /** Direct access to this constructor is disallowed. */
+    constexpr FpuStatus(size_t i, size_t w) : EnvBits {i, w} { }
 };
 
 /** An FPU tag register. */
 class FpuTag : public EnvBits {
-	// Needs access to constructor.
-	friend class Constants;
+    // Needs access to constructor.
+    friend class Constants;
 
-	private:
-		/** Direct access to this constructor is disallowed. */
-		constexpr FpuTag(size_t i, size_t w) : EnvBits{i, w} { }
+  private:
+    /** Direct access to this constructor is disallowed. */
+    constexpr FpuTag(size_t i, size_t w) : EnvBits {i, w} { }
 };
 
 /** An MXCSR register bit. */
 class Mxcsr : public EnvBits {
-	// Needs access to constructor.
-	friend class Constants;
+    // Needs access to constructor.
+    friend class Constants;
 
-	private:
-		/** Direct access to this constructor is disallowed. */
-		constexpr Mxcsr(size_t i, size_t w) : EnvBits{i, w} { }
+  private:
+    /** Direct access to this constructor is disallowed. */
+    constexpr Mxcsr(size_t i, size_t w) : EnvBits {i, w} { }
 };
 
 } // namespace x64asm

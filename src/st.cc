@@ -23,16 +23,17 @@ using namespace std;
 namespace x64asm {
 
 void St::write_att(ostream& os) const {
-	os << "%";
-	write_intel(os);
+  os << "%";
+  write_intel(os);
 }
 
 void St::write_intel(ostream& os) const {
-	assert(check());
-	if ( val_ == 0 )
-		os << "st";	
-	else
-		os << "st(" << dec << val_ << ")";
+  assert(check());
+  if (val_ == 0) {
+    os << "st";
+  } else {
+    os << "st(" << dec << val_ << ")";
+  }
 }
 
 } // namespace x64asm

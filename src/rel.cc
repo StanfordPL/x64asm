@@ -23,11 +23,11 @@ using namespace std;
 namespace x64asm {
 
 void Rel::write_att(ostream& os) const {
-	os << hex << showbase << val_;
+  os << hex << showbase << val_;
 }
 
 void Rel::write_intel(ostream& os) const {
-	os << hex << noshowbase << val_;
+  os << hex << noshowbase << val_;
 }
 
 } // namespace x64asm
