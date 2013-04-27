@@ -1393,7 +1393,7 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
 
 -- Representative memory values
 test_mem :: [String]
-test_mem = ["(%rip)","(%eax)","(%rax)","(%rax,%r8)","(%rbx,%r12,4)","0x1(%rcx,%rbp,8)"]
+test_mem = ["(%rip)","(%eax)","(%rax)","(%rax,%r8,1)","(%rbx,%r12,4)","0x1(%rcx,%rbp,8)"]
 
 -- Representative moffs values
 test_moffs :: [String]
