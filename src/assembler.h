@@ -278,39 +278,56 @@ class Assembler {
 			fxn_->emit_byte(mod);
 		}
 
-		/** Emits a vex prefix.  See Figure 2-9: Intel Manual Vol 2A 2-14
-		    For simplicity, we always emit a three-byte rex prefix. 
-				@note This would be the place to relax that assumption is necessary.
-		*/   
-		void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
-				            const Operand& vvvv) {
+		/** Emits a 2-byte vex prefix. See Figure 2-9: Intel Manual Vol 2A 2-14. */
+		void vex2(uint8_t r_bit, const Operand& vvvv, uint8_t l, uint8_t pp) {
+			fxn_->emit_byte(0xc5);
+			fxn_->emit_byte(r_bit | (vvvv.val_ << 3) | (l << 2) | pp);
+		}
 
+		/** Emits a 3-byte vex prefix. See Figure 2-9: Intel Manual Vol 2A 2-14. */
+		void vex3(uint8_t r_bit, uint8_t x_bit, uint8_t b_bit, uint8_t mmmmm,
+				      uint8_t w, const Operand& vvvv, uint8_t l, uint8_t pp) {
 			fxn_->emit_byte(0xc4);
-			fxn_->emit_byte(mmmmm);
+			fxn_->emit_byte(r_bit | x_bit | b_bit | mmmmm);
 			fxn_->emit_byte((w << 7) | (vvvv.val_ << 3) | (l << 2) | pp); 
 		}
 
 		// Emits a vex prefix. See Figure 2-9: Intel Manual Vol 2A 2-14. */
 		void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
-				            const Operand& vvvv, const M& rm, 
-										const Operand& r) {
-			mmmmm |= ((~r.val_ << 4) & 0x80);
-			if ( rm.contains_base() )
-				mmmmm |= ((~rm.get_base().val_ << 3) & 0x40);
-			if ( rm.contains_index() )
-				mmmmm |= ((~rm.get_index().val_ << 2) & 0x20);
+             const Operand& vvvv, const M& rm, 
+             const Operand& r) {
+			uint8_t r_bit = (~r.val_ << 4) & 0x80;
+			uint8_t x_bit = rm.contains_base() ? 
+											(~rm.get_base().val_ << 3) & 0x40 : 0x40;
+			uint8_t b_bit = rm.contains_index() ?
+											(~rm.get_index().val_ << 2) & 0x20 : 0x20;
 
-			vex(mmmmm, l, pp, w, vvvv);
+			if ( x_bit == 0x40 && b_bit == 0x20 && mmmmm == 0x01 && w == 0 )
+				vex2(r_bit, vvvv, l, pp);
+			else
+				vex3(r_bit, x_bit, b_bit, mmmmm, w, vvvv, l, pp);
 		}
 
 		/** Emits a vex prefix. See Figure 2-9: Intel Manual Vol 2A 2-14. */
 		void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
-				            const Operand& vvvv, const Operand& rm, 
-										const Operand& r) {
-			mmmmm |= ((~rm.val_ << 2) & 0x20);
-			mmmmm |= ((~r.val_  << 4) & 0x80);
+				     const Operand& vvvv, const Operand& rm, 
+             const Operand& r) {
+			uint8_t r_bit = (~r.val_ << 4) & 0x80;
+			uint8_t b_bit = (~rm.val_ << 2) & 0x20;
 
-			vex(mmmmm, l, pp, w, vvvv);
+			if ( b_bit == 0x20 && mmmmm == 0x01 && w == 0 )
+				vex2(r_bit, vvvv, l, pp);
+			else
+				vex3(r_bit, 0x40, b_bit, mmmmm, w, vvvv, l, pp);
+		}
+
+		/** Emits a vex prefix. See Figure 2-9: Intel Manual Vol 2A 2-14. */
+		void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w, 
+				     const Operand& vvvv) { 
+			if ( mmmmm == 0x01 && w == 0 )
+				vex2(0x80, vvvv, l, pp);
+			else
+				vex3(0x80, 0x40, 0x20, mmmmm, w, vvvv, l, pp);
 		}
 
 		/** Prints out the hex encoding of the last instruciton that was assembled.
