@@ -147,11 +147,6 @@ consequence of this decision is code size. Most compilers solve this problem
 using an iterative algorithm which initially assumes 8-bit displacements and
 then adjusts as necessary. We emit all jumps to labels using the 32-bit form.
 
-For certain operand combinations, it is possible to emit VEX instructions
-using a short 2-byte prefix.  Any 2-byte prefix can also be emitted using an
-equivalent version of the standard 3-byte prefix form. We always use the 3-byte
-form.
-
 -------------------------------------------------------------------------------
 
 Notes on Codegen:
