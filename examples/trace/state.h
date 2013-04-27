@@ -8,9 +8,9 @@
 namespace trace {
 
 class State {
-	public:
-		std::array<uint64_t,16> general_purpose;
-		std::array<__uint128_t,16> xmm;	
+  public:
+    std::array<uint64_t, 16> general_purpose;
+    std::array<uint64_t, 16> xmm;
 };
 
 } // namespace trace
