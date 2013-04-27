@@ -289,7 +289,7 @@ class Assembler {
     /** Emits a 2-byte vex prefix. See Figure 2-9: Intel Manual Vol 2A 2-14. */
     void vex2(uint8_t r_bit, const Operand& vvvv, uint8_t l, uint8_t pp) {
       fxn_->emit_byte(0xc5);
-      fxn_->emit_byte(r_bit | (vvvv.val_ << 3) | (l << 2) | pp);
+      fxn_->emit_byte(r_bit | ((~vvvv.val_ << 3) & 0x78) | (l << 2) | pp);
     }
 
     /** Emits a 3-byte vex prefix. See Figure 2-9: Intel Manual Vol 2A 2-14. */
@@ -297,7 +297,7 @@ class Assembler {
               uint8_t w, const Operand& vvvv, uint8_t l, uint8_t pp) {
       fxn_->emit_byte(0xc4);
       fxn_->emit_byte(r_bit | x_bit | b_bit | mmmmm);
-      fxn_->emit_byte((w << 7) | (vvvv.val_ << 3) | (l << 2) | pp);
+      fxn_->emit_byte((w << 7) | ((~vvvv.val_ << 3) & 0x78) | (l << 2) | pp);
     }
 
     // Emits a vex prefix. See Figure 2-9: Intel Manual Vol 2A 2-14. */

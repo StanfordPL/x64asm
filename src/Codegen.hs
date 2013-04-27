@@ -1127,7 +1127,7 @@ vex_w i
 vex_vvvv :: Instr -> String
 vex_vvvv i = case findIndex (=='V') (op_en i) of
   (Just idx) -> "arg" ++ (show idx) 
-  Nothing -> "r64s[15]"
+  Nothing -> "xmm0"
 
 -- Emits code for VEX Prefix
 vex_prefix :: Instr -> String
