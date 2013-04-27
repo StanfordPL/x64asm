@@ -24,45 +24,45 @@ using namespace x64asm;
 // program state back and forth between assembled functions.
 
 int main() {
-	// Create an assembler 
-	Assembler assm;
+  // Create an assembler
+  Assembler assm;
 
-	// Declare a local program variable.
-	uint64_t x = 10;
+  // Declare a local program variable.
+  uint64_t x = 10;
 
-	// Example 1:
-	// Compile a function that will modify the value of x as a side effect
-	// Note that x is referenced by its address.
-	Code c1 {
-		{MOV_R64_IMM64, {rax, Imm64{&x}}},
-		{INC_M64, {M64{rax}}},
-		{RET}
-	};
-	const auto f1 = assm.assemble(c1);
+  // Example 1:
+  // Compile a function that will modify the value of x as a side effect
+  // Note that x is referenced by its address.
+  Code c1 {
+    {MOV_R64_IMM64, {rax, Imm64{&x}}},
+    {INC_M64, {M64{rax}}},
+    {RET}
+  };
+  const auto f1 = assm.assemble(c1);
 
-	// Calling the function should increment the value of x
-	cout << "Before: x = " << x << endl;
-	f1.call<int>();
-	cout << "After:  x = " << x << endl;
-	cout << endl;
+  // Calling the function should increment the value of x
+  cout << "Before: x = " << x << endl;
+  f1.call<int>();
+  cout << "After:  x = " << x << endl;
+  cout << endl;
 
-	// Example 2:
-	// Compile a function that will copy the value of rdx to x as a side effect
-	// Note that rdx only escapes this function through the pointer to x
-	Code c2 {
-		{MOV_R64_IMM64, {rax, Imm64{&x}}},
-		{MOV_R64_IMM64, {rdx, Imm64{12345678}}},
-		{MOV_M64_R64, {M64{rax}, rdx}},
-		{RET}
-	};
-	const auto f2 = assm.assemble(c2);
+  // Example 2:
+  // Compile a function that will copy the value of rdx to x as a side effect
+  // Note that rdx only escapes this function through the pointer to x
+  Code c2 {
+    {MOV_R64_IMM64, {rax, Imm64{&x}}},
+    {MOV_R64_IMM64, {rdx, Imm64{12345678}}},
+    {MOV_M64_R64, {M64{rax}, rdx}},
+    {RET}
+  };
+  const auto f2 = assm.assemble(c2);
 
-	// Calling the function should place the value of rdx in x
-	cout << "Before: x = " << x << endl;
-	f2.call<int>();
-	cout << "After:  x = " << x << endl;
-	cout << endl;
+  // Calling the function should place the value of rdx in x
+  cout << "Before: x = " << x << endl;
+  f2.call<int>();
+  cout << "After:  x = " << x << endl;
+  cout << endl;
 
-	return 0;
+  return 0;
 }
 
