@@ -57,7 +57,7 @@ void Assembler::mod_rm_sib(const M& rm, const Operand& r) {
   if (!rm.contains_base()) {
     const auto mod_byte = 0x00 | rrr | 0x4;
     const auto sib_byte = rm.contains_index() ?
-                          ((int)rm.get_scale() & 0xc0) | ((rm.get_index().val_ << 3) & 0x38) | 0x5 :
+                          (((int)rm.get_scale() << 6) & 0xc0) | ((rm.get_index().val_ << 3) & 0x38) | 0x5 :
                           0x00 | 0x24 | 0x4;
 
     fxn_->emit_byte(mod_byte);
@@ -83,7 +83,7 @@ void Assembler::mod_rm_sib(const M& rm, const Operand& r) {
   // Is index non-null?
   if (rm.contains_index()) {
     const auto mod_byte = mod | rrr | 0x4;
-    const auto sib_byte = ((int)rm.get_scale() & 0xc0) |
+    const auto sib_byte = (((int)rm.get_scale() << 6) & 0xc0) |
                           ((rm.get_index().val_ << 3) & 0x38) | bbb;
 
     fxn_->emit_byte(mod_byte);
@@ -92,7 +92,7 @@ void Assembler::mod_rm_sib(const M& rm, const Operand& r) {
   // Is base sitting in the eip/rip+disp32 row?
   else if (bbb == 0x4) {
     const auto mod_byte = mod | rrr | 0x4;
-    const auto sib_byte = ((int)rm.get_scale() & 0xc0) | 0x20 | bbb;
+    const auto sib_byte = (((int)rm.get_scale() << 6) & 0xc0) | 0x20 | bbb;
 
     fxn_->emit_byte(mod_byte);
     fxn_->emit_byte(sib_byte);
