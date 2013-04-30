@@ -1393,7 +1393,7 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
 
 -- Representative memory values
 test_mem :: [String]
-test_mem = ["(%rip)","(%eax)","(%rax)","(%rax,%r8,1)","(%rbx,%r12,4)","0x1(%rcx,%rbp,8)"]
+test_mem = []--["(%rip)","(%eax)","(%rax)","(%rax,%r8,1)","(%rbx,%r12,4)","0x1(%rcx,%rbp,8)"]
 
 -- Representative moffs values
 test_moffs :: [String]
@@ -1433,10 +1433,10 @@ test_operand "m2byte"   = test_mem
 test_operand "m28byte"  = test_mem
 test_operand "m108byte" = test_mem
 test_operand "m512byte" = test_mem
-test_operand "imm8"     = ["$0x1","$-0x1"]
-test_operand "imm16"    = ["$0x1","$-0x1"]
-test_operand "imm32"    = ["$0x1","$-0x1"]
-test_operand "imm64"    = ["$0x1","$-0x1"]
+test_operand "imm8"     = ["$0x0","$0x1","$0x7f","$-0x1","$-0x7f"]
+test_operand "imm16"    = ["$0x0","$0x1","$0x7fff","$-0x1","$-0x7fff"]
+test_operand "imm32"    = ["$0x0","$0x1","$0x7fffffff","$-0x1","$-0x7fffffff"]
+test_operand "imm64"    = ["$0x0","$0x1","$0x7fffffffffffffff","$-0x1","$-0x7fffffffffffffff"]
 test_operand "0"        = ["$0x0"]
 test_operand "1"        = ["$0x1"]
 test_operand "3"        = ["$0x3"]
