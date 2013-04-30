@@ -41,6 +41,7 @@ data Instr =
         , mode32      :: String	-- Is this instruction valid in 32-bit mode?
         , flag        :: String -- CPUID flag
         , att         :: String -- att mnemonic (per gcc)
+        , pref        :: String -- Prefer this over equally valid alternative
         , description :: String -- Intel manual description
         } deriving (Show)
 
@@ -467,13 +468,13 @@ is_vex_encoded i = ("AVX" `elem` fs) || ("F16C" `elem` fs)
 
 -- Read a row
 read_instr :: String -> Instr
-read_instr s = let (o:i:e:p:r:w:u:su:sp:m64:m32:f:a:d:[]) = splitOn "\t" s in 
+read_instr s = let (o:i:e:p:r:w:u:su:sp:m64:m32:f:a:pr:d:[]) = splitOn "\t" s in 
                    (Instr (trim o)  (trim i) 
                           (trim e)  (trim p)
                           (trim r)  (trim w)  (trim u)
                           (trim su) (trim sp) (trim m64) (trim m32) 
                           (trim f) 
-                          (trim a)  (trim d))
+                          (trim a)  (trim pr) (trim d))
 
 -- Read all rows
 read_instrs :: String -> [Instr]
@@ -1284,21 +1285,28 @@ op_order = ["hint",
   "<XMM0>","xmm",
   "ymm"]
 
--- Compare operands
+-- Compare two operands
 compare_op :: String -> String -> Ordering
 compare_op o1 o2 = compare (idx o1 op_order) (idx o2 op_order)
   where idx x xs = let (Just i) = elemIndex x xs in i
 
--- Compare instructions based on operands	
+-- Compare operand lists
+compare_ops :: [String] -> [String] -> Ordering
+compare_ops [] [] = EQ
+compare_ops [] _ = LT
+compare_ops _ [] = GT
+compare_ops (x:xs) (y:ys) = case compare_op x y of
+  LT -> LT
+  GT -> GT
+  EQ -> compare_ops xs ys
+
+-- Compare instructions based on operands, defer to preference info
 compare_instr :: Instr -> Instr -> Ordering
-compare_instr i1 i2 = comp (operands i1) (operands i2)
-  where comp [] [] = EQ
-        comp [] (_:_) = LT
-        comp (_:_) [] = GT
-        comp (x:xs) (y:ys) = case compare_op x y of
-          LT -> LT
-          GT -> GT
-          EQ -> comp xs ys
+compare_instr i1 i2
+  | (pref i1 == "YES") && (pref i2 == "YES") = EQ
+  | (pref i1 == "YES") = LT
+  | (pref i2 == "YES") = GT
+  | otherwise = compare_ops (operands i1) (operands i2)
 
 -- Read AT&T code
 --------------------------------------------------------------------------------
