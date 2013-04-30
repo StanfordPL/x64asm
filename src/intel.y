@@ -308,7 +308,10 @@ code : blank instrs {
 	code.assign($2->begin(), $2->end()); delete $2; 
 }
 
-instrs : instr { 
+instrs : /* empty */ {
+	$$ = new vector<Instruction>();
+}
+| instr { 
   $$ = new vector<Instruction>(); 
 	$$->push_back(*$1); 
 	delete $1; 
