@@ -34,8 +34,8 @@ REX+ 80 /2 ib	ADC r/m8, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE
 81 /2 id	ADC r/m32, imm32	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcl		Add with CF imm32 to r/m32.
 REX.W+ 81 /2 id	ADC r/m64, imm32	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		adcq		Add with CF imm32 sign extended to 64-bits to r/m64.
 83 /2 ib	ADC r/m16, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcw	YES	Add with CF sign-extended imm8 to r/m16.
-83 /2 ib	ADC r/m32, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcl		Add with CF sign-extended imm8 into r/m32.
-REX.W+ 83 /2 ib	ADC r/m64, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		adcq		Add with CF sign-extended imm8 into r/m64.
+83 /2 ib	ADC r/m32, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcl	YES	Add with CF sign-extended imm8 into r/m32.
+REX.W+ 83 /2 ib	ADC r/m64, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		adcq	YES	Add with CF sign-extended imm8 into r/m64.
 10 /r	ADC r/m8, r8	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcb		Add with carry byte register to r/m8.
 REX+ 10 /r	ADC r/m8, r8	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		adcb		Add with carry byte register to r/m8.
 11 /r	ADC r/m16, r16	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcw		Add with carry r16 to r/m16.
