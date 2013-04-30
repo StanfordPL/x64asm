@@ -56,9 +56,9 @@ REX+ 80 /0 ib 	ADD r/m8, imm8 	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		
 81 /0 iw	ADD r/m16, imm16 	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addw		Add imm16 to r/m16.
 81 /0 id	ADD r/m32, imm32 	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addl		Add imm32 to r/m32.
 REX.W+ 81 /0 id	ADD r/m64, imm32	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		addq		Add imm32 sign-extended to 64-bits to r/m64.
-83 /0 ib	ADD r/m16, imm8 	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addw		Add sign-extended imm8 to r/m16. 
-83 /0 ib	ADD r/m32, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addl		Add sign-extended imm8 to r/m32. 
-REX.W+ 83 /0 ib 	ADD r/m64, imm8 	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		addq		Add sign-extended imm8 to r/m64. 
+83 /0 ib	ADD r/m16, imm8 	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addw	YES	Add sign-extended imm8 to r/m16. 
+83 /0 ib	ADD r/m32, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addl	YES	Add sign-extended imm8 to r/m32. 
+REX.W+ 83 /0 ib 	ADD r/m64, imm8 	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		addq	YES	Add sign-extended imm8 to r/m64. 
 00 /r 	ADD r/m8, r8 	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addb		Add r8 to r/m8.
 REX+ 00 /r	ADD r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		addb		Add r8 to r/m8. 
 01 /r	ADD r/m16, r16 	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addw		Add r16 to r/m16. 
@@ -119,9 +119,9 @@ REX+ 80 /4 ib	AND r/m8, imm8	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		and
 81 /4 iw	AND r/m16, imm16	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andw		r/m16 AND imm16.
 81 /4 id	AND r/m32, imm32	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andl		r/m32 AND imm32.
 REX.W+ 81 /4 id	AND r/m64, imm32	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		andq		r/m64 AND imm32 sign extended to 64-bits.
-83 /4 ib	AND r/m16, imm8	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andw		r/m16 AND imm8 (sign-extended).
-83 /4 ib	AND r/m32, imm8	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andl		r/m32 AND imm8 (sign-extended).
-REX.W+ 83 /4 ib	AND r/m64, imm8	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		andq		r/m64 AND imm8 (sign-extended).
+83 /4 ib	AND r/m16, imm8	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andw	YES	r/m16 AND imm8 (sign-extended).
+83 /4 ib	AND r/m32, imm8	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andl	YES	r/m32 AND imm8 (sign-extended).
+REX.W+ 83 /4 ib	AND r/m64, imm8	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		andq	YES	r/m64 AND imm8 (sign-extended).
 20 /r	AND r/m8, r8	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andb		r/m8 AND r8.
 REX+ 20 /r	AND r/m8, r8	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		andb		r/m64 AND r8 (sign-extended).
 21 /r	AND r/m16, r16	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andw		r/m16 AND r16.
@@ -336,9 +336,9 @@ REX+ 80 /7 ib	CMP r/m8, imm8	MI	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		cmp
 81 /7 iw	CMP r/m16, imm16 	MI	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpw		Compare imm16 with r/m16.
 81 /7 id	CMP r/m32, imm32 	MI	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpl		Compare imm32 with r/m32.
 REX.W+ 81 /7 id	CMP r/m64, imm32	MI	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		cmpq		Compare imm32 sign-extended to 64-bits with r/m64.
-83 /7 ib	CMP r/m16, imm8 	MI	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpw		Compare imm8 with r/m16.
-83 /7 ib	CMP r/m32, imm8 	MI	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpl		Compare imm8 with r/m32.
-REX.W+ 83 /7 ib	CMP r/m64, imm8 	MI	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		cmpq		Compare imm8 with r/m64.
+83 /7 ib	CMP r/m16, imm8 	MI	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpw	YES	Compare imm8 with r/m16.
+83 /7 ib	CMP r/m32, imm8 	MI	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpl	YES	Compare imm8 with r/m32.
+REX.W+ 83 /7 ib	CMP r/m64, imm8 	MI	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		cmpq	YES	Compare imm8 with r/m64.
 38 /r	CMP r/m8, r8 	MR	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpb		Compare r8 with r/m8.
 REX+ 38 /r	CMP r/m8, r8	MR	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		cmpb		Compare r8 with r/m8.
 39 /r	CMP r/m16, r16 	MR	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpw		Compare r16 with r/m16.
@@ -1294,9 +1294,9 @@ REX+ 80 /1 ib 	OR r/m8, imm8 	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		or
 81 /1 iw 	OR r/m16, imm16 	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orw		r/m16 OR imm16.
 81 /1 id 	OR r/m32, imm32 	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orl		r/m32 OR imm32.
 REX.W+ 81 /1 id 	OR r/m64, imm32 	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		orq		r/m64 OR imm32 (sign-extended).
-83 /1 ib 	OR r/m16, imm8 	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orw		r/m16 OR imm8 (sign-extended).
-83 /1 ib 	OR r/m32, imm8 	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orl		r/m32 OR imm8 (sign-extended).
-REX.W+ 83 /1 ib 	OR r/m64, imm8 	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		orq		r/m64 OR imm8 (sign-extended).
+83 /1 ib 	OR r/m16, imm8 	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orw	YES	r/m16 OR imm8 (sign-extended).
+83 /1 ib 	OR r/m32, imm8 	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orl	YES	r/m32 OR imm8 (sign-extended).
+REX.W+ 83 /1 ib 	OR r/m64, imm8 	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		orq	YES	r/m64 OR imm8 (sign-extended).
 08 /r 	OR r/m8, r8 	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orb		r/m8 OR r8.
 REX+ 08 /r 	OR r/m8, r8	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		orb		r/m8 OR r8.
 09 /r 	OR r/m16, r16 	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orw		r/m16 OR r16.
@@ -2039,9 +2039,9 @@ REX+ 80 /3 ib	SBB r/m8, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE
 81 /3 iw	SBB r/m16, imm16	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw		Subtract with borrow imm16 from r/m16.
 81 /3 id	SBB r/m32, imm32	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl		Subtract with borrow imm32 from r/m32.
 REX.W+ 81 /3 id	SBB r/m64, imm32	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq		Subtract with borrow sign-extended imm32 to 64-bits from r/m64.
-83 /3 ib	SBB r/m16, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw		Subtract with borrow sign-extended imm8 from r/m16.
-83 /3 ib	SBB r/m32, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl		Subtract with borrow sign-extended imm8 from r/m32.
-REX.W+ 83 /3 ib	SBB r/m64, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq		Subtract with borrow sign-extended imm8 from r/m64.
+83 /3 ib	SBB r/m16, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw	YES	Subtract with borrow sign-extended imm8 from r/m16.
+83 /3 ib	SBB r/m32, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl	YES	Subtract with borrow sign-extended imm8 from r/m32.
+REX.W+ 83 /3 ib	SBB r/m64, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq	YES	Subtract with borrow sign-extended imm8 from r/m64.
 18 /r	SBB r/m8, r8	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbb		Subtract with borrow r8 from r/m8.
 REX+ 18 /r	SBB r/m8, r8	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbb		Subtract with borrow r8 from r/m8.
 19 /r	SBB r/m16, r16	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw		Subtract with borrow r16 from r/m16.
@@ -2201,9 +2201,9 @@ REX+ 80 /5 ib	SUB r/m8, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		su
 81 /5 iw	SUB r/m16, imm16	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subw		Subtract imm16 from r/m16.
 81 /5 id	SUB r/m32, imm32	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subl		Subtract imm32 from r/m32.
 REX.W+ 81 /5 id	SUB r/m64, imm32	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		subq		Subtract imm32 sign-extended to 64-bits from r/m64.
-83 /5 ib	SUB r/m16, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subw		Subtract sign-extended imm8 from r/m16.
-83 /5 ib	SUB r/m32, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subl		Subtract sign-extended imm8 from r/m32.
-REX.W+ 83 /5 ib	SUB r/m64, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		subq		Subtract sign-extended imm8 from r/m64.
+83 /5 ib	SUB r/m16, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subw	YES	Subtract sign-extended imm8 from r/m16.
+83 /5 ib	SUB r/m32, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subl	YES	Subtract sign-extended imm8 from r/m32.
+REX.W+ 83 /5 ib	SUB r/m64, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		subq	YES	Subtract sign-extended imm8 from r/m64.
 28 /r	SUB r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subb		Subtract r8 from r/m8.
 REX+ 28 /r	SUB r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		subb		Subtract r8 from r/m8.
 29 /r	SUB r/m16, r16	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subw		Subtract r16 from r/m16.
@@ -2378,9 +2378,9 @@ REX+ 80 /6 ib	XOR r/m8, imm8	MI	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	NE		xor
 81 /6 iw	XOR r/m16, imm16	MI	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorw		r/m16 XOR imm16.
 81 /6 id	XOR r/m32, imm32	MI	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorl		r/m32 XOR imm32.
 REX.W+ 81 /6 id	XOR r/m64, imm32	MI	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	NE		xorq		r/m64 XOR imm32 (sign-extended).
-83 /6 ib	XOR r/m16, imm8	MI	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorw		r/m16 XOR imm8 (sign-extended).
-83 /6 ib	XOR r/m32, imm8	MI	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorl		r/m32 XOR imm8 (sign-extended).
-REX.W+ 83 /6 ib	XOR r/m64, imm8	MI	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	NE		xorq		r/m64 XOR imm8 (sign-extended).
+83 /6 ib	XOR r/m16, imm8	MI	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorw	YES	r/m16 XOR imm8 (sign-extended).
+83 /6 ib	XOR r/m32, imm8	MI	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorl	YES	r/m32 XOR imm8 (sign-extended).
+REX.W+ 83 /6 ib	XOR r/m64, imm8	MI	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	NE		xorq	YES	r/m64 XOR imm8 (sign-extended).
 30 /r	XOR r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorb		r/m8 XOR r8.
 REX+ 30 /r	XOR r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	NE		xorb		r/m8 XOR r8.
 31 /r	XOR r/m16, r16	MR	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorw		r/m16 XOR r16.
