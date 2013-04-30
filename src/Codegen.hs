@@ -1274,12 +1274,12 @@ op_order = ["hint",
   "label",
   "p66","pw","far",
   "AL","CL","rl","rh","rb","AX","DX","r16","EAX","r32","RAX","r64",
+  "rel8","rel32",
+  "moffs8","moffs16","moffs32","moffs64",
   "m8","m16","m32","m64","m128","m256","m16:16","m16:32","m16:64",
   "m16int","m32int","m64int","m80bcd","m32fp","m64fp","m80fp",
   "m2byte","m28byte","m108byte","m512byte",
   "mm",
-  "moffs8","moffs16","moffs32","moffs64",
-  "rel8","rel32",
   "FS","GS","Sreg",
   "ST","ST(i)",
   "<XMM0>","xmm",
@@ -1454,8 +1454,8 @@ test_operand "<XMM0>"   = ["%xmm0"]
 test_operand "ymm"      = map (("%ymm"++).show) [0..15]
 test_operand "ST"       = ["%st(0)"]
 test_operand "ST(i)"    = ["%st(0)","%st(1)","%st(2)","%st(3)","%st(4)","%st(5)","%st(6)","%st(7)"]
-test_operand "rel8"     = ["0x1"]
-test_operand "rel32"    = ["0x1"]
+test_operand "rel8"     = ["0x0","0x1","0x7f","-0x1","-0x7f"]
+test_operand "rel32"    = ["0x0","0x1","0x7fffffff","-0x1","-0x7fffffff"]
 test_operand "moffs8"   = test_moffs
 test_operand "moffs16"  = test_moffs
 test_operand "moffs32"  = test_moffs
