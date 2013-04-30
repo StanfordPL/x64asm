@@ -22,7 +22,7 @@ do
 		cat test.s | ../bin/x64asm -i att -o hex | sed 'N;s/\n//' | sed 's/ *$//' > x64asm.out
 
 		diff objdump.out x64asm.out > /dev/null
-		if [ $? -ne 0 ]
+		if [ $? -ne 0 -a -s objdump.out ]
 		then
 			cat test.s >> $src.log
 			echo "reference: " >> $src.log
