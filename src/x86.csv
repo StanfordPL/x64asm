@@ -1220,7 +1220,7 @@ VEX.LIG.F3.0F.WIG 11 /r	VMOVSS m32, xmm1	MR	W, R						V	V	AVX	vmovss		Move scala
 														
 0F BE /r 	MOVSX r16, r/m8 	RM	W, R						V	V		movsbw		Move byte to word with sign-extension.
 0F BE /r 	MOVSX r32, r/m8 	RM	W, R						V	V		movsbl		Move byte to doubleword with sign-extension.
-REX+ 0F BE /r 	MOVSX r64, r/m8	RM	W, R						V	NE		movsbq		Move byte to quadword with sign-extension.
+REX.W+ 0F BE /r 	MOVSX r64, r/m8	RM	W, R						V	NE		movsbq		Move byte to quadword with sign-extension.
 0F BF /r 	MOVSX r32, r/m16 	RM	W, R						V	V		movswl		Move word to doubleword, with sign-extension.
 REX.W+ 0F BF /r 	MOVSX r64, r/m16 	RM	W, R						V	NE		movswq		Move word to quadword with sign-extension.
 REX.W+ 63 /r 	MOVSXD r64, r/m32 	RM	W, R						V	NE		movslq		Move doubleword to quadword with sign-extension.
