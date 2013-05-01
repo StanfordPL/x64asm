@@ -632,7 +632,6 @@ no_pref66 :: Instr -> Bool
 no_pref66 i = (is_vex_encoded i) || 
               (op == "ENTER") ||
               (op == "FSTSW") || (op == "FNSTSW") ||
-              (op == "LAR" ) ||
               (op == "LDDQU") ||
               (op == "LSL") ||
               (op == "LEA") ||
