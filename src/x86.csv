@@ -210,7 +210,7 @@ REX.W+ 0F AB	BTS r/m64, r64 	MR	RW, R		E.CF	E.OF E.SF E.AF E.PF			V	NE		btsq		St
 REX.W+ 0F BA /5 ib	BTS r/m64, imm8	MI	RW, R		E.CF	E.OF E.SF E.AF E.PF			V	NE		btsq		Store selected bit in CF flag and set.
 														
 E8 cw 	CALL rel16 								NS	V				Call near, relative, displacement relative to next instruction.
-E8 cd	CALL rel32	D	R	???	???	???			V	V		callq		Call near, relative, displacement relative to next instruction. 32-bit displacement sign extended to 64-bits in 64-bit mode.
+E8 cd	CALL rel32	D	R	???	???	???			V	V		lcallq		Call near, relative, displacement relative to next instruction. 32-bit displacement sign extended to 64-bits in 64-bit mode.
 FF /2	CALL r/m16								NE	V				Call near, absolute indirect, address given in r/m16.
 FF /2	CALL r/m32								NE	V				Call near, absolute indirect, address given in r/m32.
 FF /2	CALL r/m64	M	R	???	???	???			V	NE		callq		Call near, absolute indirect, address given in r/m64.
