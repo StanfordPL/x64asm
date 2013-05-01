@@ -1853,7 +1853,7 @@ REX.W+ D1 /0	ROL r/m64, 1	M1	RW, R		E.CF E.OF				V	NE		rolq		Rotate 64 bits r/m6
 D3 /0	ROL r/m32, CL	MC	RW, R		E.CF e.of	e.of			V	V		roll		Rotate 32 bits r/m32 left CL times.
 REX.W+ D3 /0	ROL r/m64, CL	MC	RW, R		E.CF e.of	e.of			V	NE		rolq		Rotate 64 bits r/m64 left CL times. Uses a 6 bit count.
 C1 /0 ib	ROL r/m32, imm8	MI	RW, R		E.CF e.of	e.of			V	V		roll		Rotate 32 bits r/m32 left imm8 times.
-C1 /0 ib	ROL r/m64, imm8	MI	RW, R		E.CF e.of	e.of			V	NE		rolq		Rotate 64 bits r/m64 left imm8 times. Uses a 6 bit count.
+REX.W+ C1 /0 ib	ROL r/m64, imm8	MI	RW, R		E.CF e.of	e.of			V	NE		rolq		Rotate 64 bits r/m64 left imm8 times. Uses a 6 bit count.
 D0 /1	ROR r/m8, 1	M1	RW, R		E.CF E.OF				V	V		rorb		Rotate 8 bits r/m8 right once.
 REX+ D0 /1	ROR r/m8, 1	M1	RW, R		E.CF E.OF				V	NE		rorb		Rotate 8 bits r/m8 right once.
 D2 /1	ROR r/m8, CL	MC	RW, R		E.CF e.of	e.of			V	V		rorb		Rotate 8 bits r/m8 right CL times.
