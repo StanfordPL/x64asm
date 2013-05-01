@@ -98,6 +98,9 @@ bool is_a(const Operand* o, Type parse, Type target) {
 
 	if ( parse == Type::MOFFS_8 ) {
 		const auto offs = ((Moffs8*)o)->get_offset();
+		if ( target == Type::MOFFS_8 || target == Type::MOFFS_16 ||
+				 target == Type::MOFFS_32 || target == Type::MOFFS_64 )
+			return true;
 		if ( is_mem(target) || target == Type::REL_32 )
 			return ((const Imm32*)&offs)->check();
 		if ( target == Type::REL_8 )
