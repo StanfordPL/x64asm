@@ -1091,6 +1091,7 @@ implied_rex i
 -- Emits code for REX Prefix 
 rex_prefix :: Instr -> String
 rex_prefix i 
+  | op_en i == "OI" = "rex(arg0," ++ (implied_rex i) ++ ");\n"
   | rm_args i /= "" = "rex(" ++ (rm_args i) ++ "," ++ (implied_rex i) ++ ");\n"
   | implied_rex i /= "(uint8_t)0x00" = "rex(" ++ (implied_rex i) ++ ");\n"
   | otherwise = "// No REX Prefix\n"
@@ -1406,7 +1407,7 @@ test_mem = []--["(%rip)","(%eax)","(%rax)","(%rax,%r8,1)","(%rbx,%r12,4)","0x1(%
 
 -- Representative moffs values
 test_moffs :: [String]
-test_moffs = ["0x1"]
+test_moffs = ["0x0","0x1","0x7fffffffffffffff","-0x7fffffffffffffff"]
 
 -- Representative values for each operand type
 test_operand :: String -> [String]
