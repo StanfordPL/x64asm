@@ -1022,16 +1022,16 @@ VEX.NDS.LIG.F3.0F.WIG 5D /r	VMINSS xmm1,xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	
 														
 0F 01 C8 	MONITOR 	NP							V	V	MONITOR	monitor		Sets up a linear address range to be monitored by hardware and activates the monitor. The address range should be a write-back memory caching type. The address is DS:EAX (DS:RAX in 64-bit mode).
 														
-88 /r 	MOV r/m8, r8 	MR	W, R						V	V		movb		Move r8 to r/m8.
-REX+ 88 /r 	MOV r/m8, r8	MR	W, R						V	NE		movb		Move r8 to r/m8.
-89 /r 	MOV r/m16, r16 	MR	W, R						V	V		movw		Move r16 to r/m16.
-89 /r 	MOV r/m32, r32 	MR	W, R						V	V		movl		Move r32 to r/m32.
-REX.W+ 89 /r 	MOV r/m64, r64 	MR	W, R						V	NE		movq		Move r64 to r/m64.
-8A /r 	MOV r8, r/m8 	RM	W, R						V	V		movb	YES	Move r/m8 to r8.
-REX+ 8A /r 	MOV r8, r/m8	RM	W, R						V	NE		movb	YES	Move r/m8 to r8.
-8B /r 	MOV r16, r/m16 	RM	W, R						V	V		movw	YES	Move r/m16 to r16.
-8B /r 	MOV r32, r/m32 	RM	W, R						V	V		movl	YES	Move r/m32 to r32.
-REX.W+ 8B /r 	MOV r64, r/m64 	RM	W, R						V	NE		movq	YES	Move r/m64 to r64.
+88 /r 	MOV r/m8, r8 	MR	W, R						V	V		movb	YES	Move r8 to r/m8.
+REX+ 88 /r 	MOV r/m8, r8	MR	W, R						V	NE		movb	YES	Move r8 to r/m8.
+89 /r 	MOV r/m16, r16 	MR	W, R						V	V		movw	YES	Move r16 to r/m16.
+89 /r 	MOV r/m32, r32 	MR	W, R						V	V		movl	YES	Move r32 to r/m32.
+REX.W+ 89 /r 	MOV r/m64, r64 	MR	W, R						V	NE		movq	YES	Move r64 to r/m64.
+8A /r 	MOV r8, r/m8 	RM	W, R						V	V		movb		Move r/m8 to r8.
+REX+ 8A /r 	MOV r8, r/m8	RM	W, R						V	NE		movb		Move r/m8 to r8.
+8B /r 	MOV r16, r/m16 	RM	W, R						V	V		movw		Move r/m16 to r16.
+8B /r 	MOV r32, r/m32 	RM	W, R						V	V		movl		Move r/m32 to r32.
+REX.W+ 8B /r 	MOV r64, r/m64 	RM	W, R						V	NE		movq		Move r/m64 to r64.
 8C /r 	MOV r/m16, Sreg	MR	W, R						V	V		movw		Move segment register to r/m16.
 REX.W+ 8C /r 	MOV r/m64, Sreg	MR	W, R						V	V		movq		Move zero extended 16-bit segment register to r/m64.
 8E /r 	MOV Sreg, r/m16	RM	W, R						V	V		mov		Move r/m16 to segment register.
