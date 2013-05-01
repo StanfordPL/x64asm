@@ -1069,19 +1069,19 @@ REX.R+ 0F 22	MOV CR8, r64						NO	YES	V	NE				Move r64 to extended CR8.1
 0F 23 /r	MOV DR0-DR7, r32						NO	YES	NE	V				Move r32 to debug register.
 0F 23 /r	MOV DR0-DR7, r64						NO	YES	V	NE				Move r64 to extended debug register.
 														
-66 0F 28 /r 	MOVAPD xmm1, xmm2/m128	RM	W, R						V	V	SSE2	movapd	YES	Move packed double-precision floating-point values from xmm2/m128 to xmm1.
-66 0F 29 /r	MOVAPD xmm2/m128, xmm1	MR	W, R						V	V	SSE2	movapd		Move packed double-precision floating-point values from xmm1 to xmm2/m128.
+66 0F 28 /r 	MOVAPD xmm1, xmm2/m128	RM	W, R						V	V	SSE2	movapd		Move packed double-precision floating-point values from xmm2/m128 to xmm1.
+66 0F 29 /r	MOVAPD xmm2/m128, xmm1	MR	W, R						V	V	SSE2	movapd	YES	Move packed double-precision floating-point values from xmm1 to xmm2/m128.
 VEX.128.66.0F.WIG 28 /r	VMOVAPD xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovapd	YES	Move aligned packed double-precision floating-point values from xmm2/mem to xmm1.
 VEX.128.66.0F.WIG 29 /r	VMOVAPD xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovapd		Move aligned packed double-precision floating-point values from xmm1 to xmm2/mem.
-VEX.256.66.0F.WIG 28 /r	VMOVAPD ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovapd	YES	Move aligned packed double-precision floating-point values from ymm2/mem to ymm1.
-VEX.256.66.0F.WIG 29 /r	VMOVAPD ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovapd		Move aligned packed double-precision floating-point values from ymm1 to ymm2/mem.
+VEX.256.66.0F.WIG 28 /r	VMOVAPD ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovapd		Move aligned packed double-precision floating-point values from ymm2/mem to ymm1.
+VEX.256.66.0F.WIG 29 /r	VMOVAPD ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovapd	YES	Move aligned packed double-precision floating-point values from ymm1 to ymm2/mem.
 														
-0F 28 /r 	MOVAPS xmm1, xmm2/m128	RM	W, R						V	V	SSE	movaps	YES	Move packed single-precision floating-point values from xmm2/m128 to xmm1.
-0F 29 /r	MOVAPS xmm2/m128, xmm1	MR	W, R						V	V	SSE	movaps		Move packed single-precision floating-point values from xmm1 to xmm2/m128.
+0F 28 /r 	MOVAPS xmm1, xmm2/m128	RM	W, R						V	V	SSE	movaps		Move packed single-precision floating-point values from xmm2/m128 to xmm1.
+0F 29 /r	MOVAPS xmm2/m128, xmm1	MR	W, R						V	V	SSE	movaps	YES	Move packed single-precision floating-point values from xmm1 to xmm2/m128.
 VEX.128.0F.WIG 28 /r	VMOVAPS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovaps	YES	Move aligned packed single-precision floating-point values from xmm2/mem to xmm1.
 VEX.128.0F.WIG 29 /r	VMOVAPS xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovaps		Move aligned packed single-precision floating-point values from xmm1 to xmm2/mem.
-VEX.256.0F.WIG 28 /r	VMOVAPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovaps	YES	Move aligned packed single-precision floating-point values from ymm2/mem to ymm1.
-VEX.256.0F.WIG 29 /r	VMOVAPS ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovaps		Move aligned packed single-precision floating-point values from ymm1 to ymm2/mem.
+VEX.256.0F.WIG 28 /r	VMOVAPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovaps		Move aligned packed single-precision floating-point values from ymm2/mem to ymm1.
+VEX.256.0F.WIG 29 /r	VMOVAPS ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovaps	YES	Move aligned packed single-precision floating-point values from ymm1 to ymm2/mem.
 														
 0F 38 F0 /r 	MOVBE r16, m16 	RM	W, R						V	V	MOVBE	movbew		Reverse byte order in m16 and move to r16
 0F 38 F0 /r 	MOVBE r32, m32 	RM	W, R						V	V	MOVBE	movbel		Reverse byte order in m32 and move to r32
@@ -1109,17 +1109,17 @@ VEX.256.F2.0F.WIG 12 /r	VMOVDDUP ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovddup		
 														
 66 0F 6F /r 	MOVDQA xmm1, xmm2/m128	RM	W, R						V	V	SSE2	movdqa	YES	Move aligned double quadword from xmm2/m128 to xmm1.
 66 0F 7F /r	MOVDQA xmm2/m128, xmm1	MR	W, R						V	V	SSE2	movdqa		Move aligned double quadword from xmm1 to xmm2/m128.
-VEX.128.66.0F.WIG 6F /r	VMOVDQA xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovdqa	YES	Move aligned packed integer values from xmm2/mem to xmm1.
-VEX.128.66.0F.WIG 7F /r	VMOVDQA xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovdqa		Move aligned packed integer values from xmm1 to xmm2/mem.
-VEX.256.66.0F.WIG 6F /r	VMOVDQA ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovdqa	YES	Move aligned packed integer values from ymm2/mem to ymm1.
-VEX.256.66.0F.WIG 7F /r	VMOVDQA ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovdqa		Move aligned packed integer values from ymm1 to ymm2/mem.
+VEX.128.66.0F.WIG 6F /r	VMOVDQA xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovdqa		Move aligned packed integer values from xmm2/mem to xmm1.
+VEX.128.66.0F.WIG 7F /r	VMOVDQA xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovdqa	YES	Move aligned packed integer values from xmm1 to xmm2/mem.
+VEX.256.66.0F.WIG 6F /r	VMOVDQA ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovdqa		Move aligned packed integer values from ymm2/mem to ymm1.
+VEX.256.66.0F.WIG 7F /r	VMOVDQA ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovdqa	YES	Move aligned packed integer values from ymm1 to ymm2/mem.
 														
 F3 0F 6F /r 	MOVDQU xmm1, xmm2/m128	RM	W, R						V	V	SSE2	movdqu	YES	Move unaligned double quadword from xmm2/m128 to xmm1.
 F3 0F 7F /r	MOVDQU xmm2/m128, xmm1	MR	W, R						V	V	SSE2	movdqu		Move unaligned double quadword from xmm1 to xmm2/m128.
-VEX.128.F3.0F.WIG 6F /r	VMOVDQU xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovdqu	YES	Move unaligned packed integer values from xmm2/mem to xmm1.
-VEX.128.F3.0F.WIG 7F /r	VMOVDQU xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovdqu		Move unaligned packed integer values from xmm1 to xmm2/mem.
-VEX.256.F3.0F.WIG 6F /r	VMOVDQU ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovdqu	YES	Move unaligned packed integer values from ymm2/mem to ymm1.
-VEX.256.F3.0F.WIG 7F /r	VMOVDQU ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovdqu		Move unaligned packed integer values from ymm1 to ymm2/mem.
+VEX.128.F3.0F.WIG 6F /r	VMOVDQU xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovdqu		Move unaligned packed integer values from xmm2/mem to xmm1.
+VEX.128.F3.0F.WIG 7F /r	VMOVDQU xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovdqu	YES	Move unaligned packed integer values from xmm1 to xmm2/mem.
+VEX.256.F3.0F.WIG 6F /r	VMOVDQU ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovdqu		Move unaligned packed integer values from ymm2/mem to ymm1.
+VEX.256.F3.0F.WIG 7F /r	VMOVDQU ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovdqu	YES	Move unaligned packed integer values from ymm1 to ymm2/mem.
 														
 F2 0F D6 	MOVDQ2Q mm, xmm 	RM	W, R						V	V		movdq2q		Move low quadword from xmm to mmx register.
 														
