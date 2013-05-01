@@ -1034,8 +1034,8 @@ REX+ 8A /r 	MOV r8, r/m8	RM	W, R						V	NE		movb		Move r/m8 to r8.
 REX.W+ 8B /r 	MOV r64, r/m64 	RM	W, R						V	NE		movq		Move r/m64 to r64.
 8C /r 	MOV r/m16, Sreg	MR	W, R						V	V		movw		Move segment register to r/m16.
 REX.W+ 8C /r 	MOV r/m64, Sreg	MR	W, R						V	V		movq		Move zero extended 16-bit segment register to r/m64.
-8E /r 	MOV Sreg, r/m16	RM	W, R						V	V		movb		Move r/m16 to segment register.
-REX.W+ 8E /r 	MOV Sreg, r/m64	RM	W, R						V	V		movq		Move lower 16 bits of r/m64 to segment register.
+8E /r 	MOV Sreg, r/m16	RM	W, R						V	V		mov		Move r/m16 to segment register.
+REX.W+ 8E /r 	MOV Sreg, r/m64	RM	W, R						V	V		mov		Move lower 16 bits of r/m64 to segment register.
 A0 	MOV AL, moffs8	FD	W, R						V	V		movabsb		Move byte at (seg:offset) to AL.
 REX.W+ A0 	MOV AL, moffs8, pw	FD	W, R, I						V	NE		movabsb		Move byte at (offset) to AL.
 A1 	MOV AX, moffs16	FD	W, R						V	V		movabsw		Move word at (seg:offset) to AX.
