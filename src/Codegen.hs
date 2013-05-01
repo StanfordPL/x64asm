@@ -634,8 +634,10 @@ no_pref66 i = (is_vex_encoded i) ||
               (op == "FSTSW") || (op == "FNSTSW") ||
               (op == "LDDQU") ||
               (op == "LEA") ||
+              (en == "MOV_SREG_R16") ||
               (op == "PINSRW")
   where op = raw_mnemonic i
+        en = opcode_enum i
 
 -- Inserts PREF.66+ for instructions with 16-bit operands
 -- This ignores DX which only appears as an implicit operand to string instrs
