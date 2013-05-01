@@ -980,8 +980,8 @@ E0 cb 	LOOPE rel8 	D	R	RCX E.ZF					V	V		loope		Decrement count; jump short if c
 E0 cb 	LOOPNE rel8 	D	R	RCX E.ZF					V	V		loopne		Decrement count; jump short if count != 0 and  ZF = 0.
 														
 0F 03 /r 	LSL r16, r16/m16 	RM	W, R		E.ZF		YES	NO	V	V		lslw		Load: r16 = segment limit, selector r16/m16.
-0F 03 /r 	LSL r32, r32/m16	RM	W, R		E.ZF		YES	NO	V	V		lsll		Load: r32 = segment limit, selector r32/m16.
-REX.W+ 0F 03 /r	LSL r64, r32/m16	RM	W, R		E.ZF		YES	NO	V	V		lslq		Load: r64 = segment limit, selector r32/m16
+0F 03 /r 	LSL r32, r32/m16	RM	W, R		E.ZF		YES	NO	V	V		lsl		Load: r32 = segment limit, selector r32/m16.
+REX.W+ 0F 03 /r	LSL r64, r32/m16	RM	W, R		E.ZF		YES	NO	V	V		lsl		Load: r64 = segment limit, selector r32/m16
 														
 0F 00 /3 	LTR r/m16 						NO	YES	V	V				Load r/m16 into task register.
 														
