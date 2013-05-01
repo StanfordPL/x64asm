@@ -546,11 +546,11 @@ canonical_op "mm2"   = "mm"
 canonical_op "xmm1"  = "xmm"
 canonical_op "xmm2"  = "xmm"
 canonical_op "xmm3"  = "xmm"
-canonical_op "xmm4"  = "imm8" -- Not a bug! This is a bitmask reference
+canonical_op "xmm4"  = "xmm" 
 canonical_op "ymm1"  = "ymm"
 canonical_op "ymm2"  = "ymm"
 canonical_op "ymm3"  = "ymm"
-canonical_op "ymm4"  = "imm8" -- Not a bug! This is a bitmask reference
+canonical_op "ymm4"  = "ymm" 
 canonical_op "ST(0)" = "ST"
 canonical_op "ST(i)" = "ST(i)"
 canonical_op o = o
@@ -637,7 +637,8 @@ no_pref66 i = (is_vex_encoded i) ||
               (en == "MOVSX_R32_R16") || (en == "MOVSX_R64_R16") ||
               (en == "MOVZX_R32_R16") || (en == "MOVZX_R64_R16") ||
               (op == "PINSRW") ||
-              (op == "RET")
+              (op == "RET") ||
+              (op == "VERR") || (op == "VERW")
   where op = raw_mnemonic i
         en = opcode_enum i
 
