@@ -1788,9 +1788,9 @@ FF /6	PUSH r/m64	M	R						V	NE		pushq		Push r/m64.
 50 +rw	PUSH r16	O	R						V	V		pushw	YES	Push r16.
 50 +rd	PUSH r32								NE	V				Push r32.
 50 +rd	PUSH r64	O	R						V	NE		pushq	YES	Push r64.
-6A	PUSH imm8	I	R						V	V		pushb		Push imm8.
-68	PUSH imm16	I	R						V	V		pushw		Push imm16.
-68	PUSH imm32	I	R						V	V		pushl		Push imm32.
+6A	PUSH imm8	I	R						V	V		push		Push imm8.
+68	PUSH imm16	I	R						V	V		push		Push imm16.
+68	PUSH imm32	I	R						V	V		push		Push imm32.
 0E	PUSH CS								I	V				Push CS.
 16	PUSH SS								I	V				Push SS.
 1E	PUSH DS								I	V				Push DS.
@@ -1801,7 +1801,7 @@ FF /6	PUSH r/m64	M	R						V	NE		pushq		Push r/m64.
 60	PUSHA								I	V				Push AX, CX, DX, BX, original SP, BP, SI, and DI.
 60	PUSHAD								I	V				Push EAX, ECX, EDX, EBX, original ESP, EBP, ESI, and EDI.
 														
-PREF.66+ 9C	PUSHF	NP		E.*					V	V		pushf		Push lower 16 bits of EFLAGS.
+9C	PUSHF	NP		E.*					V	V		pushf		Push lower 16 bits of EFLAGS.
 9C	PUSHFD								NE	V				Push EFLAGS.
 9C	PUSHFQ	NP		E.*					V	NE		pushfq		Push RFLAGS.
 														
