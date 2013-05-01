@@ -1607,9 +1607,9 @@ VEX.NDS.128.66.0F.WIG F4 /r	VPMULUDQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	
 8F /0 	POP r/m16 	M	W						V	V		popw		Pop top of stack into m16; increment stack pointer.
 8F /0 	POP r/m32 								NE	V				Pop top of stack into m32; increment stack pointer.
 8F /0 	POP r/m64 	M	W						V	NE		popq		Pop top of stack into m64; increment stack pointer. Cannot encode 32-bit operand size.
-58 +rw 	POP r16 	O	W						V	V		popw		Pop top of stack into r16; increment stack pointer.
+58 +rw 	POP r16 	O	W						V	V		popw	YES	Pop top of stack into r16; increment stack pointer.
 58 +rd 	POP r32 								NE	V				Pop top of stack into r32; increment stack pointer.
-58 +rd 	POP r64 	O	W						V	NE		popq		Pop top of stack into r64; increment stack pointer. Cannot encode 32-bit operand size.
+58 +rd 	POP r64 	O	W						V	NE		popq	YES	Pop top of stack into r64; increment stack pointer. Cannot encode 32-bit operand size.
 1F 	POP DS 								I	V				Pop top of stack into DS; increment stack pointer.
 07	POP ES 								I	V				Pop top of stack into ES; increment stack pointer.
 17	POP SS 								I	V				Pop top of stack into SS; increment stack pointer.
@@ -1785,9 +1785,9 @@ VEX.NDS.128.66.0F.WIG 6C /r	VPUNPCKLQDQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V
 FF /6	PUSH r/m16 	M	R						V	V		pushw		Push r/m16.
 FF /6	PUSH r/m32								NE	V				Push r/m32.
 FF /6	PUSH r/m64	M	R						V	NE		pushq		Push r/m64.
-50 +rw	PUSH r16	O	R						V	V		pushw		Push r16.
+50 +rw	PUSH r16	O	R						V	V		pushw	YES	Push r16.
 50 +rd	PUSH r32								NE	V				Push r32.
-50 +rd	PUSH r64	O	R						V	NE		pushq		Push r64.
+50 +rd	PUSH r64	O	R						V	NE		pushq	YES	Push r64.
 6A	PUSH imm8	I	R						V	V		pushb		Push imm8.
 68	PUSH imm16	I	R						V	V		pushw		Push imm16.
 68	PUSH imm32	I	R						V	V		pushl		Push imm32.
