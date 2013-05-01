@@ -212,8 +212,8 @@ class Assembler {
 
 		/** Emits a pair of immediates. */
 		void disp_imm(Imm8 i1, Imm16 i2) {
-			disp_imm(i1);
 			disp_imm(i2);
+			disp_imm(i1);
 		}
 
     /** Records internal state for a label reference. Saves the current code
