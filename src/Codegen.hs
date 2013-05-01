@@ -635,6 +635,8 @@ no_pref66 i = (is_vex_encoded i) ||
               (op == "LDDQU") ||
               (op == "LEA") ||
               (en == "MOV_SREG_R16") ||
+              (en == "MOVSX_R32_R16") || (en == "MOVSX_R64_R16") ||
+              (en == "MOVZX_R32_R16") || (en == "MOVZX_R64_R16") ||
               (op == "PINSRW")
   where op = raw_mnemonic i
         en = opcode_enum i
