@@ -1050,12 +1050,12 @@ B0 +rb 	MOV r8, imm8 	OI	W, R						V	V		movb	YES	Move imm8 to r8.
 REX+ B0 +rb	MOV r8, imm8 	OI	W, R						V	NE		movb	YES	Move imm8 to r8.
 B8 +rw 	MOV r16, imm16 	OI	W, R						V	V		movw	YES	Move imm16 to r16.
 B8 +rd 	MOV r32, imm32 	OI	W, R						V	V		movl	YES	Move imm32 to r32.
-REX.W+ B8 +rd 	MOV r64, imm64 	OI	W, R						V	NE		movq	YES	Move imm64 to r64.
+REX.W+ B8 +rd 	MOV r64, imm64 	OI	W, R						V	NE		movq		Move imm64 to r64.
 C6 /0 	MOV r/m8, imm8 	MI	W, R						V	V		movb		Move imm8 to r/m8.
 REX+ C6 /0 	MOV r/m8, imm8 	MI	W, R						V	NE		movb		Move imm8 to r/m8.
 C7 /0 	MOV r/m16, imm16 	MI	W, R						V	V		movw		Move imm16 to r/m16.
 C7 /0 	MOV r/m32, imm32 	MI	W, R						V	V		movl		Move imm32 to r/m32.
-REX.W+ C7 /0 	MOV r/m64, imm32 	MI	W, R						V	NE		movq		Move imm32 sign extended to 64-bits to r/m64.
+REX.W+ C7 /0 	MOV r/m64, imm32 	MI	W, R						V	NE		movq	YES	Move imm32 sign extended to 64-bits to r/m64.
 														
 0F 20 /r 	MOV r32, CR0-CR7						NO	YES	NE	V				Move control register to r32.
 0F 20 /r	MOV r64, CR0-CR7						NO	YES	V	NE				Move extended control register to r64.
