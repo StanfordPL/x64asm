@@ -590,11 +590,6 @@ fix_norex_r8 i = case "REX+" `notElem` (opcode_terms i) of
 fix_rex_row :: Instr -> [Instr]
 fix_rex_row i = concat $ map fix_norex_r8 $ fix_rex_r8 i
 
--- Does this row have r8 operands?
-r8_row :: Instr -> Bool
-r8_row i = "rl" `elem` os || "rh" `elem` os || "rb" `elem` os
-  where os = operands i
-
 -- Is this one of three instructions that require REX+ no matter what
 needs_rex :: Instr -> Bool
 needs_rex i = mn == "LSS" || mn == "LFS" || mn == "LGS"
@@ -603,24 +598,28 @@ needs_rex i = mn == "LSS" || mn == "LFS" || mn == "LGS"
 -- Remove REX+ rows which correspond to r/m8 splits
 remove_m8_rex :: [Instr] -> [Instr]
 remove_m8_rex is = filter keep is
-  where keep i = "REX+" `notElem` (opcode_terms i) || r8_row i || needs_rex i
+  where keep i = "REX+" `notElem` (opcode_terms i) || needs_rex i
 
 -- Fix all rex rows
 fix_rex_rows :: [Instr] -> [Instr]
 fix_rex_rows is = remove_m8_rex $ concat $ map fix_rex_row is
 
--- Step 6: Remove duplicate rows by prefering shortest encoding
+-- Step 6: Remove duplicate rows by using the preferred encoding
 --------------------------------------------------------------------------------
 
--- Returns the instruction with the shortest encoding
-shortest :: [Instr] -> Instr
-shortest is = minimumBy encoding is
-  where encoding i1 i2 = compare (len i1) (len i2)
-        len i = (length (opcode_terms i))
+-- Returns a preferred instruction from a list of alternatives
+get_pref :: [Instr] -> Instr
+get_pref [] = error "Can't select preference from empty list!"
+get_pref (i:[]) = i
+get_pref is = case find (\x -> pref x == "YES") is of
+                   (Just i) -> i
+                   _ -> error $ "Ambiguity for " ++ 
+                                (opcode_enum (head is)) ++ ": " ++ 
+                                (intercalate " " (map opcode is))
 
 -- Remove ambiguity by prefering the shortest encoding
 remove_ambiguity :: [Instr] -> [Instr]
-remove_ambiguity is = map shortest $ groupBy eq $ sortBy srt is
+remove_ambiguity is = map get_pref $ groupBy eq $ sortBy srt is
   where srt x y = compare (assm_decl x) (assm_decl y)
         eq x y = (assm_decl x) == (assm_decl y)	
 

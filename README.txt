@@ -180,9 +180,7 @@ mnemonic and operand. These ambiguities represent a distinction without a
 difference. They are alternate hardware methods for performing the same 
 operation, which as far as we know, have no noticable performance tradeoffs.
 	
-We remove this redudancy by eliminating all but one row from each such 
-equivalence class. In the interest of encoding efficiency, preference is given 
-to variants with shorter encodings.
+We remove this redudancy by choosing the encoding preferred by g++.
 
 -------------------------------------------------------------------------------
 
