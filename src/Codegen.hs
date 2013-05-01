@@ -1104,9 +1104,9 @@ rex_prefix i
 -- Explicit VEX mmmmm arg
 vex_mmmmm :: Instr -> String
 vex_mmmmm i
-  | "OF"   `elem` (vex_terms i) = "0x01"
-  | "OF3A" `elem` (vex_terms i) = "0x02"
-  | "OF38" `elem` (vex_terms i) = "0x03"
+  | "0F"   `elem` (vex_terms i) = "0x01"
+  | "0F38" `elem` (vex_terms i) = "0x02"
+  | "0F3A" `elem` (vex_terms i) = "0x03"
   | otherwise = "0x01"
 
 -- Explicit VEX l arg
@@ -1456,9 +1456,9 @@ test_operand "0"        = ["$0x0"]
 test_operand "1"        = ["$0x1"]
 test_operand "3"        = ["$0x3"]
 test_operand "mm"       = map (("%mm"++).show) [0..7]
-test_operand "xmm"      = map (("%xmm"++).show) [0..15]
+test_operand "xmm"      = map (("%xmm"++).show) [0,1,8,9,12,5]--[0..15]
 test_operand "<XMM0>"   = ["%xmm0"]
-test_operand "ymm"      = map (("%ymm"++).show) [0..15]
+test_operand "ymm"      = map (("%ymm"++).show) [0,1,8,9,12,15]--[0..15]
 test_operand "ST"       = ["%st(0)"]
 test_operand "ST(i)"    = ["%st(0)","%st(1)","%st(2)","%st(3)","%st(4)","%st(5)","%st(6)","%st(7)"]
 test_operand "rel8"     = ["0x0","0x1","0x7f","-0x1","-0x7f"]
