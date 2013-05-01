@@ -210,6 +210,12 @@ class Assembler {
       fxn_->emit_quad(i.val_);
     }
 
+		/** Emits a pair of immediates. */
+		void disp_imm(Imm8 i1, Imm16 i2) {
+			disp_imm(i1);
+			disp_imm(i2);
+		}
+
     /** Records internal state for a label reference. Saves the current code
     	  position and reserves space for the resolved address.
     */

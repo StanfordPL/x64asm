@@ -630,6 +630,7 @@ remove_ambiguity is = map shortest $ groupBy eq $ sortBy srt is
 -- Is this an instruction which does NOT require a 66 prefix despite operands?
 no_pref66 :: Instr -> Bool
 no_pref66 i = (is_vex_encoded i) || 
+              (op == "ENTER") ||
               (op == "FSTSW") || (op == "FNSTSW") ||
               (op == "LAR" ) ||
               (op == "LDDQU") ||
@@ -1170,9 +1171,11 @@ disp_imm_index i = findIndex disp_imm_op (operands i)
 
 -- Emits code for displacement or immediate bytes
 disp_imm :: Instr -> String
-disp_imm i = case disp_imm_index i of
-  (Just idx) -> "disp_imm(arg" ++ (show idx) ++ ");\n"
-  Nothing -> "// No Displacement/Immediate\n"
+disp_imm i 
+  | op_en i == "II" = "disp_imm(arg0,arg1);\n"
+  | otherwise = case disp_imm_index i of
+                     (Just idx) -> "disp_imm(arg" ++ (show idx) ++ ");\n"
+                     Nothing -> "// No Displacement/Immediate\n"
 
 -- Emits code for vex immediate byte
 vex_imm :: Instr -> String
