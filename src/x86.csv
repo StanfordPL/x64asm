@@ -1674,8 +1674,8 @@ VEX.NDD.128.66.0F.WIG 73 /7 ib	VPSLLDQ xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX
 														
 0F F1 /r	PSLLW mm, mm/m64	RM	RW, R						V	V	MMX	psllw		Shift words in mm left mm/m64 while shifting in 0s.
 66 0F F1 /r	PSLLW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psllw		Shift words in xmm1 left by xmm2/m128 while shifting in 0s.
-0F 71 /6 ib	PSLLW xmm1, imm8	MI	RW, R						V	V	MMX	psllw	YES	Shift words in mm left by imm8 while shifting in 0s.
-66 0F 71 /6 ib	PSLLW xmm1, imm8	MI	RW, R						V	V	SSE2	psllw		Shift words in xmm1 left by imm8 while shifting in 0s.
+0F 71 /6 ib	PSLLW xmm1, imm8	MI	RW, R						V	V	MMX	psllw		Shift words in mm left by imm8 while shifting in 0s.
+66 0F 71 /6 ib	PSLLW xmm1, imm8	MI	RW, R						V	V	SSE2	psllw	YES	Shift words in xmm1 left by imm8 while shifting in 0s.
 0F F2 /r	PSLLD mm, mm/m64	RM	RW, R						V	V	MMX	pslld		Shift doublewords in mm left by mm/m64 while shifting in 0s.
 66 0F F2 /r	PSLLD xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pslld		Shift doublewords in xmm1 left by xmm2/m128 while shifting in 0s.
 0F 72 /6 ib	PSLLD mm, imm8	MI	RW, R						V	V	MMX	pslld		Shift doublewords in mm left by imm8 while shifting in 0s.
