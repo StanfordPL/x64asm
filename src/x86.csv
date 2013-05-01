@@ -1071,15 +1071,15 @@ REX.R+ 0F 22	MOV CR8, r64						NO	YES	V	NE				Move r64 to extended CR8.1
 														
 66 0F 28 /r 	MOVAPD xmm1, xmm2/m128	RM	W, R						V	V	SSE2	movapd		Move packed double-precision floating-point values from xmm2/m128 to xmm1.
 66 0F 29 /r	MOVAPD xmm2/m128, xmm1	MR	W, R						V	V	SSE2	movapd	YES	Move packed double-precision floating-point values from xmm1 to xmm2/m128.
-VEX.128.66.0F.WIG 28 /r	VMOVAPD xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovapd	YES	Move aligned packed double-precision floating-point values from xmm2/mem to xmm1.
-VEX.128.66.0F.WIG 29 /r	VMOVAPD xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovapd		Move aligned packed double-precision floating-point values from xmm1 to xmm2/mem.
+VEX.128.66.0F.WIG 28 /r	VMOVAPD xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovapd		Move aligned packed double-precision floating-point values from xmm2/mem to xmm1.
+VEX.128.66.0F.WIG 29 /r	VMOVAPD xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovapd	YES	Move aligned packed double-precision floating-point values from xmm1 to xmm2/mem.
 VEX.256.66.0F.WIG 28 /r	VMOVAPD ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovapd		Move aligned packed double-precision floating-point values from ymm2/mem to ymm1.
 VEX.256.66.0F.WIG 29 /r	VMOVAPD ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovapd	YES	Move aligned packed double-precision floating-point values from ymm1 to ymm2/mem.
 														
 0F 28 /r 	MOVAPS xmm1, xmm2/m128	RM	W, R						V	V	SSE	movaps		Move packed single-precision floating-point values from xmm2/m128 to xmm1.
 0F 29 /r	MOVAPS xmm2/m128, xmm1	MR	W, R						V	V	SSE	movaps	YES	Move packed single-precision floating-point values from xmm1 to xmm2/m128.
-VEX.128.0F.WIG 28 /r	VMOVAPS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovaps	YES	Move aligned packed single-precision floating-point values from xmm2/mem to xmm1.
-VEX.128.0F.WIG 29 /r	VMOVAPS xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovaps		Move aligned packed single-precision floating-point values from xmm1 to xmm2/mem.
+VEX.128.0F.WIG 28 /r	VMOVAPS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovaps		Move aligned packed single-precision floating-point values from xmm2/mem to xmm1.
+VEX.128.0F.WIG 29 /r	VMOVAPS xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovaps	YES	Move aligned packed single-precision floating-point values from xmm1 to xmm2/mem.
 VEX.256.0F.WIG 28 /r	VMOVAPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovaps		Move aligned packed single-precision floating-point values from ymm2/mem to ymm1.
 VEX.256.0F.WIG 29 /r	VMOVAPS ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovaps	YES	Move aligned packed single-precision floating-point values from ymm1 to ymm2/mem.
 														
