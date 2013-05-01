@@ -36,11 +36,11 @@ REX.W+ 81 /2 id	ADC r/m64, imm32	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				
 83 /2 ib	ADC r/m16, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcw	YES	Add with CF sign-extended imm8 to r/m16.
 83 /2 ib	ADC r/m32, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcl	YES	Add with CF sign-extended imm8 into r/m32.
 REX.W+ 83 /2 ib	ADC r/m64, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		adcq	YES	Add with CF sign-extended imm8 into r/m64.
-10 /r	ADC r/m8, r8	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcb		Add with carry byte register to r/m8.
-REX+ 10 /r	ADC r/m8, r8	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		adcb		Add with carry byte register to r/m8.
-11 /r	ADC r/m16, r16	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcw		Add with carry r16 to r/m16.
-11 /r	ADC r/m32, r32	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcl		Add with CF r32 to r/m32.
-REX.W+ 11 /r	ADC r/m64, r64	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		adcq		Add with CF r64 to r/m64.
+10 /r	ADC r/m8, r8	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcb	YES	Add with carry byte register to r/m8.
+REX+ 10 /r	ADC r/m8, r8	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		adcb	YES	Add with carry byte register to r/m8.
+11 /r	ADC r/m16, r16	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcw	YES	Add with carry r16 to r/m16.
+11 /r	ADC r/m32, r32	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcl	YES	Add with CF r32 to r/m32.
+REX.W+ 11 /r	ADC r/m64, r64	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		adcq	YES	Add with CF r64 to r/m64.
 12 /r	ADC r8, r/m8	RM	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcb		Add with carry r/m8 to byte register.
 REX+ 12 /r	ADC r8, r/m8	RM	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		adcb		Add with carry r/m64 to byte register.
 13 /r	ADC r16, r/m16	RM	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		adcw		Add with carry r/m16 to r16.
@@ -59,11 +59,11 @@ REX.W+ 81 /0 id	ADD r/m64, imm32	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE
 83 /0 ib	ADD r/m16, imm8 	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addw	YES	Add sign-extended imm8 to r/m16. 
 83 /0 ib	ADD r/m32, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addl	YES	Add sign-extended imm8 to r/m32. 
 REX.W+ 83 /0 ib 	ADD r/m64, imm8 	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		addq	YES	Add sign-extended imm8 to r/m64. 
-00 /r 	ADD r/m8, r8 	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addb		Add r8 to r/m8.
-REX+ 00 /r	ADD r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		addb		Add r8 to r/m8. 
-01 /r	ADD r/m16, r16 	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addw		Add r16 to r/m16. 
-01 /r	ADD r/m32, r32 	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addl		Add r32 to r/m32. 
-REX.W+ 01 /r 	ADD r/m64, r64 	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		addq		Add r64 to r/m64. 
+00 /r 	ADD r/m8, r8 	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addb	YES	Add r8 to r/m8.
+REX+ 00 /r	ADD r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		addb	YES	Add r8 to r/m8. 
+01 /r	ADD r/m16, r16 	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addw	YES	Add r16 to r/m16. 
+01 /r	ADD r/m32, r32 	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addl	YES	Add r32 to r/m32. 
+REX.W+ 01 /r 	ADD r/m64, r64 	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		addq	YES	Add r64 to r/m64. 
 02 /r 	ADD r8, r/m8 	RM	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addb		Add r/m8 to r8. 
 REX+ 02 /r	ADD r8, r/m8	RM	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		addb		Add r/m8 to r8. 
 03 /r	ADD r16, r/m16 	RM	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		addw		Add r/m16 to r16. 
@@ -122,11 +122,11 @@ REX.W+ 81 /4 id	AND r/m64, imm32	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE	
 83 /4 ib	AND r/m16, imm8	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andw	YES	r/m16 AND imm8 (sign-extended).
 83 /4 ib	AND r/m32, imm8	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andl	YES	r/m32 AND imm8 (sign-extended).
 REX.W+ 83 /4 ib	AND r/m64, imm8	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		andq	YES	r/m64 AND imm8 (sign-extended).
-20 /r	AND r/m8, r8	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andb		r/m8 AND r8.
-REX+ 20 /r	AND r/m8, r8	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		andb		r/m64 AND r8 (sign-extended).
-21 /r	AND r/m16, r16	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andw		r/m16 AND r16.
-21 /r	AND r/m32, r32	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andl		r/m32 AND r32.
-REX.W+ 21 /r	AND r/m64, r64	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		andq		r/m64 AND r32.
+20 /r	AND r/m8, r8	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andb	YES	r/m8 AND r8.
+REX+ 20 /r	AND r/m8, r8	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		andb	YES	r/m64 AND r8 (sign-extended).
+21 /r	AND r/m16, r16	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andw	YES	r/m16 AND r16.
+21 /r	AND r/m32, r32	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andl	YES	r/m32 AND r32.
+REX.W+ 21 /r	AND r/m64, r64	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		andq	YES	r/m64 AND r32.
 22 /r	AND r8, r/m8	RM	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andb		r8 AND r/m8.
 REX+ 22 /r	AND r8, r/m8	RM	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		andb		r/m64 AND r8 (sign-extended).
 23 /r	AND r16, r/m16	RM	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andw		r16 AND r/m16.
@@ -339,11 +339,11 @@ REX.W+ 81 /7 id	CMP r/m64, imm32	MI	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE	
 83 /7 ib	CMP r/m16, imm8 	MI	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpw	YES	Compare imm8 with r/m16.
 83 /7 ib	CMP r/m32, imm8 	MI	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpl	YES	Compare imm8 with r/m32.
 REX.W+ 83 /7 ib	CMP r/m64, imm8 	MI	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		cmpq	YES	Compare imm8 with r/m64.
-38 /r	CMP r/m8, r8 	MR	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpb		Compare r8 with r/m8.
-REX+ 38 /r	CMP r/m8, r8	MR	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		cmpb		Compare r8 with r/m8.
-39 /r	CMP r/m16, r16 	MR	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpw		Compare r16 with r/m16.
-39 /r	CMP r/m32, r32 	MR	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpl		Compare r32 with r/m32.
-REX.W+ 39 /r	CMP r/m64, r64 	MR	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		cmpq		Compare r64 with r/m64.
+38 /r	CMP r/m8, r8 	MR	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpb	YES	Compare r8 with r/m8.
+REX+ 38 /r	CMP r/m8, r8	MR	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		cmpb	YES	Compare r8 with r/m8.
+39 /r	CMP r/m16, r16 	MR	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpw	YES	Compare r16 with r/m16.
+39 /r	CMP r/m32, r32 	MR	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpl	YES	Compare r32 with r/m32.
+REX.W+ 39 /r	CMP r/m64, r64 	MR	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		cmpq	YES	Compare r64 with r/m64.
 3A /r	CMP r8, r/m8 	RM	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpb		Compare r/m8 with r8.
 REX+ 3A /r	CMP r8, r/m8	RM	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		cmpb		Compare r/m8 with r8.
 3B /r	CMP r16, r/m16 	RM	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpw		Compare r/m16 with r16.
@@ -1027,11 +1027,11 @@ REX+ 88 /r 	MOV r/m8, r8	MR	W, R						V	NE		movb		Move r8 to r/m8.
 89 /r 	MOV r/m16, r16 	MR	W, R						V	V		movw		Move r16 to r/m16.
 89 /r 	MOV r/m32, r32 	MR	W, R						V	V		movl		Move r32 to r/m32.
 REX.W+ 89 /r 	MOV r/m64, r64 	MR	W, R						V	NE		movq		Move r64 to r/m64.
-8A /r 	MOV r8, r/m8 	RM	W, R						V	V		movb		Move r/m8 to r8.
-REX+ 8A /r 	MOV r8, r/m8	RM	W, R						V	NE		movb		Move r/m8 to r8.
-8B /r 	MOV r16, r/m16 	RM	W, R						V	V		movw		Move r/m16 to r16.
-8B /r 	MOV r32, r/m32 	RM	W, R						V	V		movl		Move r/m32 to r32.
-REX.W+ 8B /r 	MOV r64, r/m64 	RM	W, R						V	NE		movq		Move r/m64 to r64.
+8A /r 	MOV r8, r/m8 	RM	W, R						V	V		movb	YES	Move r/m8 to r8.
+REX+ 8A /r 	MOV r8, r/m8	RM	W, R						V	NE		movb	YES	Move r/m8 to r8.
+8B /r 	MOV r16, r/m16 	RM	W, R						V	V		movw	YES	Move r/m16 to r16.
+8B /r 	MOV r32, r/m32 	RM	W, R						V	V		movl	YES	Move r/m32 to r32.
+REX.W+ 8B /r 	MOV r64, r/m64 	RM	W, R						V	NE		movq	YES	Move r/m64 to r64.
 8C /r 	MOV r/m16, Sreg	MR	W, R						V	V		movw		Move segment register to r/m16.
 REX.W+ 8C /r 	MOV r/m64, Sreg	MR	W, R						V	V		movq		Move zero extended 16-bit segment register to r/m64.
 8E /r 	MOV Sreg, r/m16	RM	W, R						V	V		mov		Move r/m16 to segment register.
@@ -1046,11 +1046,11 @@ REX.W+ A2 	MOV moffs8, AL, pw 	TD	W, R, I						V	NE		movabsb		Move AL to (offset
 A3 	MOV moffs16, AX 	TD	W, R						V	V		movabsw		Move AX to (seg:offset).
 A3 	MOV moffs32, EAX 	TD	W, R						V	V		movabsl		Move EAX to (seg:offset).
 REX.W+ A3 	MOV moffs64, RAX 	TD	W, R						V	NE		movabsq		Move RAX to (offset).
-B0 +rb 	MOV r8, imm8 	OI	W, R						V	V		movb		Move imm8 to r8.
-REX+ B0 +rb	MOV r8, imm8 	OI	W, R						V	NE		movb		Move imm8 to r8.
-B8 +rw 	MOV r16, imm16 	OI	W, R						V	V		movw		Move imm16 to r16.
-B8 +rd 	MOV r32, imm32 	OI	W, R						V	V		movl		Move imm32 to r32.
-REX.W+ B8 +rd 	MOV r64, imm64 	OI	W, R						V	NE		movq		Move imm64 to r64.
+B0 +rb 	MOV r8, imm8 	OI	W, R						V	V		movb	YES	Move imm8 to r8.
+REX+ B0 +rb	MOV r8, imm8 	OI	W, R						V	NE		movb	YES	Move imm8 to r8.
+B8 +rw 	MOV r16, imm16 	OI	W, R						V	V		movw	YES	Move imm16 to r16.
+B8 +rd 	MOV r32, imm32 	OI	W, R						V	V		movl	YES	Move imm32 to r32.
+REX.W+ B8 +rd 	MOV r64, imm64 	OI	W, R						V	NE		movq	YES	Move imm64 to r64.
 C6 /0 	MOV r/m8, imm8 	MI	W, R						V	V		movb		Move imm8 to r/m8.
 REX+ C6 /0 	MOV r/m8, imm8 	MI	W, R						V	NE		movb		Move imm8 to r/m8.
 C7 /0 	MOV r/m16, imm16 	MI	W, R						V	V		movw		Move imm16 to r/m16.
@@ -1069,18 +1069,18 @@ REX.R+ 0F 22	MOV CR8, r64						NO	YES	V	NE				Move r64 to extended CR8.1
 0F 23 /r	MOV DR0-DR7, r32						NO	YES	NE	V				Move r32 to debug register.
 0F 23 /r	MOV DR0-DR7, r64						NO	YES	V	NE				Move r64 to extended debug register.
 														
-66 0F 28 /r 	MOVAPD xmm1, xmm2/m128	RM	W, R						V	V	SSE2	movapd		Move packed double-precision floating-point values from xmm2/m128 to xmm1.
+66 0F 28 /r 	MOVAPD xmm1, xmm2/m128	RM	W, R						V	V	SSE2	movapd	YES	Move packed double-precision floating-point values from xmm2/m128 to xmm1.
 66 0F 29 /r	MOVAPD xmm2/m128, xmm1	MR	W, R						V	V	SSE2	movapd		Move packed double-precision floating-point values from xmm1 to xmm2/m128.
-VEX.128.66.0F.WIG 28 /r	VMOVAPD xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovapd		Move aligned packed double-precision floating-point values from xmm2/mem to xmm1.
+VEX.128.66.0F.WIG 28 /r	VMOVAPD xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovapd	YES	Move aligned packed double-precision floating-point values from xmm2/mem to xmm1.
 VEX.128.66.0F.WIG 29 /r	VMOVAPD xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovapd		Move aligned packed double-precision floating-point values from xmm1 to xmm2/mem.
-VEX.256.66.0F.WIG 28 /r	VMOVAPD ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovapd		Move aligned packed double-precision floating-point values from ymm2/mem to ymm1.
+VEX.256.66.0F.WIG 28 /r	VMOVAPD ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovapd	YES	Move aligned packed double-precision floating-point values from ymm2/mem to ymm1.
 VEX.256.66.0F.WIG 29 /r	VMOVAPD ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovapd		Move aligned packed double-precision floating-point values from ymm1 to ymm2/mem.
 														
-0F 28 /r 	MOVAPS xmm1, xmm2/m128	RM	W, R						V	V	SSE	movaps		Move packed single-precision floating-point values from xmm2/m128 to xmm1.
+0F 28 /r 	MOVAPS xmm1, xmm2/m128	RM	W, R						V	V	SSE	movaps	YES	Move packed single-precision floating-point values from xmm2/m128 to xmm1.
 0F 29 /r	MOVAPS xmm2/m128, xmm1	MR	W, R						V	V	SSE	movaps		Move packed single-precision floating-point values from xmm1 to xmm2/m128.
-VEX.128.0F.WIG 28 /r	VMOVAPS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovaps		Move aligned packed single-precision floating-point values from xmm2/mem to xmm1.
+VEX.128.0F.WIG 28 /r	VMOVAPS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovaps	YES	Move aligned packed single-precision floating-point values from xmm2/mem to xmm1.
 VEX.128.0F.WIG 29 /r	VMOVAPS xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovaps		Move aligned packed single-precision floating-point values from xmm1 to xmm2/mem.
-VEX.256.0F.WIG 28 /r	VMOVAPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovaps		Move aligned packed single-precision floating-point values from ymm2/mem to ymm1.
+VEX.256.0F.WIG 28 /r	VMOVAPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovaps	YES	Move aligned packed single-precision floating-point values from ymm2/mem to ymm1.
 VEX.256.0F.WIG 29 /r	VMOVAPS ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovaps		Move aligned packed single-precision floating-point values from ymm1 to ymm2/mem.
 														
 0F 38 F0 /r 	MOVBE r16, m16 	RM	W, R						V	V	MOVBE	movbew		Reverse byte order in m16 and move to r16
@@ -1091,34 +1091,34 @@ REX.W+ 0F 38 F0 /r 	MOVBE r64, m64 	RM	W, R						V	NE	MOVBE	movbeq		Reverse byte
 REX.W+ 0F 38 F1 /r 	MOVBE m64, r64 	MR	W, R						V	NE	MOVBE	movbeq		Reverse byte order in r64 and move to m64.
 														
 0F 6E /r 	MOVD mm, r/m32	RM	W, R						V	V	MMX	movd		Move doubleword from r/m32 to mm.
-REX.W+ 0F 6E /r	MOVQ mm, r/m64	RM	W, R						V	NE	MMX	movq		Move quadword from r/m64 to mm.
+REX.W+ 0F 6E /r	MOVQ mm, r/m64	RM	W, R						V	NE	MMX	movq	YES	Move quadword from r/m64 to mm.
 0F 7E /r	MOVD r/m32, mm	MR	W, R						V	V	MMX	movd		Move doubleword from mm to r/m32.
-REX.W+ 0F 7E /r	MOVQ r/m64, mm	MR	W, R						V	NE	MMX	movq		Move quadword from mm to r/m64.
+REX.W+ 0F 7E /r	MOVQ r/m64, mm	MR	W, R						V	NE	MMX	movq	YES	Move quadword from mm to r/m64.
 VEX.128.66.0F.W0 6E /r	VMOVD xmm1, r32/m32	RM	Z, R						V	V	AVX	vmovd		Move doubleword from r/m32 to xmm1.
-VEX.128.66.0F.W1 6E /r	VMOVQ xmm1, r64/m64	RM	Z, R						V	NE	AVX	vmovq		Move quadword from r/m64 to xmm1.
+VEX.128.66.0F.W1 6E /r	VMOVQ xmm1, r64/m64	RM	Z, R						V	NE	AVX	vmovq	YES	Move quadword from r/m64 to xmm1.
 66 0F 6E /r	MOVD xmm, r/m32	RM	W, R						V	V	SSE2	movd		Move doubleword from r/m32 to xmm.
-66 REX.W+ 0F 6E /r	MOVQ xmm, r/m64	RM	W, R						V	NE	SSE2	movq		Move quadword from r/m64 to xmm.
+66 REX.W+ 0F 6E /r	MOVQ xmm, r/m64	RM	W, R						V	NE	SSE2	movq	YES	Move quadword from r/m64 to xmm.
 66 0F 7E /r	MOVD r/m32, xmm	MR	W, R						V	V	SSE2	movd		Move doubleword from xmm register to r/m32.
-66 REX.W+ 0F 7E /r	MOVQ r/m64, xmm	MR	W, R						V	NE	SSE2	movq		Move quadword from xmm register to r/m64.
+66 REX.W+ 0F 7E /r	MOVQ r/m64, xmm	MR	W, R						V	NE	SSE2	movq	YES	Move quadword from xmm register to r/m64.
 VEX.128.66.0F.W0 7E /r	VMOVD r32/m32, xmm1	MR	W, R						V	V	AVX	vmovd		Move doubleword from xmm1 register to r/m32.
-VEX.128.66.0F.W1 7E /r	VMOVQ r64/m64, xmm1	MR	W, R						V	NE	AVX	vmovq		Move quadword from xmm1 register to r/m64.
+VEX.128.66.0F.W1 7E /r	VMOVQ r64/m64, xmm1	MR	W, R						V	NE	AVX	vmovq	YES	Move quadword from xmm1 register to r/m64.
 														
 F2 0F 12 /r 	MOVDDUP xmm1, xmm2/m64	RM	W, R						V	V	SSE3	movddup		Move one double-precision floating-point value from the lower 64-bit operand in xmm2/m64 to xmm1 and duplicate.
 VEX.128.F2.0F.WIG 12 /r	VMOVDDUP xmm1, xmm2/m64	RM	Z, R						V	V	AVX	vmovddup		Move double-precision floating-point values from xmm2/mem and duplicate into xmm1.
 VEX.256.F2.0F.WIG 12 /r	VMOVDDUP ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovddup		Move even index double-precision floating-point values from ymm2/mem and duplicate each element into ymm1.
 														
-66 0F 6F /r 	MOVDQA xmm1, xmm2/m128	RM	W, R						V	V	SSE2	movdqa		Move aligned double quadword from xmm2/m128 to xmm1.
+66 0F 6F /r 	MOVDQA xmm1, xmm2/m128	RM	W, R						V	V	SSE2	movdqa	YES	Move aligned double quadword from xmm2/m128 to xmm1.
 66 0F 7F /r	MOVDQA xmm2/m128, xmm1	MR	W, R						V	V	SSE2	movdqa		Move aligned double quadword from xmm1 to xmm2/m128.
-VEX.128.66.0F.WIG 6F /r	VMOVDQA xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovdqa		Move aligned packed integer values from xmm2/mem to xmm1.
+VEX.128.66.0F.WIG 6F /r	VMOVDQA xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovdqa	YES	Move aligned packed integer values from xmm2/mem to xmm1.
 VEX.128.66.0F.WIG 7F /r	VMOVDQA xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovdqa		Move aligned packed integer values from xmm1 to xmm2/mem.
-VEX.256.66.0F.WIG 6F /r	VMOVDQA ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovdqa		Move aligned packed integer values from ymm2/mem to ymm1.
+VEX.256.66.0F.WIG 6F /r	VMOVDQA ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovdqa	YES	Move aligned packed integer values from ymm2/mem to ymm1.
 VEX.256.66.0F.WIG 7F /r	VMOVDQA ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovdqa		Move aligned packed integer values from ymm1 to ymm2/mem.
 														
-F3 0F 6F /r 	MOVDQU xmm1, xmm2/m128	RM	W, R						V	V	SSE2	movdqu		Move unaligned double quadword from xmm2/m128 to xmm1.
+F3 0F 6F /r 	MOVDQU xmm1, xmm2/m128	RM	W, R						V	V	SSE2	movdqu	YES	Move unaligned double quadword from xmm2/m128 to xmm1.
 F3 0F 7F /r	MOVDQU xmm2/m128, xmm1	MR	W, R						V	V	SSE2	movdqu		Move unaligned double quadword from xmm1 to xmm2/m128.
-VEX.128.F3.0F.WIG 6F /r	VMOVDQU xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovdqu		Move unaligned packed integer values from xmm2/mem to xmm1.
+VEX.128.F3.0F.WIG 6F /r	VMOVDQU xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovdqu	YES	Move unaligned packed integer values from xmm2/mem to xmm1.
 VEX.128.F3.0F.WIG 7F /r	VMOVDQU xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovdqu		Move unaligned packed integer values from xmm1 to xmm2/mem.
-VEX.256.F3.0F.WIG 6F /r	VMOVDQU ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovdqu		Move unaligned packed integer values from ymm2/mem to ymm1.
+VEX.256.F3.0F.WIG 6F /r	VMOVDQU ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovdqu	YES	Move unaligned packed integer values from ymm2/mem to ymm1.
 VEX.256.F3.0F.WIG 7F /r	VMOVDQU ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovdqu		Move unaligned packed integer values from ymm1 to ymm2/mem.
 														
 F2 0F D6 	MOVDQ2Q mm, xmm 	RM	W, R						V	V		movdq2q		Move low quadword from xmm to mmx register.
@@ -1177,10 +1177,10 @@ VEX.256.0F.WIG 2B /r	VMOVNTPS m256, ymm1	MR	W, R						V	V	AVX	vmovntps		Move pac
 														
 0F E7 /r 	MOVNTQ m64, mm 	MR	W, R						V	V		movntq		Move quadword from mm to m64 using non-temporal hint.
 														
-0F 6F /r 	MOVQ mm, mm/m64	RM	W, R						V	V	MMX	movq		Move quadword from mm/m64 to mm.
+0F 6F /r 	MOVQ mm, mm/m64	RM	W, R						V	V	MMX	movq	YES	Move quadword from mm/m64 to mm.
 0F 7F /r	MOVQ mm/m64, mm	MR	W, R						V	V	MMX	movq		Move quadword from mm to mm/m64.
-F3 0F 7E	MOVQ xmm1, xmm2/m64	RM	W, R						V	V	SSE2	movq		Move quadword from xmm2/mem64 to xmm1.
-VEX.128.F3.0F.WIG 7E /r	VMOVQ xmm1, xmm2	RM	Z, R						V	V	AVX	vmovq		Move quadword from xmm2 to xmm1.
+F3 0F 7E	MOVQ xmm1, xmm2/m64	RM	W, R						V	V	SSE2	movq	YES	Move quadword from xmm2/mem64 to xmm1.
+VEX.128.F3.0F.WIG 7E /r	VMOVQ xmm1, xmm2	RM	Z, R						V	V	AVX	vmovq	YES	Move quadword from xmm2 to xmm1.
 VEX.128.F3.0F.WIG 7E /r	VMOVQ xmm1, m64	RM	Z, R						V	V	AVX	vmovq		Load quadword from m64 to xmm1.
 66 0F D6	MOVQ xmm2/m64, xmm1	MR	W, R						V	V	SSE2	movq		Move quadword from xmm1 to xmm2/mem64.
 VEX.128.66.0F.WIG D6 /r	VMOVQ xmm1/m64, xmm2	MR	Z, R						V	V	AVX	vmovq		Move quadword from xmm2 register to xmm1/m64.
@@ -1196,8 +1196,8 @@ PREF.66+ A5 	MOVSW 	NP		E.DF ESI rsi EDI rdi					V	V		movsw		For legacy mode, mo
 A5 	MOVSD 	NP		E.DF ESI rsi EDI rdi					V	V		movsl		For legacy mode, move dword from address DS:(E)SI to ES:(E)DI. For 64-bit mode move dword from address (R|E)SI to (R|E)DI.
 REX.W+ A5 	MOVSQ 	NP		E.DF ESI rsi EDI rdi					V	NE		movsq		Move qword from address (R|E)SI to (R|E)DI.
 														
-F2 0F 10 /r 	MOVSD xmm1, xmm2/m64	RM	W, R						V	V	SSE2	movsd		Move scalar double-precision floating-point value from xmm2/m64 to xmm1 register.
-VEX.NDS.LIG.F2.0F.WIG 10 /r	VMOVSD xmm1, xmm2, xmm3	RVM	W, R, R						V	V	AVX	vmovsd		Merge scalar double-precision floating-point value from xmm2 and xmm3 to xmm1 register.
+F2 0F 10 /r 	MOVSD xmm1, xmm2/m64	RM	W, R						V	V	SSE2	movsd	YES	Move scalar double-precision floating-point value from xmm2/m64 to xmm1 register.
+VEX.NDS.LIG.F2.0F.WIG 10 /r	VMOVSD xmm1, xmm2, xmm3	RVM	W, R, R						V	V	AVX	vmovsd	YES	Merge scalar double-precision floating-point value from xmm2 and xmm3 to xmm1 register.
 VEX.LIG.F2.0F.WIG 10 /r	VMOVSD xmm1, m64	XM	Z, R						V	V	AVX	vmovsd		Load scalar double-precision floating-point value from m64 to xmm1 register.
 F2 0F 11 /r	MOVSD xmm2/m64, xmm1	MR	W, R						V	V	SSE2	movsd		Move scalar double-precision floating-point value from xmm1 register to xmm2/m64.
 VEX.NDS.LIG.F2.0F.WIG 11 /r	VMOVSD xmm1, xmm2, xmm3	MVR	Z, R, R						V	V	AVX	vmovsd		Merge scalar double-precision floating-point value from xmm2 and xmm3 registers to xmm1.
@@ -1211,8 +1211,8 @@ F3 0F 12 /r 	MOVSLDUP xmm1, xmm2/m128	RM	W, R						V	V	SSE3	movsldup		Move two s
 VEX.128.F3.0F.WIG 12 /r	VMOVSLDUP xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovsldup		Move even index single-precision floating-point values from xmm2/mem and duplicate each element into xmm1.
 VEX.256.F3.0F.WIG 12 /r	VMOVSLDUP ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovsldup		Move even index single-precision floating-point values from ymm2/mem and duplicate each element into ymm1.
 														
-F3 0F 10 /r 	MOVSS xmm1, xmm2/m32	RM	W, R						V	V	SSE	movss		Move scalar single-precision floating-point value from xmm2/m32 to xmm1 register.
-VEX.NDS.LIG.F3.0F.WIG 10 /r	VMOVSS xmm1, xmm2, xmm3	RVM	Z, R, R						V	V	AVX	vmovss		Merge scalar single-precision floating-point value from xmm2 and xmm3 to xmm1 register.
+F3 0F 10 /r 	MOVSS xmm1, xmm2/m32	RM	W, R						V	V	SSE	movss	YES	Move scalar single-precision floating-point value from xmm2/m32 to xmm1 register.
+VEX.NDS.LIG.F3.0F.WIG 10 /r	VMOVSS xmm1, xmm2, xmm3	RVM	Z, R, R						V	V	AVX	vmovss	YES	Merge scalar single-precision floating-point value from xmm2 and xmm3 to xmm1 register.
 VEX.LIG.F3.0F.WIG 10 /r	VMOVSS xmm1, m32	XM	Z, R						V	V	AVX	vmovss		Load scalar single-precision floating-point value from m32 to xmm1 register.
 F3 0F 11 /r	MOVSS xmm2/m32, xmm	MR	W, R						V	V	SSE	movss		Move scalar single-precision floating-point value from xmm1 register to xmm2/m32.
 VEX.NDS.LIG.F3.0F.WIG 11 /r	VMOVSS xmm1, xmm2, xmm3	MVR	Z, R, R						V	V	AVX	vmovss		Move scalar single-precision floating-point value from xmm2 and xmm3 to xmm1 register.
@@ -1225,16 +1225,16 @@ REX.W+ 0F BE /r 	MOVSX r64, r/m8	RM	W, R						V	NE		movsbq		Move byte to quadwor
 REX.W+ 0F BF /r 	MOVSX r64, r/m16 	RM	W, R						V	NE		movswq		Move word to quadword with sign-extension.
 REX.W+ 63 /r 	MOVSXD r64, r/m32 	RM	W, R						V	NE		movslq		Move doubleword to quadword with sign-extension.
 														
-66 0F 10 /r 	MOVUPD xmm1, xmm2/m128	RM	W, R						V	V	SSE2	movupd		Move packed double-precision floating-point values from xmm2/m128 to xmm1.
-VEX.128.66.0F.WIG 10 /r	VMOVUPD xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovupd		Move unaligned packed double-precision floating-point from xmm2/mem to xmm1.
-VEX.256.66.0F.WIG 10 /r	VMOVUPD ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovupd		Move unaligned packed double-precision floating-point from ymm2/mem to ymm1.
+66 0F 10 /r 	MOVUPD xmm1, xmm2/m128	RM	W, R						V	V	SSE2	movupd	YES	Move packed double-precision floating-point values from xmm2/m128 to xmm1.
+VEX.128.66.0F.WIG 10 /r	VMOVUPD xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovupd	YES	Move unaligned packed double-precision floating-point from xmm2/mem to xmm1.
+VEX.256.66.0F.WIG 10 /r	VMOVUPD ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovupd	YES	Move unaligned packed double-precision floating-point from ymm2/mem to ymm1.
 66 0F 11 /r	MOVUPD xmm2/m128, xmm	MR	W, R						V	V	SSE2	movupd		Move packed double-precision floating-point values from xmm1 to xmm2/m128.
 VEX.128.66.0F.WIG 11 /r	VMOVUPD xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovupd		Move unaligned packed double-precision floating-point from xmm1 to xmm2/mem.
 VEX.256.66.0F.WIG 11 /r	VMOVUPD ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovupd		Move unaligned packed double-precision floating-point from ymm1 to ymm2/mem.
 														
-0F 10 /r 	MOVUPS xmm1, xmm2/m128	RM	W, R						V	V	SSE	movups		Move packed single-precision floating-point values from xmm2/m128 to xmm1.
-VEX.128.0F.WIG 10 /r	VMOVUPS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovups		Move unaligned packed single-precision floating-point from xmm2/mem to xmm1.
-VEX.256.0F.WIG 10 /r	VMOVUPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovups		Move unaligned packed single-precision floating-point from ymm2/mem to ymm1.
+0F 10 /r 	MOVUPS xmm1, xmm2/m128	RM	W, R						V	V	SSE	movups	YES	Move packed single-precision floating-point values from xmm2/m128 to xmm1.
+VEX.128.0F.WIG 10 /r	VMOVUPS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovups	YES	Move unaligned packed single-precision floating-point from xmm2/mem to xmm1.
+VEX.256.0F.WIG 10 /r	VMOVUPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovups	YES	Move unaligned packed single-precision floating-point from ymm2/mem to ymm1.
 0F 11 /r	MOVUPS xmm2/m128, xmm1	MR	W, R						V	V	SSE	movups		Move packed single-precision floating-point values from xmm1 to xmm2/m128.
 VEX.128.0F.WIG 11 /r	VMOVUPS xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovups		Move unaligned packed single-precision floating-point from xmm1 to xmm2/mem.
 VEX.256.0F.WIG 11 /r	VMOVUPS ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovups		Move unaligned packed single-precision floating-point from ymm1 to ymm2/mem.
@@ -1298,11 +1298,11 @@ REX.W+ 81 /1 id 	OR r/m64, imm32 	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE
 83 /1 ib 	OR r/m16, imm8 	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orw	YES	r/m16 OR imm8 (sign-extended).
 83 /1 ib 	OR r/m32, imm8 	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orl	YES	r/m32 OR imm8 (sign-extended).
 REX.W+ 83 /1 ib 	OR r/m64, imm8 	MI	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		orq	YES	r/m64 OR imm8 (sign-extended).
-08 /r 	OR r/m8, r8 	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orb		r/m8 OR r8.
-REX+ 08 /r 	OR r/m8, r8	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		orb		r/m8 OR r8.
-09 /r 	OR r/m16, r16 	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orw		r/m16 OR r16.
-09 /r 	OR r/m32, r32 	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orl		r/m32 OR r32.
-REX.W+ 09 /r 	OR r/m64, r64 	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		orq		r/m64 OR r64.
+08 /r 	OR r/m8, r8 	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orb	YES	r/m8 OR r8.
+REX+ 08 /r 	OR r/m8, r8	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		orb	YES	r/m8 OR r8.
+09 /r 	OR r/m16, r16 	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orw	YES	r/m16 OR r16.
+09 /r 	OR r/m32, r32 	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orl	YES	r/m32 OR r32.
+REX.W+ 09 /r 	OR r/m64, r64 	MR	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		orq	YES	r/m64 OR r64.
 0A /r 	OR r8, r/m8 	RM	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orb		r8 OR r/m8.
 REX+ 0A /r 	OR r8, r/m8	RM	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		orb		r8 OR r/m8.
 0B /r 	OR r16, r/m16 	RM	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		orw		r16 OR r/m16.
@@ -1459,9 +1459,9 @@ VEX.128.66.0F3A.W0 16 /r ib 	VPEXTRD r32/m32, xmm2, imm8 	MRI	W, R, R						V	V	A
 VEX.128.66.0F3A.W1 16 /r ib 	VPEXTRQ r64/m64, xmm2, imm8 	MRI	W, R, R						V	I	AVX	vpextrq		Extract a qword integer value from xmm2 at the source dword offset specified by imm8 into r64/m64.
 														
 0F C5 /r ib 	PEXTRW reg, mm, imm8	RMI	W, R, R						V	V	SSE	pextrw		Extract the word specified by imm8 from mm and move it to reg, bits 15-0. The upper bits of r32 or r64 is zeroed.
-66 0F C5 /r ib	PEXTRW reg, xmm, imm8	RMI	W, R, R						V	V	SSE2	pextrw		Extract the word specified by imm8 from xmm and move it to reg, bits 15-0. The upper bits of r32 or r64 is zeroed.
+66 0F C5 /r ib	PEXTRW reg, xmm, imm8	RMI	W, R, R						V	V	SSE2	pextrw	YES	Extract the word specified by imm8 from xmm and move it to reg, bits 15-0. The upper bits of r32 or r64 is zeroed.
 66 0F 3A 15 /r ib 	PEXTRW reg/m16, xmm, imm8 	MRI	W, R, R						V	V	SSE4_1	pextrw		Extract the word specified by imm8 from xmm and copy it to lowest 16 bits of reg or m16. Zero-extend the result in the destination, r32 or r64.
-VEX.128.66.0F.W0 C5 /r ib 	VPEXTRW reg, xmm1, imm8 	RMI	W, R, R						V	V	AVX	vpextrw		Extract the word specified by imm8 from xmm1 and move it to reg, bits 15:0. Zero-extend the result. The upper bits of r64/r32 is filled with zeros.
+VEX.128.66.0F.W0 C5 /r ib 	VPEXTRW reg, xmm1, imm8 	RMI	W, R, R						V	V	AVX	vpextrw	YES	Extract the word specified by imm8 from xmm1 and move it to reg, bits 15:0. Zero-extend the result. The upper bits of r64/r32 is filled with zeros.
 VEX.128.66.0F3A.W0 15 /r ib 	VPEXTRW reg/m16, xmm2, imm8 	MRI	W, R, R						V	V	AVX	vpextrw		Extract a word integer value from xmm2 at the source word offset specified by imm8 into reg or m16. The upper bits of r64/r32 is filled with zeros.
 														
 0F 38 01 /r 	PHADDW mm1, mm2/m64	RM	RW, R						V	V	SSE3	phaddw		Add 16-bit integers horizontally, pack to MM1.
@@ -1674,7 +1674,7 @@ VEX.NDD.128.66.0F.WIG 73 /7 ib	VPSLLDQ xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX
 														
 0F F1 /r	PSLLW mm, mm/m64	RM	RW, R						V	V	MMX	psllw		Shift words in mm left mm/m64 while shifting in 0s.
 66 0F F1 /r	PSLLW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psllw		Shift words in xmm1 left by xmm2/m128 while shifting in 0s.
-0F 71 /6 ib	PSLLW xmm1, imm8	MI	RW, R						V	V	MMX	psllw		Shift words in mm left by imm8 while shifting in 0s.
+0F 71 /6 ib	PSLLW xmm1, imm8	MI	RW, R						V	V	MMX	psllw	YES	Shift words in mm left by imm8 while shifting in 0s.
 66 0F 71 /6 ib	PSLLW xmm1, imm8	MI	RW, R						V	V	SSE2	psllw		Shift words in xmm1 left by imm8 while shifting in 0s.
 0F F2 /r	PSLLD mm, mm/m64	RM	RW, R						V	V	MMX	pslld		Shift doublewords in mm left by mm/m64 while shifting in 0s.
 66 0F F2 /r	PSLLD xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pslld		Shift doublewords in xmm1 left by xmm2/m128 while shifting in 0s.
@@ -1894,50 +1894,50 @@ REX.W+ 0F C7 /6	RDRAND r64	M	W		E.CF E.OF E.SF E.ZF E.AF E.PF				V	I	RDRAND	rdra
 														
 0F 01 F9	RDTSCP						YES	YES*	V	V				Read 64-bit time-stamp counter and 32-bit IA32_TSC_AUX value into EDX:EAX and ECX.
 														
-F3 6C	REP_INS m8, DX 	NP	I, R	ECX E.IOPL E.VM E.DF RDI					V	V		rep ins		Input (E)CX bytes from port DX into ES:[(E)DI].
+F3 6C	REP_INS m8, DX 	NP	I, R	ECX E.IOPL E.VM E.DF RDI					V	V		rep ins	YES	Input (E)CX bytes from port DX into ES:[(E)DI].
 F3 REX.W+ 6C	REP_INS m8, DX	NP	I, R	RCX E.IOPL E.VM E.DF RDI					V	NE		rep ins		Input RCX bytes from port DX into [RDI].
-F3 6D	REP_INS m16, DX	NP	I, R	ECX E.IOPL E.VM E.DF RDI					V	V		rep ins		Input (E)CX words from port DX into ES:[(E)DI.]
-F3 6D	REP_INS m32, DX	NP	I, R	ECX E.IOPL E.VM E.DF RDI					V	V		rep ins		Input (E)CX doublewords from port DX into ES:[(E)DI].
+F3 6D	REP_INS m16, DX	NP	I, R	ECX E.IOPL E.VM E.DF RDI					V	V		rep ins	YES	Input (E)CX words from port DX into ES:[(E)DI.]
+F3 6D	REP_INS m32, DX	NP	I, R	ECX E.IOPL E.VM E.DF RDI					V	V		rep ins	YES	Input (E)CX doublewords from port DX into ES:[(E)DI].
 F3 REX.W+ 6D	REP_INS m32, DX	NP	I, R	RCX E.IOPL E.VM E.DF RDI					V	NE		rep ins		Input RCX default size from port DX into [RDI].
-F3 A4	REP_MOVS m8, m8	NP	I, I	ECX E.DF ESI rsi EDI rdi					V	V		rep movs		Move (E)CX bytes from DS:[(E)SI] to ES:[(E)DI].
+F3 A4	REP_MOVS m8, m8	NP	I, I	ECX E.DF ESI rsi EDI rdi					V	V		rep movs	YES	Move (E)CX bytes from DS:[(E)SI] to ES:[(E)DI].
 F3 REX.W+ A4	REP_MOVS m8, m8	NP	I, I	RCX E.DF ESI rsi EDI rdi					V	NE		rep movs		Move RCX bytes from [RSI] to [RDI].
-F3 A5	REP_MOVS m16, m16	NP	I, I	ECX E.DF ESI rsi EDI rdi					V	V		rep movs		Move (E)CX words from DS:[(E)SI] to ES:[(E)DI].
-F3 A5	REP_MOVS m32, m32	NP	I, I	ECX E.DF ESI rsi EDI rdi					V	V		rep movs		Move (E)CX doublewords from DS:[(E)SI] to ES:[(E)DI].
+F3 A5	REP_MOVS m16, m16	NP	I, I	ECX E.DF ESI rsi EDI rdi					V	V		rep movs	YES	Move (E)CX words from DS:[(E)SI] to ES:[(E)DI].
+F3 A5	REP_MOVS m32, m32	NP	I, I	ECX E.DF ESI rsi EDI rdi					V	V		rep movs	YES	Move (E)CX doublewords from DS:[(E)SI] to ES:[(E)DI].
 F3 REX.W+ A5	REP_MOVS m64, m64	NP	I, I	RCX E.DF ESI rsi EDI rdi					V	NE		rep movs		Move RCX quadwords from [RSI] to [RDI].
-F3 6E	REP_OUTS DX, m8	NP	R, I	ECX E.IOPL E.VM E.DF RSI					V	V		rep outs		Output (E)CX bytes from DS:[(E)SI] to port DX.
+F3 6E	REP_OUTS DX, m8	NP	R, I	ECX E.IOPL E.VM E.DF RSI					V	V		rep outs	YES	Output (E)CX bytes from DS:[(E)SI] to port DX.
 F3 REX.W+ 6E	REP_OUTS DX, m8	NP	R, I	RCX E.IOPL E.VM E.DF RSI					V	NE		rep outs		Output RCX bytes from [RSI] to port DX.
-F3 6F	REP_OUTS DX, m16	NP	R, I	ECX E.IOPL E.VM E.DF RSI					V	V		rep outs		Output (E)CX words from DS:[(E)SI] to port DX.
-F3 6F	REP_OUTS DX, m32	NP	R, I	ECX E.IOPL E.VM E.DF RSI					V	V		rep outs		Output (E)CX doublewords from DS:[(E)SI] to port DX.
+F3 6F	REP_OUTS DX, m16	NP	R, I	ECX E.IOPL E.VM E.DF RSI					V	V		rep outs	YES	Output (E)CX words from DS:[(E)SI] to port DX.
+F3 6F	REP_OUTS DX, m32	NP	R, I	ECX E.IOPL E.VM E.DF RSI					V	V		rep outs	YES	Output (E)CX doublewords from DS:[(E)SI] to port DX.
 F3 REX.W+ 6F	REP_OUTS DX, m32	NP	R, I	RCX E.IOPL E.VM E.DF RSI					V	NE		rep outs		Output RCX default size from [RSI] to port DX.
-F3 AC	REP_LODS AL	NP	W	ECX E.DF SI rsi					V	V		rep lods		Load (E)CX bytes from DS:[(E)SI] to AL.
+F3 AC	REP_LODS AL	NP	W	ECX E.DF SI rsi					V	V		rep lods	YES	Load (E)CX bytes from DS:[(E)SI] to AL.
 F3 REX.W+ AC	REP_LODS AL	NP	W	RCX E.DF SI rsi					V	NE		rep lods		Load RCX bytes from [RSI] to AL.
-F3 AD	REP_LODS AX	NP	W	ECX E.DF SI rsi					V	V		rep lods		Load (E)CX words from DS:[(E)SI] to AX.
-F3 AD	REP_LODS EAX	NP	W	ECX E.DF SI rsi					V	V		rep lods		Load (E)CX doublewords from DS:[(E)SI] to EAX.
+F3 AD	REP_LODS AX	NP	W	ECX E.DF SI rsi					V	V		rep lods	YES	Load (E)CX words from DS:[(E)SI] to AX.
+F3 AD	REP_LODS EAX	NP	W	ECX E.DF SI rsi					V	V		rep lods	YES	Load (E)CX doublewords from DS:[(E)SI] to EAX.
 F3 REX.W+ AD	REP_LODS RAX	NP	W	RCX E.DF SI rsi					V	NE		rep lods		Load RCX quadwords from [RSI] to RAX.
-F3 AA	REP_STOS m8	NP	I	ECX E.DF RDI AL					V	V		rep stos		Fill (E)CX bytes at ES:[(E)DI] with AL.
+F3 AA	REP_STOS m8	NP	I	ECX E.DF RDI AL					V	V		rep stos	YES	Fill (E)CX bytes at ES:[(E)DI] with AL.
 F3 REX.W+ AA	REP_STOS m8	NP	I	RCX E.DF RDI AL					V	NE		rep stos		Fill RCX bytes at [RDI] with AL.
-F3 AB	REP_STOS m16	NP	I	ECX E.DF RDI AL					V	V		rep stos		Fill (E)CX words at ES:[(E)DI] with AX.
-F3 AB	REP_STOS m32	NP	I	ECX E.DF RDI AL					V	V		rep stos		Fill (E)CX doublewords at ES:[(E)DI] with EAX.
+F3 AB	REP_STOS m16	NP	I	ECX E.DF RDI AL					V	V		rep stos	YES	Fill (E)CX words at ES:[(E)DI] with AX.
+F3 AB	REP_STOS m32	NP	I	ECX E.DF RDI AL					V	V		rep stos	YES	Fill (E)CX doublewords at ES:[(E)DI] with EAX.
 F3 REX.W+ AB	REP_STOS m64	NP	I	RCX E.DF RDI AL					V	NE		rep stos		Fill RCX quadwords at [RDI] with RAX.
-F3 A6	REPE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V		repe cmps		Find nonmatching bytes in ES:[(E)DI] and DS:[(E)SI].
+F3 A6	REPE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V		repe cmps	YES	Find nonmatching bytes in ES:[(E)DI] and DS:[(E)SI].
 F3 REX.W+ A6	REPE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE		repe cmps		Find non-matching bytes in [RDI] and [RSI].
-F3 A7	REPE_CMPS m16, m16	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V		repe cmps		Find nonmatching words in ES:[(E)DI] and DS:[(E)SI].
-F3 A7	REPE_CMPS m32, m32	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V		repe cmps		Find nonmatching doublewords in ES:[(E)DI] and DS:[(E)SI].
+F3 A7	REPE_CMPS m16, m16	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V		repe cmps	YES	Find nonmatching words in ES:[(E)DI] and DS:[(E)SI].
+F3 A7	REPE_CMPS m32, m32	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V		repe cmps	YES	Find nonmatching doublewords in ES:[(E)DI] and DS:[(E)SI].
 F3 REX.W+ A7	REPE_CMPS m64, m64	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE		repe cmps		Find non-matching quadwords in [RDI] and [RSI].
-F3 AE	REPE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	V		repe scas		Find non-AL byte starting at ES:[(E)DI].
+F3 AE	REPE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	V		repe scas	YES	Find non-AL byte starting at ES:[(E)DI].
 F3 REX.W+ AE	REPE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	NE		repe scas		Find non-AL byte starting at [RDI].
-F3 AF	REPE_SCAS m16	NP	I	E.ZF E.DF RDI AX					V	V		repe scas		Find non-AX word starting at ES:[(E)DI].
-F3 AF	REPE_SCAS m32	NP	I	E.ZF E.DF RDI EAX					V	V		repe scas		Find non-EAX doubleword starting at ES:[(E)DI].
+F3 AF	REPE_SCAS m16	NP	I	E.ZF E.DF RDI AX					V	V		repe scas	YES	Find non-AX word starting at ES:[(E)DI].
+F3 AF	REPE_SCAS m32	NP	I	E.ZF E.DF RDI EAX					V	V		repe scas	YES	Find non-EAX doubleword starting at ES:[(E)DI].
 F3 REX.W+ AF	REPE_SCAS m64	NP	I	E.ZF E.DF RDI RAX					V	NE		repe scas		Find non-RAX quadword starting at [RDI].
-F2 A6	REPNE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V		repne cmps		Find matching bytes in ES:[(E)DI] and DS:[(E)SI].
+F2 A6	REPNE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V		repne cmps	YES	Find matching bytes in ES:[(E)DI] and DS:[(E)SI].
 F2 REX.W+ A6	REPNE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE		repne cmps		Find matching bytes in [RDI] and [RSI].
-F2 A7	REPNE_CMPS m16, m16	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V		repne cmps		Find matching words in ES:[(E)DI] and DS:[(E)SI].
-F2 A7	REPNE_CMPS m32, m32	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V		repne cmps		Find matching doublewords in ES:[(E)DI] and DS:[(E)SI].
+F2 A7	REPNE_CMPS m16, m16	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V		repne cmps	YES	Find matching words in ES:[(E)DI] and DS:[(E)SI].
+F2 A7	REPNE_CMPS m32, m32	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V		repne cmps	YES	Find matching doublewords in ES:[(E)DI] and DS:[(E)SI].
 F2 REX.W+ A7	REPNE_CMPS m64, m64	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE		repne cmps		Find matching doublewords in [RDI] and [RSI].
-F2 AE	REPNE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	V		repne scas		Find AL, starting at ES:[(E)DI].
+F2 AE	REPNE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	V		repne scas	YES	Find AL, starting at ES:[(E)DI].
 F2 REX.W+ AE	REPNE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	NE		repne scas		Find AL, starting at [RDI].
-F2 AF	REPNE_SCAS m16	NP	I	E.ZF E.DF RDI AX					V	V		repne scas		Find AX, starting at ES:[(E)DI].
-F2 AF	REPNE_SCAS m32	NP	I	E.ZF E.DF RDI EAX					V	V		repne scas		Find EAX, starting at ES:[(E)DI].
+F2 AF	REPNE_SCAS m16	NP	I	E.ZF E.DF RDI AX					V	V		repne scas	YES	Find AX, starting at ES:[(E)DI].
+F2 AF	REPNE_SCAS m32	NP	I	E.ZF E.DF RDI EAX					V	V		repne scas	YES	Find EAX, starting at ES:[(E)DI].
 F2 REX.W+ AF	REPNE_SCAS m64	NP	I	E.ZF E.DF RDI RAX					V	NE		repne scas		Find RAX, starting at [RDI].
 														
 C3	RET	NP			RIP				V	V		retq		Near return to calling procedure.
@@ -2043,11 +2043,11 @@ REX.W+ 81 /3 id	SBB r/m64, imm32	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				
 83 /3 ib	SBB r/m16, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw	YES	Subtract with borrow sign-extended imm8 from r/m16.
 83 /3 ib	SBB r/m32, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl	YES	Subtract with borrow sign-extended imm8 from r/m32.
 REX.W+ 83 /3 ib	SBB r/m64, imm8	MI	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq	YES	Subtract with borrow sign-extended imm8 from r/m64.
-18 /r	SBB r/m8, r8	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbb		Subtract with borrow r8 from r/m8.
-REX+ 18 /r	SBB r/m8, r8	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbb		Subtract with borrow r8 from r/m8.
-19 /r	SBB r/m16, r16	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw		Subtract with borrow r16 from r/m16.
-19 /r	SBB r/m32, r32	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl		Subtract with borrow r32 from r/m32.
-REX.W+ 19 /r	SBB r/m64, r64	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq		Subtract with borrow r64 from r/m64.
+18 /r	SBB r/m8, r8	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbb	YES	Subtract with borrow r8 from r/m8.
+REX+ 18 /r	SBB r/m8, r8	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbb	YES	Subtract with borrow r8 from r/m8.
+19 /r	SBB r/m16, r16	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw	YES	Subtract with borrow r16 from r/m16.
+19 /r	SBB r/m32, r32	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbl	YES	Subtract with borrow r32 from r/m32.
+REX.W+ 19 /r	SBB r/m64, r64	MR	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbq	YES	Subtract with borrow r64 from r/m64.
 1A /r	SBB r8, r/m8	RM	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbb		Subtract with borrow r/m8 from r8.
 REX+ 1A /r	SBB r8, r/m8	RM	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	NE		sbbb		Subtract with borrow r/m8 from r8.
 1B /r	SBB r16, r/m16	RM	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw		Subtract with borrow r/m16 from r16.
@@ -2205,11 +2205,11 @@ REX.W+ 81 /5 id	SUB r/m64, imm32	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE
 83 /5 ib	SUB r/m16, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subw	YES	Subtract sign-extended imm8 from r/m16.
 83 /5 ib	SUB r/m32, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subl	YES	Subtract sign-extended imm8 from r/m32.
 REX.W+ 83 /5 ib	SUB r/m64, imm8	MI	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		subq	YES	Subtract sign-extended imm8 from r/m64.
-28 /r	SUB r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subb		Subtract r8 from r/m8.
-REX+ 28 /r	SUB r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		subb		Subtract r8 from r/m8.
-29 /r	SUB r/m16, r16	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subw		Subtract r16 from r/m16.
-29 /r	SUB r/m32, r32	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subl		Subtract r32 from r/m32.
-REX.W+ 29 /r	SUB r/m64, r64	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		subq		Subtract r64 from r/m64.
+28 /r	SUB r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subb	YES	Subtract r8 from r/m8.
+REX+ 28 /r	SUB r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		subb	YES	Subtract r8 from r/m8.
+29 /r	SUB r/m16, r16	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subw	YES	Subtract r16 from r/m16.
+29 /r	SUB r/m32, r32	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subl	YES	Subtract r32 from r/m32.
+REX.W+ 29 /r	SUB r/m64, r64	MR	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		subq	YES	Subtract r64 from r/m64.
 2A /r	SUB r8, r/m8	RM	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subb		Subtract r/m8 from r8.
 REX+ 2A /r	SUB r8, r/m8	RM	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		subb		Subtract r/m8 from r8.
 2B /r	SUB r16, r/m16	RM	RW, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		subw		Subtract r/m16 from r16.
@@ -2353,21 +2353,21 @@ REX.W+ 0F C1 /r	XADD r/m64, r64	MR	RW, RW		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE
 REX.W+ 90 +rd	XCHG RAX, r64	O	RW, RW						V	NE		xchgq		Exchange r64 with RAX.
 90 +rd	XCHG r32, EAX	O	RW, RW						V	V		xchgl		Exchange EAX with r32.
 REX.W+ 90 +rd	XCHG r64, RAX	O	RW, RW						V	NE		xchgq		Exchange RAX with r64.
-86 /r	XCHG r/m8, r8	MR	RW, RW						V	V		xchgb		Exchange r8 (byte register) with byte from r/m8.
+86 /r	XCHG r/m8, r8	MR	RW, RW						V	V		xchgb	YES	Exchange r8 (byte register) with byte from r/m8.
 REX+ 86 /r	XCHG r/m8, r8	MR	RW, RW						V	NE		xchgb		Exchange r8 (byte register) with byte from r/m8.
 86 /r	XCHG r8, r/m8	RM	RW, RW						V	V		xchgb		Exchange byte from r/m8 with r8 (byte register).
 REX+ 86 /r	XCHG r8, r/m8	RM	RW, RW						V	NE		xchgb		Exchange byte from r/m8 with r8 (byte register).
-87 /r	XCHG r/m16, r16	MR	RW, RW						V	V		xchgw		Exchange r16 with word from r/m16.
+87 /r	XCHG r/m16, r16	MR	RW, RW						V	V		xchgw	YES	Exchange r16 with word from r/m16.
 87 /r	XCHG r16, r/m16	RM	RW, RW						V	V		xchgw		Exchange word from r/m16 with r16.
-87 /r	XCHG r/m32, r32	MR	RW, RW						V	V		xchgl		Exchange r32 with doubleword from r/m32.
-REX.W+ 87 /r	XCHG r/m64, r64	MR	RW, RW						V	NE		xchgq		Exchange r64 with quadword from r/m64.
+87 /r	XCHG r/m32, r32	MR	RW, RW						V	V		xchgl	YES	Exchange r32 with doubleword from r/m32.
+REX.W+ 87 /r	XCHG r/m64, r64	MR	RW, RW						V	NE		xchgq	YES	Exchange r64 with quadword from r/m64.
 87 /r	XCHG r32, r/m32	RM	RW, RW						V	V		xchgl		Exchange doubleword from r/m32 with r32.
 REX.W+ 87 /r	XCHG r64, r/m64	RM	RW, RW						V	NE		xchgq		Exchange quadword from r/m64 with r64.
 														
 0F 01 D0	XGETBV	NP		ECX	EAX EDX		YES	NO	V	V	XSAVE	xgetbv		Reads an XCR specified by ECX into EDX:EAX.
 														
 D7	XLAT m8	NP	I	AL DS BX ebx	AL				V	V		xlat		Set AL to memory byte DS:[(E)BX + unsigned AL].
-D7	XLATB	NP		AL DS BX ebx	AL				V	V		xlatb		Set AL to memory byte DS:[(E)BX + unsigned AL].
+D7	XLATB	NP		AL DS BX ebx	AL				V	V		xlatb	YES	Set AL to memory byte DS:[(E)BX + unsigned AL].
 REX.W+ D7	XLATB	NP		AL RBX	AL				V	NE		xlatb		Set AL to memory byte [RBX + unsigned AL].
 														
 34 ib	XOR AL, imm8	I	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorb		AL XOR imm8.
@@ -2382,11 +2382,11 @@ REX.W+ 81 /6 id	XOR r/m64, imm32	MI	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	NE	
 83 /6 ib	XOR r/m16, imm8	MI	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorw	YES	r/m16 XOR imm8 (sign-extended).
 83 /6 ib	XOR r/m32, imm8	MI	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorl	YES	r/m32 XOR imm8 (sign-extended).
 REX.W+ 83 /6 ib	XOR r/m64, imm8	MI	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	NE		xorq	YES	r/m64 XOR imm8 (sign-extended).
-30 /r	XOR r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorb		r/m8 XOR r8.
-REX+ 30 /r	XOR r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	NE		xorb		r/m8 XOR r8.
-31 /r	XOR r/m16, r16	MR	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorw		r/m16 XOR r16.
-31 /r	XOR r/m32, r32	MR	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorl		r/m32 XOR r32.
-REX.W+ 31 /r	XOR r/m64, r64	MR	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	NE		xorq		r/m64 XOR r64.
+30 /r	XOR r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorb	YES	r/m8 XOR r8.
+REX+ 30 /r	XOR r/m8, r8	MR	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	NE		xorb	YES	r/m8 XOR r8.
+31 /r	XOR r/m16, r16	MR	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorw	YES	r/m16 XOR r16.
+31 /r	XOR r/m32, r32	MR	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorl	YES	r/m32 XOR r32.
+REX.W+ 31 /r	XOR r/m64, r64	MR	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	NE		xorq	YES	r/m64 XOR r64.
 32 /r	XOR r8, r/m8	RM	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorb		r8 XOR r/m8.
 REX+ 32 /r	XOR r8, r/m8	RM	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	NE		xorb		r8 XOR r/m8.
 33 /r	XOR r16, r/m16	RM	RW, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		xorw		r16 XOR r/m16.
