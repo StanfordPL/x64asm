@@ -633,7 +633,6 @@ no_pref66 i = (is_vex_encoded i) ||
               (op == "ENTER") ||
               (op == "FSTSW") || (op == "FNSTSW") ||
               (op == "LDDQU") ||
-              (op == "LSL") ||
               (op == "LEA") ||
               (op == "PINSRW")
   where op = raw_mnemonic i
