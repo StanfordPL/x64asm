@@ -1623,9 +1623,9 @@ PREF.66+ 0F A9 	POP GS, p66	NP	W, I						V	V		popq		Pop top of stack into GS; in
 61	POPA 								I	V				Pop DI, SI, BP, BX, DX, CX, and AX.
 61	POPAD 								I	V				Pop EDI, ESI, EBP, EBX, EDX, ECX, and EAX.
 														
-F3 0F B8 /r 	POPCNT r16, r/m16 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	POPCNT	popcntb		POPCNT on r/m16
-F3 0F B8 /r 	POPCNT r32, r/m32 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	POPCNT	popcntl		POPCNT on r/m32
-F3 REX.W+ 0F B8 /r 	POPCNT r64, r/m64 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE	POPCNT	popcntq		POPCNT on r/m64
+F3 0F B8 /r 	POPCNT r16, r/m16 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	POPCNT	popcnt		POPCNT on r/m16
+F3 0F B8 /r 	POPCNT r32, r/m32 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	POPCNT	popcnt		POPCNT on r/m32
+F3 REX.W+ 0F B8 /r 	POPCNT r64, r/m64 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE	POPCNT	popcnt		POPCNT on r/m64
 														
 PREF.66+ 9D 	POPF 	NP			E.*				V	V		popf		Pop top of stack into lower 16 bits of EFLAGS.
 9D 	POPFD 								NE	V				Pop top of stack into EFLAGS.
