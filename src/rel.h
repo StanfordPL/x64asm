@@ -19,6 +19,7 @@ limitations under the License.
 
 #include <iostream>
 
+#include "src/imm.h"
 #include "src/operand.h"
 
 namespace x64asm {
@@ -65,7 +66,7 @@ class Rel8 : public Rel {
 
     /** Checks that this offset fits in 8 bits. */
     constexpr bool check() {
-      return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
+			return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
     }
 };
 
@@ -82,7 +83,7 @@ class Rel32 : public Rel {
 
     /** Checks that this offset value fits in 32-bits. */
     constexpr bool check() {
-      return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
+			return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
     }
 };
 

@@ -67,7 +67,7 @@ class Imm8 : public Imm {
 
     /** Checks that this immediate value fits in 8 bits. */
     constexpr bool check() {
-      return (int64_t)val_ >= -128 && (int64_t)val_ < 128;
+			return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
     }
 };
 
@@ -83,7 +83,7 @@ class Imm16 : public Imm {
 
     /** Checks that this immediate value fits in 16 bits. */
     constexpr bool check() {
-      return (int64_t)val_ >= -32768 && (int64_t)val_ < 32768;
+			return ((val_>>16) == 0x0ul) || ((val_>>16) == 0xfffffffffffful);
     }
 };
 
@@ -100,7 +100,7 @@ class Imm32 : public Imm {
 
     /** Check that this immediate value fits in 32 bits. */
     constexpr bool check() {
-      return (int64_t)val_ >= -2147483648 && (int64_t)val_ < 2147483648;
+			return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
     }
 };
 
