@@ -1380,7 +1380,7 @@ VEX.NDS.128.66.0F.WIG ED /r 	VPADDSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	
 66 0F DC /r	PADDUSB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	paddusb		Add packed unsigned byte integers from xmm2/m128 and xmm1 saturate the results.
 0F DD /r	PADDUSW mm, mm/m64	RM	RW, R						V	V	MMX	paddusw		Add packed unsigned word integers from mm/m64 and mm and saturate the results.
 66 0F DD /r	PADDUSW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	paddusw		Add packed unsigned word integers from xmm2/m128 to xmm1 and saturate the results.
-VEX.NDS.128.660F.WIG DC /r	VPADDUSB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpaddusb		Add packed unsigned byte integers from xmm3/m128 to xmm2 and saturate the results.
+VEX.NDS.128.66.0F.WIG DC /r	VPADDUSB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpaddusb		Add packed unsigned byte integers from xmm3/m128 to xmm2 and saturate the results.
 VEX.NDS.128.66.0F.WIG DD /r	VPADDUSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpaddusw		Add packed unsigned word integers from xmm3/m128 to xmm2 and saturate the results.
 														
 0F 3A 0F 	PALIGNR mm1, mm2/m64, imm8	RMI	RW, R, R						V	V	SSE3	palignr		Concatenate destination and source operands, extract byte-aligned result shifted to the right by constant value in imm8 into mm1.
