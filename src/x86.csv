@@ -2347,10 +2347,10 @@ REX+ 0F C0 /r	XADD r/m8, r8	MR	RW, RW		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		xa
 0F C1 /r	XADD r/m32, r32	MR	RW, RW		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		xaddl		Exchange r32 and r/m32; load sum into r/m32.
 REX.W+ 0F C1 /r	XADD r/m64, r64	MR	RW, RW		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		xaddq		Exchange r64 and r/m64; load sum into r/m64.
 														
-90 +rw	XCHG AX, r16	O	RW, RW						V	V		xchgw	YES	Exchange r16 with AX.
+90 +rw	XCHG AX, r16	O	RW, RW						V	V		xchgw		Exchange r16 with AX.
 90 +rw	XCHG r16, AX	O	RW, RW						V	V		xchgw		Exchange AX with r16.
-90 +rd	XCHG EAX, r32	O	RW, RW						V	V		xchgl	YES	Exchange r32 with EAX.
-REX.W+ 90 +rd	XCHG RAX, r64	O	RW, RW						V	NE		xchgq	YES	Exchange r64 with RAX.
+90 +rd	XCHG EAX, r32	O	RW, RW						V	V		xchgl		Exchange r32 with EAX.
+REX.W+ 90 +rd	XCHG RAX, r64	O	RW, RW						V	NE		xchgq		Exchange r64 with RAX.
 90 +rd	XCHG r32, EAX	O	RW, RW						V	V		xchgl		Exchange EAX with r32.
 REX.W+ 90 +rd	XCHG r64, RAX	O	RW, RW						V	NE		xchgq		Exchange RAX with r64.
 86 /r	XCHG r/m8, r8	MR	RW, RW						V	V		xchgb	YES	Exchange r8 (byte register) with byte from r/m8.
