@@ -239,6 +239,16 @@ class Assembler {
       fxn_->emit_long(r.val_);
     }
 
+		/** Emits an xmm register encoded as an immediats. */
+		void disp_imm(Xmm x) {
+			fxn_->emit_byte(x.val_ << 4);
+		}
+
+		/** Emits a ymm register encoded as an immediats. */
+		void disp_imm(Ymm y) {
+			fxn_->emit_byte(y.val_ << 4);
+		}
+
     /** Unconditionally emits a rex prefix. */
     void rex(uint8_t val) {
       fxn_->emit_byte(val);
