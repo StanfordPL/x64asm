@@ -42,7 +42,7 @@ int main() {
   const auto f1 = assm.assemble(c1);
 
   // Calling this function should invoke hello()
-  f1.call<int>();
+  f1.call<void>();
   cout << endl;
 
   // Example 2:
@@ -55,12 +55,27 @@ int main() {
   const auto f2 = assm.assemble(c2);
 
   // Calling this function will indirectly invoke hello()
-  f2.call<int>();
+  f2.call<void>();
   cout << endl;
 
-  // Example 3:
+	// Example 3:
+	// Compile a function that calls a c-function by first binding,
+	// a label to its address.
+	Function f3;
+	
+	assm.start(f3);
+	assm.bind(Label("hello"), hello);
+	assm.call(Label("hello"));
+	assm.ret();
+	assm.finish();
+
+	// Calling this function should invoke hello()
+	f3.call<void>();
+	cout << endl;
+
+  // Example 4:
   // Writing a recursive function (fibonacci)
-  Code c3 {
+  Code c4 {
     {LABEL_DEFN, {Label{"fib"}}},
 
     {CMP_R64_IMM32, {rdi, Imm32{0}}},
@@ -79,19 +94,19 @@ int main() {
     {MOV_R64_IMM64, {rax, Imm64{1}}},
     {RET}
   };
-  const auto f3 = assm.assemble(c3);
+  const auto f4 = assm.assemble(c4);
 
   // Calling this function should compute fibbonaci
-  cout << "fib(5) = " << f3.call<int, int>(5) << endl;
+  cout << "fib(5) = " << f4.call<int, int>(5) << endl;
   cout << endl;
 
-  // Example 4:
+  // Example 5:
   // In princple, it is possible to assemble a self referential function.
   // However if during the course of assembling, the internal buffer associated
   // with f4 is exhausted and the assembler is forced to allocate a new one,
   // this may fail.  Use with caution.
-  Function f4;
-  Code c4 {
+  Function f5;
+  Code c5 {
     {CMP_R64_IMM32, {rdi, Imm32{0}}},
     {JE_LABEL, {Label{"base_case"}}},
     {CMP_R64_IMM32, {rdi, Imm32{1}}},
@@ -99,7 +114,7 @@ int main() {
 
     {PUSH_R64, {rdi}},
     {SUB_R64_IMM32, {rdi, Imm32{1}}},
-    {MOV_R64_IMM64, {rdx, Imm64{f4}}},
+    {MOV_R64_IMM64, {rdx, Imm64{f5}}},
     {CALL_R64, {rdx}},
     {POP_R64, {rdi}},
     {ADD_R64_R64, {rax, rdi}},
@@ -109,10 +124,10 @@ int main() {
     {MOV_R64_IMM64, {rax, Imm64{1}}},
     {RET}
   };
-  assm.assemble(f4, c4);
+  assm.assemble(f5, c5);
 
   // Calling this function should compute fibbonaci as well
-  cout << "fib(5) = " << f4.call<int, int>(5) << endl;
+  cout << "fib(5) = " << f5.call<int, int>(5) << endl;
   cout << endl;
 
   return 0;

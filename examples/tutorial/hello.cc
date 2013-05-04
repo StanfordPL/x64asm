@@ -106,7 +106,7 @@ void test(const Function& memcpy) {
 
   // A function can be called with up to six arguments, each of which must
   // be or be castable to a native type. No explicit cast is necessary.
-  memcpy.call<int, char*, const char*, int>(target, source, 14);
+  memcpy.call<void, char*, const char*, int>(target, source, 14);
   cout << "After return target = \"" << target << "\"" << endl;
   cout << endl;
 

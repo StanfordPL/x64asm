@@ -198,7 +198,7 @@ int main(int argc, char** argv) {
   fxn.reserve(15 * (24 + 44 * code.size()));
   assm_code(fxn, read_state);
 
-  fxn.call<int>();
+  fxn.call<void>();
 
   return 0;
 }
