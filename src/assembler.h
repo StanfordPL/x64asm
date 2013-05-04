@@ -113,12 +113,6 @@ class Assembler {
       label_defs_[label.val_] = fxn_->size();
     }
 
-		/** Bind a label definition to an arbitrary address. */
-		template <typename T>
-		void bind(Label label, T* addr) {
-			label_defs_[label.val_] = (size_t)addr;
-		}
-
     // void adc(const Al& arg0, const Imm8& arg1); ...
 #include "src/assembler.decl"
 
