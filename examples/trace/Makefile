@@ -14,7 +14,7 @@
 
 ##### CONSTANT DEFINITIONS
 
-GCC=ccache g++-4.6 -std=c++0x 
+GCC=ccache g++ -std=c++0x 
 
 OPT=-Werror -O3 -g
 
