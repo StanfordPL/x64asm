@@ -70,10 +70,8 @@ class Function {
       free_buffer();
     }
 
-		/** Returns the address of the internal buffer. This allows Functions
-		    to be passed around as c++ functions. 
-		*/
-		operator void*() const {
+		/** Returns the address of the entrypoint of this function. */
+		void* get_entrypoint() const {
 			return buffer_;
 		}
 
