@@ -340,6 +340,8 @@ x64asm::Function assemble_read_cpu(const CpuState& cs,
 
 } // namespace trace
 
+// iostream overloads. Note that these are in the global namespace.
+
 std::istream& operator>>(std::istream& is, trace::CpuState& cs);
 std::istream& operator>>(std::istream& is, trace::Format f);
 
