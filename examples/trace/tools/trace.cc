@@ -72,15 +72,11 @@ Function assemble_code(const Function& read_fxn, uint64_t* rax_backup) {
 		assm.mov(M64 {rsp, Imm32{(uint32_t) - 56}}, r9);
 		assm.mov(M64 {rsp, Imm32{(uint32_t) - 64}}, r10);
 		assm.mov(M64 {rsp, Imm32{(uint32_t) - 72}}, r11);
-		assm.movdqu(M128 {rsp, Imm32{(uint32_t) - 88}},  xmm0);
-		assm.movdqu(M128 {rsp, Imm32{(uint32_t) - 104}}, xmm1);
-		assm.movdqu(M128 {rsp, Imm32{(uint32_t) - 120}}, xmm2);
-		assm.movdqu(M128 {rsp, Imm32{(uint32_t) - 136}}, xmm3);
-		assm.movdqu(M128 {rsp, Imm32{(uint32_t) - 152}}, xmm4);
-		assm.movdqu(M128 {rsp, Imm32{(uint32_t) - 168}}, xmm5);
-		assm.movdqu(M128 {rsp, Imm32{(uint32_t) - 184}}, xmm6);
-		assm.movdqu(M128 {rsp, Imm32{(uint32_t) - 200}}, xmm7);
-		assm.sub(rsp, Imm32 {200});
+		for ( size_t i = 0; i < 8; ++i ) {
+			const auto offset = Imm32{(uint32_t) - (72+SSE_SIZE*8*(i+1))};
+			assm.SSE_MOV(SSE_MEM {rsp, offset}, SSE_POOL[i]);
+		}
+		assm.sub(rsp, Imm32 {72+8*8*SSE_SIZE});
 
 		// Call print state then call print instr
 		assm.mov((R64)rax, Imm64{print_state});
@@ -90,7 +86,7 @@ Function assemble_code(const Function& read_fxn, uint64_t* rax_backup) {
 		assm.call(rax);
 
 		// Pop caller save registers, this will restore rax and rdi
-		assm.add(rsp, Imm32 {200});
+		assm.add(rsp, Imm32 {72+8*8*SSE_SIZE});
 		assm.mov(rax, M64 {rsp, Imm32{(uint32_t) - 8}});
 		assm.mov(rcx, M64 {rsp, Imm32{(uint32_t) - 16}});
 		assm.mov(rdx, M64 {rsp, Imm32{(uint32_t) - 24}});
@@ -100,14 +96,10 @@ Function assemble_code(const Function& read_fxn, uint64_t* rax_backup) {
 		assm.mov(r9,  M64 {rsp, Imm32{(uint32_t) - 56}});
 		assm.mov(r10, M64 {rsp, Imm32{(uint32_t) - 64}});
 		assm.mov(r11, M64 {rsp, Imm32{(uint32_t) - 72}});
-		assm.movdqu(xmm0, M128 {rsp, Imm32{(uint32_t) - 88}});
-		assm.movdqu(xmm1, M128 {rsp, Imm32{(uint32_t) - 104}});
-		assm.movdqu(xmm2, M128 {rsp, Imm32{(uint32_t) - 120}});
-		assm.movdqu(xmm3, M128 {rsp, Imm32{(uint32_t) - 136}});
-		assm.movdqu(xmm4, M128 {rsp, Imm32{(uint32_t) - 152}});
-		assm.movdqu(xmm5, M128 {rsp, Imm32{(uint32_t) - 168}});
-		assm.movdqu(xmm6, M128 {rsp, Imm32{(uint32_t) - 184}});
-		assm.movdqu(xmm7, M128 {rsp, Imm32{(uint32_t) - 200}});
+		for ( size_t i = 0; i < 8; ++i ) {
+			const auto offset = Imm32{(uint32_t)-(72+SSE_SIZE*8*(i+1))};
+			assm.SSE_MOV(SSE_POOL[i], SSE_MEM{rsp, offset});
+		}
 
     // Emit instruction
     assm.assemble(code[i]);
