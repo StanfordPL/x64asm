@@ -302,6 +302,8 @@ RegSet& Instruction::explicit_must_write_set(RegSet& ret) const {
         default:
           break;
       }
+		else
+			break;
   }
 
   return ret;
@@ -372,6 +374,8 @@ RegSet& Instruction::explicit_maybe_write_set(RegSet& ret) const {
         default:
           break;
       }
+		else 
+			break;
   }
 
   return ret;
@@ -428,6 +432,8 @@ RegSet& Instruction::explicit_must_undef_set(RegSet& ret) const {
         default:
           break;
       }
+		else
+			break;
 
   return ret;
 }
@@ -483,6 +489,8 @@ RegSet& Instruction::explicit_maybe_undef_set(RegSet& ret) const {
         default:
           break;
       }
+		else
+			break;
 
   return ret;
 }
