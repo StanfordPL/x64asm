@@ -73,6 +73,8 @@ $ sudo apt-get install flex
 $ sudo apt-get install g++
 $ sudo apt-get install g++-multilib
 $ sudo apt-get install ghc
+$ sudo apt-get install libghc-regex-tdfa-dev
+$ sudo apt-get install libghc-regex-compat-dev
 $ sudo apt-get install libghc-split-dev
 
 2a. Build the code.
