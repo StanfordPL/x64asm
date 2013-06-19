@@ -22,6 +22,7 @@ OBJ=src/assembler.o \
 		src/code.o \
 		src/code.att.o \
 		src/code.intel.o \
+		src/constants.o \
 		src/hint.o \
 		src/imm.o \
 		src/instruction.o \
