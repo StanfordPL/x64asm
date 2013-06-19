@@ -23,15 +23,6 @@ using namespace x64asm;
 
 // This example demonstrates the set of built-in constants supported by x64asm.
 
-// Write each of the elements in an array
-template <typename T>
-void write(const std::vector<T>& ts) {
-  for (const auto & t : ts) {
-    cout << t << " ";
-  }
-  cout << endl;
-}
-
 // Write each of the built-in constants
 void write() {
   // Constants are available individually
@@ -71,20 +62,39 @@ void write() {
   cout << endl;
 
   // And in predefined convenience containers
-  write(rls);
-  write(rhs);
-  write(rbs);
-  write(r16s);
-  write(r32s);
-  write(r64s);
-  write(sregs);
-  write(mms);
-  write(sts);
-  write(xmms);
+	for ( const auto& r : rls )
+		cout << r << " ";
+	cout << endl;
+	for ( const auto& r : rhs )
+		cout << r << " ";
+	cout << endl;
+	for ( const auto& r : rbs )
+		cout << r << " ";
+	cout << endl;
+	for ( const auto& r : r16s )
+		cout << r << " ";
+	cout << endl;
+	for ( const auto& r : r32s )
+		cout << r << " ";
+	cout << endl;
+	for ( const auto& r : r64s )
+		cout << r << " ";
+	cout << endl;
+	for ( const auto& s : sregs )
+		cout << s << " ";
+	cout << endl;
+	for ( const auto& m : mms )
+		cout << m << " ";
+	cout << endl;
+	for ( const auto& s : sts )
+		cout << s << " ";
+	cout << endl;
+	for ( const auto& x : xmms )
+		cout << x << " ";
+	cout << endl;
 	for ( const auto& y : ymms ) 
 		cout << y << " ";
 	cout << endl;
-
   cout << endl;
 
   // In addition to register constnats, there are also predefined
