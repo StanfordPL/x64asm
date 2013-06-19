@@ -29,7 +29,7 @@ limitations under the License.
 #include "src/xmm.h"
 #include "src/ymm.h"
 
-#include <vector>
+#include <array>
 
 namespace x64asm {
 
@@ -661,7 +661,7 @@ extern const FpuControl fpu_control_pc;
 extern const FpuControl fpu_control_rc;
 extern const FpuControl fpu_control_x;
 
-extern const std::vector<FpuControl> fpu_control;
+extern const std::array<FpuControl,9> fpu_control;
 
 extern const Eflags eflags_cf;
 extern const Eflags eflags_pf;
@@ -681,7 +681,7 @@ extern const Eflags eflags_vif;
 extern const Eflags eflags_vip;
 extern const Eflags eflags_id;
 
-extern const std::vector<Eflags> eflags;
+extern const std::array<Eflags,17> eflags;
 
 extern const Mxcsr mxcsr_ie;
 extern const Mxcsr mxcsr_de;
@@ -699,7 +699,7 @@ extern const Mxcsr mxcsr_pm;
 extern const Mxcsr mxcsr_rc;
 extern const Mxcsr mxcsr_fz;
 
-extern const std::vector<Mxcsr> mxcsr;
+extern const std::array<Mxcsr,15> mxcsr;
 
 extern const FpuStatus fpu_status_ie;
 extern const FpuStatus fpu_status_de;
@@ -716,7 +716,7 @@ extern const FpuStatus fpu_status_top;
 extern const FpuStatus fpu_status_c3;
 extern const FpuStatus fpu_status_b;
 
-extern const std::vector<FpuStatus> fpu_status;
+extern const std::array<FpuStatus,14> fpu_status;
 
 extern const FpuTag tag0;
 extern const FpuTag tag1;
@@ -727,7 +727,7 @@ extern const FpuTag tag5;
 extern const FpuTag tag6;
 extern const FpuTag tag7;
 
-extern const std::vector<FpuTag> fpu_tags;
+extern const std::array<FpuTag,8> fpu_tags;
 
 extern const FpuData fpu_data;
 extern const FpuInstruction fpu_instruction;
@@ -750,7 +750,7 @@ extern const Mm mm5;
 extern const Mm mm6;
 extern const Mm mm7;
 
-extern const std::vector<Mm> mms;
+extern const std::array<Mm,8> mms;
 
 extern const Pref66 pref_66;
 extern const PrefRexW pref_rex_w;
@@ -761,14 +761,14 @@ extern const Cl cl;
 extern const Rl dl;
 extern const Rl bl;
 
-extern const std::vector<Rl> rls;
+extern const std::array<Rl,4> rls;
 
 extern const Rh ah;
 extern const Rh ch;
 extern const Rh dh;
 extern const Rh bh;
 
-extern const std::vector<Rh> rhs;
+extern const std::array<Rh,4> rhs;
 
 extern const Rb spl;
 extern const Rb bpl;
@@ -783,7 +783,7 @@ extern const Rb r13b;
 extern const Rb r14b;
 extern const Rb r15b;
 
-extern const std::vector<Rb> rbs;
+extern const std::array<Rb,12> rbs;
 
 extern const Ax ax;
 extern const R16 cx;
@@ -802,7 +802,7 @@ extern const R16 r13w;
 extern const R16 r14w;
 extern const R16 r15w;
 
-extern const std::vector<R16> r16s;
+extern const std::array<R16,16> r16s;
 
 extern const Eax eax;
 extern const R32 ecx;
@@ -821,7 +821,7 @@ extern const R32 r13d;
 extern const R32 r14d;
 extern const R32 r15d;
 
-extern const std::vector<R32> r32s;
+extern const std::array<R32,16> r32s;
 
 extern const Rax rax;
 extern const R64 rcx;
@@ -840,7 +840,7 @@ extern const R64 r13;
 extern const R64 r14;
 extern const R64 r15;
 
-extern const std::vector<R64> r64s;
+extern const std::array<R64,16> r64s;
 
 extern const Sreg es;
 extern const Sreg cs;
@@ -849,7 +849,7 @@ extern const Sreg ds;
 extern const Fs fs;
 extern const Gs gs;
 
-extern const std::vector<Sreg> sregs;
+extern const std::array<Sreg,6> sregs;
 
 extern const St0 st0;
 extern const St st1;
@@ -860,7 +860,7 @@ extern const St st5;
 extern const St st6;
 extern const St st7;
 
-extern const std::vector<St> sts;
+extern const std::array<St,8> sts;
 
 extern const Xmm0 xmm0;
 extern const Xmm xmm1;
@@ -879,7 +879,7 @@ extern const Xmm xmm13;
 extern const Xmm xmm14;
 extern const Xmm xmm15;
 
-extern const std::vector<Xmm> xmms;
+extern const std::array<Xmm,16> xmms;
 
 extern const Ymm ymm0;
 extern const Ymm ymm1;
@@ -898,7 +898,7 @@ extern const Ymm ymm13;
 extern const Ymm ymm14;
 extern const Ymm ymm15;
 
-extern const std::vector<Ymm> ymms;
+extern const std::array<Ymm,16> ymms;
 
 } // namespace x64asm
 

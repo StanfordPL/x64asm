@@ -72,7 +72,7 @@ const Eflags eflags_id {
   Constants::eflags_id()
 };
 
-const vector<Eflags> eflags {
+const array<Eflags,17> eflags {
   eflags_cf, eflags_pf,   eflags_af,  eflags_zf,
   eflags_sf, eflags_tf,   eflags_if,  eflags_df,
   eflags_of, eflags_iopl, eflags_nt,  eflags_rf,
@@ -108,7 +108,7 @@ const FpuControl fpu_control_x {
   Constants::fpu_control_x()
 };
 
-const vector<FpuControl> fpu_control {
+const array<FpuControl,9> fpu_control {
   fpu_control_im, fpu_control_dm, fpu_control_zm, fpu_control_om,
   fpu_control_um, fpu_control_pm, fpu_control_pc, fpu_control_rc,
   fpu_control_x
@@ -157,7 +157,7 @@ const FpuStatus fpu_status_b {
   Constants::fpu_status_b()
 };
 
-const vector<FpuStatus> fpu_status {
+const array<FpuStatus,14> fpu_status {
   fpu_status_ie, fpu_status_de, fpu_status_ze, fpu_status_oe,
   fpu_status_ue, fpu_status_pe, fpu_status_sf, fpu_status_es,
   fpu_status_c0, fpu_status_c1, fpu_status_c2, fpu_status_top,
@@ -189,7 +189,7 @@ const FpuTag tag7 {
   Constants::tag7()
 };
 
-const vector<FpuTag> fpu_tags {
+const array<FpuTag,8> fpu_tags {
   tag0, tag1, tag2, tag3, tag4, tag5, tag6, tag7
 };
 
@@ -239,7 +239,7 @@ const Mxcsr mxcsr_fz {
   Constants::mxcsr_fz()
 };
 
-const vector<Mxcsr> mxcsr {
+const array<Mxcsr,15> mxcsr {
   mxcsr_ie, mxcsr_de, mxcsr_ze,  mxcsr_oe,
   mxcsr_ue, mxcsr_pe, mxcsr_daz, mxcsr_im,
   mxcsr_dm, mxcsr_zm, mxcsr_om,  mxcsr_um,
@@ -301,7 +301,7 @@ const Mm mm7 {
   Constants::mm7()
 };
 
-const vector<Mm> mms {
+const array<Mm,8> mms {
   mm0, mm1, mm2, mm3, mm4, mm5, mm6, mm7
 };
 
@@ -328,7 +328,7 @@ const Rl bl {
   Constants::bl()
 };
 
-const vector<Rl> rls {
+const array<Rl,4> rls {
   al, cl, dl, bl
 };
 
@@ -345,7 +345,7 @@ const Rh bh {
   Constants::bh()
 };
 
-const vector<Rh> rhs {
+const array<Rh,4> rhs {
   ah, ch, dh, bh
 };
 
@@ -386,7 +386,7 @@ const Rb r15b {
   Constants::r15b()
 };
 
-const vector<Rb> rbs {
+const array<Rb,12> rbs {
   spl, bpl, sil, dil, r8b, r9b, r10b, r11b, r12b, r13b, r14b, r15b
 };
 
@@ -439,7 +439,7 @@ const R16 r15w {
   Constants::r15w()
 };
 
-const vector<R16> r16s {
+const array<R16,16> r16s {
   ax,  cx,  dx,   bx,   sp,   bp,   si,   di,
   r8w, r9w, r10w, r11w, r12w, r13w, r14w, r15w
 };
@@ -493,7 +493,7 @@ const R32 r15d {
   Constants::r15d()
 };
 
-const vector<R32> r32s {
+const array<R32,16> r32s {
   eax, ecx, edx,  ebx,  esp,  ebp,  esi,  edi,
   r8d, r9d, r10d, r11d, r12d, r13d, r14d, r15d
 };
@@ -547,7 +547,7 @@ const R64 r15 {
   Constants::r15()
 };
 
-const vector<R64> r64s {
+const array<R64,16> r64s {
   rax, rcx, rdx, rbx, rsp, rbp, rsi, rdi,
   r8,  r9,  r10, r11, r12, r13, r14, r15
 };
@@ -571,7 +571,7 @@ const Gs gs {
   Constants::gs()
 };
 
-const vector<Sreg> sregs {
+const array<Sreg,6> sregs {
   es, cs, ss, ds, fs, gs
 };
 
@@ -600,7 +600,7 @@ const St st7 {
   Constants::st7()
 };
 
-const vector<St> sts {
+const array<St,8> sts {
   st0, st1, st2, st3, st4, st5, st6, st7
 };
 
@@ -653,7 +653,7 @@ const Xmm xmm15 {
   Constants::xmm15()
 };
 
-const vector<Xmm> xmms {
+const array<Xmm,16> xmms {
   xmm0, xmm1, xmm2,  xmm3,  xmm4,  xmm5,  xmm6,  xmm7,
   xmm8, xmm9, xmm10, xmm11, xmm12, xmm13, xmm14, xmm15
 };
@@ -707,7 +707,7 @@ const Ymm ymm15 {
   Constants::ymm15()
 };
 
-const vector<Ymm> ymms {
+const array<Ymm,16> ymms {
   ymm0, ymm1, ymm2,  ymm3,  ymm4,  ymm5,  ymm6,  ymm7,
   ymm8, ymm9, ymm10, ymm11, ymm12, ymm13, ymm14, ymm15
 };
