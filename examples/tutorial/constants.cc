@@ -81,7 +81,9 @@ void write() {
   write(mms);
   write(sts);
   write(xmms);
-  write(ymms);
+	for ( const auto& y : ymms ) 
+		cout << y << " ";
+	cout << endl;
 
   cout << endl;
 

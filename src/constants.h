@@ -29,8 +29,6 @@ limitations under the License.
 #include "src/xmm.h"
 #include "src/ymm.h"
 
-#include <vector>
-
 namespace x64asm {
 
 /** Predefined assembler constants. Direct access to the object constructors is
@@ -651,255 +649,697 @@ class Constants {
 
 // Convenience definitions follow...
 
-extern const FpuControl fpu_control_im;
-extern const FpuControl fpu_control_dm;
-extern const FpuControl fpu_control_zm;
-extern const FpuControl fpu_control_om;
-extern const FpuControl fpu_control_um;
-extern const FpuControl fpu_control_pm;
-extern const FpuControl fpu_control_pc;
-extern const FpuControl fpu_control_rc;
-extern const FpuControl fpu_control_x;
+constexpr Eflags eflags_cf {
+  Constants::eflags_cf()
+};
+constexpr Eflags eflags_pf {
+  Constants::eflags_pf()
+};
+constexpr Eflags eflags_af {
+  Constants::eflags_af()
+};
+constexpr Eflags eflags_zf {
+  Constants::eflags_zf()
+};
+constexpr Eflags eflags_sf {
+  Constants::eflags_sf()
+};
+constexpr Eflags eflags_tf {
+  Constants::eflags_tf()
+};
+constexpr Eflags eflags_if {
+  Constants::eflags_if()
+};
+constexpr Eflags eflags_df {
+  Constants::eflags_df()
+};
+constexpr Eflags eflags_of {
+  Constants::eflags_of()
+};
+constexpr Eflags eflags_iopl {
+  Constants::eflags_iopl()
+};
+constexpr Eflags eflags_nt {
+  Constants::eflags_nt()
+};
+constexpr Eflags eflags_rf {
+  Constants::eflags_rf()
+};
+constexpr Eflags eflags_vm {
+  Constants::eflags_vm()
+};
+constexpr Eflags eflags_ac {
+  Constants::eflags_ac()
+};
+constexpr Eflags eflags_vif {
+  Constants::eflags_vif()
+};
+constexpr Eflags eflags_vip {
+  Constants::eflags_vip()
+};
+constexpr Eflags eflags_id {
+  Constants::eflags_id()
+};
 
-extern const std::vector<FpuControl> fpu_control;
+constexpr Eflags eflags[17] {
+  eflags_cf, eflags_pf,   eflags_af,  eflags_zf,
+  eflags_sf, eflags_tf,   eflags_if,  eflags_df,
+  eflags_of, eflags_iopl, eflags_nt,  eflags_rf,
+  eflags_vm, eflags_ac,   eflags_vif, eflags_vip,
+  eflags_id
+};
 
-extern const Eflags eflags_cf;
-extern const Eflags eflags_pf;
-extern const Eflags eflags_af;
-extern const Eflags eflags_zf;
-extern const Eflags eflags_sf;
-extern const Eflags eflags_tf;
-extern const Eflags eflags_if;
-extern const Eflags eflags_df;
-extern const Eflags eflags_of;
-extern const Eflags eflags_iopl;
-extern const Eflags eflags_nt;
-extern const Eflags eflags_rf;
-extern const Eflags eflags_vm;
-extern const Eflags eflags_ac;
-extern const Eflags eflags_vif;
-extern const Eflags eflags_vip;
-extern const Eflags eflags_id;
+constexpr FpuControl fpu_control_im {
+  Constants::fpu_control_im()
+};
+constexpr FpuControl fpu_control_dm {
+  Constants::fpu_control_dm()
+};
+constexpr FpuControl fpu_control_zm {
+  Constants::fpu_control_zm()
+};
+constexpr FpuControl fpu_control_om {
+  Constants::fpu_control_om()
+};
+constexpr FpuControl fpu_control_um {
+  Constants::fpu_control_um()
+};
+constexpr FpuControl fpu_control_pm {
+  Constants::fpu_control_pm()
+};
+constexpr FpuControl fpu_control_pc {
+  Constants::fpu_control_pc()
+};
+constexpr FpuControl fpu_control_rc {
+  Constants::fpu_control_rc()
+};
+constexpr FpuControl fpu_control_x {
+  Constants::fpu_control_x()
+};
 
-extern const std::vector<Eflags> eflags;
+constexpr FpuControl fpu_control[9] {
+  fpu_control_im, fpu_control_dm, fpu_control_zm, fpu_control_om,
+  fpu_control_um, fpu_control_pm, fpu_control_pc, fpu_control_rc,
+  fpu_control_x
+};
 
-extern const Mxcsr mxcsr_ie;
-extern const Mxcsr mxcsr_de;
-extern const Mxcsr mxcsr_ze;
-extern const Mxcsr mxcsr_oe;
-extern const Mxcsr mxcsr_ue;
-extern const Mxcsr mxcsr_pe;
-extern const Mxcsr mxcsr_daz;
-extern const Mxcsr mxcsr_im;
-extern const Mxcsr mxcsr_dm;
-extern const Mxcsr mxcsr_zm;
-extern const Mxcsr mxcsr_om;
-extern const Mxcsr mxcsr_um;
-extern const Mxcsr mxcsr_pm;
-extern const Mxcsr mxcsr_rc;
-extern const Mxcsr mxcsr_fz;
+constexpr FpuStatus fpu_status_ie {
+  Constants::fpu_status_ie()
+};
+constexpr FpuStatus fpu_status_de {
+  Constants::fpu_status_de()
+};
+constexpr FpuStatus fpu_status_ze {
+  Constants::fpu_status_ze()
+};
+constexpr FpuStatus fpu_status_oe {
+  Constants::fpu_status_oe()
+};
+constexpr FpuStatus fpu_status_ue {
+  Constants::fpu_status_ue()
+};
+constexpr FpuStatus fpu_status_pe {
+  Constants::fpu_status_pe()
+};
+constexpr FpuStatus fpu_status_sf {
+  Constants::fpu_status_sf()
+};
+constexpr FpuStatus fpu_status_es {
+  Constants::fpu_status_es()
+};
+constexpr FpuStatus fpu_status_c0 {
+  Constants::fpu_status_c0()
+};
+constexpr FpuStatus fpu_status_c1 {
+  Constants::fpu_status_c1()
+};
+constexpr FpuStatus fpu_status_c2 {
+  Constants::fpu_status_c2()
+};
+constexpr FpuStatus fpu_status_top {
+  Constants::fpu_status_top()
+};
+constexpr FpuStatus fpu_status_c3 {
+  Constants::fpu_status_c3()
+};
+constexpr FpuStatus fpu_status_b {
+  Constants::fpu_status_b()
+};
 
-extern const std::vector<Mxcsr> mxcsr;
+constexpr FpuStatus fpu_status[14] {
+  fpu_status_ie, fpu_status_de, fpu_status_ze, fpu_status_oe,
+  fpu_status_ue, fpu_status_pe, fpu_status_sf, fpu_status_es,
+  fpu_status_c0, fpu_status_c1, fpu_status_c2, fpu_status_top,
+  fpu_status_c3, fpu_status_b
+};
 
-extern const FpuStatus fpu_status_ie;
-extern const FpuStatus fpu_status_de;
-extern const FpuStatus fpu_status_ze;
-extern const FpuStatus fpu_status_oe;
-extern const FpuStatus fpu_status_ue;
-extern const FpuStatus fpu_status_pe;
-extern const FpuStatus fpu_status_sf;
-extern const FpuStatus fpu_status_es;
-extern const FpuStatus fpu_status_c0;
-extern const FpuStatus fpu_status_c1;
-extern const FpuStatus fpu_status_c2;
-extern const FpuStatus fpu_status_top;
-extern const FpuStatus fpu_status_c3;
-extern const FpuStatus fpu_status_b;
+constexpr FpuTag tag0 {
+  Constants::tag0()
+};
+constexpr FpuTag tag1 {
+  Constants::tag1()
+};
+constexpr FpuTag tag2 {
+  Constants::tag2()
+};
+constexpr FpuTag tag3 {
+  Constants::tag3()
+};
+constexpr FpuTag tag4 {
+  Constants::tag4()
+};
+constexpr FpuTag tag5 {
+  Constants::tag5()
+};
+constexpr FpuTag tag6 {
+  Constants::tag6()
+};
+constexpr FpuTag tag7 {
+  Constants::tag7()
+};
 
-extern const std::vector<FpuStatus> fpu_status;
+constexpr FpuTag fpu_tags[8] {
+  tag0, tag1, tag2, tag3, tag4, tag5, tag6, tag7
+};
 
-extern const FpuTag tag0;
-extern const FpuTag tag1;
-extern const FpuTag tag2;
-extern const FpuTag tag3;
-extern const FpuTag tag4;
-extern const FpuTag tag5;
-extern const FpuTag tag6;
-extern const FpuTag tag7;
+constexpr Mxcsr mxcsr_ie {
+  Constants::mxcsr_ie()
+};
+constexpr Mxcsr mxcsr_de {
+  Constants::mxcsr_de()
+};
+constexpr Mxcsr mxcsr_ze {
+  Constants::mxcsr_ze()
+};
+constexpr Mxcsr mxcsr_oe {
+  Constants::mxcsr_oe()
+};
+constexpr Mxcsr mxcsr_ue {
+  Constants::mxcsr_ue()
+};
+constexpr Mxcsr mxcsr_pe {
+  Constants::mxcsr_pe()
+};
+constexpr Mxcsr mxcsr_daz {
+  Constants::mxcsr_daz()
+};
+constexpr Mxcsr mxcsr_im {
+  Constants::mxcsr_im()
+};
+constexpr Mxcsr mxcsr_dm {
+  Constants::mxcsr_dm()
+};
+constexpr Mxcsr mxcsr_zm {
+  Constants::mxcsr_zm()
+};
+constexpr Mxcsr mxcsr_om {
+  Constants::mxcsr_om()
+};
+constexpr Mxcsr mxcsr_um {
+  Constants::mxcsr_um()
+};
+constexpr Mxcsr mxcsr_pm {
+  Constants::mxcsr_pm()
+};
+constexpr Mxcsr mxcsr_rc {
+  Constants::mxcsr_rc()
+};
+constexpr Mxcsr mxcsr_fz {
+  Constants::mxcsr_fz()
+};
 
-extern const std::vector<FpuTag> fpu_tags;
+constexpr Mxcsr mxcsr[15] {
+  mxcsr_ie, mxcsr_de, mxcsr_ze,  mxcsr_oe,
+  mxcsr_ue, mxcsr_pe, mxcsr_daz, mxcsr_im,
+  mxcsr_dm, mxcsr_zm, mxcsr_om,  mxcsr_um,
+  mxcsr_pm, mxcsr_rc, mxcsr_fz
+};
 
-extern const FpuData fpu_data;
-extern const FpuInstruction fpu_instruction;
-extern const FpuOpcode fpu_opcode;
-extern const Rip rip;
+constexpr FpuData fpu_data {
+  Constants::fpu_data()
+};
+constexpr FpuInstruction fpu_instruction {
+  Constants::fpu_instruction()
+};
+constexpr FpuOpcode fpu_opcode {
+  Constants::fpu_opcode()
+};
+constexpr Rip rip {
+  Constants::rip()
+};
 
-extern const Hint taken;
-extern const Hint not_taken;
+constexpr Hint taken {
+  Constants::taken()
+};
+constexpr Hint not_taken {
+  Constants::not_taken()
+};
 
-extern const Zero zero;
-extern const One one;
-extern const Three three;
+constexpr Zero zero {
+  Constants::zero()
+};
+constexpr One one {
+  Constants::one()
+};
+constexpr Three three {
+  Constants::three()
+};
 
-extern const Mm mm0;
-extern const Mm mm1;
-extern const Mm mm2;
-extern const Mm mm3;
-extern const Mm mm4;
-extern const Mm mm5;
-extern const Mm mm6;
-extern const Mm mm7;
+constexpr Mm mm0 {
+  Constants::mm0()
+};
+constexpr Mm mm1 {
+  Constants::mm1()
+};
+constexpr Mm mm2 {
+  Constants::mm2()
+};
+constexpr Mm mm3 {
+  Constants::mm3()
+};
+constexpr Mm mm4 {
+  Constants::mm4()
+};
+constexpr Mm mm5 {
+  Constants::mm5()
+};
+constexpr Mm mm6 {
+  Constants::mm6()
+};
+constexpr Mm mm7 {
+  Constants::mm7()
+};
 
-extern const std::vector<Mm> mms;
+constexpr Mm mms[8] {
+  mm0, mm1, mm2, mm3, mm4, mm5, mm6, mm7
+};
 
-extern const Pref66 pref_66;
-extern const PrefRexW pref_rex_w;
-extern const Far far;
+constexpr Pref66 pref_66 {
+  Constants::pref_66()
+};
+constexpr PrefRexW pref_rex_w {
+  Constants::pref_rex_w()
+};
+constexpr Far far {
+  Constants::far()
+};
 
-extern const Al al;
-extern const Cl cl;
-extern const Rl dl;
-extern const Rl bl;
+constexpr Al al {
+  Constants::al()
+};
+constexpr Cl cl {
+  Constants::cl()
+};
+constexpr Rl dl {
+  Constants::dl()
+};
+constexpr Rl bl {
+  Constants::bl()
+};
 
-extern const std::vector<Rl> rls;
+constexpr Rl rls[4] {
+  al, cl, dl, bl
+};
 
-extern const Rh ah;
-extern const Rh ch;
-extern const Rh dh;
-extern const Rh bh;
+constexpr Rh ah {
+  Constants::ah()
+};
+constexpr Rh ch {
+  Constants::ch()
+};
+constexpr Rh dh {
+  Constants::dh()
+};
+constexpr Rh bh {
+  Constants::bh()
+};
 
-extern const std::vector<Rh> rhs;
+constexpr Rh rhs[4] {
+  ah, ch, dh, bh
+};
 
-extern const Rb spl;
-extern const Rb bpl;
-extern const Rb sil;
-extern const Rb dil;
-extern const Rb r8b;
-extern const Rb r9b;
-extern const Rb r10b;
-extern const Rb r11b;
-extern const Rb r12b;
-extern const Rb r13b;
-extern const Rb r14b;
-extern const Rb r15b;
+constexpr Rb spl {
+  Constants::spl()
+};
+constexpr Rb bpl {
+  Constants::bpl()
+};
+constexpr Rb sil {
+  Constants::sil()
+};
+constexpr Rb dil {
+  Constants::dil()
+};
+constexpr Rb r8b {
+  Constants::r8b()
+};
+constexpr Rb r9b {
+  Constants::r9b()
+};
+constexpr Rb r10b {
+  Constants::r10b()
+};
+constexpr Rb r11b {
+  Constants::r11b()
+};
+constexpr Rb r12b {
+  Constants::r12b()
+};
+constexpr Rb r13b {
+  Constants::r13b()
+};
+constexpr Rb r14b {
+  Constants::r14b()
+};
+constexpr Rb r15b {
+  Constants::r15b()
+};
 
-extern const std::vector<Rb> rbs;
+constexpr Rb rbs[12] {
+  spl, bpl, sil, dil, r8b, r9b, r10b, r11b, r12b, r13b, r14b, r15b
+};
 
-extern const Ax ax;
-extern const R16 cx;
-extern const Dx dx;
-extern const R16 bx;
-extern const R16 sp;
-extern const R16 bp;
-extern const R16 si;
-extern const R16 di;
-extern const R16 r8w;
-extern const R16 r9w;
-extern const R16 r10w;
-extern const R16 r11w;
-extern const R16 r12w;
-extern const R16 r13w;
-extern const R16 r14w;
-extern const R16 r15w;
+constexpr Ax ax {
+  Constants::ax()
+};
+constexpr R16 cx {
+  Constants::cx()
+};
+constexpr Dx dx {
+  Constants::dx()
+};
+constexpr R16 bx {
+  Constants::bx()
+};
+constexpr R16 sp {
+  Constants::sp()
+};
+constexpr R16 bp {
+  Constants::bp()
+};
+constexpr R16 si {
+  Constants::si()
+};
+constexpr R16 di {
+  Constants::di()
+};
+constexpr R16 r8w {
+  Constants::r8w()
+};
+constexpr R16 r9w {
+  Constants::r9w()
+};
+constexpr R16 r10w {
+  Constants::r10w()
+};
+constexpr R16 r11w {
+  Constants::r11w()
+};
+constexpr R16 r12w {
+  Constants::r12w()
+};
+constexpr R16 r13w {
+  Constants::r13w()
+};
+constexpr R16 r14w {
+  Constants::r14w()
+};
+constexpr R16 r15w {
+  Constants::r15w()
+};
 
-extern const std::vector<R16> r16s;
+constexpr R16 r16s[16] {
+  ax,  cx,  dx,   bx,   sp,   bp,   si,   di,
+  r8w, r9w, r10w, r11w, r12w, r13w, r14w, r15w
+};
 
-extern const Eax eax;
-extern const R32 ecx;
-extern const R32 edx;
-extern const R32 ebx;
-extern const R32 esp;
-extern const R32 ebp;
-extern const R32 esi;
-extern const R32 edi;
-extern const R32 r8d;
-extern const R32 r9d;
-extern const R32 r10d;
-extern const R32 r11d;
-extern const R32 r12d;
-extern const R32 r13d;
-extern const R32 r14d;
-extern const R32 r15d;
+constexpr Eax eax {
+  Constants::eax()
+};
+constexpr R32 ecx {
+  Constants::ecx()
+};
+constexpr R32 edx {
+	Constants::edx()
+};
+constexpr R32 ebx {
+  Constants::ebx()
+};
+constexpr R32 esp {
+  Constants::esp()
+};
+constexpr R32 ebp {
+  Constants::ebp()
+};
+constexpr R32 esi {
+  Constants::esi()
+};
+constexpr R32 edi {
+  Constants::edi()
+};
+constexpr R32 r8d {
+  Constants::r8d()
+};
+constexpr R32 r9d {
+  Constants::r9d()
+};
+constexpr R32 r10d {
+  Constants::r10d()
+};
+constexpr R32 r11d {
+  Constants::r11d()
+};
+constexpr R32 r12d {
+  Constants::r12d()
+};
+constexpr R32 r13d {
+  Constants::r13d()
+};
+constexpr R32 r14d {
+  Constants::r14d()
+};
+constexpr R32 r15d {
+  Constants::r15d()
+};
 
-extern const std::vector<R32> r32s;
+constexpr R32 r32s[16] {
+  eax, ecx, edx,  ebx,  esp,  ebp,  esi,  edi,
+  r8d, r9d, r10d, r11d, r12d, r13d, r14d, r15d
+};
 
-extern const Rax rax;
-extern const R64 rcx;
-extern const R64 rdx;
-extern const R64 rbx;
-extern const R64 rsp;
-extern const R64 rbp;
-extern const R64 rsi;
-extern const R64 rdi;
-extern const R64 r8;
-extern const R64 r9;
-extern const R64 r10;
-extern const R64 r11;
-extern const R64 r12;
-extern const R64 r13;
-extern const R64 r14;
-extern const R64 r15;
+constexpr Rax rax {
+  Constants::rax()
+};
+constexpr R64 rcx {
+  Constants::rcx()
+};
+constexpr R64 rdx {
+  Constants::rdx()
+};
+constexpr R64 rbx {
+  Constants::rbx()
+};
+constexpr R64 rsp {
+  Constants::rsp()
+};
+constexpr R64 rbp {
+  Constants::rbp()
+};
+constexpr R64 rsi {
+  Constants::rsi()
+};
+constexpr R64 rdi {
+  Constants::rdi()
+};
+constexpr R64 r8 {
+  Constants::r8()
+};
+constexpr R64 r9 {
+  Constants::r9()
+};
+constexpr R64 r10 {
+  Constants::r10()
+};
+constexpr R64 r11 {
+  Constants::r11()
+};
+constexpr R64 r12 {
+  Constants::r12()
+};
+constexpr R64 r13 {
+  Constants::r13()
+};
+constexpr R64 r14 {
+  Constants::r14()
+};
+constexpr R64 r15 {
+  Constants::r15()
+};
 
-extern const std::vector<R64> r64s;
+constexpr R64 r64s[16] {
+  rax, rcx, rdx, rbx, rsp, rbp, rsi, rdi,
+  r8,  r9,  r10, r11, r12, r13, r14, r15
+};
 
-extern const Sreg es;
-extern const Sreg cs;
-extern const Sreg ss;
-extern const Sreg ds;
-extern const Fs fs;
-extern const Gs gs;
+constexpr Sreg es {
+  Constants::es()
+};
+constexpr Sreg cs {
+  Constants::cs()
+};
+constexpr Sreg ss {
+  Constants::ss()
+};
+constexpr Sreg ds {
+  Constants::ds()
+};
+constexpr Fs fs {
+  Constants::fs()
+};
+constexpr Gs gs {
+  Constants::gs()
+};
 
-extern const std::vector<Sreg> sregs;
+constexpr Sreg sregs[6] {
+  es, cs, ss, ds, fs, gs
+};
 
-extern const St0 st0;
-extern const St st1;
-extern const St st2;
-extern const St st3;
-extern const St st4;
-extern const St st5;
-extern const St st6;
-extern const St st7;
+constexpr St0 st0 {
+  Constants::st0()
+};
+constexpr St st1 {
+  Constants::st1()
+};
+constexpr St st2 {
+  Constants::st2()
+};
+constexpr St st3 {
+  Constants::st3()
+};
+constexpr St st4 {
+  Constants::st4()
+};
+constexpr St st5 {
+  Constants::st5()
+};
+constexpr St st6 {
+  Constants::st6()
+};
+constexpr St st7 {
+  Constants::st7()
+};
 
-extern const std::vector<St> sts;
+constexpr St sts[8] {
+  st0, st1, st2, st3, st4, st5, st6, st7
+};
 
-extern const Xmm0 xmm0;
-extern const Xmm xmm1;
-extern const Xmm xmm2;
-extern const Xmm xmm3;
-extern const Xmm xmm4;
-extern const Xmm xmm5;
-extern const Xmm xmm6;
-extern const Xmm xmm7;
-extern const Xmm xmm8;
-extern const Xmm xmm9;
-extern const Xmm xmm10;
-extern const Xmm xmm11;
-extern const Xmm xmm12;
-extern const Xmm xmm13;
-extern const Xmm xmm14;
-extern const Xmm xmm15;
+constexpr Xmm0 xmm0 {
+  Constants::xmm0()
+};
+constexpr Xmm xmm1 {
+  Constants::xmm1()
+};
+constexpr Xmm xmm2 {
+  Constants::xmm2()
+};
+constexpr Xmm xmm3 {
+  Constants::xmm3()
+};
+constexpr Xmm xmm4 {
+  Constants::xmm4()
+};
+constexpr Xmm xmm5 {
+  Constants::xmm5()
+};
+constexpr Xmm xmm6 {
+  Constants::xmm6()
+};
+constexpr Xmm xmm7 {
+  Constants::xmm7()
+};
+constexpr Xmm xmm8 {
+  Constants::xmm8()
+};
+constexpr Xmm xmm9 {
+  Constants::xmm9()
+};
+constexpr Xmm xmm10 {
+  Constants::xmm10()
+};
+constexpr Xmm xmm11 {
+  Constants::xmm11()
+};
+constexpr Xmm xmm12 {
+  Constants::xmm12()
+};
+constexpr Xmm xmm13 {
+  Constants::xmm13()
+};
+constexpr Xmm xmm14 {
+  Constants::xmm14()
+};
+constexpr Xmm xmm15 {
+  Constants::xmm15()
+};
 
-extern const std::vector<Xmm> xmms;
+constexpr Xmm xmms[16] {
+  xmm0, xmm1, xmm2,  xmm3,  xmm4,  xmm5,  xmm6,  xmm7,
+  xmm8, xmm9, xmm10, xmm11, xmm12, xmm13, xmm14, xmm15
+};
 
-extern const Ymm ymm0;
-extern const Ymm ymm1;
-extern const Ymm ymm2;
-extern const Ymm ymm3;
-extern const Ymm ymm4;
-extern const Ymm ymm5;
-extern const Ymm ymm6;
-extern const Ymm ymm7;
-extern const Ymm ymm8;
-extern const Ymm ymm9;
-extern const Ymm ymm10;
-extern const Ymm ymm11;
-extern const Ymm ymm12;
-extern const Ymm ymm13;
-extern const Ymm ymm14;
-extern const Ymm ymm15;
+constexpr Ymm ymm0 {
+  Constants::ymm0()
+};
+constexpr Ymm ymm1 {
+  Constants::ymm1()
+};
+constexpr Ymm ymm2 {
+  Constants::ymm2()
+};
+constexpr Ymm ymm3 {
+  Constants::ymm3()
+};
+constexpr Ymm ymm4 {
+  Constants::ymm4()
+};
+constexpr Ymm ymm5 {
+  Constants::ymm5()
+};
+constexpr Ymm ymm6 {
+  Constants::ymm6()
+};
+constexpr Ymm ymm7 {
+  Constants::ymm7()
+};
+constexpr Ymm ymm8 {
+  Constants::ymm8()
+};
+constexpr Ymm ymm9 {
+  Constants::ymm9()
+};
+constexpr Ymm ymm10 {
+  Constants::ymm10()
+};
+constexpr Ymm ymm11 {
+  Constants::ymm11()
+};
+constexpr Ymm ymm12 {
+  Constants::ymm12()
+};
+constexpr Ymm ymm13 {
+  Constants::ymm13()
+};
+constexpr Ymm ymm14 {
+  Constants::ymm14()
+};
+constexpr Ymm ymm15 {
+  Constants::ymm15()
+};
 
-extern const std::vector<Ymm> ymms;
-
+constexpr Ymm ymms[16] {
+  ymm0, ymm1, ymm2,  ymm3,  ymm4,  ymm5,  ymm6,  ymm7,
+  ymm8, ymm9, ymm10, ymm11, ymm12, ymm13, ymm14, ymm15
+};
 } // namespace x64asm
 
 #endif
