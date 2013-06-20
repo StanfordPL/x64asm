@@ -48,26 +48,49 @@ class Function {
     */
     Function(size_t capacity = 1024) {
       capacity_ = round_up(capacity);
-      buffer_ = make_buffer(capacity_);
+      buffer_ = (unsigned char*) mmap(0, capacity_,
+          PROT_READ | PROT_WRITE | PROT_EXEC,
+          MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
       head_ = buffer_;
     }
 
     /** Deep copy constructor. */
     Function(const Function& rhs) {
-      copy_buffer(rhs);
-      head_ = buffer_ + size();
+      if (good())
+        munmap(buffer_, capacity_);
+			capacity_ = rhs.capacity_;
+      buffer_ = (unsigned char*) mmap(0, capacity_,
+         PROT_READ | PROT_WRITE | PROT_EXEC,
+         MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+      if (good() && rhs.good())
+        memcpy(buffer_, rhs.buffer_, rhs.size());
+      head_ = buffer_ + rhs.size();
     }
 
     /** Deep copy assignment operator. */
     Function& operator=(const Function& rhs) {
-      copy_buffer(rhs);
-      head_ = buffer_ + size();
+			if ( this == &rhs )
+				return *this;
+
+      if (good())
+        munmap(buffer_, capacity_);
+			capacity_ = rhs.capacity_;
+      buffer_ = (unsigned char*) mmap(0, capacity_,
+         PROT_READ | PROT_WRITE | PROT_EXEC,
+         MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+      if (good() && rhs.good())
+        memcpy(buffer_, rhs.buffer_, rhs.size());
+      head_ = buffer_ + rhs.size();
+
       return *this;
     }
 
     /** Deallocates the internal buffer. */
     ~Function() {
-      free_buffer();
+      if (good()) {
+        munmap(buffer_, capacity_);
+				buffer_ = (unsigned char*)-1;
+			}
     }
 
 		/** Returns the address of the entrypoint of this function. */
@@ -138,7 +161,7 @@ class Function {
       return capacity_;
     }
 
-    /** Extends the size of the internal buffer; performsa a reallocation if
+    /** Extends the size of the internal buffer; performs a reallocation if
     	  necessary.
     */
     void reserve(size_t capacity) {
@@ -146,15 +169,20 @@ class Function {
         return;
       }
 
-      capacity = round_up(capacity);
-      auto buf = make_buffer(capacity);
-      if ((long) buf != -1) {
-        memcpy(buf, buffer_, size());
-      }
+      const auto new_capacity = round_up(capacity);
+      auto new_buffer = (unsigned char*) mmap(0, new_capacity,
+          PROT_READ | PROT_WRITE | PROT_EXEC, 
+					MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+			const auto new_head = new_buffer + size();
 
-      free_buffer();
-      capacity_ = capacity;
-      buffer_ = buf;
+			if (good() && (long)new_buffer != -1)
+				memcpy(new_buffer, buffer_, size());
+			if (good())
+				munmap(buffer_, capacity_);
+
+			capacity_ = new_capacity;
+			buffer_ = new_buffer;
+			head_ = new_head;
     }
 
     /** Resets the write pointer to the beginning of the internal pointer. */
@@ -266,34 +294,8 @@ class Function {
     size_t round_up(size_t size) const {
       if (size == 0) {
         return 1024;
-      } else if (size % 1024 == 0) {
-        return size;
       } else {
-        return ((size / 1024) + 1) * 1024;
-      }
-    }
-
-    /** Allocates an executable buffer of at least size bytes. */
-    unsigned char* make_buffer(size_t size) const {
-      return (unsigned char*) mmap(0, size,
-                                   PROT_READ | PROT_WRITE | PROT_EXEC,
-                                   MAP_PRIVATE | MAP_ANONYMOUS,
-                                   -1, 0);
-    }
-
-    /** Performs a deep copy of a buffer. */
-    void copy_buffer(const Function& rhs) {
-      capacity_ = rhs.capacity_;
-      buffer_ = make_buffer(rhs.capacity_);
-      if (good()) {
-        memcpy(buffer_, rhs.buffer_, rhs.size());
-      }
-    }
-
-    /** Deallocates a buffer. */
-    void free_buffer() {
-      if (good()) {
-        munmap(buffer_, capacity_);
+        return (((size-1) / 1024) + 1) * 1024;
       }
     }
 };
