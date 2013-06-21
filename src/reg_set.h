@@ -17,6 +17,7 @@ limitations under the License.
 #ifndef X64ASM_SRC_REG_SET_H
 #define X64ASM_SRC_REG_SET_H
 
+#include <algorithm>
 #include <iostream>
 
 #include "src/env_bits.h"
@@ -572,6 +573,14 @@ class RegSet {
     bool contains(const RegSet& rhs) const {
       return (*this & rhs) == rhs;
     }
+
+		/** Swap. */
+		void swap(RegSet& rhs) {
+			std::swap(group1_, rhs.group1_);
+			std::swap(group2_, rhs.group2_);
+			std::swap(group3_, rhs.group3_);
+			std::swap(group4_, rhs.group4_);
+		}
 
   private:
     /** Internal bit mask group 1 (see Mask enum for details). */
