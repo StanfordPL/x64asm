@@ -17,6 +17,7 @@ limitations under the License.
 #ifndef X64ASM_SRC_FUNCTION_H
 #define X64ASM_SRC_FUNCTION_H
 
+#include <algorithm>
 #include <cassert>
 #include <cstring>
 #include <iomanip>
@@ -67,25 +68,22 @@ class Function {
       head_ = buffer_ + rhs.size();
     }
 
-    /** Deep copy assignment operator. */
-    Function& operator=(const Function& rhs) {
-			if ( this == &rhs )
-				return *this;
-
-      if (good())
-        munmap(buffer_, capacity_);
+		/** Move constructor. */
+		Function(Function&& rhs) {
 			capacity_ = rhs.capacity_;
-      buffer_ = (unsigned char*) mmap(0, capacity_,
-         PROT_READ | PROT_WRITE | PROT_EXEC,
-         MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-      if (good() && rhs.good())
-        memcpy(buffer_, rhs.buffer_, rhs.size());
-      head_ = buffer_ + rhs.size();
+			buffer_ = rhs.buffer_;
+			head_ = rhs.head_;
 
+			rhs.buffer_ = (unsigned char*)-1;
+		}
+
+    /** Assignment operator. */
+    Function& operator=(Function rhs) {
+			swap(rhs);
       return *this;
     }
 
-    /** Deallocates the internal buffer. */
+    /** Destructor. */
     ~Function() {
       if (good()) {
         munmap(buffer_, capacity_);
@@ -276,6 +274,13 @@ class Function {
         }
       }
     }
+
+		/** Swap. */
+		void swap(Function& rhs) {
+			std::swap(capacity_, rhs.capacity_);
+			std::swap(buffer_, rhs.buffer_);
+			std::swap(head_, rhs.head_);
+		}
 
   private:
     /** The size of the internal buffer. */
