@@ -24,10 +24,6 @@ namespace x64asm {
 
 void Sreg::write_att(ostream& os) const {
   os << "%";
-  write_intel(os);
-}
-
-void Sreg::write_intel(ostream& os) const {
   switch (val_) {
     case 0:
       os << "es";

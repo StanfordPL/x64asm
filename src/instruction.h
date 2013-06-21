@@ -313,8 +313,6 @@ class Instruction {
 
     /** Writes this instruction to an ostream using at&t syntax. */
     void write_att(std::ostream& os) const;
-    /** Writes this instruction to an ostream using intel syntax. */
-    void write_intel(std::ostream& os) const;
 
   private:
     /** Instruction mnemonic. */

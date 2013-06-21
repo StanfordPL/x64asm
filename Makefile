@@ -21,7 +21,6 @@ INC=-I./
 OBJ=src/assembler.o \
 		src/code.o \
 		src/code.att.o \
-		src/code.intel.o \
 		src/constants.o \
 		src/hint.o \
 		src/imm.o \
@@ -67,15 +66,10 @@ codegen:
 		./Codegen && \
 		rm -f *.hi *.o Codegen
 	flex $(FLEXOPS) -Patt src/att.l 
-	flex $(FLEXOPS) -Pintel src/intel.l 
 	bison $(BISONOPS) -batt -patt --defines src/att.y && touch att.output 
-	bison $(BISONOPS) -bintel -pintel --defines src/intel.y && touch intel.output 
 	mv lex.*.* src/ && mv *.tab.* src/ && mv *.output src/
 		
 src/code.att.o: src/code.att.cc src/code.h codegen
-	$(GCC) -w -O0 $(INC) -c $< -o $@
-
-src/code.intel.o: src/code.intel.cc src/code.h codegen
 	$(GCC) -w -O0 $(INC) -c $< -o $@
 
 src/%.o: src/%.cc src/%.h codegen
@@ -114,6 +108,6 @@ check:
 clean:
 	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN)
 	rm -f src/mainpage.dox
-	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.intel src/*.enum src/*.table
+	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.enum src/*.table
 	rm -f src/*.tab.c src/*.tab.h src/lex.*.c src/*.output
 	rm -f test/*.s test/*.log test/*.o test/*.out

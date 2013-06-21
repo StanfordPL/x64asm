@@ -23,13 +23,8 @@ using namespace std;
 namespace x64asm {
 
 void Ymm::write_att(ostream& os) const {
-  os << "%";
-  write_intel(os);
-}
-
-void Ymm::write_intel(ostream& os) const {
   assert(check());
-  os << "ymm" << dec << val_;
+  os << "%ymm" << dec << val_;
 }
 
 } // namespace x64asm

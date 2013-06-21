@@ -61,8 +61,6 @@ class Rl : public R {
 
     /** Writes this register to an ostream using at&t syntax. */
     void write_att(std::ostream& os) const;
-    /** Writes this register to an ostream using intel syntax. */
-    void write_intel(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
@@ -84,8 +82,6 @@ class Rh : public R {
 
     /** Writes this register to an ostream using at&t syntax. */
     void write_att(std::ostream& os) const;
-    /** Writes this register to an ostream using intel syntax. */
-    void write_intel(std::ostream& os) const;
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -109,8 +105,6 @@ class Rb : public R {
 
     /** Writes this register to an ostream using at&t syntax. */
     void write_att(std::ostream& os) const;
-    /** Writes this register to an ostream using intel syntax. */
-    void write_intel(std::ostream& os) const;
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -171,8 +165,6 @@ class R16 : public R {
 
     /** Writes this register to an ostream using at&t syntax. */
     void write_att(std::ostream& os) const;
-    /** Writes this register to an ostream using intel syntax. */
-    void write_intel(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
@@ -233,8 +225,6 @@ class R32 : public R {
 
     /** Writes this register to an ostream using at&t syntax. */
     void write_att(std::ostream& os) const;
-    /** Writes this register to an ostream using intel syntax. */
-    void write_intel(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
@@ -278,8 +268,6 @@ class R64 : public R {
 
     /** Writes this register to an ostream using at&t syntax. */
     void write_att(std::ostream& os) const;
-    /** Writes this register to an ostream using intel syntax. */
-    void write_intel(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */

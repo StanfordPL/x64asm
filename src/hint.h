@@ -38,8 +38,6 @@ class Hint : public Operand {
 
     /** Writes this hint to an ostream using (something like) at&t syntax. */
     void write_att(std::ostream& os) const;
-    /** Writes this hint to an ostream using (something like) intel syntax. */
-    void write_intel(std::ostream& os) const;
 
   private:
     /** Direct access to this constructor is disallowed. */

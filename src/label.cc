@@ -21,10 +21,6 @@ using namespace std;
 namespace x64asm {
 
 void Label::write_att(ostream& os) const {
-  write_intel(os);
-}
-
-void Label::write_intel(ostream& os) const {
   os << ".L_X64ASM_" << dec << val_;
 }
 

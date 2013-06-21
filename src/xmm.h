@@ -53,8 +53,6 @@ class Xmm : public Operand {
 
     /** Writes this xmm register to an ostream using at&t syntax. */
     void write_att(std::ostream& os) const;
-    /** Writes this xmm register to an ostream using intel syntax. */
-    void write_intel(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */

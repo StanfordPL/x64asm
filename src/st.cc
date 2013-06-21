@@ -23,12 +23,8 @@ using namespace std;
 namespace x64asm {
 
 void St::write_att(ostream& os) const {
-  os << "%";
-  write_intel(os);
-}
-
-void St::write_intel(ostream& os) const {
   assert(check());
+  os << "%";
   if (val_ == 0) {
     os << "st";
   } else {

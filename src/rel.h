@@ -44,8 +44,6 @@ class Rel : public Operand {
 
     /** Writes this relative address to an ostream in at&t syntax. */
     void write_att(std::ostream& os) const;
-    /** Writes this relative address to an ostream in at&t syntax. */
-    void write_intel(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */

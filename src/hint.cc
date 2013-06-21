@@ -23,10 +23,6 @@ using namespace std;
 namespace x64asm {
 
 void Hint::write_att(ostream& os) const {
-  write_intel(os);
-}
-
-void Hint::write_intel(ostream& os) const {
   if (val_ == 0) {
     os << "<taken>";
   } else if (val_ == 1) {

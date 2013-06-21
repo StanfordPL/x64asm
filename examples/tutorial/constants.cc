@@ -105,16 +105,9 @@ void write() {
 }
 
 int main() {
-  // Constants can be printed using either AT&T or Intel syntax.
-  // Stream manipulators are provided for both options.
+  // Constants can be printed using AT&T syntax.
 
   cout << "AT&T Constants:" << endl << endl;
-  cout << Syntax::ATT;
-  write();
-  cout << endl;
-
-  cout << "Intel Constants:" << endl << endl;
-  cout << Syntax::INTEL;
   write();
   cout << endl;
 

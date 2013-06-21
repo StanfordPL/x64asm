@@ -17,7 +17,7 @@ limitations under the License.
 x64asm
 
 x64asm is a c++11 library for working with x86_64 assembly. It provides 
-parsers, an in memory assembler, and primitives for building data flow 
+a parser, an in memory assembler, and primitives for building data flow 
 analyses. x64asm was built with the following design goals in mind:
 
 Simplicity: 
@@ -106,10 +106,7 @@ doc/ref/index.html:  x86_64 application programmer cheatsheet.
 
 4a. Try the command line app.
     
-Input file formats are specified with the -i flag (att or intel). Output 
-formats are specified with the -o flag (att, intel, or hex).
-
-$ x64asm -i att -o hex test.s
+$ cat test.s | x64asm 
 
 4b. Write some code of your own.
 

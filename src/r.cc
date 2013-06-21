@@ -26,10 +26,6 @@ namespace x64asm {
 
 void Rl::write_att(ostream& os) const {
   os << "%";
-  write_intel(os);
-}
-
-void Rl::write_intel(ostream& os) const {
   switch (val_) {
     case 0:
       os << "al";
@@ -51,10 +47,6 @@ void Rl::write_intel(ostream& os) const {
 
 void Rh::write_att(ostream& os) const {
   os << "%";
-  write_intel(os);
-}
-
-void Rh::write_intel(ostream& os) const {
   switch (val_) {
     case 4:
       os << "ah";
@@ -76,10 +68,6 @@ void Rh::write_intel(ostream& os) const {
 
 void Rb::write_att(ostream& os) const {
   os << "%";
-  write_intel(os);
-}
-
-void Rb::write_intel(ostream& os) const {
   switch (val_) {
     case 4:
       os << "spl";
@@ -125,10 +113,6 @@ void Rb::write_intel(ostream& os) const {
 
 void R16::write_att(ostream& os) const {
   os << "%";
-  write_intel(os);
-}
-
-void R16::write_intel(ostream& os) const {
   switch (val_) {
     case 0:
       os << "ax";
@@ -186,10 +170,6 @@ void R16::write_intel(ostream& os) const {
 
 void R32::write_att(ostream& os) const {
   os << "%";
-  write_intel(os);
-}
-
-void R32::write_intel(ostream& os) const {
   switch (val_) {
     case 0:
       os << "eax";
@@ -247,10 +227,6 @@ void R32::write_intel(ostream& os) const {
 
 void R64::write_att(ostream& os) const {
   os << "%";
-  write_intel(os);
-}
-
-void R64::write_intel(ostream& os) const {
   switch (val_) {
     case 0:
       os << "rax";

@@ -51,8 +51,6 @@ class Mm : public Operand {
 
     /** Writes this mmx register to an ostream using at&t syntax. */
     void write_att(std::ostream& os) const;
-    /** Writes this mmx register to an ostream using intel syntax. */
-    void write_intel(std::ostream& os) const;
 
   private:
     /** Direct access to this contructor is disallowed. */

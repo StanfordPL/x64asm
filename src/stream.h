@@ -37,20 +37,7 @@ limitations under the License.
 #include "src/xmm.h"
 #include "src/ymm.h"
 
-namespace x64asm {
-
-/** I/O syntax for iostreams. */
-enum class Syntax : uint32_t {
-  ATT = 0,
-  INTEL
-};
-
-} // namespace x64asm
-
 // iostream overloads.  Note that these are in the global namespace.
-
-std::istream& operator>>(std::istream& is, const x64asm::Syntax s);
-std::ostream& operator<<(std::ostream& os, const x64asm::Syntax s);
 
 std::istream& operator>>(std::istream& is, x64asm::Code& c);
 

@@ -29,8 +29,6 @@ class Imm : public Operand {
   public:
     /** Writes this immediate to an ostream using at&t syntax. */
     void write_att(std::ostream& os) const;
-    /** Writes this immediate to an ostrema using intel syntax. */
-    void write_intel(std::ostream& os) const;
 
     /** Comparison based on immediate value. */
     constexpr bool operator<(const Imm& rhs) {

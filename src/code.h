@@ -53,15 +53,8 @@ class Code : public std::vector<Instruction> {
 
     /** Reads a code sequence in at&t syntax from an istream. */
     void read_att(std::istream& is);
-    /** Reads a code sequence in intel syntax from an istream.
-    	  @todo This method is currently incomplete.
-    */
-    void read_intel(std::istream& is);
-
     /** Writes a code sequence to an ostream using at&t syntax. */
     void write_att(std::ostream& os) const;
-    /** Writes a code sequence to an ostream using intel syntax. */
-    void write_intel(std::ostream& os) const;
 };
 
 } // namespace x64asm

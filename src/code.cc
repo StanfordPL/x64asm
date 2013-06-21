@@ -37,13 +37,4 @@ void Code::write_att(ostream& os) const {
   }
 }
 
-void Code::write_intel(ostream& os) const {
-  for (size_t i = 0, ie = size(); i < ie; ++i) {
-    (*this)[i].write_intel(os);
-    if (i + 1 != ie) {
-      os << endl;
-    }
-  }
-}
-
 } // namespace x64asm
