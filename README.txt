@@ -104,10 +104,6 @@ dataflow.cc:  How to use the dataflow API.
 doc/html/index.html: API documentation.
 doc/ref/index.html:  x86_64 application programmer cheatsheet.
 
-3c. Browse some more advanced examples.
-
-examples/trace: How to trace register state during execution.
-
 4a. Try the command line app.
     
 Input file formats are specified with the -i flag (att or intel). Output 
