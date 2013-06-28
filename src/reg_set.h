@@ -582,6 +582,11 @@ class RegSet {
 			std::swap(group4_, rhs.group4_);
 		}
 
+		/** STL compliant hash function. */
+		size_t hash() const {
+			return group1_ ^ group2_ ^ group3_ ^ group4_;
+		}
+
   private:
     /** Internal bit mask group 1 (see Mask enum for details). */
     uint64_t group1_;
@@ -594,5 +599,17 @@ class RegSet {
 };
 
 } // namespace x64asm
+
+namespace std {
+
+/** Specialization for use with unordered maps/sets. */
+template <>
+struct hash<x64asm::RegSet> {
+	size_t operator()(const x64asm::RegSet& rs) const {
+		return rs.hash();
+	}
+};
+
+} // namespace std
 
 #endif
