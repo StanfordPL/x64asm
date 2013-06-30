@@ -43,5 +43,6 @@ limitations under the License.
 #include "src/type.h"
 #include "src/xmm.h"
 #include "src/ymm.h"
+#include "src/zmm.h"
 
 #endif
