@@ -23,6 +23,9 @@ namespace x64asm {
 
 /** An environment register bit. */
 class EnvBits {
+	// Needs access to indices
+	friend class RegSet;
+
   public:
     /** Returns this bit's upper register index. */
     constexpr size_t index() {

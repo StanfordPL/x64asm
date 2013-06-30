@@ -32,6 +32,7 @@ limitations under the License.
 #include "src/st.h"
 #include "src/xmm.h"
 #include "src/ymm.h"
+#include "src/zmm.h"
 
 namespace x64asm {
 
@@ -173,6 +174,9 @@ struct is_operand<Xmm0> : public std::true_type { };
 
 template <>
 struct is_operand<Ymm> : public std::true_type { };
+
+template <>
+struct is_operand<Zmm> : public std::true_type { };
 
 // Is this a register type?
 

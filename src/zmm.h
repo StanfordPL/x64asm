@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef X64ASM_SRC_ZMM_H
 #define X64ASM_SRC_ZMM_H
 
-#include <cassert>
+#include <functional>
 #include <iostream>
 
 #include "src/operand.h"
@@ -58,78 +58,54 @@ class Zmm : public Operand {
     constexpr Zmm(uint64_t val);
 };
 
-} // namespace x64asm
-
-namespace std {
-
-template <>
-struct hash<x64asm::Zmm> {
-	size_t operator()(const x64asm::Zmm& z) const;
-};
-
-template <>
-void swap(x64asm::Zmm& lhs, x64asm::Zmm& rhs);
-
-} // namespace std
-
-namespace x64asm {
-
 inline constexpr bool Zmm::check() {
 	return val_ < 16;
 }
 
 inline constexpr bool Zmm::operator<(const Zmm& rhs) {
-	assert(check() && rhs.check());
 	return val_ < rhs.val_;
 }
 
 inline constexpr bool Zmm::operator==(const Zmm& rhs) {
-	assert(check() && rhs.check());
 	return val_ == rhs.val_;
 }
 
 inline constexpr bool Zmm::operator!=(const Zmm& rhs) {
-	assert(check() && rhs.check());
 	return val_ != rhs.val_;
 }
 
 inline constexpr Zmm::operator uint64_t() {
-	assert(check());
 	return val_;
 }
 
 inline void Zmm::write_att(std::ostream& os) const {
-	assert(check());
 	os << "%zmm" << std::dec << val_;
 }
 
 inline constexpr size_t Zmm::hash() {
-	assert(check());
 	return val_;
 }
 
 inline void Zmm::swap(Zmm& rhs) {
-	assert(check() && rhs.check());
 	std::swap(val_, rhs.val_);
 }
 
 inline constexpr Zmm::Zmm(uint64_t val) : Operand{val} {
-	assert(check());
 }
 
 } // namespace x64asm
 
 namespace std {
 
-template<>
-inline size_t hash<x64asm::Zmm>::operator()(const x64asm::Zmm& z) const {
-	return z.hash();
-}
-
+/** STL-compliant hash specialization. */
 template <>
-inline void swap(x64asm::Zmm& lhs, x64asm::Zmm& rhs) {
-	lhs.swap(rhs);
-}
+struct hash<x64asm::Zmm> {
+	size_t operator()(const x64asm::Zmm& z) const;
+};
+
+/** STL-complaint swap specialization. */
+template <>
+void swap(x64asm::Zmm& lhs, x64asm::Zmm& rhs);
 
 } // namespace std
 
