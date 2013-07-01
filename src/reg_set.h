@@ -822,12 +822,16 @@ namespace std {
 /** STL-compliant hash specialization. */
 template <>
 struct hash<x64asm::RegSet> {
-	size_t operator()(const x64asm::RegSet& rs) const;
+	size_t operator()(const x64asm::RegSet& rs) const {
+		return rs.hash();
+	}
 };
 
 /** STL-compliant swap specialization. */
 template <>
-void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs);
+void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs) {
+	return lhs.swap(rhs);
+}
 
 } // namespace std
 

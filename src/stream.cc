@@ -332,3 +332,8 @@ ostream& operator<<(ostream& os, const Ymm& y) {
   check(os, y);
   return write(os, y);
 }
+
+ostream& operator<<(ostream& os, const Zmm& z) {
+  check(os, z);
+  return write(os, z);
+}
