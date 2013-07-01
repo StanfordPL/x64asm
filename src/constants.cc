@@ -712,4 +712,58 @@ const array<Ymm,16> ymms {
   ymm8, ymm9, ymm10, ymm11, ymm12, ymm13, ymm14, ymm15
 };
 
+const Zmm zmm0 {
+  Constants::zmm0()
+};
+const Zmm zmm1 {
+  Constants::zmm1()
+};
+const Zmm zmm2 {
+  Constants::zmm2()
+};
+const Zmm zmm3 {
+  Constants::zmm3()
+};
+const Zmm zmm4 {
+  Constants::zmm4()
+};
+const Zmm zmm5 {
+  Constants::zmm5()
+};
+const Zmm zmm6 {
+  Constants::zmm6()
+};
+const Zmm zmm7 {
+  Constants::zmm7()
+};
+const Zmm zmm8 {
+  Constants::zmm8()
+};
+const Zmm zmm9 {
+  Constants::zmm9()
+};
+const Zmm zmm10 {
+  Constants::zmm10()
+};
+const Zmm zmm11 {
+  Constants::zmm11()
+};
+const Zmm zmm12 {
+  Constants::zmm12()
+};
+const Zmm zmm13 {
+  Constants::zmm13()
+};
+const Zmm zmm14 {
+  Constants::zmm14()
+};
+const Zmm zmm15 {
+  Constants::zmm15()
+};
+
+const array<Zmm,16> zmms {
+  zmm0, zmm1, zmm2,  zmm3,  zmm4,  zmm5,  zmm6,  zmm7,
+  zmm8, zmm9, zmm10, zmm11, zmm12, zmm13, zmm14, zmm15
+};
+
 } // namespace x64asm
