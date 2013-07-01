@@ -100,12 +100,16 @@ namespace std {
 /** STL-compliant hash specialization. */
 template <>
 struct hash<x64asm::Zmm> {
-	size_t operator()(const x64asm::Zmm& z) const;
+	size_t operator()(const x64asm::Zmm& z) const {
+		return z.hash();
+	}
 };
 
 /** STL-complaint swap specialization. */
 template <>
-void swap(x64asm::Zmm& lhs, x64asm::Zmm& rhs);
+inline void swap(x64asm::Zmm& lhs, x64asm::Zmm& rhs) {
+	return lhs.swap(rhs);
+}
 
 } // namespace std
 
