@@ -829,7 +829,7 @@ struct hash<x64asm::RegSet> {
 
 /** STL-compliant swap specialization. */
 template <>
-void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs) {
+inline void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs) {
 	return lhs.swap(rhs);
 }
 
