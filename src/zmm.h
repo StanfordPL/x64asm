@@ -123,17 +123,17 @@ inline constexpr Zmm::operator uint64_t() {
 	return val_;
 }
 
-inline std::ostream& Zmm::write_att(std::ostream& os) const {
-	assert(check());
-	return (os << "%zmm" << std::dec << val_);
-}
-
 inline constexpr size_t Zmm::hash() {
 	return val_;
 }
 
 inline void Zmm::swap(Zmm& rhs) {
 	std::swap(val_, rhs.val_);
+}
+
+inline std::ostream& Zmm::write_att(std::ostream& os) const {
+	assert(check());
+	return (os << "%zmm" << std::dec << val_);
 }
 
 inline constexpr Zmm::Zmm(uint64_t val) : Operand{val} {

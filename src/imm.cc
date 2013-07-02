@@ -20,8 +20,4 @@ using namespace std;
 
 namespace x64asm {
 
-void Imm::write_att(ostream& os) const {
-  os << "$0x" << noshowbase << hex << val_;
-}
-
 } // namespace x64asm
