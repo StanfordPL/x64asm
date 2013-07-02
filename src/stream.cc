@@ -143,12 +143,3 @@ ostream& operator<<(ostream& os, const Moffs64& m) {
   return write(os, m);
 }
 
-ostream& operator<<(ostream& os, const Rel8& r) {
-  check(os, r);
-  return write(os, r);
-}
-
-ostream& operator<<(ostream& os, const Rel32& r) {
-  check(os, r);
-  return write(os, r);
-}

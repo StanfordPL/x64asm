@@ -23,7 +23,6 @@ limitations under the License.
 #include "src/instruction.h"
 #include "src/m.h"
 #include "src/moffs.h"
-#include "src/rel.h"
 
 // iostream overloads.  Note that these are in the global namespace.
 
@@ -48,7 +47,5 @@ std::ostream& operator<<(std::ostream& os, const x64asm::Moffs8& m);
 std::ostream& operator<<(std::ostream& os, const x64asm::Moffs16& m);
 std::ostream& operator<<(std::ostream& os, const x64asm::Moffs32& m);
 std::ostream& operator<<(std::ostream& os, const x64asm::Moffs64& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::Rel8& r);
-std::ostream& operator<<(std::ostream& os, const x64asm::Rel32& r);
 
 #endif
