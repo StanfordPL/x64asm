@@ -26,7 +26,6 @@ limitations under the License.
 #include "src/moffs.h"
 #include "src/rel.h"
 #include "src/sreg.h"
-#include "src/st.h"
 
 // iostream overloads.  Note that these are in the global namespace.
 
@@ -59,7 +58,5 @@ std::ostream& operator<<(std::ostream& os, const x64asm::Rel32& r);
 std::ostream& operator<<(std::ostream& os, const x64asm::Sreg& s);
 std::ostream& operator<<(std::ostream& os, const x64asm::Fs& s);
 std::ostream& operator<<(std::ostream& os, const x64asm::Gs& s);
-std::ostream& operator<<(std::ostream& os, const x64asm::St& s);
-std::ostream& operator<<(std::ostream& os, const x64asm::St0& s);
 
 #endif

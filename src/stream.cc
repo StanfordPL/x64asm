@@ -177,13 +177,3 @@ ostream& operator<<(ostream& os, const Gs& s) {
   check(os, s);
   return write(os, s);
 }
-
-ostream& operator<<(ostream& os, const St& s) {
-  check(os, s);
-  return write(os, s);
-}
-
-ostream& operator<<(ostream& os, const St0& s) {
-  check(os, s);
-  return write(os, s);
-}

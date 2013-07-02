@@ -31,34 +31,39 @@ class St : public Operand {
     friend class Constants;
 
   public:
-    /** Checks whether this floating point stack register is well-formed. */
-    constexpr bool check() {
-      return val_ < 8;
-    }
+    /** Copy constructor. */
+    St(const St& rhs);
+    /** Move constructor. */
+    St(St&& rhs);
+    /** Copy assignment operator. */
+    St& operator=(const St& rhs);
+    /** Move assignment operator. */
+    St& operator=(St&& rhs);
 
-    /** Comparison based on underlying value. */
-    constexpr bool operator<(const St& rhs) {
-      return val_ < rhs.val_;
-    }
+    /** Returns true if this stack register is well-formed. */
+    constexpr bool check();
 
-    /** Comparison based on underlying value. */
-    constexpr bool operator==(const St& rhs) {
-      return val_ == rhs.val_;
-    }
+    /** Comparison based on on val_. */
+    constexpr bool operator<(const St& rhs);
+    /** Comparison based on on val_. */
+    constexpr bool operator==(const St& rhs);
+    /** Comparison based on on val_. */
+    constexpr bool operator!=(const St& rhs);
 
     /** Conversion based on underlying value. */
-    constexpr operator uint64_t() {
-      return val_;
-    }
+    constexpr operator uint64_t();
+
+    /** STL-compliant hash. */
+    constexpr size_t hash();
+    /** STL-compliant swap. */
+    void swap(St& rhs);
 
     /** Writes this stack register to an ostream using at&t syntax. */
-    void write_att(std::ostream& os) const;
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr St(uint64_t val)
-      : Operand {val} {
-    }
+    constexpr St(uint64_t val);
 };
 
 /** The top element of the FPU register stack. */
@@ -68,17 +73,115 @@ class St0 : public St {
 
   public:
     /** Returns true if this stack register is %st(0). */
-    constexpr bool check() {
-      return val_ == 0;
-    }
+    constexpr bool check();
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr St0()
-      : St {0} {
-    }
+    constexpr St0();
 };
 
 } // namespace x64asm
 
+namespace std {
+
+/** STL hash specialization. */
+template <>
+struct hash<x64asm::St> {
+  size_t operator()(const x64asm::St& s) const;
+};
+
+/** STL swap overload. */
+void swap(x64asm::St& lhs, x64asm::St& rhs);
+
+/** I/O overload. */
+ostream& operator<<(ostream& os, const x64asm::St& s);
+
+} // namespace std
+
+namespace x64asm {
+
+inline St::St(const St& rhs) {
+  val_ = rhs.val_;
+}
+
+inline St::St(St&& rhs) {
+  val_ = rhs.val_;
+}
+
+inline St& St::operator=(const St& rhs) {
+  St(rhs).swap(*this);
+}
+
+inline St& St::operator=(St&& rhs) {
+  St(std::move(rhs)).swap(*this);
+}
+
+inline constexpr bool St::check() {
+  return val_ < 8;
+}
+
+inline constexpr bool St::operator<(const St& rhs) {
+  return val_ < rhs.val_;
+}
+
+inline constexpr bool St::operator==(const St& rhs) {
+  return val_ == rhs.val_;
+}
+
+inline constexpr bool St::operator!=(const St& rhs) {
+  return val_ != rhs.val_;
+}
+
+inline constexpr St::operator uint64_t() {
+  return val_;
+}
+
+inline std::ostream& St::write_att(std::ostream& os) const {
+  assert(check());
+  os << "%";
+  if (val_ == 0) {
+    os << "st";
+  } else {
+    os << "st(" << std::dec << val_ << ")";
+  }
+  return os;
+}
+
+inline constexpr size_t St::hash() {
+  return val_;
+}
+
+inline void St::swap(St& rhs) {
+  std::swap(val_, rhs.val_);
+}
+
+inline constexpr St::St(uint64_t val) : 
+    Operand{val} {
+}
+
+inline constexpr bool St0::check() {
+  return val_ == 0;
+}
+
+inline constexpr St0::St0() : 
+    St {0} {
+}
+
+} // namespace x64asm
+
+namespace std {
+
+inline size_t hash<x64asm::St>::operator()(const x64asm::St& s) const {
+  return s.hash();
+}
+
+inline void swap(x64asm::St& lhs, x64asm::St& rhs) {
+  lhs.swap(rhs);
+}
+
+inline ostream& operator<<(ostream& os, const x64asm::St& s) {
+  return s.write_att(os);
+}
+
+} // namespace std
 #endif
