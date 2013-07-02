@@ -1,5 +1,5 @@
 /*
-Copyright 2103 eric schkufza
+Copyright 2013 eric schkufza
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,11 +20,7 @@ using namespace std;
 
 namespace x64asm {
 
-void Label::write_att(ostream& os) const {
-  os << ".L_X64ASM_" << dec << val_;
-}
-
 map<string, uint64_t> Label::labels_;
-uint64_t Label::next_val_;
+uint64_t Label::next_val_ = 0;
 
 } // namespace x64asm

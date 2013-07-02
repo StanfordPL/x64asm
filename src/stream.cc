@@ -53,11 +53,6 @@ ostream& operator<<(ostream& os, const Instruction& i) {
   return write(os, i);
 }
 
-ostream& operator<<(ostream& os, const Label& l) {
-  check(os, l);
-  return write(os, l);
-}
-
 ostream& operator<<(ostream& os, const M8& m) {
   check(os, m);
   return write(os, m);
