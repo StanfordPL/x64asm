@@ -24,6 +24,7 @@ limitations under the License.
 #include "src/st.h"
 #include "src/xmm.h"
 #include "src/ymm.h"
+#include "src/zmm.h"
 
 using namespace std;
 
@@ -33,9 +34,8 @@ array<const char*, 3257> att_ {{
     // Internal mnemonics
     "<label definition>"
     // Auto-generated mnemonics
-#include "src/opcode.att"
-  }
-};
+    #include "src/opcode.att"
+}};
 
 } // namespace
 
@@ -125,6 +125,9 @@ RegSet& Instruction::explicit_must_read_set(RegSet& ret) const {
         break;
       case Type::YMM:
         ret += get_operand<Ymm>(i);
+        break;
+      case Type::ZMM:
+        ret += get_operand<Zmm>(i);
         break;
 
       default:
@@ -220,6 +223,9 @@ RegSet& Instruction::explicit_maybe_read_set(RegSet& ret) const {
       case Type::YMM:
         ret += get_operand<Ymm>(i);
         break;
+      case Type::ZMM:
+        ret += get_operand<Zmm>(i);
+        break;
 
       default:
         break;
@@ -289,6 +295,9 @@ RegSet& Instruction::explicit_must_write_set(RegSet& ret) const {
           break;
         case Type::YMM:
           ret += get_operand<Ymm>(i);
+          break;
+        case Type::ZMM:
+          ret += get_operand<Zmm>(i);
           break;
 
         default:
@@ -362,6 +371,9 @@ RegSet& Instruction::explicit_maybe_write_set(RegSet& ret) const {
         case Type::YMM:
           ret += get_operand<Ymm>(i);
           break;
+        case Type::ZMM:
+          ret += get_operand<Zmm>(i);
+          break;
 
         default:
           break;
@@ -420,6 +432,9 @@ RegSet& Instruction::explicit_must_undef_set(RegSet& ret) const {
         case Type::YMM:
           ret += get_operand<Ymm>(i);
           break;
+        case Type::ZMM:
+          ret += get_operand<Zmm>(i);
+          break;
 
         default:
           break;
@@ -476,6 +491,9 @@ RegSet& Instruction::explicit_maybe_undef_set(RegSet& ret) const {
           break;
         case Type::YMM:
           ret += get_operand<Ymm>(i);
+          break;
+        case Type::ZMM:
+          ret += get_operand<Zmm>(i);
           break;
 
         default:
@@ -717,13 +735,13 @@ bool Instruction::check() const {
   return true;
 }
 
-void Instruction::write_att(ostream& os) const {
+ostream& Instruction::write_att(ostream& os) const {
   assert((size_t)get_opcode() < att_.size());
 
   if (get_opcode() == LABEL_DEFN) {
     get_operand<Label>(0).write_att(os);
     os << ":";
-    return;
+    return os;
   }
 
   os << att_[get_opcode()] << " ";
@@ -748,62 +766,24 @@ void Instruction::write_att(ostream& os) const {
           break;
 
         case Type::M_8:
-          get_operand<M8>(i).write_att(os);
-          break;
         case Type::M_16:
-          get_operand<M16>(i).write_att(os);
-          break;
         case Type::M_32:
-          get_operand<M32>(i).write_att(os);
-          break;
         case Type::M_64:
-          get_operand<M64>(i).write_att(os);
-          break;
         case Type::M_128:
-          get_operand<M128>(i).write_att(os);
-          break;
         case Type::M_256:
-          get_operand<M256>(i).write_att(os);
-          break;
         case Type::M_16_INT:
-          get_operand<M16Int>(i).write_att(os);
-          break;
         case Type::M_32_INT:
-          get_operand<M32Int>(i).write_att(os);
-          break;
         case Type::M_64_INT:
-          get_operand<M64Int>(i).write_att(os);
-          break;
         case Type::M_32_FP:
-          get_operand<M32Fp>(i).write_att(os);
-          break;
         case Type::M_64_FP:
-          get_operand<M64Fp>(i).write_att(os);
-          break;
         case Type::M_80_FP:
-          get_operand<M80Fp>(i).write_att(os);
-          break;
         case Type::M_80_BCD:
-          get_operand<M80Bcd>(i).write_att(os);
-          break;
         case Type::M_2_BYTE:
-          get_operand<M2Byte>(i).write_att(os);
-          break;
         case Type::M_28_BYTE:
-          get_operand<M28Byte>(i).write_att(os);
-          break;
         case Type::M_108_BYTE:
-          get_operand<M108Byte>(i).write_att(os);
-          break;
         case Type::M_512_BYTE:
-          get_operand<M512Byte>(i).write_att(os);
-          break;
         case Type::FAR_PTR_16_16:
-          get_operand<FarPtr1616>(i).write_att(os);
-          break;
         case Type::FAR_PTR_16_32:
-          get_operand<FarPtr1632>(i).write_att(os);
-          break;
         case Type::FAR_PTR_16_64:
           get_operand<FarPtr1664>(i).write_att(os);
           break;
@@ -879,6 +859,10 @@ void Instruction::write_att(ostream& os) const {
           get_operand<Ymm>(i).write_att(os);
           break;
 
+        case Type::ZMM:
+          get_operand<Ymm>(i).write_att(os);
+          break;
+
         default:
           assert(false);
       }
@@ -887,118 +871,163 @@ void Instruction::write_att(ostream& os) const {
         os << ", ";
       }
     }
+
+  return os;
+}
+
+bool Instruction::operator<(const Instruction& rhs) const {
+  if ( opcode_ != rhs.opcode_ )
+    return opcode_ < rhs.opcode_;
+  for ( size_t i = 0, ie = arity(); i < ie; ++i )
+    switch ( type(i) ) {
+      case Type::MOFFS_8:
+      case Type::MOFFS_16:
+      case Type::MOFFS_32:
+      case Type::MOFFS_64:
+        if ( operands_[i] != rhs.operands_[i] )
+          return operands_[i] < rhs.operands_[i];
+        break;
+      default:
+        if ( get_operand<R64>(i) != rhs.get_operand<R64>(i) )
+          return get_operand<R64>(i) < rhs.get_operand<R64>(i);
+        break;
+    }
+  return true;
+}
+
+bool Instruction::operator==(const Instruction& rhs) const {
+  if ( opcode_ != rhs.opcode_ )
+    return false;
+  for ( size_t i = 0, ie = arity(); i < ie; ++i )
+    switch ( type(i) ) {
+      case Type::MOFFS_8:
+      case Type::MOFFS_16:
+      case Type::MOFFS_32:
+      case Type::MOFFS_64:
+        if ( operands_[i] != rhs.operands_[i] )
+          return false;
+        break;
+      default:
+        if ( get_operand<R64>(i) != rhs.get_operand<R64>(i) )
+          return false;
+        break;
+    }
+  return true;
+}
+
+size_t Instruction::hash() const {
+  auto res = (size_t)opcode_;
+  for ( size_t i = 0, ie = arity(); i < ie; ++i )
+    switch ( type(i) ) {
+      case Type::MOFFS_8:
+      case Type::MOFFS_16:
+      case Type::MOFFS_32:
+      case Type::MOFFS_64:
+        res ^= get_operand<Moffs8>(i).hash();
+        break;
+      default:
+        res ^= get_operand<R64>(i).hash();
+        break;
+    }
+  return res;
 }
 
 const array<size_t, 3257> Instruction::arity_ {{
-    // Internal mnemonics
-    1
-    // Auto-generated mnemonics
-#include "src/arity.table"
-  }
-};
+  // Internal mnemonics
+  1
+  // Auto-generated mnemonics
+  #include "src/arity.table"
+}};
 
 const array<array<Instruction::Properties, 4>, 3257> Instruction::properties_ {{
-    // Internal mnemonics
-    {{Properties::none() + Property::MUST_READ}}
-    // Auto-generated mnemonics
-#include "src/properties.table"
-  }
-};
+  // Internal mnemonics
+  {{Properties::none() + Property::MUST_READ}}
+  // Auto-generated mnemonics
+  #include "src/properties.table"
+}};
 
 const array<array<Type, 4>, 3257> Instruction::type_ {{
-    // Internal mnemonics
-    {{Type::LABEL}}
-    // Auto-generated mnemonics
-#include "src/type.table"
-  }
-};
+  // Internal mnemonics
+  {{Type::LABEL}}
+  // Auto-generated mnemonics
+  #include "src/type.table"
+}};
 
 const array<bool, 3257> Instruction::is_return_ {{
-    // Internal mnemonics
-    false
-    // Auto-generated mnemonics
-#include "src/return.table"
-  }
-};
+  // Internal mnemonics
+  false
+  // Auto-generated mnemonics
+  #include "src/return.table"
+}};
 
 const array<bool, 3257> Instruction::is_nop_ {{
-    // Internal mnemonics
-    false
-    // Auto-generated mnemonics
-#include "src/nop.table"
-  }
-};
+  // Internal mnemonics
+  false
+  // Auto-generated mnemonics
+  #include "src/nop.table"
+}};
 
 const array<bool, 3257> Instruction::is_jump_ {{
-    // Internal mnemonics
-    false
-    // Auto-generated mnemonics
-#include "src/jump.table"
-  }
-};
+  // Internal mnemonics
+  false
+  // Auto-generated mnemonics
+  #include "src/jump.table"
+}};
 
 const array<bool, 3257> Instruction::is_cond_jump_ {{
-    // Internal mnemonics
-    false
-    // Auto-generated mnemonics
-#include "src/cond_jump.table"
-  }
-};
+  // Internal mnemonics
+  false
+  // Auto-generated mnemonics
+  #include "src/cond_jump.table"
+}};
 
 const array<bool, 3257> Instruction::is_uncond_jump_ {{
-    // Internal mnemonics
-    false
-    // Auto-generated mnemonics
-#include "src/uncond_jump.table"
-  }
-};
+  // Internal mnemonics
+  false
+  // Auto-generated mnemonics
+  #include "src/uncond_jump.table"
+}};
 
 const array<RegSet, 3257> Instruction::implicit_must_read_set_ {{
-    // Internal mnemonics
-    RegSet::empty()
-    // Auto-generated mnemonics
-#include "src/must_read.table"
-  }
-};
+  // Internal mnemonics
+  RegSet::empty()
+  // Auto-generated mnemonics
+  #include "src/must_read.table"
+}};
 
 const array<RegSet, 3257> Instruction::implicit_maybe_read_set_ {{
-    // Internal mnemonics
-    RegSet::empty()
-    // Auto-generated mnemonics
-#include "src/maybe_read.table"
-  }
-};
+  // Internal mnemonics
+  RegSet::empty()
+  // Auto-generated mnemonics
+  #include "src/maybe_read.table"
+}};
 
 const array<RegSet, 3257> Instruction::implicit_must_write_set_ {{
-    // Internal mnemonics
-    RegSet::empty()
-    // Auto-generated mnemonics
-#include "src/must_write.table"
-  }
-};
+  // Internal mnemonics
+  RegSet::empty()
+  // Auto-generated mnemonics
+  #include "src/must_write.table"
+}};
 
 const array<RegSet, 3257> Instruction::implicit_maybe_write_set_ {{
-    // Internal mnemonics
-    RegSet::empty()
-    // Auto-generated mnemonics
-#include "src/maybe_write.table"
-  }
-};
+  // Internal mnemonics
+  RegSet::empty()
+  // Auto-generated mnemonics
+  #include "src/maybe_write.table"
+}};
 
 const array<RegSet, 3257> Instruction::implicit_must_undef_set_ {{
-    // Internal mnemonics
-    RegSet::empty()
-    // Auto-generated mnemonics
-#include "src/must_undef.table"
-  }
-};
+  // Internal mnemonics
+  RegSet::empty()
+  // Auto-generated mnemonics
+  #include "src/must_undef.table"
+}};
 
 const array<RegSet, 3257> Instruction::implicit_maybe_undef_set_ {{
-    // Internal mnemonics
-    RegSet::empty()
-    // Auto-generated mnemonics
-#include "src/maybe_undef.table"
-  }
-};
+  // Internal mnemonics
+  RegSet::empty()
+  // Auto-generated mnemonics
+  #include "src/maybe_undef.table"
+}};
 
 } // namespace x64asm

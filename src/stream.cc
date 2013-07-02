@@ -32,8 +32,3 @@ inline void check(ostream& os, const T& t) {
 
 } // namespace
 
-ostream& operator<<(ostream& os, const Instruction& i) {
-  check(os, i);
-  i.write_att(os);
-}
-

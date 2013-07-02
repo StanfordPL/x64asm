@@ -24,6 +24,4 @@ limitations under the License.
 
 // iostream overloads.  Note that these are in the global namespace.
 
-std::ostream& operator<<(std::ostream& os, const x64asm::Instruction& i);
-
 #endif
