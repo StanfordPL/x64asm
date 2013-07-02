@@ -26,7 +26,6 @@ OBJ=src/assembler.o \
 		src/m.o \
 		src/moffs.o \
 		src/rel.o \
-		src/sreg.o \
 		src/stream.o
 
 LIB=lib/libx64asm.a
@@ -59,8 +58,8 @@ codegen:
 	bison $(BISONOPS) -batt -patt --defines src/att.y && touch att.output 
 	mv lex.*.* src/ && mv *.tab.* src/ && mv *.output src/
 		
-#src/code.o: src/code.cc src/code.h codegen
-#	$(GCC) -w -O0 $(INC) -c $< -o $@
+src/code.o: src/code.cc src/code.h codegen
+	$(GCC) -w -O0 $(INC) -c $< -o $@
 
 src/%.o: src/%.cc src/%.h codegen
 	$(GCC) -Werror $(OPT) $(INC) -c $< -o $@

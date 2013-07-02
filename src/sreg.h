@@ -17,6 +17,7 @@ limitations under the License.
 #ifndef X64ASM_SRC_SREG_H
 #define X64ASM_SRC_SREG_H
 
+#include <cassert>
 #include <iostream>
 
 #include "src/operand.h"
@@ -35,34 +36,39 @@ class Sreg : public Operand {
     friend class Moffs;
 
   public:
+    /** Copy constructor. */
+    Sreg(const Sreg& rhs);
+    /** Move constructor. */
+    Sreg(Sreg&& rhs);
+    /** Copy assignment operator. */
+    Sreg& operator=(const Sreg& rhs);
+    /** Move assignment operator. */
+    Sreg& operator=(Sreg&& rhs);
+
     /** Returns true if this segment register is well-formed. */
-    constexpr bool check() {
-      return val_ < 6;
-    }
+    constexpr bool check();
 
-    /** Comaprison based on underlying type. */
-    constexpr bool operator<(const Sreg& rhs) {
-      return val_ < rhs.val_;
-    }
+    /** Comparison based on on val_. */
+    constexpr bool operator<(const Sreg& rhs);
+    /** Comparison based on on val_. */
+    constexpr bool operator==(const Sreg& rhs);
+    /** Comparison based on on val_. */
+    constexpr bool operator!=(const Sreg& rhs);
 
-    /** Comaprison based on underlying type. */
-    constexpr bool operator==(const Sreg& rhs) {
-      return val_ == rhs.val_;
-    }
+    /** Conversion based on underlying value. */
+    constexpr operator uint64_t();
 
-    /** Conversion based on underlying type. */
-    constexpr operator uint64_t() {
-      return val_;
-    }
+    /** STL-compliant hash. */
+    constexpr size_t hash();
+    /** STL-compliant swap. */
+    void swap(Sreg& rhs);
 
     /** Writes this segment register to an ostream using at&t syntax. */
-    void write_att(std::ostream& os) const;
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Sreg(uint64_t val)
-      : Operand {val} {
-    }
+    constexpr Sreg(uint64_t val);
 };
 
 /** The segment register FS. */
@@ -72,15 +78,11 @@ class Fs : public Sreg {
 
   public:
     /** Checks whether this segment register is %fs. */
-    constexpr bool check() {
-      return val_ == 4;
-    }
+    constexpr bool check();
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Fs()
-      : Sreg {4} {
-    }
+    constexpr Fs();
 };
 
 /** The segment register GS. */
@@ -90,17 +92,118 @@ class Gs : public Sreg {
 
   public:
     /** Checks whether this segment register is %gs. */
-    constexpr bool check() {
-      return val_ == 5;
-    }
+    constexpr bool check();
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Gs()
-      : Sreg {5} {
-    }
+    constexpr Gs();
 };
 
 } // namespace x64asm
+
+namespace std {
+
+/** STL hash specialization. */
+template <>
+struct hash<x64asm::Sreg> {
+  size_t operator()(const x64asm::Sreg& s) const;
+};
+
+/** STL swap overload. */
+void swap(x64asm::Sreg& lhs, x64asm::Sreg& rhs);
+
+/** I/O overload. */
+ostream& operator<<(ostream& os, const x64asm::Sreg& s);
+
+} // namespace std
+
+namespace x64asm {
+
+inline Sreg::Sreg(const Sreg& rhs) {
+  val_ = rhs.val_;
+}
+
+inline Sreg::Sreg(Sreg&& rhs) {
+  val_ = rhs.val_;
+}
+
+inline Sreg& Sreg::operator=(const Sreg& rhs) {
+  Sreg(rhs).swap(*this);
+}
+
+inline Sreg& Sreg::operator=(Sreg&& rhs) {
+  Sreg(std::move(rhs)).swap(*this);
+}
+
+inline constexpr bool Sreg::check() {
+  return val_ < 6;
+}
+
+inline constexpr bool Sreg::operator<(const Sreg& rhs) {
+  return val_ < rhs.val_;
+}
+
+inline constexpr bool Sreg::operator==(const Sreg& rhs) {
+  return val_ == rhs.val_;
+}
+
+inline constexpr bool Sreg::operator!=(const Sreg& rhs) {
+  return val_ != rhs.val_;
+}
+
+inline constexpr Sreg::operator uint64_t() {
+  return val_;
+}
+
+inline std::ostream& Sreg::write_att(std::ostream& os) const {
+  assert(check());
+  const char* sregs[6] = {"es","cs","ss","ds","fs","gs"};
+  return (os << "%" << sregs[val_]);
+}
+
+inline constexpr size_t Sreg::hash() {
+  return val_;
+}
+
+inline void Sreg::swap(Sreg& rhs) {
+  std::swap(val_, rhs.val_);
+}
+
+inline constexpr Sreg::Sreg(uint64_t val) : Operand{val} {
+}
+
+inline constexpr bool Fs::check() {
+  return val_ == 4;
+}
+
+inline constexpr Fs::Fs() :
+    Sreg {4} {
+}
+
+inline constexpr bool Gs::check() {
+  return val_ == 5;
+}
+
+inline constexpr Gs::Gs() :
+    Sreg {5} {
+}
+
+} // namespace x64asm
+
+namespace std {
+
+inline size_t hash<x64asm::Sreg>::operator()(const x64asm::Sreg& s) const {
+  return s.hash();
+}
+
+inline void swap(x64asm::Sreg& lhs, x64asm::Sreg& rhs) {
+  lhs.swap(rhs);
+}
+
+inline ostream& operator<<(ostream& os, const x64asm::Sreg& s) {
+  return s.write_att(os);
+}
+
+} // namespace std
 
 #endif

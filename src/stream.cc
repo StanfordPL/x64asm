@@ -152,18 +152,3 @@ ostream& operator<<(ostream& os, const Rel32& r) {
   check(os, r);
   return write(os, r);
 }
-
-ostream& operator<<(ostream& os, const Sreg& s) {
-  check(os, s);
-  return write(os, s);
-}
-
-ostream& operator<<(ostream& os, const Fs& s) {
-  check(os, s);
-  return write(os, s);
-}
-
-ostream& operator<<(ostream& os, const Gs& s) {
-  check(os, s);
-  return write(os, s);
-}
