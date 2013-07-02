@@ -133,21 +133,6 @@ ostream& operator<<(ostream& os, const FarPtr1664& m) {
   return write(os, m);
 }
 
-ostream& operator<<(ostream& os, const Pref66& p) {
-  check(os, p);
-  return write(os, p);
-}
-
-ostream& operator<<(ostream& os, const PrefRexW& p) {
-  check(os, p);
-  return write(os, p);
-}
-
-ostream& operator<<(ostream& os, const Far& f) {
-  check(os, f);
-  return write(os, f);
-}
-
 ostream& operator<<(ostream& os, const Moffs8& m) {
   check(os, m);
   return write(os, m);

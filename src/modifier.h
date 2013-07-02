@@ -48,13 +48,13 @@ class Modifier : public Operand {
     /** Comparison based on on val_. */
     constexpr bool operator!=(const Modifier& rhs);
 
+    /** Conversion based on val_. */
+    constexpr operator uint64_t();
+
     /** STL-compliant hash. */
     constexpr size_t hash();
     /** STL-compliant swap. */
     void swap(Modifier& rhs);
-
-    /** Returns true if this modifier is well-formed. */
-    constexpr bool check();
 
   protected:
     /** Direct access to this constructor is disallowed. */
@@ -117,11 +117,11 @@ struct hash<x64asm::Modifier> {
 void swap(x64asm::Modifier& lhs, x64asm::Modifier& rhs);
 
 /** I/O overload. */
-ostream& operator<<(ostream& os, const x64asm::Pref66W& p);
+ostream& operator<<(ostream& os, const x64asm::Pref66& p);
 /** I/O overload. */
 ostream& operator<<(ostream& os, const x64asm::PrefRexW& p);
 /** I/O overload. */
-ostream& operator<<(ostream& os, const x64asm::PrefFarW& p);
+ostream& operator<<(ostream& os, const x64asm::Far& f);
 
 } // namespace std
 
@@ -179,7 +179,7 @@ inline std::ostream& Pref66::write_att(std::ostream& os) const {
   return (os << "<66>");
 }
 
-inline constexpr Pref66() :
+inline constexpr Pref66::Pref66() :
     Modifier {0} {
 }
 
@@ -187,7 +187,7 @@ inline std::ostream& PrefRexW::write_att(std::ostream& os) const {
   return (os << "<rexw>");
 }
 
-inline constexpr PrefRexW() :
+inline constexpr PrefRexW::PrefRexW() :
     Modifier {0} {
 }
 
@@ -195,7 +195,7 @@ inline std::ostream& Far::write_att(std::ostream& os) const {
   return (os << "<far>");
 }
 
-inline constexpr Far() :
+inline constexpr Far::Far() :
     Modifier {0} {
 }
 
@@ -211,11 +211,11 @@ inline void swap(x64asm::Modifier& lhs, x64asm::Modifier& rhs) {
   lhs.swap(rhs);
 }
 
-inline ostream& operator<<(ostream& os, const x64asm::Prefix66& p) {
+inline ostream& operator<<(ostream& os, const x64asm::Pref66& p) {
   return p.write_att(os);
 }
 
-inline ostream& operator<<(ostream& os, const x64asm::PrefixRexW& p) {
+inline ostream& operator<<(ostream& os, const x64asm::PrefRexW& p) {
   return p.write_att(os);
 }
 
