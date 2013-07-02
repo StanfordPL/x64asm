@@ -20,16 +20,4 @@ using namespace std;
 
 namespace x64asm {
 
-void Pref66::write_att(ostream& os) const {
-  os << "<66>";
-}
-
-void PrefRexW::write_att(ostream& os) const {
-  os << "<rexw>";
-}
-
-void Far::write_att(ostream& os) const {
-  os << "<far>";
-}
-
 } // namespace x64asm
