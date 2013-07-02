@@ -178,66 +178,6 @@ ostream& operator<<(ostream& os, const Moffs64& m) {
   return write(os, m);
 }
 
-ostream& operator<<(ostream& os, const Rl& r) {
-  check(os, r);
-  return write(os, r);
-}
-
-ostream& operator<<(ostream& os, const Rh& r) {
-  check(os, r);
-  return write(os, r);
-}
-
-ostream& operator<<(ostream& os, const Rb& r) {
-  check(os, r);
-  return write(os, r);
-}
-
-ostream& operator<<(ostream& os, const Al& r) {
-  check(os, r);
-  return write(os, r);
-}
-
-ostream& operator<<(ostream& os, const Cl& r) {
-  check(os, r);
-  return write(os, r);
-}
-
-ostream& operator<<(ostream& os, const R16& r) {
-  check(os, r);
-  return write(os, r);
-}
-
-ostream& operator<<(ostream& os, const Ax& r) {
-  check(os, r);
-  return write(os, r);
-}
-
-ostream& operator<<(ostream& os, const Dx& r) {
-  check(os, r);
-  return write(os, r);
-}
-
-ostream& operator<<(ostream& os, const R32& r) {
-  check(os, r);
-  return write(os, r);
-}
-
-ostream& operator<<(ostream& os, const Eax& r) {
-  check(os, r);
-  return write(os, r);
-}
-
-ostream& operator<<(ostream& os, const R64& r) {
-  check(os, r);
-  return write(os, r);
-}
-
-ostream& operator<<(ostream& os, const Rax& r) {
-  check(os, r);
-  return write(os, r);
-}
-
 ostream& operator<<(ostream& os, const Rel8& r) {
   check(os, r);
   return write(os, r);

@@ -28,7 +28,6 @@ OBJ=src/assembler.o \
 		src/mm.o \
 		src/modifier.o \
 		src/moffs.o \
-		src/r.o \
 		src/rel.o \
 		src/sreg.o \
 		src/stream.o \
