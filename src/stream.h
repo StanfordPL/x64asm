@@ -20,7 +20,6 @@ limitations under the License.
 #include <iostream>
 #include <stdint.h>
 
-#include "src/code.h"
 #include "src/instruction.h"
 #include "src/m.h"
 #include "src/moffs.h"
@@ -29,9 +28,6 @@ limitations under the License.
 
 // iostream overloads.  Note that these are in the global namespace.
 
-std::istream& operator>>(std::istream& is, x64asm::Code& c);
-
-std::ostream& operator<<(std::ostream& os, const x64asm::Code& c);
 std::ostream& operator<<(std::ostream& os, const x64asm::Instruction& i);
 std::ostream& operator<<(std::ostream& os, const x64asm::M8& m);
 std::ostream& operator<<(std::ostream& os, const x64asm::M16& m);

@@ -38,16 +38,6 @@ ostream& write(ostream& os, const T& t) {
 
 } // namespace
 
-istream& operator>>(istream& is, Code& c) {
-  c.read_att(is);
-  return is;
-}
-
-ostream& operator<<(ostream& os, const Code& c) {
-  check(os, c);
-  return write(os, c);
-}
-
 ostream& operator<<(ostream& os, const Instruction& i) {
   check(os, i);
   return write(os, i);

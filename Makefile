@@ -20,7 +20,6 @@ INC=-I./
 		
 OBJ=src/assembler.o \
 		src/code.o \
-		src/code.att.o \
 		src/constants.o \
 		src/instruction.o \
 		src/label.o \
@@ -60,8 +59,8 @@ codegen:
 	bison $(BISONOPS) -batt -patt --defines src/att.y && touch att.output 
 	mv lex.*.* src/ && mv *.tab.* src/ && mv *.output src/
 		
-src/code.att.o: src/code.att.cc src/code.h codegen
-	$(GCC) -w -O0 $(INC) -c $< -o $@
+#src/code.o: src/code.cc src/code.h codegen
+#	$(GCC) -w -O0 $(INC) -c $< -o $@
 
 src/%.o: src/%.cc src/%.h codegen
 	$(GCC) -Werror $(OPT) $(INC) -c $< -o $@
