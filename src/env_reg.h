@@ -21,9 +21,6 @@ namespace x64asm {
 
 /** An environment register. */
 class EnvReg {
-    // Needs access to internal value.
-    friend class RegSet;
-
   protected:
     /** Direct access to this constructor is disallowed. */
     constexpr EnvReg(size_t val);

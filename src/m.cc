@@ -48,12 +48,10 @@ bool M::check() const {
   if (!get_disp().check()) {
     return false;
   }
-
   // Index cannot be rsp/esp
   if (contains_index() && get_index().val_ == esp.val_) {
     return false;
   }
-
   // Check for absence of base/index for RIP+offset form
   if (rip_offset() && (contains_base() || contains_index())) {
     return false;
@@ -62,26 +60,24 @@ bool M::check() const {
   return true;
 }
 
-void M::write_att(ostream& os) const {
+ostream& M::write_att(ostream& os) const {
   if (contains_seg()) {
     get_seg().write_att(os);
     os << ":";
   }
-  if (get_disp().val_ != 0) {
-    os << "0x" << noshowbase << hex << get_disp().val_;
+  if ((uint64_t)get_disp() != 0) {
+    os << "0x" << noshowbase << hex << (uint64_t)get_disp();
   }
-
   if (!contains_base() && !contains_index() && !rip_offset()) {
-    return;
+    return os;
   }
-
   os << "(";
   if (rip_offset()) {
     os << "%rip";
   }
   if (contains_base()) {
     const auto b = get_base();
-    if (get_addr_or()) {
+    if (addr_or()) {
       Alias::to_double(b).write_att(os);
     } else {
       b.write_att(os);
@@ -92,7 +88,7 @@ void M::write_att(ostream& os) const {
   }
   if (contains_index()) {
     const auto i = get_index();
-    if (get_addr_or()) {
+    if (addr_or()) {
       Alias::to_double(i).write_att(os);
     } else {
       i.write_att(os);
@@ -116,6 +112,8 @@ void M::write_att(ostream& os) const {
     }
   }
   os << ")";
+
+  return os;
 }
 
 } // namespace x64asm

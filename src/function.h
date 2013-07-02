@@ -41,7 +41,7 @@ namespace x64asm {
 class Function {
     // Needs access to internal buffer.
     friend class Assembler;
-    // Needs access to internal buffer address.
+    // Needs access to internal buffer.
     friend class Imm64;
 
   public:

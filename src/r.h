@@ -213,7 +213,7 @@ class Dx : public R16 {
 class R32 : public R {
     // Needs access to constructor.
     friend class Constants;
-    // Needs access to constructor.
+    // Needs access to consturctor.
     friend class M;
 
   public:
@@ -255,7 +255,7 @@ class Eax : public R32 {
 class R64 : public R {
     // Needs access to constructor.
     friend class Constants;
-    // Needs access to constructor.
+    // Needs access to consturctor.
     friend class M;
 
   public:

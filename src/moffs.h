@@ -41,122 +41,245 @@ class Moffs : public Operand {
     };
 
   public:
+    /** Copy constructor. */
+    Moffs(const Moffs& rhs);
+    /** Move constructor. */
+    Moffs(Moffs&& rhs);
+    /** Copy assignment operator. */
+    Moffs& operator=(const Moffs& rhs);
+    /** Move assignment operator. */
+    Moffs& operator=(Moffs&& rhs);
+
     /** Returns true if this moffs contains a segment register. */
-    constexpr bool contains_seg() {
-      return (val2_ & (uint64_t)Mask::SEG) != (uint64_t)Null::SEG;
-    }
+    constexpr bool contains_seg();
 
     /** Returns this moffs' segment register; undefined if absent. */
-    constexpr Sreg get_seg() {
-      return Sreg {val2_};
-    }
-
+    constexpr Sreg get_seg();
     /** Returns this moffs' offset. */
-    constexpr Imm64 get_offset() {
-      return Imm64 {val_};
-    }
+    constexpr Imm64 get_offset();
 
     /** Sets this moffs' segment register. */
-    void set_seg(const Sreg& seg) {
-      val2_ = seg.val_;
-    }
-
+    void set_seg(const Sreg& seg);
     /** Sets this moffs' offset. */
-    void set_offset(const Imm64& offset) {
-      val_ = offset.val_;
-    }
+    void set_offset(const Imm64& offset);
 
     /** Removes the segment register from this moffs. */
-    void clear_seg() {
-      set_seg(Sreg {(uint64_t)Null::SEG});
-    }
+    void clear_seg();
 
     /** Returns true if this moffs contains a well-formed segment register. */
-    constexpr bool check() {
-      return (!contains_seg() || get_seg().check()) && get_offset().check();
-    }
+    constexpr bool check();
 
-    /** Comparison based on underlying value. */
-    constexpr bool operator<(const Moffs& rhs) {
-      return val_ == rhs.val_ ? val2_ < rhs.val2_ : val_ < rhs.val_;
-    }
+    /** Comparison based on on val_. */
+    bool operator<(const Moffs& rhs) const;
+    /** Comparison based on on val_. */
+    bool operator==(const Moffs& rhs) const;
+    /** Comparison based on on val_. */
+    bool operator!=(const Moffs& rhs) const;
 
-    /** Comparison based on underlying value. */
-    constexpr bool operator==(const Moffs& rhs) {
-      return val_ == rhs.val_ && val2_ == rhs.val2_;
-    }
+    /** STL-compliant hash. */
+    constexpr size_t hash();
+    /** STL-compliant swap. */
+    void swap(Moffs& rhs);
 
     /** Writes this moffs to an ostream using at&t syntax. */
-    void write_att(std::ostream& os) const;
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Create a moffs using seg:offset form. */
-    constexpr Moffs(const Sreg& seg, const Imm64& offset)
-      : Operand {offset.val_, seg.val_} {
-    }
+    constexpr Moffs(const Sreg& seg, const Imm64& offset);
 
     /** Create a moffs using offset form. */
-    constexpr Moffs(const Imm64& offset)
-      : Operand {offset.val_, (uint64_t)Null::SEG} {
-    }
+    constexpr Moffs(const Imm64& offset);
 };
 
 /** A simple memory variable (memory offset) of type byte. */
 class Moffs8 : public Moffs {
   public:
     /** Create a moffs using seg:offset form. */
-    constexpr Moffs8(const Sreg& seg, const Imm64& offset)
-      : Moffs {seg, offset} {
-    }
-
+    constexpr Moffs8(const Sreg& seg, const Imm64& offset);
     /** Create a moffs using offset form. */
-    constexpr Moffs8(const Imm64& offset)
-      : Moffs {offset} {
-    }
+    constexpr Moffs8(const Imm64& offset);
 };
 
 /** A simple memory variable (memory offset) of type word. */
 class Moffs16 : public Moffs {
   public:
     /** Create a moffs using seg:offset form. */
-    constexpr Moffs16(const Sreg& seg, const Imm64& offset)
-      : Moffs {seg, offset} {
-    }
-
+    constexpr Moffs16(const Sreg& seg, const Imm64& offset);
     /** Create a moffs using offset form. */
-    constexpr Moffs16(const Imm64& offset)
-      : Moffs {offset} {
-    }
+    constexpr Moffs16(const Imm64& offset);
 };
 
 /** A simple memory variable (memory offset) of type doubleword. */
 class Moffs32 : public Moffs {
   public:
     /** Create a moffs using seg:offset form. */
-    constexpr Moffs32(const Sreg& seg, const Imm64& offset)
-      : Moffs {seg, offset} {
-    }
-
+    constexpr Moffs32(const Sreg& seg, const Imm64& offset);
     /** Create a moffs using offset form. */
-    constexpr Moffs32(const Imm64& offset)
-      : Moffs {offset} {
-    }
+    constexpr Moffs32(const Imm64& offset);
 };
 
 /** A simple memory variable (memory offset) of type quadword. */
 class Moffs64 : public Moffs {
   public:
     /** Create a moffs using seg:offset form. */
-    constexpr Moffs64(const Sreg& seg, const Imm64& offset)
-      : Moffs {seg, offset} {
-    }
-
+    constexpr Moffs64(const Sreg& seg, const Imm64& offset);
     /** Create a moffs using offset form. */
-    constexpr Moffs64(const Imm64& offset)
-      : Moffs {offset} {
-    }
+    constexpr Moffs64(const Imm64& offset);
 };
 
 } // namespace x64asm
+
+namespace std {
+
+/** STL hash specialization. */
+template <>
+struct hash<x64asm::Moffs> {
+  size_t operator()(const x64asm::Moffs& m) const;
+};
+
+/** STL swap overload. */
+void swap(x64asm::Moffs& lhs, x64asm::Moffs& rhs);
+
+/** I/O overload. */
+ostream& operator<<(ostream& os, const x64asm::Moffs& m);
+
+} // namespace std
+
+namespace x64asm {
+
+inline Moffs::Moffs(const Moffs& rhs) {
+  val_ = rhs.val_;
+  val2_ = rhs.val2_;
+}
+
+inline Moffs::Moffs(Moffs&& rhs) {
+  val_ = rhs.val_;
+  val2_ = rhs.val2_;
+}
+
+inline Moffs& Moffs::operator=(const Moffs& rhs) {
+  Moffs(rhs).swap(*this);
+}
+
+inline Moffs& Moffs::operator=(Moffs&& rhs) {
+  Moffs(std::move(rhs)).swap(*this);
+}
+
+inline constexpr bool Moffs::contains_seg() {
+  return (val2_ & (uint64_t)Mask::SEG) != (uint64_t)Null::SEG;
+}
+
+inline constexpr Sreg Moffs::get_seg() {
+  return Sreg {val2_};
+}
+
+inline constexpr Imm64 Moffs::get_offset() {
+  return Imm64 {val_};
+}
+
+inline void Moffs::set_seg(const Sreg& seg) {
+  val2_ = seg.val_;
+}
+
+inline void Moffs::set_offset(const Imm64& offset) {
+  val_ = (uint64_t)offset;
+}
+
+inline void Moffs::clear_seg() {
+  set_seg(Sreg {(uint64_t)Null::SEG});
+}
+
+inline constexpr bool Moffs::check() {
+  return (!contains_seg() || get_seg().check()) && get_offset().check();
+}
+
+inline bool Moffs::operator<(const Moffs& rhs) const {
+  return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
+}
+
+inline bool Moffs::operator==(const Moffs& rhs) const {
+  return std::make_pair(val_, val2_) == std::make_pair(rhs.val_, rhs.val2_);
+}
+
+inline bool Moffs::operator!=(const Moffs& rhs) const {
+  return !(*this == rhs);
+}
+
+inline constexpr size_t Moffs::hash() {
+  return val_ ^ val2_;
+}
+
+inline void Moffs::swap(Moffs& rhs) {
+  std::swap(val_, rhs.val_);
+  std::swap(val2_, rhs.val2_);
+}
+
+inline std::ostream& Moffs::write_att(std::ostream& os) const {
+  if (contains_seg()) {
+    get_seg().write_att(os);
+    os << ":";
+  }
+  os << "0x" << std::noshowbase << std::hex << (uint64_t)get_offset();
+  return os;
+}
+
+inline constexpr Moffs::Moffs(const Sreg& seg, const Imm64& offset) :
+    Operand {(uint64_t)offset, seg.val_} {
+}
+
+inline constexpr Moffs::Moffs(const Imm64& offset) :
+    Operand {(uint64_t)offset, (uint64_t)Null::SEG} {
+}
+
+inline constexpr Moffs8::Moffs8(const Sreg& seg, const Imm64& offset) : 
+    Moffs {seg, offset} {
+}
+
+inline constexpr Moffs8::Moffs8(const Imm64& offset) :
+    Moffs {offset} {
+}
+
+inline constexpr Moffs16::Moffs16(const Sreg& seg, const Imm64& offset) : 
+    Moffs {seg, offset} {
+}
+
+inline constexpr Moffs16::Moffs16(const Imm64& offset) :
+    Moffs {offset} {
+}
+
+inline constexpr Moffs32::Moffs32(const Sreg& seg, const Imm64& offset) : 
+    Moffs {seg, offset} {
+}
+
+inline constexpr Moffs32::Moffs32(const Imm64& offset) :
+    Moffs {offset} {
+}
+
+inline constexpr Moffs64::Moffs64(const Sreg& seg, const Imm64& offset) : 
+    Moffs {seg, offset} {
+}
+
+inline constexpr Moffs64::Moffs64(const Imm64& offset) :
+    Moffs {offset} {
+}
+
+} // namespace x64asm
+
+namespace std {
+
+inline size_t hash<x64asm::Moffs>::operator()(const x64asm::Moffs& m) const {
+  return m.hash();
+}
+
+inline void swap(x64asm::Moffs& lhs, x64asm::Moffs& rhs) {
+  lhs.swap(rhs);
+}
+
+inline ostream& operator<<(ostream& os, const x64asm::Moffs& m) {
+  return m.write_att(os);
+}
+
+} // namespace std
 
 #endif

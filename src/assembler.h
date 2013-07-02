@@ -155,7 +155,7 @@ class Assembler {
 
     /** Emits a group 4 prefix byte. */
     void pref_group4(const M& m) {
-      if (m.get_addr_or()) {
+      if (m.addr_or()) {
         fxn_->emit_byte(0x67);
       }
     }

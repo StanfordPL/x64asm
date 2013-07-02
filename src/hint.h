@@ -26,8 +26,6 @@ namespace x64asm {
 
 /** A taken/not-taken hint for conditional jumps. */
 class Hint : public Operand {
-    // Needs access to internal value for emitting prefixes.
-    friend class Assembler;
     // Needs access to constructor.
     friend class Constants;
 
@@ -50,6 +48,9 @@ class Hint : public Operand {
     constexpr bool operator!=(const Hint& rhs);
     /** Comparison based on val_. */
     constexpr bool operator<(const Hint& rhs);
+
+    /** Conversion based on val_. */
+    constexpr operator uint64_t();
 
     /** STL-compliant hash. */
     constexpr size_t hash();
@@ -114,6 +115,10 @@ inline constexpr bool Hint::operator!=(const Hint& rhs) {
 
 inline constexpr bool Hint::operator<(const Hint& rhs) {
   return val_ < rhs.val_;
+}
+
+inline constexpr Hint::operator uint64_t() {
+  return val_;
 }
 
 inline constexpr size_t Hint::hash() {

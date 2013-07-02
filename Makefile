@@ -24,7 +24,6 @@ OBJ=src/assembler.o \
 		src/instruction.o \
 		src/label.o \
 		src/m.o \
-		src/moffs.o \
 		src/stream.o
 
 LIB=lib/libx64asm.a

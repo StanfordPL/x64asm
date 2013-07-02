@@ -21,31 +21,9 @@ limitations under the License.
 #include <stdint.h>
 
 #include "src/instruction.h"
-#include "src/m.h"
-#include "src/moffs.h"
 
 // iostream overloads.  Note that these are in the global namespace.
 
 std::ostream& operator<<(std::ostream& os, const x64asm::Instruction& i);
-std::ostream& operator<<(std::ostream& os, const x64asm::M8& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::M16& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::M32& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::M64& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::M128& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::M256& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::M16Int& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::M32Int& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::M64Int& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::M32Fp& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::M64Fp& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::M80Fp& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::M80Bcd& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::FarPtr1616& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::FarPtr1632& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::FarPtr1664& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::Moffs8& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::Moffs16& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::Moffs32& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::Moffs64& m);
 
 #endif

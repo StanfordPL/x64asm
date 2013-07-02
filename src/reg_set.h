@@ -432,87 +432,87 @@ inline constexpr bool RegSet::contains(const RegSet& rhs) {
 }
 
 inline constexpr RegSet RegSet::operator+(const Rl& rhs) {
-  return plus_group1(Mask::LOW, rhs.val_);
+  return plus_group1(Mask::LOW, (uint64_t)rhs);
 }
 
 inline constexpr RegSet RegSet::operator+(const Rh& rhs) {
-  return plus_group1(Mask::HIGH, rhs.val_-4);
+  return plus_group1(Mask::HIGH, (uint64_t)rhs-4);
 }
 
 inline constexpr RegSet RegSet::operator+(const Rb& rhs) {
-  return plus_group1(Mask::LOW, rhs.val_);
+  return plus_group1(Mask::LOW, (uint64_t)rhs);
 }
 
 inline constexpr RegSet RegSet::operator+(const R16& rhs) {
-  return plus_group1(Mask::WORD, rhs.val_);
+  return plus_group1(Mask::WORD, (uint64_t)rhs);
 }
 
 inline constexpr RegSet RegSet::operator+(const R32& rhs) {
-  return plus_group1(Mask::DOUBLE, rhs.val_);
+  return plus_group1(Mask::DOUBLE, (uint64_t)rhs);
 }
 
 inline constexpr RegSet RegSet::operator+(const R64& rhs) {
-  return plus_group1(Mask::QUAD, rhs.val_);
+  return plus_group1(Mask::QUAD, (uint64_t)rhs);
 }
 
 inline constexpr RegSet RegSet::operator+(const Xmm& rhs) {
-  return plus_group2(Mask::XMM, rhs.val_);
+  return plus_group2(Mask::XMM, (uint64_t)rhs);
 }
 
 inline constexpr RegSet RegSet::operator+(const Ymm& rhs) {
-  return plus_group2(Mask::YMM, rhs.val_);
+  return plus_group2(Mask::YMM, (uint64_t)rhs);
 }
 
 inline constexpr RegSet RegSet::operator+(const Zmm& rhs) {
-  return plus_group2(Mask::ZMM, rhs.val_);
+  return plus_group2(Mask::ZMM, (uint64_t)rhs);
 }
 
 inline constexpr RegSet RegSet::operator+(const Mm& rhs) {
-  return plus_group2(Mask::MM, rhs.val_);
+  return plus_group2(Mask::MM, (uint64_t)rhs);
 }
 
 inline constexpr RegSet RegSet::operator+(const St& rhs) {
-  return plus_group2(Mask::ST, rhs.val_);
+  return plus_group2(Mask::ST, (uint64_t)rhs);
 }
 
 inline constexpr RegSet RegSet::operator+(const Sreg& rhs) {
-  return plus_group4(Mask::SREG, rhs.val_);
+  return plus_group4(Mask::SREG, (uint64_t)rhs);
 }
 
 inline constexpr RegSet RegSet::operator+(const FpuData& rhs) {
-  return plus_group4(Mask::DATA, rhs.val_);
+  return plus_group4(Mask::DATA, 0);
 }
 
 inline constexpr RegSet RegSet::operator+(const FpuInstruction& rhs) {
-  return plus_group4(Mask::INSTR, rhs.val_);
+  return plus_group4(Mask::INSTR, 0);
 }
 
 inline constexpr RegSet RegSet::operator+(const FpuOpcode& rhs) {
-  return plus_group4(Mask::OPCODE, rhs.val_);
+  return plus_group4(Mask::OPCODE, 0);
 }
 
 inline constexpr RegSet RegSet::operator+(const Rip& rhs) {
-  return plus_group4(Mask::RIP, rhs.val_);
+  return plus_group4(Mask::RIP, 0);
 }
 
 inline constexpr RegSet RegSet::operator+(const Eflags& rhs) {
-  return plus_group3(Mask::EFLAG, rhs.index_);
+  return plus_group3(Mask::EFLAG, rhs.index());
 }
 
 inline constexpr RegSet RegSet::operator+(const FpuControl& rhs) {
-  return plus_group3(Mask::CONTROL, rhs.index_);
+  return plus_group3(Mask::CONTROL, rhs.index());
 }
 
 inline constexpr RegSet RegSet::operator+(const FpuStatus& rhs) {
-  return plus_group3(Mask::STATUS, rhs.index_);
+  return plus_group3(Mask::STATUS, rhs.index());
 }
 
 inline constexpr RegSet RegSet::operator+(const FpuTag& rhs) {
-  return plus_group4(Mask::TAG, rhs.index_);
+  return plus_group4(Mask::TAG, rhs.index());
 }
 
 inline constexpr RegSet RegSet::operator+(const Mxcsr& rhs) {
-  return plus_group4(Mask::MXCSR, rhs.index_);
+  return plus_group4(Mask::MXCSR, rhs.index());
 }
 
 inline RegSet RegSet::operator+(const M& rhs) const {
@@ -525,91 +525,91 @@ inline RegSet RegSet::operator+(const Moffs& rhs) const {
 }
 
 inline RegSet& RegSet::operator+=(const Rl& rhs) {
-  return plus_equal(Mask::LOW, group1_, rhs.val_);
+  return plus_equal(Mask::LOW, group1_, (uint64_t)rhs);
 }
 
 inline RegSet& RegSet::operator+=(const Rh& rhs) {
-  return plus_equal(Mask::HIGH, group1_, rhs.val_ - 4);
+  return plus_equal(Mask::HIGH, group1_, (uint64_t)rhs - 4);
 }
 
 inline RegSet& RegSet::operator+=(const Rb& rhs) {
-  return plus_equal(Mask::LOW, group1_, rhs.val_);
+  return plus_equal(Mask::LOW, group1_, (uint64_t)rhs);
 }
 
 inline RegSet& RegSet::operator+=(const R16& rhs) {
-  return plus_equal(Mask::WORD, group1_, rhs.val_);
+  return plus_equal(Mask::WORD, group1_, (uint64_t)rhs);
 }
 
 inline RegSet& RegSet::operator+=(const R32& rhs) {
-  return plus_equal(Mask::DOUBLE, group1_, rhs.val_);
+  return plus_equal(Mask::DOUBLE, group1_, (uint64_t)rhs);
 }
 
 inline RegSet& RegSet::operator+=(const R64& rhs) {
-  return plus_equal(Mask::QUAD, group1_, rhs.val_);
+  return plus_equal(Mask::QUAD, group1_, (uint64_t)rhs);
 }
 
 inline RegSet& RegSet::operator+=(const Xmm& rhs) {
-  return plus_equal(Mask::XMM, group2_, rhs.val_);
+  return plus_equal(Mask::XMM, group2_, (uint64_t)rhs);
 }
 
 inline RegSet& RegSet::operator+=(const Ymm& rhs) {
-  return plus_equal(Mask::YMM, group2_, rhs.val_);
+  return plus_equal(Mask::YMM, group2_, (uint64_t)rhs);
 }
 
 inline RegSet& RegSet::operator+=(const Zmm& rhs) {
-  return plus_equal(Mask::ZMM, group2_, rhs.val_);
+  return plus_equal(Mask::ZMM, group2_, (uint64_t)rhs);
 }
 
 inline RegSet& RegSet::operator+=(const Mm& rhs) {
-  return plus_equal(Mask::MM, group2_, rhs.val_);
+  return plus_equal(Mask::MM, group2_, (uint64_t)rhs);
 }
 
 inline RegSet& RegSet::operator+=(const St& rhs) {
-  return plus_equal(Mask::ST, group2_, rhs.val_);
+  return plus_equal(Mask::ST, group2_, (uint64_t)rhs);
 }
 
 inline RegSet& RegSet::operator+=(const Sreg& rhs) {
-  return plus_equal(Mask::SREG, group4_, rhs.val_);
+  return plus_equal(Mask::SREG, group4_, (uint64_t)rhs);
 }
 
 inline RegSet& RegSet::operator+=(const FpuData& rhs) {
-  return plus_equal(Mask::DATA, group4_, rhs.val_);
+  return plus_equal(Mask::DATA, group4_, 0);
 }
 
 inline RegSet& RegSet::operator+=(const FpuInstruction& rhs) {
-  return plus_equal(Mask::INSTR, group4_, rhs.val_);
+  return plus_equal(Mask::INSTR, group4_, 0);
 }
 
 inline RegSet& RegSet::operator+=(const FpuOpcode& rhs) {
-  return plus_equal(Mask::OPCODE, group4_, rhs.val_);
+  return plus_equal(Mask::OPCODE, group4_, 0);
 }
 
 inline RegSet& RegSet::operator+=(const Rip& rhs) {
-  return plus_equal(Mask::RIP, group4_, rhs.val_);
+  return plus_equal(Mask::RIP, group4_, 0);
 }
 
 inline RegSet& RegSet::operator+=(const Eflags& rhs) {
-  return plus_equal(Mask::EFLAG, group3_, rhs.index_);
+  return plus_equal(Mask::EFLAG, group3_, rhs.index());
 }
 
 inline RegSet& RegSet::operator+=(const FpuControl& rhs) {
-  return plus_equal(Mask::CONTROL, group3_, rhs.index_);
+  return plus_equal(Mask::CONTROL, group3_, rhs.index());
 }
 
 inline RegSet& RegSet::operator+=(const FpuStatus& rhs) {
-  return plus_equal(Mask::STATUS, group3_, rhs.index_);
+  return plus_equal(Mask::STATUS, group3_, rhs.index());
 }
 
 inline RegSet& RegSet::operator+=(const FpuTag& rhs) {
-  return plus_equal(Mask::TAG, group4_, rhs.index_);
+  return plus_equal(Mask::TAG, group4_, rhs.index());
 }
 
 inline RegSet& RegSet::operator+=(const Mxcsr& rhs) {
-  return plus_equal(Mask::MXCSR, group4_, rhs.index_);
+  return plus_equal(Mask::MXCSR, group4_, rhs.index());
 }
 
 inline RegSet& RegSet::operator+=(const M& rhs) {
-  if (rhs.get_addr_or()) {
+  if (rhs.addr_or()) {
     if (rhs.contains_base()) {
       *this += Alias::to_double(rhs.get_base());
     }
@@ -632,87 +632,87 @@ inline RegSet& RegSet::operator+=(const Moffs& rhs) {
 }
 
 inline constexpr bool RegSet::contains(const Rl& rhs) {
-  return contains(Mask::LOW, group1_, rhs.val_);
+  return contains(Mask::LOW, group1_, (uint64_t)rhs);
 }
 
 inline constexpr bool RegSet::contains(const Rh& rhs) {
-  return contains(Mask::HIGH, group1_, rhs.val_ - 4);
+  return contains(Mask::HIGH, group1_, (uint64_t)rhs - 4);
 }
 
 inline constexpr bool RegSet::contains(const Rb& rhs) {
-  return contains(Mask::LOW, group1_, rhs.val_);
+  return contains(Mask::LOW, group1_, (uint64_t)rhs);
 }
 
 inline constexpr bool RegSet::contains(const R16& rhs) {
-  return contains(Mask::WORD, group1_, rhs.val_);
+  return contains(Mask::WORD, group1_, (uint64_t)rhs);
 }
 
 inline constexpr bool RegSet::contains(const R32& rhs) {
-  return contains(Mask::DOUBLE, group1_, rhs.val_);
+  return contains(Mask::DOUBLE, group1_, (uint64_t)rhs);
 }
 
 inline constexpr bool RegSet::contains(const R64& rhs) {
-  return contains(Mask::QUAD, group1_, rhs.val_);
+  return contains(Mask::QUAD, group1_, (uint64_t)rhs);
 }
 
 inline constexpr bool RegSet::contains(const Xmm& rhs) {
-  return contains(Mask::XMM, group2_, rhs.val_);
+  return contains(Mask::XMM, group2_, (uint64_t)rhs);
 }
 
 inline constexpr bool RegSet::contains(const Ymm& rhs) {
-  return contains(Mask::YMM, group2_, rhs.val_);
+  return contains(Mask::YMM, group2_, (uint64_t)rhs);
 }
 
 inline constexpr bool RegSet::contains(const Zmm& rhs) {
-  return contains(Mask::ZMM, group2_, rhs.val_);
+  return contains(Mask::ZMM, group2_, (uint64_t)rhs);
 }
 
 inline constexpr bool RegSet::contains(const Mm& rhs) {
-  return contains(Mask::MM, group2_, rhs.val_);
+  return contains(Mask::MM, group2_, (uint64_t)rhs);
 }
 
 inline constexpr bool RegSet::contains(const St& rhs) {
-  return contains(Mask::ST, group2_, rhs.val_);
+  return contains(Mask::ST, group2_, (uint64_t)rhs);
 }
 
 inline constexpr bool RegSet::contains(const Sreg& rhs) {
-  return contains(Mask::SREG, group4_, rhs.val_);
+  return contains(Mask::SREG, group4_, (uint64_t)rhs);
 }
 
 inline constexpr bool RegSet::contains(const FpuData& rhs) {
-  return contains(Mask::DATA, group4_, rhs.val_);
+  return contains(Mask::DATA, group4_, 0);
 }
 
 inline constexpr bool RegSet::contains(const FpuInstruction& rhs) {
-  return contains(Mask::INSTR, group4_, rhs.val_);
+  return contains(Mask::INSTR, group4_, 0);
 }
 
 inline constexpr bool RegSet::contains(const FpuOpcode& rhs) {
-  return contains(Mask::OPCODE, group4_, rhs.val_);
+  return contains(Mask::OPCODE, group4_, 0);
 }
 
 inline constexpr bool RegSet::contains(const Rip& rhs) {
-  return contains(Mask::RIP, group4_, rhs.val_);
+  return contains(Mask::RIP, group4_, 0);
 }
 
 inline constexpr bool RegSet::contains(const Eflags& rhs) {
-  return contains(Mask::EFLAG, group3_, rhs.index_);
+  return contains(Mask::EFLAG, group3_, rhs.index());
 }
 
 inline constexpr bool RegSet::contains(const FpuControl& rhs) {
-  return contains(Mask::CONTROL, group3_, rhs.index_);
+  return contains(Mask::CONTROL, group3_, rhs.index());
 }
 
 inline constexpr bool RegSet::contains(const FpuStatus& rhs) {
-  return contains(Mask::STATUS, group3_, rhs.index_);
+  return contains(Mask::STATUS, group3_, rhs.index());
 }
 
 inline constexpr bool RegSet::contains(const FpuTag& rhs) {
-  return contains(Mask::TAG, group4_, rhs.index_);
+  return contains(Mask::TAG, group4_, rhs.index());
 }
 
 inline constexpr bool RegSet::contains(const Mxcsr& rhs) {
-  return contains(Mask::MXCSR, group4_, rhs.index_);
+  return contains(Mask::MXCSR, group4_, rhs.index());
 }
 
 constexpr bool RegSet::contains_any_rl() {

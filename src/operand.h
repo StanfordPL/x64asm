@@ -37,12 +37,6 @@ class Operand {
     friend class Assembler;
     // Needs access to non-default constructor.
     friend class Instruction;
-    // Needs access to non-default constructor.
-    friend class M;
-    // Needs access to non-default constructor.
-    friend class Moffs;
-    // Needs access to underlying value.
-    friend class RegSet;
 
   public:
     /** Copy constructor. */
