@@ -23,8 +23,7 @@ OBJ=src/assembler.o \
 		src/constants.o \
 		src/instruction.o \
 		src/label.o \
-		src/m.o \
-		src/stream.o
+		src/m.o
 
 LIB=lib/libx64asm.a
 
