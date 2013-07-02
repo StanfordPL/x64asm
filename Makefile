@@ -33,9 +33,7 @@ OBJ=src/assembler.o \
 		src/rel.o \
 		src/sreg.o \
 		src/stream.o \
-		src/st.o \
-		src/xmm.o \
-		src/ymm.o 
+		src/st.o
 
 LIB=lib/libx64asm.a
 

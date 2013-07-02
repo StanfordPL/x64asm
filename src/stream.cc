@@ -307,23 +307,3 @@ ostream& operator<<(ostream& os, const St0& s) {
   check(os, s);
   return write(os, s);
 }
-
-ostream& operator<<(ostream& os, const Xmm& x) {
-  check(os, x);
-  return write(os, x);
-}
-
-ostream& operator<<(ostream& os, const Xmm0& x) {
-  check(os, x);
-  return write(os, x);
-}
-
-ostream& operator<<(ostream& os, const Ymm& y) {
-  check(os, y);
-  return write(os, y);
-}
-
-ostream& operator<<(ostream& os, const Zmm& z) {
-  check(os, z);
-  return write(os, z);
-}

@@ -32,9 +32,6 @@ limitations under the License.
 #include "src/rel.h"
 #include "src/sreg.h"
 #include "src/st.h"
-#include "src/xmm.h"
-#include "src/ymm.h"
-#include "src/zmm.h"
 
 // iostream overloads.  Note that these are in the global namespace.
 
@@ -93,9 +90,5 @@ std::ostream& operator<<(std::ostream& os, const x64asm::Fs& s);
 std::ostream& operator<<(std::ostream& os, const x64asm::Gs& s);
 std::ostream& operator<<(std::ostream& os, const x64asm::St& s);
 std::ostream& operator<<(std::ostream& os, const x64asm::St0& s);
-std::ostream& operator<<(std::ostream& os, const x64asm::Xmm& x);
-std::ostream& operator<<(std::ostream& os, const x64asm::Xmm0& x);
-std::ostream& operator<<(std::ostream& os, const x64asm::Ymm& y);
-std::ostream& operator<<(std::ostream& os, const x64asm::Zmm& z);
 
 #endif

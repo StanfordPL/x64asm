@@ -125,15 +125,8 @@ inline void Hint::swap(Hint& rhs) {
 }
 
 inline std::ostream& Hint::write_att(std::ostream& os) const {
-  if (val_ == 0) {
-    os << "<taken>";
-  } else if (val_ == 1) {
-    os << "<not taken>";
-  } else {
-    assert(false);
-  }
-
-	return os;
+	assert(check());
+	return (os << (val_ == 0 ? "<taken>" : "<not taken>"));
 }
 
 inline constexpr Hint::Hint(uint64_t val) : Operand {val} { 

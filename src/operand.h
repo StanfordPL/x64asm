@@ -44,6 +44,19 @@ class Operand {
     // Needs access to underlying value.
     friend class RegSet;
 
+	public:
+		/** Copy constructor. */
+		Operand(const Operand& rhs);
+		/** Move constructor. */
+		Operand(Operand&& rhs);
+		/** Copy assignment operator. */
+		Operand& operator=(const Operand& rhs);
+		/** Move assignment operator. */
+		Operand& operator=(Operand&& rhs);
+
+		/** STL-compliant swap. */
+		void swap(Operand& rhs);
+
   protected:
     /** Creates an operand with no underlying value. */
     constexpr Operand();
@@ -57,6 +70,31 @@ class Operand {
     /** Extended storage space for underlying value. */
     uint64_t val2_;
 };
+
+inline Operand::Operand(const Operand& rhs) {
+	val_ = rhs.val_;
+	val2_ = rhs.val2_;
+}
+
+inline Operand::Operand(Operand&& rhs) {
+	val_ = rhs.val_;
+	val2_ = rhs.val2_;
+}
+
+inline Operand& Operand::operator=(const Operand& rhs) {
+	Operand(rhs).swap(*this);
+	return *this;
+}
+
+inline Operand& Operand::operator=(Operand&& rhs) {
+	Operand(std::move(rhs)).swap(*this);
+	return *this;
+}
+
+inline void Operand::swap(Operand& rhs) {
+	std::swap(val_, rhs.val_);
+	std::swap(val2_, rhs.val2_);
+}
 
 inline constexpr Operand::Operand() : 
 		val_ {0}, val2_ {0} { 
