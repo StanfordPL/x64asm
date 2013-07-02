@@ -19,7 +19,6 @@ limitations under the License.
 #include <cassert>
 
 #include "src/constants.h"
-#include "src/stream.h"
 
 using namespace std;
 
@@ -34,7 +33,7 @@ void Assembler::assemble(const Instruction& instr) {
       bind(instr.get_operand<Label>(0));
       break;
       // 4000-way switch
-#include "src/assembler.switch"
+      #include "src/assembler.switch"
 
     default:
       assert(false);
