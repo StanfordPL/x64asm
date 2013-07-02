@@ -65,17 +65,18 @@ class Operand {
     /** Creates an operand with two underlying values. */
     constexpr Operand(uint64_t val, uint64_t val2);
 
+    /** Underlying value. */
+    uint64_t val_;
+    /** Extended storage space for underlying value. */
+    uint64_t val2_;
+
+	private:	
 		/** Comparison based on underlying values. */
 		bool operator<(const Operand& rhs) const;
 		/** Comparison based on underlying values. */
 		bool operator==(const Operand& rhs) const;
 		/** Comparison based on underlying values. */
 		bool operator!=(const Operand& rhs) const;
-
-    /** Underlying value. */
-    uint64_t val_;
-    /** Extended storage space for underlying value. */
-    uint64_t val2_;
 };
 
 inline Operand::Operand(const Operand& rhs) {
