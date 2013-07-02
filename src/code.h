@@ -84,10 +84,11 @@ inline bool Code::check() const {
 inline std::ostream& Code::write_att(std::ostream& os) const {
   for (size_t i = 0, ie = size(); i < ie; ++i) {
     (*this)[i].write_att(os);
-    if (i + 1 != ie) {
+    if (i+1 != ie) {
       os << std::endl;
     }
   }
+  return os;
 }
 
 } // namespace x64asm
