@@ -25,7 +25,6 @@ OBJ=src/assembler.o \
 		src/instruction.o \
 		src/label.o \
 		src/m.o \
-		src/mm.o \
 		src/modifier.o \
 		src/moffs.o \
 		src/rel.o \

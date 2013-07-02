@@ -17,6 +17,7 @@ limitations under the License.
 #ifndef X64ASM_SRC_MM_H
 #define X64ASM_SRC_MM_H
 
+#include <cassert>
 #include <iostream>
 
 #include "src/operand.h"
@@ -29,35 +30,130 @@ class Mm : public Operand {
     friend class Constants;
 
   public:
-    /** Returns true if this is a valid mmx register. */
-    constexpr bool check() {
-      return val_ < 8;
-    }
+		/** Copy constructor. */
+		Mm(const Mm& rhs);
+		/** Move constructor. */
+		Mm(Mm&& rhs);
+		/** Copy assignment operator. */
+		Mm& operator=(const Mm& rhs);
+		/** Move assignment operator. */
+		Mm& operator=(Mm&& rhs);
 
-    /** Comparison based on underlying value. */
-    constexpr bool operator<(const Mm& rhs) {
-      return val_ < rhs.val_;
-    }
+    /** Returns true if this xmm register is well-formed. */
+    constexpr bool check();
 
-    /** Comparison based on underlying value. */
-    constexpr bool operator==(const Mm& rhs) {
-      return val_ == rhs.val_;
-    }
+    /** Comparison based on on val_. */
+    constexpr bool operator<(const Mm& rhs);
+    /** Comparison based on on val_. */
+    constexpr bool operator==(const Mm& rhs);
+    /** Comparison based on on val_. */
+		constexpr bool operator!=(const Mm& rhs);
 
     /** Conversion based on underlying value. */
-    constexpr operator uint64_t() {
-      return val_;
-    }
+    constexpr operator uint64_t();
 
-    /** Writes this mmx register to an ostream using at&t syntax. */
-    void write_att(std::ostream& os) const;
+		/** STL-compliant hash. */
+		constexpr size_t hash();
+		/** STL-compliant swap. */
+		void swap(Mm& rhs);
 
-  private:
-    /** Direct access to this contructor is disallowed. */
-    constexpr Mm(uint64_t val) : Operand {val} { }
+    /** Writes this xmm register to an ostream using at&t syntax. */
+		std::ostream& write_att(std::ostream& os) const;
+
+  protected:
+    /** Direct access to this constructor is disallowed. */
+    constexpr Mm(uint64_t val);
 };
 
 } // namespace x64asm
+
+namespace std {
+
+/** STL hash specialization. */
+template <>
+struct hash<x64asm::Mm> {
+	size_t operator()(const x64asm::Mm& m) const;
+};
+
+/** STL swap overload. */
+void swap(x64asm::Mm& lhs, x64asm::Mm& rhs);
+
+/** I/O overload. */
+ostream& operator<<(ostream& os, const x64asm::Mm& m);
+
+} // namespace std
+
+namespace x64asm {
+
+inline Mm::Mm(const Mm& rhs) {
+	val_ = rhs.val_;
+}
+
+inline Mm::Mm(Mm&& rhs) {
+	val_ = rhs.val_;
+}
+
+inline Mm& Mm::operator=(const Mm& rhs) {
+	Mm(rhs).swap(*this);
+}
+
+inline Mm& Mm::operator=(Mm&& rhs) {
+	Mm(std::move(rhs)).swap(*this);
+}
+
+inline constexpr bool Mm::check() {
+	return val_ < 8;
+}
+
+inline constexpr bool Mm::operator<(const Mm& rhs) {
+	return val_ < rhs.val_;
+}
+
+inline constexpr bool Mm::operator==(const Mm& rhs) {
+	return val_ == rhs.val_;
+}
+
+inline constexpr bool Mm::operator!=(const Mm& rhs) {
+	return val_ != rhs.val_;
+}
+
+inline constexpr Mm::operator uint64_t() {
+	return val_;
+}
+
+inline std::ostream& Mm::write_att(std::ostream& os) const {
+	assert(check());
+	return (os << "%mm" << std::dec << val_);
+}
+
+inline constexpr size_t Mm::hash() {
+	return val_;
+}
+
+inline void Mm::swap(Mm& rhs) {
+	std::swap(val_, rhs.val_);
+}
+
+inline constexpr Mm::Mm(uint64_t val) : Operand{val} {
+}
+
+} // namespace x64asm
+
+namespace std {
+
+inline size_t hash<x64asm::Mm>::operator()(const x64asm::Mm& m) const {
+	return m.hash();
+}
+
+inline void swap(x64asm::Mm& lhs, x64asm::Mm& rhs) {
+	lhs.swap(rhs);
+}
+
+inline ostream& operator<<(ostream& os, const x64asm::Mm& m) {
+	return m.write_att(os);
+}
+
+} // namespace std
 
 #endif
 

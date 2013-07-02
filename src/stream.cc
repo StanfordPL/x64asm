@@ -138,11 +138,6 @@ ostream& operator<<(ostream& os, const FarPtr1664& m) {
   return write(os, m);
 }
 
-ostream& operator<<(ostream& os, const Mm& m) {
-  check(os, m);
-  return write(os, m);
-}
-
 ostream& operator<<(ostream& os, const Pref66& p) {
   check(os, p);
   return write(os, p);

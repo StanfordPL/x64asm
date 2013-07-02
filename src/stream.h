@@ -24,7 +24,6 @@ limitations under the License.
 #include "src/instruction.h"
 #include "src/label.h"
 #include "src/m.h"
-#include "src/mm.h"
 #include "src/modifier.h"
 #include "src/moffs.h"
 #include "src/rel.h"
@@ -54,7 +53,6 @@ std::ostream& operator<<(std::ostream& os, const x64asm::M80Bcd& m);
 std::ostream& operator<<(std::ostream& os, const x64asm::FarPtr1616& m);
 std::ostream& operator<<(std::ostream& os, const x64asm::FarPtr1632& m);
 std::ostream& operator<<(std::ostream& os, const x64asm::FarPtr1664& m);
-std::ostream& operator<<(std::ostream& os, const x64asm::Mm& m);
 std::ostream& operator<<(std::ostream& os, const x64asm::Pref66& p);
 std::ostream& operator<<(std::ostream& os, const x64asm::PrefRexW& p);
 std::ostream& operator<<(std::ostream& os, const x64asm::Far& f);
