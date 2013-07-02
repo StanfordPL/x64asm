@@ -65,6 +65,13 @@ class Operand {
     /** Creates an operand with two underlying values. */
     constexpr Operand(uint64_t val, uint64_t val2);
 
+		/** Comparison based on underlying values. */
+		bool operator<(const Operand& rhs) const;
+		/** Comparison based on underlying values. */
+		bool operator==(const Operand& rhs) const;
+		/** Comparison based on underlying values. */
+		bool operator!=(const Operand& rhs) const;
+
     /** Underlying value. */
     uint64_t val_;
     /** Extended storage space for underlying value. */
@@ -106,6 +113,18 @@ inline constexpr Operand::Operand(uint64_t val) :
 
 inline constexpr Operand::Operand(uint64_t val, uint64_t val2) : 
 		val_ {val}, val2_ {val2} { 
+}
+
+inline bool Operand::operator<(const Operand& rhs) const {
+	return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
+}
+
+inline bool Operand::operator==(const Operand& rhs) const {
+	return std::make_pair(val_, val2_) == std::make_pair(rhs.val_, rhs.val2_);
+}
+
+inline bool Operand::operator!=(const Operand& rhs) const {
+	return !(*this == rhs);
 }
 
 } // namespace x64asm
