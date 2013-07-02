@@ -17,8 +17,6 @@ limitations under the License.
 #ifndef X64ASM_ENV_REG_H
 #define X64ASM_ENV_REG_H
 
-#include <stdint.h>
-
 namespace x64asm {
 
 /** An environment register. */
@@ -28,11 +26,11 @@ class EnvReg {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr EnvReg(uint64_t val) : val_ {val} { }
+    constexpr EnvReg(size_t val);
 
   private:
     /** Globally unique id. */
-    uint64_t val_;
+    size_t val_;
 };
 
 /** The FPU Data register. */
@@ -42,7 +40,7 @@ class FpuData : public EnvReg {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuData() : EnvReg {0} { }
+    constexpr FpuData();
 };
 
 /** The FPU Instruction register. */
@@ -52,7 +50,7 @@ class FpuInstruction : public EnvReg {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuInstruction() : EnvReg {0} { }
+    constexpr FpuInstruction();
 };
 
 /** The FPU Opcode regiter. */
@@ -62,7 +60,7 @@ class FpuOpcode : public EnvReg {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuOpcode() : EnvReg {0} { }
+    constexpr FpuOpcode();
 };
 
 /** The instruction pointer register. */
@@ -72,8 +70,28 @@ class Rip : public EnvReg {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Rip() : EnvReg {0} { }
+    constexpr Rip();
 };
+
+inline constexpr EnvReg::EnvReg(size_t val) : 
+		val_ {val} { 
+}
+
+inline constexpr FpuData::FpuData() : 
+		EnvReg {0} { 
+}
+
+inline constexpr FpuInstruction::FpuInstruction() : 
+		EnvReg {0} { 
+}
+
+inline constexpr FpuOpcode::FpuOpcode() :
+	 	EnvReg {0} {
+}
+
+inline constexpr Rip::Rip() : 
+		EnvReg {0} { 
+}
 
 } // namespace x64asm
 

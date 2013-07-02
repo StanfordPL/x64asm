@@ -45,13 +45,13 @@ class Zmm : public Operand {
     /** Conversion based on underlying value. */
     constexpr operator uint64_t();
 
-    /** Writes this xmm register to an ostream using at&t syntax. */
-    void write_att(std::ostream& os) const;
-
 		/** STL-compliant hash. */
 		constexpr size_t hash();
 		/** STL-compliant swap. */
 		void swap(Zmm& rhs);
+
+    /** Writes this xmm register to an ostream using at&t syntax. */
+		std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
@@ -78,8 +78,8 @@ inline constexpr Zmm::operator uint64_t() {
 	return val_;
 }
 
-inline void Zmm::write_att(std::ostream& os) const {
-	os << "%zmm" << std::dec << val_;
+inline std::ostream& Zmm::write_att(std::ostream& os) const {
+	return (os << "%zmm" << std::dec << val_);
 }
 
 inline constexpr size_t Zmm::hash() {

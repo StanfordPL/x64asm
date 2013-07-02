@@ -22,15 +22,6 @@ using namespace std;
 
 namespace x64asm {
 
-void Hint::write_att(ostream& os) const {
-  if (val_ == 0) {
-    os << "<taken>";
-  } else if (val_ == 1) {
-    os << "<not taken>";
-  } else {
-    assert(false);
-  }
-}
 
 } // namespace x64asm
 

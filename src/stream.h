@@ -21,8 +21,6 @@ limitations under the License.
 #include <stdint.h>
 
 #include "src/code.h"
-#include "src/function.h"
-#include "src/hint.h"
 #include "src/imm.h"
 #include "src/instruction.h"
 #include "src/label.h"
@@ -43,8 +41,6 @@ limitations under the License.
 std::istream& operator>>(std::istream& is, x64asm::Code& c);
 
 std::ostream& operator<<(std::ostream& os, const x64asm::Code& c);
-std::ostream& operator<<(std::ostream& os, const x64asm::Function& f);
-std::ostream& operator<<(std::ostream& os, const x64asm::Hint& h);
 std::ostream& operator<<(std::ostream& os, const x64asm::Imm8& i);
 std::ostream& operator<<(std::ostream& os, const x64asm::Imm16& i);
 std::ostream& operator<<(std::ostream& os, const x64asm::Imm32& i);

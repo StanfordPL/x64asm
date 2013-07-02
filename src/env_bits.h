@@ -1,5 +1,5 @@
 /*
-Copyright 2103 eric schkufza
+Copyright 2013 eric schkufza
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,17 +28,13 @@ class EnvBits {
 
   public:
     /** Returns this bit's upper register index. */
-    constexpr size_t index() {
-      return index_;
-    }
+    constexpr size_t index();
     /** Returns the number of bits this register bit spans. */
-    constexpr size_t width() {
-      return width_;
-    }
+    constexpr size_t width();
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr EnvBits(size_t i, size_t w) : index_ {i}, width_ {w} { }
+    constexpr EnvBits(size_t i, size_t w);
 
   private:
     /** This bit's upper register index. */
@@ -54,7 +50,7 @@ class Eflags : public EnvBits {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Eflags(size_t i, size_t w) : EnvBits {i, w} { }
+    constexpr Eflags(size_t i, size_t w);
 };
 
 /** An FPU control register bit. */
@@ -64,7 +60,7 @@ class FpuControl : public EnvBits {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuControl(size_t i, size_t w) : EnvBits {i, w} { }
+    constexpr FpuControl(size_t i, size_t w);
 };
 
 /** An FPU status register bit. */
@@ -74,7 +70,7 @@ class FpuStatus : public EnvBits {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuStatus(size_t i, size_t w) : EnvBits {i, w} { }
+    constexpr FpuStatus(size_t i, size_t w);
 };
 
 /** An FPU tag register. */
@@ -84,7 +80,7 @@ class FpuTag : public EnvBits {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuTag(size_t i, size_t w) : EnvBits {i, w} { }
+    constexpr FpuTag(size_t i, size_t w);
 };
 
 /** An MXCSR register bit. */
@@ -94,10 +90,42 @@ class Mxcsr : public EnvBits {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Mxcsr(size_t i, size_t w) : EnvBits {i, w} { }
+    constexpr Mxcsr(size_t i, size_t w);
 };
 
-} // namespace x64asm
+inline constexpr size_t EnvBits::index() {
+	return index_;
+}
+
+inline constexpr size_t EnvBits::width() {
+	return width_;
+}
+
+inline constexpr EnvBits::EnvBits(size_t i, size_t w) :
+		index_{i}, width_{w} {
+}
+
+inline constexpr Eflags::Eflags(size_t i, size_t w) : 
+		EnvBits {i, w} { 
+}
+
+inline constexpr FpuControl::FpuControl(size_t i, size_t w) : 
+		EnvBits {i, w} { 
+}
+
+inline constexpr FpuStatus::FpuStatus(size_t i, size_t w) : 
+		EnvBits {i, w} { 
+}
+
+inline constexpr FpuTag::FpuTag(size_t i, size_t w) : 
+		EnvBits {i, w} { 
+}
+
+inline constexpr Mxcsr::Mxcsr(size_t i, size_t w) : 
+		EnvBits {i, w} { 
+}
+
+} // namespace std
 
 #endif
 

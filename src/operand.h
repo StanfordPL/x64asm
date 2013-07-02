@@ -1,5 +1,5 @@
 /*
-Copyright 2103 eric schkufza
+Copyright 2013 eric schkufza
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -46,17 +46,29 @@ class Operand {
 
   protected:
     /** Creates an operand with no underlying value. */
-    constexpr Operand() : val_ {0}, val2_ {0} { }
+    constexpr Operand();
     /** Creates an operand with one underlying value. */
-    constexpr Operand(uint64_t val) : val_ {val}, val2_ {0} { }
+    constexpr Operand(uint64_t val);
     /** Creates an operand with two underlying values. */
-    constexpr Operand(uint64_t val, uint64_t val2) : val_ {val}, val2_ {val2} { }
+    constexpr Operand(uint64_t val, uint64_t val2);
 
     /** Underlying value. */
     uint64_t val_;
     /** Extended storage space for underlying value. */
     uint64_t val2_;
 };
+
+inline constexpr Operand::Operand() : 
+		val_ {0}, val2_ {0} { 
+}
+
+inline constexpr Operand::Operand(uint64_t val) : 
+		val_ {val}, val2_ {0} { 
+}
+
+inline constexpr Operand::Operand(uint64_t val, uint64_t val2) : 
+		val_ {val}, val2_ {val2} { 
+}
 
 } // namespace x64asm
 
