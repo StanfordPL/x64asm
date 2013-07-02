@@ -335,6 +335,23 @@ class RegSet {
 		constexpr bool contains_all(Mask m, uint64_t group);
 };
 
+} // namespace x64asm
+
+namespace std {
+
+/** STL hash specialization. */
+template <>
+struct hash<x64asm::RegSet> {
+	size_t operator()(const x64asm::RegSet& rs) const;
+};
+
+/** STL swap overload. */
+void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs);
+
+} // namespace std
+
+namespace x64asm {
+
 inline constexpr RegSet::RegSet(uint64_t g1, uint64_t g2, uint64_t g3, 
 		uint64_t g4) : 
 	group1_ {g1}, group2_ {g2}, group3_ {g3}, group4_ {g4} {
@@ -819,19 +836,14 @@ inline constexpr bool RegSet::contains_all(Mask m, uint64_t group) {
 
 namespace std {
 
-/** STL-compliant hash specialization. */
-template <>
-struct hash<x64asm::RegSet> {
-	size_t operator()(const x64asm::RegSet& rs) const {
-		return rs.hash();
-	}
-};
-
-/** STL-compliant swap specialization. */
-template <>
-inline void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs) {
-	return lhs.swap(rhs);
+inline size_t hash<x64asm::RegSet>::operator()(const x64asm::RegSet& rs) const {
+	return rs.hash();
 }
+
+inline void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs) {
+	lhs.swap(rhs);
+}
+
 
 } // namespace std
 

@@ -48,41 +48,6 @@ ostream& operator<<(ostream& os, const Code& c) {
   return write(os, c);
 }
 
-ostream& operator<<(ostream& os, const Imm8& i) {
-  check(os, i);
-  return write(os, i);
-}
-
-ostream& operator<<(ostream& os, const Imm16& i) {
-  check(os, i);
-  return write(os, i);
-}
-
-ostream& operator<<(ostream& os, const Imm32& i) {
-  check(os, i);
-  return write(os, i);
-}
-
-ostream& operator<<(ostream& os, const Imm64& i) {
-  check(os, i);
-  return write(os, i);
-}
-
-ostream& operator<<(ostream& os, const Zero& z) {
-  check(os, z);
-  return write(os, z);
-}
-
-ostream& operator<<(ostream& os, const One& o) {
-  check(os, o);
-  return write(os, o);
-}
-
-ostream& operator<<(ostream& os, const Three& t) {
-  check(os, t);
-  return write(os, t);
-}
-
 ostream& operator<<(ostream& os, const Instruction& i) {
   check(os, i);
   return write(os, i);

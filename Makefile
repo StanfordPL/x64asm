@@ -22,7 +22,6 @@ OBJ=src/assembler.o \
 		src/code.o \
 		src/code.att.o \
 		src/constants.o \
-		src/imm.o \
 		src/instruction.o \
 		src/label.o \
 		src/m.o \
