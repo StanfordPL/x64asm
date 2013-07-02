@@ -27,8 +27,8 @@ class RegSet;
 /** Base operand type. This class is provisioned with enough storage space
     for an operand of any type. This prevents object slicing from losing
     information if an object is cast back and form to/from an Operand.
-		The only operand type which requires more than 64-bits to store its
-		internal representation is the Moffs type.
+    The only operand type which requires more than 64-bits to store its
+    internal representation is the Moffs type.
  */
 class Operand {
     // Needs access to default constructor.
@@ -44,18 +44,18 @@ class Operand {
     // Needs access to underlying value.
     friend class RegSet;
 
-	public:
-		/** Copy constructor. */
-		Operand(const Operand& rhs);
-		/** Move constructor. */
-		Operand(Operand&& rhs);
-		/** Copy assignment operator. */
-		Operand& operator=(const Operand& rhs);
-		/** Move assignment operator. */
-		Operand& operator=(Operand&& rhs);
+  public:
+    /** Copy constructor. */
+    Operand(const Operand& rhs);
+    /** Move constructor. */
+    Operand(Operand&& rhs);
+    /** Copy assignment operator. */
+    Operand& operator=(const Operand& rhs);
+    /** Move assignment operator. */
+    Operand& operator=(Operand&& rhs);
 
-		/** STL-compliant swap. */
-		void swap(Operand& rhs);
+    /** STL-compliant swap. */
+    void swap(Operand& rhs);
 
   protected:
     /** Creates an operand with no underlying value. */
@@ -70,62 +70,62 @@ class Operand {
     /** Extended storage space for underlying value. */
     uint64_t val2_;
 
-	private:	
-		/** Comparison based on underlying values. */
-		bool operator<(const Operand& rhs) const;
-		/** Comparison based on underlying values. */
-		bool operator==(const Operand& rhs) const;
-		/** Comparison based on underlying values. */
-		bool operator!=(const Operand& rhs) const;
+  private:  
+    /** Comparison based on underlying values. */
+    bool operator<(const Operand& rhs) const;
+    /** Comparison based on underlying values. */
+    bool operator==(const Operand& rhs) const;
+    /** Comparison based on underlying values. */
+    bool operator!=(const Operand& rhs) const;
 };
 
 inline Operand::Operand(const Operand& rhs) {
-	val_ = rhs.val_;
-	val2_ = rhs.val2_;
+  val_ = rhs.val_;
+  val2_ = rhs.val2_;
 }
 
 inline Operand::Operand(Operand&& rhs) {
-	val_ = rhs.val_;
-	val2_ = rhs.val2_;
+  val_ = rhs.val_;
+  val2_ = rhs.val2_;
 }
 
 inline Operand& Operand::operator=(const Operand& rhs) {
-	Operand(rhs).swap(*this);
-	return *this;
+  Operand(rhs).swap(*this);
+  return *this;
 }
 
 inline Operand& Operand::operator=(Operand&& rhs) {
-	Operand(std::move(rhs)).swap(*this);
-	return *this;
+  Operand(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 inline void Operand::swap(Operand& rhs) {
-	std::swap(val_, rhs.val_);
-	std::swap(val2_, rhs.val2_);
+  std::swap(val_, rhs.val_);
+  std::swap(val2_, rhs.val2_);
 }
 
 inline constexpr Operand::Operand() : 
-		val_ {0}, val2_ {0} { 
+    val_ {0}, val2_ {0} { 
 }
 
 inline constexpr Operand::Operand(uint64_t val) : 
-		val_ {val}, val2_ {0} { 
+    val_ {val}, val2_ {0} { 
 }
 
 inline constexpr Operand::Operand(uint64_t val, uint64_t val2) : 
-		val_ {val}, val2_ {val2} { 
+    val_ {val}, val2_ {val2} { 
 }
 
 inline bool Operand::operator<(const Operand& rhs) const {
-	return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
+  return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
 }
 
 inline bool Operand::operator==(const Operand& rhs) const {
-	return std::make_pair(val_, val2_) == std::make_pair(rhs.val_, rhs.val2_);
+  return std::make_pair(val_, val2_) == std::make_pair(rhs.val_, rhs.val2_);
 }
 
 inline bool Operand::operator!=(const Operand& rhs) const {
-	return !(*this == rhs);
+  return !(*this == rhs);
 }
 
 } // namespace x64asm

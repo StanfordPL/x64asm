@@ -30,38 +30,38 @@ class Label : public Operand {
   public:
     /** Creates a new, globally unique label. */
     Label();
-		/** Creates a named label. Repeated calls will produce identical results. */
+    /** Creates a named label. Repeated calls will produce identical results. */
     Label(const std::string& s);
 
-		/** Copy constructor. */
-		Label(const Label& rhs);
-		/** Move constructor. */
-		Label(Label&& rhs);
-		/** Copy assignment operator. */
-		Label& operator=(const Label& rhs);
-		/** Move assignment operator. */
-		Label& operator=(Label&& rhs);
+    /** Copy constructor. */
+    Label(const Label& rhs);
+    /** Move constructor. */
+    Label(Label&& rhs);
+    /** Copy assignment operator. */
+    Label& operator=(const Label& rhs);
+    /** Move assignment operator. */
+    Label& operator=(Label&& rhs);
 
     /** Returns true if this label is well-formed. */
     bool check() const;
 
-		/** Comparison based on label id. */
+    /** Comparison based on label id. */
     bool operator<(const Label& rhs) const;
-		/** Comparison based on label id. */
+    /** Comparison based on label id. */
     bool operator==(const Label& rhs) const;
-		/** Comparison based on label id. */
+    /** Comparison based on label id. */
     bool operator!=(const Label& rhs) const;
 
-		/** Conversion based on label value. */
+    /** Conversion based on label value. */
     operator uint64_t() const;
 
-		/** STL-compliant hash. */
-		size_t hash() const;
-		/** STL-compliant swap. */
-		void swap(Label& rhs);
+    /** STL-compliant hash. */
+    size_t hash() const;
+    /** STL-compliant swap. */
+    void swap(Label& rhs);
 
     /** Writes this label to an ostream using at&t syntax. */
-		std::ostream& write_att(std::ostream& os) const;
+    std::ostream& write_att(std::ostream& os) const;
 
   private:
     /** Global map of named labels. */
@@ -77,7 +77,7 @@ namespace std {
 /** STL hash specialization. */
 template <>
 struct hash<x64asm::Label> {
-	size_t operator()(const x64asm::Label& l) const;
+  size_t operator()(const x64asm::Label& l) const;
 };
 
 /** STL swap overload. */
@@ -91,57 +91,57 @@ ostream& operator<<(ostream& os, const x64asm::Label& l);
 namespace x64asm {
 
 inline Label::Label() {
-	val_ = next_val_++;
+  val_ = next_val_++;
 }
 
 inline Label::Label(const std::string& s) {
-	val_ = labels_.find(s) == labels_.end() ?
-		labels_.insert(std::make_pair(s, next_val_++)).first->second :
-		labels_.find(s)->second;
+  val_ = labels_.find(s) == labels_.end() ?
+    labels_.insert(std::make_pair(s, next_val_++)).first->second :
+    labels_.find(s)->second;
 }
 
 inline Label::Label(const Label& rhs) {
-	val_ = rhs.val_;
+  val_ = rhs.val_;
 }
 
 inline Label::Label(Label&& rhs) {
-	val_ = rhs.val_;
+  val_ = rhs.val_;
 }
 
 inline Label& Label::operator=(const Label& rhs) {
-	Label(rhs).swap(*this);
+  Label(rhs).swap(*this);
 }
 
 inline Label& Label::operator=(Label&& rhs) {
-	Label(std::move(rhs)).swap(*this);
+  Label(std::move(rhs)).swap(*this);
 }
 
 inline bool Label::check() const {
-	return true;
+  return true;
 }
 
 inline bool Label::operator<(const Label& rhs) const {
-	return val_ < rhs.val_;
+  return val_ < rhs.val_;
 }
 
 inline bool Label::operator==(const Label& rhs) const {
-	return val_ == val_;
+  return val_ == val_;
 }
 
 inline bool Label::operator!=(const Label& rhs) const {
-	return !(*this == rhs);
+  return !(*this == rhs);
 }
 
 inline Label::operator uint64_t() const {
-	return val_;
+  return val_;
 }
 
 inline size_t Label::hash() const {
-	return val_;
+  return val_;
 }
 
 inline void Label::swap(Label& rhs) {
-	std::swap(val_, rhs.val_);
+  std::swap(val_, rhs.val_);
 }
 
 inline std::ostream& Label::write_att(std::ostream& os) const {
@@ -153,15 +153,15 @@ inline std::ostream& Label::write_att(std::ostream& os) const {
 namespace std {
 
 inline size_t hash<x64asm::Label>::operator()(const x64asm::Label& l) const {
-	return l.hash();
+  return l.hash();
 }
 
 inline void swap(x64asm::Label& lhs, x64asm::Label& rhs) {
-	lhs.swap(rhs);
+  lhs.swap(rhs);
 }
 
 inline ostream& operator<<(ostream& os, const x64asm::Label& x) {
-	return x.write_att(os);
+  return x.write_att(os);
 }
 
 } // namespace std

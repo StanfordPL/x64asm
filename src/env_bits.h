@@ -23,8 +23,8 @@ namespace x64asm {
 
 /** An environment register bit. */
 class EnvBits {
-	// Needs access to indices
-	friend class RegSet;
+  // Needs access to indices
+  friend class RegSet;
 
   public:
     /** Returns this bit's upper register index. */
@@ -94,35 +94,35 @@ class Mxcsr : public EnvBits {
 };
 
 inline constexpr size_t EnvBits::index() {
-	return index_;
+  return index_;
 }
 
 inline constexpr size_t EnvBits::width() {
-	return width_;
+  return width_;
 }
 
 inline constexpr EnvBits::EnvBits(size_t i, size_t w) :
-		index_{i}, width_{w} {
+    index_{i}, width_{w} {
 }
 
 inline constexpr Eflags::Eflags(size_t i, size_t w) : 
-		EnvBits {i, w} { 
+    EnvBits {i, w} { 
 }
 
 inline constexpr FpuControl::FpuControl(size_t i, size_t w) : 
-		EnvBits {i, w} { 
+    EnvBits {i, w} { 
 }
 
 inline constexpr FpuStatus::FpuStatus(size_t i, size_t w) : 
-		EnvBits {i, w} { 
+    EnvBits {i, w} { 
 }
 
 inline constexpr FpuTag::FpuTag(size_t i, size_t w) : 
-		EnvBits {i, w} { 
+    EnvBits {i, w} { 
 }
 
 inline constexpr Mxcsr::Mxcsr(size_t i, size_t w) : 
-		EnvBits {i, w} { 
+    EnvBits {i, w} { 
 }
 
 } // namespace std

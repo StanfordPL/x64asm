@@ -32,13 +32,13 @@ limitations under the License.
 namespace x64asm {
 
 /** A hardware instruction; operands are stored in intel order with target
-	  given first. The implementation of this class is similar to the java
-		implementation of type erasures. The user has the ability to assign an
-		operand of any type to any argument position. However in doing so, the type
-		information for that operand is lost. The alternative implementation
-		choices were either to define a specific type for each mnemonic (seemed
-		bloated) or to store pointers rather than Operand references (this seemed
-		preferable, but required the user to manage memory.)
+    given first. The implementation of this class is similar to the java
+    implementation of type erasures. The user has the ability to assign an
+    operand of any type to any argument position. However in doing so, the type
+    information for that operand is lost. The alternative implementation
+    choices were either to define a specific type for each mnemonic (seemed
+    bloated) or to store pointers rather than Operand references (this seemed
+    preferable, but required the user to manage memory.)
 */
 class Instruction {
   private:
@@ -179,7 +179,7 @@ class Instruction {
     }
 
     /** Returns true if this instruction causes control to return from
-    	  a function.
+        a function.
     */
     bool is_return() const {
       assert((size_t)get_opcode() < is_return_.size());
@@ -205,7 +205,7 @@ class Instruction {
     }
 
     /** Returns true if this instruction unconditionally causes a control
-    	  jump.
+        jump.
     */
     bool is_uncond_jump() const {
       assert((size_t)get_opcode() < is_uncond_jump_.size());
@@ -250,7 +250,7 @@ class Instruction {
     }
 
     /** Returns true if this instruction might write the operand at index and
-    	  zero extend its parent register.
+        zero extend its parent register.
     */
     bool maybe_extend(size_t index) const {
       assert((size_t)get_opcode() < properties_.size());

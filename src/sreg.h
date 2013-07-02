@@ -24,7 +24,7 @@ limitations under the License.
 namespace x64asm {
 
 /** A segment register. The segment register bit assignments are ES = 0,
-	  CS = 1, SS = 2, DS = 3, FS = 4, and GS = 5.
+    CS = 1, SS = 2, DS = 3, FS = 4, and GS = 5.
 */
 class Sreg : public Operand {
     // Needs access to constructor.

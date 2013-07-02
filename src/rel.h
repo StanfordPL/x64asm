@@ -53,7 +53,7 @@ class Rel : public Operand {
 };
 
 /** A relative address in the range from 128 bytes before the end of the
-	  instruction to 127 bytes after the end of the instruction.
+    instruction to 127 bytes after the end of the instruction.
 */
 class Rel8 : public Rel {
   public:
@@ -64,13 +64,13 @@ class Rel8 : public Rel {
 
     /** Checks that this offset fits in 8 bits. */
     constexpr bool check() {
-			return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
+      return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
     }
 };
 
 /** A relative address within the same code segment as the instruction
-	  assembled. The rel32 symbol applies to instructions with an
-		operand-size attribute of 32 bits.
+    assembled. The rel32 symbol applies to instructions with an
+    operand-size attribute of 32 bits.
 */
 class Rel32 : public Rel {
   public:
@@ -81,7 +81,7 @@ class Rel32 : public Rel {
 
     /** Checks that this offset value fits in 32-bits. */
     constexpr bool check() {
-			return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
+      return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
     }
 };
 

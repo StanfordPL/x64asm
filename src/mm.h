@@ -30,14 +30,14 @@ class Mm : public Operand {
     friend class Constants;
 
   public:
-		/** Copy constructor. */
-		Mm(const Mm& rhs);
-		/** Move constructor. */
-		Mm(Mm&& rhs);
-		/** Copy assignment operator. */
-		Mm& operator=(const Mm& rhs);
-		/** Move assignment operator. */
-		Mm& operator=(Mm&& rhs);
+    /** Copy constructor. */
+    Mm(const Mm& rhs);
+    /** Move constructor. */
+    Mm(Mm&& rhs);
+    /** Copy assignment operator. */
+    Mm& operator=(const Mm& rhs);
+    /** Move assignment operator. */
+    Mm& operator=(Mm&& rhs);
 
     /** Returns true if this xmm register is well-formed. */
     constexpr bool check();
@@ -47,18 +47,18 @@ class Mm : public Operand {
     /** Comparison based on on val_. */
     constexpr bool operator==(const Mm& rhs);
     /** Comparison based on on val_. */
-		constexpr bool operator!=(const Mm& rhs);
+    constexpr bool operator!=(const Mm& rhs);
 
     /** Conversion based on underlying value. */
     constexpr operator uint64_t();
 
-		/** STL-compliant hash. */
-		constexpr size_t hash();
-		/** STL-compliant swap. */
-		void swap(Mm& rhs);
+    /** STL-compliant hash. */
+    constexpr size_t hash();
+    /** STL-compliant swap. */
+    void swap(Mm& rhs);
 
     /** Writes this xmm register to an ostream using at&t syntax. */
-		std::ostream& write_att(std::ostream& os) const;
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
@@ -72,7 +72,7 @@ namespace std {
 /** STL hash specialization. */
 template <>
 struct hash<x64asm::Mm> {
-	size_t operator()(const x64asm::Mm& m) const;
+  size_t operator()(const x64asm::Mm& m) const;
 };
 
 /** STL swap overload. */
@@ -86,52 +86,52 @@ ostream& operator<<(ostream& os, const x64asm::Mm& m);
 namespace x64asm {
 
 inline Mm::Mm(const Mm& rhs) {
-	val_ = rhs.val_;
+  val_ = rhs.val_;
 }
 
 inline Mm::Mm(Mm&& rhs) {
-	val_ = rhs.val_;
+  val_ = rhs.val_;
 }
 
 inline Mm& Mm::operator=(const Mm& rhs) {
-	Mm(rhs).swap(*this);
+  Mm(rhs).swap(*this);
 }
 
 inline Mm& Mm::operator=(Mm&& rhs) {
-	Mm(std::move(rhs)).swap(*this);
+  Mm(std::move(rhs)).swap(*this);
 }
 
 inline constexpr bool Mm::check() {
-	return val_ < 8;
+  return val_ < 8;
 }
 
 inline constexpr bool Mm::operator<(const Mm& rhs) {
-	return val_ < rhs.val_;
+  return val_ < rhs.val_;
 }
 
 inline constexpr bool Mm::operator==(const Mm& rhs) {
-	return val_ == rhs.val_;
+  return val_ == rhs.val_;
 }
 
 inline constexpr bool Mm::operator!=(const Mm& rhs) {
-	return val_ != rhs.val_;
+  return val_ != rhs.val_;
 }
 
 inline constexpr Mm::operator uint64_t() {
-	return val_;
+  return val_;
 }
 
 inline std::ostream& Mm::write_att(std::ostream& os) const {
-	assert(check());
-	return (os << "%mm" << std::dec << val_);
+  assert(check());
+  return (os << "%mm" << std::dec << val_);
 }
 
 inline constexpr size_t Mm::hash() {
-	return val_;
+  return val_;
 }
 
 inline void Mm::swap(Mm& rhs) {
-	std::swap(val_, rhs.val_);
+  std::swap(val_, rhs.val_);
 }
 
 inline constexpr Mm::Mm(uint64_t val) : Operand{val} {
@@ -142,15 +142,15 @@ inline constexpr Mm::Mm(uint64_t val) : Operand{val} {
 namespace std {
 
 inline size_t hash<x64asm::Mm>::operator()(const x64asm::Mm& m) const {
-	return m.hash();
+  return m.hash();
 }
 
 inline void swap(x64asm::Mm& lhs, x64asm::Mm& rhs) {
-	lhs.swap(rhs);
+  lhs.swap(rhs);
 }
 
 inline ostream& operator<<(ostream& os, const x64asm::Mm& m) {
-	return m.write_att(os);
+  return m.write_att(os);
 }
 
 } // namespace std

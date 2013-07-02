@@ -32,15 +32,15 @@ inline void check(ostream& os, const T& t) {
 
 template <typename T>
 ostream& write(ostream& os, const T& t) {
-	t.write_att(os);
-	return os;
+  t.write_att(os);
+  return os;
 }
 
 } // namespace
 
 istream& operator>>(istream& is, Code& c) {
-	c.read_att(is);
-	return is;
+  c.read_att(is);
+  return is;
 }
 
 ostream& operator<<(ostream& os, const Code& c) {

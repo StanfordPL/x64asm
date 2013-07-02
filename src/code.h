@@ -26,7 +26,7 @@ limitations under the License.
 namespace x64asm {
 
 /** A sequence of Instructions. In addition to the methods defined below, this
-	  class supports all of the behvaior of an STL sequence container.
+    class supports all of the behvaior of an STL sequence container.
 */
 class Code : public std::vector<Instruction> {
   public:
@@ -47,7 +47,7 @@ class Code : public std::vector<Instruction> {
     }
 
     /** Returns true iff each of the instruction in this sequence are
-    	  well-formed.
+        well-formed.
     */
     bool check() const;
 

@@ -41,19 +41,19 @@ limitations under the License.
 namespace x64asm {
 
 /** An in-memory assembler. This class can be thought of as an expert
-	  user of the Function api.
+    user of the Function api.
 */
 class Assembler {
   public:
     /** Resize's a function's internal buffer to guarantee sufficient
-    	  space for assembling an instruction.
+        space for assembling an instruction.
     */
     void reserve(Function& fxn, const Instruction& instr) {
       fxn.reserve(fxn.size() + 15);
     }
 
     /** Resize's a function's internal buffer to guarantee sufficient
-    	  space for assembling a code.
+        space for assembling a code.
     */
     void reserve(Function& fxn, const Code& code) {
       fxn.reserve(fxn.size() + 15 * code.size());
@@ -77,7 +77,7 @@ class Assembler {
     }
 
     /** Begin compiling a function. Clears the function's internal buffer.
-    	  and erases previously stored label definitions.
+        and erases previously stored label definitions.
     */
     void start(Function& fxn) {
       fxn_ = &fxn;
@@ -88,7 +88,7 @@ class Assembler {
     }
 
     /** Finishes compiling a function. Replaces relative placeholders by
-    	  actual values.
+        actual values.
     */
     void finish() {
       for (const auto & l : label_rels_) {
@@ -104,7 +104,7 @@ class Assembler {
     }
 
     /** Assembles an instruction. This method will print a hex dump to
-    		standard error when x64asm is compiled in debug mode.
+        standard error when x64asm is compiled in debug mode.
     */
     void assemble(const Instruction& instr);
 
@@ -210,14 +210,14 @@ class Assembler {
       fxn_->emit_quad(i.val_);
     }
 
-		/** Emits a pair of immediates. */
-		void disp_imm(Imm8 i1, Imm16 i2) {
-			disp_imm(i2);
-			disp_imm(i1);
-		}
+    /** Emits a pair of immediates. */
+    void disp_imm(Imm8 i1, Imm16 i2) {
+      disp_imm(i2);
+      disp_imm(i1);
+    }
 
     /** Records internal state for a label reference. Saves the current code
-    	  position and reserves space for the resolved address.
+        position and reserves space for the resolved address.
     */
     void disp_imm(Label l) {
       label_rels_.push_back(std::make_pair(fxn_->size(), l.val_));
@@ -239,15 +239,15 @@ class Assembler {
       fxn_->emit_long(r.val_);
     }
 
-		/** Emits an xmm register encoded as an immediats. */
-		void disp_imm(Xmm x) {
-			fxn_->emit_byte(x.val_ << 4);
-		}
+    /** Emits an xmm register encoded as an immediats. */
+    void disp_imm(Xmm x) {
+      fxn_->emit_byte(x.val_ << 4);
+    }
 
-		/** Emits a ymm register encoded as an immediats. */
-		void disp_imm(Ymm y) {
-			fxn_->emit_byte(y.val_ << 4);
-		}
+    /** Emits a ymm register encoded as an immediats. */
+    void disp_imm(Ymm y) {
+      fxn_->emit_byte(y.val_ << 4);
+    }
 
     /** Unconditionally emits a rex prefix. */
     void rex(uint8_t val) {
@@ -255,7 +255,7 @@ class Assembler {
     }
 
     /** Conditionally emits a rex prefix.
-    	  See Figure 2.4: Intel Manual Vol 2A 2-8.
+        See Figure 2.4: Intel Manual Vol 2A 2-8.
     */
     void rex(const M& rm, const Operand& r, uint8_t val) {
       rex(rm, val | ((r.val_ >> 1) & 0x4));
@@ -285,7 +285,7 @@ class Assembler {
     }
 
     /** Conditionally emits a rex prefix.
-        See	Figure 2.7: Intel Manual Vol 2A 2-9.
+        See Figure 2.7: Intel Manual Vol 2A 2-9.
     */
     void rex(const Operand& rm, uint8_t val) {
       if (val |= (rm.val_ >> 3)) {

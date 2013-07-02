@@ -27,14 +27,14 @@ namespace x64asm {
 /** An immediate value. */
 class Imm : public Operand {
   public:
-		/** Copy constructor. */
-		Imm(const Imm& rhs);
-		/** Move constructor. */
-		Imm(Imm&& rhs);
-		/** Copy assignment operator. */
-		Imm& operator=(const Imm& rhs);
-		/** Move assignment operator. */
-		Imm& operator=(Imm&& rhs);
+    /** Copy constructor. */
+    Imm(const Imm& rhs);
+    /** Move constructor. */
+    Imm(Imm&& rhs);
+    /** Copy assignment operator. */
+    Imm& operator=(const Imm& rhs);
+    /** Move assignment operator. */
+    Imm& operator=(Imm&& rhs);
 
     /** Comparison based on immediate value. */
     constexpr bool operator==(const Imm& rhs);
@@ -46,13 +46,13 @@ class Imm : public Operand {
     /** Conversion based on underlying value. */
     constexpr operator uint64_t();
 
-		/** STL-compliant hash. */
-		constexpr size_t hash();
-		/** STL-compliant swap. */
-		void swap(Imm& rhs);
+    /** STL-compliant hash. */
+    constexpr size_t hash();
+    /** STL-compliant swap. */
+    void swap(Imm& rhs);
 
     /** Writes this xmm register to an ostream using at&t syntax. */
-		std::ostream& write_att(std::ostream& os) const;
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
@@ -60,10 +60,10 @@ class Imm : public Operand {
 };
 
 /** An immediate byte value. The imm8 symbol is a signed number between –128
-	  and +127 inclusive. For instructions in which imm8 is combined with a
-		word or doubleword operand, the immediate value is sign-extended to form
-		a word or doubleword. The upper byte of the word is filled with the topmost
-		bit of the immediate value.
+    and +127 inclusive. For instructions in which imm8 is combined with a
+    word or doubleword operand, the immediate value is sign-extended to form
+    a word or doubleword. The upper byte of the word is filled with the topmost
+    bit of the immediate value.
 */
 class Imm8 : public Imm {
   public:
@@ -75,7 +75,7 @@ class Imm8 : public Imm {
 };
 
 /** An immediate word value used for instructions whose operand-size attribute
-	  is 16 bits. This is a number between -32,768 and +32,767 inclusive.
+    is 16 bits. This is a number between -32,768 and +32,767 inclusive.
 */
 class Imm16 : public Imm {
   public:
@@ -87,8 +87,8 @@ class Imm16 : public Imm {
 };
 
 /** An immediate doubleword value used for instructions whose operand-size
-	  attribute is 32 bits. It allows the use of a number between
-		+2,147,483,647 and -2,147,483,648 inclusive.
+    attribute is 32 bits. It allows the use of a number between
+    +2,147,483,647 and -2,147,483,648 inclusive.
 */
 class Imm32 : public Imm {
   public:
@@ -100,8 +100,8 @@ class Imm32 : public Imm {
 };
 
 /** An immediate quadword value used for instructions whose operand-size
-	  attribute is 64 bits. The value allows the use of a number between
-		+9,223,372,036,854,775,807 and -9,223,372,036,854,775,808 inclusive.
+    attribute is 64 bits. The value allows the use of a number between
+    +9,223,372,036,854,775,807 and -9,223,372,036,854,775,808 inclusive.
 */
 class Imm64 : public Imm {
   public:
@@ -166,7 +166,7 @@ namespace std {
 /** STL hash specialization. */
 template <>
 struct hash<x64asm::Imm> {
-	size_t operator()(const x64asm::Imm& i) const;
+  size_t operator()(const x64asm::Imm& i) const;
 };
 
 /** STL swap overload. */
@@ -180,43 +180,43 @@ ostream& operator<<(ostream& os, const x64asm::Imm& i);
 namespace x64asm {
 
 inline Imm::Imm(const Imm& rhs) {
-	val_ = rhs.val_;
+  val_ = rhs.val_;
 }
 
 inline Imm::Imm(Imm&& rhs) {
-	val_ = rhs.val_;
+  val_ = rhs.val_;
 }
 
 inline Imm& Imm::operator=(const Imm& rhs) {
-	Imm(rhs).swap(*this);
+  Imm(rhs).swap(*this);
 }
 
 inline Imm& Imm::operator=(Imm&& rhs) {
-	Imm(std::move(rhs)).swap(*this);
+  Imm(std::move(rhs)).swap(*this);
 }
 
 constexpr bool Imm::operator==(const Imm& rhs) {
-	return val_ == rhs.val_;
+  return val_ == rhs.val_;
 }
 
 constexpr bool Imm::operator!=(const Imm& rhs) {
-	return !(*this == rhs);
+  return !(*this == rhs);
 }
 
 constexpr bool Imm::operator<(const Imm& rhs) {
-	return val_ < rhs.val_;
+  return val_ < rhs.val_;
 }
 
 inline constexpr Imm::operator uint64_t() {
-	return val_;
+  return val_;
 }
 
 inline constexpr size_t Imm::hash() {
-	return val_;
+  return val_;
 }
 
 inline void Imm::swap(Imm& rhs) {
-	std::swap(val_, rhs.val_);
+  std::swap(val_, rhs.val_);
 }
 
 inline std::ostream& Imm::write_att(std::ostream& os) const {
@@ -224,68 +224,68 @@ inline std::ostream& Imm::write_att(std::ostream& os) const {
 }
 
 inline constexpr Imm8::Imm8(uint8_t i) : 
-		Imm {i} {
+    Imm {i} {
 }
 
 inline constexpr bool Imm8::check() {
-	return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
+  return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
 }
 
 inline constexpr Imm16::Imm16(uint16_t i) : 
-		Imm {i} {
+    Imm {i} {
 }
 
 inline constexpr bool Imm16::check() {
-	return ((val_>>16) == 0x0ul) || ((val_>>16) == 0xfffffffffffful);
+  return ((val_>>16) == 0x0ul) || ((val_>>16) == 0xfffffffffffful);
 }
 
 inline constexpr Imm32::Imm32(uint32_t i) : 
-		Imm {i} {
+    Imm {i} {
 }
 
 inline constexpr bool Imm32::check() {
-	return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
+  return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
 }
 
 inline constexpr Imm64::Imm64(uint64_t i) : 
-		Imm {i} {
+    Imm {i} {
 }
 
 template <typename T>
 inline constexpr Imm64::Imm64(T* t) :
- 		Imm {(uint64_t)t} {
+    Imm {(uint64_t)t} {
 }
 
 inline Imm64::Imm64(const Function& f) : 
-		Imm {(uint64_t)f.buffer_} {
+    Imm {(uint64_t)f.buffer_} {
 }
 
 inline constexpr bool Imm64::check() {
-	return true;
+  return true;
 }
 
 inline constexpr bool Zero::check() {
-	return val_ == 0;
+  return val_ == 0;
 }
 
 inline constexpr Zero::Zero() : 
-		Imm8 {0} {
+    Imm8 {0} {
 }
 
 inline constexpr bool One::check() {
-	return val_ == 1;
+  return val_ == 1;
 }
 
 inline constexpr One::One() : 
-		Imm8 {1} {
+    Imm8 {1} {
 }
 
 inline constexpr bool Three::check() {
-	return val_ == 3;
+  return val_ == 3;
 }
 
 inline constexpr Three::Three() : 
-		Imm8 {3} {
+    Imm8 {3} {
 }
 
 } // namespace x64asm
@@ -293,15 +293,15 @@ inline constexpr Three::Three() :
 namespace std {
 
 inline size_t hash<x64asm::Imm>::operator()(const x64asm::Imm& i) const {
-	return i.hash();
+  return i.hash();
 }
 
 inline void swap(x64asm::Imm& lhs, x64asm::Imm& rhs) {
-	lhs.swap(rhs);
+  lhs.swap(rhs);
 }
 
 inline ostream& operator<<(ostream& os, const x64asm::Imm& i) {
-	return i.write_att(os);
+  return i.write_att(os);
 }
 
 } // namespace std

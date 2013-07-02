@@ -25,7 +25,7 @@ namespace x64asm {
 
 /** A modifier used to distinguish between mnemonics. These are non-standard
     operands which we have introduced to disambiguate parts of the intel x86_64
- 	  specification.
+    specification.
 */
 class Modifier : public Operand {
   public:

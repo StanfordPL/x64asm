@@ -30,12 +30,12 @@ limitations under the License.
 
 namespace x64asm {
 
-/**	A static class for resolving hardware aliasing relationships. */
+/** A static class for resolving hardware aliasing relationships. */
 class Alias {
   public:
     /** Convert a general purpose register to its low alias.
-    	  This method is undefined for byte registers and when no alias
-    		exists (ie: %r12).
+        This method is undefined for byte registers and when no alias
+        exists (ie: %r12).
     */
     template <typename T>
     static typename std::enable_if < is_reg<T>::value&&
@@ -48,8 +48,8 @@ class Alias {
     }
 
     /** Convert a general purpose register to its low alias.
-    	  This method is undefined for byte registers and when no alias
-    		exists (ie: %r12).
+        This method is undefined for byte registers and when no alias
+        exists (ie: %r12).
     */
     static const Rl& to_low(const Rh& r) {
       // High registers are assigned internal values beginning from 4.
@@ -57,8 +57,8 @@ class Alias {
     }
 
     /** Convert a general purpose register to its high alias.
-    	  This method is undefined for byte registers and when no alias
-    		exists (ie: %r12).
+        This method is undefined for byte registers and when no alias
+        exists (ie: %r12).
     */
     template <typename T>
     static typename std::enable_if < is_reg<T>::value&&
@@ -71,16 +71,16 @@ class Alias {
     }
 
     /** Convert a general purpose register to its high alias.
-    	  This method is undefined for byte registers and when no alias
-    		exists (ie: %r12).
+        This method is undefined for byte registers and when no alias
+        exists (ie: %r12).
     */
     static const Rh& to_high(const Rh& r) {
       return r;
     }
 
     /** Convert a general purpose register to its byte alias.
-    	  This method is undefined for byte registers and when no alias
-    		exists (ie: %r12).
+        This method is undefined for byte registers and when no alias
+        exists (ie: %r12).
     */
     template <typename T>
     static typename std::enable_if < is_reg<T>::value&&

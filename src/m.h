@@ -119,7 +119,7 @@ class M : public Operand {
     }
 
     /** Returns true if this memory uses RIP+offset form.  This implies that
-    	  contains_base() and contains_index() are all false.
+        contains_base() and contains_index() are all false.
     */
     constexpr bool rip_offset() {
       return val_ & (uint64_t)Mask::RIP;
@@ -189,8 +189,8 @@ class M : public Operand {
     }
 
     /** Returns true if this memory is well-formed: all present registers are
-    	  well formed, the index register is not rsp, and that the RIP+offset() bit
-    		is set only if base and index registers are absent.
+        well formed, the index register is not rsp, and that the RIP+offset() bit
+        is set only if base and index registers are absent.
     */
     bool check() const;
 
@@ -412,70 +412,70 @@ class M : public Operand {
 
 // This ugliness can be replaced using inherited constructors come gcc 4.8
 #define CONSTRUCTORS(T) \
-	/** Creates a memory using disp form. */ \
-	constexpr T(const Imm32& d) : M{d} { } \
-	/** Creates a memory using seg:disp form. */ \
-	constexpr T(const Sreg& s, const Imm32& d) : M{s, d} { } \
-	/** Creates a memroy using (base64) form. */ \
-	constexpr T(const R32& b) : M{b} { } \
-	/** Creates a memory using (base32) form. */ \
-	constexpr T(const R64& b) : M{b} { } \
-	/** Creates a memory using RIP form. */ \
-	constexpr T(Rip rip) : M{rip} {} \
-	/** Creates a memory using seg:base32 form. */ \
-	constexpr T(const Sreg& s, const R32& b) : M{s, b} { } \
-	/** Creates a memory using seg:base64 form. */ \
-	constexpr T(const Sreg& s, const R64& b) : M{s, b} { } \
-	/** Creates a memory using seg:RIP form. */ \
-	constexpr T(const Sreg& s, Rip rip) : M{s, rip} { } \
-	/** Creates a memory using disp(base32) form. */ \
-	constexpr T(const R32& b, const Imm32& d) : M{b, d} { } \
-	/** Creates a memory using disp(base64) form. */ \
-	constexpr T(const R64& b, const Imm32& d) : M{b, d} { } \
-	/** Creates a memory using RIP+disp form. */ \
-	constexpr T(Rip rip, const Imm32& d) : M{rip, d} { } \
-	/** Creates a memory using seg:disp(base32) form. */ \
-	constexpr T(const Sreg& s, const R32& b, const Imm32& d) : M{s, b, d} { } \
-	/** Creates a memory using seg:disp(base64) form. */ \
-	constexpr T(const Sreg& s, const R64& b, const Imm32& d) : M{s, b, d} { } \
-	/** Creates a memory using seg:RIP+disp form. */ \
-	constexpr T(const Sreg& s, Rip rip, const Imm32& d) : M{s, rip, d} { } \
-	/** Creates a memory using (index32,scale) form. */ \
-	constexpr T(const R32& i, Scale s) : M{i, s} { } \
-	/** Creates a memory using (index64,scale) form. */ \
-	constexpr T(const R64& i, Scale s) : M{i, s} { } \
-	/** Creates a memory using seg:(index32,scale) form. */ \
-	constexpr T(const Sreg& s, const R32& i, Scale sc) : M{s, i, sc} { } \
-	/** Creates a memory using seg:(index64,scale) form. */ \
-	constexpr T(const Sreg& s, const R64& i, Scale sc) : M{s, i, sc} { } \
-	/** Creates a memory using disp(index32,scale) form. */ \
-	constexpr T(const R32& i, Scale s, const Imm32& d) : M{i, s, d} { } \
-	/** Creates a memory using disp(index64,scale) form. */ \
-	constexpr T(const R64& i, Scale s, const Imm32& d) : M{i, s, d} { } \
-	/** Creates a memory using seg:disp(index32,scale) form. */ \
-	constexpr T(const Sreg& s, const R32& i, Scale sc, const Imm32& d) : M{s, i, sc, d} { } \
-	/** Creates a memory using seg:disp(index64,scale) form. */ \
-	constexpr T(const Sreg& s, const R64& i, Scale sc, const Imm32& d) : M{s, i, sc, d} { } \
-	/** Creates a memory using (base32,index32,scale) form. */ \
-	constexpr T(const R32& b, const R32& i, Scale s) : M{b, i, s} { } \
-	/** Creates a memory using (base64,index64,scale) form. */ \
-	constexpr T(const R64& b, const R64& i, Scale s) : M{b, i, s} { } \
-	/** Creates a memory using seg:(base32,index32,scale) form. */ \
-	constexpr T(const Sreg& s, const R32& b, const R32& i, Scale sc) : M{s, b, i, sc} { } \
-	/** Creates a memory using seg:(base64,index64,scale) form. */ \
-	constexpr T(const Sreg& s, const R64& b, const R64& i, Scale sc) : M{s, b, i, sc} { } \
-	/** Creates a memory using disp(base32,index32,scale) form. */ \
-	constexpr T(const R32& b, const R32& i, Scale s, const Imm32& d) : M{b, i, s, d} { } \
-	/** Creates a memory using disp(base64,index64,scale) form. */ \
-	constexpr T(const R64& b, const R64& i, Scale s, const Imm32& d) : M{b, i, s, d} { } \
-	/** Creates a memory using seg:disp(base32,index32,scale) form. */ \
-	constexpr T(const Sreg& s, const R32& b, const R32& i, Scale sc, const Imm32& d) : M{s, b, i, sc, d} { } \
-	/** Creates a memory using seg:disp(base64,index64,scale) form. */ \
-	constexpr T(const Sreg& s, const R64& b, const R64& i, Scale sc, const Imm32& d) : M{s, b, i, sc, d} { } \
+  /** Creates a memory using disp form. */ \
+  constexpr T(const Imm32& d) : M{d} { } \
+  /** Creates a memory using seg:disp form. */ \
+  constexpr T(const Sreg& s, const Imm32& d) : M{s, d} { } \
+  /** Creates a memroy using (base64) form. */ \
+  constexpr T(const R32& b) : M{b} { } \
+  /** Creates a memory using (base32) form. */ \
+  constexpr T(const R64& b) : M{b} { } \
+  /** Creates a memory using RIP form. */ \
+  constexpr T(Rip rip) : M{rip} {} \
+  /** Creates a memory using seg:base32 form. */ \
+  constexpr T(const Sreg& s, const R32& b) : M{s, b} { } \
+  /** Creates a memory using seg:base64 form. */ \
+  constexpr T(const Sreg& s, const R64& b) : M{s, b} { } \
+  /** Creates a memory using seg:RIP form. */ \
+  constexpr T(const Sreg& s, Rip rip) : M{s, rip} { } \
+  /** Creates a memory using disp(base32) form. */ \
+  constexpr T(const R32& b, const Imm32& d) : M{b, d} { } \
+  /** Creates a memory using disp(base64) form. */ \
+  constexpr T(const R64& b, const Imm32& d) : M{b, d} { } \
+  /** Creates a memory using RIP+disp form. */ \
+  constexpr T(Rip rip, const Imm32& d) : M{rip, d} { } \
+  /** Creates a memory using seg:disp(base32) form. */ \
+  constexpr T(const Sreg& s, const R32& b, const Imm32& d) : M{s, b, d} { } \
+  /** Creates a memory using seg:disp(base64) form. */ \
+  constexpr T(const Sreg& s, const R64& b, const Imm32& d) : M{s, b, d} { } \
+  /** Creates a memory using seg:RIP+disp form. */ \
+  constexpr T(const Sreg& s, Rip rip, const Imm32& d) : M{s, rip, d} { } \
+  /** Creates a memory using (index32,scale) form. */ \
+  constexpr T(const R32& i, Scale s) : M{i, s} { } \
+  /** Creates a memory using (index64,scale) form. */ \
+  constexpr T(const R64& i, Scale s) : M{i, s} { } \
+  /** Creates a memory using seg:(index32,scale) form. */ \
+  constexpr T(const Sreg& s, const R32& i, Scale sc) : M{s, i, sc} { } \
+  /** Creates a memory using seg:(index64,scale) form. */ \
+  constexpr T(const Sreg& s, const R64& i, Scale sc) : M{s, i, sc} { } \
+  /** Creates a memory using disp(index32,scale) form. */ \
+  constexpr T(const R32& i, Scale s, const Imm32& d) : M{i, s, d} { } \
+  /** Creates a memory using disp(index64,scale) form. */ \
+  constexpr T(const R64& i, Scale s, const Imm32& d) : M{i, s, d} { } \
+  /** Creates a memory using seg:disp(index32,scale) form. */ \
+  constexpr T(const Sreg& s, const R32& i, Scale sc, const Imm32& d) : M{s, i, sc, d} { } \
+  /** Creates a memory using seg:disp(index64,scale) form. */ \
+  constexpr T(const Sreg& s, const R64& i, Scale sc, const Imm32& d) : M{s, i, sc, d} { } \
+  /** Creates a memory using (base32,index32,scale) form. */ \
+  constexpr T(const R32& b, const R32& i, Scale s) : M{b, i, s} { } \
+  /** Creates a memory using (base64,index64,scale) form. */ \
+  constexpr T(const R64& b, const R64& i, Scale s) : M{b, i, s} { } \
+  /** Creates a memory using seg:(base32,index32,scale) form. */ \
+  constexpr T(const Sreg& s, const R32& b, const R32& i, Scale sc) : M{s, b, i, sc} { } \
+  /** Creates a memory using seg:(base64,index64,scale) form. */ \
+  constexpr T(const Sreg& s, const R64& b, const R64& i, Scale sc) : M{s, b, i, sc} { } \
+  /** Creates a memory using disp(base32,index32,scale) form. */ \
+  constexpr T(const R32& b, const R32& i, Scale s, const Imm32& d) : M{b, i, s, d} { } \
+  /** Creates a memory using disp(base64,index64,scale) form. */ \
+  constexpr T(const R64& b, const R64& i, Scale s, const Imm32& d) : M{b, i, s, d} { } \
+  /** Creates a memory using seg:disp(base32,index32,scale) form. */ \
+  constexpr T(const Sreg& s, const R32& b, const R32& i, Scale sc, const Imm32& d) : M{s, b, i, sc, d} { } \
+  /** Creates a memory using seg:disp(base64,index64,scale) form. */ \
+  constexpr T(const Sreg& s, const R64& b, const R64& i, Scale sc, const Imm32& d) : M{s, b, i, sc, d} { } \
  
 /** A byte operand in memory, usually expressed as a variable or array name,
-	  but pointed to by the DS:(E)SI or ES:(E)DI registers.
-		In 64-bit mode, it is pointed to by the RSI or RDI registers.
+    but pointed to by the DS:(E)SI or ES:(E)DI registers.
+    In 64-bit mode, it is pointed to by the RSI or RDI registers.
 */
 class M8 : public M {
   public:
@@ -483,8 +483,8 @@ class M8 : public M {
 };
 
 /** A word operand in memory, usually expressed as a variable or array name,
-	  but pointed to by the DS:(E)SI or ES:(E)DI registers. This nomenclature is
-		used only with the string instructions.
+    but pointed to by the DS:(E)SI or ES:(E)DI registers. This nomenclature is
+    used only with the string instructions.
 */
 class M16 : public M {
   public:
@@ -492,8 +492,8 @@ class M16 : public M {
 };
 
 /** A doubleword operand in memory, usually expressed as a variable or array
-		name, but pointed to by the DS:(E)SI or ES:(E)DI registers. This
-		nomenclature is used only with the string instructions.
+    name, but pointed to by the DS:(E)SI or ES:(E)DI registers. This
+    nomenclature is used only with the string instructions.
 */
 class M32 : public M {
   public:
@@ -513,7 +513,7 @@ class M128 : public M {
 };
 
 /** A 32-byte operand in memory. This nomenclature is used only with AVX
-	  instructions.
+    instructions.
 */
 class M256 : public M {
   public:
@@ -521,7 +521,7 @@ class M256 : public M {
 };
 
 /** A word integer operand in memory. This symbol designates integers that are
-	  used as operands for x87 FPU integer instructions.
+    used as operands for x87 FPU integer instructions.
 */
 class M16Int : public M {
   public:
@@ -529,7 +529,7 @@ class M16Int : public M {
 };
 
 /** A doubleword integer operand in memory. This symbol designates integers
-	  that are used as operands for x87 FPU integer instructions.
+    that are used as operands for x87 FPU integer instructions.
 */
 class M32Int : public M {
   public:
@@ -537,7 +537,7 @@ class M32Int : public M {
 };
 
 /** A quadword integer operand in memory. This symbol designates integers
-	  that are used as operands for x87 FPU integer instructions.
+    that are used as operands for x87 FPU integer instructions.
 */
 class M64Int : public M {
   public:
@@ -545,8 +545,8 @@ class M64Int : public M {
 };
 
 /** A single-precision floating-point operand in memory. This symbol designates
-		floating-point values that are used as operands for x87 FPU floating-point
-		instructions.
+    floating-point values that are used as operands for x87 FPU floating-point
+    instructions.
 */
 class M32Fp : public M {
   public:
@@ -554,8 +554,8 @@ class M32Fp : public M {
 };
 
 /** A double-precision floating-point operand in memory. This symbol designates
-		floating-point values that are used as operands for x87 FPU floating-point
-		instructions.
+    floating-point values that are used as operands for x87 FPU floating-point
+    instructions.
 */
 class M64Fp : public M {
   public:
@@ -563,8 +563,8 @@ class M64Fp : public M {
 };
 
 /** A double extended-precision floating-point operand in memory. This symbol
-		designates floating-point values that are used as operands for x87 FPU
-		floating-point instructions.
+    designates floating-point values that are used as operands for x87 FPU
+    floating-point instructions.
 */
 class M80Fp : public M {
   public:
@@ -602,8 +602,8 @@ class M512Byte : public M {
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
-		number to the left of the colon corresponds to the pointer's segment
-		selector. The number to the right corresponds to its offset.
+    number to the left of the colon corresponds to the pointer's segment
+    selector. The number to the right corresponds to its offset.
 */
 class FarPtr1616 : public M {
   public:
@@ -611,8 +611,8 @@ class FarPtr1616 : public M {
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
-		number to the left of the colon corresponds to the pointer's segment
-		selector. The number to the right corresponds to its offset.
+    number to the left of the colon corresponds to the pointer's segment
+    selector. The number to the right corresponds to its offset.
 */
 class FarPtr1632 : public M {
   public:
@@ -620,8 +620,8 @@ class FarPtr1632 : public M {
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
-		number to the left of the colon corresponds to the pointer's segment
-		selector. The number to the right corresponds to its offset.
+    number to the left of the colon corresponds to the pointer's segment
+    selector. The number to the right corresponds to its offset.
 */
 class FarPtr1664 : public M {
   public:

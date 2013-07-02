@@ -68,7 +68,7 @@ void M::write_att(ostream& os) const {
     os << ":";
   }
   if (get_disp().val_ != 0) {
-		os << "0x" << noshowbase << hex << get_disp().val_;
+    os << "0x" << noshowbase << hex << get_disp().val_;
   }
 
   if (!contains_base() && !contains_index() && !rip_offset()) {

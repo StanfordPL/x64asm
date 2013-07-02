@@ -74,23 +74,23 @@ class Rip : public EnvReg {
 };
 
 inline constexpr EnvReg::EnvReg(size_t val) : 
-		val_ {val} { 
+    val_ {val} { 
 }
 
 inline constexpr FpuData::FpuData() : 
-		EnvReg {0} { 
+    EnvReg {0} { 
 }
 
 inline constexpr FpuInstruction::FpuInstruction() : 
-		EnvReg {0} { 
+    EnvReg {0} { 
 }
 
 inline constexpr FpuOpcode::FpuOpcode() :
-	 	EnvReg {0} {
+    EnvReg {0} {
 }
 
 inline constexpr Rip::Rip() : 
-		EnvReg {0} { 
+    EnvReg {0} { 
 }
 
 } // namespace x64asm

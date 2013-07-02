@@ -49,7 +49,7 @@ class RegSet {
       // Group 2 (fpu / sse)
       XMM      = 0x0000000000000001,
       YMM      = 0x0000000000010001,
-			ZMM      = 0x0000000100010001,
+      ZMM      = 0x0000000100010001,
       MM       = 0x0001000000000000,
       ST       = 0x0100000000000000,
       // Group 3 (env bits) 
@@ -64,32 +64,32 @@ class RegSet {
       INSTR    = 0x0000000200000000,
       OPCODE   = 0x0000000400000000,
       RIP      = 0x0000000800000000,
-			// Any Masks
-			A_LOW    = 0x000000000000000f,
-			A_HIGH   = 0x00000000000f0000,
-			A_BYTE   = 0x000000000000fff0, 
-			A_WORD   = 0x00000000fff00000, // (this one is tricky -- see below)
-			A_DOUBLE = 0x0000ffff00000000,
-			A_QUAD   = 0xffff000000000000,
-			A_XMM    = 0x000000000000ffff,
-			A_YMM    = 0x00000000ffff0000,
-			A_ZMM    = 0x0000ffff00000000,
-			// All Masks
-			LOWS     = 0x000000000000000f,
-			HIGHS    = 0x00000000000f0000,
-			BYTES    = 0x000000000000fff0,
-			WORDS    = 0x00000000ffffffff,
-			DOUBLES  = 0x0000ffffffffffff,
-			QUADS    = 0xffffffffffffffff,
-			XMMS     = 0x000000000000ffff,
-			YMMS     = 0x00000000ffffffff,
-			ZMMS     = 0x0000ffffffffffff,
+      // Any Masks
+      A_LOW    = 0x000000000000000f,
+      A_HIGH   = 0x00000000000f0000,
+      A_BYTE   = 0x000000000000fff0, 
+      A_WORD   = 0x00000000fff00000, // (this one is tricky -- see below)
+      A_DOUBLE = 0x0000ffff00000000,
+      A_QUAD   = 0xffff000000000000,
+      A_XMM    = 0x000000000000ffff,
+      A_YMM    = 0x00000000ffff0000,
+      A_ZMM    = 0x0000ffff00000000,
+      // All Masks
+      LOWS     = 0x000000000000000f,
+      HIGHS    = 0x00000000000f0000,
+      BYTES    = 0x000000000000fff0,
+      WORDS    = 0x00000000ffffffff,
+      DOUBLES  = 0x0000ffffffffffff,
+      QUADS    = 0xffffffffffffffff,
+      XMMS     = 0x000000000000ffff,
+      YMMS     = 0x00000000ffffffff,
+      ZMMS     = 0x0000ffffffffffff,
       // Top and Bottom
       EMPTY    = 0x0000000000000000,
       UNIV1    = 0xffffffffffffffff,
       UNIV2    = 0xffffffffffffffff,
       UNIV3    = 0xe7ff1a3f003f6fd5,
-			UNIV4    = 0x0000000f3fffdfff
+      UNIV4    = 0x0000000f3fffdfff
     };
 
     /** Creates a register set from four bit masks. */
@@ -264,48 +264,48 @@ class RegSet {
     /** Returns true if this set contains an environment bit. */
     constexpr bool contains(const Mxcsr& rhs);
 
-		/** Returns true if this set contains any low registers. */
-		constexpr bool contains_any_rl();
-		/** Returns true if this set contains any high registers. */
-		constexpr bool contains_any_rh();
-		/** Returns true if this set contains any byte registers. */
-		constexpr bool contains_any_rb();
-		/** Returns true if this set contains any word registers. */
-		constexpr bool contains_any_word();
-		/** Returns true if this set contains any double registers. */
-		constexpr bool contains_any_double();
-		/** Returns true if this set contains any quad registers. */
-		constexpr bool contains_any_quad();
-		/** Returns true if this set contains any xmm registers. */
-		constexpr bool contains_any_xmm();
-		/** Returns true if this set contains any ymm registers. */
-		constexpr bool contains_any_ymm();
-		/** Returns true if this set contains any zmm registers. */
-		constexpr bool contains_any_zmm();
+    /** Returns true if this set contains any low registers. */
+    constexpr bool contains_any_rl();
+    /** Returns true if this set contains any high registers. */
+    constexpr bool contains_any_rh();
+    /** Returns true if this set contains any byte registers. */
+    constexpr bool contains_any_rb();
+    /** Returns true if this set contains any word registers. */
+    constexpr bool contains_any_word();
+    /** Returns true if this set contains any double registers. */
+    constexpr bool contains_any_double();
+    /** Returns true if this set contains any quad registers. */
+    constexpr bool contains_any_quad();
+    /** Returns true if this set contains any xmm registers. */
+    constexpr bool contains_any_xmm();
+    /** Returns true if this set contains any ymm registers. */
+    constexpr bool contains_any_ymm();
+    /** Returns true if this set contains any zmm registers. */
+    constexpr bool contains_any_zmm();
 
-		/** Returns true if this set contains all low registers. */
-		constexpr bool contains_all_rl();
-		/** Returns true if this set contains all high registers. */
-		constexpr bool contains_all_rh();
-		/** Returns true if this set contains all byte registers. */
-		constexpr bool contains_all_rb();
-		/** Returns true if this set contains all word registers. */
-		constexpr bool contains_all_word();
-		/** Returns true if this set contains all double registers. */
-		constexpr bool contains_all_double();
-		/** Returns true if this set contains all quad registers. */
-		constexpr bool contains_all_quad();
-		/** Returns true if this set contains all xmm registers. */
-		constexpr bool contains_all_xmm();
-		/** Returns true if this set contains all ymm registers. */
-		constexpr bool contains_all_ymm();
-		/** Returns true if this set contains all zmm registers. */
-		constexpr bool contains_all_zmm();
+    /** Returns true if this set contains all low registers. */
+    constexpr bool contains_all_rl();
+    /** Returns true if this set contains all high registers. */
+    constexpr bool contains_all_rh();
+    /** Returns true if this set contains all byte registers. */
+    constexpr bool contains_all_rb();
+    /** Returns true if this set contains all word registers. */
+    constexpr bool contains_all_word();
+    /** Returns true if this set contains all double registers. */
+    constexpr bool contains_all_double();
+    /** Returns true if this set contains all quad registers. */
+    constexpr bool contains_all_quad();
+    /** Returns true if this set contains all xmm registers. */
+    constexpr bool contains_all_xmm();
+    /** Returns true if this set contains all ymm registers. */
+    constexpr bool contains_all_ymm();
+    /** Returns true if this set contains all zmm registers. */
+    constexpr bool contains_all_zmm();
 
-		/** STL compliant hash. */
-		constexpr size_t hash();
-		/** STL compliant swap. */
-		void swap(RegSet& rhs);
+    /** STL compliant hash. */
+    constexpr size_t hash();
+    /** STL compliant swap. */
+    void swap(RegSet& rhs);
 
   private:
     /** Internal bit mask group 1 (see Mask enum for details). */
@@ -317,22 +317,22 @@ class RegSet {
     /** Internal bit mask group 4 (see Mask enum for details). */
     uint64_t group4_;
 
-		/** Helper method for inserting elements into a group. */
-		constexpr RegSet plus_group1(Mask m, uint64_t val);
-		/** Helper method for inserting elements into a group. */
-		constexpr RegSet plus_group2(Mask m, uint64_t val);
-		/** Helper method for inserting elements into a group. */
-		constexpr RegSet plus_group3(Mask m, uint64_t val);
-		/** Helper method for inserting elements into a group. */
-		constexpr RegSet plus_group4(Mask m, uint64_t val);
-		/** Helper method for inserting elements into a group. */
-		RegSet& plus_equal(Mask m, uint64_t& group, uint64_t val);
-		/** Helper method for checking containment in a group. */
-		constexpr bool contains(Mask m, uint64_t group, uint64_t val);
-		/** Helper method for checking containment in a group. */
-		constexpr bool contains_any(Mask m, uint64_t group);
-		/** Helper method for checking containment in a group. */
-		constexpr bool contains_all(Mask m, uint64_t group);
+    /** Helper method for inserting elements into a group. */
+    constexpr RegSet plus_group1(Mask m, uint64_t val);
+    /** Helper method for inserting elements into a group. */
+    constexpr RegSet plus_group2(Mask m, uint64_t val);
+    /** Helper method for inserting elements into a group. */
+    constexpr RegSet plus_group3(Mask m, uint64_t val);
+    /** Helper method for inserting elements into a group. */
+    constexpr RegSet plus_group4(Mask m, uint64_t val);
+    /** Helper method for inserting elements into a group. */
+    RegSet& plus_equal(Mask m, uint64_t& group, uint64_t val);
+    /** Helper method for checking containment in a group. */
+    constexpr bool contains(Mask m, uint64_t group, uint64_t val);
+    /** Helper method for checking containment in a group. */
+    constexpr bool contains_any(Mask m, uint64_t group);
+    /** Helper method for checking containment in a group. */
+    constexpr bool contains_all(Mask m, uint64_t group);
 };
 
 } // namespace x64asm
@@ -342,7 +342,7 @@ namespace std {
 /** STL hash specialization. */
 template <>
 struct hash<x64asm::RegSet> {
-	size_t operator()(const x64asm::RegSet& rs) const;
+  size_t operator()(const x64asm::RegSet& rs) const;
 };
 
 /** STL swap overload. */
@@ -353,259 +353,259 @@ void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs);
 namespace x64asm {
 
 inline constexpr RegSet::RegSet(uint64_t g1, uint64_t g2, uint64_t g3, 
-		uint64_t g4) : 
-	group1_ {g1}, group2_ {g2}, group3_ {g3}, group4_ {g4} {
+    uint64_t g4) : 
+  group1_ {g1}, group2_ {g2}, group3_ {g3}, group4_ {g4} {
 }
 
 inline constexpr RegSet::RegSet(Mask g1, Mask g2, Mask g3, Mask g4) : 
-	group1_ {(uint64_t)g1}, group2_ {(uint64_t)g2}, group3_ {(uint64_t)g3}, 
-	group4_ {(uint64_t)g4} {
+  group1_ {(uint64_t)g1}, group2_ {(uint64_t)g2}, group3_ {(uint64_t)g3}, 
+  group4_ {(uint64_t)g4} {
 }
 
 inline constexpr RegSet::RegSet() :
-	group1_ {(uint64_t)Mask::EMPTY}, group2_ {(uint64_t)Mask::EMPTY},
-	group3_ {(uint64_t)Mask::EMPTY}, group4_ {(uint64_t)Mask::EMPTY} {
+  group1_ {(uint64_t)Mask::EMPTY}, group2_ {(uint64_t)Mask::EMPTY},
+  group3_ {(uint64_t)Mask::EMPTY}, group4_ {(uint64_t)Mask::EMPTY} {
 }
 
 inline constexpr RegSet RegSet::empty() {
-	return RegSet {Mask::EMPTY, Mask::EMPTY, Mask::EMPTY, Mask::EMPTY};
+  return RegSet {Mask::EMPTY, Mask::EMPTY, Mask::EMPTY, Mask::EMPTY};
 }
 
 inline constexpr RegSet RegSet::universe() {
-	return RegSet {Mask::UNIV1, Mask::UNIV2, Mask::UNIV3, Mask::UNIV4};
+  return RegSet {Mask::UNIV1, Mask::UNIV2, Mask::UNIV3, Mask::UNIV4};
 }
 
 inline constexpr RegSet RegSet::operator~() {
-	return RegSet {~group1_, ~group2_, ~group3_, ~group4_};
+  return RegSet {~group1_, ~group2_, ~group3_, ~group4_};
 }
 
 inline constexpr RegSet RegSet::operator&(const RegSet& rhs) {
-	return RegSet {group1_ & rhs.group1_, group2_ & rhs.group2_,
-			group3_ & rhs.group3_, group4_ & rhs.group4_};
+  return RegSet {group1_ & rhs.group1_, group2_ & rhs.group2_,
+      group3_ & rhs.group3_, group4_ & rhs.group4_};
 }
 
 inline constexpr RegSet RegSet::operator|(const RegSet& rhs) {
-	return RegSet {group1_ | rhs.group1_, group2_ | rhs.group2_,
-			group3_ | rhs.group3_, group4_ | rhs.group4_};
+  return RegSet {group1_ | rhs.group1_, group2_ | rhs.group2_,
+      group3_ | rhs.group3_, group4_ | rhs.group4_};
 }
 
 inline constexpr RegSet RegSet::operator-(const RegSet& rhs) {
-	return RegSet {group1_& ~rhs.group1_, group2_& ~rhs.group2_,
-			group3_& ~rhs.group3_, group4_& ~rhs.group4_};
+  return RegSet {group1_& ~rhs.group1_, group2_& ~rhs.group2_,
+      group3_& ~rhs.group3_, group4_& ~rhs.group4_};
 }
 
 inline RegSet& RegSet::operator&=(const RegSet& rhs) {
-	group1_ &= rhs.group1_;
-	group2_ &= rhs.group2_;
-	group3_ &= rhs.group3_;
-	group4_ &= rhs.group4_;
-	return *this;
+  group1_ &= rhs.group1_;
+  group2_ &= rhs.group2_;
+  group3_ &= rhs.group3_;
+  group4_ &= rhs.group4_;
+  return *this;
 }
 
 inline RegSet& RegSet::operator|=(const RegSet& rhs) {
-	group1_ |= rhs.group1_;
-	group2_ |= rhs.group2_;
-	group3_ |= rhs.group3_;
-	group4_ |= rhs.group4_;
-	return *this;
+  group1_ |= rhs.group1_;
+  group2_ |= rhs.group2_;
+  group3_ |= rhs.group3_;
+  group4_ |= rhs.group4_;
+  return *this;
 }
 
 inline RegSet& RegSet::operator-=(const RegSet& rhs) {
-	group1_ &= ~rhs.group1_;
-	group2_ &= ~rhs.group2_;
-	group3_ &= ~rhs.group3_;
-	group4_ &= ~rhs.group4_;
-	return *this;
+  group1_ &= ~rhs.group1_;
+  group2_ &= ~rhs.group2_;
+  group3_ &= ~rhs.group3_;
+  group4_ &= ~rhs.group4_;
+  return *this;
 }
 
 inline constexpr bool RegSet::operator==(const RegSet& rhs) {
-	return group1_ == rhs.group1_ && group2_ == rhs.group2_ &&
-		group3_ == rhs.group3_ && group4_ == rhs.group4_;
+  return group1_ == rhs.group1_ && group2_ == rhs.group2_ &&
+    group3_ == rhs.group3_ && group4_ == rhs.group4_;
 }
 
 inline constexpr bool RegSet::operator!=(const RegSet& rhs) {
-	return !(*this == rhs);
+  return !(*this == rhs);
 }
 
 inline constexpr bool RegSet::contains(const RegSet& rhs) {
-	return (*this & rhs) == rhs;
+  return (*this & rhs) == rhs;
 }
 
 inline constexpr RegSet RegSet::operator+(const Rl& rhs) {
-	return plus_group1(Mask::LOW, rhs.val_);
+  return plus_group1(Mask::LOW, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const Rh& rhs) {
-	return plus_group1(Mask::HIGH, rhs.val_-4);
+  return plus_group1(Mask::HIGH, rhs.val_-4);
 }
 
 inline constexpr RegSet RegSet::operator+(const Rb& rhs) {
-	return plus_group1(Mask::LOW, rhs.val_);
+  return plus_group1(Mask::LOW, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const R16& rhs) {
-	return plus_group1(Mask::WORD, rhs.val_);
+  return plus_group1(Mask::WORD, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const R32& rhs) {
-	return plus_group1(Mask::DOUBLE, rhs.val_);
+  return plus_group1(Mask::DOUBLE, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const R64& rhs) {
-	return plus_group1(Mask::QUAD, rhs.val_);
+  return plus_group1(Mask::QUAD, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const Xmm& rhs) {
-	return plus_group2(Mask::XMM, rhs.val_);
+  return plus_group2(Mask::XMM, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const Ymm& rhs) {
-	return plus_group2(Mask::YMM, rhs.val_);
+  return plus_group2(Mask::YMM, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const Zmm& rhs) {
-	return plus_group2(Mask::ZMM, rhs.val_);
+  return plus_group2(Mask::ZMM, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const Mm& rhs) {
-	return plus_group2(Mask::MM, rhs.val_);
+  return plus_group2(Mask::MM, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const St& rhs) {
-	return plus_group2(Mask::ST, rhs.val_);
+  return plus_group2(Mask::ST, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const Sreg& rhs) {
-	return plus_group4(Mask::SREG, rhs.val_);
+  return plus_group4(Mask::SREG, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const FpuData& rhs) {
-	return plus_group4(Mask::DATA, rhs.val_);
+  return plus_group4(Mask::DATA, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const FpuInstruction& rhs) {
-	return plus_group4(Mask::INSTR, rhs.val_);
+  return plus_group4(Mask::INSTR, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const FpuOpcode& rhs) {
-	return plus_group4(Mask::OPCODE, rhs.val_);
+  return plus_group4(Mask::OPCODE, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const Rip& rhs) {
-	return plus_group4(Mask::RIP, rhs.val_);
+  return plus_group4(Mask::RIP, rhs.val_);
 }
 
 inline constexpr RegSet RegSet::operator+(const Eflags& rhs) {
-	return plus_group3(Mask::EFLAG, rhs.index_);
+  return plus_group3(Mask::EFLAG, rhs.index_);
 }
 
 inline constexpr RegSet RegSet::operator+(const FpuControl& rhs) {
-	return plus_group3(Mask::CONTROL, rhs.index_);
+  return plus_group3(Mask::CONTROL, rhs.index_);
 }
 
 inline constexpr RegSet RegSet::operator+(const FpuStatus& rhs) {
-	return plus_group3(Mask::STATUS, rhs.index_);
+  return plus_group3(Mask::STATUS, rhs.index_);
 }
 
 inline constexpr RegSet RegSet::operator+(const FpuTag& rhs) {
-	return plus_group4(Mask::TAG, rhs.index_);
+  return plus_group4(Mask::TAG, rhs.index_);
 }
 
 inline constexpr RegSet RegSet::operator+(const Mxcsr& rhs) {
-	return plus_group4(Mask::MXCSR, rhs.index_);
+  return plus_group4(Mask::MXCSR, rhs.index_);
 }
 
 inline RegSet RegSet::operator+(const M& rhs) const {
-	auto ret = *this;
-	return ret += rhs;
+  auto ret = *this;
+  return ret += rhs;
 }
 
 inline RegSet RegSet::operator+(const Moffs& rhs) const {
-	return rhs.contains_seg() ? plus_group4(Mask::SREG, rhs.get_seg()) : *this;
+  return rhs.contains_seg() ? plus_group4(Mask::SREG, rhs.get_seg()) : *this;
 }
 
 inline RegSet& RegSet::operator+=(const Rl& rhs) {
-	return plus_equal(Mask::LOW, group1_, rhs.val_);
+  return plus_equal(Mask::LOW, group1_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const Rh& rhs) {
-	return plus_equal(Mask::HIGH, group1_, rhs.val_ - 4);
+  return plus_equal(Mask::HIGH, group1_, rhs.val_ - 4);
 }
 
 inline RegSet& RegSet::operator+=(const Rb& rhs) {
-	return plus_equal(Mask::LOW, group1_, rhs.val_);
+  return plus_equal(Mask::LOW, group1_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const R16& rhs) {
-	return plus_equal(Mask::WORD, group1_, rhs.val_);
+  return plus_equal(Mask::WORD, group1_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const R32& rhs) {
-	return plus_equal(Mask::DOUBLE, group1_, rhs.val_);
+  return plus_equal(Mask::DOUBLE, group1_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const R64& rhs) {
-	return plus_equal(Mask::QUAD, group1_, rhs.val_);
+  return plus_equal(Mask::QUAD, group1_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const Xmm& rhs) {
-	return plus_equal(Mask::XMM, group2_, rhs.val_);
+  return plus_equal(Mask::XMM, group2_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const Ymm& rhs) {
-	return plus_equal(Mask::YMM, group2_, rhs.val_);
+  return plus_equal(Mask::YMM, group2_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const Zmm& rhs) {
-	return plus_equal(Mask::ZMM, group2_, rhs.val_);
+  return plus_equal(Mask::ZMM, group2_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const Mm& rhs) {
-	return plus_equal(Mask::MM, group2_, rhs.val_);
+  return plus_equal(Mask::MM, group2_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const St& rhs) {
-	return plus_equal(Mask::ST, group2_, rhs.val_);
+  return plus_equal(Mask::ST, group2_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const Sreg& rhs) {
-	return plus_equal(Mask::SREG, group4_, rhs.val_);
+  return plus_equal(Mask::SREG, group4_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const FpuData& rhs) {
-	return plus_equal(Mask::DATA, group4_, rhs.val_);
+  return plus_equal(Mask::DATA, group4_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const FpuInstruction& rhs) {
-	return plus_equal(Mask::INSTR, group4_, rhs.val_);
+  return plus_equal(Mask::INSTR, group4_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const FpuOpcode& rhs) {
-	return plus_equal(Mask::OPCODE, group4_, rhs.val_);
+  return plus_equal(Mask::OPCODE, group4_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const Rip& rhs) {
-	return plus_equal(Mask::RIP, group4_, rhs.val_);
+  return plus_equal(Mask::RIP, group4_, rhs.val_);
 }
 
 inline RegSet& RegSet::operator+=(const Eflags& rhs) {
-	return plus_equal(Mask::EFLAG, group3_, rhs.index_);
+  return plus_equal(Mask::EFLAG, group3_, rhs.index_);
 }
 
 inline RegSet& RegSet::operator+=(const FpuControl& rhs) {
-	return plus_equal(Mask::CONTROL, group3_, rhs.index_);
+  return plus_equal(Mask::CONTROL, group3_, rhs.index_);
 }
 
 inline RegSet& RegSet::operator+=(const FpuStatus& rhs) {
-	return plus_equal(Mask::STATUS, group3_, rhs.index_);
+  return plus_equal(Mask::STATUS, group3_, rhs.index_);
 }
 
 inline RegSet& RegSet::operator+=(const FpuTag& rhs) {
-	return plus_equal(Mask::TAG, group4_, rhs.index_);
+  return plus_equal(Mask::TAG, group4_, rhs.index_);
 }
 
 inline RegSet& RegSet::operator+=(const Mxcsr& rhs) {
-	return plus_equal(Mask::MXCSR, group4_, rhs.index_);
+  return plus_equal(Mask::MXCSR, group4_, rhs.index_);
 }
 
 inline RegSet& RegSet::operator+=(const M& rhs) {
@@ -628,208 +628,208 @@ inline RegSet& RegSet::operator+=(const M& rhs) {
 }
 
 inline RegSet& RegSet::operator+=(const Moffs& rhs) {
-	return rhs.contains_seg() ? plus_equal(Mask::SREG, group4_, rhs.get_seg()) : *this;
+  return rhs.contains_seg() ? plus_equal(Mask::SREG, group4_, rhs.get_seg()) : *this;
 }
 
 inline constexpr bool RegSet::contains(const Rl& rhs) {
-	return contains(Mask::LOW, group1_, rhs.val_);
+  return contains(Mask::LOW, group1_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const Rh& rhs) {
-	return contains(Mask::HIGH, group1_, rhs.val_ - 4);
+  return contains(Mask::HIGH, group1_, rhs.val_ - 4);
 }
 
 inline constexpr bool RegSet::contains(const Rb& rhs) {
-	return contains(Mask::LOW, group1_, rhs.val_);
+  return contains(Mask::LOW, group1_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const R16& rhs) {
-	return contains(Mask::WORD, group1_, rhs.val_);
+  return contains(Mask::WORD, group1_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const R32& rhs) {
-	return contains(Mask::DOUBLE, group1_, rhs.val_);
+  return contains(Mask::DOUBLE, group1_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const R64& rhs) {
-	return contains(Mask::QUAD, group1_, rhs.val_);
+  return contains(Mask::QUAD, group1_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const Xmm& rhs) {
-	return contains(Mask::XMM, group2_, rhs.val_);
+  return contains(Mask::XMM, group2_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const Ymm& rhs) {
-	return contains(Mask::YMM, group2_, rhs.val_);
+  return contains(Mask::YMM, group2_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const Zmm& rhs) {
-	return contains(Mask::ZMM, group2_, rhs.val_);
+  return contains(Mask::ZMM, group2_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const Mm& rhs) {
-	return contains(Mask::MM, group2_, rhs.val_);
+  return contains(Mask::MM, group2_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const St& rhs) {
-	return contains(Mask::ST, group2_, rhs.val_);
+  return contains(Mask::ST, group2_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const Sreg& rhs) {
-	return contains(Mask::SREG, group4_, rhs.val_);
+  return contains(Mask::SREG, group4_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const FpuData& rhs) {
-	return contains(Mask::DATA, group4_, rhs.val_);
+  return contains(Mask::DATA, group4_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const FpuInstruction& rhs) {
-	return contains(Mask::INSTR, group4_, rhs.val_);
+  return contains(Mask::INSTR, group4_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const FpuOpcode& rhs) {
-	return contains(Mask::OPCODE, group4_, rhs.val_);
+  return contains(Mask::OPCODE, group4_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const Rip& rhs) {
-	return contains(Mask::RIP, group4_, rhs.val_);
+  return contains(Mask::RIP, group4_, rhs.val_);
 }
 
 inline constexpr bool RegSet::contains(const Eflags& rhs) {
-	return contains(Mask::EFLAG, group3_, rhs.index_);
+  return contains(Mask::EFLAG, group3_, rhs.index_);
 }
 
 inline constexpr bool RegSet::contains(const FpuControl& rhs) {
-	return contains(Mask::CONTROL, group3_, rhs.index_);
+  return contains(Mask::CONTROL, group3_, rhs.index_);
 }
 
 inline constexpr bool RegSet::contains(const FpuStatus& rhs) {
-	return contains(Mask::STATUS, group3_, rhs.index_);
+  return contains(Mask::STATUS, group3_, rhs.index_);
 }
 
 inline constexpr bool RegSet::contains(const FpuTag& rhs) {
-	return contains(Mask::TAG, group4_, rhs.index_);
+  return contains(Mask::TAG, group4_, rhs.index_);
 }
 
 inline constexpr bool RegSet::contains(const Mxcsr& rhs) {
-	return contains(Mask::MXCSR, group4_, rhs.index_);
+  return contains(Mask::MXCSR, group4_, rhs.index_);
 }
 
 constexpr bool RegSet::contains_any_rl() {
-	return contains_any(Mask::A_LOW, group1_);
+  return contains_any(Mask::A_LOW, group1_);
 }
 
 constexpr bool RegSet::contains_any_rh() {
-	return contains_any(Mask::A_HIGH, group1_);
+  return contains_any(Mask::A_HIGH, group1_);
 }
 
 constexpr bool RegSet::contains_any_rb() {
-	return contains_any(Mask::A_BYTE, group1_);
+  return contains_any(Mask::A_BYTE, group1_);
 }
 
 constexpr bool RegSet::contains_any_word() {
-	return contains_any(Mask::A_WORD, group1_) ||
-			contains(ax) || contains(bx) || contains(cx) || contains(dx);
+  return contains_any(Mask::A_WORD, group1_) ||
+      contains(ax) || contains(bx) || contains(cx) || contains(dx);
 }
 
 constexpr bool RegSet::contains_any_double() {
-	return contains_any(Mask::A_DOUBLE, group1_);
+  return contains_any(Mask::A_DOUBLE, group1_);
 }
 
 constexpr bool RegSet::contains_any_quad() {
-	return contains_any(Mask::A_QUAD, group1_);
+  return contains_any(Mask::A_QUAD, group1_);
 }
 
 constexpr bool RegSet::contains_any_xmm() {
-	return contains_any(Mask::A_XMM, group2_);
+  return contains_any(Mask::A_XMM, group2_);
 }
 
 constexpr bool RegSet::contains_any_ymm() {
-	return contains_any(Mask::A_YMM, group2_);
+  return contains_any(Mask::A_YMM, group2_);
 }
 
 constexpr bool RegSet::contains_any_zmm() {
-	return contains_any(Mask::A_ZMM, group2_);
+  return contains_any(Mask::A_ZMM, group2_);
 }
 
 constexpr bool RegSet::contains_all_rl() {
-	return contains_all(Mask::LOWS, group1_);
+  return contains_all(Mask::LOWS, group1_);
 }
 
 constexpr bool RegSet::contains_all_rh() {
-	return contains_all(Mask::HIGHS, group1_);
+  return contains_all(Mask::HIGHS, group1_);
 }
 
 constexpr bool RegSet::contains_all_rb() {
-	return contains_all(Mask::BYTES, group1_);
+  return contains_all(Mask::BYTES, group1_);
 }
 
 constexpr bool RegSet::contains_all_word() {
-	return contains_all(Mask::WORDS, group1_);
+  return contains_all(Mask::WORDS, group1_);
 }
 
 constexpr bool RegSet::contains_all_double() {
-	return contains_all(Mask::DOUBLES, group1_);
+  return contains_all(Mask::DOUBLES, group1_);
 }
 
 constexpr bool RegSet::contains_all_quad() {
-	return contains_all(Mask::QUADS, group1_);
+  return contains_all(Mask::QUADS, group1_);
 }
 
 constexpr bool RegSet::contains_all_xmm() {
-	return contains_all(Mask::XMMS, group2_);
+  return contains_all(Mask::XMMS, group2_);
 }
 
 constexpr bool RegSet::contains_all_ymm() {
-	return contains_all(Mask::YMMS, group2_);
+  return contains_all(Mask::YMMS, group2_);
 }
 
 constexpr bool RegSet::contains_all_zmm() {
-	return contains_all(Mask::ZMMS, group2_);
+  return contains_all(Mask::ZMMS, group2_);
 }
 
 inline void RegSet::swap(RegSet& rhs) {
-	std::swap(group1_, rhs.group1_);
-	std::swap(group2_, rhs.group2_);
-	std::swap(group3_, rhs.group3_);
-	std::swap(group4_, rhs.group4_);
+  std::swap(group1_, rhs.group1_);
+  std::swap(group2_, rhs.group2_);
+  std::swap(group3_, rhs.group3_);
+  std::swap(group4_, rhs.group4_);
 }
 
 inline constexpr size_t RegSet::hash() {
-	return group1_ ^ group2_ ^ group3_ ^ group4_;
+  return group1_ ^ group2_ ^ group3_ ^ group4_;
 }
 
 inline constexpr RegSet RegSet::plus_group1(Mask m, uint64_t val) {
-	return RegSet{group1_ | ((uint64_t)m << val), group2_, group3_, group4_};
+  return RegSet{group1_ | ((uint64_t)m << val), group2_, group3_, group4_};
 }
 
 inline constexpr RegSet RegSet::plus_group2(Mask m, uint64_t val) {
-	return RegSet{group1_, group2_ | ((uint64_t)m << val), group3_, group4_};
+  return RegSet{group1_, group2_ | ((uint64_t)m << val), group3_, group4_};
 }
 
 inline constexpr RegSet RegSet::plus_group3(Mask m, uint64_t val) {
-	return RegSet{group1_, group2_, group3_ | ((uint64_t)m << val), group4_};
+  return RegSet{group1_, group2_, group3_ | ((uint64_t)m << val), group4_};
 }
 
 inline constexpr RegSet RegSet::plus_group4(Mask m, uint64_t val) {
-	return RegSet{group1_, group2_, group3_, group4_ | ((uint64_t)m << val)};
+  return RegSet{group1_, group2_, group3_, group4_ | ((uint64_t)m << val)};
 }
 
 inline RegSet& RegSet::plus_equal(Mask m, uint64_t& group, uint64_t val) {
-	group |= ((uint64_t)m << val);
-	return *this;
+  group |= ((uint64_t)m << val);
+  return *this;
 }
 
 inline constexpr bool RegSet::contains(Mask m, uint64_t group, uint64_t val) {
-	return ((group >> val) & (uint64_t)m) == (uint64_t)m;
+  return ((group >> val) & (uint64_t)m) == (uint64_t)m;
 }
 
 inline constexpr bool RegSet::contains_any(Mask m, uint64_t group) {
-	return (uint64_t)m & group;
+  return (uint64_t)m & group;
 }
 
 inline constexpr bool RegSet::contains_all(Mask m, uint64_t group) {
-	return ((uint64_t)m & group) == (uint64_t)m;
+  return ((uint64_t)m & group) == (uint64_t)m;
 }
 
 } // namespace x64asm
@@ -837,11 +837,11 @@ inline constexpr bool RegSet::contains_all(Mask m, uint64_t group) {
 namespace std {
 
 inline size_t hash<x64asm::RegSet>::operator()(const x64asm::RegSet& rs) const {
-	return rs.hash();
+  return rs.hash();
 }
 
 inline void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs) {
-	lhs.swap(rhs);
+  lhs.swap(rhs);
 }
 
 

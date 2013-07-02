@@ -25,7 +25,7 @@ void Moffs::write_att(ostream& os) const {
     get_seg().write_att(os);
     os << ":";
   }
-	os << "0x" << noshowbase << hex << get_offset().val_;
+  os << "0x" << noshowbase << hex << get_offset().val_;
 }
 
 } // namespace x64asm

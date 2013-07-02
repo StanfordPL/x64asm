@@ -25,21 +25,21 @@ limitations under the License.
 namespace x64asm {
 
 /** A YMM register. The 256-bit YMM registers are: YMM0 through YMM7; YMM8
-	  through YMM15 are available using REX.R in 64-bit mode.
+    through YMM15 are available using REX.R in 64-bit mode.
 */
 class Ymm : public Operand {
     // Needs access to constructor.
     friend class Constants;
 
   public:
-		/** Copy constructor. */
-		Ymm(const Ymm& rhs);
-		/** Move constructor. */
-		Ymm(Ymm&& rhs);
-		/** Copy assignment operator. */
-		Ymm& operator=(const Ymm& rhs);
-		/** Move assignment operator. */
-		Ymm& operator=(Ymm&& rhs);
+    /** Copy constructor. */
+    Ymm(const Ymm& rhs);
+    /** Move constructor. */
+    Ymm(Ymm&& rhs);
+    /** Copy assignment operator. */
+    Ymm& operator=(const Ymm& rhs);
+    /** Move assignment operator. */
+    Ymm& operator=(Ymm&& rhs);
 
     /** Returns true if this xmm register is well-formed. */
     constexpr bool check();
@@ -49,18 +49,18 @@ class Ymm : public Operand {
     /** Comparison based on on val_. */
     constexpr bool operator==(const Ymm& rhs);
     /** Comparison based on on val_. */
-		constexpr bool operator!=(const Ymm& rhs);
+    constexpr bool operator!=(const Ymm& rhs);
 
     /** Conversion based on underlying value. */
     constexpr operator uint64_t();
 
-		/** STL-compliant hash. */
-		constexpr size_t hash();
-		/** STL-compliant swap. */
-		void swap(Ymm& rhs);
+    /** STL-compliant hash. */
+    constexpr size_t hash();
+    /** STL-compliant swap. */
+    void swap(Ymm& rhs);
 
     /** Writes this xmm register to an ostream using at&t syntax. */
-		std::ostream& write_att(std::ostream& os) const;
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
@@ -74,7 +74,7 @@ namespace std {
 /** STL hash specialization. */
 template <>
 struct hash<x64asm::Ymm> {
-	size_t operator()(const x64asm::Ymm& y) const;
+  size_t operator()(const x64asm::Ymm& y) const;
 };
 
 /** STL swap overload. */
@@ -88,52 +88,52 @@ ostream& operator<<(ostream& os, const x64asm::Ymm& y);
 namespace x64asm {
 
 inline Ymm::Ymm(const Ymm& rhs) {
-	val_ = rhs.val_;
+  val_ = rhs.val_;
 }
 
 inline Ymm::Ymm(Ymm&& rhs) {
-	val_ = rhs.val_;
+  val_ = rhs.val_;
 }
 
 inline Ymm& Ymm::operator=(const Ymm& rhs) {
-	Ymm(rhs).swap(*this);
+  Ymm(rhs).swap(*this);
 }
 
 inline Ymm& Ymm::operator=(Ymm&& rhs) {
-	Ymm(std::move(rhs)).swap(*this);
+  Ymm(std::move(rhs)).swap(*this);
 }
 
 inline constexpr bool Ymm::check() {
-	return val_ < 16;
+  return val_ < 16;
 }
 
 inline constexpr bool Ymm::operator<(const Ymm& rhs) {
-	return val_ < rhs.val_;
+  return val_ < rhs.val_;
 }
 
 inline constexpr bool Ymm::operator==(const Ymm& rhs) {
-	return val_ == rhs.val_;
+  return val_ == rhs.val_;
 }
 
 inline constexpr bool Ymm::operator!=(const Ymm& rhs) {
-	return val_ != rhs.val_;
+  return val_ != rhs.val_;
 }
 
 inline constexpr Ymm::operator uint64_t() {
-	return val_;
+  return val_;
 }
 
 inline std::ostream& Ymm::write_att(std::ostream& os) const {
-	assert(check());
-	return (os << "%ymm" << std::dec << val_);
+  assert(check());
+  return (os << "%ymm" << std::dec << val_);
 }
 
 inline constexpr size_t Ymm::hash() {
-	return val_;
+  return val_;
 }
 
 inline void Ymm::swap(Ymm& rhs) {
-	std::swap(val_, rhs.val_);
+  std::swap(val_, rhs.val_);
 }
 
 inline constexpr Ymm::Ymm(uint64_t val) : Operand{val} {
@@ -144,15 +144,15 @@ inline constexpr Ymm::Ymm(uint64_t val) : Operand{val} {
 namespace std {
 
 inline size_t hash<x64asm::Ymm>::operator()(const x64asm::Ymm& y) const {
-	return y.hash();
+  return y.hash();
 }
 
 inline void swap(x64asm::Ymm& lhs, x64asm::Ymm& rhs) {
-	lhs.swap(rhs);
+  lhs.swap(rhs);
 }
 
 inline ostream& operator<<(ostream& os, const x64asm::Ymm& y) {
-	return y.write_att(os);
+  return y.write_att(os);
 }
 
 } // namespace std

@@ -25,21 +25,21 @@ limitations under the License.
 namespace x64asm {
 
 /** A ZMM register. The 512-bit ZMM registers are: ZMM0 through ZMM7; ZMM8
-	  through ZMM15 are available using REX.R in 64-bit mode.
+    through ZMM15 are available using REX.R in 64-bit mode.
 */
 class Zmm : public Operand {
     // Needs access to constructor.
     friend class Constants;
 
   public:
-		/** Copy constructor. */
-		Zmm(const Zmm& rhs);
-		/** Move constructor. */
-		Zmm(Zmm&& rhs);
-		/** Copy assignment operator. */
-		Zmm& operator=(const Zmm& rhs);
-		/** Move assignment operator. */
-		Zmm& operator=(Zmm&& rhs);
+    /** Copy constructor. */
+    Zmm(const Zmm& rhs);
+    /** Move constructor. */
+    Zmm(Zmm&& rhs);
+    /** Copy assignment operator. */
+    Zmm& operator=(const Zmm& rhs);
+    /** Move assignment operator. */
+    Zmm& operator=(Zmm&& rhs);
 
     /** Returns true if this xmm register is well-formed. */
     constexpr bool check();
@@ -49,18 +49,18 @@ class Zmm : public Operand {
     /** Comparison based on on val_. */
     constexpr bool operator==(const Zmm& rhs);
     /** Comparison based on on val_. */
-		constexpr bool operator!=(const Zmm& rhs);
+    constexpr bool operator!=(const Zmm& rhs);
 
     /** Conversion based on underlying value. */
     constexpr operator uint64_t();
 
-		/** STL-compliant hash. */
-		constexpr size_t hash();
-		/** STL-compliant swap. */
-		void swap(Zmm& rhs);
+    /** STL-compliant hash. */
+    constexpr size_t hash();
+    /** STL-compliant swap. */
+    void swap(Zmm& rhs);
 
     /** Writes this xmm register to an ostream using at&t syntax. */
-		std::ostream& write_att(std::ostream& os) const;
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
@@ -74,7 +74,7 @@ namespace std {
 /** STL hash specialization. */
 template <>
 struct hash<x64asm::Zmm> {
-	size_t operator()(const x64asm::Zmm& z) const;
+  size_t operator()(const x64asm::Zmm& z) const;
 };
 
 /** STL swap overload. */
@@ -88,52 +88,52 @@ ostream& operator<<(ostream& os, const x64asm::Zmm& z);
 namespace x64asm {
 
 inline Zmm::Zmm(const Zmm& rhs) {
-	val_ = rhs.val_;
+  val_ = rhs.val_;
 }
 
 inline Zmm::Zmm(Zmm&& rhs) {
-	val_ = rhs.val_;
+  val_ = rhs.val_;
 }
 
 inline Zmm& Zmm::operator=(const Zmm& rhs) {
-	Zmm(rhs).swap(*this);
+  Zmm(rhs).swap(*this);
 }
 
 inline Zmm& Zmm::operator=(Zmm&& rhs) {
-	Zmm(std::move(rhs)).swap(*this);
+  Zmm(std::move(rhs)).swap(*this);
 }
 
 inline constexpr bool Zmm::check() {
-	return val_ < 16;
+  return val_ < 16;
 }
 
 inline constexpr bool Zmm::operator<(const Zmm& rhs) {
-	return val_ < rhs.val_;
+  return val_ < rhs.val_;
 }
 
 inline constexpr bool Zmm::operator==(const Zmm& rhs) {
-	return val_ == rhs.val_;
+  return val_ == rhs.val_;
 }
 
 inline constexpr bool Zmm::operator!=(const Zmm& rhs) {
-	return val_ != rhs.val_;
+  return val_ != rhs.val_;
 }
 
 inline constexpr Zmm::operator uint64_t() {
-	return val_;
+  return val_;
 }
 
 inline constexpr size_t Zmm::hash() {
-	return val_;
+  return val_;
 }
 
 inline void Zmm::swap(Zmm& rhs) {
-	std::swap(val_, rhs.val_);
+  std::swap(val_, rhs.val_);
 }
 
 inline std::ostream& Zmm::write_att(std::ostream& os) const {
-	assert(check());
-	return (os << "%zmm" << std::dec << val_);
+  assert(check());
+  return (os << "%zmm" << std::dec << val_);
 }
 
 inline constexpr Zmm::Zmm(uint64_t val) : Operand{val} {
@@ -144,15 +144,15 @@ inline constexpr Zmm::Zmm(uint64_t val) : Operand{val} {
 namespace std {
 
 inline size_t hash<x64asm::Zmm>::operator()(const x64asm::Zmm& z) const {
-	return z.hash();
+  return z.hash();
 }
 
 inline void swap(x64asm::Zmm& lhs, x64asm::Zmm& rhs) {
-	lhs.swap(rhs);
+  lhs.swap(rhs);
 }
 
 inline ostream& operator<<(ostream& os, const x64asm::Zmm& z) {
-	return z.write_att(os);
+  return z.write_att(os);
 }
 
 } // namespace std
