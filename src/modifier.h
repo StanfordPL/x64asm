@@ -137,10 +137,12 @@ inline Modifier::Modifier(Modifier&& rhs) {
 
 inline Modifier& Modifier::operator=(const Modifier& rhs) {
   Modifier(rhs).swap(*this);
+  return *this;
 }
 
 inline Modifier& Modifier::operator=(Modifier&& rhs) {
   Modifier(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 inline constexpr bool Modifier::check() {

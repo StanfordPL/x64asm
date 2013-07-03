@@ -95,10 +95,12 @@ inline Mm::Mm(Mm&& rhs) {
 
 inline Mm& Mm::operator=(const Mm& rhs) {
   Mm(rhs).swap(*this);
+  return *this;
 }
 
 inline Mm& Mm::operator=(Mm&& rhs) {
   Mm(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 inline constexpr bool Mm::check() {

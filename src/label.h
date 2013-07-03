@@ -110,10 +110,12 @@ inline Label::Label(Label&& rhs) {
 
 inline Label& Label::operator=(const Label& rhs) {
   Label(rhs).swap(*this);
+  return *this;
 }
 
 inline Label& Label::operator=(Label&& rhs) {
   Label(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 inline bool Label::check() const {

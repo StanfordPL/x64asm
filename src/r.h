@@ -336,10 +336,12 @@ inline R::R(R&& rhs) {
 
 inline R& R::operator=(const R& rhs) {
   R(rhs).swap(*this);
+  return *this;
 }
 
 inline R& R::operator=(R&& rhs) {
   R(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 inline constexpr R::operator uint64_t() {

@@ -110,10 +110,12 @@ inline St::St(St&& rhs) {
 
 inline St& St::operator=(const St& rhs) {
   St(rhs).swap(*this);
+  return *this;
 }
 
 inline St& St::operator=(St&& rhs) {
   St(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 inline constexpr bool St::check() {

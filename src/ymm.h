@@ -97,10 +97,12 @@ inline Ymm::Ymm(Ymm&& rhs) {
 
 inline Ymm& Ymm::operator=(const Ymm& rhs) {
   Ymm(rhs).swap(*this);
+  return *this;
 }
 
 inline Ymm& Ymm::operator=(Ymm&& rhs) {
   Ymm(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 inline constexpr bool Ymm::check() {

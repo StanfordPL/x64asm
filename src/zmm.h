@@ -97,10 +97,12 @@ inline Zmm::Zmm(Zmm&& rhs) {
 
 inline Zmm& Zmm::operator=(const Zmm& rhs) {
   Zmm(rhs).swap(*this);
+  return *this;
 }
 
 inline Zmm& Zmm::operator=(Zmm&& rhs) {
   Zmm(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 inline constexpr bool Zmm::check() {

@@ -95,10 +95,12 @@ inline Hint::Hint(Hint&& rhs) {
 
 inline Hint& Hint::operator=(const Hint& rhs) {
   Hint(rhs).swap(*this);
+  return *this;
 }
 
 inline Hint& Hint::operator=(Hint&& rhs) {
   Hint(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 inline constexpr bool Hint::check() {

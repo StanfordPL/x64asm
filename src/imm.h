@@ -189,10 +189,12 @@ inline Imm::Imm(Imm&& rhs) {
 
 inline Imm& Imm::operator=(const Imm& rhs) {
   Imm(rhs).swap(*this);
+  return *this;
 }
 
 inline Imm& Imm::operator=(Imm&& rhs) {
   Imm(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 constexpr bool Imm::operator==(const Imm& rhs) {

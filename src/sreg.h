@@ -129,10 +129,12 @@ inline Sreg::Sreg(Sreg&& rhs) {
 
 inline Sreg& Sreg::operator=(const Sreg& rhs) {
   Sreg(rhs).swap(*this);
+  return *this;
 }
 
 inline Sreg& Sreg::operator=(Sreg&& rhs) {
   Sreg(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 inline constexpr bool Sreg::check() {

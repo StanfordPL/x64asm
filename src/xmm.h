@@ -111,10 +111,12 @@ inline Xmm::Xmm(Xmm&& rhs) {
 
 inline Xmm& Xmm::operator=(const Xmm& rhs) {
   Xmm(rhs).swap(*this);
+  return *this;
 }
 
 inline Xmm& Xmm::operator=(Xmm&& rhs) {
   Xmm(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 inline constexpr bool Xmm::check() {

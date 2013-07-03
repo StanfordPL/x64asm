@@ -160,10 +160,12 @@ inline Moffs::Moffs(Moffs&& rhs) {
 
 inline Moffs& Moffs::operator=(const Moffs& rhs) {
   Moffs(rhs).swap(*this);
+  return *this;
 }
 
 inline Moffs& Moffs::operator=(Moffs&& rhs) {
   Moffs(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 inline constexpr bool Moffs::contains_seg() {

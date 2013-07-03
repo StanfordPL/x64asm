@@ -467,10 +467,12 @@ inline M::M(M&& rhs) {
 
 inline M& M::operator=(const M& rhs) {
   M(rhs).swap(*this);
+  return *this;
 }
 
 inline M& M::operator=(M&& rhs) {
   M(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 inline constexpr bool M::contains_seg() {

@@ -113,10 +113,12 @@ inline Rel::Rel(Rel&& rhs) {
 
 inline Rel& Rel::operator=(const Rel& rhs) {
   Rel(rhs).swap(*this);
+  return *this;
 }
 
 inline Rel& Rel::operator=(Rel&& rhs) {
   Rel(std::move(rhs)).swap(*this);
+  return *this;
 }
 
 inline constexpr bool Rel::operator<(const Rel& rhs) {
