@@ -113,6 +113,8 @@ class RegSet {
     static constexpr RegSet all_zmms();
     /** Creates a register set containing linux caller save registers. */
     static constexpr RegSet linux_caller_save();
+    /** Creates a register set containing linux callee save registers. */
+    static constexpr RegSet linux_callee_save();
     /** Creates a retister set containing windows caller save reigsters. */
     static constexpr RegSet windows_caller_save();
     /** Creates a full register set. */
@@ -406,6 +408,13 @@ inline constexpr RegSet RegSet::linux_caller_save() {
       Constants::xmm0() + Constants::xmm1() + Constants::xmm2() + 
       Constants::xmm3() + Constants::xmm4() + Constants::xmm5() + 
       Constants::xmm6() + Constants::xmm7();
+}
+
+inline constexpr RegSet RegSet::linux_callee_save() {
+  return empty() + 
+      Constants::rbx()  + Constants::rbp()  + Constants::rsp()  + 
+      Constants::r12()  + Constants::r13()  + Constants::r14()  +
+      Constants::r15();
 }
 
 inline constexpr RegSet RegSet::windows_caller_save() {
