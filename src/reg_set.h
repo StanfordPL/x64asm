@@ -400,13 +400,20 @@ inline constexpr RegSet RegSet::all_zmms() {
 }
 
 inline constexpr RegSet RegSet::linux_caller_save() {
-  return empty() + rdi + rsi + rdx + rcx + r8 + r9 +
-      xmm0 + xmm1 + xmm2 + xmm3 + xmm4 + xmm5 + xmm6 + xmm7;
+  return empty() + 
+      Constants::rdi()  + Constants::rsi()  + Constants::rdx()  + 
+      Constants::rcx()  + Constants::r8()   + Constants::r9()   +
+      Constants::xmm0() + Constants::xmm1() + Constants::xmm2() + 
+      Constants::xmm3() + Constants::xmm4() + Constants::xmm5() + 
+      Constants::xmm6() + Constants::xmm7();
 }
 
 inline constexpr RegSet RegSet::windows_caller_save() {
-  return empty() + rcx + rdx + r8 + r9 +
-      xmm0 + xmm1 + xmm2 + xmm3;
+  return empty() + 
+      Constants::rcx()  + Constants::rdx()  + 
+      Constants::r8()   + Constants::r9()   + 
+      Constants::xmm0() + Constants::xmm1() + 
+      Constants::xmm2() + Constants::xmm3();
 }
 
 inline constexpr RegSet RegSet::universe() {
