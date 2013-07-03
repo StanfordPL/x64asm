@@ -103,6 +103,18 @@ class RegSet {
 
     /** Creates an empty register set. */
     static constexpr RegSet empty();
+    /** Creates a register set containing all general purpose registers. */
+    static constexpr RegSet all_gps();
+    /** Creates a register set containing all xmm registers. */
+    static constexpr RegSet all_xmms();
+    /** Creates a register set containing all ymm registers. */
+    static constexpr RegSet all_ymms();
+    /** Creates a register set containing all zmm registers. */
+    static constexpr RegSet all_zmms();
+    /** Creates a register set containing linux caller save registers. */
+    static constexpr RegSet linux_caller_save();
+    /** Creates a retister set containing windows caller save reigsters. */
+    static constexpr RegSet windows_caller_save();
     /** Creates a full register set. */
     static constexpr RegSet universe();
 
@@ -369,6 +381,32 @@ inline constexpr RegSet::RegSet() :
 
 inline constexpr RegSet RegSet::empty() {
   return RegSet {Mask::EMPTY, Mask::EMPTY, Mask::EMPTY, Mask::EMPTY};
+}
+
+inline constexpr RegSet RegSet::all_gps() {
+  return RegSet {Mask::QUADS, Mask::EMPTY, Mask::EMPTY, Mask::EMPTY};
+}
+
+inline constexpr RegSet RegSet::all_xmms() {
+  return RegSet {Mask::EMPTY, Mask::XMMS, Mask::EMPTY, Mask::EMPTY};
+}
+
+inline constexpr RegSet RegSet::all_ymms() {
+  return RegSet {Mask::EMPTY, Mask::YMMS, Mask::EMPTY, Mask::EMPTY};
+}
+
+inline constexpr RegSet RegSet::all_zmms() {
+  return RegSet {Mask::EMPTY, Mask::ZMMS, Mask::EMPTY, Mask::EMPTY};
+}
+
+inline constexpr RegSet RegSet::linux_caller_save() {
+  return empty() + rdi + rsi + rdx + rcx + r8 + r9 +
+      xmm0 + xmm1 + xmm2 + xmm3 + xmm4 + xmm5 + xmm6 + xmm7;
+}
+
+inline constexpr RegSet RegSet::windows_caller_save() {
+  return empty() + rcx + rdx + r8 + r9 +
+      xmm0 + xmm1 + xmm2 + xmm3;
 }
 
 inline constexpr RegSet RegSet::universe() {
