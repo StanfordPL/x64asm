@@ -889,7 +889,6 @@ inline void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs) {
   lhs.swap(rhs);
 }
 
-
 } // namespace std
 
 #endif
