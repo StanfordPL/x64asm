@@ -860,6 +860,16 @@ uncond_jump_row i = case is_uncond_jump i of
 uncond_jump_table :: [Instr] -> String
 uncond_jump_table is = to_table is uncond_jump_row 
 
+-- Converts an instruction mem_index table row
+mem_index_row :: Instr -> String
+mem_index_row i = case findIndex mem_op (operands i) of
+  (Just idx) -> show idx
+  Nothing -> "-1"
+
+-- Converts all instruction to mem_index table
+mem_index_table :: [Instr] -> String
+mem_index_table is = to_table is mem_index_row
+
 -- Is this a must element?
 is_must :: String -> Bool
 is_must o = any isUpper o
@@ -1027,13 +1037,13 @@ pref1 :: Instr -> String
 pref1 i 
   | "F2" `elem` opcode_prefix i = "pref_group1(0xf2);\n"
   | "F3" `elem` opcode_prefix i = "pref_group1(0xf3);\n"
-	| otherwise = "// No Prefix Group 1\n"
+  | otherwise = "// No Prefix Group 1\n"
 
 -- Emits code for Prefix Group 2
 pref2 :: Instr -> String
 pref2 i
   | "hint" `elem` operands i = "pref_group2(arg1);\n"
-	| otherwise = case findIndex mem_op (operands i) of
+  | otherwise = case findIndex mem_op (operands i) of
                      (Just idx) -> "pref_group2(arg" ++ (show idx) ++ ");\n"
                      Nothing -> "// No Prefix Group 2\n"
 
@@ -1353,6 +1363,7 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "jump.table"        $ jump_table is
                    writeFile "cond_jump.table"   $ cond_jump_table is
                    writeFile "uncond_jump.table" $ uncond_jump_table is
+                   writeFile "mem_index.table"   $ mem_index_table is
                    writeFile "must_read.table"   $ must_read_table is
                    writeFile "maybe_read.table"  $ maybe_read_table is
                    writeFile "must_write.table"  $ must_write_table is

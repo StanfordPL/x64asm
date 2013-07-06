@@ -131,6 +131,11 @@ class Instruction {
     /** Does this instruction unconditionally cause a control jump. */
     bool is_uncond_jump() const;
 
+		/** Does this instruction dereference memory? @todo check for implicit. */
+		bool derefs_mem() const;
+		/** Returns the index of a memory operand if present, -1 otherwise. */
+		int mem_index() const;
+
     /** Returns true if this instruction must read the operand at index. */
     bool must_read(size_t index) const;
     /** Returns true if this instruction might read the operand at index. */
@@ -198,6 +203,7 @@ class Instruction {
     static const std::array<bool, 3257> is_jump_;
     static const std::array<bool, 3257> is_cond_jump_;
     static const std::array<bool, 3257> is_uncond_jump_;
+		static const std::array<int, 3257> mem_index_;
     static const std::array<RegSet, 3257> implicit_must_read_set_;
     static const std::array<RegSet, 3257> implicit_maybe_read_set_;
     static const std::array<RegSet, 3257> implicit_must_write_set_;
@@ -371,6 +377,15 @@ inline bool Instruction::is_cond_jump() const {
 inline bool Instruction::is_uncond_jump() const {
   assert((size_t)get_opcode() < is_uncond_jump_.size());
   return is_uncond_jump_[get_opcode()];
+}
+
+inline bool Instruction::derefs_mem() const {
+	return mem_index() != -1;
+}
+
+inline int Instruction::mem_index() const {
+  assert((size_t)get_opcode() < mem_index_.size());
+  return mem_index_[get_opcode()];
 }
 
 inline bool Instruction::must_read(size_t index) const {

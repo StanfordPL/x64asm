@@ -988,6 +988,13 @@ const array<bool, 3257> Instruction::is_uncond_jump_ {{
   #include "src/uncond_jump.table"
 }};
 
+const array<int, 3257> Instruction::mem_index_ {{
+  // Internal mnemonics
+  -1
+  // Auto-generated mnemonics
+  #include "src/mem_index.table"
+}};
+
 const array<RegSet, 3257> Instruction::implicit_must_read_set_ {{
   // Internal mnemonics
   RegSet::empty()
