@@ -321,10 +321,10 @@ class Assembler {
              const Operand& vvvv, const M& rm,
              const Operand& r) {
       uint8_t r_bit = (~r.val_ << 4) & 0x80;
-      uint8_t x_bit = rm.contains_base() ?
-                      (~rm.get_base().val_ << 3) & 0x40 : 0x40;
-      uint8_t b_bit = rm.contains_index() ?
-                      (~rm.get_index().val_ << 2) & 0x20 : 0x20;
+      uint8_t x_bit = rm.contains_index() ?
+                      (~rm.get_index().val_ << 3) & 0x40 : 0x40;
+      uint8_t b_bit = rm.contains_base() ?
+                      (~rm.get_base().val_ << 2) & 0x20 : 0x20;
 
       if (x_bit == 0x40 && b_bit == 0x20 && mmmmm == 0x01 && w == 0) {
         vex2(r_bit, vvvv, l, pp);
