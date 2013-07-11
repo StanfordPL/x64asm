@@ -56,8 +56,8 @@ void Assembler::mod_rm_sib(const M& rm, const Operand& r) {
   if (!rm.contains_base()) {
     const auto mod_byte = 0x00 | rrr | 0x4;
     const auto sib_byte = rm.contains_index() ?
-                          (((int)rm.get_scale() << 6) & 0xc0) | ((rm.get_index().val_ << 3) & 0x38) | 0x5 :
-                          0x00 | 0x24 | 0x4;
+      (((int)rm.get_scale() << 6) & 0xc0) | ((rm.get_index().val_ << 3) & 0x38) | 0x5 :
+      0x00 | 0x20 | 0x5;
 
     fxn_->emit_byte(mod_byte);
     fxn_->emit_byte(sib_byte);
