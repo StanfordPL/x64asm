@@ -380,6 +380,9 @@ inline bool Instruction::is_uncond_jump() const {
 }
 
 inline bool Instruction::derefs_mem() const {
+  const auto o = get_opcode();
+	if ( o >= LEA_R16_M16 && o <= LEA_R64_M64 )
+		return false;
 	return mem_index() != -1;
 }
 
