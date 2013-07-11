@@ -632,7 +632,9 @@ no_pref66 i = (is_vex_encoded i) ||
               (op == "ENTER") ||
               (op == "FSTSW") || (op == "FNSTSW") ||
               (op == "LDDQU") ||
-              (op == "LEA") ||
+              (en == "LEA_R32_M16") || (en == "LEA_R32_M32") || 
+              (en == "LEA_R32_M64") || (en == "LEA_R64_M16") ||
+              (en == "LEA_R64_M32") || (en == "LEA_R64_M64") ||
               (en == "MOV_SREG_R16") ||
               (en == "MOVSX_R32_R16") || (en == "MOVSX_R64_R16") ||
               (en == "MOVZX_R32_R16") || (en == "MOVZX_R64_R16") ||
