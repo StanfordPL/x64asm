@@ -402,12 +402,9 @@ inline constexpr RegSet RegSet::all_zmms() {
 }
 
 inline constexpr RegSet RegSet::linux_caller_save() {
-  return empty() + 
+  return all_xmms() + 
       Constants::rdi()  + Constants::rsi()  + Constants::rdx()  + 
-      Constants::rcx()  + Constants::r8()   + Constants::r9()   +
-      Constants::xmm0() + Constants::xmm1() + Constants::xmm2() + 
-      Constants::xmm3() + Constants::xmm4() + Constants::xmm5() + 
-      Constants::xmm6() + Constants::xmm7();
+      Constants::rcx()  + Constants::r8()   + Constants::r9();
 }
 
 inline constexpr RegSet RegSet::linux_callee_save() {
