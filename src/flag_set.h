@@ -118,11 +118,11 @@ inline FlagSet& FlagSet::operator-=(Flag f) {
 }
 
 inline constexpr bool FlagSet::contains(Flag f) {
-  return (uint64_t)f & mask_ == (uint64_t)f;
+  return ((uint64_t)f & mask_) == (uint64_t)f;
 }
 
 inline constexpr bool FlagSet::contains(FlagSet fs) {
-  return (uint64_t)fs.mask_ & mask_ == (uint64_t)fs.mask_;
+  return ((uint64_t)fs.mask_ & mask_) == (uint64_t)fs.mask_;
 }
 
 inline constexpr bool FlagSet::operator==(FlagSet rhs) {
