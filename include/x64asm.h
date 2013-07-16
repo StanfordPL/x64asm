@@ -24,6 +24,7 @@ limitations under the License.
 #include "src/env_bits.h"
 #include "src/env_reg.h"
 #include "src/flag.h"
+#include "src/flag_set.h"
 #include "src/function.h"
 #include "src/hint.h"
 #include "src/imm.h"
