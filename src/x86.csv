@@ -96,7 +96,7 @@ VEX.NDS.256.F2.0F.WIG D0 /r	VADDSUBPS ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V
 VEX.NDS.128.66.0F38.WIG DE /r	VAESDEC xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AES AVX	vaesdec		Perform one round of an AES decryption flow, using the Equivalent Inverse Cipher, operating on a 128-bit data (state) from xmm2 with a 128-bit round key from xmm3/m128; store the result in xmm1.
 														
 66 0F 38 DF /r	AESDECLAST xmm1, xmm2/m128	RM	RW, R						V	V	AES	aesdeclast		Perform the last round of an AES decryption flow, using the Equivalent Inverse Cipher, operating on a 128-bit data (state) from xmm1 with a 128-bit round key from xmm2/m128.
-VEX.NDS.128.66.0F38.WIG DF /r	VAESDECLAST xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AEX AVX	vaesdeclast		Perform the last round of an AES decryption flow, using the Equivalent Inverse Cipher, operating on a 128-bit data (state) from xmm2 with a 128-bit round key from xmm3/m128; store the result in xmm1.
+VEX.NDS.128.66.0F38.WIG DF /r	VAESDECLAST xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AES AVX	vaesdeclast		Perform the last round of an AES decryption flow, using the Equivalent Inverse Cipher, operating on a 128-bit data (state) from xmm2 with a 128-bit round key from xmm3/m128; store the result in xmm1.
 														
 66 0F 38 DC /r	AESENC xmm1, xmm2/m128	RM	RW, R						V	V	AES	aesenc		Perform one round of an AES encryption flow, operating on a 128-bit data (state) from xmm1 with a 128-bit round key from xmm2/m128.
 VEX.NDS.128.66.0F38.WIG DC /r	VAESENC xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AES AVX	vaesenc		Perform one round of an AES encryption flow, operating on a 128-bit data (state) from xmm2 with a 128-bit round key from the xmm3/m128; store the result in xmm1.
