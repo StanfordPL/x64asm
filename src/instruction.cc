@@ -1037,4 +1037,11 @@ const array<RegSet, 3257> Instruction::implicit_maybe_undef_set_ {{
   #include "src/maybe_undef.table"
 }};
 
+const array<FlagSet, 3257> Instruction::flags_ {{
+  // Internal mnemonics
+  FlagSet::empty()
+  // Auto-generatred mnemonics
+  #include "src/flag.table"
+}};
+
 } // namespace x64asm

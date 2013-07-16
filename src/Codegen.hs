@@ -452,7 +452,7 @@ implicit_undefs i = filter (/= "") $
 
 -- Separate cpuid feature flags
 flags :: Instr -> [String]
-flags i = splitOn " " $ flag i
+flags i = filter (\x -> x /= "" ) $ splitOn " " $ flag i
 
 -- Is this instruction VEX encoded?
 is_vex_encoded :: Instr -> Bool
@@ -969,6 +969,15 @@ maybe_undef_row i
 maybe_undef_table :: [Instr] -> String
 maybe_undef_table is = to_table is maybe_undef_row
 
+-- Converts an instruction to a flag table row
+flag_row :: Instr -> String
+flag_row i = "FlagSet::empty()" ++ (concat (map elem (flags i)))
+  where elem x = "+Flag::" ++ x
+
+-- Converts all instructions to flag table
+flag_table :: [Instr] -> String
+flag_table is = to_table is flag_row
+
 -- Converts an instruction to a printable at&t mnemonic
 att_mnemonic :: Instr -> String
 att_mnemonic i = "\"" ++ (att i) ++ "\""
@@ -1372,6 +1381,7 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "maybe_write.table" $ maybe_write_table is
                    writeFile "must_undef.table"  $ must_undef_table is
                    writeFile "maybe_undef.table" $ maybe_undef_table is
+                   writeFile "flag.table"        $ flag_table is
                    writeFile "opcode.enum"       $ opcode_enums is
                    writeFile "opcode.att"        $ att_mnemonics is
                    writeFile "att.table"         $ att_table is		

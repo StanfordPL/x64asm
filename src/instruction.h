@@ -23,6 +23,7 @@ limitations under the License.
 #include <iostream>
 #include <type_traits>
 
+#include "src/flag_set.h"
 #include "src/opcode.h"
 #include "src/operand.h"
 #include "src/reg_set.h"
@@ -170,6 +171,11 @@ class Instruction {
     /** Returns the set of registers this instruction might undefine. */
     RegSet maybe_undef_set() const;
 
+    /** Returns the cpu flag set required by this instruction. */
+    FlagSet required_flags() const;
+    /** Returns whether this instruction is enabled for a flag set. */
+    bool enabled(FlagSet fs) const;
+
     /** Returns true if this instruction is well-formed. */
     bool check() const;
 
@@ -210,6 +216,7 @@ class Instruction {
     static const std::array<RegSet, 3257> implicit_maybe_write_set_;
     static const std::array<RegSet, 3257> implicit_must_undef_set_;
     static const std::array<RegSet, 3257> implicit_maybe_undef_set_;
+    static const std::array<FlagSet, 3257> flags_;
 
     /** Returns the set of registers this instruction must implicitly read. */
     const RegSet& implicit_must_read_set() const;
@@ -467,6 +474,15 @@ inline RegSet Instruction::must_undef_set() const {
 inline RegSet Instruction::maybe_undef_set() const {
   auto rs = implicit_maybe_undef_set();
   return explicit_maybe_undef_set(rs);
+}
+
+inline FlagSet Instruction::required_flags() const {
+  assert((size_t)get_opcode() < flags_.size());
+  return flags_[get_opcode()];
+}
+
+inline bool Instruction::enabled(FlagSet fs) const {
+  return fs.contains(required_flags());
 }
 
 inline const RegSet& Instruction::implicit_must_read_set() const {
