@@ -28,8 +28,11 @@ class FlagSet {
     constexpr FlagSet();
     /** Creates a flag set with a single element. */
     constexpr FlagSet(Flag f);
+
     /** Creates an empty flag set. */
     static constexpr FlagSet empty();
+    /** Creates a full flag set. */
+    static constexpr FlagSet universe();
 
     /** Inserts a flag into this set. */
     constexpr FlagSet operator+(Flag f);
@@ -45,6 +48,13 @@ class FlagSet {
     constexpr bool contains(Flag f);
     /** Does this set subsume another set? */
     constexpr bool contains(FlagSet fs);
+
+    /** Equality based on underlying bit mask. */
+    constexpr bool operator==(FlagSet rhs);
+    /** Equality based on underlying bit mask. */
+    constexpr bool operator!=(FlagSet rhs);
+    /** Equality based on underlying bit mask. */
+    constexpr bool operator<(FlagSet rhs);
 
     /** STL compliant hash. */
     constexpr size_t hash();
@@ -85,6 +95,10 @@ inline constexpr FlagSet FlagSet::empty() {
   return FlagSet();
 }
 
+inline constexpr FlagSet FlagSet::universe() {
+  return FlagSet((Flag)-1);
+}
+
 inline constexpr FlagSet FlagSet::operator+(Flag f) {
   return FlagSet{(Flag)(mask_ | (uint64_t)f)};
 }
@@ -109,6 +123,18 @@ inline constexpr bool FlagSet::contains(Flag f) {
 
 inline constexpr bool FlagSet::contains(FlagSet fs) {
   return (uint64_t)fs.mask_ & mask_ == (uint64_t)fs.mask_;
+}
+
+inline constexpr bool FlagSet::operator==(FlagSet rhs) {
+  return mask_ == rhs.mask_;
+}
+
+inline constexpr bool FlagSet::operator!=(FlagSet rhs) {
+  return mask_ != rhs.mask_;
+}
+
+inline constexpr bool FlagSet::operator<(FlagSet rhs) {
+  return mask_ < rhs.mask_;
 }
 
 inline constexpr size_t FlagSet::hash() {
