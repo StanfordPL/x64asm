@@ -2329,8 +2329,8 @@ VEX.256.0F.WIG 77	VZEROALL	NP							V	V	AVX	vzeroall		Zero all YMM registers.
 														
 VEX.128.0F.WIG 77	VZEROUPPER	NP							V	V	AVX	vzeroupper		Zero upper 128 bits of all YMM registers.
 														
-9B	WAIT	NP				S.C0 S.C1 S.C2 S.C3			V	V		wait		Check pending unmasked floating-point exceptions.
-9B	FWAIT	NP				S.C0 S.C1 S.C2 S.C3			V	V		fwait		Check pending unmasked floating-point exceptions.
+9B	WAIT	NP				S.C0 S.C1 S.C2 S.C3			V	V	FPU	wait		Check pending unmasked floating-point exceptions.
+9B	FWAIT	NP				S.C0 S.C1 S.C2 S.C3			V	V	FPU	fwait		Check pending unmasked floating-point exceptions.
 														
 0F 09	WBINVD						NO	YES	V	V				Write back and flush Internal caches; initiate writing-back and flushing of external caches.
 														
