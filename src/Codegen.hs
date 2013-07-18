@@ -1104,6 +1104,7 @@ rm_args i = case op_en i of
   "RVMR" -> "arg2,arg0"
   "MVR"  -> "arg0,arg2"
   "XM"   -> "arg1,arg0"
+  "VM"   -> "arg1"
   "VMI"  -> "arg1"
   _      -> ""
 
