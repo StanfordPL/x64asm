@@ -27,7 +27,7 @@ compiler. It is a low-level library for building YOUR optimizing compiler.
 
 Completeness: 
 x64asm supports the entire ring 3 application level subset of the x86_64 
-instruction set, including the most recent AVX extensions.
+instruction set, including the most recent AVX2/BMI1/BMI2/FMA extensions.
 
 Correctness:
 Compared to other x86 assemblers, the majority of the source in the x64asm
@@ -45,6 +45,9 @@ If you've found x64asm useful, please let me know and I will add a reference.
 
 Stochastic Superoptimization. Eric Schkufza, Rahul Sharma, Alex Aiken. 
 ASPLOS 2013.
+
+Data-Driven Equivalence Checking. Rahul Sharma, Eric Schkufza, 
+Berkeley Churchill, Alex Aiken. OOPSLA 2013 (to appear).
 
 -------------------------------------------------------------------------------
 
