@@ -1471,13 +1471,13 @@ VEX.NDS.128.66.0F3A.WIG 44 /r ib 	VPCLMULQDQ xmm1, xmm2, xmm3/m128, imm8 	RVMI	Z
 VEX.NDS.128.66.0F.WIG 74 /r	VPCMPEQB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpeqb		Compare packed bytes in xmm3/m128 and xmm2 for equality.
 VEX.NDS.128.66.0F.WIG 75 /r	VPCMPEQW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpeqw		Compare packed words in xmm3/m128 and xmm2 for equality.
 VEX.NDS.128.66.0F.WIG 76 /r	VPCMPEQD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpeqd		Compare packed doublewords in xmm3/m128 and xmm2 for equality.
-VEX.NDS.256.66.0F.WIG 75 /r	VPCMPEQW ymm1, ymm2, ymm3 /m256	RVM	W, R, R						V	V	AVX2	vpcmpeqb		Compare packed words in ymm3/m256 and ymm2 for equality.
-VEX.NDS.256.66.0F.WIG 76 /r	VPCMPEQD ymm1, ymm2, ymm3 /m256	RVM	W, R, R						V	V	AVX2	vpcmpeqw		Compare packed doublewords in ymm3/m256 and ymm2 for equality.
-VEX.NDS.256.66.0F38.WIG 29 /r	VPCMPEQQ ymm1, ymm2, ymm3 /m256	RVM	W, R, R						V	V	AVX2	vpcmpeqd		Compare packed quadwords in ymm3/m256and ymm2 for equality.
+VEX.NDS.256.66.0F.WIG 75 /r	VPCMPEQW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpeqb		Compare packed words in ymm3/m256 and ymm2 for equality.
+VEX.NDS.256.66.0F.WIG 76 /r	VPCMPEQD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpeqw		Compare packed doublewords in ymm3/m256 and ymm2 for equality.
+VEX.NDS.256.66.0F38.WIG 29 /r	VPCMPEQQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpeqd		Compare packed quadwords in ymm3/m256and ymm2 for equality.
 														
 66 0F 38 29 /r 	PCMPEQQ xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pcmpeqq		Compare packed qwords in xmm2/m128 and xmm1 for equality.
 VEX.NDS.128.66.0F38.WIG 29 /r 	VPCMPEQQ xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpcmpeqq		Compare packed quadwords in xmm3/m128 and xmm2 for equality.
-VEX.NDS.256.66.0F38.WIG 29 /r	VPCMPEQQ ymm1, ymm2, ymm3 /m256	RVM	W, R, R						V	V	AVX2	vpcmpeqq		Compare packed quadwords in ymm3/m256 and ymm2 for equality.
+VEX.NDS.256.66.0F38.WIG 29 /r	VPCMPEQQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpeqq		Compare packed quadwords in ymm3/m256 and ymm2 for equality.
 														
 66 0F 3A 61 /r	PCMPESTRI xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	ECX E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	SSE4_2	pcmpestri		Perform a packed comparison of string data with explicit lengths, generating an index, and storing the result in ECX.
 VEX.128.66.0F3A.WIG 61 /r ib 	VPCMPESTRI xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	ECX E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	AVX	vpcmpestri		Perform a packed comparison of string data with explicit lengths, generating an index, and storing the result in ECX.
@@ -1746,7 +1746,7 @@ VEX.NDS.256.66.0F.WIG EB /r	VPOR ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2
 0F F6 /r 	PSADBW mm1, mm2/m64	RM	RW, R						V	V	SSE	psadbw		Computes the absolute differences of the packed unsigned byte integers from mm2 /m64 and mm1; differences are then summed to produce an unsigned word integer result.
 66 0F F6 /r	PSADBW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psadbw		Computes the absolute differences of the packed unsigned byte integers from xmm2 /m128 and xmm1; the 8 low differences and 8 high differences are then summed separately to produce two unsigned word integer results.
 VEX.NDS.128.66.0F.WIG F6 /r	VPSADBW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsadbw		Computes the absolute differences of the packed unsigned byte integers from xmm3 /m128 and xmm2; the 8 low differences and 8 high differences are then summed separately to produce two unsigned word integer results.
-VEX.NDS.256.66.0F.WIG F6 /r	VPSADBW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsadbw		Computes the absolute differences of the packed unsigned byte integers from ymm3 /m256 and ymm2; then each consecutive 8 differences are summed separately to produce four unsigned word integer results.
+VEX.NDS.256.66.0F.WIG F6 /r	VPSADBW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsadbw		Computes the absolute differences of the packed unsigned byte integers from ymm3/m256 and ymm2; then each consecutive 8 differences are summed separately to produce four unsigned word integer results.
 														
 0F 38 00 /r 	PSHUFB mm1, mm2/m64	RM	RW, R						V	V	SSSE3	pshufb		Shuffle bytes in mm1 according to contents of mm2/m64.
 66 0F 38 00 /r	PSHUFB xmm1, xmm2/m128	RM	RZ, R						V	V	SSSE3	pshufb		Shuffle bytes in xmm1 according to contents of xmm2/m128.
