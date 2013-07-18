@@ -420,6 +420,9 @@ expand_implicit "MM*"    = ["MM0","MM1","MM2","MM3","MM4","MM5","MM6","MM7"]
 expand_implicit "XMM*"   = ["XMM0","XMM1","XMM2","XMM3","XMM4","XMM5","XMM6",
                             "XMM7","XMM8","XMM9","XMM10","XMM11","XMM12",
                             "XMM13","XMM14","XMM15"]
+expand_implicit "YMM*"   = ["YMM0","YMM1","YMM2","YMM3","YMM4","YMM5","YMM6",
+                            "YMM7","YMM8","YMM9","YMM10","YMM11","YMM12",
+                            "YMM13","YMM14","YMM15"]
 expand_implicit "E.*"    = ["E.CF","E.PF","E.AF","E.ZF","E.SF","E.SF","E.TF",
                             "E.IF","E.DF","E.OF","E.IOPL","E.NT","E.RF","E.VM",
                             "E.AC","E.VIF","E.VIP","E.ID"]
@@ -496,7 +499,12 @@ x64 :: [Instr] -> [Instr]
 x64 is = filter keep is
   where keep i = mode64 i == "V" &&
                  useful i /= "NO" && useful i /= "NO*" &&
-                 protected i /= "YES" && protected i /= "YES*"
+                 protected i /= "YES" && protected i /= "YES*" &&
+								 -- TODO: Figure out what these operands mean
+                 (not ("vm32x" `elem` (operands i))) &&
+                 (not ("vm32y" `elem` (operands i))) &&
+                 (not ("vm64x" `elem` (operands i))) &&
+                 (not ("vm64y" `elem` (operands i))) 
 
 -- Step 3: Split instructions with implicit or explicit disjunct operands
 --------------------------------------------------------------------------------
@@ -543,10 +551,16 @@ flatten_instrs is = concat $ map flatten_instr $
 canonical_op :: String -> String
 canonical_op "mm1"   = "mm"
 canonical_op "mm2"   = "mm"
+canonical_op "r32a"  = "r32"
+canonical_op "r32b"  = "r32"
+canonical_op "r64a"  = "r64"
+canonical_op "r64b"  = "r64"
+canonical_op "xmm0"  = "xmm"
 canonical_op "xmm1"  = "xmm"
 canonical_op "xmm2"  = "xmm"
 canonical_op "xmm3"  = "xmm"
 canonical_op "xmm4"  = "xmm" 
+canonical_op "ymm0"  = "ymm"
 canonical_op "ymm1"  = "ymm"
 canonical_op "ymm2"  = "ymm"
 canonical_op "ymm3"  = "ymm"
@@ -1528,7 +1542,7 @@ write_html is = writeFile "../doc/ref/x64.html" $ html_table is
 --------------------------------------------------------------------------------
 
 main :: IO ()		
-main = do is <- parse_instrs "x86.csv"
+main = do is <- parse_instrs "x86.csv"       
           property_arity_check is 
           write_html is
           write_code is
