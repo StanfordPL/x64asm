@@ -459,8 +459,7 @@ flags i = filter (\x -> x /= "" ) $ splitOn " " $ flag i
 
 -- Is this instruction VEX encoded?
 is_vex_encoded :: Instr -> Bool
-is_vex_encoded i = ("AVX" `elem` fs) || ("F16C" `elem` fs)
-  where fs = flags i
+is_vex_encoded i = any (\x -> head x == 'V') $ opcode_terms i
 
 --------------------------------------------------------------------------------
 -- Data parsing
@@ -1096,9 +1095,11 @@ rm_args i = case op_en i of
   "M"    -> "arg0"
   "MRI"  -> "arg0,arg1"
   "RVM"  -> "arg2,arg0"
+  "RMV"  -> "arg1,arg0"
   "MC"   -> "arg0"
   "M1"   -> "arg0"
   "MRC"  -> "arg0,arg1"
+  "RMVI" -> "arg1,arg0"
   "RVMI" -> "arg2,arg0"
   "RVMR" -> "arg2,arg0"
   "MVR"  -> "arg0,arg2"
