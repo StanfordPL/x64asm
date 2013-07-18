@@ -17,10 +17,10 @@ Opcode	Instruction	Op/En	Properties	Implicit Read	Implicit Write	Implicit Undef	
 37	AAA								I	V				ASCII adjust AL after addition.
 														
 D5 0A	AAD								I	V				ASCII adjust AX before division.
-D5 ib	(No mnemonic)								I	V				Adjust AX before division to number base imm8.
+D5 ib	AAD imm8								I	V				Adjust AX before division to number base imm8.
 														
 D4 0A	AAM								I	V				ASCII adjust AX after multiply.
-D4 ib	(No mnemonic)								I	V				Adjust AX after multiply to number base imm8.
+D4 ib	AAM imm8								I	V				Adjust AX after multiply to number base imm8.
 														
 3F	AAS								I	V				ASCII adjust AL after subtraction.
 														
@@ -133,6 +133,9 @@ REX+ 22 /r	AND r8, r/m8	RM	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		andb		r/
 23 /r	AND r32, r/m32	RM	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	V		andl		r32 AND r/m32.
 REX.W+ 23 /r	AND r64, r/m64	RM	RW, R		E.OF E.CF E.SF E.ZF E.PF	E.AF			V	NE		andq		r64 AND r/m64.
 														
+VEX.NDS.LZ.0F38.W0 F2 /r	ANDN r32a, r32b, r/m32	RVM	W, R, R		E.SF E.ZF E.OF E.CF	E.AF E.PF			V	V	BMI1	andnl		Bitwise AND of inverted r32b with r/m32, store result in r32a
+VEX.NDS.LZ.0F38.W1 F2 /r	ANDN r64a, r64b, r/m64	RVM	W, R, R		E.SF E.ZF E.OF E.CF	E.AF E.PF			V	NE	BMI1	andnq		Bitwise AND of inverted r64b with r/m64, store result in r64a
+														
 66 0F 54 /r	ANDPD xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	andpd		Return the bitwise logical AND of packed double-precision floating-point values in xmm1 and xmm2/m128.
 VEX.NDS.128.66.0F.WIG 54 /r	VANDPD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vandpd		Return the bitwise logical AND of packed double-precision floating-point values in xmm2 and xmm3/mem.
 VEX.NDS.256.66.0F.WIG 54 /r	VANDPD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	vandpd		Return the bitwise logical AND of packed double-precision floating-point values in ymm2 and ymm3/mem.
@@ -155,6 +158,9 @@ VEX.NDS.256.0F.WIG 55 /r	VANDNPS ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	
 VEX.NDS.128.66.0F3A.WIG 0D /r ib	VBLENDPD xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R						V	V	AVX	vblendpd		Select packed double-precision floating-point values from xmm2 and xmm3/m128 from mask in imm8 and store the values in xmm1. 
 VEX.NDS.256.66.0F3A.WIG 0D /r ib	VBLENDPD ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R						V	V	AVX	vblendpd		Select packed double-precision floating-point values from ymm2 and ymm3/m256 from mask in imm8 and store the values in ymm1.
 														
+VEX.NDS.LZ.0F38.W0 F7 /r	BEXTR r32a, r/m32, r32b	RMV	W, R, R		E.ZF E.OF E.CF	E.AF E.SF E.PF			V	V	BMI1	bextrl		Contiguous bitwise extract from r/m32 using r32b as control; store result in r32a.
+VEX.NDS.LZ.0F38.W1 F7 /r	BEXTR r64a, r/m64, r64b	RMV	W, R, R		E.ZF E.OF E.CF	E.AF E.SF E.PF			V	NE	BMI1	bextrq		Contiguous bitwise extract from r/m64 using r64b as control; store result in r64a
+														
 66 0F 3A 0C /r ib	BLENDPS xmm1, xmm2/m128, imm8	RMI	RW, R, R						V	V	SSE4_1	blendps		Select packed single precision floating-point values from xmm1 and xmm2/m128 from mask specified in imm8 and store the values into xmm1.
 VEX.NDS.128.66.0F3A.WIG 0C /r ib	VBLENDPS xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R						V	V	AVX	vblendps		Select packed single-precision floating-point values from xmm2 and xmm3/m128 from mask in imm8 and store the values in xmm1.
 VEX.NDS.256.66.0F3A.WIG 0C /r ib	VBLENDPS ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R						V	V	AVX	vblendps		Select packed single-precision floating-point values from ymm2 and ymm3/m256 from mask in imm8 and store the values in ymm1.
@@ -166,6 +172,15 @@ VEX.NDS.256.66.0F3A.W0 4B /r /is4	VBLENDVPD ymm1, ymm2, ymm3/m256, ymm4	RVMR	W, 
 66 0F 38 14 /r	BLENDVPS xmm1, xmm2/m128, <XMM0>	RM0	RW, R, R						V	V	SSE4_1	blendvps		Select packed single precision floating-point values from xmm1 and xmm2/m128 from mask specified in XMM0 and store the values into xmm1.
 VEX.NDS.128.66.0F3A.W0 4A /r /is4	VBLENDVPS xmm1, xmm2, xmm3/m128, xmm4	RVMR	Z, R, R, R						V	V	AVX	vblendvps		Conditionally copy single-precision floating- point values from xmm2 or xmm3/m128 to xmm1, based on mask bits in the specified mask operand, xmm4.
 VEX.NDS.256.66.0F3A.W0 4A /r /is4	VBLENDVPS ymm1, ymm2, ymm3/m256, ymm4	RVMR	W, R, R, R						V	V	AVX	vblendvps		Conditionally copy single-precision floating- point values from ymm2 or ymm3/m256 to ymm1, based on mask bits in the specified mask register, ymm4.
+														
+VEX.NDD.LZ.0F38.W0 F3 /3	BLSI r32, r/m32	VM	W, R		E.ZF E.SF E.OF e.cf	E.AF E.PF			V	V	BMI1	blsil		Extract lowest set bit from r/m32 and set that bit in r32.
+VEX.NDD.LZ.0F38.W1 F3 /3	BLSI r64, r/m64	VM	W, R		E.ZF E.SF E.OF e.cf	E.AF E.PF			V	NE	BMI1	blsiq		Extract lowest set bit from r/m64, and set that bit in r64.
+														
+VEX.NDD.LZ.0F38.W0 F3 /2	BLSMSK r32, r/m32	VM	W, R		E.ZF E.SF E.OF e.cf	E.AF E.PF			V	V	BMI1	blsmskl		Set all lower bits in r32 to “1” starting from bit 0 to lowest set bit in r/m32
+VEX.NDD.LZ.0F38.W1 F3 /2	BLSMSK r64, r/m64	VM	W, R		E.ZF E.SF E.OF e.cf	E.AF E.PF			V	NE	BMI1	blsmskq		Set all lower bits in r64 to “1” starting from bit 0 to lowest set bit in r/m64
+														
+VEX.NDD.LZ.0F38.W0 F3 /1	BLSR r32, r/m32	VM	W, R		E.ZF E.SF E.OF e.cf	E.AF E.PF			V	V	BMI1	blsrl		Reset lowest set bit of r/m32, keep all other bits of r/m32 and write result to r32.
+VEX.NDD.LZ.0F38.W1 F3 /1	BLSR r64, r/m64	VM	W, R		E.ZF E.SF E.OF e.cf	E.AF E.PF			V	NE	BMI1	blsrq		Reset lowest set bit of r/m64, keep all other bits of r/m64 and write result to r64.
 														
 62 /r	BOUND r16, m16&16								I	V				Check if r16 (array index) is within bounds specified by m16&16.
 62 /r	BOUND r32, m32&32								I	V				Check if r32 (array index) is within bounds specified by m16&16.
@@ -208,6 +223,9 @@ REX.W+ 0F AB	BTS r/m64, r64 	MR	RW, R		E.CF	E.OF E.SF E.AF E.PF			V	NE		btsq		St
 0F BA /5 ib	BTS r/m16, imm8 	MI	RW, R		E.CF	E.OF E.SF E.AF E.PF			V	V		btsw		Store selected bit in CF flag and set.
 0F BA /5 ib	BTS r/m32, imm8 	MI	RW, R		E.CF	E.OF E.SF E.AF E.PF			V	V		btsl		Store selected bit in CF flag and set.
 REX.W+ 0F BA /5 ib	BTS r/m64, imm8	MI	RW, R		E.CF	E.OF E.SF E.AF E.PF			V	NE		btsq		Store selected bit in CF flag and set.
+														
+VEX.NDS.LZ.0F38.W0 F5 /r	BZHI r32a, r/m32, r32b	RMV	W, R, R		E.ZF E.CF E.SF E.OF	E.AF E.PF			V	V	BMI2	bzhil		Zero bits in r/m32 starting with the position in r32b, write result to r32a.
+VEX.NDS.LZ.0F38.W1 F5 /r	BZHI r64a, r/m64, r64b	RMV	W, R, R		E.ZF E.CF E.SF E.OF	E.AF E.PF			V	NE	BMI2	bzhiq		Zero bits in r/m64 starting with the position in r64b, write result to r64a.
 														
 E8 cw 	CALL rel16 								NS	V				Call near, relative, displacement relative to next instruction.
 E8 cd	CALL rel32	D	R	???	???	???			V	V		callq		Call near, relative, displacement relative to next instruction. 32-bit displacement sign extended to 64-bits in 64-bit mode.
@@ -985,6 +1003,10 @@ REX.W+ 0F 03 /r	LSL r64, r32/m16	RM	W, R		E.ZF		YES	NO	V	V		lsl		Load: r64 = seg
 														
 0F 00 /3 	LTR r/m16 						NO	YES	V	V				Load r/m16 into task register.
 														
+F3 0F BD /r	LZCNT r16, r/m16	RM	W, R		E.ZF E.CF	E.AF E.PF E.SF E.OF			V	V	BMI1	lzcntw		Count the number of leading zero bits in r/m16, return result in r16
+F3 0F BD /r	LZCNT r32, r/m32	RM	W, R		E.ZF E.CF	E.AF E.PF E.SF E.OF			V	V	BMI1	lzcntl		Count the number of leading zero bits in r/m32, return result in r32
+REX.W+ F3 0F BD /r	LZCNT r64, r/m64	MR	W, R		E.ZF E.CF	E.AF E.PF E.SF E.OF			V	NE	BMI1	lzcntq		Count the number of leading zero bits in r/m64, return result in r64
+														
 66 0F F7 /r 	MASKMOVDQU xmm1, xmm2	RM	R, R						V	V	SSE2	maskmovdqu		Selectively write bytes from xmm1 to memory location using the byte mask in xmm2. The default memory location is specified by DS:DI/EDI/RDI.
 VEX.128.66.0F.WIG F7 /r	VMASKMOVDQU xmm1, xmm2	RM	R, R						V	V	AVX	vmaskmovdqu		Selectively write bytes from xmm1 to memory location using the byte mask in xmm2. The default memory location is specified by DS:DI/EDI/RDI.
 														
@@ -1159,6 +1181,7 @@ VEX.256.0F.WIG 50 /r	VMOVMSKPS reg, ymm2	RM	W, R						V	V	AVX	vmovmskps		Extract
 														
 66 0F 38 2A /r 	MOVNTDQA xmm1, m128	RM	W, R						V	V	SSE4_1	movntdqa		Move double quadword from m128 to xmm using non-temporal hint if WC memory type.
 VEX.128.66.0F38.WIG 2A /r	VMOVNTDQA xmm1, m128	RM	Z, R						V	V	AVX	vmovntdqa		Move double quadword from m128 to xmm using non-temporal hint if WC memory type.
+VEX.256.66.0F38.WIG 2A /r	VMOVNTDQA ymm1, m256	RM	W, R						V	V	AVX2	vmovntdqz		Move 256-bit data from m256 to ymm using non-temporal hint if WC memory type.
 														
 66 0F E7 /r 	MOVNTDQ m128, xmm	MR	W, R						V	V	SSE2	movntdq		Move double quadword from xmm to m128 using non-temporal hint.
 VEX.128.66.0F.WIG E7 /r	VMOVNTDQ m128, xmm1	MR	W, R						V	V	AVX	vmovntdqa		Move packed integer values in xmm1 to m128 using non-temporal hint.
@@ -1247,6 +1270,7 @@ REX.W+ 0F B7 /r 	MOVZX r64, r/m16 	RM	W, R						V	NE		movzwq		Move word to quadw
 														
 66 0F 3A 42 /r ib 	MPSADBW xmm1, xmm2/m128, imm8	RMI	RW, R, R						V	V	SSE4_1	mpsadbw		Sums absolute 8-bit integer difference of adjacent groups of 4 byte integers in xmm1 and xmm2/m128 and writes the results in xmm1. Starting offsets within xmm1 and xmm2/m128 are determined by imm8.
 VEX.NDS.128.66.0F3A.WIG 42 /r ib	VMPSADBW xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R						V	V	AVX	vmpsadbw		Sums absolute 8-bit integer difference of adjacent groups of 4 byte integers in xmm2 and xmm3/m128 and writes the results in xmm1. Starting offsets within xmm2 and xmm3/m128 are determined by imm8.
+VEX.NDS.256.66.0F3A.WIG 42 /r ib	VMPSADBW ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R						V	V	AVX2	vmpsadbw		Sums absolute 8-bit integer difference of adjacent groups of 4 byte integers in xmm2 and ymm3/m128 and writes the results in ymm1. Starting offsets within ymm2 and xmm3/m128 are determined by imm8.
 														
 F6 /4 	MUL r/m8 	M	R	AL	AX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	V		mulb		Unsigned multiply (AX = AL ∗ r/m8).
 REX+ F6 /4 	MUL r/m8	M	R	AL	AX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	NE		mulb		Unsigned multiply (AX = AL ∗ r/m8).
@@ -1267,6 +1291,9 @@ VEX.NDS.LIG.F2.0F.WIG 59 /r	VMULSD xmm1,xmm2, xmm3/m64	RVM	Z, R, R						V	V	AVX	
 														
 F3 0F 59 /r 	MULSS xmm1, xmm2/m32	RM	RW, R						V	V	SSE	mulss		Multiply the low single-precision floating-point value in xmm2/mem by the low single-precision floating-point value in xmm1.
 VEX.NDS.LIG.F3.0F.WIG 59 /r	VMULSS xmm1,xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vmulss		Multiply the low single-precision floating-point value in xmm3/mem by the low single-precision floating-point value in xmm2.
+														
+VEX.NDD.LZ.F2.0F38.W0 F6 /r	MULX r32a, r32b, r/m32	RVM	W, W, R	EDX					V	V	BMI2	mulxl		Unsigned multiply of r/m32 with EDX without affecting arithmetic flags
+VEX.NDD.LZ.F2.0F38.W1 F6 /r	MULX r64a, r64b, r/m64	RVM	W, W, R	RDX					V	NE	BMI2	mulxq		Unsigned multiply of r/m64 with RDX without affecting arithmetic flags
 														
 0F 01 C9 	MWAIT 	NP		EAX ECX					V	V	MONITOR	mwait		A hint that allow the processor to stop instruction execution and enter an implementation-dependent optimized state until occurrence of a class of events.
 														
@@ -1340,6 +1367,9 @@ PREF.66+ 6F 	OUTSW 	NP		E.IOPL E.VM E.DF DX RSI					V	V		outsw		Output word from
 VEX.128.66.0F38.WIG 1C /r	VPABSB xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vpabsb		Compute the absolute value of bytes in xmm2/m128 and store UNSIGNED result in xmm1.
 VEX.128.66.0F38.WIG 1D /r	VPABSW xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vpabsw		Compute the absolute value of 16- bit integers in xmm2/m128 and store UNSIGNED result in xmm1.
 VEX.128.66.0F38.WIG 1E /r	VPABSD xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vpabsd		Compute the absolute value of 32- bit integers in xmm2/m128 and store UNSIGNED result in xmm1.
+VEX.256.66.0F38.WIG 1C /r	VPABSB ymm1, ymm2/m256	RM	W, R						V	V	AVX2	vpabsb		Compute the absolute value of bytes in ymm2/m256 and store UNSIGNED result in ymm1.
+VEX.256.66.0F38.WIG 1D /r	VPABSW ymm1, ymm2/m256	RM	W, R						V	V	AVX2	vpabsw		Compute the absolute value of 16-bit integers in ymm2/m256 and store UNSIGNED result in ymm1
+VEX.256.66.0F38.WIG 1E /r	VPABSD ymm1, ymm2/m256	RM	W, R						V	V	AVX2	vpabsd		Compute the absolute value of 32-bit integers in ymm2/m256 and store UNSIGNED result in ymm1.
 														
 0F 63 /r 	PACKSSWB mm1, mm2/m64	RM	RW, R						V	V	MMX	packsswb		Converts 4 packed signed word integers from mm1 and from mm2/m64 into 8 packed signed byte integers in mm1 using signed saturation.
 66 0F 63 /r	PACKSSWB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	packsswb		Converts 8 packed signed word integers from xmm1 and from xxm2/m128 into 16 packed signed byte integers in xxm1 using signed saturation.
@@ -1347,13 +1377,17 @@ VEX.128.66.0F38.WIG 1E /r	VPABSD xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vpabsd		Co
 66 0F 6B /r	PACKSSDW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	packssdw		Converts 4 packed signed doubleword integers from xmm1 and from xxm2/m128 into 8 packed signed word integers in xxm1 using signed saturation.
 VEX.NDS.128.66.0F.WIG 63 /r	VPACKSSWB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpacksswb		Converts 8 packed signed word integers from xmm2 and from xmm3/m128 into 16 packed signed byte integers in xmm1 using signed saturation.
 VEX.NDS.128.66.0F.WIG 6B /r	VPACKSSDW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpackssdw		Converts 4 packed signed doubleword integers from xmm2 and from xmm3/m128 into 8 packed signed word integers in xmm1 using signed saturation.
+VEX.NDS.256.66.0F.WIG 63 /r	VPACKSSWB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpacksswb		Converts 16 packed signed word integers from ymm2 and from ymm3/m256 into 32 packed signed byte integers in ymm1 using signed saturation.
+VEX.NDS.256.66.0F.WIG 6B /r	VPACKSSDW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpackssdw		Converts 8 packed signed doubleword integers from ymm2 and from ymm3/m256 into 16 packed signed word integers in ymm1using signed saturation.
 														
 66 0F 38 2B /r 	PACKUSDW xmm1, xmm2/m128 	RM	W, R						V	V	SSE4_1	packusdw		Convert 4 packed signed doubleword integers from xmm1 and 4 packed signed doubleword integers from xmm2/m128 into 8 packed unsigned word integers in xmm1 using unsigned saturation.
 VEX.NDS.128.66.0F38.WIG 2B /r 	VPACKUSDW xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpackusdw		Convert 4 packed signed doubleword integers from xmm2 and 4 packed signed doubleword integers from xmm3/m128 into 8 packed unsigned word integers in xmm1 using unsigned saturation.
+VEX.NDS.256.66.0F38.WIG 2B /r	VPACKUSDW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpackusdw		Convert 8 packed signed doubleword integers from ymm2 and 8 packed signed doubleword integers from ymm3/m128 into 16 packed unsigned word integers in ymm1 using unsigned saturation.
 														
 0F 67 /r 	PACKUSWB mm, mm/m64	RM	RW, R						V	V	MMX	packuswb		Converts 4 signed word integers from mm and 4 signed word integers from mm/m64 into 8 unsigned byte integers in mm using unsigned saturation.
 66 0F 67 /r	PACKUSWB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	packuswb		Converts 8 signed word integers from xmm1 and 8 signed word integers from xmm2/m128 into 16 unsigned byte integers in xmm1 using unsigned saturation.
 VEX.NDS.128.66.0F.WIG 67 /r	VPACKUSWB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpackuswb		Converts 8 signed word integers from xmm2 and 8 signed word integers from xmm3/m128 into 16 unsigned byte integers in xmm1 using unsigned saturation.
+VEX.NDS.256.66.0F.WIG 67 /r	VPACKUSWB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpackuswb		Converts 16 signed word integers from ymm2 And 16 signed word integers from ymm3/m256 into 32 unsigned byte integers in ymm1 using unsigned saturation.
 														
 0F FC /r 	PADDB mm, mm/m64	RM	RW, R						V	V	MMX	paddb		Add packed byte integers from mm/m64 and mm.
 66 0F FC /r	PADDB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	paddb		Add packed byte integers from xmm2/m128 and xmm1.
@@ -1364,10 +1398,14 @@ VEX.NDS.128.66.0F.WIG 67 /r	VPACKUSWB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V
 VEX.NDS.128.66.0F.WIG FC /r	VPADDB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpaddb		Add packed byte integers from xmm3/m128 and xmm2.
 VEX.NDS.128.66.0F.WIG FD /r	VPADDW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpaddw		Add packed word integers from xmm3/m128 and xmm2.
 VEX.NDS.128.66.0F.WIG FE /r	VPADDD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpaddd		Add packed doubleword integers from xmm3/m128 and xmm2.
+VEX.NDS.256.66.0F.WIG FC /r	VPADDB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpaddb		Add packed byte integers from ymm2, and ymm3/m256 and store in ymm1.
+VEX.NDS.256.66.0F.WIG FD /r	VPADDW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpaddw		Add packed word integers from ymm2, ymm3/m256 and store in ymm1.
+VEX.NDS.256.66.0F.WIG FE /r	VPADDD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpaddd		Add packed doubleword integers from ymm2, ymm3/m256 and store in ymm1.
 														
 0F D4 /r 	PADDQ mm1, mm2/m64	RM	RW, R						V	V	SSE2	paddq		Add quadword integer mm2/m64 to mm1.
 66 0F D4 /r	PADDQ xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	paddq		Add packed quadword integers xmm2/m128 to xmm1.
 VEX.NDS.128.66.0F.WIG D4 /r	VPADDQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpaddq		Add packed quadword integers xmm3/m128 and xmm2.
+VEX.NDS.256.66.0F.WIG D4 /r	VPADDQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpaddq		Add packed quadword integers from ymm2, ymm3/m256 and store in ymm1.
 														
 0F EC /r 	PADDSB mm, mm/m64	RM	RW, R						V	V	MMX	paddsb		Add packed signed byte integers from mm/m64 and mm and saturate the results.
 66 0F EC /r	PADDSB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	paddsb		Add packed signed byte integers from xmm2/m128 and xmm1 saturate the results.
@@ -1375,6 +1413,8 @@ VEX.NDS.128.66.0F.WIG D4 /r	VPADDQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AV
 66 0F ED /r	PADDSW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	paddsw		Add packed signed word integers from xmm2/m128 and xmm1 and saturate the results.
 VEX.NDS.128.66.0F.WIG EC /r 	VPADDSB xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpaddsb		Add packed signed byte integers from xmm3/m128 and xmm2 saturate the results.
 VEX.NDS.128.66.0F.WIG ED /r 	VPADDSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpaddsw		Add packed signed word integers from xmm3/m128 and xmm2 and saturate the results.
+VEX.NDS.256.66.0F.WIG EC /r	VPADDSB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpaddsb		Add packed signed byte integers from ymm2, and ymm3/m256 and store the saturated results in ymm1.
+VEX.NDS.256.66.0F.WIG ED /r	VPADDSW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpaddsw		Add packed signed word integers from ymm2, and ymm3/m256 and store the saturated results in ymm1.
 														
 0F DC /r 	PADDUSB mm, mm/m64	RM	RW, R						V	V	MMX	paddusb		Add packed unsigned byte integers from mm/m64 and mm and saturate the results.
 66 0F DC /r	PADDUSB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	paddusb		Add packed unsigned byte integers from xmm2/m128 and xmm1 saturate the results.
@@ -1382,18 +1422,23 @@ VEX.NDS.128.66.0F.WIG ED /r 	VPADDSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	
 66 0F DD /r	PADDUSW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	paddusw		Add packed unsigned word integers from xmm2/m128 to xmm1 and saturate the results.
 VEX.NDS.128.66.0F.WIG DC /r	VPADDUSB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpaddusb		Add packed unsigned byte integers from xmm3/m128 to xmm2 and saturate the results.
 VEX.NDS.128.66.0F.WIG DD /r	VPADDUSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpaddusw		Add packed unsigned word integers from xmm3/m128 to xmm2 and saturate the results.
+VEX.NDS.256.66.0F.WIG DC /r	VPADDUSB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpaddusb		Add packed unsigned byte integers from ymm2, and ymm3/m256 and store the saturated results in ymm1.
+VEX.NDS.256.66.0F.WIG DD /r	VPADDUSW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpaddusw		Add packed unsigned word integers from ymm2, and ymm3/m256 and store the saturated results in ymm1.
 														
 0F 3A 0F 	PALIGNR mm1, mm2/m64, imm8	RMI	RW, R, R						V	V	SSSE3	palignr		Concatenate destination and source operands, extract byte-aligned result shifted to the right by constant value in imm8 into mm1.
 66 0F 3A 0F	PALIGNR xmm1, xmm2/m128, imm8	RMI	RW, R, R						V	V	SSSE3	palignr		Concatenate destination and source operands, extract byte-aligned result shifted to the right by constant value in imm8 into xmm1
 VEX.NDS.128.66.0F3A.WIG 0F /r ib	VPALIGNR xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R						V	V	AVX	vpalignr		Concatenate xmm2 and xmm3/m128, extract byte aligned result shifted to the right by constant value in imm8 and result is stored in xmm1.
+VEX.NDS.256.66.0F3A.WIG 0F /r ib	VPALIGNR ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R						V	V	AVX2	vpalignr		Concatenate pairs of 16 bytes in ymm2 and ymm3/m256 into 32-byte intermediate result, extract byte-aligned, 16-byte result shifted to the right by constant values in imm8 from each intermediate result, and two 16-byte results are stored in ymm1.
 														
 0F DB /r 	PAND mm, mm/m64	RM	RW, R						V	V	MMX	pand		Bitwise AND mm/m64 and mm.
 66 0F DB /r	PAND xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pand		Bitwise AND of xmm2/m128 and xmm1.
 VEX.NDS.128.66.0F.WIG DB /r	VPAND xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpand		Bitwise AND of xmm3/m128 and xmm.
+VEX.NDS.256.66.0F.WIG DB /r	VPAND ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpand		Bitwise AND of ymm2, and ymm3/m256 and store result in ymm1.
 														
 0F DF /r 	PANDN mm, mm/m64	RM	RW, R						V	V	MMX	pandn		Bitwise AND NOT of mm/m64 and mm.
 66 0F DF /r	PANDN xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pandn		Bitwise AND NOT of xmm2/m128 and xmm1.
 VEX.NDS.128.66.0F.WIG DF /r	VPANDN xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpandn		Bitwise AND NOT of xmm3/m128 and xmm2.
+VEX.NDS.256.66.0F.WIG DF /r	VPANDN ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpandn		Bitwise AND NOT of ymm2, and ymm3/m256 and store result in ymm1.
 														
 F3 90 	PAUSE 	NP							V	V		pause		Gives hint to processor that improves performance of spin-wait loops.
 														
@@ -1403,12 +1448,16 @@ F3 90 	PAUSE 	NP							V	V		pause		Gives hint to processor that improves perform
 66 0F E3 /r	PAVGW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pavgw		Average packed unsigned word integers from xmm2/m128 and xmm1 with rounding.
 VEX.NDS.128.66.0F.WIG E0 /r	VPAVGB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpavgb		Average packed unsigned byte integers from xmm3/m128 and xmm2 with rounding.
 VEX.NDS.128.66.0F.WIG E3 /r	VPAVGW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpavgw		Average packed unsigned word integers from xmm3/m128 and xmm2 with rounding.
+VEX.NDS.256.66.0F.WIG E0 /r	VPAVGB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpavgb		Average packed unsigned byte integers from ymm2, and ymm3/m256 with rounding and store to ymm1.
+VEX.NDS.256.66.0F.WIG E3 /r	VPAVGW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpavgw		Average packed unsigned word integers from ymm2, ymm3/m256 with rounding to ymm1.
 														
 66 0F 38 10 /r 	PBLENDVB xmm1, xmm2/m128, <XMM0> 	RM	RW, R, R						V	V	SSE4_1	pblendvb		Select byte values from xmm1 and xmm2/m128 from mask specified in the high bit of each byte in XMM0 and store the values into xmm1.
 VEX.NDS.128.66.0F3A.W0 4C /r /is4 	VPBLENDVB xmm1, xmm2, xmm3/m128, xmm4 	RVMR	Z, R, R, R						V	V	AVX	vpblendvb		Select byte values from xmm2 and xmm3/m128 using mask bits in the specified mask register, xmm4, and store the values into xmm1.
+VEX.NDS.256.66.0F3A.W0 4C /r /is4	VPBLENDVB ymm1, ymm2, ymm3/m256, ymm4	RVMR	W, R, R, R						V	V	AVX2	vpblendvb		Select byte values from ymm2 and ymm3/m256 from mask specified in the high bit of each byte in ymm4 and store the values into ymm1.
 														
 66 0F 3A 0E /r ib 	PBLENDW xmm1, xmm2/m128, imm8 	RMI	RW, R, R						V	V	SSE4_1	pblendw		Select words from xmm1 and xmm2/m128 from mask specified in imm8 and store the values into xmm1.
 VEX.NDS.128.66.0F3A.WIG 0E /r ib 	VPBLENDW xmm1, xmm2, xmm3/m128, imm8 	RVMI	Z, R, R, R						V	V	AVX	vpblendw		Select words from xmm2 and xmm3/m128 from mask specified in imm8 and store the values into xmm1.
+VEX.NDS.256.66.0F3A.WIG 0E /r ib	VPBLENDW ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R						V	V	AVX2	vpblendw		Select words from ymm2 and ymm3/m256 from mask specified in imm8 and store the values into ymm1.
 														
 66 0F 3A 44 /r ib 	PCLMULQDQ xmm1, xmm2/m128, imm8 	RMI	RW, R, R						V	V	PCLMULQDQ	pclmulqdq		Carry-less multiplication of one quadword of xmm1 by one quadword of xmm2/m128, stores the 128-bit result in xmm1. The immediate is used to determine which quadwords of xmm1 and xmm2/m128 should be used.
 VEX.NDS.128.66.0F3A.WIG 44 /r ib 	VPCLMULQDQ xmm1, xmm2, xmm3/m128, imm8 	RVMI	Z, R, R, R						V	V	PCLMULQDQ AVX	vpclmulqdq		Carry-less multiplication of one quadword of xmm2 by one quadword of xmm3/m128, stores the 128-bit result in xmm1. The immediate is used to determine which quadwords of xmm2 and xmm3/m128 should be used.
@@ -1422,9 +1471,13 @@ VEX.NDS.128.66.0F3A.WIG 44 /r ib 	VPCLMULQDQ xmm1, xmm2, xmm3/m128, imm8 	RVMI	Z
 VEX.NDS.128.66.0F.WIG 74 /r	VPCMPEQB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpeqb		Compare packed bytes in xmm3/m128 and xmm2 for equality.
 VEX.NDS.128.66.0F.WIG 75 /r	VPCMPEQW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpeqw		Compare packed words in xmm3/m128 and xmm2 for equality.
 VEX.NDS.128.66.0F.WIG 76 /r	VPCMPEQD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpeqd		Compare packed doublewords in xmm3/m128 and xmm2 for equality.
+VEX.NDS.256.66.0F.WIG 75 /r	VPCMPEQW ymm1, ymm2, ymm3 /m256	RVM	W, R, R						V	V	AVX2	vpcmpeqb		Compare packed words in ymm3/m256 and ymm2 for equality.
+VEX.NDS.256.66.0F.WIG 76 /r	VPCMPEQD ymm1, ymm2, ymm3 /m256	RVM	W, R, R						V	V	AVX2	vpcmpeqw		Compare packed doublewords in ymm3/m256 and ymm2 for equality.
+VEX.NDS.256.66.0F38.WIG 29 /r	VPCMPEQQ ymm1, ymm2, ymm3 /m256	RVM	W, R, R						V	V	AVX2	vpcmpeqd		Compare packed quadwords in ymm3/m256and ymm2 for equality.
 														
 66 0F 38 29 /r 	PCMPEQQ xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pcmpeqq		Compare packed qwords in xmm2/m128 and xmm1 for equality.
 VEX.NDS.128.66.0F38.WIG 29 /r 	VPCMPEQQ xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpcmpeqq		Compare packed quadwords in xmm3/m128 and xmm2 for equality.
+VEX.NDS.256.66.0F38.WIG 29 /r	VPCMPEQQ ymm1, ymm2, ymm3 /m256	RVM	W, R, R						V	V	AVX2	vpcmpeqq		Compare packed quadwords in ymm3/m256 and ymm2 for equality.
 														
 66 0F 3A 61 /r	PCMPESTRI xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	ECX E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	SSE4_2	pcmpestri		Perform a packed comparison of string data with explicit lengths, generating an index, and storing the result in ECX.
 VEX.128.66.0F3A.WIG 61 /r ib 	VPCMPESTRI xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	ECX E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	AVX	vpcmpestri		Perform a packed comparison of string data with explicit lengths, generating an index, and storing the result in ECX.
@@ -1441,15 +1494,25 @@ VEX.128.66.0F3A.WIG 60 /r ib 	VPCMPESTRM xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX 
 VEX.NDS.128.66.0F.WIG 64 /r	VPCMPGTB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpgtb		Compare packed signed byte integers in xmm2 and xmm3/m128 for greater than.
 VEX.NDS.128.66.0F.WIG 65 /r	VPCMPGTW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpgtw		Compare packed signed word integers in xmm2 and xmm3/m128 for greater than.
 VEX.NDS.128.66.0F.WIG 66 /r	VPCMPGTD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpgtd		Compare packed signed doubleword integers in xmm2 and xmm3/m128 for greater than.
+VEX.NDS.256.66.0F.WIG 64 /r	VPCMPGTB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	vpcmpgtb		Compare packed signed byte integers in ymm2 and ymm3/m256 for greater than.
+VEX.NDS.256.66.0F.WIG 65 /r	VPCMPGTW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpgtw		Compare packed signed word integers in ymm2 and ymm3/m256 for greater than.
+VEX.NDS.256.66.0F.WIG 66 /r	VPCMPGTD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpgtd		Compare packed signed doubleword integers in ymm2 and ymm3/m256 for greater than.
 														
 66 0F 38 37 /r 	PCMPGTQ xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_2	pcmpgtq		Compare packed signed qwords in xmm2/m128 and xmm1 for greater than.
 VEX.NDS.128.66.0F38.WIG 37 /r 	VPCMPGTQ xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpcmpgtq		Compare packed signed qwords in xmm2 and xmm3/m128 for greater than.
+VEX.NDS.256.66.0F38.WIG 37 /r	VPCMPGTQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpvmpgtq		Compare packed signed qwords in ymm2 and ymm3/m256 for greater than.
 														
 66 0F 3A 63 /r	PCMPISTRI xmm1, xmm2/m128, imm8 	RM	R, R, R		ECX E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	SSE4_2	pcmpistri		Perform a packed comparison of string data with implicit lengths, generating an index, and storing the result in ECX.
 VEX.128.66.0F3A.WIG 63 /r ib 	VPCMPISTRI xmm1, xmm2/m128, imm8 	RM	R, R, R		ECX E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	AVX	vpcmpistri		Perform a packed comparison of string data with implicit lengths, generating an index, and storing the result in ECX.
 														
 66 0F 3A 62 /r	PCMPISTRM xmm1, xmm2/m128, imm8 	RM	R, R, R		XMM0 E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	SSE4_2	pcmpistrm		Perform a packed comparison of string data with implicit lengths, generating a mask, and storing the result in XMM0.
 VEX.128.66.0F3A.WIG 62 /r ib 	VPCMPISTRM xmm1, xmm2/m128, imm8 	RM	R, R, R		XMM0 E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	AVX	vpcmpistrm		Perform a packed comparison of string data with implicit lengths, generating a Mask, and storing the result in XMM0.
+														
+VEX.NDS.LZ.F2.0F38.W0 F5 /r	PDEP r32a, r32b, r/m32	RVM	W, R, R						V	V	BMI2	pdepl		Parallel deposit of bits from r32b using mask in r/m32, result is written to r32a.
+VEX.NDS.LZ.F2.0F38.W1 F5 /r	PDEP r64a, r64b, r/m64	RVM	W, R, R						V	NE	BMI2	pdelq		Parallel deposit of bits from r64b using mask in r/m64, result is written to r64a.
+														
+VEX.NDS.LZ.F3.0F38.W0 F5 /r	PEXT r32a, r32b, r/m32	RVM	W, R, R						V	V	BMI2	pextl		Parallel extract of bits from r32b using mask in r/m32, result is written to r32a.
+VEX.NDS.LZ.F3.0F38.W1 F5 /r	PEXT r64a, r64b, r/m64	RVM	W, R, R						V	NE	BMI2	pextq		Parallel extract of bits from r64b using mask in r/m64, result is written to r64a.
 														
 66 0F 3A 14 /r ib 	PEXTRB reg/m8, xmm2, imm8 	MRI	W, R, R						V	V	SSE4_1	pextrb		Extract a byte integer value from xmm2 at the source byte offset specified by imm8 into rreg or m8. The upper bits of r32 or r64 are zeroed.
 66 0F 3A 16 /r ib 	PEXTRD r/m32, xmm2, imm8 	MRI	W, R, R						V	V	SSE4_1	pextrd		Extract a dword integer value from xmm2 at the source dword offset specified by imm8 into r/m32.
@@ -1470,10 +1533,13 @@ VEX.128.66.0F3A.W0 15 /r ib 	VPEXTRW reg/m16, xmm2, imm8 	MRI	W, R, R						V	V	A
 66 0F 38 02 /r	PHADDD xmm1, xmm2/m128	RM	RW, R						V	V	SSSE3	phaddd		Add 32-bit integers horizontally, pack to XMM1.
 VEX.NDS.128.66.0F38.WIG 01 /r	VPHADDW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vphaddw		Add 16-bit integers horizontally, pack to xmm1.
 VEX.NDS.128.66.0F38.WIG 02 /r	VPHADDD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vphaddd		Add 32-bit integers horizontally, pack to xmm1.
+VEX.NDS.256.66.0F38.WIG 01 /r	VPHADDW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vphaddw		Add 16-bit signed integers horizontally, pack to ymm1.
+VEX.NDS.256.66.0F38.WIG 02 /r	VPHADDD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vphaddd		Add 32-bit signed integers horizontally, pack to ymm1.
 														
 0F 38 03 /r 	PHADDSW mm1, mm2/m64	RM	RW, R						V	V	SSSE3	phaddsw		Add 16-bit signed integers horizontally, pack saturated integers to MM1.
 66 0F 38 03 /r	PHADDSW xmm1, xmm2/m128	RM	RW, R						V	V	SSSE3	phaddsw		Add 16-bit signed integers horizontally, pack saturated integers to XMM1.
 VEX.NDS.128.66.0F38.WIG 03 /r	VPHADDSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vphaddsw		Add 16-bit signed integers horizontally, pack saturated integers to xmm1.
+VEX.NDS.256.66.0F38.WIG 03 /r	VPHADDSW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vphaddsw		Add 16-bit signed integers horizontally, pack saturated integers to ymm1.
 														
 66 0F 38 41 /r 	PHMINPOSUW xmm1, xmm2/m128 	RM	W, R						V	V	SSE4_1	phminposuw		Find the minimum unsigned word in xmm2/m128 and place its value in the low word of xmm1 and its index in the second-lowest word of xmm1.
 VEX.128.66.0F38.WIG 41 /r 	VPHMINPOSUW xmm1, xmm2/m128 	RM	Z, R						V	V	AVX	vphminposuw		Find the minimum unsigned word in xmm2/m128 and place its value in the low word of xmm1 and its index in the second-lowest word of xmm1.
@@ -1484,10 +1550,13 @@ VEX.128.66.0F38.WIG 41 /r 	VPHMINPOSUW xmm1, xmm2/m128 	RM	Z, R						V	V	AVX	vph
 66 0F 38 06 /r	PHSUBD xmm1, xmm2/m128	RM	RW, R						V	V	SSSE3	phsubd		Subtract 32-bit signed integers horizontally, pack to XMM1
 VEX.NDS.128.66.0F38.WIG 05 /r	VPHSUBW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vphsubw		Subtract 16-bit signed integers horizontally, pack to xmm1.
 VEX.NDS.128.66.0F38.WIG 06 /r	VPHSUBD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vphsubd		Subtract 32-bit signed integers horizontally, pack to xmm1.
+VEX.NDS.256.66.0F38.WIG 05 /r	VPHSUBW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vphsubw		Subtract 16-bit signed integers horizontally, pack to ymm1.
+VEX.NDS.256.66.0F38.WIG 06 /r	VPHSUBD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vphsubd		Subtract 32-bit signed integers horizontally, pack to ymm1.
 														
 0F 38 07 /r 	PHSUBSW mm1, mm2/m64	RM	RW, R						V	V	SSSE3	phsubsw		Subtract 16-bit signed integer horizontally, pack saturated integers to MM1.
 66 0F 38 07 /r	PHSUBSW xmm1, xmm2/m128	RM	RW, R						V	V	SSSE3	phsubsw		Subtract 16-bit signed integer horizontally, pack saturated integers to XMM1
 VEX.NDS.128.66.0F38.WIG 07 /r	VPHSUBSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vphsubsw		Subtract 16-bit signed integer horizontally, pack saturated integers to xmm1.
+VEX.NDS.256.66.0F38.WIG 07 /r	VPHSUBSW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vphsubsw		Subtract 16-bit signed integer horizontally, pack saturated integers to ymm1.
 														
 66 0F 3A 20 /r ib 	PINSRB xmm1, r32/m8, imm8 	RMI	RW, R, R						V	V	SSE4_1	pinsrb		Insert a byte integer value from r32/m8 into xmm1 at the destination element in xmm1 specified by imm8.
 66 0F 3A 22 /r ib 	PINSRD xmm1, r/m32, imm8 	RMI	RW, R, R						V	V	SSE4_1	pinsrd		Insert a dword integer value from r/m32 into the xmm1 at the destination element specified by imm8.
@@ -1503,36 +1572,46 @@ VEX.NDS.128.66.0F.W0 C4 /r ib	VPINSRW xmm1, xmm2, r32/m16, imm8	RVMI	Z, R, R, R	
 0F 38 04 /r 	PMADDUBSW mm1, mm2/m64	RM	RW, R						V	V	MMX SSSE3	pmaddubsw		Multiply signed and unsigned bytes, add horizontal pair of signed words, pack saturated signed-words to MM1.
 66 0F 38 04 /r	PMADDUBSW xmm1, xmm2/m128	RM	RW, R						V	V	SSSE3	pmaddubsw		Multiply signed and unsigned bytes, add horizontal pair of signed words, pack saturated signed-words to XMM1.
 VEX.NDS.128.66.0F38.WIG 04 /r	VPMADDUBSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpmaddubsw		Multiply signed and unsigned bytes, add horizontal pair of signed words, pack saturated signed-words to xmm1.
+VEX.NDS.256.66.0F38.WIG 04 /r	VPMADDUBSW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmaddubsw		Multiply signed and unsigned bytes, add horizontal pair of signed words, pack saturated signed-words to ymm1.
 														
 0F F5 /r 	PMADDWD mm, mm/m64	RM	RW, R						V	V	MMX	pmaddwd		Multiply the packed words in mm by the packed words in mm/m64, add adjacent doubleword results, and store in mm.
 66 0F F5 /r	PMADDWD xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pmaddwd		Multiply the packed word integers in xmm1 by the packed word integers in xmm2/m128, add adjacent doubleword results, and store in xmm1.
 VEX.NDS.128.66.0F.WIG F5 /r	VPMADDWD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpmaddwd		Multiply the packed word integers in xmm2 by the packed word integers in xmm3/m128, add adjacent doubleword results, and store in xmm1.
+VEX.NDS.256.66.0F.WIG F5 /r	VPMADDWD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmaddwd		Multiply the packed word integers in ymm2 by the packed word integers in ymm3/m256, add adjacent doubleword results, and store in ymm1.
 														
 66 0F 38 3C /r 	PMAXSB xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pmaxsb		Compare packed signed byte integers in xmm1 and xmm2/m128 and store packed maximum values in xmm1.
 VEX.NDS.128.66.0F38.WIG 3C /r 	VPMAXSB xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpmaxsb		Compare packed signed byte integers in xmm2 and xmm3/m128 and store packed maximum values in xmm1.
+VEX.NDS.256.66.0F38.WIG 3C /r	VPMAXSB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmaxsb		Compare packed signed byte integers in ymm2 and ymm3/m128 and store packed maximum values in ymm1.
 														
 66 0F 38 3D /r 	PMAXSD xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pmaxsd		Compare packed signed dword integers in xmm1 and xmm2/m128 and store packed maximum values in xmm1.
 VEX.NDS.128.66.0F38.WIG 3D /r 	VPMAXSD xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpmaxsd		Compare packed signed dword integers in xmm2 and xmm3/m128 and store packed maximum values in xmm1.
+VEX.NDS.256.66.0F38.WIG 3D /r	VPMAXSD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmaxsd		Compare packed signed dword integers in ymm2 and ymm3/m128 and store packed maximum values in ymm1.
 														
 0F EE /r 	PMAXSW mm1, mm2/m64	RM	RW, R						V	V	SSE	pmaxsw		Compare signed word integers in mm2/m64 and mm1 and return maximum values.
 66 0F EE /r	PMAXSW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pmaxsw		Compare signed word integers in xmm2/m128 and xmm1 and return maximum values.
 VEX.NDS.128.66.0F.WIG EE /r	VPMAXSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpmaxsw		Compare packed signed word integers in xmm3/m128 and xmm2 and store packed maximum values in xmm1.
+VEX.NDS.256.66.0F.WIG EE /r	VPMAXSW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmaxsw		Compare packed signed word integers in ymm3/m128 and ymm2 and store packed maximum values in ymm1.
 														
 0F DE /r 	PMAXUB mm1, mm2/m64	RM	RW, R						V	V	SSE	pmaxub		Compare unsigned byte integers in mm2/m64 and mm1 and returns maximum values.
 66 0F DE /r	PMAXUB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pmaxub		Compare unsigned byte integers in xmm2/m128 and xmm1 and returns maximum values.
 VEX.NDS.128.66.0F.WIG DE /r	VPMAXUB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpmaxub		Compare packed unsigned byte integers in xmm2 and xmm3/m128 and store packed maximum values in xmm1.
+VEX.NDS.256.66.0F.WIG DE /r	VPMAXUB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmaxub		Compare packed unsigned byte integers in ymm2 and ymm3/m256 and store packed maximum values in ymm1.
 														
 66 0F 38 3F /r 	PMAXUD xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pmaxud		Compare packed unsigned dword integers in xmm1 and xmm2/m128 and store packed maximum values in xmm1.
 VEX.NDS.128.66.0F38.WIG 3F /r 	VPMAXUD xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpmaxud		Compare packed unsigned dword integers in xmm2 and xmm3/m128 and store packed maximum values in xmm1.
+VEX.NDS.256.66.0F38.WIG 3F /r	VPMAXUD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmaxud		Compare packed unsigned dword integers in ymm2 and ymm3/m256 and store packed maximum values in ymm1.
 														
 66 0F 38 3E /r 	PMAXUW xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pmaxuw		Compare packed unsigned word integers in xmm1 and xmm2/m128 and store packed maximum values in xmm1.
 VEX.NDS.128.66.0F38.WIG 3E /r 	VPMAXUW xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpmaxuw		Compare packed unsigned word integers in xmm3/m128 and xmm2 and store maximum packed values in xmm1.
+VEX.NDS.256.66.0F38.WIG 3E /r	VPMAXUW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmaxuw		Compare packed unsigned word integers in ymm3/m256 and ymm2 and store maximum packed values in ymm1.
 														
 66 0F 38 38 /r 	PMINSB xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pminsb		Compare packed signed byte integers in xmm1 and xmm2/m128 and store packed minimum values in xmm1.
 VEX.NDS.128.66.0F38.WIG 38 /r 	VPMINSB xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpminsb		Compare packed signed byte integers in xmm2 and xmm3/m128 and store packed minimum values in xmm1.
+VEX.NDS.256.66.0F38.WIG 38 /r	VPMINSB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpminsb		Compare packed signed byte integers in ymm2 and ymm3/m256 and store packed minimum values in ymm1.
 														
 66 0F 38 39 /r 	PMINSD xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pminsd		Compare packed signed dword integers in xmm1 and xmm2/m128 and store packed minimum values in xmm1.
 VEX.NDS.128.66.0F38.WIG 39 /r 	VPMINSD xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpminsd		Compare packed signed dword integers in xmm2 and xmm3/m128 and store packed minimum values in xmm1.
+VEX.NDS.256.66.0F38.WIG 39 /r	VPMINSD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpminsd		Compare packed signed dword integers in ymm2 and ymm3/m128 and store packed minimum values in ymm1.
 														
 0F EA /r 	PMINSW mm1, mm2/m64	RM	RW, R						V	V	SSE	pminsw		Compare signed word integers in mm2/m64 and mm1 and return minimum values.
 66 0F EA /r	PMINSW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pminsw		Compare signed word integers in xmm2/m128 and xmm1 and return minimum values.
@@ -1541,16 +1620,20 @@ VEX.NDS.128.66.0F.WIG EA /r	VPMINSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	A
 0F DA /r 	PMINUB mm1, mm2/m64	RM	RW, R						V	V	SSE	pminub		Compare unsigned byte integers in mm2/m64 and mm1 and returns minimum values.
 66 0F DA /r	PMINUB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pminub		Compare unsigned byte integers in xmm2/m128 and xmm1 and returns minimum values.
 VEX.NDS.128.66.0F.WIG DA /r	VPMINUB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpminub		Compare packed unsigned byte integers in xmm2 and xmm3/m128 and store packed minimum values in xmm1.
+VEX.NDS.256.66.0F.WIG DA /r	VPMINUB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpminub		Compare packed unsigned byte integers in ymm2 and ymm3/m256 and store packed minimum values in ymm1.
 														
 66 0F 38 3B /r 	PMINUD xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pminud		Compare packed unsigned dword integers in xmm1 and xmm2/m128 and store packed minimum values in xmm1.
 VEX.NDS.128.66.0F38.WIG 3B /r 	VPMINUD xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpminud		Compare packed unsigned dword integers in xmm2 and xmm3/m128 and store packed minimum values in xmm1.
+VEX.NDS.256.66.0F38.WIG 3B /r	VPMINUD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpminud		Compare packed unsigned dword integers in ymm2 and ymm3/m256 and store packed minimum values in ymm1.
 														
 66 0F 38 3A /r 	PMINUW xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pminuw		Compare packed unsigned word integers in xmm1 and xmm2/m128 and store packed minimum values in xmm1.
 VEX.NDS.128.66.0F38.WIG 3A /r 	VPMINUW xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpminuw		Compare packed unsigned word integers in xmm3/m128 and xmm2 and return packed minimum values in xmm1.
+VEX.NDS.256.66.0F38.WIG 3A /r	VPMINUW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpminuw		Compare packed unsigned word integers in ymm3/m256 and ymm2 and return packed minimum values in ymm1.
 														
 0F D7 /r 	PMOVMSKB reg, mm	RM	W, R						V	V	SSE	pmovmskb		Move a byte mask of mm to reg. The upper bits of r32 or r64 are zeroed
 66 0F D7 /r	PMOVMSKB reg, xmm	RM	W, R						V	V	SSE2	pmovmskb		Move a byte mask of xmm to reg. The upper bits of r32 or r64 are zeroed
 VEX.128.66.0F.WIG D7 /r	VPMOVMSKB reg, xmm1	RM	W, R						V	V	AVX	vpmovmskb		Move a byte mask of xmm1 to reg. The upper bits of r32 or r64 are filled with zeros.
+VEX.256.66.0F.WIG D7 /r	VPMOVMSKB reg, ymm1	RM	W, R						V	V	AVX2	vpmovmskb		Move a 32-bit mask of ymm1 to reg. The upper bits of r64 are filled with zeros.
 														
 66 0f 38 20 /r 	PMOVSXBW xmm1, xmm2/m64 	RM	W, R						V	V	SSE4_1	pmovsxbw		Sign extend 8 packed signed 8-bit integers in the low 8 bytes of xmm2/m64 to 8 packed signed 16-bit integers in xmm1.
 66 0f 38 21 /r 	PMOVSXBD xmm1, xmm2/m32 	RM	W, R						V	V	SSE4_1	pmovsxbd		Sign extend 4 packed signed 8-bit integers in the low 4 bytes of xmm2/m32 to 4 packed signed 32-bit integers in xmm1.
@@ -1564,6 +1647,12 @@ VEX.128.66.0F38.WIG 22 /r 	VPMOVSXBQ xmm1, xmm2/m16 	RM	Z, R						V	V	AVX	vpmovs
 VEX.128.66.0F38.WIG 23 /r 	VPMOVSXWD xmm1, xmm2/m64 	RM	Z, R						V	V	AVX	vpmovsxwd		Sign extend 4 packed 16-bit integers in the low 8 bytes of xmm2/m64 to 4 packed 32-bit integers in xmm1.
 VEX.128.66.0F38.WIG 24 /r 	VPMOVSXWQ xmm1, xmm2/m32 	RM	Z, R						V	V	AVX	vpmovsxwq		Sign extend 2 packed 16-bit integers in the low 4 bytes of xmm2/m32 to 2 packed 64-bit integers in xmm1.
 VEX.128.66.0F38.WIG 25 /r 	VPMOVSXDQ xmm1, xmm2/m64 	RM	Z, R						V	V	AVX	vpmovsxdq		Sign extend 2 packed 32-bit integers in the low 8 bytes of xmm2/m64 to 2 packed 64-bit integers in xmm1
+VEX.256.66.0F38.WIG 20 /r	VPMOVSXBW ymm1, xmm2/m128	RM	W, R						V	V	AVX2	vpmovsxbw		Sign extend 16 packed 8-bit integers in xmm2/m128 to 16 packed 16-bit integers in ymm1.
+VEX.256.66.0F38.WIG 21 /r	VPMOVSXBD ymm1, xmm2/m64	RM	W, R						V	V	AVX2	vpmovsxbd		Sign extend 8 packed 8-bit integers in the low 8 bytes of xmm2/m64 to 8 packed 32-bit integers in ymm1.
+VEX.256.66.0F38.WIG 22 /r	VPMOVSXBQ ymm1, xmm2/m32	RM	W, R						V	V	AVX2	vpmovsxbq		Sign extend 4 packed 8-bit integers in the low 4 bytes of xmm2/m32 to 4 packed 64-bit integers in ymm1.
+VEX.256.66.0F38.WIG 23 /r	VPMOVSXWD ymm1, xmm2/m128	RM	W, R						V	V	AVX2	vpmovsxwd		Sign extend 8 packed 16-bit integers in the low 16 bytes of xmm2/m128 to 8 packed 32-bit integers in ymm1.
+VEX.256.66.0F38.WIG 24 /r	VPMOVSXWQ ymm1, xmm2/m64	RM	W, R						V	V	AVX2	vpmovsxwq		Sign extend 4 packed 16-bit integers in the low 8 bytes of xmm2/m64 to 4 packed 64-bit integers in ymm1.
+VEX.256.66.0F38.WIG 25 /r	VPMOVSXDQ ymm1, xmm2/m128	RM	W, R						V	V	AVX2	vpmovsxdq		Sign extend 4 packed 32-bit integers in the low 16 bytes of xmm2/m128 to 4 packed 64-bit integers in ymm1.
 														
 66 0f 38 30 /r 	PMOVZXBW xmm1, xmm2/m64 	RM	W, R						V	V	SSE4_1	pmovzxbw		Zero extend 8 packed 8-bit integers in the low 8 bytes of xmm2/m64 to 8 packed 16-bit integers in xmm1.
 66 0f 38 31 /r 	PMOVZXBD xmm1, xmm2/m32 	RM	W, R						V	V	SSE4_1	pmovzxbd		Zero extend 4 packed 8-bit integers in the low 4 bytes of xmm2/m32 to 4 packed 32-bit integers in xmm1.
@@ -1577,32 +1666,45 @@ VEX.128.66.0F38.WIG 32 /r 	VPMOVZXBQ xmm1, xmm2/m16 	RM	Z, R						V	V	AVX	vpmovz
 VEX.128.66.0F38.WIG 33 /r 	VPMOVZXWD xmm1, xmm2/m64 	RM	Z, R						V	V	AVX	vpmovzxwd		Zero extend 4 packed 16-bit integers in the low 8 bytes of xmm2/m64 to 4 packed 32-bit integers in xmm1.
 VEX.128.66.0F38.WIG 34 /r 	VPMOVZXWQ xmm1, xmm2/m32 	RM	Z, R						V	V	AVX	vpmovzxwq		Zero extend 2 packed 16-bit integers in the low 4 bytes of xmm2/m32 to 2 packed 64-bit integers in xmm1.
 VEX.128.66.0F38.WIG 35 /r 	VPMOVZXDQ xmm1, xmm2/m64 	RM	Z, R						V	V	AVX	vpmovzxdq		Zero extend 2 packed 32-bit integers in the low 8 bytes of xmm2/m64 to 2 packed 64-bit integers in xmm1.
+VEX.256.66.0F38.WIG 30 /r	VPMOVZXBW ymm1, xmm2/m128	RM	W, R						V	V	AVX2	vpmovzxbw		Zero extend 16 packed 8-bit integers in the low 16 bytes of xmm2/m128 to 16 packed 16-bit integers in ymm1.
+VEX.256.66.0F38.WIG 31 /r	VPMOVZXBD ymm1, xmm2/m64	RM	W, R						V	V	AVX2	vpmovzxbd		Zero extend 8 packed 8-bit integers in the low 8 bytes of xmm2/m64 to 8 packed 32-bit integers in ymm1.
+VEX.256.66.0F38.WIG 32 /r	VPMOVZXBQ ymm1, xmm2/m32	RM	W, R						V	V	AVX2	vpmovzxbq		Zero extend 4 packed 8-bit integers in the low 4 bytes of xmm2/m32 to 4 packed 64-bit integers in ymm1.
+VEX.256.66.0F38.WIG 33 /r	VPMOVZXWD ymm1, xmm2/m128	RM	W, R						V	V	AVX2	vpmovzxwd		Zero extend 8 packed 16-bit integers in the low 16 bytes of xmm2/m128 to 8 packed 32-bit integers in ymm1
+VEX.256.66.0F38.WIG 34 /r	VPMOVZXWQ ymm1, xmm2/m64	RM	W, R						V	V	AVX2	vpmovzxwq		Zero extend 4 packed 16-bit integers in the low 8 bytes of xmm2/m64 to 4 packed 64-bit integers in xmm1.
+VEX.256.66.0F38.WIG 35 /r	VPMOVZXDQ ymm1, xmm2/m128	RM	W, R						V	V	AVX2	vpmovzxdq		Zero extend 4 packed 32-bit integers in the low 16 bytes of xmm2/m128 to 4 packed 64-bit integers in ymm1.
 														
 66 0F 38 28 /r 	PMULDQ xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pmuldq		Multiply the packed signed dword integers in xmm1 and xmm2/m128 and store the quadword product in xmm1.
 VEX.NDS.128.66.0F38.WIG 28 /r 	VPMULDQ xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpmuldq		Multiply packed signed doubleword integers in xmm2 by packed signed doubleword integers in xmm3/m128, and store the quadword results in xmm1.
+VEX.NDS.256.66.0F38.WIG 28 /r	VPMULDQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmuldq		Multiply packed signed doubleword integers in ymm2 by packed signed doubleword integers in ymm3/m256, and store the quadword results in ymm1.
 														
 0F 38 0B /r 	PMULHRSW mm1, mm2/m64	RM	RW, R						V	V	SSSE3	pmulhrsw		Multiply 16-bit signed words, scale and round signed doublewords, pack high 16 bits to MM1.
 66 0F 38 0B /r	PMULHRSW xmm1, xmm2/m128	RM	RW, R						V	V	SSSE3	pmulhrsw		Multiply 16-bit signed words, scale and round signed doublewords, pack high 16 bits to XMM1.
 VEX.NDS.128.66.0F38.WIG 0B /r	VPMULHRSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpmulhrsw		Multiply 16-bit signed words, scale and round signed doublewords, pack high 16 bits to xmm1.
+VEX.NDS.256.66.0F38.WIG 0B /r	VPMULHRSW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmulhrsw		Multiply 16-bit signed words, scale and round signed doublewords, pack high 16 bits to ymm1.
 														
 0F E4 /r 	PMULHUW mm1, mm2/m64	RM	RW, R						V	V	SSE	pmulhuw		Multiply the packed unsigned word integers in mm1 register and mm2/m64, and store the high 16 bits of the results in mm1.
 66 0F E4 /r	PMULHUW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pmulhuw		Multiply the packed unsigned word integers in xmm1 and xmm2/m128, and store the high 16 bits of the results in xmm1.
 VEX.NDS.128.66.0F.WIG E4 /r	VPMULHUW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpmulhuw		Multiply the packed unsigned word integers in xmm2 and xmm3/m128, and store the high 16 bits of the results in xmm1.
+VEX.NDS.256.66.0F.WIG E4 /r	VPMULHUW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmulhuw		Multiply the packed unsigned word integers in ymm2 and ymm3/m256, and store the high 16 bits of the results in ymm1.
 														
 0F E5 /r 	PMULHW mm, mm/m64	RM	RW, R						V	V	MMX	pmulhw		Multiply the packed signed word integers in mm1 register and mm2/m64, and store the high 16 bits of the results in mm1.
 66 0F E5 /r	PMULHW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pmulhw		Multiply the packed signed word integers in xmm1 and xmm2/m128, and store the high 16 bits of the results in xmm1.
 VEX.NDS.128.66.0F.WIG E5 /r	VPMULHW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpmulhw		Multiply the packed signed word integers in xmm2 and xmm3/m128, and store the high 16 bits of the results in xmm1.
+VEX.NDS.256.66.0F.WIG E5 /r	VPMULHW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmulhw		Multiply the packed signed word integers in ymm2 and ymm3/m256, and store the high 16 bits of the results in ymm1.
 														
 66 0F 38 40 /r 	PMULLD xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pmulld		Multiply the packed dword signed integers in xmm1 and xmm2/m128 and store the low 32 bits of each product in xmm1.
 VEX.NDS.128.66.0F38.WIG 40 /r 	VPMULLD xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpmulld		Multiply the packed dword signed integers in xmm2 and xmm3/m128 and store the low 32 bits of each product in xmm1.
+VEX.NDS.256.66.0F38.WIG 40 /r	VPMULLD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmulld		Multiply the packed dword signed integers in ymm2 and ymm3/m256 and store the low 32 bits of each product in ymm1.
 														
 0F D5 /r 	PMULLW mm, mm/m64	RM	RW, R						V	V	MMX	pmullw		Multiply the packed signed word integers in mm1 register and mm2/m64, and store the low 16 bits of the results in mm1.
 66 0F D5 /r	PMULLW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pmullw		Multiply the packed signed word integers in xmm1 and xmm2/m128, and store the low 16 bits of the results in xmm1.
 VEX.NDS.128.66.0F.WIG D5 /r	VPMULLW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpmullw		Multiply the packed dword signed integers in xmm2 and xmm3/m128 and store the low 32 bits of each product in xmm1.
+VEX.NDS.256.66.0F.WIG D5 /r	VPMULLW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmullw		Multiply the packed signed word integers in ymm2 and ymm3/m256, and store the low 16 bits of the results in ymm1.
 														
 0F F4 /r 	PMULUDQ mm1, mm2/m64	RM	RW, R						V	V	SSE2	pmuludq		Multiply unsigned doubleword integer in mm1 by unsigned doubleword integer in mm2/m64, and store the quadword result in mm1.
 66 0F F4 /r	PMULUDQ xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pmuludq		Multiply packed unsigned doubleword integers in xmm1 by packed unsigned doubleword integers in xmm2/m128, and store the quadword results in xmm1.
 VEX.NDS.128.66.0F.WIG F4 /r	VPMULUDQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpmuludq		Multiply packed unsigned doubleword integers in xmm2 by packed unsigned doubleword integers in xmm3/m128, and store the quadword results in xmm1.
+VEX.NDS.256.66.0F.WIG F4 /r	VPMULUDQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmuludq		Multiply packed unsigned doubleword integers in ymm2 by packed unsigned doubleword integers in ymm3/m256, and store the quadword results in ymm1.
 														
 8F /0 	POP r/m16 	M	W						V	V		popw		Pop top of stack into m16; increment stack pointer.
 8F /0 	POP r/m32 								NE	V				Pop top of stack into m32; increment stack pointer.
@@ -1634,6 +1736,7 @@ F3 REX.W+ 0F B8 /r 	POPCNT r64, r/m64 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF			
 0F EB /r 	POR mm, mm/m64	RM	RW, R						V	V	MMX	por		Bitwise OR of mm/m64 and mm.
 66 0F EB /r	POR xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	por		Bitwise OR of xmm2/m128 and xmm1.
 VEX.NDS.128.66.0F.WIG EB /r	VPOR xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpor		Bitwise OR of xmm2/m128 and xmm3.
+VEX.NDS.256.66.0F.WIG EB /r	VPOR ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpor		Bitwise OR of ymm2/m256 and ymm3
 														
 0F 18 /1 	PREFETCHT0 m8 	M	I						V	V		prefetcht0		Move data from m8 closer to the processor using T0 hint.
 0F 18 /2 	PREFETCHT1 m8 	M	I						V	V		prefetcht1		Move data from m8 closer to the processor using T1 hint.
@@ -1643,19 +1746,24 @@ VEX.NDS.128.66.0F.WIG EB /r	VPOR xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	
 0F F6 /r 	PSADBW mm1, mm2/m64	RM	RW, R						V	V	SSE	psadbw		Computes the absolute differences of the packed unsigned byte integers from mm2 /m64 and mm1; differences are then summed to produce an unsigned word integer result.
 66 0F F6 /r	PSADBW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psadbw		Computes the absolute differences of the packed unsigned byte integers from xmm2 /m128 and xmm1; the 8 low differences and 8 high differences are then summed separately to produce two unsigned word integer results.
 VEX.NDS.128.66.0F.WIG F6 /r	VPSADBW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsadbw		Computes the absolute differences of the packed unsigned byte integers from xmm3 /m128 and xmm2; the 8 low differences and 8 high differences are then summed separately to produce two unsigned word integer results.
+VEX.NDS.256.66.0F.WIG F6 /r	VPSADBW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsadbw		Computes the absolute differences of the packed unsigned byte integers from ymm3 /m256 and ymm2; then each consecutive 8 differences are summed separately to produce four unsigned word integer results.
 														
 0F 38 00 /r 	PSHUFB mm1, mm2/m64	RM	RW, R						V	V	SSSE3	pshufb		Shuffle bytes in mm1 according to contents of mm2/m64.
 66 0F 38 00 /r	PSHUFB xmm1, xmm2/m128	RM	RZ, R						V	V	SSSE3	pshufb		Shuffle bytes in xmm1 according to contents of xmm2/m128.
 VEX.NDS.128.66.0F38.WIG 00 /r	VPSHUFB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpshufb		Shuffle bytes in xmm2 according to contents of xmm3/m128.
+VEX.NDS.256.66.0F38.WIG 00 /r	VPSHUFB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpshufb		Shuffle bytes in ymm2 according to contents of ymm3/m256.
 														
 66 0F 70 /r ib 	PSHUFD xmm1, xmm2/m128, imm8	RMI	W, R, R						V	V	SSE2	pshufd		Shuffle the doublewords in xmm2/m128 based on the encoding in imm8 and store the result in xmm1.
 VEX.128.66.0F.WIG 70 /r ib	VPSHUFD xmm1, xmm2/m128, imm8	RMI	Z, R, R						V	V	AVX	vpshufd		Shuffle the doublewords in xmm2/m128 based on the encoding in imm8 and store the result in xmm1.
+VEX.256.66.0F.WIG 70 /r ib	VPSHUFD ymm1, ymm2/m256, imm8	RMI	W, R, R						V	V	AVX2	vpshufd		Shuffle the doublewords in ymm2/m256 based on the encoding in imm8 and store the result in ymm1.
 														
 F3 0F 70 /r ib 	PSHUFHW xmm1, xmm2/m128, imm8	RMI	W, R, R						V	V	SSE2	pshufhw		Shuffle the high words in xmm2/m128 based on the encoding in imm8 and store the result in xmm1.
 VEX.128.F3.0F.WIG 70 /r ib	VPSHUFHW xmm1, xmm2/m128, imm8	RMI	Z, R, R						V	V	AVX	vpshufhw		Shuffle the high words in xmm2/m128 based on the encoding in imm8 and store the result in xmm1.
+VEX.256.F3.0F.WIG 70 /r ib	VPSHUFHW ymm1, ymm2/m256, imm8	RMI	W, R, R						V	V	AVX2	vpshufhw		Shuffle the high words in ymm2/m256 based on the encoding in imm8 and store the result in ymm1.
 														
 F2 0F 70 /r ib 	PSHUFLW xmm1, xmm2/m128, imm8	RMI	W, R, R						V	V	SSE2	pshuflw		Shuffle the low words in xmm2/m128 based on the encoding in imm8 and store the result in xmm1.
 VEX.128.F2.0F.WIG 70 /r ib	VPSHUFLW xmm1, xmm2/m128, imm8	RMI	Z, R, R						V	V	AVX	vpshuflw		Shuffle the low words in xmm2/m128 based on the encoding in imm8 and store the result in xmm1.
+VEX.256.F2.0F.WIG 70 /r ib	VPSHUFLW ymm1, ymm2/m256, imm8	RMI	W, R, R						V	V	AVX2	vpshuflw		Shuffle the low words in ymm2/m256 based on the encoding in imm8 and store the result in ymm1.
 														
 0F 70 /r ib 	PSHUFW mm1, mm2/m64, imm8	RMI	W, R, R						V	V		pshufw		Shuffle the words in mm2/m64 based on the encoding in imm8 and store the result in mm1.
 														
@@ -1671,6 +1779,7 @@ VEX.NDS.128.66.0F38.WIG 0A /r	VPSIGND xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V
 														
 66 0F 73 /7 ib 	PSLLDQ xmm1, imm8	MI	RW, R						V	V	SSE2	pslldq		Shift xmm1 left by imm8 bytes while shifting in 0s.
 VEX.NDD.128.66.0F.WIG 73 /7 ib	VPSLLDQ xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX	vpslldq		Shift xmm2 left by imm8 bytes while shifting in 0s and store result in xmm1.
+VEX.NDD.256.66.0F.WIG 73 /7 ib	VPSLLDQ ymm1, ymm2, imm8	VMI	W, R, R						V	V	AVX2	vpslldq		Shift ymm2 left by imm8 bytes while shifting in 0s and store result in ymm1.
 														
 0F F1 /r	PSLLW mm, mm/m64	RM	RW, R						V	V	MMX	psllw		Shift words in mm left mm/m64 while shifting in 0s.
 66 0F F1 /r	PSLLW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psllw		Shift words in xmm1 left by xmm2/m128 while shifting in 0s.
@@ -1690,6 +1799,12 @@ VEX.NDS.128.66.0F.WIG F2 /r	VPSLLD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AV
 VEX.NDD.128.66.0F.WIG 72 /6 ib	VPSLLD xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX	vpslld		Shift doublewords in xmm2 left by imm8 while shifting in 0s.
 VEX.NDS.128.66.0F.WIG F3 /r	VPSLLQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsllq		Shift quadwords in xmm2 left by amount specified in xmm3/m128 while shifting in 0s.
 VEX.NDD.128.66.0F.WIG 73 /6 ib	VPSLLQ xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX	vpsllq		Shift quadwords in xmm2 left by imm8 while shifting in 0s.
+VEX.NDS.256.66.0F.WIG F1 /r	VPSLLW ymm1, ymm2, xmm3/m128	RVM	W, R, R						V	V	AVX2	vpsllw		Shift words in ymm2 left by amount specified in xmm3/m128 while shifting in 0s.
+VEX.NDD.256.66.0F.WIG 71 /6 ib	VPSLLW ymm1, ymm2, imm8	VMI	W, R, R						V	V	AVX2	vpsllw		Shift words in ymm2 left by imm8 while shifting in 0s.
+VEX.NDS.256.66.0F.WIG F2 /r	VPSLLD ymm1, ymm2, xmm3/m128	RVM	W, R, R						V	V	AVX2	vpslld		Shift doublewords in ymm2 left by amount specified in xmm3/m128 while shifting in 0s
+VEX.NDD.256.66.0F.WIG 72 /6 ib	VPSLLD ymm1, ymm2, imm8	VMI	W, R, R						V	V	AVX2	vpslld		Shift doublewords in ymm2 left by imm8 while shifting in 0s.
+VEX.NDS.256.66.0F.WIG F3 /r	VPSLLQ ymm1, ymm2, xmm3/m128	RVM	W, R, R						V	V	AVX2	vpsllq		Shift quadwords in ymm2 left by amount specified in xmm3/m128 while shifting in 0s.
+VEX.NDD.256.66.0F.WIG 73 /6 ib	VPSLLQ ymm1, ymm2, imm8	VMI	W, R, R						V	V	AVX2	vpsllq		Shift quadwords in ymm2 left by imm8 while shifting in 0s.
 														
 0F E1 /r	PSRAW mm, mm/m64	RM	RW, R						V	V	MMX	psraw		Shift words in mm right by mm/m64 while shifting in sign bits.
 66 0F E1 /r	PSRAW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psraw		Shift words in xmm1 right by xmm2/m128 while shifting in sign bits.
@@ -1703,9 +1818,14 @@ VEX.NDS.128.66.0F.WIG E1 /r	VPSRAW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AV
 VEX.NDD.128.66.0F.WIG 71 /4 ib	VPSRAW xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX	vpsraw		Shift words in xmm2 right by imm8 while shifting in sign bits.
 VEX.NDS.128.66.0F.WIG E2 /r	VPSRAD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsrad		Shift doublewords in xmm2 right by amount specified in xmm3/m128 while shifting in sign bits.
 VEX.NDD.128.66.0F.WIG 72 /4 ib	VPSRAD xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX	vpsrad		Shift doublewords in xmm2 right by imm8 while shifting in sign bits.
+VEX.NDS.256.66.0F.WIG E1 /r	VPSRAW ymm1, ymm2, xmm3/m128	RVM	W, R, R						V	V	AVX2	vpsraw		Shift words in ymm2 right by amount specified in xmm3/m128 while shifting in sign bits.
+VEX.NDD.256.66.0F.WIG 71 /4 ib	VPSRAW ymm1, ymm2, imm8	VMI	W, R, R						V	V	AVX2	vpsraw		Shift words in ymm2 right by imm8 while shifting in sign bits.
+VEX.NDS.256.66.0F.WIG E2 /r	VPSRAD ymm1, ymm2, xmm3/m128	RVM	W, R, R						V	V	AVX2	vpsrad		Shift doublewords in ymm2 right by amount specified in xmm3/m128 while shifting in sign bits.
+VEX.NDD.256.66.0F.WIG 72 /4 ib	VPSRAD ymm1, ymm2, imm8	VMI	W, R, R						V	V	AVX2	vpsrad		Shift doublewords in ymm2 right by imm8 while shifting in sign bits.
 														
 66 0F 73 /3 ib	PSRLDQ xmm1, imm8	MI	RW, R						V	V	SSE2	psrldq		Shift xmm1 right by imm8 while shifting in 0s.
 VEX.NDD.128.66.0F.WIG 73 /3 ib	VPSRLDQ xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX	vpsrldq		Shift xmm2 right by imm8 bytes while shifting in 0s.
+VEX.NDD.256.66.0F.WIG 73 /3 ib	VPSRLDQ ymm1, ymm2, imm8	VMI	W, R, R						V	V	AVX2	vpsrldq		Shift ymm1 right by imm8 bytes while shifting in 0s.
 														
 0F D1 /r	PSRLW mm, mm/m64	RM	RW, R						V	V	MMX	psrlw		Shift words in mm right by amount specified in mm/m64 while shifting in 0s.
 66 0F D1 /r	PSRLW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psrlw		Shift words in xmm1 right by amount specified in xmm2/m128 while shifting in 0s.
@@ -1725,6 +1845,12 @@ VEX.NDS.128.66.0F.WIG D2 /r	VPSRLD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AV
 VEX.NDD.128.66.0F.WIG 72 /2 ib	VPSRLD xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX	vpsrld		Shift doublewords in xmm2 right by imm8 while shifting in 0s.
 VEX.NDS.128.66.0F.WIG D3 /r	VPSRLQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsrlq		Shift quadwords in xmm2 right by amount specified in xmm3/m128 while shifting in 0s.
 VEX.NDD.128.66.0F.WIG 73 /2 ib	VPSRLQ xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX	vpsrlq		Shift quadwords in xmm2 right by imm8 while shifting in 0s.
+VEX.NDS.256.66.0F.WIG D1 /r	VPSRLW ymm1, ymm2, xmm3/m128	RVM	W, R, R						V	V	AVX2	vpsrlw		Shift words in ymm2 right by amount specified in xmm3/m128 while shifting in 0s.
+VEX.NDD.256.66.0F.WIG 71 /2 ib	VPSRLW ymm1, ymm2, imm8	VMI	W, R, R						V	V	AVX2	vpsrlw		Shift words in ymm2 right by imm8 while shifting in 0s.
+VEX.NDS.256.66.0F.WIG D2 /r	VPSRLD ymm1, ymm2, xmm3/m128	RVM	W, R, R						V	V	AVX2	vpsrld		Shift doublewords in ymm2 right by amount specified in xmm3/m128 while shifting in 0s.
+VEX.NDD.256.66.0F.WIG 72 /2 ib	VPSRLD ymm1, ymm2, imm8	VMI	W, R, R						V	V	AVX2	vpsrld		Shift doublewords in ymm2 right by imm8 while shifting in 0s.
+VEX.NDS.256.66.0F.WIG D3 /r	VPSRLQ ymm1, ymm2, xmm3/m128	RVM	W, R, R						V	V	AVX2	vpsrlq		Shift quadwords in ymm2 right by amount specified in xmm3/m128 while shifting in 0s.
+VEX.NDD.256.66.0F.WIG 73 /2 ib	VPSRLQ ymm1, ymm2, imm8	VMI	W, R, R						V	V	AVX2	vpsrlq		Shift quadwords in ymm2 right by imm8 while shifting in 0s.
 														
 0F F8 /r	PSUBB mm, mm/m64	RM	RW, R						V	V	MMX	psubb		Subtract packed byte integers in mm/m64 from packed byte integers in mm.
 66 0F F8 /r	PSUBB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psubb		Subtract packed byte integers in xmm2/m128 from packed byte integers in xmm1.
@@ -1735,10 +1861,14 @@ VEX.NDD.128.66.0F.WIG 73 /2 ib	VPSRLQ xmm1, xmm2, imm8	VMI	Z, R, R						V	V	AVX	
 VEX.NDS.128.66.0F.WIG F8 /r	VPSUBB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsubb		Subtract packed byte integers in xmm3/m128 from xmm2.
 VEX.NDS.128.66.0F.WIG F9 /r	VPSUBW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsubw		Subtract packed word integers in xmm3/m128 from xmm2.
 VEX.NDS.128.66.0F.WIG FA /r	VPSUBD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsubd		Subtract packed doubleword integers in xmm3/m128 from xmm2.
+VEX.NDS.256.66.0F.WIG F8 /r	VPSUBB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsubb		Subtract packed byte integers in ymm3/m256 from ymm2.
+VEX.NDS.256.66.0F.WIG F9 /r	VPSUBW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsubw		Subtract packed word integers in ymm3/m256 from ymm2.
+VEX.NDS.256.66.0F.WIG FA /r	VPSUBD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsubd		Subtract packed doubleword integers in ymm3/m256 from ymm2.
 														
 0F FB /r	PSUBQ mm1, mm2/m64	RM	RW, R						V	V	SSE2	psubq		Subtract quadword integer in mm1 from mm2 /m64.
 66 0F FB /r	PSUBQ xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psubq		Subtract packed quadword integers in xmm1 from xmm2 /m128.
 VEX.NDS.128.66.0F.WIG FB /r	VPSUBQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsubq		Subtract packed quadword integers in xmm3/m128 from xmm2.
+VEX.NDS.256.66.0F.WIG FB /r	VPSUBQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsubq		Subtract packed quadword integers in ymm3/m256 from ymm2.
 														
 0F E8 /r	PSUBSB mm, mm/m64	RM	RW, R						V	V	MMX	psubsb		Subtract signed packed bytes in mm/m64 from signed packed bytes in mm and saturate results.
 66 0F E8 /r	PSUBSB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psubsb		Subtract packed signed byte integers in xmm2/m128 from packed signed byte integers in xmm1 and saturate results.
@@ -1746,6 +1876,8 @@ VEX.NDS.128.66.0F.WIG FB /r	VPSUBQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AV
 66 0F E9 /r	PSUBSW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psubsw		Subtract packed signed word integers in xmm2/m128 from packed signed word integers in xmm1 and saturate results.
 VEX.NDS.128.66.0F.WIG E8 /r	VPSUBSB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsubsb		Subtract packed signed byte integers in xmm3/m128 from packed signed byte integers in xmm2 and saturate results.
 VEX.NDS.128.66.0F.WIG E9 /r	VPSUBSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsubsw		Subtract packed signed word integers in xmm3/m128 from packed signed word integers in xmm2 and saturate results.
+VEX.NDS.256.66.0F.WIG E8 /r	VPSUBSB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsubsb		Subtract packed signed byte integers in ymm3/m256 from packed signed byte integers in ymm2 and saturate results.
+VEX.NDS.256.66.0F.WIG E9 /r	VPSUBSW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsubsw		Subtract packed signed word integers in ymm3/m256 from packed signed word integers in ymm2 and saturate results.
 														
 0F D8 /r	PSUBUSB mm, mm/m64	RM	RW, R						V	V	MMX	psubusb		Subtract unsigned packed bytes in mm/m64 from unsigned packed bytes in mm and saturate result.
 66 0F D8 /r	PSUBUSB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psubusb		Subtract packed unsigned byte integers in xmm2/m128 from packed unsigned byte integers in xmm1 and saturate result.
@@ -1753,6 +1885,8 @@ VEX.NDS.128.66.0F.WIG E9 /r	VPSUBSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	A
 66 0F D9 /r	PSUBUSW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	psubusw		Subtract packed unsigned word integers in xmm2/m128 from packed unsigned word integers in xmm1 and saturate result.
 VEX.NDS.128.66.0F.WIG D8 /r	VPSUBUSB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsubusb		Subtract packed unsigned byte integers in xmm3/m128 from packed unsigned byte integers in xmm2 and saturate result.
 VEX.NDS.128.66.0F.WIG D9 /r	VPSUBUSW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpsubusw		Subtract packed unsigned word integers in xmm3/m128 from packed unsigned word integers in xmm2 and saturate result.
+VEX.NDS.256.66.0F.WIG D8 /r	VPSUBUSB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsubusb		Subtract packed unsigned byte integers in ymm3/m256 from packed unsigned byte integers in ymm2 and saturate result.
+VEX.NDS.256.66.0F.WIG D9 /r	VPSUBUSW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsubusw		Subtract packed unsigned word integers in ymm3/m256 from packed unsigned word integers in ymm2 and saturate result.
 														
 66 0F 38 17 /r	PTEST xmm1, xmm2/m128	RM	R, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	SSE4_1	ptest		Set ZF if xmm2/m128 AND xmm1 result is all 0s. Set CF if xmm2/m128 AND NOT xmm1 result is all 0s.
 VEX.128.66.0F38.WIG 17 /r	VPTEST xmm1, xmm2/m128	RM	R, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	AVX	vptest		Set ZF and CF depending on bitwise AND and ANDN of sources.
@@ -1769,6 +1903,10 @@ VEX.NDS.128.66.0F.WIG 68 /r	VPUNPCKHBW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	
 VEX.NDS.128.66.0F.WIG 69 /r	VPUNPCKHWD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpunpckhwd		Interleave high-order words from xmm2 and xmm3/m128 into xmm1.
 VEX.NDS.128.66.0F.WIG 6A /r	VPUNPCKHDQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpunpckhdq		Interleave high-order doublewords from xmm2 and xmm3/m128 into xmm1.
 VEX.NDS.128.66.0F.WIG 6D /r 	VPUNPCKHQDQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpunpckhqdq		Interleave high-order quadword from xmm2 and xmm3/m128 into xmm1 register.
+VEX.NDS.256.66.0F.WIG 68 /r	VPUNPCKHBW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpunpckhbw		Interleave high-order bytes from ymm2 and ymm3/m256 into ymm1 register.
+VEX.NDS.256.66.0F.WIG 69 /r	VPUNPCKHWD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpunpckhwd		Interleave high-order words from ymm2 and ymm3/m256 into ymm1 register.
+VEX.NDS.256.66.0F.WIG 6A /r	VPUNPCKHDQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpunpckhdq		Interleave high-order doublewords from ymm2 and ymm3/m256 into ymm1 register.
+VEX.NDS.256.66.0F.WIG 6D /r	VPUNPCKHQDQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpunpckhqdq		Interleave high-order quadword from ymm2 and ymm3/m256 into ymm1 register.
 														
 0F 60 /r	PUNPCKLBW mm, mm/m32	RM	RW, R						V	V	MMX	punpcklbw		Interleave low-order bytes from mm and mm/m32 into mm.
 66 0F 60 /r	PUNPCKLBW xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	punpcklbw		Interleave low-order bytes from xmm1 and xmm2/m128 into xmm1.
@@ -1781,6 +1919,10 @@ VEX.NDS.128.66.0F.WIG 60 /r	VPUNPCKLBW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	
 VEX.NDS.128.66.0F.WIG 61 /r	VPUNPCKLWD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpunpcklwd		Interleave low-order words from xmm2 and xmm3/m128 into xmm1.
 VEX.NDS.128.66.0F.WIG 62 /r	VPUNPCKLDQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpunpckldq		Interleave low-order doublewords from xmm2 and xmm3/m128 into xmm1.
 VEX.NDS.128.66.0F.WIG 6C /r	VPUNPCKLQDQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpunpcklqdq		Interleave low-order quadword from xmm2 and xmm3/m128 into xmm1 register.
+VEX.NDS.256.66.0F.WIG 60 /r	VPUNPCKLBW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpunpcklbw		Interleave low-order bytes from ymm2 and ymm3/m256 into ymm1 register.
+VEX.NDS.256.66.0F.WIG 61 /r	VPUNPCKLWD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpunpcklwd		Interleave low-order words from ymm2 and ymm3/m256 into ymm1 register.
+VEX.NDS.256.66.0F.WIG 62 /r	VPUNPCKLDQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpunpckldq		Interleave low-order doublewords from ymm2 and ymm3/m256 into ymm1 register.
+VEX.NDS.256.66.0F.WIG 6C /r	VPUNPCKLQDQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpunpcklqdq		Interleave low-order quadword from ymm2 and ymm3/m256 into ymm1 register.
 														
 FF /6	PUSH r/m16 	M	R						V	V		pushw		Push r/m16.
 FF /6	PUSH r/m32								NE	V				Push r/m32.
@@ -1808,6 +1950,7 @@ FF /6	PUSH r/m64	M	R						V	NE		pushq		Push r/m64.
 0F EF /r	PXOR mm, mm/m64	RM	RW, R						V	V	MMX	pxor		Bitwise XOR of mm/m64 and mm.
 66 0F EF /r	PXOR xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pxor		Bitwise XOR of xmm2/m128 and xmm1. 
 VEX.NDS.128.66.0F.WIG EF /r	VPXOR xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpxor		Bitwise XOR of xmm3/m128 and xmm2.
+VEX.NDS.256.66.0F.WIG EF /r	VPXOR ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpxor		Bitwise XOR of ymm3/m256 and ymm2.
 														
 D0 /2	RCL r/m8, 1	M1	RW, R		E.CF E.OF				V	V		rclb		Rotate 9 bits (CF, r/m8) left once.
 REX+ D0 /2	RCL r/m8, 1	M1	RW, R		E.CF E.OF				V	NE		rclb		Rotate 9 bits (CF, r/m8) left once.
@@ -1945,6 +2088,9 @@ CB	RET far	NP	I	???	???	???			V	V		lretl		Far return to calling procedure.
 C2 iw	RET imm16	I	R		RIP RSP				V	V		retq		Near return to calling procedure and pop imm16 bytes from stack.
 CA iw	RET imm16, far	I	R, I	???	???	???			V	V		retq		Far return to calling procedure and pop imm16 bytes from stack.
 														
+VEX.LZ.F2.0F3A.W0 F0 /r ib	RORX r32, r/m32, imm8	RMI	W, R, R						V	V	BMI2	rorxl		Rotate 32-bit r/m32 right imm8 times without affecting arithmetic flags.
+VEX.LZ.F2.0F3A.W1 F0 /r ib	RORX r64, r/m64, imm8	RMI	W, R, R						V	NE	BMI2	rorxq		Rotate 64-bit r/m64 right imm8 times without affecting arithmetic flags.
+														
 66 0F 3A 09 /r ib	ROUNDPD xmm1, xmm2/m128, imm8	RMI	W, R, R	M.RC					V	V	SSE4_1	roundpd		Round packed double precision floating-point values in xmm2/m128 and place the result in xmm1. The rounding mode is determined by imm8.
 VEX.128.66.0F3A.WIG 09 /r ib	VROUNDPD xmm1, xmm2/m128, imm8	RMI	Z, R, R	M.RC					V	V	AVX	vroundpd		Round packed double-precision floating-point values in xmm2/m128 and place the result in xmm1. The rounding mode is determined by imm8.
 VEX.256.66.0F3A.WIG 09 /r ib	VROUNDPD ymm1, ymm2/m256, imm8	RMI	W, R, R	M.RC					V	V	AVX	vroundpd		Round packed double-precision floating-point values in ymm2/m256 and place the result in ymm1. The rounding mode is determined by imm8.
@@ -2030,6 +2176,13 @@ D3 /5	SHR r/m32, CL	MC	RW, R		e.cf e.of e.pf e.sf e.zf	e.cf e.of e.af			V	V		shr
 REX.W+ D3 /5	SHR r/m64, CL	MC	RW, R		e.cf e.of e.pf e.sf e.zf	e.cf e.of e.af			V	NE		shrq		Unsigned divide r/m32 by 2, CL times.
 C1 /5 ib	SHR r/m32, imm8	MI	RW, R		e.cf e.of e.pf e.sf e.zf	e.cf e.of e.af			V	V		shrl		Unsigned divide r/m32 by 2, imm8 times.
 REX.W+ C1 /5 ib	SHR r/m64, imm8	MI	RW, R		e.cf e.of e.pf e.sf e.zf	e.cf e.of e.af			V	NE		shrq		Unsigned divide r/m32 by 2, imm8 times.
+														
+VEX.NDS.LZ.F3.0F38.W0 F7 /r	SARX r32a, r/m32, r32b	RMV	W, R, R						V	V	BMI2	sarxl		Shift r/m32 arithmetically right with count specified in r32b
+VEX.NDS.LZ.66.0F38.W0 F7 /r	SHLX r32a, r/m32, r32b	RMV	W, R, R						V	V	BMI2	shlxl		Shift r/m32 logically left with count specified in r32b
+VEX.NDS.LZ.F2.0F38.W0 F7 /r	SHRX r32a, r/m32, r32b	RMV	W, R, R						V	V	BMI2	shrxl		Shift r/m32 logically right with count specified in r32b
+VEX.NDS.LZ.F3.0F38.W1 F7 /r	SARX r64a, r/m64, r64b	RMV	W, R, R						V	NE	BMI2	sarxq		Shift r/m64 arithmetically right with count specified in r64b
+VEX.NDS.LZ.66.0F38.W1 F7 /r	SHLX r64a, r/m64, r64b	RMV	W, R, R						V	NE	BMI2	shlxq		Shift r/m64 logically left with count specified in r64b.
+VEX.NDS.LZ.F2.0F38.W1 F7 /r	SHRX r64a, r/m64, r64b	RMV	W, R, R						V	NE	BMI2	shrxq		Shift r/m64 logically right with count specified in r64b
 														
 1C ib	SBB AL, imm8	I	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbb		Subtract with borrow imm8 from AL.
 1D iw	SBB AX, imm16	I	RW, R	E.CF	E.OF E.SF E.ZF E.AF E.PF E.CF				V	V		sbbw		Subtract with borrow imm16 from AX.
@@ -2257,6 +2410,10 @@ REX+ 84 /r	TEST r/m8, r8	MR	R, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	NE		testb		A
 85 /r	TEST r/m32, r32	MR	R, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	V		testl		AND r32 with r/m32; set SF, ZF, PF according to result.
 REX.W+ 85 /r	TEST r/m64, r64	MR	R, R		E.OF E.SF E.ZF E.CF E.PF	E.AF			V	NE		testq		AND r64 with r/m64; set SF, ZF, PF according to result.
 														
+F3 0F BC /r	TZCNT r16, r/m16	RM	W, R		E.ZF E.CF	E.AF E.PF E.OF E.SF			V	V	BMI1	tzcntw		Count the number of trailing zero bits in r/m16, return result in r16.
+F3 0F BC /r	TZCNT r32, r/m32	RM	W, R		E.ZF E.CF	E.AF E.PF E.OF E.SF			V	V	BMI1	tzcntl		Count the number of trailing zero bits in r/m32, return result in r32.
+REX.W+ F3 0F BC /r	TZCNT r64, r/m64	RM	W, R		E.ZF E.CF	E.AF E.PF E.OF E.SF			V	NE	BMI1	tzcntq		Count the number of trailing zero bits in r/m64, return result in r64.
+														
 66 0F 2E /r	UCOMISD xmm1, xmm2/m64	RM	R, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	SSE2	ucomisd		Compares (unordered) the low double- precision floating-point values in xmm1 and xmm2/m64 and set the EFLAGS accordingly.
 VEX.LIG.66.0F.WIG 2E /r	VUCOMISD xmm1, xmm2/m64	RM	R, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	AVX	vucomisd		Compare low double precision floating-point values in xmm1 and xmm2/mem64 and set the EFLAGS flags accordingly.
 														
@@ -2285,6 +2442,9 @@ VEX.128.66.0F38.W0 18 /r	VBROADCASTSS xmm1, m32	RM	Z, R						I	V	AVX	vbroadcasts
 VEX.256.66.0F38.W0 18 /r	VBROADCASTSS ymm1, m32	RM	W, R						V	V	AVX	vbroadcastss		Broadcast single-precision floating-point element in mem to eight locations in ymm1.
 VEX.256.66.0F38.W0 19 /r	VBROADCASTSD ymm1, m64	RM	W, R						V	V	AVX	vbroadcastsd		Broadcast double-precision floating-point element in mem to four locations in ymm1.
 VEX.256.66.0F38.W0 1A /r	VBROADCASTF128 ymm1, m128	RM	W, R						V	V	AVX	vbroadcastf128		Broadcast 128 bits of floating-point data in mem to low and high 128-bits in ymm1.
+VEX.128.66.0F38.W0 18/r	VBROADCASTSS xmm1, xmm2	RM	Z, R						V	V	AVX2	vbroadcastss		Broadcast the low single-precision floating- point element in the source operand to four locations in xmm1.
+VEX.256.66.0F38.W0 18 /r	VBROADCASTSS ymm1, xmm2	RM	W, R						V	V	AVX2	vbroadcastss		Broadcast low single-precision floating-point element in the source operand to eight locations in ymm1.
+VEX.256.66.0F38.W0 19 /r	VBROADCASTSD ymm1, xmm2	RM	W, R						V	V	AVX2	vbroadcastsd		Broadcast low double-precision floating-point element in the source operand to four locations in ymm1.
 														
 VEX.256.66.0F38.W0 13 /r	VCVTPH2PS ymm1, xmm2/m128	RM	W, R	M.RC					V	V	F16C	vcvtph2ps		Convert eight packed half precision (16-bit) floating-point values in xmm2/m128 to packed single-precision floating-point value in ymm1.
 VEX.128.66.0F38.W0 13 /r	VCVTPH2PS xmm1, xmm2/m64	RM	Z, R	M.RC					V	V	F16C	vcvtph2ps		Convert four packed half precision (16-bit) floating-point values in xmm2/m64 to packed single-precision floating-point value in xmm1.
@@ -2297,7 +2457,147 @@ VEX.128.66.0F3A.W0 1D /r ib	VCVTPS2PH xmm1/m64, xmm2, imm8	MR	Z, R, R	M.RC					V
 														
 VEX.256.66.0F3A.W0 19 /r ib	VEXTRACTF128 xmm1/m128, ymm2, imm8	MR	Z, R, R						V	V	AVX	vextractf128		Extract 128 bits of packed floating-point values from ymm2 and store results in xmm1/mem.
 														
-VEX.NDS.256.66.0F3A.W0 18 /r ib	VINSERTF128 ymm1, ymm2, xmm3/m128, imm8	RVM	W, R, R, R						V	V	AVX	vinsertf128		Insert a single precision floating-point value selected by imm8 from xmm3/m128 into ymm2 at the specified destination element specified by imm8 and zero out destination elements in ymm1 as indicated in imm8.
+VEX.256.66.0F3A.W0 39 /r ib	VEXTRACTI128 xmm1/m128, ymm2, imm8	RMI	Z, R, R						V	V	AVX2	vextracti128		Extract 128 bits of integer data from ymm2 and store results in xmm1/mem.
+														
+VEX.DDS.128.66.0F38.W1 98 /r	VFMADD132PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmadd132pd		Multiply packed double-precision floating-point values from xmm0 and xmm2/mem, add to xmm1 and put result in xmm0.
+VEX.DDS.128.66.0F38.W1 A8 /r	VFMADD213PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmadd213pd		Multiply packed double-precision floating-point values from xmm0 and xmm1, add to xmm2/mem and put result in xmm0.
+VEX.DDS.128.66.0F38.W1 B8 /r	VFMADD231PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmadd231pd		Multiply packed double-precision floating-point values from xmm1 and xmm2/mem, add to xmm0 and put result in xmm0.
+VEX.DDS.256.66.0F38.W1 98 /r	VFMADD132PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmadd132pd		Multiply packed double-precision floating-point values from ymm0 and ymm2/mem, add to ymm1 and put result in ymm0.
+VEX.DDS.256.66.0F38.W1 A8 /r	VFMADD213PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmadd213pd		Multiply packed double-precision floating-point values from ymm0 and ymm1, add to ymm2/mem and put result in ymm0.
+VEX.DDS.256.66.0F38.W1 B8 /r 	VFMADD231PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmadd231pd		Multiply packed double-precision floating-point values from ymm1 and ymm2/mem, add to ymm0 and put result in ymm0.
+														
+VEX.DDS.128.66.0F38.W0 98 /r 	VFMADD132PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmadd132ps		Multiply packed single-precision floating-point values from xmm0 and xmm2/mem, add to xmm1 and put result in xmm0
+VEX.DDS.128.66.0F38.W0 A8 /r	VFMADD213PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmadd213ps		Multiply packed single-precision floating-point values from xmm0 and xmm1, add to xmm2/mem and put result in xmm0.
+VEX.DDS.128.66.0F38.W0 B8 /r	VFMADD231PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmadd231ps		Multiply packed single-precision floating-point values from xmm1 and xmm2/mem, add to xmm0 and put result in xmm0.
+VEX.DDS.256.66.0F38.W0 98 /r	VFMADD132PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmadd132ps		Multiply packed single-precision floating-point values from ymm0 and ymm2/mem, add to ymm1 and put result in ymm0.
+VEX.DDS.256.66.0F38.W0 A8 /r 	VFMADD213PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmadd213ps		Multiply packed single-precision floating-point values from ymm0 and ymm1, add to ymm2/mem and put result in ymm0.
+VEX.DDS.256.66.0F38.W0 B8 /r	VFMADD231PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmadd231ps		Multiply packed single-precision floating-point values from ymm1 and ymm2/mem, add to ymm0 and put result in ymm0.
+														
+VEX.DDS.LIG.128.66.0F38.W1 99 /r	VFMADD132SD xmm0, xmm1, xmm2/m64	RVM	RZ, R, R						V	V	FMA	vfmadd132sd		Multiply scalar double-precision floating-point value from xmm0 and xmm2/mem, add to xmm1 and put result in xmm0
+VEX.DDS.LIG.128.66.0F38.W1 A9 /r	VFMADD213SD xmm0, xmm1, xmm2/m64	RVM	RZ, R, R						V	V	FMA	vfmadd213sd		Multiply scalar double-precision floating-point value from xmm0 and xmm1, add to xmm2/mem and put result in xmm0.
+VEX.DDS.LIG.128.66.0F38.W1 B9 /r	VFMADD231SD xmm0, xmm1, xmm2/m64	RVM	RZ, R, R						V	V	FMA	vfmadd231sd		Multiply scalar double-precision floating-point value from xmm1 and xmm2/mem, add to xmm0 and put result in xmm0.
+														
+VEX.DDS.LIG.128.66.0F38.W0 99 /r	VFMADD132SS xmm0, xmm1, xmm2/m32	RVM	RZ, R, R						V	V	FMA	vfmadd132ss		Multiply scalar single-precision floating-point value from xmm0 and xmm2/mem, add to xmm1 and put result in xmm0
+VEX.DDS.LIG.128.66.0F38.W0 A9 /r	VFMADD213SS xmm0, xmm1, xmm2/m32	RVM	RZ, R, R						V	V	FMA	vfmadd213ss		Multiply scalar single-precision floating-point value from xmm0 and xmm1, add to xmm2/mem and put result in xmm0.
+VEX.DDS.LIG.128.66.0F38.W0 B9 /r	VFMADD231SS xmm0, xmm1, xmm2/m32	RVM	RZ, R, R						V	V	FMA	vfmadd231ss		Multiply scalar single-precision floating-point value from xmm1 and xmm2/mem, add to xmm0 and put result in xmm0.
+														
+VEX.DDS.128.66.0F38.W1 96 /r	VFMADDSUB132PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmaddsub132pd		Multiply packed double-precision floating-point values from xmm0 and xmm2/mem, add/subtract elements in xmm1 and put result in xmm0.
+VEX.DDS.128.66.0F38.W1 A6 /r	VFMADDSUB213PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmaddsub213pd		Multiply packed double-precision floating-point values from xmm0 and xmm1, add/subtract elements in xmm2/mem and put result in xmm0.
+VEX.DDS.128.66.0F38.W1 B6 /r	VFMADDSUB231PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmaddsub231pd		Multiply packed double-precision floating-point values from xmm1 and xmm2/mem, add/subtract elements in xmm0 and put result in xmm0.
+VEX.DDS.256.66.0F38.W1 96 /r	VFMADDSUB132PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmaddsub132pd		Multiply packed double-precision floating-point values from ymm0 and ymm2/mem, add/subtract elements in ymm1 and put result in ymm0.
+VEX.DDS.256.66.0F38.W1 A6 /r	VFMADDSUB213PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmaddsub213pd		Multiply packed double-precision floating-point values from ymm0 and ymm1, add/subtract elements in ymm2/mem and put result in ymm0.
+VEX.DDS.256.66.0F38.W1 B6 /r	VFMADDSUB231PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmaddsub231pd		Multiply packed double-precision floating-point values from ymm1 and ymm2/mem, add/subtract elements in ymm0 and put result in ymm0.
+														
+VEX.DDS.128.66.0F38.W0 96 /r	VFMADDSUB132PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmaddsub132ps		Multiply packed single-precision floating-point values from xmm0 and xmm2/mem, add/subtract elements in xmm1 and put result in xmm0.
+VEX.DDS.128.66.0F38.W0 A6 /r	VFMADDSUB213PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmaddsub213ps		Multiply packed single-precision floating-point values from xmm0 and xmm1, add/subtract elements in xmm2/mem and put result in xmm0.
+VEX.DDS.128.66.0F38.W0 B6 /r	VFMADDSUB231PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmaddsub231ps		Multiply packed single-precision floating-point values from xmm1 and xmm2/mem, add/subtract elements in xmm0 and put result in xmm0.
+VEX.DDS.256.66.0F38.W0 96 /r	VFMADDSUB132PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmaddsub132ps		Multiply packed single-precision floating-point values from ymm0 and ymm2/mem, add/subtract elements in ymm1 and put result in ymm0.
+VEX.DDS.256.66.0F38.W0 A6 /r	VFMADDSUB213PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmaddsub213ps		Multiply packed single-precision floating-point values from ymm0 and ymm1, add/subtract elements in ymm2/mem and put result in ymm0.
+VEX.DDS.256.66.0F38.W0 B6 /r	VFMADDSUB231PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmaddsub231ps		Multiply packed single-precision floating-point values from ymm1 and ymm2/mem, add/subtract elements in ymm0 and put result in ymm0.
+														
+VEX.DDS.128.66.0F38.W1 97 /r 	VFMSUBADD132PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmsubadd132pd		Multiply packed double-precision floating-point values from xmm0 and xmm2/mem, subtract/add elements in xmm1 and put result in xmm0.
+VEX.DDS.128.66.0F38.W1 A7 /r	VFMSUBADD213PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmsubadd213pd		Multiply packed double-precision floating-point values from xmm0 and xmm1, subtract/add elements in xmm2/mem and put result in xmm0.
+VEX.DDS.128.66.0F38.W1 B7 /r	VFMSUBADD231PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmsubadd231pd		Multiply packed double-precision floating-point values from xmm1 and xmm2/mem, subtract/add elements in xmm0 and put result in xmm0.
+VEX.DDS.256.66.0F38.W1 97 /r	VFMSUBADD132PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmsubadd132pd		Multiply packed double-precision floating-point values from ymm0 and ymm2/mem, subtract/add elements in ymm1 and put result in ymm0.
+VEX.DDS.256.66.0F38.W1 A7 /r	VFMSUBADD213PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmsubadd213pd		Multiply packed double-precision floating-point values from ymm0 and ymm1, subtract/add elements in ymm2/mem and put result in ymm0.
+VEX.DDS.256.66.0F38.W1 B7 /r	VFMSUBADD231PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmsubadd231pd		Multiply packed double-precision floating-point values from ymm1 and ymm2/mem, subtract/add elements in ymm0 and put result in ymm0.
+														
+VEX.DDS.128.66.0F38.W0 97 /r	VFMSUBADD132PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmsubadd132ps		Multiply packed single-precision floating-point values from xmm0 and xmm2/mem, subtract/add elements in xmm1 and put result in xmm0.
+VEX.DDS.128.66.0F38.W0 A7 /r	VFMSUBADD213PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmsubadd213ps		Multiply packed single-precision floating-point values from xmm0 and xmm1, subtract/add elements in xmm2/mem and put result in xmm0.
+VEX.DDS.128.66.0F38.W0 B7 /r	VFMSUBADD231PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmsubadd231ps		Multiply packed single-precision floating-point values from xmm1 and xmm2/mem, subtract/add elements in xmm0 and put result in xmm0.
+VEX.DDS.256.66.0F38.W0 97 /r	VFMSUBADD132PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmsubadd132ps		Multiply packed single-precision floating-point values from ymm0 and ymm2/mem, subtract/add elements in ymm1 and put result in ymm0.
+VEX.DDS.256.66.0F38.W0 A7 /r	VFMSUBADD213PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmsubadd213ps		Multiply packed single-precision floating-point values from ymm0 and ymm1, subtract/add elements in ymm2/mem and put result in ymm0.
+VEX.DDS.256.66.0F38.W0 B7 /r	VFMSUBADD231PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmsubadd231ps		Multiply packed single-precision floating-point values from ymm1 and ymm2/mem, subtract/add elements in ymm0 and put result in ymm0.
+														
+VEX.DDS.128.66.0F38.W1 9A /r	VFMSUB132PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmsub132pd		Multiply packed double-precision floating-point values from xmm0 and xmm2/mem, subtract xmm1 and put result in xmm0.
+VEX.DDS.128.66.0F38.W1 AA /r	VFMSUB213PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmsub213pd		Multiply packed double-precision floating-point values from xmm0 and xmm1, subtract xmm2/mem and put result in xmm0.
+VEX.DDS.128.66.0F38.W1 BA /r	VFMSUB231PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmsub231pd		Multiply packed double-precision floating-point values from xmm1 and xmm2/mem, subtract xmm0 and put result in xmm0.
+VEX.DDS.256.66.0F38.W1 9A /r 	VFMSUB132PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmsub132pd		Multiply packed double-precision floating-point values from ymm0 and ymm2/mem, subtract ymm1 and put result in ymm0.
+VEX.DDS.256.66.0F38.W1 AA /r	VFMSUB213PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmsub213pd		Multiply packed double-precision floating-point values from ymm0 and ymm1, subtract ymm2/mem and put result in ymm0
+VEX.DDS.256.66.0F38.W1 BA /r	VFMSUB231PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmsub231pd		Multiply packed double-precision floating-point values from ymm1 and ymm2/mem, subtract ymm0 and put result in ymm0.
+														
+VEX.DDS.128.66.0F38.W0 9A /r	VFMSUB132PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmsub132ps		Multiply packed single-precision floating-point values from xmm0 and xmm2/mem, subtract xmm1 and put result in xmm0.
+VEX.DDS.128.66.0F38.W0 AA /r	VFMSUB213PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmsub213ps		Multiply packed single-precision floating-point values from xmm0 and xmm1, subtract xmm2/mem and put result in xmm0.
+VEX.DDS.128.66.0F38.W0 BA /r	VFMSUB231PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmsub231ps		Multiply packed single-precision floating-point values from xmm1 and xmm2/mem, subtract xmm0 and put result in xmm0.
+VEX.DDS.256.66.0F38.W0 9A /r	VFMSUB132PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmsub132ps		Multiply packed single-precision floating-point values from ymm0 and ymm2/mem, subtract ymm1 and put result in ymm0.
+VEX.DDS.256.66.0F38.W0 AA /r	VFMSUB213PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmsub213ps		Multiply packed single-precision floating-point values from ymm0 and ymm1, subtract ymm2/mem and put result in ymm0
+VEX.DDS.256.66.0F38.W0 BA /r	VFMSUB231PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfmsub231ps		Multiply packed single-precision floating-point values from ymm1 and ymm2/mem, subtract ymm0 and put result in ymm0.
+														
+VEX.DDS.LIG.128.66.0F38.W1 9B /r	VFMSUB132SD xmm0, xmm1, xmm2/m64	RVM	RZ, R, R						V	V	FMA	vfmsub132sd		Multiply scalar double-precision floating-point value from xmm0 and xmm2/mem, subtract xmm1 and put result in xmm0.
+VEX.DDS.LIG.128.66.0F38.W1 AB /r	VFMSUB213SD xmm0, xmm1, xmm2/m64	RVM	RZ, R, R						V	V	FMA	vfmsub213sd		Multiply scalar double-precision floating-point value from xmm0 and xmm1, subtract xmm2/mem and put result in xmm0.
+VEX.DDS.LIG.128.66.0F38.W1 BB /r	VFMSUB231SD xmm0, xmm1, xmm2/m64	RVM	RZ, R, R						V	V	FMA	vfmsub231sd		Multiply scalar double-precision floating-point value from xmm1 and xmm2/mem, subtract xmm0 and put result in xmm0.
+														
+VEX.DDS.LIG.128.66.0F38.W0 9B /r	VFMSUB132SS xmm0, xmm1, xmm2/m32	RVM	RZ, R, R						V	V	FMA	vfmsub132ss		Multiply scalar single-precision floating-point value from xmm0 and xmm2/mem, subtract xmm1 and put result in xmm0.
+VEX.DDS.LIG.128.66.0F38.W0 AB /r	VFMSUB213SS xmm0, xmm1, xmm2/m32	RVM	RZ, R, R						V	V	FMA	vfmsub213ss		Multiply scalar single-precision floating-point value from xmm0 and xmm1, subtract xmm2/mem and put result in xmm0.
+VEX.DDS.LIG.128.66.0F38.W0 BB /r 	VFMSUB231SS xmm0, xmm1, xmm2/m32	RVM	RZ, R, R						V	V	FMA	vfmsub231ss		Multiply scalar single-precision floating-point value from xmm1 and xmm2/mem, subtract xmm0 and put result in xmm0.
+														
+VEX.DDS.128.66.0F38.W1 9C /r	VFNMADD132PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfnmadd132pd		Multiply packed double-precision floating-point values from xmm0 and xmm2/mem, negate the multiplication result and add to xmm1 and put result in xmm0.
+VEX.DDS.128.66.0F38.W1 AC /r	VFNMADD213PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfnmadd213pd		Multiply packed double-precision floating-point values from xmm0 and xmm1, negate the multiplication result and add to xmm2/mem and put result in xmm0.
+VEX.DDS.128.66.0F38.W1 BC /r	VFNMADD231PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfnmadd231pd		Multiply packed double-precision floating-point values from xmm1 and xmm2/mem, negate the multiplication result and add to xmm0 and put result in xmm0
+VEX.DDS.256.66.0F38.W1 9C /r	VFNMADD132PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfnmadd132pd		Multiply packed double-precision floating-point values from ymm0 and ymm2/mem, negate the multiplication result and add to ymm1 and put result in ymm0.
+VEX.DDS.256.66.0F38.W1 AC /r	VFNMADD213PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfnmadd213pd		Multiply packed double-precision floating-point values from ymm0 and ymm1, negate the multiplication result and add to ymm2/mem and put result in ymm0
+VEX.DDS.256.66.0F38.W1 BC /r	VFNMADD231PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfnmadd231pd		Multiply packed double-precision floating-point values from ymm1 and ymm2/mem, negate the multiplication result and add to ymm0 and put result in ymm0.
+														
+VEX.DDS.128.66.0F38.W0 9C /r	VFNMADD132PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfnmadd132ps		Multiply packed single-precision floating-point values from xmm0 and xmm2/mem, negate the multiplication result and add to xmm1 and put result in xmm0.
+VEX.DDS.128.66.0F38.W0 AC /r	VFNMADD213PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfnmadd213ps		Multiply packed single-precision floating-point values from xmm0 and xmm1, negate the multiplication result and add to xmm2/mem and put result in xmm0.
+VEX.DDS.128.66.0F38.W0 BC /r	VFNMADD231PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfnmadd231ps		Multiply packed single-precision floating-point values from xmm1 and xmm2/mem, negate the multiplication result and add to xmm0 and put result in xmm0.
+VEX.DDS.256.66.0F38.W0 9C /r 	VFNMADD132PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfnmadd132ps		Multiply packed single-precision floating-point values from ymm0 and ymm2/mem, negate the multiplication result and add to ymm1 and put result in ymm0.
+VEX.DDS.256.66.0F38.W0 AC /r	VFNMADD213PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfnmadd213ps		Multiply packed single-precision floating-point values from ymm0 and ymm1, negate the multiplication result and add to ymm2/mem and put result in ymm0.
+VEX.DDS.256.66.0F38.0 BC /r	VFNMADD231PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfnmadd231ps		Multiply packed single-precision floating-point values from ymm1 and ymm2/mem, negate the multiplication result and add to ymm0 and put result in ymm0.
+														
+VEX.DDS.LIG.128.66.0F38.W1 9D /r	VFNMADD132SD xmm0, xmm1, xmm2/m64	RVM	RZ, R, R						V	V	FMA	vfnmadd132sd		Multiply scalar double-precision floating-point value from xmm0 and xmm2/mem, negate the multiplication result and add to xmm1 and put result in xmm0
+VEX.DDS.LIG.128.66.0F38.W1 AD /r 	VFNMADD213SD xmm0, xmm1, xmm2/m64	RVM	RZ, R, R						V	V	FMA	vfnmadd213sd		Multiply scalar double-precision floating-point value from xmm0 and xmm1, negate the multiplication result and add to xmm2/mem and put result in xmm0.
+VEX.DDS.LIG.128.66.0F38.W1 BD /r 	VFNMADD231SD xmm0, xmm1, xmm2/m64	RVM	RZ, R, R						V	V	FMA	vfnmadd231sd		Multiply scalar double-precision floating-point value from xmm1 and xmm2/mem, negate the multiplication result and add to xmm0 and put result in xmm0.
+														
+VEX.DDS.LIG.128.66.0F38.W0 9D /r	VFNMADD132SS xmm0, xmm1, xmm2/m32	RVM	RZ, R, R						V	V	FMA	vfnmadd132ss		Multiply scalar single-precision floating-point value from xmm0 and xmm2/mem, negate the multiplication result and add to xmm1 and put result in xmm0
+VEX.DDS.LIG.128.66.0F38.W0 AD /r	VFNMADD213SS xmm0, xmm1, xmm2/m32	RVM	RZ, R, R						V	V	FMA	vfnmadd213ss		Multiply scalar single-precision floating-point value from xmm0 and xmm1, negate the multiplication result and add to xmm2/mem and put result in xmm0.
+VEX.DDS.LIG.128.66.0F38.W0 BD /r	VFNMADD231SS xmm0, xmm1, xmm2/m32	RVM	RZ, R, R						V	V	FMA	vfnmadd231ss		Multiply scalar single-precision floating-point value from xmm1 and xmm2/mem, negate the multiplication result and add to xmm0 and put result in xmm0.
+														
+VEX.DDS.128.66.0F38.W1 9E /r	VFNMSUB132PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfnmsub132pd		Multiply packed double-precision floating-point values from xmm0 and xmm2/mem, negate the multiplication result and subtract xmm1 and put result in xmm0.
+VEX.DDS.128.66.0F38.W1 AE /r	VFNMSUB213PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfnmsub213pd		Multiply packed double-precision floating-point values from xmm0 and xmm1, negate the multiplication result and subtract xmm2/mem and put result in xmm0
+VEX.DDS.128.66.0F38.W1 BE /r	VFNMSUB231PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfnmsub231pd		Multiply packed double-precision floating-point values from xmm1 and xmm2/mem, negate the multiplication result and subtract xmm0 and put result in xmm0.
+VEX.DDS.256.66.0F38.W1 9E /r	VFNMSUB132PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfnmsub132pd		Multiply packed double-precision floating-point values from ymm0 and ymm2/mem, negate the multiplication result and subtract ymm1 and put result in ymm0.
+VEX.DDS.256.66.0F38.W1 AE /r	VFNMSUB213PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfnmsub213pd		Multiply packed double-precision floating-point values from ymm0 and ymm1, negate the multiplication result and subtract ymm2/mem and put result in ymm0.
+VEX.DDS.256.66.0F38.W1 BE /r	VFNMSUB231PD ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfnmsub231pd		Multiply packed double-precision floating-point values from ymm1 and ymm2/mem, negate the multiplication result and subtract ymm0 and put result in ymm0.
+														
+VEX.DDS.128.66.0F38.W0 9E /r	VFNMSUB132PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfnmsub132ps		Multiply packed single-precision floating-point values from xmm0 and xmm2/mem, negate the multiplication result and subtract xmm1 and put result in xmm0.
+VEX.DDS.128.66.0F38.W0 AE /r	VFNMSUB213PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfnmsub213ps		Multiply packed single-precision floating-point values from xmm0 and xmm1, negate the multiplication result and subtract xmm2/mem and put result in xmm0.
+VEX.DDS.128.66.0F38.W0 BE /r	VFNMSUB231PS xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfnmsub231ps		Multiply packed single-precision floating-point values from xmm1 and xmm2/mem, negate the multiplication result and subtract xmm0 and put result in xmm0.
+VEX.DDS.256.66.0F38.W0 9E /r	VFNMSUB132PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfnmsub132ps		Multiply packed single-precision floating-point values from ymm0 and ymm2/mem, negate the multiplication result and subtract ymm1 and put result in ymm0.
+VEX.DDS.256.66.0F38.W0 AE /r	VFNMSUB213PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfnmsub213ps		Multiply packed single-precision floating-point values from ymm0 and ymm1, negate the multiplication result and subtract ymm2/mem and put result in ymm0.
+VEX.DDS.256.66.0F38.0 BE /r	VFNMSUB231PS ymm0, ymm1, ymm2/m256	RVM	RW, R, R						V	V	FMA	vfnmsub231ps		Multiply packed single-precision floating-point values from ymm1 and ymm2/mem, negate the multiplication result and subtract ymm0 and put result in ymm0.
+														
+VEX.DDS.LIG.128.66.0F38.W1 9F /r	VFNMSUB132SD xmm0, xmm1, xmm2/m64	RVM	RZ, R, R						V	V	FMA	vfnmsub132sd		Multiply scalar double-precision floating-point value from xmm0 and xmm2/mem, negate the multiplication result and subtract xmm1 and put result in xmm0.
+VEX.DDS.LIG.128.66.0F38.W1 AF /r	VFNMSUB213SD xmm0, xmm1, xmm2/m64	RVM	RZ, R, R						V	V	FMA	vfnmsub213sd		Multiply scalar double-precision floating-point value from xmm0 and xmm1, negate the multiplication result and subtract xmm2/mem and put result in xmm0.
+VEX.DDS.LIG.128.66.0F38.W1 BF /r	VFNMSUB231SD xmm0, xmm1, xmm2/m64	RVM	RZ, R, R						V	V	FMA	vfnmsub231sd		Multiply scalar double-precision floating-point value from xmm1 and xmm2/mem, negate the multiplication result and subtract xmm0 and put result in xmm0.
+														
+VEX.DDS.LIG.128.66.0F38.W0 9F /r	VFNMSUB132SS xmm0, xmm1, xmm2/m32	RVM	RZ, R, R						V	V	FMA	vfnmsub132ss		Multiply scalar single-precision floating-point value from xmm0 and xmm2/mem, negate the multiplication result and subtract xmm1 and put result in xmm0.
+VEX.DDS.LIG.128.66.0F38.W0 AF /r	VFNMSUB213SS xmm0, xmm1, xmm2/m32	RVM	RZ, R, R						V	V	FMA	vfnmsub213ss		Multiply scalar single-precision floating-point value from xmm0 and xmm1, negate the multiplication result and subtract xmm2/mem and put result in xmm0.
+VEX.DDS.LIG.128.66.0F38.W0 BF /r	VFNMSUB231SS xmm0, xmm1, xmm2/m32	RVM	RZ, R, R						V	V	FMA	vfnmsub231ss		Multiply scalar single-precision floating-point value from xmm1 and xmm2/mem, negate the multiplication result and subtract xmm0 and put result in xmm0.
+														
+VEX.DDS.128.66.0F38.W1 92 /r	VGATHERDPD xmm1, vm32x, xmm2	RMV	Z, R, R						V	V	AVX2	vgatherdpd		Using dword indices specified in vm32x, gather double-precision FP values from memory conditioned on mask specified by xmm2. Conditionally gathered elements are merged into xmm1.
+VEX.DDS.128.66.0F38.W1 93 /r	VGATHERQPD xmm1, vm64x, xmm2	RMV	Z, R, R						V	V	AVX2	vgatherqpd		Using qword indices specified in vm64x, gather double-precision FP values from memory conditioned on mask specified by xmm2. Conditionally gathered elements are merged into xmm1.
+VEX.DDS.256.66.0F38.W1 92 /r	VGATHERDPD ymm1, vm32x, ymm2	RMV	W, R, R						V	V	AVX2	vgatherdpd		Using dword indices specified in vm32x, gather double-precision FP values from memory conditioned on mask specified by ymm2. Conditionally gathered elements are merged into ymm1.
+VEX.DDS.256.66.0F38.W1 93 /r	VGATHERQPD ymm1, vm64y, ymm2	RMV	W, R, R						V	V	AVX2	vgatherqpd		Using qword indices specified in vm64y, gather double-precision FP values from memory conditioned on mask specified by ymm2. Conditionally gathered elements are merged into ymm1.
+														
+VEX.DDS.128.66.0F38.W0 92 /r	VGATHERDPS xmm1, vm32x, xmm2	RMV	Z, R, R						V	V	AVX2	vgatherdps		Using dword indices specified in vm32x, gather single-precision FP values from memory conditioned on mask specified by xmm2. Conditionally gathered elements are merged into xmm1.
+VEX.DDS.128.66.0F38.W0 93 /r	VGATHERQPS xmm1, vm64x, xmm2	RMV	Z, R, R						V	V	AVX2	vgatherqps		Using qword indices specified in vm64x, gather single-precision FP values from memory conditioned on mask specified by xmm2. Conditionally gathered elements are merged into xmm1.
+VEX.DDS.256.66.0F38.W0 92 /r	VGATHERDPS ymm1, vm32y, ymm2	RMV	W, R, R						V	V	AVX2	vgatherdps		Using dword indices specified in vm32x, gather single-precision FP values from memory conditioned on mask specified by ymm2. Conditionally gathered elements are merged into ymm1.
+VEX.DDS.256.66.0F38.W0 93 /r	VGATHERQPS xmm1, vm64y, xmm2	RMV	Z, R, R						V	V	AVX2	vgatherqps		Using qword indices specified in vm64y, gather single-precision FP values from memory conditioned on mask specified by ymm2. Conditionally gathered elements are merged into ymm1.
+														
+VEX.DDS.128.66.0F38.W0 90 /r	VPGATHERDD xmm1, vm32x, xmm2	RMV	Z, R, R						V	V	AVX2	vpgatherdd		Using dword indices specified in vm32x, gather dword values from memory conditioned on mask specified by xmm2. Conditionally gathered elements are merged into xmm1.
+VEX.DDS.128.66.0F38.W0 91 /r	VPGATHERQD xmm1, vm64x, xmm2	RMV	Z, R, R						V	V	AVX2	vpgatherqd		Using qword indices specified in vm64x, gather dword values from memory conditioned on mask specified by xmm2. Conditionally gathered elements are merged into xmm1.
+VEX.DDS.256.66.0F38.W0 90 /r	VPGATHERDD ymm1, vm32y, ymm2	RMV	W, R, R						V	V	AVX2	vpgatherdd		Using dword indices specified in vm32y, gather dword from memory conditioned on mask specified by ymm2. Conditionally gathered elements are merged into ymm1.
+VEX.DDS.256.66.0F38.W0 91 /r	VPGATHERQD xmm1, vm64y, xmm2	RMV	Z, R, R						V	V	AVX2	vpgatherqd		Using qword indices specified in vm64y, gather dword values from memory conditioned on mask specified by xmm2. Conditionally gathered elements are merged into xmm1.
+														
+VEX.DDS.128.66.0F38.W1 90 /r	VPGATHERDQ xmm1, vm32x, xmm2	RMV	Z, R, R						V	V	AVX2	vpgatherdq		Using dword indices specified in vm32x, gather qword values from memory conditioned on mask specified by xmm2. Conditionally gathered elements are merged into xmm1.
+VEX.DDS.128.66.0F38.W1 91 /r	VPGATHERQQ xmm1, vm64x, xmm2	RMV	Z, R, R						V	V	AVX2	vpgatherqq		Using qword indices specified in vm64x, gather qword values from memory conditioned on mask specified by xmm2. Conditionally gathered elements are merged into xmm1.
+VEX.DDS.256.66.0F38.W1 90 /r	VPGATHERDQ ymm1, vm32x, ymm2	RMV	W, R, R						V	V	AVX2	vpgatherdq		Using dword indices specified in vm32x, gather qword values from memory conditioned on mask specified by ymm2. Conditionally gathered elements are merged into ymm1.
+VEX.DDS.256.66.0F38.W1 91 /r	VPGATHERQQ ymm1, vm64y, ymm2	RMV	W, R, R						V	V	AVX2	vpgatherqq		Using qword indices specified in vm64y, gather qword values from memory conditioned on mask specified by ymm2. Conditionally gathered elements are merged into ymm1.
+														
+VEX.NDS.256.66.0F3A.W0 18 /r ib	VINSERTF128 ymm1, ymm2, xmm3/m128, imm8	RVMI	W, R, R, R						V	V	AVX	vinsertf128		Insert a single precision floating-point value selected by imm8 from xmm3/m128 into ymm2 at the specified destination element specified by imm8 and zero out destination elements in ymm1 as indicated in imm8.
+														
+VEX.NDS.256.66.0F3A.W0 38 /r ib	VINSERTI128 ymm1, ymm2, xmm3/m128, imm8	RVMI	W, R, R, R						V	V	AVX2	vinserti128		Insert 128-bits of integer data from xmm3/mem and the remaining values from ymm2 into ymm1.
 														
 VEX.NDS.128.66.0F38.W0 2C /r	VMASKMOVPS xmm1, xmm2, m128	RVM	Z, R, R						V	V	AVX	vmaskmovps		Conditionally load packed single-precision values from m128 using mask in xmm2 and store in xmm1.
 VEX.NDS.256.66.0F38.W0 2C /r	VMASKMOVPS ymm1, ymm2, m256	RVM	W, R, R						V	V	AVX	vmaskmovps		Conditionally load packed single-precision values from m256 using mask in ymm2 and store in ymm1.
@@ -2307,6 +2607,29 @@ VEX.NDS.128.66.0F38.W0 2E /r	VMASKMOVPS m128, xmm1, xmm2	MVR	W, R, R						V	V	AV
 VEX.NDS.256.66.0F38.W0 2E /r	VMASKMOVPS m256, ymm1, ymm2	MVR	W, R, R						V	V	AVX	vmaskmovps		Conditionally store packed single-precision values from ymm2 using mask in ymm1.
 VEX.NDS.128.66.0F38.W0 2F /r	VMASKMOVPD m128, xmm1, xmm2	MVR	W, R, R						V	V	AVX	vmaskmovpd		Conditionally store packed double-precision values from xmm2 using mask in xmm1.
 VEX.NDS.256.66.0F38.W0 2F /r	VMASKMOVPD m256, ymm1, ymm2	MVR	W, R, R						V	V	AVX	vmaskmovpd		Conditionally store packed double-precision values from ymm2 using mask in ymm1.
+														
+VEX.NDS.128.66.0F3A.W0 02 /r ib	VPBLENDD xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R						V	V	AVX2	vpblendd		Select dwords from xmm2 and xmm3/m128 from mask specified in imm8 and store the values into xmm1.
+VEX.NDS.256.66.0F3A.W0 02 /r ib	VPBLENDD ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R						V	V	AVX2	vpblendd		Select dwords from ymm2 and ymm3/m256 from mask specified in imm8 and store the values into ymm1.
+														
+VEX.128.66.0F38.W0 78 /r	VPBROADCASTB xmm1, xmm2/m8	RM	Z, R						V	V	AVX2	vpbroadcastb		Broadcast a byte integer in the source operand to sixteen locations in xmm1.
+VEX.256.66.0F38.W0 78 /r	VPBROADCASTB ymm1, xmm2/m8	RM	W, R						V	V	AVX2	vpbroadcastb		Broadcast a byte integer in the source operand to thirty two locations in ymm1.
+VEX.128.66.0F38.W0 79 /r	VPBROADCASTW xmm1, xmm2/m16	RM	Z, R						V	V	AVX2	vpbroadcastw		Broadcast a word integer in the source operand to eight locations in xmm1.
+VEX.256.66.0F38.W0 79 /r	VPBROADCASTW ymm1, xmm2/m16	RM	W, R						V	V	AVX2	vpbroadcastw		Broadcast a word integer in the source operand to sixteen locations in ymm1.
+VEX.128.66.0F38.W0 58 /r	VPBROADCASTD xmm1, xmm2/m32	RM	Z, R						V	V	AVX2	vpbroadcastd		Broadcast a dword integer in the source operand to four locations in xmm1.
+VEX.256.66.0F38.W0 58 /r	VPBROADCASTD ymm1, xmm2/m32	RM	W, R						V	V	AVX2	vpbroadcastd		Broadcast a dword integer in the source operand to eight locations in ymm1.
+VEX.128.66.0F38.W0 59 /r	VPBROADCASTQ xmm1, xmm2/m64	RM	Z, R						V	V	AVX2	vpbroadcastq		Broadcast a qword element in mem to two locations in xmm1
+VEX.256.66.0F38.W0 59 /r	VPBROADCASTQ ymm1, xmm2/m64	RM	W, R						V	V	AVX2	vpbroadcastq		Broadcast a qword element in mem to four locations in ymm1
+VEX.256.66.0F38.W0 5A /r	VBROADCASTI128 ymm1, m128	RM	W, R						V	V	AVX2	vpbroadcasti128		Broadcast 128 bits of integer data in mem to low and high 128-bits in ymm1.
+														
+VEX.NDS.256.66.0F38.W0 36 /r	VPERMD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpermd		Permute doublewords in ymm3/m256 using indexes in ymm2 and store the result in ymm1.
+														
+VEX.256.66.0F3A.W1 01 /r ib	VPERMPD ymm1, ymm2/m256, imm8	RMI	W, R, R						V	V	AVX2	vpermpd		Permute double-precision floating-point elements in ymm2/m256 using indexes in imm8 and store the result in ymm1.
+														
+VEX.NDS.256.66.0F38.W0 16 /r	VPERMPS ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpermps		Permute single-precision floating-point elements in ymm3/m256 using indexes in ymm2 and store the result in ymm1.
+														
+VEX.256.66.0F3A.W1 00 /r ib	VPERMQ ymm1, ymm2/m256, imm8	RMI	W, R, R						V	V	AVX2	vpermq		Permute qwords in ymm2/m256 using indexes in imm8 and store the result in ymm1.
+														
+VEX.NDS.256.66.0F3A.W0 46 /r ib	VPERM2I128 ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R						V	V	AVX2	vperm2i128		Permute 128-bit integer data in ymm2 and ymm3/mem using controls from imm8 and store result in ymm1.
 														
 VEX.NDS.128.66.0F38.W0 0D /r	VPERMILPD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpermilpd		Permute double-precision floating-point values in xmm2 using controls from xmm3/mem and store result in xmm1.
 VEX.NDS.256.66.0F38.W0 0D /r	VPERMILPD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	vpermilpd		Permute double-precision floating-point values in ymm2 using controls from ymm3/mem and store result in ymm1.
@@ -2320,14 +2643,36 @@ VEX.256.66.0F3A.W0 04 /r ib	VPERMILPS ymm1, ymm2/m256, imm8	RMI	W, R, R						V	V
 														
 VEX.NDS.256.66.0F3A.W0 06 /r ib	VPERM2F128 ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R						V	V	AVX	vperm2f128		Permute 128-bit floating-point fields in ymm2 and ymm3/mem using controls from imm8 and store result in ymm1.
 														
+VEX.NDS.128.66.0F38.W0 8C /r	VPMASKMOVD xmm1, xmm2, m128	RVM	Z, R, R						V	V	AVX2	vpmaskmovd		Conditionally load dword values from m128 using mask in xmm2 and store in xmm1.
+VEX.NDS.256.66.0F38.W0 8C /r	VPMASKMOVD ymm1, ymm2, m256	RVM	W, R, R						V	V	AVX2	vpmaskmovd		Conditionally load dword values from m256 using mask in ymm2 and store in ymm1.
+VEX.NDS.128.66.0F38.W1 8C /r	VPMASKMOVQ xmm1, xmm2, m128	RVM	Z, R, R						V	V	AVX2	vpmaskmovq		Conditionally load qword values from m128 using mask in xmm2 and store in xmm1.
+VEX.NDS.256.66.0F38.W1 8C /r	VPMASKMOVQ ymm1, ymm2, m256	RVM	W, R, R						V	V	AVX2	vpmaskmovq		Conditionally load qword values from m256 using mask in ymm2 and store in ymm1.
+VEX.NDS.128.66.0F38.W0 8E /r	VPMASKMOVD m128, xmm1, xmm2	MVR	W, R, R						V	V	AVX2	vpmaskmovd		Conditionally store dword values from xmm2 using mask in xmm1.
+VEX.NDS.256.66.0F38.W0 8E /r	VPMASKMOVD m256, ymm1, ymm2	MVR	W, R, R						V	V	AVX2	vpmaskmovd		Conditionally store dword values from ymm2 using mask in ymm1.
+VEX.NDS.128.66.0F38.W1 8E /r	VPMASKMOVQ m128, xmm1, xmm2	MVR	W, R, R						V	V	AVX2	vpmaskmovq		Conditionally store qword values from xmm2 using mask in xmm1.
+VEX.NDS.256.66.0F38.W1 8E /r	VPMASKMOVQ m256, ymm1, ymm2	MVR	W, R, R						V	V	AVX2	vpmaskmovq		Conditionally store qword values from ymm2 using mask in ymm1.
+														
+VEX.NDS.128.66.0F38.W0 47 /r	VPSLLVD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX2	vpsllvd		Shift bits in doublewords in xmm2 left by amount specified in the corresponding element of xmm3/m128 while shifting in 0s.
+VEX.NDS.128.66.0F38.W1 47 /r	VPSLLVQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX2	vpsllvq		Shift bits in quadwords in xmm2 left by amount specified in the corresponding element of xmm3/m128 while shifting in 0s.
+VEX.NDS.256.66.0F38.W0 47 /r	VPSLLVD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsllvd		Shift bits in doublewords in ymm2 left by amount specified in the corresponding element of ymm3/m256 while shifting in 0s.
+VEX.NDS.256.66.0F38.W1 47 /r	VPSLLVQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsllvq		Shift bits in quadwords in ymm2 left by amount specified in the corresponding element of ymm3/m256 while shifting in 0s.
+														
+VEX.NDS.128.66.0F38.W0 46 /r	VPSRAVD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX2	vpsravd		Shift bits in doublewords in xmm2 right by amount specified in the corresponding element of xmm3/m128 while shifting in the sign bits.
+VEX.NDS.256.66.0F38.W0 46 /r	VPSRAVD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsravd		Shift bits in doublewords in ymm2 right by amount specified in the corresponding element of ymm3/m256 while shifting in the sign bits.
+														
+VEX.NDS.128.66.0F38.W0 45 /r	VPSRLVD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX2	vpsrlvd		Shift bits in doublewords in xmm2 right by amount specified in the corresponding element of xmm3/m128 while shifting in 0s.
+VEX.NDS.128.66.0F38.W1 45 /r	VPSRLVQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX2	vpsrlvq		Shift bits in quadwords in xmm2 right by amount specified in the corresponding element of xmm3/m128 while shifting in 0s.
+VEX.NDS.256.66.0F38.W0 45 /r	VPSRLVD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsrlvd		Shift bits in doublewords in ymm2 right by amount specified in the corresponding element of ymm3/m256 while shifting in 0s.
+VEX.NDS.256.66.0F38.W1 45 /r	VPSRLVQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsrlvq		Shift bits in quadwords in ymm2 right by amount specified in the corresponding element of ymm3/m256 while shifting in 0s.
+														
 VEX.128.66.0F38.W0 0E /r	VTESTPS xmm1, xmm2/m128	RM	R, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	AVX	vtestps		Set ZF and CF depending on sign bit AND and ANDN of packed single-precision floating- point sources.
 VEX.256.66.0F38.W0 0E /r	VTESTPS ymm1, ymm2/m256	RM	R, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	AVX	vtestps		Set ZF and CF depending on sign bit AND and ANDN of packed single-precision floating- point sources.
 VEX.128.66.0F38.W0 0F /r	VTESTPD xmm1, xmm2/m128	RM	R, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	AVX	vtestpd		Set ZF and CF depending on sign bit AND and ANDN of packed double-precision floating- point sources.
 VEX.256.66.0F38.W0 0F /r	VTESTPD ymm1, ymm2/m256	RM	R, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	AVX	vtestpd		Set ZF and CF depending on sign bit AND and ANDN of packed double-precision floating- point sources.
 														
-VEX.256.0F.WIG 77	VZEROALL	NP							V	V	AVX	vzeroall		Zero all YMM registers.
+VEX.256.0F.WIG 77	VZEROALL	NP			YMM*				V	V	AVX	vzeroall		Zero all YMM registers.
 														
-VEX.128.0F.WIG 77	VZEROUPPER	NP							V	V	AVX	vzeroupper		Zero upper 128 bits of all YMM registers.
+VEX.128.0F.WIG 77	VZEROUPPER	NP			YMM*				V	V	AVX	vzeroupper		Zero upper 128 bits of all YMM registers.
 														
 9B	WAIT	NP				S.C0 S.C1 S.C2 S.C3			V	V	FPU	wait		Check pending unmasked floating-point exceptions.
 9B	FWAIT	NP				S.C0 S.C1 S.C2 S.C3			V	V	FPU	fwait		Check pending unmasked floating-point exceptions.
@@ -2341,11 +2686,19 @@ REX.W+ F3 0F AE /3	WRGSBASE r64	M	R						V	I	FSGSBASE	wrgsbase		Load the GS base
 														
 0F 30	WRMSR						NO	YES	V	V				Write the value in EDX:EAX to MSR specified by ECX.
 														
+F2	XACQUIRE	NP							V	V	HLE	xacquire		A hint used with an “XACQUIRE-enabled“ instruction to start lock elision on the instruction memory operand address.
+F3	XRELEASE	NP							V	V	HLE	xrelease		A hint used with an “XRELEASE-enabled“ instruction to end lock elision on the instruction memory operand address.
+														
+C6 F8 ib	XABORT imm8	I	R						V	V	RTM	xabort		Causes an RTM abort if in RTM execution
+														
 0F C0 /r	XADD r/m8, r8	MR	RW, RW		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		xaddb		Exchange r8 and r/m8; load sum into r/m8.
 REX+ 0F C0 /r	XADD r/m8, r8	MR	RW, RW		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		xaddb		Exchange r8 and r/m8; load sum into r/m8.
 0F C1 /r	XADD r/m16, r16	MR	RW, RW		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		xaddw		Exchange r16 and r/m16; load sum into r/m16.
 0F C1 /r	XADD r/m32, r32	MR	RW, RW		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V		xaddl		Exchange r32 and r/m32; load sum into r/m32.
 REX.W+ 0F C1 /r	XADD r/m64, r64	MR	RW, RW		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE		xaddq		Exchange r64 and r/m64; load sum into r/m64.
+														
+C7 F8	XBEGIN rel16	A	R						NS	V	RTM	xbegin		Specifies the start of an RTM region. Provides a 16-bit relative offset to compute the address of the fallback instruction address at which execution resumes following an RTM abort.
+C7 F8	XBEGIN rel32	A	R						V	V	RTM	xbegin		Specifies the start of an RTM region. Provides a 32-bit relative offset to compute the address of the fallback instruction address at which execution resumes following an RTM abort.
 														
 90 +rw	XCHG AX, r16	O	RW, RW						V	V		xchgw		Exchange r16 with AX.
 90 +rw	XCHG r16, AX	O	RW, RW						V	V		xchgw		Exchange AX with r16.
@@ -2363,6 +2716,8 @@ REX+ 86 /r	XCHG r8, r/m8	RM	RW, RW						V	NE		xchgb		Exchange byte from r/m8 wit
 REX.W+ 87 /r	XCHG r/m64, r64	MR	RW, RW						V	NE		xchgq	YES	Exchange r64 with quadword from r/m64.
 87 /r	XCHG r32, r/m32	RM	RW, RW						V	V		xchgl		Exchange doubleword from r/m32 with r32.
 REX.W+ 87 /r	XCHG r64, r/m64	RM	RW, RW						V	NE		xchgq		Exchange quadword from r/m64 with r64.
+														
+0F 01 D5	XEND	NP							V	V	RTM	xend		Specifies the end of an RTM code region.
 														
 0F 01 D0	XGETBV	NP		ECX	EAX EDX		YES	NO	V	V	XSAVE	xgetbv		Reads an XCR specified by ECX into EDX:EAX.
 														
@@ -2411,3 +2766,5 @@ REX.W+ 0F AE /4	XSAVE64 mem	M	W	???	???	???			V	NE	XSAVE	xsave64		Save processor
 REX.W+ 0F AE /6	XSAVEOPT64 mem	M	W	???	???	???			V	V	XSAVEOPT	xsaveopt64		Save processor extended states specified in EDX:EAX to memory, optimizing the state save operation if possible.
 														
 0F 01 D1	XSETBV						NO*	YES	V	V				Write the value in EDX:EAX to the XCR specified by ECX.
+														
+0F 01 D6	XTEST	NP							V	V	RTM	xtest		Test if executing in a transactional region
