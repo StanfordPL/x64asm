@@ -1473,7 +1473,6 @@ VEX.NDS.128.66.0F.WIG 75 /r	VPCMPEQW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	
 VEX.NDS.128.66.0F.WIG 76 /r	VPCMPEQD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpeqd		Compare packed doublewords in xmm3/m128 and xmm2 for equality.
 VEX.NDS.256.66.0F.WIG 75 /r	VPCMPEQW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpeqb		Compare packed words in ymm3/m256 and ymm2 for equality.
 VEX.NDS.256.66.0F.WIG 76 /r	VPCMPEQD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpeqw		Compare packed doublewords in ymm3/m256 and ymm2 for equality.
-VEX.NDS.256.66.0F38.WIG 29 /r	VPCMPEQQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpeqd		Compare packed quadwords in ymm3/m256and ymm2 for equality.
 														
 66 0F 38 29 /r 	PCMPEQQ xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pcmpeqq		Compare packed qwords in xmm2/m128 and xmm1 for equality.
 VEX.NDS.128.66.0F38.WIG 29 /r 	VPCMPEQQ xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpcmpeqq		Compare packed quadwords in xmm3/m128 and xmm2 for equality.
@@ -2442,7 +2441,7 @@ VEX.128.66.0F38.W0 18 /r	VBROADCASTSS xmm1, m32	RM	Z, R						I	V	AVX	vbroadcasts
 VEX.256.66.0F38.W0 18 /r	VBROADCASTSS ymm1, m32	RM	W, R						V	V	AVX	vbroadcastss		Broadcast single-precision floating-point element in mem to eight locations in ymm1.
 VEX.256.66.0F38.W0 19 /r	VBROADCASTSD ymm1, m64	RM	W, R						V	V	AVX	vbroadcastsd		Broadcast double-precision floating-point element in mem to four locations in ymm1.
 VEX.256.66.0F38.W0 1A /r	VBROADCASTF128 ymm1, m128	RM	W, R						V	V	AVX	vbroadcastf128		Broadcast 128 bits of floating-point data in mem to low and high 128-bits in ymm1.
-VEX.128.66.0F38.W0 18/r	VBROADCASTSS xmm1, xmm2	RM	Z, R						V	V	AVX2	vbroadcastss		Broadcast the low single-precision floating- point element in the source operand to four locations in xmm1.
+VEX.128.66.0F38.W0 18 /r	VBROADCASTSS xmm1, xmm2	RM	Z, R						V	V	AVX2	vbroadcastss		Broadcast the low single-precision floating- point element in the source operand to four locations in xmm1.
 VEX.256.66.0F38.W0 18 /r	VBROADCASTSS ymm1, xmm2	RM	W, R						V	V	AVX2	vbroadcastss		Broadcast low single-precision floating-point element in the source operand to eight locations in ymm1.
 VEX.256.66.0F38.W0 19 /r	VBROADCASTSD ymm1, xmm2	RM	W, R						V	V	AVX2	vbroadcastsd		Broadcast low double-precision floating-point element in the source operand to four locations in ymm1.
 														
