@@ -59,7 +59,7 @@ src/code.o: src/code.cc src/code.h codegen
 	$(GCC) -w -O0 $(INC) -c $< -o $@
 
 src/%.o: src/%.cc src/%.h codegen
-	$(GCC) -Werror $(OPT) $(INC) -c $< -o $@
+	$(GCC) $(OPT) $(INC) -c $< -o $@
 
 ##### DOCUMENTATION TARGETS
 
