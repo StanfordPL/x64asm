@@ -14,7 +14,7 @@
 
 ##### CONSTANT DEFINITIONS
 
-GCC=ccache g++ -Werror -std=c++0x 
+GCC=ccache g++ -Werror -std=c++0x -fPIC
 
 INC=-I./
 		
