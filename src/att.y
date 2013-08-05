@@ -53,16 +53,12 @@ using namespace std;
 using namespace x64asm;
 
 extern int yylex();
-extern int yy_line_number;
-
-void yyerror(std::istream& is, x64asm::Code& code, const char* s) { 
-	is.setstate(std::ios::failbit); 
-	cerr << "Error on line " << yy_line_number << ": "  << s << endl;
-}
 
 typedef std::pair<x64asm::Opcode, std::vector<x64asm::Type>> Entry;
 typedef std::vector<Entry> Row;
 typedef std::map<std::string, Row> Table;
+
+void yyerror(std::istream& is, x64asm::Code& code, const char* s);
 
 Table att_table = {
 	#include "src/att.table"
@@ -436,3 +432,8 @@ m :
 | SREG COLON OFFSET OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{seg($1), base64($5), index64($7), $9, disp($3)}; }
 
 %% 
+
+void yyerror(std::istream& is, x64asm::Code& code, const char* s) { 
+	is.setstate(std::ios::failbit); 
+	cerr << "Error on line " << yylloc.first_line << ": "  << s << endl;
+}

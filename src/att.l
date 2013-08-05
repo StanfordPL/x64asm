@@ -47,15 +47,8 @@ the need to distinguish between general and special cases in parser rules.
 using namespace std;
 using namespace x64asm;
 
-int yy_line_number = 1;
-static int colnum = 0;
-#define YY_USER_ACTION {        \
-	yylloc.first_line = yylineno; \
-	yylloc.first_column = colnum; \
-	colnum += yyleng;             \
-	yylloc.last_column = colnum;  \
-	yylloc.last_line = yylineno;  \
-}
+#define YY_USER_ACTION \
+	yylloc.first_line = yylloc.last_line = yylineno;
 
 const Imm* to_imm(const char* c, bool is_hex, bool is_neg) {
 	uint64_t val = 0;
@@ -88,9 +81,9 @@ const std::string* to_str(const char* c, size_t len) {
 ":"           { return COLON; }
 "("           { return OPEN; }
 ")"           { return CLOSE; }
-"\n"          { yy_line_number++; return ENDL; }
+"\n"          { return ENDL; }
 [ \t*]        { ; }
-"#"[^\n]*"\n" { yy_line_number++; return ENDL; }
+"#"[^\n]*"\n" { return ENDL; }
 
 "1" { yylval.scale = Scale::TIMES_1; return SCALE; }
 "2" { yylval.scale = Scale::TIMES_2; return SCALE; }

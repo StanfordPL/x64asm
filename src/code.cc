@@ -35,7 +35,10 @@ istream& Code::read_att(istream& is) {
 
   auto buffer = att_scan_string(ss.str().c_str());
   att_switch_to_buffer(buffer);
+
+  attlineno = 0;
   attparse(is, *this);
+
   att_delete_buffer(buffer);
 
   return is;
