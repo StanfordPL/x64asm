@@ -916,6 +916,8 @@ E3 cb 	JRCXZ rel8 	D	R	RCX					V	NE		jrcxz		Jump short if RCX register is 0.
 0F 80 cw 	JO rel16 								NS	V				Jump near if overflow (OF=1). Not supported in 64-bit mode.
 0F 80 cd 	JO rel32 	D	R	E.OF					V	V		jo		Jump near if overflow (OF=1).
 0F 8A cw 	JP rel16 								NS	V				Jump near if parity (PF=1). Not supported in 64-bit mode.
+0F 8A cd 	JP rel32 	D	R	E.PF					V	V		jp		Jump near if parity (PF=1).
+0F 8A cw 	JPE rel16								NS	V				Jump near if parity even (PF=1). Not supported in 64-bit mode.
 0F 8A cd 	JPE rel32 	D	R	E.PF					V	V		jpe		Jump near if parity even (PF=1).
 0F 8B cw 	JPO rel16 								NS	V				Jump near if parity odd (PF=0). Not supported in 64-bit mode.
 0F 8B cd 	JPO rel32 	D	R	E.PF					V	V		jpo		Jump near if parity odd (PF=0).
