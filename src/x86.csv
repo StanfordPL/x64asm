@@ -779,6 +779,7 @@ F7 /7 	IDIV r/m32 	M	R	EAX EDX	EAX EDX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	V		idiv
 REX.W+ F7 /7 	IDIV r/m64 	M	R	RAX RDX	RAX RDX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	NE		idivq		Signed divide RDX:RAX by r/m64, with result stored in RAX = Quotient, RDX = Remainder.
 														
 F6 /5	IMUL r/m8	M	R	AL	AX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulb		AX= AL ∗ r/m byte.
+REX+ F6 /5	IMUL r/m8	M	R	AL	AX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulb		AX= AL ∗ r/m byte.
 F7 /5 	IMUL r/m16 	M	R	AX	AX DX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulw		DX:AX = AX ∗ r/m word.
 F7 /5 	IMUL r/m32 	M	R	EAX	EAX EDX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imull		EDX:EAX = EAX ∗ r/m32.
 REX.W+ F7 /5 	IMUL r/m64 	M	R	RAX	RAX RDX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	NE		imulq		RDX:RAX = RAX ∗ r/m64.
@@ -1244,7 +1245,9 @@ VEX.NDS.LIG.F3.0F.WIG 11 /r	VMOVSS xmm1, xmm2, xmm3	MVR	Z, R, R						V	V	AVX	vmo
 VEX.LIG.F3.0F.WIG 11 /r	VMOVSS m32, xmm1	MR	W, R						V	V	AVX	vmovss		Move scalar single-precision floating-point value from xmm1 register to m32.
 														
 0F BE /r 	MOVSX r16, r/m8 	RM	W, R						V	V		movsbw		Move byte to word with sign-extension.
+REX+ 0F BE /r 	MOVSX r16, r/m8 	RM	W, R						V	V		movsbw		Move byte to word with sign-extension.
 0F BE /r 	MOVSX r32, r/m8 	RM	W, R						V	V		movsbl		Move byte to doubleword with sign-extension.
+REX+ 0F BE /r 	MOVSX r32, r/m8 	RM	W, R						V	V		movsbl		Move byte to doubleword with sign-extension.
 REX.W+ 0F BE /r 	MOVSX r64, r/m8	RM	W, R						V	NE		movsbq		Move byte to quadword with sign-extension.
 0F BF /r 	MOVSX r32, r/m16 	RM	W, R						V	V		movswl		Move word to doubleword, with sign-extension.
 REX.W+ 0F BF /r 	MOVSX r64, r/m16 	RM	W, R						V	NE		movswq		Move word to quadword with sign-extension.
@@ -1265,7 +1268,9 @@ VEX.128.0F.WIG 11 /r	VMOVUPS xmm2/m128, xmm1	MR	Z, R						V	V	AVX	vmovups	YES	Mo
 VEX.256.0F.WIG 11 /r	VMOVUPS ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovups	YES	Move unaligned packed single-precision floating-point from ymm1 to ymm2/mem.
 														
 0F B6 /r 	MOVZX r16, r/m8 	RM	W, R						V	V		movzbw		Move byte to word with zero-extension.
+REX+ 0F B6 /r 	MOVZX r16, r/m8 	RM	W, R						V	V		movzbw		Move byte to word with zero-extension.
 0F B6 /r 	MOVZX r32, r/m8 	RM	W, R						V	V		movzbl		Move byte to doubleword, zero-extension.
+REX+ 0F B6 /r 	MOVZX r32, r/m8 	RM	W, R						V	V		movzbl		Move byte to doubleword, zero-extension.
 REX.W+ 0F B6 /r 	MOVZX r64, r/m8	RM	W, R						V	NE		movzbq		Move byte to quadword, zero-extension.
 0F B7 /r 	MOVZX r32, r/m16 	RM	W, R						V	V		movzwl		Move word to doubleword, zero-extension.
 REX.W+ 0F B7 /r 	MOVZX r64, r/m16 	RM	W, R						V	NE		movzwq		Move word to quadword, zero-extension.
