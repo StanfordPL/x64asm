@@ -581,41 +581,37 @@ fix_ops is = map fix_op is
 -- Step 5: Fix up REX rows
 --------------------------------------------------------------------------------
 
--- Split a row with an r8 operand into two alternatives
-split_r8 :: String -> String -> Instr -> [Instr]
-split_r8 alt1 alt2 i = case "r8" `elem` (operands i) of
-  True ->  [(repl_first_op i "r8" alt1), (repl_first_op i "r8" alt2)]
-  False -> [i]
-
--- Replace r8 in rew rows by rl and rb
+-- Replace an r8 in a rex row by rl and rb
 fix_rex_r8 :: Instr -> [Instr]
 fix_rex_r8 i = case "REX+" `elem` (opcode_terms i) of
-  True  -> concat $ map (split_r8 "rl" "rb") $ split_r8 "rl" "rb" i
-  False -> [i]
+  True  -> [(repl_first_op i "r8" "rl"), (repl_first_op i "r8" "rb")]
+  False -> []
 
--- Replace r8 in non-rex rows by rl and rh
+-- Replace an r8 in a non-rex row by rl and rh
 fix_norex_r8 :: Instr -> [Instr]
 fix_norex_r8 i = case "REX+" `notElem` (opcode_terms i) of
-  True  -> concat $ map (split_r8 "rl" "rh") $ split_r8 "rl" "rh" i
-  False -> [i]
+  True  -> [(repl_first_op i "r8" "rl"), (repl_first_op i "r8" "rh")]
+  False -> []
 
 -- Replace an r8 in a rex row if necessary
 fix_rex_row :: Instr -> [Instr]
-fix_rex_row i = concat $ map fix_norex_r8 $ fix_rex_r8 i
+fix_rex_row i = case "r8" `elem` (operands i) of 
+	True -> concat [(fix_norex_r8 i), (fix_rex_r8 i)]
+	False -> [i]
 
 -- Is this one of three instructions that require REX+ no matter what
 needs_rex :: Instr -> Bool
 needs_rex i = mn == "LSS" || mn == "LFS" || mn == "LGS"
   where mn = raw_mnemonic i
 
--- Remove REX+ rows which correspond to r/m8 splits
+-- Remove REX+ rows which correspond to the mem half of r/m8 splits
 remove_m8_rex :: [Instr] -> [Instr]
 remove_m8_rex is = filter keep is
-  where keep i = "REX+" `notElem` (opcode_terms i) || needs_rex i
+  where keep i = "REX+" `notElem` (opcode_terms i) || "rb" `elem` (operands i) || needs_rex i
 
--- Fix all rex rows
+-- Fix all rex rows (we do this twice to handle instructions with 2 r8 operands)
 fix_rex_rows :: [Instr] -> [Instr]
-fix_rex_rows is = remove_m8_rex $ concat $ map fix_rex_row is
+fix_rex_rows is = remove_m8_rex $ concat $ map fix_rex_row $ concat $ map fix_rex_row is
 
 -- Step 6: Remove duplicate rows by using the preferred encoding
 --------------------------------------------------------------------------------
@@ -632,7 +628,7 @@ get_pref is = case find (\x -> pref x == "YES") is of
 
 -- Remove ambiguity by prefering the shortest encoding
 remove_ambiguity :: [Instr] -> [Instr]
-remove_ambiguity is = map get_pref $ groupBy eq $ sortBy srt is
+remove_ambiguity is = map get_pref $ groupBy eq $ nubBy eq $ sortBy srt is
   where srt x y = compare (assm_decl x) (assm_decl y)
         eq x y = (assm_decl x) == (assm_decl y)	
 
