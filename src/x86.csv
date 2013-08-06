@@ -656,7 +656,7 @@ D9 EE 	FLDZ 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldz		Push +0.0 onto the FPU
 														
 D9 /5 	FLDCW m2byte 	M	R			S.C0 S.C1 S.C2 S.C3			V	V	FPU	fldcw		Load FPU control word from m2byte.
 														
-D9 /4 	FLDENV m28byte 	M	R		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE				V	V	FPU	fldenv		Load FPU environment from m14byte or m28byte.
+D9 /4 	FLDENV m28byte 	M	R		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE				V	V	FPU	fldenvl		Load FPU environment from m14byte or m28byte.
 														
 D8 /1 	FMUL m32fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fmuls		Multiply ST(0) by m32fp and store result in ST(0).
 DC /1 	FMUL m64fp 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fmull		Multiply ST(0) by m64fp and store result in ST(0).
@@ -703,8 +703,8 @@ DD D8 +i 	FSTP ST(i) 	O	W	ST(0)	S.C1	S.C0 S.C2 S.C3			V	V	FPU	fstp		Copy ST(0) t
 9B D9 /7 	FSTCW m2byte 	M	W			S.C0 S.C1 S.C2 S.C3			V	V	FPU	fstcw		Store FPU control word to m2byte after checking for pending unmasked floating-point exceptions.
 D9 /7 	FNSTCW m2byte 	M	W			S.C0 S.C1 S.C2 S.C3			V	V	FPU	fnstcw		Store FPU control word to m2byte without checking for pending unmasked floating-point exceptions.
 														
-9B D9 /6 	FSTENV m28byte 	M	W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V	FPU	fstenv		Store FPU environment to m14byte or m28byte after checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
-D9 /6 	FNSTENV m28byte 	M	W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V	FPU	fnstenv		Store FPU environment to m14byte or m28byte without checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
+9B D9 /6 	FSTENV m28byte 	M	W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V	FPU	fstenvl		Store FPU environment to m14byte or m28byte after checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
+D9 /6 	FNSTENV m28byte 	M	W		S.* TAG(*) FPUDATA FPUINSTR FPUOPCODE	S.C0 S.C1 S.C2 S.C3			V	V	FPU	fnstenvl		Store FPU environment to m14byte or m28byte without checking for pending unmasked floating-point exceptions. Then mask all floating-point exceptions.
 														
 9B DD /7 	FSTSW m2byte 	M	W		S.*	S.C0 S.C1 S.C2 S.C3			V	V	FPU	fstsw		Store FPU status word at m2byte after checking for pending unmasked floating-point exceptions.
 9B DF E0 	FSTSW AX 		W		S.*	S.C0 S.C1 S.C2 S.C3			V	V	FPU	fstsw		Store FPU status word in AX register after checking for pending unmasked floating-point exceptions.
