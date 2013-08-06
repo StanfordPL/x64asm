@@ -615,7 +615,7 @@ DE F9	FDIVRP 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fdivrp		Divide S
 DA /7 	FIDIVR m32int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fidivrl		Divide m32int by ST(0) and store result in ST(0).
 DE /7 	FIDIVR m16int 	M	R	ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fidivr		Divide m16int by ST(0) and store result in ST(0).
 														
-DD C0 +i 	FFREE ST(i) 	O	I			S.C0 S.C1 s.c2 S.C3			V	V	FPU	ffree		Sets tag for ST(i) to empty.
+DD C0 +i 	FFREE ST(i) 	O	I			S.C0 S.C1 s.c2 S.C3			V	V	FPU	ffreep		Sets tag for ST(i) to empty.
 														
 DE /2 	FICOM m16int 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	ficom		Compare ST(0) with m16int.
 DA /2 	FICOM m32int 	M	R	ST(0)	S.C0 S.C1 S.C2 S.C3				V	V	FPU	ficoml		Compare ST(0) with m32int.
