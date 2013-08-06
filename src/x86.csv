@@ -460,10 +460,10 @@ F2 REX.W+ 0F 2A /r	CVTSI2SD xmm, r/m64	RM	W, R	M.RC					V	NE	SSE2	cvtsi2sd		Conv
 VEX.NDS.LIG.F2.0F.W0 2A /r	VCVTSI2SD xmm1, xmm2, r/m32	RVM	Z, R, R	M.RC					V	V	AVX	vcvtsi2sd		Convert one signed doubleword integer from r/m32 to one double-precision floating-point value in xmm1.
 VEX.NDS.LIG.F2.0F.W1 2A /r	VCVTSI2SD xmm1, xmm2, r/m64	RVM	Z, R, R	M.RC					V	NE	AVX	vcvtsi2sd		Convert one signed quadword integer from r/m64 to one double-precision floating-point value in xmm1.
 														
-F3 0F 2A /r	CVTSI2SS xmm, r/m32	RM	W, R	M.RC					V	V	SSE	cvtsi2ss		Convert one signed doubleword integer from r/m32 to one single-precision floating-point value in xmm.
-F3 REX.W+ 0F 2A /r	CVTSI2SS xmm, r/m64	RM	W, R	M.RC					V	NE	SSE	cvtsi2ss		Convert one signed quadword integer from r/m64 to one single-precision floating-point value in xmm.
-VEX.NDS.LIG.F3.0F.W0 2A /r	VCVTSI2SS xmm1, xmm2, r/m32	RVM	Z, R, R	M.RC					V	V	AVX	vcvtsi2ss		Convert one signed doubleword integer from r/m32 to one single-precision floating-point value in xmm1.
-VEX.NDS.LIG.F3.0F.W1 2A /r	VCVTSI2SS xmm1, xmm2, r/m64	RVM	Z, R, R	M.RC					V	NE	AVX	vcvtsi2ss		Convert one signed quadword integer from r/m64 to one single-precision floating-point value in xmm1.
+F3 0F 2A /r	CVTSI2SS xmm, r/m32	RM	W, R	M.RC					V	V	SSE	cvtsi2ssl		Convert one signed doubleword integer from r/m32 to one single-precision floating-point value in xmm.
+F3 REX.W+ 0F 2A /r	CVTSI2SS xmm, r/m64	RM	W, R	M.RC					V	NE	SSE	cvtsi2ssq		Convert one signed quadword integer from r/m64 to one single-precision floating-point value in xmm.
+VEX.NDS.LIG.F3.0F.W0 2A /r	VCVTSI2SS xmm1, xmm2, r/m32	RVM	Z, R, R	M.RC					V	V	AVX	vcvtsi2ssl		Convert one signed doubleword integer from r/m32 to one single-precision floating-point value in xmm1.
+VEX.NDS.LIG.F3.0F.W1 2A /r	VCVTSI2SS xmm1, xmm2, r/m64	RVM	Z, R, R	M.RC					V	NE	AVX	vcvtsi2ssq		Convert one signed quadword integer from r/m64 to one single-precision floating-point value in xmm1.
 														
 F3 0F 5A /r	CVTSS2SD xmm1, xmm2/m32	RM	W, R	M.RC					V	V	SSE2	cvtss2sd		Convert one single-precision floating-point value in xmm2/m32 to one double-precision floating-point value in xmm1.
 VEX.NDS.LIG.F3.0F.WIG 5A /r	VCVTSS2SD xmm1, xmm2, xmm3/m32	RVM	Z, R, R	M.RC					V	V	AVX	vcvtss2sd		Convert one single-precision floating-point value in xmm3/m32 to one double-precision floating-point value and merge with high bits of xmm2.
@@ -926,7 +926,7 @@ E3 cb 	JRCXZ rel8 	D	R	RCX					V	NE		jrcxz		Jump short if RCX register is 0.
 														
 EB cb 	JMP rel8 	D	R		RIP				V	V		jmpq		Jump short, RIP = RIP + 8-bit displacement sign extended to 64-bits
 E9 cw 	JMP rel16 								NS	V				Jump near, relative, displacement relative to next instruction. Not supported in 64-bit mode.
-E9 cd 	JMP rel32 	D	R		RIP				V	V		jmp		Jump near, relative, RIP = RIP + 32-bit displacement sign extended to 64-bits
+E9 cd 	JMP rel32 	D	R		RIP				V	V		jmpq		Jump near, relative, RIP = RIP + 32-bit displacement sign extended to 64-bits
 FF /4 	JMP r/m16 								NS	V				Jump near, absolute indirect, address = zero-extended r/m16. Not supported in 64-bit mode.
 FF /4 	JMP r/m32 								NS	V				Jump near, absolute indirect, address given in r/m32. Not supported in 64-bit mode.
 FF /4 	JMP r/m64 	M	R		RIP				V	NE		jmpq		Jump near, absolute indirect, RIP = 64-Bit offset from register or memory
