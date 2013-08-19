@@ -447,10 +447,10 @@ VEX.256.0F.WIG 5A /r	VCVTPS2PD ymm1, xmm2/m128	RM	W, R	M.RC					V	V	AVX	vcvtps2p
 														
 0F 2D /r	CVTPS2PI mm, xmm/m64	RM	W, R	M.RC					V	V		cvtps2pi		Convert two packed single-precision floating- point values from xmm/m64 to two packed signed doubleword integers in mm.
 														
-F2 0F 2D /r	CVTSD2SI r32, xmm/m64	RM	W, R	M.RC					V	V	SSE2	cvtsd2si		Convert one double-precision floating-point value from xmm/m64 to one signed doubleword integer r32.
-F2 REX.W+ 0F 2D /r	CVTSD2SI r64, xmm/m64	RM	W, R	M.RC					V	NE	SSE2	cvtsd2si		Convert one double-precision floating-point value from xmm/m64 to one signed quadword integer sign-extended into r64.
-VEX.LIG.F2.0F.W0 2D /r	VCVTSD2SI r32, xmm1/m64	RM	W, R	M.RC					V	V	AVX	vcvtsd2si		Convert one double precision floating-point value from xmm1/m64 to one signed doubleword integer r32.
-VEX.LIG.F2.0F.W1 2D /r	VCVTSD2SI r64, xmm1/m64	RM	W, R	M.RC					V	NE	AVX	vcvtsd2si		Convert one double precision floating-point value from xmm1/m64 to one signed quadword integer sign-extended into r64.
+F2 0F 2D /r	CVTSD2SI r32, xmm/m64	RM	W, R	M.RC					V	V	SSE2	cvtsd2sil		Convert one double-precision floating-point value from xmm/m64 to one signed doubleword integer r32.
+F2 REX.W+ 0F 2D /r	CVTSD2SI r64, xmm/m64	RM	W, R	M.RC					V	NE	SSE2	cvtsd2siq		Convert one double-precision floating-point value from xmm/m64 to one signed quadword integer sign-extended into r64.
+VEX.LIG.F2.0F.W0 2D /r	VCVTSD2SI r32, xmm1/m64	RM	W, R	M.RC					V	V	AVX	vcvtsd2sil		Convert one double precision floating-point value from xmm1/m64 to one signed doubleword integer r32.
+VEX.LIG.F2.0F.W1 2D /r	VCVTSD2SI r64, xmm1/m64	RM	W, R	M.RC					V	NE	AVX	vcvtsd2siq		Convert one double precision floating-point value from xmm1/m64 to one signed quadword integer sign-extended into r64.
 														
 F2 0F 5A /r	CVTSD2SS xmm1, xmm2/m64	RM	W, R	M.RC					V	V	SSE2	cvtsd2ss		Convert one double-precision floating-point value in xmm2/m64 to one single-precision floating-point value in xmm1.
 VEX.NDS.LIG.F2.0F.WIG 5A /r	VCVTSD2SS xmm1,xmm2, xmm3/m64	RVM	Z, R, R	M.RC					V	V	AVX	vcvtsd2ss		Convert one double-precision floating-point value in xmm3/m64 to one single-precision floating-point value and merge with high bits in xmm2.
@@ -468,10 +468,10 @@ VEX.NDS.LIG.F3.0F.W1 2A /r	VCVTSI2SS xmm1, xmm2, r/m64	RVM	Z, R, R	M.RC					V	NE
 F3 0F 5A /r	CVTSS2SD xmm1, xmm2/m32	RM	W, R	M.RC					V	V	SSE2	cvtss2sd		Convert one single-precision floating-point value in xmm2/m32 to one double-precision floating-point value in xmm1.
 VEX.NDS.LIG.F3.0F.WIG 5A /r	VCVTSS2SD xmm1, xmm2, xmm3/m32	RVM	Z, R, R	M.RC					V	V	AVX	vcvtss2sd		Convert one single-precision floating-point value in xmm3/m32 to one double-precision floating-point value and merge with high bits of xmm2.
 														
-F3 0F 2D /r	CVTSS2SI r32, xmm/m32	RM	W, R						V	V	SSE	cvtss2si		Convert one single-precision floating-point value from xmm/m32 to one signed doubleword integer in r32.
-F3 REX.W+ 0F 2D /r	CVTSS2SI r64, xmm/m32	RM	W, R						V	NE	SSE	cvtss2si		Convert one single-precision floating-point value from xmm/m32 to one signed quadword integer in r64.
-VEX.LIG.F3.0F.W0 2D /r	VCVTSS2SI r32, xmm1/m32	RM	W, R						V	V	AVX	vcvtss2si		Convert one single-precision floating-point value from xmm1/m32 to one signed doubleword integer in r32.
-VEX.LIG.F3.0F.W1 2D /r	VCVTSS2SI r64, xmm1/m32	RM	W, R						V	NE	AVX	vcvtss2si		Convert one single-precision floating-point value from xmm1/m32 to one signed quadword integer in r64.
+F3 0F 2D /r	CVTSS2SI r32, xmm/m32	RM	W, R						V	V	SSE	cvtss2sil		Convert one single-precision floating-point value from xmm/m32 to one signed doubleword integer in r32.
+F3 REX.W+ 0F 2D /r	CVTSS2SI r64, xmm/m32	RM	W, R						V	NE	SSE	cvtss2siq		Convert one single-precision floating-point value from xmm/m32 to one signed quadword integer in r64.
+VEX.LIG.F3.0F.W0 2D /r	VCVTSS2SI r32, xmm1/m32	RM	W, R						V	V	AVX	vcvtss2sil		Convert one single-precision floating-point value from xmm1/m32 to one signed doubleword integer in r32.
+VEX.LIG.F3.0F.W1 2D /r	VCVTSS2SI r64, xmm1/m32	RM	W, R						V	NE	AVX	vcvtss2siq		Convert one single-precision floating-point value from xmm1/m32 to one signed quadword integer in r64.
 														
 66 0F E6	CVTTPD2DQ xmm1, xmm2/m128	RM	W, R						V	V	SSE2	cvttpd2dq		Convert two packed double-precision floating- point values from xmm2/m128 to two packed signed doubleword integers in xmm1 using truncation.
 VEX.128.66.0F.WIG E6 /r	VCVTTPD2DQ xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vcvttpd2dq		Convert two packed double-precision floating- point values in xmm2/mem to two signed doubleword integers in xmm1 using truncation.
