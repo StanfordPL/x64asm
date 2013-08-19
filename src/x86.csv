@@ -485,9 +485,9 @@ VEX.256.F3.0F.WIG 5B /r	VCVTTPS2DQ ymm1, ymm2/m256	RM	W, R						V	V	AVX	vcvttps2
 														
 0F 2C /r	CVTTPS2PI mm, xmm/m64	RM	W, R						V	V		cvttps2pi		Convert two single-precision floating-point values from xmm/m64 to two signed doubleword signed integers in mm using truncation.
 														
-F2 0F 2C /r	CVTTSD2SI r32, xmm/m64	RM	W, R						V	V	SSE2	cvttsd2sil		Convert one double-precision floating-point value from xmm/m64 to one signed doubleword integer in r32 using truncation.
+F2 0F 2C /r	CVTTSD2SI r32, xmm/m64	RM	W, R						V	V	SSE2	cvttsd2si		Convert one double-precision floating-point value from xmm/m64 to one signed doubleword integer in r32 using truncation.
 F2 REX.W+ 0F 2C /r	CVTTSD2SI r64, xmm/m64	RM	W, R						V	NE	SSE2	cvttsd2siq		Convert one double precision floating-point value from xmm/m64 to one signedquadword integer in r64 using truncation.
-VEX.LIG.F2.0F.W0 2C /r	VCVTTSD2SI r32, xmm1/m64	RM	W, R						V	V	AVX	vcvttsd2sil		Convert one double-precision floating-point value from xmm1/m64 to one signed doubleword integer in r32 using truncation.
+VEX.LIG.F2.0F.W0 2C /r	VCVTTSD2SI r32, xmm1/m64	RM	W, R						V	V	AVX	vcvttsd2si		Convert one double-precision floating-point value from xmm1/m64 to one signed doubleword integer in r32 using truncation.
 VEX.LIG.F2.0F.W1 2C /r	VCVTTSD2SI r64, xmm1/m64	RM	W, R						V	NE	AVX	vcvttsd2siq		Convert one double precision floating-point value from xmm1/m64 to one signed quadword integer in r64 using truncation.
 														
 F3 0F 2C /r	CVTTSS2SI r32, xmm/m32	RM	W, R						V	V	SSE	cvttss2si		Convert one single-precision floating-point value from xmm/m32 to one signed doubleword integer in r32 using truncation.
