@@ -424,7 +424,7 @@ VEX.128.0F.WIG 5B /r	VCVTDQ2PS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vcvtdq2ps		C
 VEX.256.0F.WIG 5B /r	VCVTDQ2PS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vcvtdq2ps		Convert eight packed signed doubleword integers from ymm2/mem to eight packed single-precision floating-point values in ymm1.
 														
 F2 0F E6	CVTPD2DQ xmm1, xmm2/m128	RM	W, R	M.RC					V	V	SSE2	cvtpd2dq		Convert two packed double-precision floating- point values from xmm2/m128 to two packed signed doubleword integers in xmm1.
-VEX.128.F2.0F.WIG E6 /r	VCVTPD2DQ xmm1, xmm2/m128	RM	Z, R	M.RC					V	V	AVX	vcvtpd2dq		Convert two packed double-precision floating- point values in xmm2/mem to two signed doubleword integers in xmm1.
+VEX.128.F2.0F.WIG E6 /r	VCVTPD2DQ xmm1, xmm2/m128	RM	Z, R	M.RC					V	V	AVX	vcvtpd2dqx		Convert two packed double-precision floating- point values in xmm2/mem to two signed doubleword integers in xmm1.
 VEX.256.F2.0F.WIG E6 /r	VCVTPD2DQ xmm1, ymm2/m256	RM	Z, R	M.RC					V	V	AVX	vcvtpd2dq		Convert four packed double-precision floating- point values in ymm2/mem to four signed doubleword integers in xmm1.
 														
 66 0F 2D /r	CVTPD2PI mm, xmm/m128	RM	W, R	M.RC					V	V		cvtpd2pi		Convert two packed double-precision floating- point values from xmm/m128 to two packed signed doubleword integers in mm.
