@@ -40,7 +40,7 @@ debug:
 release:
 	make -C . erthing OPT="-DNDEBUG -O3 -funroll-all-loops -fno-rtti -fomit-frame-pointer"
 profile:
-	make -C . erthing OPT="-DNDEBUG -O3 -funroll-all-loops -fno-rtti -fomit-frame-pointer -pg"
+	make -C . erthing OPT="-DNDEBUG -O3 -funroll-all-loops -fno-rtti -pg"
 
 erthing: $(LIB) $(BIN) $(DOC)
 
