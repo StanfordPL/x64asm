@@ -43,11 +43,11 @@ a premium.
 x64asm has been used as part of the following projects and publications:
 If you've found x64asm useful, please let me know and I will add a reference.
 
+Data-Driven Equivalence Checking. Rahul Sharma, Eric Schkufza, 
+Berkeley Churchill, Alex Aiken. OOPSLA 2013.
+
 Stochastic Superoptimization. Eric Schkufza, Rahul Sharma, Alex Aiken. 
 ASPLOS 2013.
-
-Data-Driven Equivalence Checking. Rahul Sharma, Eric Schkufza, 
-Berkeley Churchill, Alex Aiken. OOPSLA 2013 (to appear).
 
 -------------------------------------------------------------------------------
 
