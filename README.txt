@@ -60,6 +60,7 @@ Thanks to Rahul Sharma and Berkeley Churchill for implementation help.
 Supported Platforms:
 
 Ubuntu 12.04 LTS
+Ubuntu 13.10
 
 -------------------------------------------------------------------------------
 
