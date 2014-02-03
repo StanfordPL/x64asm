@@ -217,76 +217,13 @@ class M : public Operand {
         const Imm32& d);
 };
 
-// In general I'm opposed to #defs, but the alternative is copy-paste mayhem.
-#define CONSTRUCTORS(T) \
-  /** Creates a memory using disp form. */ \
-  constexpr T(const Imm32& d) : M{d} { } \
-  /** Creates a memory using seg:disp form. */ \
-  constexpr T(const Sreg& s, const Imm32& d) : M{s, d} { } \
-  /** Creates a memroy using (base64) form. */ \
-  constexpr T(const R32& b) : M{b} { } \
-  /** Creates a memory using (base32) form. */ \
-  constexpr T(const R64& b) : M{b} { } \
-  /** Creates a memory using RIP form. */ \
-  constexpr T(Rip rip) : M{rip} {} \
-  /** Creates a memory using seg:base32 form. */ \
-  constexpr T(const Sreg& s, const R32& b) : M{s, b} { } \
-  /** Creates a memory using seg:base64 form. */ \
-  constexpr T(const Sreg& s, const R64& b) : M{s, b} { } \
-  /** Creates a memory using seg:RIP form. */ \
-  constexpr T(const Sreg& s, Rip rip) : M{s, rip} { } \
-  /** Creates a memory using disp(base32) form. */ \
-  constexpr T(const R32& b, const Imm32& d) : M{b, d} { } \
-  /** Creates a memory using disp(base64) form. */ \
-  constexpr T(const R64& b, const Imm32& d) : M{b, d} { } \
-  /** Creates a memory using RIP+disp form. */ \
-  constexpr T(Rip rip, const Imm32& d) : M{rip, d} { } \
-  /** Creates a memory using seg:disp(base32) form. */ \
-  constexpr T(const Sreg& s, const R32& b, const Imm32& d) : M{s, b, d} { } \
-  /** Creates a memory using seg:disp(base64) form. */ \
-  constexpr T(const Sreg& s, const R64& b, const Imm32& d) : M{s, b, d} { } \
-  /** Creates a memory using seg:RIP+disp form. */ \
-  constexpr T(const Sreg& s, Rip rip, const Imm32& d) : M{s, rip, d} { } \
-  /** Creates a memory using (index32,scale) form. */ \
-  constexpr T(const R32& i, Scale s) : M{i, s} { } \
-  /** Creates a memory using (index64,scale) form. */ \
-  constexpr T(const R64& i, Scale s) : M{i, s} { } \
-  /** Creates a memory using seg:(index32,scale) form. */ \
-  constexpr T(const Sreg& s, const R32& i, Scale sc) : M{s, i, sc} { } \
-  /** Creates a memory using seg:(index64,scale) form. */ \
-  constexpr T(const Sreg& s, const R64& i, Scale sc) : M{s, i, sc} { } \
-  /** Creates a memory using disp(index32,scale) form. */ \
-  constexpr T(const R32& i, Scale s, const Imm32& d) : M{i, s, d} { } \
-  /** Creates a memory using disp(index64,scale) form. */ \
-  constexpr T(const R64& i, Scale s, const Imm32& d) : M{i, s, d} { } \
-  /** Creates a memory using seg:disp(index32,scale) form. */ \
-  constexpr T(const Sreg& s, const R32& i, Scale sc, const Imm32& d) : M{s, i, sc, d} { } \
-  /** Creates a memory using seg:disp(index64,scale) form. */ \
-  constexpr T(const Sreg& s, const R64& i, Scale sc, const Imm32& d) : M{s, i, sc, d} { } \
-  /** Creates a memory using (base32,index32,scale) form. */ \
-  constexpr T(const R32& b, const R32& i, Scale s) : M{b, i, s} { } \
-  /** Creates a memory using (base64,index64,scale) form. */ \
-  constexpr T(const R64& b, const R64& i, Scale s) : M{b, i, s} { } \
-  /** Creates a memory using seg:(base32,index32,scale) form. */ \
-  constexpr T(const Sreg& s, const R32& b, const R32& i, Scale sc) : M{s, b, i, sc} { } \
-  /** Creates a memory using seg:(base64,index64,scale) form. */ \
-  constexpr T(const Sreg& s, const R64& b, const R64& i, Scale sc) : M{s, b, i, sc} { } \
-  /** Creates a memory using disp(base32,index32,scale) form. */ \
-  constexpr T(const R32& b, const R32& i, Scale s, const Imm32& d) : M{b, i, s, d} { } \
-  /** Creates a memory using disp(base64,index64,scale) form. */ \
-  constexpr T(const R64& b, const R64& i, Scale s, const Imm32& d) : M{b, i, s, d} { } \
-  /** Creates a memory using seg:disp(base32,index32,scale) form. */ \
-  constexpr T(const Sreg& s, const R32& b, const R32& i, Scale sc, const Imm32& d) : M{s, b, i, sc, d} { } \
-  /** Creates a memory using seg:disp(base64,index64,scale) form. */ \
-  constexpr T(const Sreg& s, const R64& b, const R64& i, Scale sc, const Imm32& d) : M{s, b, i, sc, d} { } \
- 
 /** A byte operand in memory, usually expressed as a variable or array name,
     but pointed to by the DS:(E)SI or ES:(E)DI registers.
     In 64-bit mode, it is pointed to by the RSI or RDI registers.
 */
 class M8 : public M {
   public:
-    CONSTRUCTORS(M8);
+		using M::M;
 };
 
 /** A word operand in memory, usually expressed as a variable or array name,
@@ -295,7 +232,7 @@ class M8 : public M {
 */
 class M16 : public M {
   public:
-    CONSTRUCTORS(M16);
+		using M::M;
 };
 
 /** A doubleword operand in memory, usually expressed as a variable or array
@@ -304,19 +241,19 @@ class M16 : public M {
 */
 class M32 : public M {
   public:
-    CONSTRUCTORS(M32);
+		using M::M;
 };
 
 /** A memory quadword operand in memory. */
 class M64 : public M {
   public:
-    CONSTRUCTORS(M64);
+		using M::M;
 };
 
 /** A memory double quadword operand in memory. */
 class M128 : public M {
   public:
-    CONSTRUCTORS(M128);
+		using M::M;
 };
 
 /** A 32-byte operand in memory. This nomenclature is used only with AVX
@@ -324,7 +261,7 @@ class M128 : public M {
 */
 class M256 : public M {
   public:
-    CONSTRUCTORS(M256);
+		using M::M;
 };
 
 /** A word integer operand in memory. This symbol designates integers that are
@@ -332,7 +269,7 @@ class M256 : public M {
 */
 class M16Int : public M {
   public:
-    CONSTRUCTORS(M16Int);
+		using M::M;
 };
 
 /** A doubleword integer operand in memory. This symbol designates integers
@@ -340,7 +277,7 @@ class M16Int : public M {
 */
 class M32Int : public M {
   public:
-    CONSTRUCTORS(M32Int);
+		using M::M;
 };
 
 /** A quadword integer operand in memory. This symbol designates integers
@@ -348,7 +285,7 @@ class M32Int : public M {
 */
 class M64Int : public M {
   public:
-    CONSTRUCTORS(M64Int);
+		using M::M;
 };
 
 /** A single-precision floating-point operand in memory. This symbol designates
@@ -357,7 +294,7 @@ class M64Int : public M {
 */
 class M32Fp : public M {
   public:
-    CONSTRUCTORS(M32Fp);
+		using M::M;
 };
 
 /** A double-precision floating-point operand in memory. This symbol designates
@@ -366,7 +303,7 @@ class M32Fp : public M {
 */
 class M64Fp : public M {
   public:
-    CONSTRUCTORS(M64Fp);
+		using M::M;
 };
 
 /** A double extended-precision floating-point operand in memory. This symbol
@@ -375,37 +312,37 @@ class M64Fp : public M {
 */
 class M80Fp : public M {
   public:
-    CONSTRUCTORS(M80Fp);
+		using M::M;
 };
 
 /** A double extended-precision binary-coded-decimaly operand in memory. */
 class M80Bcd : public M {
   public:
-    CONSTRUCTORS(M80Bcd);
+		using M::M;
 };
 
 /** A 2 byte operand in memory. */
 class M2Byte : public M {
   public:
-    CONSTRUCTORS(M2Byte);
+		using M::M;
 };
 
 /** A 28 byte operand in memory. */
 class M28Byte : public M {
   public:
-    CONSTRUCTORS(M28Byte);
+		using M::M;
 };
 
 /** A 108 byte operand in memory. */
 class M108Byte : public M {
   public:
-    CONSTRUCTORS(M108Byte);
+		using M::M;
 };
 
 /** A 512 byte operand in memory. */
 class M512Byte : public M {
   public:
-    CONSTRUCTORS(M512Byte);
+		using M::M;
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -414,7 +351,7 @@ class M512Byte : public M {
 */
 class FarPtr1616 : public M {
   public:
-    CONSTRUCTORS(FarPtr1616);
+		using M::M;
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -423,7 +360,7 @@ class FarPtr1616 : public M {
 */
 class FarPtr1632 : public M {
   public:
-    CONSTRUCTORS(FarPtr1632);
+		using M::M;
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -432,10 +369,8 @@ class FarPtr1632 : public M {
 */
 class FarPtr1664 : public M {
   public:
-    CONSTRUCTORS(FarPtr1664);
+		using M::M;
 };
-
-#undef CONSTRUCTORS
 
 } // namespace x64asm
 
