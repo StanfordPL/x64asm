@@ -153,6 +153,7 @@ class M : public Operand {
     static constexpr uint64_t init(const Imm32& d, const R& b, const R& i, 
         Scale sc, const Sreg& s, uint64_t addr_or, uint64_t rip);
 
+	public:
     /** Creates a memory using disp form. */
     constexpr M(const Imm32& d);
     /** Creates a memory using seg:disp form. */
