@@ -103,7 +103,7 @@ ostream& operator<<(ostream& os, const x64asm::Rel& r);
 
 namespace x64asm {
 
-inline Rel::Rel(const Rel& rhs) {
+inline Rel::Rel(const Rel& rhs) : Operand{0,0} {
   val_ = rhs.val_;
 }
 

@@ -100,7 +100,7 @@ ostream& operator<<(ostream& os, const x64asm::St& s);
 
 namespace x64asm {
 
-inline St::St(const St& rhs) {
+inline St::St(const St& rhs) : Operand{0,0} {
   val_ = rhs.val_;
 }
 

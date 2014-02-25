@@ -85,7 +85,7 @@ ostream& operator<<(ostream& os, const x64asm::Hint& h);
 
 namespace x64asm {
 
-inline Hint::Hint(const Hint& rhs) {
+inline Hint::Hint(const Hint& rhs) : Operand{0,0} {
   val_ = rhs.val_;
 }
 

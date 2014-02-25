@@ -87,7 +87,7 @@ ostream& operator<<(ostream& os, const x64asm::Ymm& y);
 
 namespace x64asm {
 
-inline Ymm::Ymm(const Ymm& rhs) {
+inline Ymm::Ymm(const Ymm& rhs) : Operand{0,0} {
   val_ = rhs.val_;
 }
 

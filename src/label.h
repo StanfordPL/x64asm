@@ -100,7 +100,7 @@ inline Label::Label(const std::string& s) {
     labels_.find(s)->second;
 }
 
-inline Label::Label(const Label& rhs) {
+inline Label::Label(const Label& rhs) : Operand{0,0} {
   val_ = rhs.val_;
 }
 

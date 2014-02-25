@@ -30,7 +30,7 @@ using namespace std;
 
 namespace {
 
-array<const char*, 3976> att_ {{
+array<const char*, 3801> att_ {{
     // Internal mnemonics
     "<label definition>"
     // Auto-generated mnemonics
@@ -932,112 +932,112 @@ size_t Instruction::hash() const {
   return res;
 }
 
-const array<size_t, 3976> Instruction::arity_ {{
+const array<size_t, 3801> Instruction::arity_ {{
   // Internal mnemonics
   1
   // Auto-generated mnemonics
   #include "src/arity.table"
 }};
 
-const array<array<Instruction::Properties, 4>, 3976> Instruction::properties_ {{
+const array<array<Instruction::Properties, 4>, 3801> Instruction::properties_ {{
   // Internal mnemonics
-  {{Properties::none() + Property::MUST_READ}}
+  {Properties::none() + Property::MUST_READ, Properties::none(), Properties::none(), Properties::none()}
   // Auto-generated mnemonics
   #include "src/properties.table"
 }};
 
-const array<array<Type, 4>, 3976> Instruction::type_ {{
+const array<array<Type, 4>, 3801> Instruction::type_ {{
   // Internal mnemonics
   {{Type::LABEL}}
   // Auto-generated mnemonics
   #include "src/type.table"
 }};
 
-const array<bool, 3976> Instruction::is_return_ {{
+const array<bool, 3801> Instruction::is_return_ {{
   // Internal mnemonics
   false
   // Auto-generated mnemonics
   #include "src/return.table"
 }};
 
-const array<bool, 3976> Instruction::is_nop_ {{
+const array<bool, 3801> Instruction::is_nop_ {{
   // Internal mnemonics
   false
   // Auto-generated mnemonics
   #include "src/nop.table"
 }};
 
-const array<bool, 3976> Instruction::is_jump_ {{
+const array<bool, 3801> Instruction::is_jump_ {{
   // Internal mnemonics
   false
   // Auto-generated mnemonics
   #include "src/jump.table"
 }};
 
-const array<bool, 3976> Instruction::is_cond_jump_ {{
+const array<bool, 3801> Instruction::is_cond_jump_ {{
   // Internal mnemonics
   false
   // Auto-generated mnemonics
   #include "src/cond_jump.table"
 }};
 
-const array<bool, 3976> Instruction::is_uncond_jump_ {{
+const array<bool, 3801> Instruction::is_uncond_jump_ {{
   // Internal mnemonics
   false
   // Auto-generated mnemonics
   #include "src/uncond_jump.table"
 }};
 
-const array<int, 3976> Instruction::mem_index_ {{
+const array<int, 3801> Instruction::mem_index_ {{
   // Internal mnemonics
   -1
   // Auto-generated mnemonics
   #include "src/mem_index.table"
 }};
 
-const array<RegSet, 3976> Instruction::implicit_must_read_set_ {{
+const array<RegSet, 3801> Instruction::implicit_must_read_set_ {{
   // Internal mnemonics
   RegSet::empty()
   // Auto-generated mnemonics
   #include "src/must_read.table"
 }};
 
-const array<RegSet, 3976> Instruction::implicit_maybe_read_set_ {{
+const array<RegSet, 3801> Instruction::implicit_maybe_read_set_ {{
   // Internal mnemonics
   RegSet::empty()
   // Auto-generated mnemonics
   #include "src/maybe_read.table"
 }};
 
-const array<RegSet, 3976> Instruction::implicit_must_write_set_ {{
+const array<RegSet, 3801> Instruction::implicit_must_write_set_ {{
   // Internal mnemonics
   RegSet::empty()
   // Auto-generated mnemonics
   #include "src/must_write.table"
 }};
 
-const array<RegSet, 3976> Instruction::implicit_maybe_write_set_ {{
+const array<RegSet, 3801> Instruction::implicit_maybe_write_set_ {{
   // Internal mnemonics
   RegSet::empty()
   // Auto-generated mnemonics
   #include "src/maybe_write.table"
 }};
 
-const array<RegSet, 3976> Instruction::implicit_must_undef_set_ {{
+const array<RegSet, 3801> Instruction::implicit_must_undef_set_ {{
   // Internal mnemonics
   RegSet::empty()
   // Auto-generated mnemonics
   #include "src/must_undef.table"
 }};
 
-const array<RegSet, 3976> Instruction::implicit_maybe_undef_set_ {{
+const array<RegSet, 3801> Instruction::implicit_maybe_undef_set_ {{
   // Internal mnemonics
   RegSet::empty()
   // Auto-generated mnemonics
   #include "src/maybe_undef.table"
 }};
 
-const array<FlagSet, 3976> Instruction::flags_ {{
+const array<FlagSet, 3801> Instruction::flags_ {{
   // Internal mnemonics
   FlagSet::empty()
   // Auto-generatred mnemonics

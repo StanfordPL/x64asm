@@ -119,7 +119,7 @@ ostream& operator<<(ostream& os, const x64asm::Sreg& s);
 
 namespace x64asm {
 
-inline Sreg::Sreg(const Sreg& rhs) {
+inline Sreg::Sreg(const Sreg& rhs) : Operand{0,0} {
   val_ = rhs.val_;
 }
 

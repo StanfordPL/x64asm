@@ -393,7 +393,7 @@ ostream& operator<<(ostream& os, const x64asm::M& m);
 
 namespace x64asm {
 
-inline M::M(const M& rhs) {
+inline M::M(const M& rhs) : Operand{0,0} {
   val_ = rhs.val_;
 }
 

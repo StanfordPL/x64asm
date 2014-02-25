@@ -148,7 +148,7 @@ ostream& operator<<(ostream& os, const x64asm::Moffs& m);
 
 namespace x64asm {
 
-inline Moffs::Moffs(const Moffs& rhs) {
+inline Moffs::Moffs(const Moffs& rhs) : Operand{0,0} {
   val_ = rhs.val_;
   val2_ = rhs.val2_;
 }

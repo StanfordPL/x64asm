@@ -127,7 +127,7 @@ ostream& operator<<(ostream& os, const x64asm::Far& f);
 
 namespace x64asm {
 
-inline Modifier::Modifier(const Modifier& rhs) {
+inline Modifier::Modifier(const Modifier& rhs) : Operand{0,0} {
   val_ = rhs.val_;
 }
 

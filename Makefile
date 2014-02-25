@@ -14,7 +14,7 @@
 
 ##### CONSTANT DEFINITIONS
 
-GCC=ccache g++ -Werror -std=c++0x -fPIC
+GCC=ccache g++ -Werror -Wextra -pedantic -std=c++11
 
 INC=-I./
 		
@@ -38,9 +38,9 @@ all: release
 debug:
 	make -C . erthing FLEXOPS="-d" BISONOPS="-t --report=state" OPT="-g"
 release:
-	make -C . erthing OPT="-DNDEBUG -O3 -funroll-all-loops -fno-rtti -fomit-frame-pointer"
+	make -C . erthing OPT="-DNDEBUG -O3"
 profile:
-	make -C . erthing OPT="-DNDEBUG -O3 -funroll-all-loops -fno-rtti -pg"
+	make -C . erthing OPT="-DNDEBUG -O3 -pg"
 
 erthing: $(LIB) $(BIN) $(DOC)
 
