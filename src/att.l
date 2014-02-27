@@ -243,8 +243,8 @@ const std::string* to_str(const char* c, size_t len) {
 
 [a-z][a-z0-9]* { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
 "rep "[a-z]+   { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
-"repe "[a-z]+  { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
-"repne "[a-z]+ { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
+"repz "[a-z]+  { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
+"repze "[a-z]+ { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
 
 . { yyterminate(); }
 
