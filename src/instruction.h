@@ -201,22 +201,22 @@ class Instruction {
     std::array<Operand, 4> operands_;
 
     // Static lookup tables which back the public API of this class.
-    static const std::array<size_t, 3801> arity_;
-    static const std::array<std::array<Properties, 4>, 3801> properties_;
-    static const std::array<std::array<Type, 4>, 3801> type_;
-    static const std::array<bool, 3801> is_return_;
-    static const std::array<bool, 3801> is_nop_;
-    static const std::array<bool, 3801> is_jump_;
-    static const std::array<bool, 3801> is_cond_jump_;
-    static const std::array<bool, 3801> is_uncond_jump_;
-		static const std::array<int, 3801> mem_index_;
-    static const std::array<RegSet, 3801> implicit_must_read_set_;
-    static const std::array<RegSet, 3801> implicit_maybe_read_set_;
-    static const std::array<RegSet, 3801> implicit_must_write_set_;
-    static const std::array<RegSet, 3801> implicit_maybe_write_set_;
-    static const std::array<RegSet, 3801> implicit_must_undef_set_;
-    static const std::array<RegSet, 3801> implicit_maybe_undef_set_;
-    static const std::array<FlagSet, 3801> flags_;
+    static const std::array<size_t, 3803> arity_;
+    static const std::array<std::array<Properties, 4>, 3803> properties_;
+    static const std::array<std::array<Type, 4>, 3803> type_;
+    static const std::array<bool, 3803> is_return_;
+    static const std::array<bool, 3803> is_nop_;
+    static const std::array<bool, 3803> is_jump_;
+    static const std::array<bool, 3803> is_cond_jump_;
+    static const std::array<bool, 3803> is_uncond_jump_;
+		static const std::array<int, 3803> mem_index_;
+    static const std::array<RegSet, 3803> implicit_must_read_set_;
+    static const std::array<RegSet, 3803> implicit_maybe_read_set_;
+    static const std::array<RegSet, 3803> implicit_must_write_set_;
+    static const std::array<RegSet, 3803> implicit_maybe_write_set_;
+    static const std::array<RegSet, 3803> implicit_must_undef_set_;
+    static const std::array<RegSet, 3803> implicit_maybe_undef_set_;
+    static const std::array<FlagSet, 3803> flags_;
 
     /** Returns the set of registers this instruction must implicitly read. */
     const RegSet& implicit_must_read_set() const;
