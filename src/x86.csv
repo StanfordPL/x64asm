@@ -2068,26 +2068,26 @@ F3 REX.W+ AA	REP_STOS m8	NP	I	RCX E.DF RDI AL					V	NE	REP_GOOD	rep stosb		Fill 
 F3 AB	REP_STOS m16	NP	I	ECX E.DF RDI AL					V	V	REP_GOOD	rep stosw	YES	Fill (E)CX words at ES:[(E)DI] with AX.
 F3 AB	REP_STOS m32	NP	I	ECX E.DF RDI AL					V	V	REP_GOOD	rep stosl	YES	Fill (E)CX doublewords at ES:[(E)DI] with EAX.
 F3 REX.W+ AB	REP_STOS m64	NP	I	RCX E.DF RDI AL					V	NE	REP_GOOD	rep stosq		Fill RCX quadwords at [RDI] with RAX.
-F3 A6	REPE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repe cmpsb	YES	Find nonmatching bytes in ES:[(E)DI] and DS:[(E)SI].
-F3 REX.W+ A6	REPE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repe cmpsb		Find non-matching bytes in [RDI] and [RSI].
-F3 A7	REPE_CMPS m16, m16	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repe cmpsw	YES	Find nonmatching words in ES:[(E)DI] and DS:[(E)SI].
-F3 A7	REPE_CMPS m32, m32	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repe cmpsl	YES	Find nonmatching doublewords in ES:[(E)DI] and DS:[(E)SI].
-F3 REX.W+ A7	REPE_CMPS m64, m64	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repe cmpsq		Find non-matching quadwords in [RDI] and [RSI].
-F3 AE	REPE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	V	REP_GOOD	repe scasb	YES	Find non-AL byte starting at ES:[(E)DI].
-F3 REX.W+ AE	REPE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	NE	REP_GOOD	repe scasb		Find non-AL byte starting at [RDI].
-F3 AF	REPE_SCAS m16	NP	I	E.ZF E.DF RDI AX					V	V	REP_GOOD	repe scasw	YES	Find non-AX word starting at ES:[(E)DI].
-F3 AF	REPE_SCAS m32	NP	I	E.ZF E.DF RDI EAX					V	V	REP_GOOD	repe scasl	YES	Find non-EAX doubleword starting at ES:[(E)DI].
-F3 REX.W+ AF	REPE_SCAS m64	NP	I	E.ZF E.DF RDI RAX					V	NE	REP_GOOD	repe scasq		Find non-RAX quadword starting at [RDI].
-F2 A6	REPNE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repne cmpsb	YES	Find matching bytes in ES:[(E)DI] and DS:[(E)SI].
-F2 REX.W+ A6	REPNE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repne cmpsb		Find matching bytes in [RDI] and [RSI].
-F2 A7	REPNE_CMPS m16, m16	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repne cmpsw	YES	Find matching words in ES:[(E)DI] and DS:[(E)SI].
-F2 A7	REPNE_CMPS m32, m32	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repne cmpsl	YES	Find matching doublewords in ES:[(E)DI] and DS:[(E)SI].
-F2 REX.W+ A7	REPNE_CMPS m64, m64	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repne cmpsq		Find matching doublewords in [RDI] and [RSI].
-F2 AE	REPNE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	V	REP_GOOD	repne scasb	YES	Find AL, starting at ES:[(E)DI].
-F2 REX.W+ AE	REPNE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	NE	REP_GOOD	repne scasb		Find AL, starting at [RDI].
-F2 AF	REPNE_SCAS m16	NP	I	E.ZF E.DF RDI AX					V	V	REP_GOOD	repne scasw	YES	Find AX, starting at ES:[(E)DI].
-F2 AF	REPNE_SCAS m32	NP	I	E.ZF E.DF RDI EAX					V	V	REP_GOOD	repne scasl	YES	Find EAX, starting at ES:[(E)DI].
-F2 REX.W+ AF	REPNE_SCAS m64	NP	I	E.ZF E.DF RDI RAX					V	NE	REP_GOOD	repne scasq		Find RAX, starting at [RDI].
+F3 A6	REPE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repz cmpsb	YES	Find nonmatching bytes in ES:[(E)DI] and DS:[(E)SI].
+F3 REX.W+ A6	REPE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repz cmpsb		Find non-matching bytes in [RDI] and [RSI].
+F3 A7	REPE_CMPS m16, m16	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repz cmpsw	YES	Find nonmatching words in ES:[(E)DI] and DS:[(E)SI].
+F3 A7	REPE_CMPS m32, m32	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repz cmpsl	YES	Find nonmatching doublewords in ES:[(E)DI] and DS:[(E)SI].
+F3 REX.W+ A7	REPE_CMPS m64, m64	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repz cmpsq		Find non-matching quadwords in [RDI] and [RSI].
+F3 AE	REPE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	V	REP_GOOD	repz scasb	YES	Find non-AL byte starting at ES:[(E)DI].
+F3 REX.W+ AE	REPE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	NE	REP_GOOD	repz scasb		Find non-AL byte starting at [RDI].
+F3 AF	REPE_SCAS m16	NP	I	E.ZF E.DF RDI AX					V	V	REP_GOOD	repz scasw	YES	Find non-AX word starting at ES:[(E)DI].
+F3 AF	REPE_SCAS m32	NP	I	E.ZF E.DF RDI EAX					V	V	REP_GOOD	repz scasl	YES	Find non-EAX doubleword starting at ES:[(E)DI].
+F3 REX.W+ AF	REPE_SCAS m64	NP	I	E.ZF E.DF RDI RAX					V	NE	REP_GOOD	repz scasq		Find non-RAX quadword starting at [RDI].
+F2 A6	REPNE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repnz cmpsb	YES	Find matching bytes in ES:[(E)DI] and DS:[(E)SI].
+F2 REX.W+ A6	REPNE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repnz cmpsb		Find matching bytes in [RDI] and [RSI].
+F2 A7	REPNE_CMPS m16, m16	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repnz cmpsw	YES	Find matching words in ES:[(E)DI] and DS:[(E)SI].
+F2 A7	REPNE_CMPS m32, m32	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repnz cmpsl	YES	Find matching doublewords in ES:[(E)DI] and DS:[(E)SI].
+F2 REX.W+ A7	REPNE_CMPS m64, m64	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repnz cmpsq		Find matching doublewords in [RDI] and [RSI].
+F2 AE	REPNE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	V	REP_GOOD	repnz scasb	YES	Find AL, starting at ES:[(E)DI].
+F2 REX.W+ AE	REPNE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	NE	REP_GOOD	repnz scasb		Find AL, starting at [RDI].
+F2 AF	REPNE_SCAS m16	NP	I	E.ZF E.DF RDI AX					V	V	REP_GOOD	repnz scasw	YES	Find AX, starting at ES:[(E)DI].
+F2 AF	REPNE_SCAS m32	NP	I	E.ZF E.DF RDI EAX					V	V	REP_GOOD	repnz scasl	YES	Find EAX, starting at ES:[(E)DI].
+F2 REX.W+ AF	REPNE_SCAS m64	NP	I	E.ZF E.DF RDI RAX					V	NE	REP_GOOD	repnz scasq		Find RAX, starting at [RDI].
 														
 C3	RET	NP			RIP				V	V		retq		Near return to calling procedure.
 CB	RET far	NP	I	???	???	???			V	V		lretl		Far return to calling procedure.
