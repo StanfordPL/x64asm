@@ -2043,51 +2043,51 @@ REX.W+ 0F C7 /6	RDRAND r64	M	W		E.CF E.OF E.SF E.ZF E.AF E.PF				V	I	RDRAND	rdra
 														
 0F 01 F9	RDTSCP						YES	YES*	V	V	RDTSCP			Read 64-bit time-stamp counter and 32-bit IA32_TSC_AUX value into EDX:EAX and ECX.
 														
-F3 6C	REP_INS m8, DX 	NP	I, R	ECX E.IOPL E.VM E.DF RDI					V	V	REP_GOOD	rep ins	YES	Input (E)CX bytes from port DX into ES:[(E)DI].
-F3 REX.W+ 6C	REP_INS m8, DX	NP	I, R	RCX E.IOPL E.VM E.DF RDI					V	NE	REP_GOOD	rep ins		Input RCX bytes from port DX into [RDI].
-F3 6D	REP_INS m16, DX	NP	I, R	ECX E.IOPL E.VM E.DF RDI					V	V	REP_GOOD	rep ins	YES	Input (E)CX words from port DX into ES:[(E)DI.]
-F3 6D	REP_INS m32, DX	NP	I, R	ECX E.IOPL E.VM E.DF RDI					V	V	REP_GOOD	rep ins	YES	Input (E)CX doublewords from port DX into ES:[(E)DI].
-F3 REX.W+ 6D	REP_INS m32, DX	NP	I, R	RCX E.IOPL E.VM E.DF RDI					V	NE	REP_GOOD	rep ins		Input RCX default size from port DX into [RDI].
-F3 A4	REP_MOVS m8, m8	NP	I, I	ECX E.DF ESI rsi EDI rdi					V	V	REP_GOOD	rep movs	YES	Move (E)CX bytes from DS:[(E)SI] to ES:[(E)DI].
-F3 REX.W+ A4	REP_MOVS m8, m8	NP	I, I	RCX E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	rep movs		Move RCX bytes from [RSI] to [RDI].
-F3 A5	REP_MOVS m16, m16	NP	I, I	ECX E.DF ESI rsi EDI rdi					V	V	REP_GOOD	rep movs	YES	Move (E)CX words from DS:[(E)SI] to ES:[(E)DI].
-F3 A5	REP_MOVS m32, m32	NP	I, I	ECX E.DF ESI rsi EDI rdi					V	V	REP_GOOD	rep movs	YES	Move (E)CX doublewords from DS:[(E)SI] to ES:[(E)DI].
-F3 REX.W+ A5	REP_MOVS m64, m64	NP	I, I	RCX E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	rep movs		Move RCX quadwords from [RSI] to [RDI].
-F3 6E	REP_OUTS DX, m8	NP	R, I	ECX E.IOPL E.VM E.DF RSI					V	V	REP_GOOD	rep outs	YES	Output (E)CX bytes from DS:[(E)SI] to port DX.
-F3 REX.W+ 6E	REP_OUTS DX, m8	NP	R, I	RCX E.IOPL E.VM E.DF RSI					V	NE	REP_GOOD	rep outs		Output RCX bytes from [RSI] to port DX.
-F3 6F	REP_OUTS DX, m16	NP	R, I	ECX E.IOPL E.VM E.DF RSI					V	V	REP_GOOD	rep outs	YES	Output (E)CX words from DS:[(E)SI] to port DX.
-F3 6F	REP_OUTS DX, m32	NP	R, I	ECX E.IOPL E.VM E.DF RSI					V	V	REP_GOOD	rep outs	YES	Output (E)CX doublewords from DS:[(E)SI] to port DX.
-F3 REX.W+ 6F	REP_OUTS DX, m32	NP	R, I	RCX E.IOPL E.VM E.DF RSI					V	NE	REP_GOOD	rep outs		Output RCX default size from [RSI] to port DX.
-F3 AC	REP_LODS AL	NP	W	ECX E.DF SI rsi					V	V	REP_GOOD	rep lods	YES	Load (E)CX bytes from DS:[(E)SI] to AL.
-F3 REX.W+ AC	REP_LODS AL	NP	W	RCX E.DF SI rsi					V	NE	REP_GOOD	rep lods		Load RCX bytes from [RSI] to AL.
-F3 AD	REP_LODS AX	NP	W	ECX E.DF SI rsi					V	V	REP_GOOD	rep lods	YES	Load (E)CX words from DS:[(E)SI] to AX.
-F3 AD	REP_LODS EAX	NP	W	ECX E.DF SI rsi					V	V	REP_GOOD	rep lods	YES	Load (E)CX doublewords from DS:[(E)SI] to EAX.
-F3 REX.W+ AD	REP_LODS RAX	NP	W	RCX E.DF SI rsi					V	NE	REP_GOOD	rep lods		Load RCX quadwords from [RSI] to RAX.
-F3 AA	REP_STOS m8	NP	I	ECX E.DF RDI AL					V	V	REP_GOOD	rep stos	YES	Fill (E)CX bytes at ES:[(E)DI] with AL.
-F3 REX.W+ AA	REP_STOS m8	NP	I	RCX E.DF RDI AL					V	NE	REP_GOOD	rep stos		Fill RCX bytes at [RDI] with AL.
-F3 AB	REP_STOS m16	NP	I	ECX E.DF RDI AL					V	V	REP_GOOD	rep stos	YES	Fill (E)CX words at ES:[(E)DI] with AX.
-F3 AB	REP_STOS m32	NP	I	ECX E.DF RDI AL					V	V	REP_GOOD	rep stos	YES	Fill (E)CX doublewords at ES:[(E)DI] with EAX.
-F3 REX.W+ AB	REP_STOS m64	NP	I	RCX E.DF RDI AL					V	NE	REP_GOOD	rep stos		Fill RCX quadwords at [RDI] with RAX.
-F3 A6	REPE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repe cmps	YES	Find nonmatching bytes in ES:[(E)DI] and DS:[(E)SI].
-F3 REX.W+ A6	REPE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repe cmps		Find non-matching bytes in [RDI] and [RSI].
-F3 A7	REPE_CMPS m16, m16	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repe cmps	YES	Find nonmatching words in ES:[(E)DI] and DS:[(E)SI].
-F3 A7	REPE_CMPS m32, m32	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repe cmps	YES	Find nonmatching doublewords in ES:[(E)DI] and DS:[(E)SI].
-F3 REX.W+ A7	REPE_CMPS m64, m64	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repe cmps		Find non-matching quadwords in [RDI] and [RSI].
-F3 AE	REPE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	V	REP_GOOD	repe scas	YES	Find non-AL byte starting at ES:[(E)DI].
-F3 REX.W+ AE	REPE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	NE	REP_GOOD	repe scas		Find non-AL byte starting at [RDI].
-F3 AF	REPE_SCAS m16	NP	I	E.ZF E.DF RDI AX					V	V	REP_GOOD	repe scas	YES	Find non-AX word starting at ES:[(E)DI].
-F3 AF	REPE_SCAS m32	NP	I	E.ZF E.DF RDI EAX					V	V	REP_GOOD	repe scas	YES	Find non-EAX doubleword starting at ES:[(E)DI].
-F3 REX.W+ AF	REPE_SCAS m64	NP	I	E.ZF E.DF RDI RAX					V	NE	REP_GOOD	repe scas		Find non-RAX quadword starting at [RDI].
-F2 A6	REPNE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repne cmps	YES	Find matching bytes in ES:[(E)DI] and DS:[(E)SI].
-F2 REX.W+ A6	REPNE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repne cmps		Find matching bytes in [RDI] and [RSI].
-F2 A7	REPNE_CMPS m16, m16	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repne cmps	YES	Find matching words in ES:[(E)DI] and DS:[(E)SI].
-F2 A7	REPNE_CMPS m32, m32	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repne cmps	YES	Find matching doublewords in ES:[(E)DI] and DS:[(E)SI].
-F2 REX.W+ A7	REPNE_CMPS m64, m64	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repne cmps		Find matching doublewords in [RDI] and [RSI].
-F2 AE	REPNE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	V	REP_GOOD	repne scas	YES	Find AL, starting at ES:[(E)DI].
-F2 REX.W+ AE	REPNE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	NE	REP_GOOD	repne scas		Find AL, starting at [RDI].
-F2 AF	REPNE_SCAS m16	NP	I	E.ZF E.DF RDI AX					V	V	REP_GOOD	repne scas	YES	Find AX, starting at ES:[(E)DI].
-F2 AF	REPNE_SCAS m32	NP	I	E.ZF E.DF RDI EAX					V	V	REP_GOOD	repne scas	YES	Find EAX, starting at ES:[(E)DI].
-F2 REX.W+ AF	REPNE_SCAS m64	NP	I	E.ZF E.DF RDI RAX					V	NE	REP_GOOD	repne scas		Find RAX, starting at [RDI].
+F3 6C	REP_INS m8, DX 	NP	I, R	ECX E.IOPL E.VM E.DF RDI					V	V	REP_GOOD	rep insb	YES	Input (E)CX bytes from port DX into ES:[(E)DI].
+F3 REX.W+ 6C	REP_INS m8, DX	NP	I, R	RCX E.IOPL E.VM E.DF RDI					V	NE	REP_GOOD	rep insb		Input RCX bytes from port DX into [RDI].
+F3 6D	REP_INS m16, DX	NP	I, R	ECX E.IOPL E.VM E.DF RDI					V	V	REP_GOOD	rep insw	YES	Input (E)CX words from port DX into ES:[(E)DI.]
+F3 6D	REP_INS m32, DX	NP	I, R	ECX E.IOPL E.VM E.DF RDI					V	V	REP_GOOD	rep insl	YES	Input (E)CX doublewords from port DX into ES:[(E)DI].
+F3 REX.W+ 6D	REP_INS m64, DX	NP	I, R	RCX E.IOPL E.VM E.DF RDI					V	NE	REP_GOOD	rep insq		Input RCX default size from port DX into [RDI].
+F3 A4	REP_MOVS m8, m8	NP	I, I	ECX E.DF ESI rsi EDI rdi					V	V	REP_GOOD	rep movsb	YES	Move (E)CX bytes from DS:[(E)SI] to ES:[(E)DI].
+F3 REX.W+ A4	REP_MOVS m8, m8	NP	I, I	RCX E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	rep movsb		Move RCX bytes from [RSI] to [RDI].
+F3 A5	REP_MOVS m16, m16	NP	I, I	ECX E.DF ESI rsi EDI rdi					V	V	REP_GOOD	rep movsw	YES	Move (E)CX words from DS:[(E)SI] to ES:[(E)DI].
+F3 A5	REP_MOVS m32, m32	NP	I, I	ECX E.DF ESI rsi EDI rdi					V	V	REP_GOOD	rep movsl	YES	Move (E)CX doublewords from DS:[(E)SI] to ES:[(E)DI].
+F3 REX.W+ A5	REP_MOVS m64, m64	NP	I, I	RCX E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	rep movsq		Move RCX quadwords from [RSI] to [RDI].
+F3 6E	REP_OUTS DX, m8	NP	R, I	ECX E.IOPL E.VM E.DF RSI					V	V	REP_GOOD	rep outsb	YES	Output (E)CX bytes from DS:[(E)SI] to port DX.
+F3 REX.W+ 6E	REP_OUTS DX, m8	NP	R, I	RCX E.IOPL E.VM E.DF RSI					V	NE	REP_GOOD	rep outsb		Output RCX bytes from [RSI] to port DX.
+F3 6F	REP_OUTS DX, m16	NP	R, I	ECX E.IOPL E.VM E.DF RSI					V	V	REP_GOOD	rep outsw	YES	Output (E)CX words from DS:[(E)SI] to port DX.
+F3 6F	REP_OUTS DX, m32	NP	R, I	ECX E.IOPL E.VM E.DF RSI					V	V	REP_GOOD	rep outsl	YES	Output (E)CX doublewords from DS:[(E)SI] to port DX.
+F3 REX.W+ 6F	REP_OUTS DX, m64	NP	R, I	RCX E.IOPL E.VM E.DF RSI					V	NE	REP_GOOD	rep outsq		Output RCX default size from [RSI] to port DX.
+F3 AC	REP_LODS AL	NP	W	ECX E.DF SI rsi					V	V	REP_GOOD	rep lodsb	YES	Load (E)CX bytes from DS:[(E)SI] to AL.
+F3 REX.W+ AC	REP_LODS AL	NP	W	RCX E.DF SI rsi					V	NE	REP_GOOD	rep lodsb		Load RCX bytes from [RSI] to AL.
+F3 AD	REP_LODS AX	NP	W	ECX E.DF SI rsi					V	V	REP_GOOD	rep lodsw	YES	Load (E)CX words from DS:[(E)SI] to AX.
+F3 AD	REP_LODS EAX	NP	W	ECX E.DF SI rsi					V	V	REP_GOOD	rep lodsl	YES	Load (E)CX doublewords from DS:[(E)SI] to EAX.
+F3 REX.W+ AD	REP_LODS RAX	NP	W	RCX E.DF SI rsi					V	NE	REP_GOOD	rep lodsq		Load RCX quadwords from [RSI] to RAX.
+F3 AA	REP_STOS m8	NP	I	ECX E.DF RDI AL					V	V	REP_GOOD	rep stosb	YES	Fill (E)CX bytes at ES:[(E)DI] with AL.
+F3 REX.W+ AA	REP_STOS m8	NP	I	RCX E.DF RDI AL					V	NE	REP_GOOD	rep stosb		Fill RCX bytes at [RDI] with AL.
+F3 AB	REP_STOS m16	NP	I	ECX E.DF RDI AL					V	V	REP_GOOD	rep stosw	YES	Fill (E)CX words at ES:[(E)DI] with AX.
+F3 AB	REP_STOS m32	NP	I	ECX E.DF RDI AL					V	V	REP_GOOD	rep stosl	YES	Fill (E)CX doublewords at ES:[(E)DI] with EAX.
+F3 REX.W+ AB	REP_STOS m64	NP	I	RCX E.DF RDI AL					V	NE	REP_GOOD	rep stosq		Fill RCX quadwords at [RDI] with RAX.
+F3 A6	REPE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repe cmpsb	YES	Find nonmatching bytes in ES:[(E)DI] and DS:[(E)SI].
+F3 REX.W+ A6	REPE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repe cmpsb		Find non-matching bytes in [RDI] and [RSI].
+F3 A7	REPE_CMPS m16, m16	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repe cmpsw	YES	Find nonmatching words in ES:[(E)DI] and DS:[(E)SI].
+F3 A7	REPE_CMPS m32, m32	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repe cmpsl	YES	Find nonmatching doublewords in ES:[(E)DI] and DS:[(E)SI].
+F3 REX.W+ A7	REPE_CMPS m64, m64	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repe cmpsq		Find non-matching quadwords in [RDI] and [RSI].
+F3 AE	REPE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	V	REP_GOOD	repe scasb	YES	Find non-AL byte starting at ES:[(E)DI].
+F3 REX.W+ AE	REPE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	NE	REP_GOOD	repe scasb		Find non-AL byte starting at [RDI].
+F3 AF	REPE_SCAS m16	NP	I	E.ZF E.DF RDI AX					V	V	REP_GOOD	repe scasw	YES	Find non-AX word starting at ES:[(E)DI].
+F3 AF	REPE_SCAS m32	NP	I	E.ZF E.DF RDI EAX					V	V	REP_GOOD	repe scasl	YES	Find non-EAX doubleword starting at ES:[(E)DI].
+F3 REX.W+ AF	REPE_SCAS m64	NP	I	E.ZF E.DF RDI RAX					V	NE	REP_GOOD	repe scasq		Find non-RAX quadword starting at [RDI].
+F2 A6	REPNE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repne cmpsb	YES	Find matching bytes in ES:[(E)DI] and DS:[(E)SI].
+F2 REX.W+ A6	REPNE_CMPS m8, m8	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repne cmpsb		Find matching bytes in [RDI] and [RSI].
+F2 A7	REPNE_CMPS m16, m16	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repne cmpsw	YES	Find matching words in ES:[(E)DI] and DS:[(E)SI].
+F2 A7	REPNE_CMPS m32, m32	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	V	REP_GOOD	repne cmpsl	YES	Find matching doublewords in ES:[(E)DI] and DS:[(E)SI].
+F2 REX.W+ A7	REPNE_CMPS m64, m64	NP	I, I	E.ZF E.DF ESI rsi EDI rdi					V	NE	REP_GOOD	repne cmpsq		Find matching doublewords in [RDI] and [RSI].
+F2 AE	REPNE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	V	REP_GOOD	repne scasb	YES	Find AL, starting at ES:[(E)DI].
+F2 REX.W+ AE	REPNE_SCAS m8	NP	I	E.ZF E.DF RDI AL					V	NE	REP_GOOD	repne scasb		Find AL, starting at [RDI].
+F2 AF	REPNE_SCAS m16	NP	I	E.ZF E.DF RDI AX					V	V	REP_GOOD	repne scasw	YES	Find AX, starting at ES:[(E)DI].
+F2 AF	REPNE_SCAS m32	NP	I	E.ZF E.DF RDI EAX					V	V	REP_GOOD	repne scasl	YES	Find EAX, starting at ES:[(E)DI].
+F2 REX.W+ AF	REPNE_SCAS m64	NP	I	E.ZF E.DF RDI RAX					V	NE	REP_GOOD	repne scasq		Find RAX, starting at [RDI].
 														
 C3	RET	NP			RIP				V	V		retq		Near return to calling procedure.
 CB	RET far	NP	I	???	???	???			V	V		lretl		Far return to calling procedure.
