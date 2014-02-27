@@ -2341,10 +2341,10 @@ FB	STI	NP		E.VM E.IOPL E.VIP	e.if e.vif				V	V		sti		Set interrupt flag; externa
 0F AE /3	STMXCSR m32	M	W	M.*					V	V	SSE	stmxcsr		Store contents of MXCSR register to m32. 
 VEX.LZ.0F.WIG AE /3	VSTMXCSR m32	M	W	M.*					V	V	AVX	vstmxcsr		Store contents of MXCSR register to m32.
 														
-AA	STOS m8	NP	I	E.DF RDI AL					V	V		stos		For legacy mode, store AL at address ES:(E)DI; For 64-bit mode store AL at address RDI or EDI.
-AB	STOS m16	NP	I	E.DF RDI AX					V	V		stos		For legacy mode, store AX at address ES:(E)DI; For 64-bit mode store AX at address RDI or EDI.
-AB	STOS m32	NP	I	E.DF RDI EAX					V	V		stos		For legacy mode, store EAX at address ES:(E)DI; For 64-bit mode store EAX at address RDI or EDI.
-REX.W+ AB	STOS m64	NP	I	E.DF RDI RAX					V	NE		stos		Store RAX at address RDI or EDI.
+AA	STOS m8	NP	I	E.DF RDI AL					V	V		stosb		For legacy mode, store AL at address ES:(E)DI; For 64-bit mode store AL at address RDI or EDI.
+AB	STOS m16	NP	I	E.DF RDI AX					V	V		stosw		For legacy mode, store AX at address ES:(E)DI; For 64-bit mode store AX at address RDI or EDI.
+AB	STOS m32	NP	I	E.DF RDI EAX					V	V		stosl		For legacy mode, store EAX at address ES:(E)DI; For 64-bit mode store EAX at address RDI or EDI.
+REX.W+ AB	STOS m64	NP	I	E.DF RDI RAX					V	NE		stosq		Store RAX at address RDI or EDI.
 AA	STOSB	NP		E.DF RDI AL					V	V		stosb		For legacy mode, store AL at address ES:(E)DI; For 64-bit mode store AL at address RDI or EDI.
 PREF.66+ AB	STOSW	NP		E.DF RDI AX					V	V		stosw		For legacy mode, store AX at address ES:(E)DI; For 64-bit mode store AX at address RDI or EDI.
 AB	STOSD	NP		E.DF RDI EAX					V	V		stosl		For legacy mode, store EAX at address ES:(E)DI; For 64-bit mode store EAX at address RDI or EDI.
