@@ -1936,9 +1936,9 @@ FF /6	PUSH r/m64	M	R						V	NE		pushq		Push r/m64.
 50 +rw	PUSH r16	O	R						V	V		pushw	YES	Push r16.
 50 +rd	PUSH r32								NE	V				Push r32.
 50 +rd	PUSH r64	O	R						V	NE		pushq	YES	Push r64.
-6A	PUSH imm8	I	R						V	V		push		Push imm8.
-68	PUSH imm16	I	R						V	V		push		Push imm16.
-68	PUSH imm32	I	R						V	V		push		Push imm32.
+6A	PUSH imm8	I	R						V	V		pushq		Push imm8.
+68	PUSH imm16	I	R						V	V		pushq		Push imm16.
+68	PUSH imm32	I	R						V	V		pushq		Push imm32.
 0E	PUSH CS								I	V				Push CS.
 16	PUSH SS								I	V				Push SS.
 1E	PUSH DS								I	V				Push DS.
