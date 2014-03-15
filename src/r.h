@@ -353,7 +353,7 @@ inline constexpr size_t R::hash() {
 }
 
 inline void R::swap(R& rhs) {
-  val_ = rhs.val_;
+	std::swap(val_, rhs.val_);
 }
 
 inline constexpr R::R(uint64_t val) : 
