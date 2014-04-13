@@ -28,7 +28,7 @@ To check the build by running the test suite, type:
 
     $ make check
 
-This will take a LONG TIME. While you're waiting, browse the `examples/tutorial/` folder
+This will take a LONG TIME. While you're waiting, browse the `examples/` folder
 
 - `hello.cc` How to use the assembler API; look here first.
 - `constants.cc` Shows off the set of built-in assembler constants.
