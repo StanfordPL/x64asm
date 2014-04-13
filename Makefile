@@ -77,7 +77,8 @@ check:
 ##### CLEAN TARGETS
 
 clean:
-	rm -rf $(DOC) $(OBJ) $(LIB) $(BIN)
+	rm -rf $(OBJ) $(LIB) $(BIN)
+	rm -f doc/reference.html
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.enum src/*.table
 	rm -f src/*.tab.c src/*.tab.h src/lex.*.c src/*.output
 	rm -f test/*.s test/*.log test/*.o test/*.out

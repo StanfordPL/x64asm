@@ -1534,7 +1534,7 @@ html_table is = "<table>" ++
 
 -- Write the html table
 write_html :: [Instr] -> IO ()
-write_html is = writeFile "../doc/ref/x64.html" $ html_table is
+write_html is = writeFile "../doc/reference.html" $ html_table is
 
 --------------------------------------------------------------------------------
 -- Main (read the spreadsheet and write some code)
