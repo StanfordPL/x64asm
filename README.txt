@@ -34,21 +34,6 @@ Compared to other x86 assemblers, the majority of the source in the x64asm
 repository is auto-generated using a declarative specification.  This means
 that bugs can be fixed quickly without major modifications to its codebase.
 
-Speed:
-x64 asm is fast enough for use in a JIT applications where compile time is at
-a premium.
-
--------------------------------------------------------------------------------
-
-x64asm has been used as part of the following projects and publications:
-If you've found x64asm useful, please let me know and I will add a reference.
-
-Data-Driven Equivalence Checking. Rahul Sharma, Eric Schkufza, 
-Berkeley Churchill, Alex Aiken. OOPSLA 2013.
-
-Stochastic Superoptimization. Eric Schkufza, Rahul Sharma, Alex Aiken. 
-ASPLOS 2013.
-
 -------------------------------------------------------------------------------
 
 Acknowledgements 
