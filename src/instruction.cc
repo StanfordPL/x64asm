@@ -24,7 +24,6 @@ limitations under the License.
 #include "src/st.h"
 #include "src/xmm.h"
 #include "src/ymm.h"
-#include "src/zmm.h"
 
 using namespace std;
 
@@ -126,9 +125,6 @@ RegSet& Instruction::explicit_must_read_set(RegSet& ret) const {
       case Type::YMM:
         ret += get_operand<Ymm>(i);
         break;
-      case Type::ZMM:
-        ret += get_operand<Zmm>(i);
-        break;
 
       default:
         break;
@@ -223,9 +219,6 @@ RegSet& Instruction::explicit_maybe_read_set(RegSet& ret) const {
       case Type::YMM:
         ret += get_operand<Ymm>(i);
         break;
-      case Type::ZMM:
-        ret += get_operand<Zmm>(i);
-        break;
 
       default:
         break;
@@ -295,9 +288,6 @@ RegSet& Instruction::explicit_must_write_set(RegSet& ret) const {
           break;
         case Type::YMM:
           ret += get_operand<Ymm>(i);
-          break;
-        case Type::ZMM:
-          ret += get_operand<Zmm>(i);
           break;
 
         default:
@@ -371,9 +361,6 @@ RegSet& Instruction::explicit_maybe_write_set(RegSet& ret) const {
         case Type::YMM:
           ret += get_operand<Ymm>(i);
           break;
-        case Type::ZMM:
-          ret += get_operand<Zmm>(i);
-          break;
 
         default:
           break;
@@ -432,9 +419,6 @@ RegSet& Instruction::explicit_must_undef_set(RegSet& ret) const {
         case Type::YMM:
           ret += get_operand<Ymm>(i);
           break;
-        case Type::ZMM:
-          ret += get_operand<Zmm>(i);
-          break;
 
         default:
           break;
@@ -491,9 +475,6 @@ RegSet& Instruction::explicit_maybe_undef_set(RegSet& ret) const {
           break;
         case Type::YMM:
           ret += get_operand<Ymm>(i);
-          break;
-        case Type::ZMM:
-          ret += get_operand<Zmm>(i);
           break;
 
         default:
@@ -856,10 +837,6 @@ ostream& Instruction::write_att(ostream& os) const {
           break;
 
         case Type::YMM:
-          get_operand<Ymm>(i).write_att(os);
-          break;
-
-        case Type::ZMM:
           get_operand<Ymm>(i).write_att(os);
           break;
 

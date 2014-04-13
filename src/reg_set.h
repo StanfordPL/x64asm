@@ -30,7 +30,6 @@ limitations under the License.
 #include "src/st.h"
 #include "src/xmm.h"
 #include "src/ymm.h"
-#include "src/zmm.h"
 
 namespace x64asm {
 
@@ -49,7 +48,6 @@ class RegSet {
       // Group 2 (fpu / sse)
       XMM      = 0x0000000000000001,
       YMM      = 0x0000000000010001,
-      ZMM      = 0x0000000100010001,
       MM       = 0x0001000000000000,
       ST       = 0x0100000000000000,
       // Group 3 (env bits) 
@@ -73,7 +71,6 @@ class RegSet {
       A_QUAD   = 0xffff000000000000,
       A_XMM    = 0x000000000000ffff,
       A_YMM    = 0x00000000ffff0000,
-      A_ZMM    = 0x0000ffff00000000,
       // All Masks
       LOWS     = 0x000000000000000f,
       HIGHS    = 0x00000000000f0000,
@@ -83,7 +80,6 @@ class RegSet {
       QUADS    = 0xffffffffffffffff,
       XMMS     = 0x000000000000ffff,
       YMMS     = 0x00000000ffffffff,
-      ZMMS     = 0x0000ffffffffffff,
       // Top and Bottom
       EMPTY    = 0x0000000000000000,
       UNIV1    = 0xffffffffffffffff,
@@ -109,8 +105,6 @@ class RegSet {
     static constexpr RegSet all_xmms();
     /** Creates a register set containing all ymm registers. */
     static constexpr RegSet all_ymms();
-    /** Creates a register set containing all zmm registers. */
-    static constexpr RegSet all_zmms();
     /** Creates a register set containing linux caller save registers. */
     static constexpr RegSet linux_caller_save();
     /** Creates a register set containing linux callee save registers. */
@@ -157,8 +151,6 @@ class RegSet {
     constexpr RegSet operator+(const Xmm& rhs);
     /** Insert a ymm register. */
     constexpr RegSet operator+(const Ymm& rhs);
-    /** Insert a zmm register. */
-    constexpr RegSet operator+(const Zmm& rhs);
     /** Insert an mmx register. */
     constexpr RegSet operator+(const Mm& rhs);
     /** Insert a floating point stack register. */
@@ -204,8 +196,6 @@ class RegSet {
     RegSet& operator+=(const Xmm& rhs);
     /** Insert a ymm register. */
     RegSet& operator+=(const Ymm& rhs);
-    /** Insert a zmm register. */
-    RegSet& operator+=(const Zmm& rhs);
     /** Insert an mmx register. */
     RegSet& operator+=(const Mm& rhs);
     /** Insert a floating point stack register. */
@@ -251,8 +241,6 @@ class RegSet {
     constexpr bool contains(const Xmm& rhs);
     /** Returns true if this set contains a ymm register. */
     constexpr bool contains(const Ymm& rhs);
-    /** Returns true if this set contains a zmm register. */
-    constexpr bool contains(const Zmm& rhs);
     /** Returns true if this set contains an mmx register. */
     constexpr bool contains(const Mm& rhs);
     /** Returns true if this set contains a floating point stack register. */
@@ -294,8 +282,6 @@ class RegSet {
     constexpr bool contains_any_xmm();
     /** Returns true if this set contains any ymm registers. */
     constexpr bool contains_any_ymm();
-    /** Returns true if this set contains any zmm registers. */
-    constexpr bool contains_any_zmm();
 
     /** Returns true if this set contains all low registers. */
     constexpr bool contains_all_rl();
@@ -313,8 +299,6 @@ class RegSet {
     constexpr bool contains_all_xmm();
     /** Returns true if this set contains all ymm registers. */
     constexpr bool contains_all_ymm();
-    /** Returns true if this set contains all zmm registers. */
-    constexpr bool contains_all_zmm();
 
     /** STL compliant hash. */
     constexpr size_t hash();
@@ -395,10 +379,6 @@ inline constexpr RegSet RegSet::all_xmms() {
 
 inline constexpr RegSet RegSet::all_ymms() {
   return RegSet {Mask::EMPTY, Mask::YMMS, Mask::EMPTY, Mask::EMPTY};
-}
-
-inline constexpr RegSet RegSet::all_zmms() {
-  return RegSet {Mask::EMPTY, Mask::ZMMS, Mask::EMPTY, Mask::EMPTY};
 }
 
 inline constexpr RegSet RegSet::linux_caller_save() {
@@ -514,10 +494,6 @@ inline constexpr RegSet RegSet::operator+(const Ymm& rhs) {
   return plus_group2(Mask::YMM, (uint64_t)rhs);
 }
 
-inline constexpr RegSet RegSet::operator+(const Zmm& rhs) {
-  return plus_group2(Mask::ZMM, (uint64_t)rhs);
-}
-
 inline constexpr RegSet RegSet::operator+(const Mm& rhs) {
   return plus_group2(Mask::MM, (uint64_t)rhs);
 }
@@ -605,10 +581,6 @@ inline RegSet& RegSet::operator+=(const Xmm& rhs) {
 
 inline RegSet& RegSet::operator+=(const Ymm& rhs) {
   return plus_equal(Mask::YMM, group2_, (uint64_t)rhs);
-}
-
-inline RegSet& RegSet::operator+=(const Zmm& rhs) {
-  return plus_equal(Mask::ZMM, group2_, (uint64_t)rhs);
 }
 
 inline RegSet& RegSet::operator+=(const Mm& rhs) {
@@ -714,10 +686,6 @@ inline constexpr bool RegSet::contains(const Ymm& rhs) {
   return contains(Mask::YMM, group2_, (uint64_t)rhs);
 }
 
-inline constexpr bool RegSet::contains(const Zmm& rhs) {
-  return contains(Mask::ZMM, group2_, (uint64_t)rhs);
-}
-
 inline constexpr bool RegSet::contains(const Mm& rhs) {
   return contains(Mask::MM, group2_, (uint64_t)rhs);
 }
@@ -799,10 +767,6 @@ constexpr bool RegSet::contains_any_ymm() {
   return contains_any(Mask::A_YMM, group2_);
 }
 
-constexpr bool RegSet::contains_any_zmm() {
-  return contains_any(Mask::A_ZMM, group2_);
-}
-
 constexpr bool RegSet::contains_all_rl() {
   return contains_all(Mask::LOWS, group1_);
 }
@@ -833,10 +797,6 @@ constexpr bool RegSet::contains_all_xmm() {
 
 constexpr bool RegSet::contains_all_ymm() {
   return contains_all(Mask::YMMS, group2_);
-}
-
-constexpr bool RegSet::contains_all_zmm() {
-  return contains_all(Mask::ZMMS, group2_);
 }
 
 inline void RegSet::swap(RegSet& rhs) {

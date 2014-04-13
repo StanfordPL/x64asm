@@ -28,7 +28,6 @@ limitations under the License.
 #include "src/st.h"
 #include "src/xmm.h"
 #include "src/ymm.h"
-#include "src/zmm.h"
 
 #include <array>
 
@@ -648,55 +647,6 @@ class Constants {
     static constexpr Ymm ymm15() {
       return Ymm {15};
     }
-
-    static constexpr Zmm zmm0()  {
-      return Zmm {0};
-    }
-    static constexpr Zmm zmm1()  {
-      return Zmm {1};
-    }
-    static constexpr Zmm zmm2()  {
-      return Zmm {2};
-    }
-    static constexpr Zmm zmm3()  {
-      return Zmm {3};
-    }
-    static constexpr Zmm zmm4()  {
-      return Zmm {4};
-    }
-    static constexpr Zmm zmm5()  {
-      return Zmm {5};
-    }
-    static constexpr Zmm zmm6()  {
-      return Zmm {6};
-    }
-    static constexpr Zmm zmm7()  {
-      return Zmm {7};
-    }
-    static constexpr Zmm zmm8()  {
-      return Zmm {8};
-    }
-    static constexpr Zmm zmm9()  {
-      return Zmm {9};
-    }
-    static constexpr Zmm zmm10() {
-      return Zmm {10};
-    }
-    static constexpr Zmm zmm11() {
-      return Zmm {11};
-    }
-    static constexpr Zmm zmm12() {
-      return Zmm {12};
-    }
-    static constexpr Zmm zmm13() {
-      return Zmm {13};
-    }
-    static constexpr Zmm zmm14() {
-      return Zmm {14};
-    }
-    static constexpr Zmm zmm15() {
-      return Zmm {15};
-    }
 };
 
 // Convenience definitions follow...
@@ -949,25 +899,6 @@ extern const Ymm ymm14;
 extern const Ymm ymm15;
 
 extern const std::array<Ymm,16> ymms;
-
-extern const Zmm zmm0;
-extern const Zmm zmm1;
-extern const Zmm zmm2;
-extern const Zmm zmm3;
-extern const Zmm zmm4;
-extern const Zmm zmm5;
-extern const Zmm zmm6;
-extern const Zmm zmm7;
-extern const Zmm zmm8;
-extern const Zmm zmm9;
-extern const Zmm zmm10;
-extern const Zmm zmm11;
-extern const Zmm zmm12;
-extern const Zmm zmm13;
-extern const Zmm zmm14;
-extern const Zmm zmm15;
-
-extern const std::array<Zmm,16> zmms;
 
 } // namespace x64asm
 

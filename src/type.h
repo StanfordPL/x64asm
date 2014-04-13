@@ -91,9 +91,7 @@ enum class Type {
   XMM,
   XMM_0,
 
-  YMM,
-
-  ZMM
+  YMM
 };
 
 } // namespace x64asm
