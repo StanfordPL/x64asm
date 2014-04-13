@@ -1,35 +1,20 @@
-Copyright 2103 eric schkufza
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
--------------------------------------------------------------------------------
-
 x64asm
+=====
 
 x64asm is a c++11 library for working with x86_64 assembly. It provides 
 a parser, an in memory assembler, and primitives for building data flow 
 analyses. x64asm was built with the following design goals in mind:
 
-Simplicity: 
+__Simplicity:__ 
 x64 asm does NOT include a register allocator, instruction scheduler, control 
 flow graph builder, or any of the features you would expect of a proper
 compiler. It is a low-level library for building YOUR optimizing compiler.
 
-Completeness: 
+__Completeness:__ 
 x64asm supports the entire ring 3 application level subset of the x86_64 
 instruction set, including the most recent AVX2/BMI1/BMI2/FMA extensions.
 
-Correctness:
+__Correctness:__
 Compared to other x86 assemblers, the majority of the source in the x64asm
 repository is auto-generated using a declarative specification.  This means
 that bugs can be fixed quickly without major modifications to its codebase.
