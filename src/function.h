@@ -140,6 +140,16 @@ class Function {
     /** Writes this function to an ostream in human-readable hex. */
     std::ostream& write_hex(std::ostream& os) const;
 
+    /** get pointer to the internal buffer (dangerous!) */
+    unsigned char* get_buffer() {
+      return buffer_;
+    }
+
+    /** get pointer to the head (dangerous!) */
+    unsigned char* get_head() {
+      return head_;
+    }
+
   private:
     /** The size of the internal buffer. */
     size_t capacity_;
