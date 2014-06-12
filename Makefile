@@ -44,19 +44,19 @@ erthing: $(LIB) $(BIN)
 
 ##### BUILD TARGETS
 
-codegen:
+src/Codegen: src/Codegen.hs
 	cd src && \
 		ghc Codegen.hs && \
 		./Codegen && \
-		rm -f *.hi *.o Codegen
+		rm -f *.hi *.o
 	flex $(FLEXOPS) -Patt src/att.l 
 	bison $(BISONOPS) -batt -patt --defines src/att.y && touch att.output 
 	mv lex.*.* src/ && mv *.tab.* src/ && mv *.output src/
 		
-src/code.o: src/code.cc src/code.h codegen
+src/code.o: src/code.cc src/code.h src/Codegen
 	$(GCC) -w -O1 -fno-stack-protector $(INC) -c $< -o $@
 
-src/%.o: src/%.cc src/%.h codegen
+src/%.o: src/%.cc src/%.h src/Codegen
 	$(GCC) $(OPT) $(INC) -c $< -o $@
 
 ##### LIBRARY TARGET
@@ -77,7 +77,7 @@ check:
 ##### CLEAN TARGETS
 
 clean:
-	rm -rf $(OBJ) $(LIB) $(BIN)
+	rm -rf $(OBJ) $(LIB) $(BIN) src/Codegen
 	rm -f doc/reference.html
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.enum src/*.table
 	rm -f src/*.tab.c src/*.tab.h src/lex.*.c src/*.output
