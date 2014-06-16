@@ -29,7 +29,9 @@ int main(int argc, char** argv) {
 	if ( !cin.good() )
 		return parse_error();
 
-	cout << (Assembler().assemble(c)) << endl;
+	cout << c << endl;
+	cout << endl;
+	cout << Assembler().assemble(c) << endl;
 
 	return 0;
 }
