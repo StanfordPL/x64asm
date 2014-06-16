@@ -66,7 +66,12 @@ ostream& M::write_att(ostream& os) const {
     os << ":";
   }
   if ((uint64_t)get_disp() != 0 || (!contains_base() && !contains_index())) {
-    os << "0x" << noshowbase << hex << (uint64_t)get_disp();
+		const auto d = (int32_t)(get_disp() & 0x00000000ffffffff);
+		if (d < 0) {
+			os << "-0x" << noshowbase << hex << -d;
+		} else {
+			os << "0x" << noshowbase << hex << d;
+		}
   }
   if (!contains_base() && !contains_index() && !rip_offset()) {
     return os;
