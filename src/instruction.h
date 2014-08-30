@@ -390,7 +390,7 @@ inline bool Instruction::is_uncond_jump() const {
 }
 
 inline bool Instruction::is_call() const {
-  assert((size_t)get_opcode() < is_call.size());
+  assert((size_t)get_opcode() < is_call_.size());
   return is_call_[get_opcode()];
 }
 
