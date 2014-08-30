@@ -131,6 +131,8 @@ class Instruction {
     bool is_cond_jump() const;
     /** Does this instruction unconditionally cause a control jump. */
     bool is_uncond_jump() const;
+    /** Does this instruction invoke a function call. */
+    bool is_call() const;
 
 		/** Does this instruction dereference memory? @todo check for implicit. */
 		bool derefs_mem() const;
@@ -209,6 +211,7 @@ class Instruction {
     static const std::array<bool, 3801> is_jump_;
     static const std::array<bool, 3801> is_cond_jump_;
     static const std::array<bool, 3801> is_uncond_jump_;
+    static const std::array<bool, 3801> is_call_;
 		static const std::array<int, 3801> mem_index_;
     static const std::array<RegSet, 3801> implicit_must_read_set_;
     static const std::array<RegSet, 3801> implicit_maybe_read_set_;
@@ -384,6 +387,11 @@ inline bool Instruction::is_cond_jump() const {
 inline bool Instruction::is_uncond_jump() const {
   assert((size_t)get_opcode() < is_uncond_jump_.size());
   return is_uncond_jump_[get_opcode()];
+}
+
+inline bool Instruction::is_call() const {
+  assert((size_t)get_opcode() < is_call.size());
+  return is_call_[get_opcode()];
 }
 
 inline bool Instruction::derefs_mem() const {

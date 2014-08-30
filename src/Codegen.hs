@@ -170,6 +170,10 @@ is_cond_jump i = let mn = raw_mnemonic i in
 is_uncond_jump :: Instr -> Bool
 is_uncond_jump i = raw_mnemonic i == "JMP"
 
+-- Returns true for call instructions
+is_call :: Instr -> Bool
+is_call i = (raw_mnemonic i == "CALL") || (raw_mnemonic i == "SYSCALL")
+
 -- Extract arity
 arity :: Instr -> Int
 arity i = length $ operands i
@@ -872,6 +876,16 @@ uncond_jump_row i = case is_uncond_jump i of
 uncond_jump_table :: [Instr] -> String
 uncond_jump_table is = to_table is uncond_jump_row 
 
+-- Converts an instruction to call table row
+call_row :: Instr -> String
+call_row i = case is_call i of
+  True -> "true"
+  False -> "false" 
+
+-- Converts all instructions to call table
+call_table :: [Instr] -> String
+call_table is = to_table is call_row
+
 -- Converts an instruction mem_index table row
 mem_index_row :: Instr -> String
 mem_index_row i = case findIndex mem_op (operands i) of
@@ -1387,6 +1401,7 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "jump.table"        $ jump_table is
                    writeFile "cond_jump.table"   $ cond_jump_table is
                    writeFile "uncond_jump.table" $ uncond_jump_table is
+                   writeFile "call.table"        $ call_table is
                    writeFile "mem_index.table"   $ mem_index_table is
                    writeFile "must_read.table"   $ must_read_table is
                    writeFile "maybe_read.table"  $ maybe_read_table is

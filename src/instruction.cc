@@ -965,6 +965,13 @@ const array<bool, 3801> Instruction::is_uncond_jump_ {{
   #include "src/uncond_jump.table"
 }};
 
+const array<bool, 3801> Instruction::is_call_ {{
+  // Internal mnemonics
+  false
+  // Auto-generated mnemonics
+  #include "src/call.table"
+}};
+
 const array<int, 3801> Instruction::mem_index_ {{
   // Internal mnemonics
   -1
