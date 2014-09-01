@@ -346,6 +346,9 @@ struct hash<x64asm::RegSet> {
 /** STL swap overload. */
 void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs);
 
+/** I/O overload. */
+ostream& operator<<(ostream& os, const x64asm::RegSet& rs);
+
 } // namespace std
 
 namespace x64asm {
@@ -853,6 +856,37 @@ inline size_t hash<x64asm::RegSet>::operator()(const x64asm::RegSet& rs) const {
 
 inline void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs) {
   lhs.swap(rhs);
+}
+
+inline ostream& operator<<(ostream& os, const x64asm::RegSet& rs) {
+  
+  vector<x64asm::R64> possible_registers = 
+    {
+      x64asm::Constants::rax(),
+      x64asm::Constants::rbx(),
+      x64asm::Constants::rcx(),
+      x64asm::Constants::rdx(),
+      x64asm::Constants::rsi(),
+      x64asm::Constants::rdi(),
+      x64asm::Constants::rbp(),
+      x64asm::Constants::rsp(),
+      x64asm::Constants::r8(),
+      x64asm::Constants::r9(),
+      x64asm::Constants::r10(),
+      x64asm::Constants::r11(),
+      x64asm::Constants::r12(),
+      x64asm::Constants::r13(),
+      x64asm::Constants::r14(),
+      x64asm::Constants::r15()
+    };
+
+  for(auto it = possible_registers.begin();
+           it != possible_registers.end(); ++it) {
+    if(rs.contains(*it)) {
+      os << " " << *it;
+    }
+  }
+  return os;
 }
 
 } // namespace std
