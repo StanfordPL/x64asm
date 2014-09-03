@@ -109,6 +109,16 @@ class RegSet {
     static constexpr RegSet linux_caller_save();
     /** Creates a register set containing linux callee save registers. */
     static constexpr RegSet linux_callee_save();
+
+    /** Source: http://wiki.osdev.org/Calling_Conventions */
+    /** Creates a register set containing registers that are preserved in a call */
+    static constexpr RegSet linux_call_preserved();
+    /** Creates a register set containing registers that are parameters to a call */
+    static constexpr RegSet linux_call_parameters();
+    /** Creates a register set containing registers that are wiped out in call */
+    /** Note that all registers in linux_call_parameters are also scratch. */
+    static constexpr RegSet linux_call_scratch();
+    
     /** Creates a retister set containing windows caller save reigsters. */
     static constexpr RegSet windows_caller_save();
     /** Creates a full register set. */
@@ -396,6 +406,28 @@ inline constexpr RegSet RegSet::linux_callee_save() {
       Constants::r12()  + Constants::r13()  + Constants::r14()  +
       Constants::r15();
 }
+
+inline constexpr RegSet RegSet::linux_call_parameters() {
+  return all_xmms() + 
+      Constants::rdi()  + Constants::rsi()  + Constants::rdx()  + 
+      Constants::rcx()  + Constants::r8()   + Constants::r9();
+}
+
+inline constexpr RegSet RegSet::linux_call_scratch() {
+  return all_xmms() + 
+      Constants::rdi()  + Constants::rsi()  + Constants::rdx()  + 
+      Constants::rcx()  + Constants::r8()   + Constants::r9() +
+      Constants::r10()  + Constants::r11()  + Constants::rax()
+}
+
+inline constexpr RegSet RegSet::linux_call_preserved() {
+  return empty() + 
+      Constants::rbx()  + Constants::rbp()  + Constants::rsp()  + 
+      Constants::r12()  + Constants::r13()  + Constants::r14()  +
+      Constants::r15();
+}
+
+
 
 inline constexpr RegSet RegSet::windows_caller_save() {
   return empty() + 
