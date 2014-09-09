@@ -176,8 +176,8 @@ VEX.NDS.256.66.0F3A.W0 4A /r /is4	VBLENDVPS ymm1, ymm2, ymm3/m256, ymm4	RVMR	W, 
 VEX.NDD.LZ.0F38.W0 F3 /3	BLSI r32, r/m32	VM	RW, R		E.ZF E.SF E.OF e.cf	E.AF E.PF			V	V	BMI1	blsil		Extract lowest set bit from r/m32 and set that bit in r32.
 VEX.NDD.LZ.0F38.W1 F3 /3	BLSI r64, r/m64	VM	RW, R		E.ZF E.SF E.OF e.cf	E.AF E.PF			V	NE	BMI1	blsiq		Extract lowest set bit from r/m64, and set that bit in r64.
 														
-VEX.NDD.LZ.0F38.W0 F3 /2	BLSMSK r32, r/m32	VM	RW, R		E.ZF E.SF E.OF e.cf	E.AF E.PF			V	V	BMI1	blsmskl		Set all lower bits in r32 to “1” starting from bit 0 to lowest set bit in r/m32
-VEX.NDD.LZ.0F38.W1 F3 /2	BLSMSK r64, r/m64	VM	RW, R		E.ZF E.SF E.OF e.cf	E.AF E.PF			V	NE	BMI1	blsmskq		Set all lower bits in r64 to “1” starting from bit 0 to lowest set bit in r/m64
+VEX.NDD.LZ.0F38.W0 F3 /2	BLSMSK r32, r/m32	VM	RW, R		E.ZF E.SF E.OF e.cf	E.AF E.PF			V	V	BMI1	blsmskl		Set all lower bits in r32 to "1" starting from bit 0 to lowest set bit in r/m32
+VEX.NDD.LZ.0F38.W1 F3 /2	BLSMSK r64, r/m64	VM	RW, R		E.ZF E.SF E.OF e.cf	E.AF E.PF			V	NE	BMI1	blsmskq		Set all lower bits in r64 to "1" starting from bit 0 to lowest set bit in r/m64
 														
 VEX.NDD.LZ.0F38.W0 F3 /1	BLSR r32, r/m32	VM	W, R		E.ZF E.SF E.OF e.cf	E.AF E.PF			V	V	BMI1	blsrl		Reset lowest set bit of r/m32, keep all other bits of r/m32 and write result to r32.
 VEX.NDD.LZ.0F38.W1 F3 /1	BLSR r64, r/m64	VM	W, R		E.ZF E.SF E.OF e.cf	E.AF E.PF			V	NE	BMI1	blsrq		Reset lowest set bit of r/m64, keep all other bits of r/m64 and write result to r64.
@@ -547,7 +547,7 @@ C8 ib iw	ENTER imm8, imm16	II	R, R	???	???	???			V	V		enterq		Create a nested st
 66 0F 3A 17 /r ib	EXTRACTPS reg/m32, xmm2, imm8	MRI	W, R, R						V	V	SSE4_1	extractps		Extract a single-precision floating-point value from xmm2 at the source offset specified by imm8 and store the result to reg or m32. The upper 32 bits of r64 is zeroed if reg is r64.
 VEX.128.66.0F3A.WIG 17 /r ib	VEXTRACTPS r/m32, xmm1, imm8	MRI	W, R, R						V	V	AVX	vextractps		Extract one single-precision floating-point value from xmm1 at the offset specified by imm8 and store the result in reg or m32. Zero extend the results in 64-bit register if applicable.
 														
-D9 F0	F2XM1			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	f2xm1		Replace ST(0) with (2^(ST(0)) – 1).
+D9 F0	F2XM1			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	f2xm1		Replace ST(0) with (2^(ST(0)) - 1).
 														
 D9 E1	FABS			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fabs		Replace ST with its absolute value.
 														
@@ -649,7 +649,7 @@ D9 C0 +i 	FLD ST(i) 	O	R		ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fld		Push ST(i) on
 D9 E8 	FLD1 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fld1		Push +1.0 onto the FPU register stack.
 D9 E9 	FLDL2T 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldl2t		Push log210 onto the FPU register stack.
 D9 EA 	FLDL2E 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldl2e		Push log2e onto the FPU register stack.
-D9 EB 	FLDPI 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldpi		Push π onto the FPU register stack.
+D9 EB 	FLDPI 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldpi		Push pi onto the FPU register stack.
 D9 EC 	FLDLG2 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldlg2		Push log102 onto the FPU register stack.
 D9 ED 	FLDLN2 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldln2		Push loge2 onto the FPU register stack.
 D9 EE 	FLDZ 				ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fldz		Push +0.0 onto the FPU register stack.
@@ -750,9 +750,9 @@ REX.W+ 0F AE /0	FXSAVE64 m512byte	M	W	ST(*) MM* XMM* M.*					V	NE	FPU FXSR	fxsav
 														
 D9 F4 	FXTRACT			ST(0)	ST(0) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fxtract		Separate value in ST(0) into exponent and significand, store exponent in ST(0), and push the significand onto the register stack.
 														
-D9 F1 	FYL2X 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fyl2x		Replace ST(1) with (ST(1) ∗ log2ST(0)) and pop the register stack.
+D9 F1 	FYL2X 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fyl2x		Replace ST(1) with (ST(1) * log2ST(0)) and pop the register stack.
 														
-D9 F9 	FYL2XP1 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fyl2xp1		Replace ST(1) with ST(1) ∗ log2(ST(0) + 1.0) and pop the register stack.
+D9 F9 	FYL2XP1 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fyl2xp1		Replace ST(1) with ST(1) * log2(ST(0) + 1.0) and pop the register stack.
 														
 66 0F 7C /r 	HADDPD xmm1, xmm2/m128	RM	RW, R						V	V	PNI	haddpd		Horizontal add packed double-precision floating-point values from xmm2/m128 to xmm1.
 VEX.NDS.128.66.0F.WIG 7C /r	VHADDPD xmm1, xmm2, xmm3/m128	RVM	W, R, R						V	V	AVX	vhaddpd		Horizontal add packed double-precision floating-point values from xmm2 and xmm3/mem.
@@ -778,20 +778,20 @@ F7 /7 	IDIV r/m16 	M	R	AX DX	AX DX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	V		idivw		S
 F7 /7 	IDIV r/m32 	M	R	EAX EDX	EAX EDX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	V		idivl		Signed divide EDX:EAX by r/m32, with result stored in EAX = Quotient, EDX = Remainder.
 REX.W+ F7 /7 	IDIV r/m64 	M	R	RAX RDX	RAX RDX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	NE		idivq		Signed divide RDX:RAX by r/m64, with result stored in RAX = Quotient, RDX = Remainder.
 														
-F6 /5	IMUL r/m8	M	R	AL	AX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulb		AX= AL ∗ r/m byte.
-REX+ F6 /5	IMUL r/m8	M	R	AL	AX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulb		AX= AL ∗ r/m byte.
-F7 /5 	IMUL r/m16 	M	R	AX	AX DX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulw		DX:AX = AX ∗ r/m word.
-F7 /5 	IMUL r/m32 	M	R	EAX	EAX EDX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imull		EDX:EAX = EAX ∗ r/m32.
-REX.W+ F7 /5 	IMUL r/m64 	M	R	RAX	RAX RDX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	NE		imulq		RDX:RAX = RAX ∗ r/m64.
-0F AF /r 	IMUL r16, r/m16 	RM	RW, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulw		word register = word register ∗ r/m16.
-0F AF /r 	IMUL r32, r/m32 	RM	RW, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imull		doubleword register = doubleword register ∗  r/m32.
-REX.W+ 0F AF /r 	IMUL r64, r/m64 	RM	RW, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	NE		imulq		Quadword register = Quadword register ∗  r/m64.
-6B /r ib 	IMUL r16, r/m16, imm8 	RMI	W, R, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulw		word register = r/m16 ∗ sign-extended immediate byte.
-6B /r ib 	IMUL r32, r/m32, imm8 	RMI	W, R, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imull		doubleword register = r/m32 ∗ sign- extended immediate byte.
-REX.W+ 6B /r ib 	IMUL r64, r/m64, imm8 	RMI	W, R, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	NE		imulq		Quadword register = r/m64 ∗ sign-extended  immediate byte.
-69 /r iw 	IMUL r16, r/m16, imm16 	RMI	W, R, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulw		word register = r/m16 ∗ immediate word.
-69 /r id 	IMUL r32, r/m32, imm32 	RMI	W, R, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imull		doubleword register = r/m32 ∗ immediate doubleword.
-REX.W+ 69 /r id 	IMUL r64, r/m64, imm32 	RMI	W, R, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	NE		imulq		Quadword register = r/m64 ∗ immediate doubleword.
+F6 /5	IMUL r/m8	M	R	AL	AX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulb		AX= AL * r/m byte.
+REX+ F6 /5	IMUL r/m8	M	R	AL	AX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulb		AX= AL * r/m byte.
+F7 /5 	IMUL r/m16 	M	R	AX	AX DX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulw		DX:AX = AX * r/m word.
+F7 /5 	IMUL r/m32 	M	R	EAX	EAX EDX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imull		EDX:EAX = EAX * r/m32.
+REX.W+ F7 /5 	IMUL r/m64 	M	R	RAX	RAX RDX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	NE		imulq		RDX:RAX = RAX * r/m64.
+0F AF /r 	IMUL r16, r/m16 	RM	RW, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulw		word register = word register * r/m16.
+0F AF /r 	IMUL r32, r/m32 	RM	RW, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imull		doubleword register = doubleword register *  r/m32.
+REX.W+ 0F AF /r 	IMUL r64, r/m64 	RM	RW, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	NE		imulq		Quadword register = Quadword register *  r/m64.
+6B /r ib 	IMUL r16, r/m16, imm8 	RMI	W, R, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulw		word register = r/m16 * sign-extended immediate byte.
+6B /r ib 	IMUL r32, r/m32, imm8 	RMI	W, R, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imull		doubleword register = r/m32 * sign- extended immediate byte.
+REX.W+ 6B /r ib 	IMUL r64, r/m64, imm8 	RMI	W, R, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	NE		imulq		Quadword register = r/m64 * sign-extended  immediate byte.
+69 /r iw 	IMUL r16, r/m16, imm16 	RMI	W, R, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulw		word register = r/m16 * immediate word.
+69 /r id 	IMUL r32, r/m32, imm32 	RMI	W, R, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imull		doubleword register = r/m32 * immediate doubleword.
+REX.W+ 69 /r id 	IMUL r64, r/m64, imm32 	RMI	W, R, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	NE		imulq		Quadword register = r/m64 * immediate doubleword.
 														
 E4 ib 	IN AL, imm8 	I	W, R	E.IOPL E.VM					V	V		inb		Input byte from imm8 I/O port address into AL.
 E5 ib 	IN AX, imm8 	I	W, R	E.IOPL E.VM					V	V		inw		Input word from imm8 I/O port address into AX.
@@ -818,9 +818,9 @@ PREF.66+ 6D 	INSW 	NP		E.IOPL E.VM E.DF DX RDI					V	V		insw		Input word from I/
 66 0F 3A 21 /r ib 	INSERTPS xmm1, xmm2/m32, imm8	RMI	RW, R, R						V	V	SSE4_1	insertps		Insert a single precision floating-point value selected by imm8 from xmm2/m32 into xmm1 at the specified destination element specified by imm8 and zero out destination elements in xmm1 as indicated in imm8.
 VEX.NDS.128.66.0F3A.WIG 21 /r ib	VINSERTPS xmm1, xmm2, xmm3/m32, imm8	RVMI	Z, W, R, R						V	V	AVX	vinsertps		Insert a single precision floating point value selected by imm8 from xmm3/m32 and merge into xmm2 at the specified destination element specified by imm8 and zero out destination elements in xmm1 as indicated in imm8.
 														
-CC 	INT 3 	NP	R	???	???	???			V	V		int		Interrupt 3—trap to debugger.
+CC 	INT 3 	NP	R	???	???	???			V	V		int		Interrupt 3-trap to debugger.
 CD ib 	INT imm8 	I	R	???	???	???			V	V		int		Interrupt vector number specified by immediate byte.
-CE 	INTO 								I	V				Interrupt 4—if overflow flag is 1.
+CE 	INTO 								I	V				Interrupt 4-if overflow flag is 1.
 														
 0F 08 	INVD 						NO	YES	V	V				Flush internal caches; initiate flushing of external caches.
 														
@@ -1279,11 +1279,11 @@ REX.W+ 0F B7 /r 	MOVZX r64, r/m16 	RM	W, R						V	NE		movzwq		Move word to quadw
 VEX.NDS.128.66.0F3A.WIG 42 /r ib	VMPSADBW xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R						V	V	AVX	vmpsadbw		Sums absolute 8-bit integer difference of adjacent groups of 4 byte integers in xmm2 and xmm3/m128 and writes the results in xmm1. Starting offsets within xmm2 and xmm3/m128 are determined by imm8.
 VEX.NDS.256.66.0F3A.WIG 42 /r ib	VMPSADBW ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R						V	V	AVX2	vmpsadbw		Sums absolute 8-bit integer difference of adjacent groups of 4 byte integers in xmm2 and ymm3/m128 and writes the results in ymm1. Starting offsets within ymm2 and xmm3/m128 are determined by imm8.
 														
-F6 /4 	MUL r/m8 	M	R	AL	AX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	V		mulb		Unsigned multiply (AX = AL ∗ r/m8).
-REX+ F6 /4 	MUL r/m8	M	R	AL	AX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	NE		mulb		Unsigned multiply (AX = AL ∗ r/m8).
-F7 /4 	MUL r/m16 	M	R	AX	AX DX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	V		mulw		Unsigned multiply (DX:AX = AX ∗ r/m16).
-F7 /4 	MUL r/m32 	M	R	EAX	EAX EDX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	V		mull		Unsigned multiply (EDX:EAX = EAX ∗ r/m32).
-REX.W+ F7 /4 	MUL r/m64 	M	R	RAX	RAX RDX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	NE		mulq		Unsigned multiply (RDX:RAX = RAX ∗ r/m64.
+F6 /4 	MUL r/m8 	M	R	AL	AX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	V		mulb		Unsigned multiply (AX = AL * r/m8).
+REX+ F6 /4 	MUL r/m8	M	R	AL	AX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	NE		mulb		Unsigned multiply (AX = AL * r/m8).
+F7 /4 	MUL r/m16 	M	R	AX	AX DX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	V		mulw		Unsigned multiply (DX:AX = AX * r/m16).
+F7 /4 	MUL r/m32 	M	R	EAX	EAX EDX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	V		mull		Unsigned multiply (EDX:EAX = EAX * r/m32).
+REX.W+ F7 /4 	MUL r/m64 	M	R	RAX	RAX RDX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	NE		mulq		Unsigned multiply (RDX:RAX = RAX * r/m64.
 														
 66 0F 59 /r 	MULPD xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	mulpd		Multiply packed double-precision floating-point values in xmm2/m128 by xmm1.
 VEX.NDS.128.66.0F.WIG 59 /r	VMULPD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vmulpd		Multiply packed double-precision floating-point values from xmm3/mem to xmm2 and stores result in xmm1.
@@ -2692,8 +2692,8 @@ REX.W+ F3 0F AE /3	WRGSBASE r64	M	R						V	I	FSGSBASE	wrgsbase		Load the GS base
 														
 0F 30	WRMSR						NO	YES	V	V				Write the value in EDX:EAX to MSR specified by ECX.
 														
-F2	XACQUIRE	NP							V	V	HLE	xacquire		A hint used with an “XACQUIRE-enabled“ instruction to start lock elision on the instruction memory operand address.
-F3	XRELEASE	NP							V	V	HLE	xrelease		A hint used with an “XRELEASE-enabled“ instruction to end lock elision on the instruction memory operand address.
+F2	XACQUIRE	NP							V	V	HLE	xacquire		A hint used with an "XACQUIRE-enabled" instruction to start lock elision on the instruction memory operand address.
+F3	XRELEASE	NP							V	V	HLE	xrelease		A hint used with an "XRELEASE-enabled" instruction to end lock elision on the instruction memory operand address.
 														
 C6 F8 ib	XABORT imm8	I	R						V	V	RTM	xabort		Causes an RTM abort if in RTM execution
 														
