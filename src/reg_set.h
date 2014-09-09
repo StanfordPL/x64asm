@@ -109,16 +109,6 @@ class RegSet {
     static constexpr RegSet linux_caller_save();
     /** Creates a register set containing linux callee save registers. */
     static constexpr RegSet linux_callee_save();
-
-    /** Source: http://wiki.osdev.org/Calling_Conventions */
-    /** Creates a register set containing registers that are preserved in a call */
-    static constexpr RegSet linux_call_preserved();
-    /** Creates a register set containing registers that are parameters to a call */
-    static constexpr RegSet linux_call_parameters();
-    /** Creates a register set containing registers that are wiped out in call */
-    /** Note that all registers in linux_call_parameters are also scratch. */
-    static constexpr RegSet linux_call_scratch();
-    
     /** Creates a retister set containing windows caller save reigsters. */
     static constexpr RegSet windows_caller_save();
     /** Creates a full register set. */
@@ -356,9 +346,6 @@ struct hash<x64asm::RegSet> {
 /** STL swap overload. */
 void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs);
 
-/** I/O overload. */
-ostream& operator<<(ostream& os, const x64asm::RegSet& rs);
-
 } // namespace std
 
 namespace x64asm {
@@ -406,28 +393,6 @@ inline constexpr RegSet RegSet::linux_callee_save() {
       Constants::r12()  + Constants::r13()  + Constants::r14()  +
       Constants::r15();
 }
-
-inline constexpr RegSet RegSet::linux_call_parameters() {
-  return all_xmms() + 
-      Constants::rdi()  + Constants::rsi()  + Constants::rdx()  + 
-      Constants::rcx()  + Constants::r8()   + Constants::r9();
-}
-
-inline constexpr RegSet RegSet::linux_call_scratch() {
-  return all_xmms() + 
-      Constants::rdi()  + Constants::rsi()  + Constants::rdx()  + 
-      Constants::rcx()  + Constants::r8()   + Constants::r9() +
-      Constants::r10()  + Constants::r11()  + Constants::rax();
-}
-
-inline constexpr RegSet RegSet::linux_call_preserved() {
-  return empty() + 
-      Constants::rbx()  + Constants::rbp()  + Constants::rsp()  + 
-      Constants::r12()  + Constants::r13()  + Constants::r14()  +
-      Constants::r15();
-}
-
-
 
 inline constexpr RegSet RegSet::windows_caller_save() {
   return empty() + 
@@ -888,37 +853,6 @@ inline size_t hash<x64asm::RegSet>::operator()(const x64asm::RegSet& rs) const {
 
 inline void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs) {
   lhs.swap(rhs);
-}
-
-inline ostream& operator<<(ostream& os, const x64asm::RegSet& rs) {
-  
-  vector<x64asm::R64> possible_registers = 
-    {
-      x64asm::Constants::rax(),
-      x64asm::Constants::rbx(),
-      x64asm::Constants::rcx(),
-      x64asm::Constants::rdx(),
-      x64asm::Constants::rsi(),
-      x64asm::Constants::rdi(),
-      x64asm::Constants::rbp(),
-      x64asm::Constants::rsp(),
-      x64asm::Constants::r8(),
-      x64asm::Constants::r9(),
-      x64asm::Constants::r10(),
-      x64asm::Constants::r11(),
-      x64asm::Constants::r12(),
-      x64asm::Constants::r13(),
-      x64asm::Constants::r14(),
-      x64asm::Constants::r15()
-    };
-
-  for(auto it = possible_registers.begin();
-           it != possible_registers.end(); ++it) {
-    if(rs.contains(*it)) {
-      os << " " << *it;
-    }
-  }
-  return os;
 }
 
 } // namespace std
