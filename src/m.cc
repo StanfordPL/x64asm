@@ -88,7 +88,7 @@ ostream& M::write_att(ostream& os) const {
       b.write_att(os);
     }
   }
-  if (contains_base() && contains_index()) {
+  if (contains_index()) {
     os << ",";
   }
   if (contains_index()) {
