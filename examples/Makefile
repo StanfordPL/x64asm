@@ -5,22 +5,22 @@ EX  = abi constants context dataflow functions hello
 all: $(EX)
 
 abi: abi.cc
-	$(CC) $(OPT) abi.cc -I../../ ../../lib/libx64asm.a -o abi
+	$(CC) $(OPT) abi.cc -I../ ../lib/libx64asm.a -o abi
 
 constants: constants.cc
-	$(CC) $(OPT) constants.cc -I../../ ../../lib/libx64asm.a -o constants
+	$(CC) $(OPT) constants.cc -I../ ../lib/libx64asm.a -o constants
 
 context: context.cc
-	$(CC) $(OPT) context.cc -I../../ ../../lib/libx64asm.a -o context
+	$(CC) $(OPT) context.cc -I../ ../lib/libx64asm.a -o context
 
 dataflow: dataflow.cc
-	$(CC) $(OPT) dataflow.cc -I../../ ../../lib/libx64asm.a -o dataflow
+	$(CC) $(OPT) dataflow.cc -I../ ../lib/libx64asm.a -o dataflow
 
 functions: functions.cc
-	$(CC) $(OPT) functions.cc -I../../ ../../lib/libx64asm.a -o functions
+	$(CC) $(OPT) functions.cc -I../ ../lib/libx64asm.a -o functions
 
 hello: hello.cc
-	$(CC) $(OPT) hello.cc -I../../ ../../lib/libx64asm.a -o hello
+	$(CC) $(OPT) hello.cc -I../ ../lib/libx64asm.a -o hello
 
 clean:
 	rm -f $(EX)
