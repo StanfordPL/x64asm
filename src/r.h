@@ -130,7 +130,7 @@ class Cl : public Rl {
 };
 
 /** One of the byte general-purpose registers: AH, CH, DH, BH. */
-class Rh : public R {
+class Rh : public Rb {
     // Needs access to constructor.
     friend class Constants;
 
@@ -427,7 +427,7 @@ inline std::ostream& Rh::write_att(std::ostream& os) const {
 }
 
 inline constexpr Rh::Rh(uint64_t val) : 
-    R {val} {
+    Rb {val} {
 }
 
 inline constexpr bool Rb::check() {
