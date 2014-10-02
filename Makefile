@@ -54,7 +54,7 @@ src/Codegen: src/Codegen.hs
 	mv lex.*.* src/ && mv *.tab.* src/ && mv *.output src/
 		
 src/code.o: src/code.cc src/code.h src/Codegen
-	$(GCC) -w -O1 -fno-stack-protector $(INC) -c $< -o $@
+	$(GCC) -w -fno-stack-protector -O0 $(INC) -c $< -o $@
 
 src/%.o: src/%.cc src/%.h src/Codegen
 	$(GCC) $(OPT) $(INC) -c $< -o $@
