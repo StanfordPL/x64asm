@@ -49,8 +49,36 @@ class R : public Operand {
     constexpr R(uint64_t val);
 };
 
+/** One of the byte general-purpose registers: BPL, SPL, DIL and SIL; or one of
+    the byte registers (R8B - R15B) available when using REX.R and 64-bit mode.
+*/
+class Rb : public R {
+    // Needs access to constructor.
+    friend class Constants;
+
+  public:
+    /** Returns true if this register is well-formed. */
+    constexpr bool check();
+
+    /** Comparison based on on val_. */
+    constexpr bool operator<(const Rb& rhs);
+    /** Comparison based on on val_. */
+    constexpr bool operator==(const Rb& rhs);
+    /** Comparison based on on val_. */
+    constexpr bool operator!=(const Rb& rhs);
+
+    /** Writes this register to an ostream using at&t syntax. */
+    std::ostream& write_att(std::ostream& os) const;
+
+  protected:
+    /** Direct access to this constructor is disallowed. */
+    constexpr Rb(uint64_t val);
+};
+
+
+
 /** One of the byte general-purpose registers: AL, CL, DL, BL. */
-class Rl : public R {
+class Rl : public Rb {
     // Needs access to constructor.
     friend class Constants;
 
@@ -123,32 +151,6 @@ class Rh : public R {
   protected:
     /** Direct access to this constructor is disallowed. */
     constexpr Rh(uint64_t val);
-};
-
-/** One of the byte general-purpose registers: BPL, SPL, DIL and SIL; or one of
-    the byte registers (R8B - R15B) available when using REX.R and 64-bit mode.
-*/
-class Rb : public R {
-    // Needs access to constructor.
-    friend class Constants;
-
-  public:
-    /** Returns true if this register is well-formed. */
-    constexpr bool check();
-
-    /** Comparison based on on val_. */
-    constexpr bool operator<(const Rb& rhs);
-    /** Comparison based on on val_. */
-    constexpr bool operator==(const Rb& rhs);
-    /** Comparison based on on val_. */
-    constexpr bool operator!=(const Rb& rhs);
-
-    /** Writes this register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const;
-
-  protected:
-    /** Direct access to this constructor is disallowed. */
-    constexpr Rb(uint64_t val);
 };
 
 /** One of the word general-purpose registers: AX, CX, DX, BX, SP, BP, SI, DI;
@@ -383,7 +385,7 @@ inline std::ostream& Rl::write_att(std::ostream& os) const {
 }
 
 inline constexpr Rl::Rl(uint64_t val) : 
-    R {val} {
+    Rb {val} {
 }
 
 inline constexpr bool Al::check() {
