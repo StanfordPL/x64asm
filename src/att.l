@@ -84,6 +84,7 @@ const std::string* to_str(const char* c, size_t len) {
 "\n"          { return ENDL; }
 [ \t*]        { ; }
 "#"[^\n]*"\n" { return ENDL; }
+";"[^\n]*"\n" { return ENDL; }
 
 "1" { yylval.scale = Scale::TIMES_1; return SCALE; }
 "2" { yylval.scale = Scale::TIMES_2; return SCALE; }
