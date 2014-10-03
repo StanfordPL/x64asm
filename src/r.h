@@ -49,6 +49,7 @@ class R : public Operand {
     constexpr R(uint64_t val);
 };
 
+
 /** One of the byte general-purpose registers: BPL, SPL, DIL and SIL; or one of
     the byte registers (R8B - R15B) available when using REX.R and 64-bit mode.
 */
@@ -431,7 +432,7 @@ inline constexpr Rh::Rh(uint64_t val) :
 }
 
 inline constexpr bool Rb::check() {
-  return val_ >= 4 && val_ < 16;
+  return val_ < 16;
 }
 
 inline constexpr bool Rb::operator<(const Rb& rhs) {
@@ -448,9 +449,10 @@ inline constexpr bool Rb::operator!=(const Rb& rhs) {
 
 inline std::ostream& Rb::write_att(std::ostream& os) const {
   assert(check());
-  const char* rbs[12] = {"spl","bpl","sil","dil","r8b","r9b","r10b",
+  const char* rbs[16] = {"al", "cl", "dl", "bl", 
+      "spl","bpl","sil","dil","r8b","r9b","r10b",
       "r11b","r12b","r13b","r14b","r15b"};
-  return (os << "%" << rbs[val_-4]);
+  return (os << "%" << rbs[val_]);
 }
 
 inline constexpr Rb::Rb(uint64_t val) : 
