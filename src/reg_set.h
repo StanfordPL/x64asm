@@ -855,6 +855,222 @@ inline void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs) {
   lhs.swap(rhs);
 }
 
+inline ostream& operator<<(ostream& os, const x64asm::RegSet& rs) {
+
+  class gp_stack {
+
+    public:
+      x64asm::R64 r64;
+      x64asm::R32 r32;
+      x64asm::R16 r16;
+      x64asm::Rb  r8;
+
+      gp_stack(x64asm::R64 r64_, x64asm::R32 r32_, 
+               x64asm::R16 r16_, x64asm::Rb r8_) : 
+                r8(r8_), r16(r16_), r32(r32_), r64(r64_) {}
+  };
+
+  class sse_stack {
+
+    public:
+      x64asm::Xmm xmm;
+      x64asm::Ymm ymm;
+
+      sse_stack(x64asm::Xmm xmm_, x64asm::Ymm ymm_) :
+        xmm(xmm_), ymm(ymm_) {}
+  };
+
+  vector<sse_stack> sse_registers = 
+  {
+    sse_stack(x64asm::Constants::xmm0(),
+              x64asm::Constants::ymm0()),
+    sse_stack(x64asm::Constants::xmm1(),
+              x64asm::Constants::ymm1()),
+    sse_stack(x64asm::Constants::xmm2(),
+              x64asm::Constants::ymm2()),
+    sse_stack(x64asm::Constants::xmm3(),
+              x64asm::Constants::ymm3()),
+    sse_stack(x64asm::Constants::xmm4(),
+              x64asm::Constants::ymm4()),
+    sse_stack(x64asm::Constants::xmm5(),
+              x64asm::Constants::ymm5()),
+    sse_stack(x64asm::Constants::xmm6(),
+              x64asm::Constants::ymm6()),
+    sse_stack(x64asm::Constants::xmm7(),
+              x64asm::Constants::ymm7()),
+    sse_stack(x64asm::Constants::xmm8(),
+              x64asm::Constants::ymm8()),
+    sse_stack(x64asm::Constants::xmm9(),
+              x64asm::Constants::ymm9()),
+    sse_stack(x64asm::Constants::xmm10(),
+              x64asm::Constants::ymm10()),
+    sse_stack(x64asm::Constants::xmm11(),
+              x64asm::Constants::ymm11()),
+    sse_stack(x64asm::Constants::xmm12(),
+              x64asm::Constants::ymm12()),
+    sse_stack(x64asm::Constants::xmm13(),
+              x64asm::Constants::ymm13()),
+    sse_stack(x64asm::Constants::xmm14(),
+              x64asm::Constants::ymm14()),
+    sse_stack(x64asm::Constants::xmm15(),
+              x64asm::Constants::ymm15())
+
+  };
+
+  vector<gp_stack> possible_registers = 
+    {
+      gp_stack(
+        (x64asm::R64)x64asm::Constants::rax(),
+        (x64asm::R32)x64asm::Constants::eax(),
+        (x64asm::R16)x64asm::Constants::ax(),
+        (x64asm::Rb)x64asm::Constants::al()
+      ),
+
+      gp_stack(
+        x64asm::Constants::rbx(),
+        x64asm::Constants::ebx(),
+        x64asm::Constants::bx(),
+        x64asm::Constants::bl()
+      ),
+
+      gp_stack(
+        x64asm::Constants::rcx(),
+        x64asm::Constants::ecx(),
+        x64asm::Constants::cx(),
+        x64asm::Constants::cl()
+      ),
+
+      gp_stack(
+        x64asm::Constants::rdx(),
+        x64asm::Constants::edx(),
+        x64asm::Constants::dx(),
+        x64asm::Constants::dl()
+      ),
+
+      gp_stack(
+        x64asm::Constants::rsi(),
+        x64asm::Constants::esi(),
+        x64asm::Constants::si(),
+        x64asm::Constants::sil()
+      ),
+
+      gp_stack(
+        x64asm::Constants::rdi(),
+        x64asm::Constants::edi(),
+        x64asm::Constants::di(),
+        x64asm::Constants::dil()
+      ),
+
+      gp_stack(
+        x64asm::Constants::rbp(),
+        x64asm::Constants::ebp(),
+        x64asm::Constants::bp(),
+        x64asm::Constants::bpl()
+      ),
+
+      gp_stack(
+        x64asm::Constants::rsp(),
+        x64asm::Constants::esp(),
+        x64asm::Constants::sp(),
+        x64asm::Constants::spl()
+      ),
+
+      gp_stack(
+        x64asm::Constants::r8(),
+        x64asm::Constants::r8d(),
+        x64asm::Constants::r8w(),
+        x64asm::Constants::r8b()
+      ),
+
+      gp_stack(
+        x64asm::Constants::r9(),
+        x64asm::Constants::r9d(),
+        x64asm::Constants::r9w(),
+        x64asm::Constants::r9b()
+      ),
+
+      gp_stack(
+        x64asm::Constants::r10(),
+        x64asm::Constants::r10d(),
+        x64asm::Constants::r10w(),
+        x64asm::Constants::r10b()
+      ),
+
+      gp_stack(
+        x64asm::Constants::r11(),
+        x64asm::Constants::r11d(),
+        x64asm::Constants::r11w(),
+        x64asm::Constants::r11b()
+      ),
+
+      gp_stack(
+        x64asm::Constants::r12(),
+        x64asm::Constants::r12d(),
+        x64asm::Constants::r12w(),
+        x64asm::Constants::r12b()
+      ),
+
+      gp_stack(
+        x64asm::Constants::r13(),
+        x64asm::Constants::r13d(),
+        x64asm::Constants::r13w(),
+        x64asm::Constants::r13b()
+      ),
+
+      gp_stack(
+        x64asm::Constants::r14(),
+        x64asm::Constants::r14d(),
+        x64asm::Constants::r14w(),
+        x64asm::Constants::r14b()
+      ),
+
+      gp_stack(
+        x64asm::Constants::r15(),
+        x64asm::Constants::r15d(),
+        x64asm::Constants::r15w(),
+        x64asm::Constants::r15b()
+      )
+    };
+
+  os << "{";
+
+  for(auto gps : possible_registers) {
+    if (rs.contains(gps.r64)) {
+      os << " " << gps.r64;
+      continue;
+    }
+    if (rs.contains(gps.r32)) {
+      os << " " << gps.r32;
+      continue;
+    }
+    if (rs.contains(gps.r16)) {
+      os << " " << gps.r16;
+      continue;
+    }
+    if (rs.contains(gps.r8)) {
+      os << " " << gps.r8;
+      continue;
+    }
+  }
+  for (auto sses: sse_registers) {
+    if (rs.contains(sses.ymm)) {
+      os << " " << sses.ymm;
+      continue;
+    }
+    if (rs.contains(sses.xmm)) {
+      os << " " << sses.xmm;
+      continue;
+    }
+  }
+#ifdef DEBUG_REGSET
+  os << " (" << hex << rs.get_group1() << ", " << rs.get_group2();
+  os << ", " << rs.get_group3() << ", " << rs.get_group4() << dec << ")";
+#endif
+  os << " }";
+  return os;
+}
+
+
 } // namespace std
 
 #endif
