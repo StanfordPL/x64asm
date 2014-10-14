@@ -151,7 +151,7 @@ class RegSet {
     /** Insert a high register. */
     constexpr RegSet operator+(const Rh& rhs);
     /** Insert a byte register. */
-    constexpr RegSet operator+(const Rb& rhs);
+    constexpr RegSet operator+(const R8& rhs);
     /** Insert a word register. */
     constexpr RegSet operator+(const R16& rhs);
     /** Insert a double register. */
@@ -196,7 +196,7 @@ class RegSet {
     /** Insert a high register. */
     RegSet& operator+=(const Rh& rhs);
     /** Insert a byte register. */
-    RegSet& operator+=(const Rb& rhs);
+    RegSet& operator+=(const R8& rhs);
     /** Insert a word register. */
     RegSet& operator+=(const R16& rhs);
     /** Insert a double register. */
@@ -241,7 +241,7 @@ class RegSet {
     /** Returns true if this set contains a high register. */
     constexpr bool contains(const Rh& rhs);
     /** Returns true if this set contains a byte register. */
-    constexpr bool contains(const Rb& rhs);
+    constexpr bool contains(const R8& rhs);
     /** Returns true if this set contains a word register. */
     constexpr bool contains(const R16& rhs);
     /** Returns true if this set contains a double register. */
@@ -511,7 +511,7 @@ inline constexpr RegSet RegSet::operator+(const Rh& rhs) {
   return plus_group1(Mask::HIGH, (uint64_t)rhs-4);
 }
 
-inline constexpr RegSet RegSet::operator+(const Rb& rhs) {
+inline constexpr RegSet RegSet::operator+(const R8& rhs) {
   return plus_group1(Mask::LOW, (uint64_t)rhs);
 }
 
@@ -600,7 +600,7 @@ inline RegSet& RegSet::operator+=(const Rh& rhs) {
   return plus_equal(Mask::HIGH, group1_, (uint64_t)rhs - 4);
 }
 
-inline RegSet& RegSet::operator+=(const Rb& rhs) {
+inline RegSet& RegSet::operator+=(const R8& rhs) {
   return plus_equal(Mask::LOW, group1_, (uint64_t)rhs);
 }
 
@@ -703,7 +703,7 @@ inline constexpr bool RegSet::contains(const Rh& rhs) {
   return contains(Mask::HIGH, group1_, (uint64_t)rhs - 4);
 }
 
-inline constexpr bool RegSet::contains(const Rb& rhs) {
+inline constexpr bool RegSet::contains(const R8& rhs) {
   return contains(Mask::LOW, group1_, (uint64_t)rhs);
 }
 
@@ -904,10 +904,10 @@ inline ostream& operator<<(ostream& os, const x64asm::RegSet& rs) {
       x64asm::R64 r64;
       x64asm::R32 r32;
       x64asm::R16 r16;
-      x64asm::Rb  r8;
+      x64asm::R8  r8;
 
       gp_stack(x64asm::R64 r64_, x64asm::R32 r32_, 
-               x64asm::R16 r16_, x64asm::Rb r8_) : 
+               x64asm::R16 r16_, x64asm::R8 r8_) : 
                 r8(r8_), r16(r16_), r32(r32_), r64(r64_) {}
   };
 
@@ -964,7 +964,7 @@ inline ostream& operator<<(ostream& os, const x64asm::RegSet& rs) {
         (x64asm::R64)x64asm::Constants::rax(),
         (x64asm::R32)x64asm::Constants::eax(),
         (x64asm::R16)x64asm::Constants::ax(),
-        (x64asm::Rb)x64asm::Constants::al()
+        (x64asm::R8)x64asm::Constants::al()
       ),
 
       gp_stack(

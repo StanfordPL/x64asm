@@ -129,7 +129,7 @@ struct is_operand<Rl> : public std::true_type { };
 template <>
 struct is_operand<Rh> : public std::true_type { };
 template <>
-struct is_operand<Rb> : public std::true_type { };
+struct is_operand<R8> : public std::true_type { };
 template <>
 struct is_operand<Al> : public std::true_type { };
 template <>
@@ -184,7 +184,7 @@ struct is_reg<Rl> : public std::true_type { };
 template <>
 struct is_reg<Rh> : public std::true_type { };
 template <>
-struct is_reg<Rb> : public std::true_type { };
+struct is_reg<R8> : public std::true_type { };
 template <>
 struct is_reg<Al> : public std::true_type { };
 template <>

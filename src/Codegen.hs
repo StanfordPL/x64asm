@@ -279,7 +279,7 @@ xmm_op _        = False
 op2type :: String -> String
 op2type "rl"       = "Rl"
 op2type "rh"       = "Rh"
-op2type "rb"       = "Rb"
+op2type "rb"       = "R8"
 op2type "r16"      = "R16"
 op2type "r32"      = "R32"
 op2type "r64"      = "R64"

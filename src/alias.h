@@ -40,7 +40,7 @@ class Alias {
     template <typename T>
     static typename std::enable_if < is_reg<T>::value&&
     !std::is_same<T, Rh>::value&&
-    !std::is_same<T, Rb>::value,
+    !std::is_same<T, R8>::value,
     const Rl& >::type
     to_low(const T& t) {
       assert(t < 4);
@@ -63,7 +63,7 @@ class Alias {
     template <typename T>
     static typename std::enable_if < is_reg<T>::value&&
     !std::is_same<T, Rh>::value&&
-    !std::is_same<T, Rb>::value,
+    !std::is_same<T, R8>::value,
     const Rh& >::type
     to_high(const T& t) {
       assert(t < 4);
@@ -86,7 +86,7 @@ class Alias {
     static typename std::enable_if < is_reg<T>::value&&
     !std::is_same<T, Rl>::value&&
     !std::is_same<T, Rh>::value,
-    const Rb& >::type
+    const R8& >::type
     to_byte(const T& t) {
       // The rbs array begins with rbp, which has an internal value of 4.
       assert(t >= 4);
