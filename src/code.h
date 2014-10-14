@@ -22,6 +22,7 @@ limitations under the License.
 #include <vector>
 
 #include "src/instruction.h"
+#include "src/reg_set.h"
 
 namespace x64asm {
 
@@ -37,6 +38,55 @@ class Code : public std::vector<Instruction> {
     /** Creates a code sequence using the instruction in an stl container. */
     template <typename InItr>
     Code(InItr begin, InItr end);
+
+    /** Returns the set of registers this code must read. */
+    RegSet must_read_set() const {
+			auto rs = RegSet::empty();
+			for (const auto& instr : *this) {
+				rs |= instr.must_read_set();
+			}
+			return rs;
+		}
+    /** Returns the set of registers this code might read. */
+    RegSet maybe_read_set() const {
+			auto rs = RegSet::empty();
+			for (const auto& instr : *this) {
+				rs |= instr.maybe_read_set();
+			}
+			return rs;
+		}
+    /** Returns the set of registers this code must write. */
+    RegSet must_write_set() const {
+			auto rs = RegSet::empty();
+			for (const auto& instr : *this) {
+				rs |= instr.must_write_set();
+			}
+			return rs;
+		}
+    /** Returns the set of registers this code might write. */
+    RegSet maybe_write_set() const {
+			auto rs = RegSet::empty();
+			for (const auto& instr : *this) {
+				rs |= instr.maybe_write_set();
+			}
+			return rs;
+		}
+    /** Returns the set of registers this code must undefine. */
+    RegSet must_undef_set() const {
+			auto rs = RegSet::empty();
+			for (const auto& instr : *this) {
+				rs |= instr.must_undef_set();
+			}
+			return rs;
+		}
+    /** Returns the set of registers this code might undefine. */
+    RegSet maybe_undef_set() const {
+			auto rs = RegSet::empty();
+			for (const auto& instr : *this) {
+				rs |= instr.maybe_undef_set();
+			}
+			return rs;
+		}
 
     /** Returns true iff every instruction is well-formed. */
     bool check() const;
