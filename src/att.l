@@ -127,18 +127,18 @@ const std::string* to_str(const char* c, size_t len) {
 "%dh" { yylval.operand = new Rh{dh}; return RH; }
 "%bh" { yylval.operand = new Rh{bh}; return RH; }
  
-"%spl"  { yylval.operand = new Rb{spl};  return RB; }
-"%bpl"  { yylval.operand = new Rb{bpl};  return RB; }
-"%sil"  { yylval.operand = new Rb{sil};  return RB; }
-"%dil"  { yylval.operand = new Rb{dil};  return RB; }
-"%r8b"  { yylval.operand = new Rb{r8b};  return RB; }
-"%r9b"  { yylval.operand = new Rb{r9b};  return RB; }
-"%r10b" { yylval.operand = new Rb{r10b}; return RB; }
-"%r11b" { yylval.operand = new Rb{r11b}; return RB; }
-"%r12b" { yylval.operand = new Rb{r12b}; return RB; }
-"%r13b" { yylval.operand = new Rb{r13b}; return RB; }
-"%r14b" { yylval.operand = new Rb{r14b}; return RB; }
-"%r15b" { yylval.operand = new Rb{r15b}; return RB; }
+"%spl"  { yylval.operand = new R8{spl};  return RB; }
+"%bpl"  { yylval.operand = new R8{bpl};  return RB; }
+"%sil"  { yylval.operand = new R8{sil};  return RB; }
+"%dil"  { yylval.operand = new R8{dil};  return RB; }
+"%r8b"  { yylval.operand = new R8{r8b};  return RB; }
+"%r9b"  { yylval.operand = new R8{r9b};  return RB; }
+"%r10b" { yylval.operand = new R8{r10b}; return RB; }
+"%r11b" { yylval.operand = new R8{r11b}; return RB; }
+"%r12b" { yylval.operand = new R8{r12b}; return RB; }
+"%r13b" { yylval.operand = new R8{r13b}; return RB; }
+"%r14b" { yylval.operand = new R8{r14b}; return RB; }
+"%r15b" { yylval.operand = new R8{r15b}; return RB; }
 
 "%ax"   { yylval.operand = new Ax{ax};    return R_16; }
 "%cx"   { yylval.operand = new R16{cx};   return R_16; }

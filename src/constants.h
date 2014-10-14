@@ -322,41 +322,41 @@ class Constants {
       return Rh {7};
     }
 
-    static constexpr Rb spl()  {
-      return Rb {4};
+    static constexpr R8 spl()  {
+      return R8 {4};
     }
-    static constexpr Rb bpl()  {
-      return Rb {5};
+    static constexpr R8 bpl()  {
+      return R8 {5};
     }
-    static constexpr Rb sil()  {
-      return Rb {6};
+    static constexpr R8 sil()  {
+      return R8 {6};
     }
-    static constexpr Rb dil()  {
-      return Rb {7};
+    static constexpr R8 dil()  {
+      return R8 {7};
     }
-    static constexpr Rb r8b()  {
-      return Rb {8};
+    static constexpr R8 r8b()  {
+      return R8 {8};
     }
-    static constexpr Rb r9b()  {
-      return Rb {9};
+    static constexpr R8 r9b()  {
+      return R8 {9};
     }
-    static constexpr Rb r10b() {
-      return Rb {10};
+    static constexpr R8 r10b() {
+      return R8 {10};
     }
-    static constexpr Rb r11b() {
-      return Rb {11};
+    static constexpr R8 r11b() {
+      return R8 {11};
     }
-    static constexpr Rb r12b() {
-      return Rb {12};
+    static constexpr R8 r12b() {
+      return R8 {12};
     }
-    static constexpr Rb r13b() {
-      return Rb {13};
+    static constexpr R8 r13b() {
+      return R8 {13};
     }
-    static constexpr Rb r14b() {
-      return Rb {14};
+    static constexpr R8 r14b() {
+      return R8 {14};
     }
-    static constexpr Rb r15b() {
-      return Rb {15};
+    static constexpr R8 r15b() {
+      return R8 {15};
     }
 
     static constexpr Ax ax()    {
@@ -770,20 +770,20 @@ extern const Rh bh;
 
 extern const std::array<Rh,4> rhs;
 
-extern const Rb spl;
-extern const Rb bpl;
-extern const Rb sil;
-extern const Rb dil;
-extern const Rb r8b;
-extern const Rb r9b;
-extern const Rb r10b;
-extern const Rb r11b;
-extern const Rb r12b;
-extern const Rb r13b;
-extern const Rb r14b;
-extern const Rb r15b;
+extern const R8 spl;
+extern const R8 bpl;
+extern const R8 sil;
+extern const R8 dil;
+extern const R8 r8b;
+extern const R8 r9b;
+extern const R8 r10b;
+extern const R8 r11b;
+extern const R8 r12b;
+extern const R8 r13b;
+extern const R8 r14b;
+extern const R8 r15b;
 
-extern const std::array<Rb,12> rbs;
+extern const std::array<R8,12> rbs;
 
 extern const Ax ax;
 extern const R16 cx;
