@@ -1358,10 +1358,10 @@ EE 	OUT DX, AL 	NP	R, R	E.IOPL E.VM					V	V		outb		Output byte in AL to I/O port
 EF 	OUT DX, AX 	NP	R, R	E.IOPL E.VM					V	V		outw		Output word in AX to I/O port address in DX.
 EF 	OUT DX, EAX 	NP	R, R	E.IOPL E.VM					V	V		outl		Output doubleword in EAX to I/O port address in DX.
 														
-6E 	OUTS DX, m8 	NP	R, I	E.IOPL E.VM E.DF RSI					V	V		outs		Output byte from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
+6	OUTS DX, m8 	NP	R, I	E.IOPL E.VM E.DF RSI					V	V		outs		Output byte from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 6F 	OUTS DX, m16 	NP	R, I	E.IOPL E.VM E.DF RSI					V	V		outs		Output word from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 6F 	OUTS DX, m32 	NP	R, I	E.IOPL E.VM E.DF RSI					V	V		outs		Output doubleword from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
-6E 	OUTSB 	NP		E.IOPL E.VM E.DF DX RSI					V	V		outsb		Output byte from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
+6	OUTSB 	NP		E.IOPL E.VM E.DF DX RSI					V	V		outsb		Output byte from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 PREF.66+ 6F 	OUTSW 	NP		E.IOPL E.VM E.DF DX RSI					V	V		outsw		Output word from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 6F 	OUTSD 	NP		E.IOPL E.VM E.DF DX RSI					V	V		outsl		Output doubleword from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 														
@@ -1712,32 +1712,32 @@ VEX.NDS.256.66.0F.WIG D5 /r	VPMULLW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	A
 VEX.NDS.128.66.0F.WIG F4 /r	VPMULUDQ xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpmuludq		Multiply packed unsigned doubleword integers in xmm2 by packed unsigned doubleword integers in xmm3/m128, and store the quadword results in xmm1.
 VEX.NDS.256.66.0F.WIG F4 /r	VPMULUDQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpmuludq		Multiply packed unsigned doubleword integers in ymm2 by packed unsigned doubleword integers in ymm3/m256, and store the quadword results in ymm1.
 														
-8F /0 	POP r/m16 	M	W						V	V		popw		Pop top of stack into m16; increment stack pointer.
-8F /0 	POP r/m32 								NE	V				Pop top of stack into m32; increment stack pointer.
-8F /0 	POP r/m64 	M	W						V	NE		popq		Pop top of stack into m64; increment stack pointer. Cannot encode 32-bit operand size.
-58 +rw 	POP r16 	O	W						V	V		popw	YES	Pop top of stack into r16; increment stack pointer.
-58 +rd 	POP r32 								NE	V				Pop top of stack into r32; increment stack pointer.
-58 +rd 	POP r64 	O	W						V	NE		popq	YES	Pop top of stack into r64; increment stack pointer. Cannot encode 32-bit operand size.
-1F 	POP DS 								I	V				Pop top of stack into DS; increment stack pointer.
-07	POP ES 								I	V				Pop top of stack into ES; increment stack pointer.
-17	POP SS 								I	V				Pop top of stack into SS; increment stack pointer.
-PREF.66+ 0F A1 	POP FS, p66	NP	W, I						V	V		popq		Pop top of stack into FS; increment stack pointer by 16 bits.
-0F A1 	POP FS 								NE	V				Pop top of stack into FS; increment stack pointer by 32 bits.
-0F A1 	POP FS 	NP	W						V	NE		popq		Pop top of stack into FS; increment stack pointer by 64 bits.
-PREF.66+ 0F A9 	POP GS, p66	NP	W, I						V	V		popq		Pop top of stack into GS; increment stack pointer by 16 bits.
-0F A9 	POP GS 								NE	V				Pop top of stack into GS; increment stack pointer by 32 bits.
-0F A9 	POP GS 	NP	W						V	NE		popq		Pop top of stack into GS; increment stack pointer by 64 bits.
+8F /0 	POP r/m16 	M	W	RSP	RSP				V	V		popw		Pop top of stack into m16; increment stack pointer.
+8F /0 	POP r/m32 			RSP	RSP				NE	V				Pop top of stack into m32; increment stack pointer.
+8F /0 	POP r/m64 	M	W	RSP	RSP				V	NE		popq		Pop top of stack into m64; increment stack pointer. Cannot encode 32-bit operand size.
+58 +rw 	POP r16 	O	W	RSP	RSP				V	V		popw	YES	Pop top of stack into r16; increment stack pointer.
+58 +rd 	POP r32 			RSP	RSP				NE	V				Pop top of stack into r32; increment stack pointer.
+58 +rd 	POP r64 	O	W	RSP	RSP				V	NE		popq	YES	Pop top of stack into r64; increment stack pointer. Cannot encode 32-bit operand size.
+1F 	POP DS 			RSP	RSP				I	V				Pop top of stack into DS; increment stack pointer.
+7	POP ES 			RSP	RSP				I	V				Pop top of stack into ES; increment stack pointer.
+17	POP SS 			RSP	RSP				I	V				Pop top of stack into SS; increment stack pointer.
+PREF.66+ 0F A1 	POP FS, p66	NP	W, I	RSP	RSP				V	V		popq		Pop top of stack into FS; increment stack pointer by 16 bits.
+0F A1 	POP FS 			RSP	RSP				NE	V				Pop top of stack into FS; increment stack pointer by 32 bits.
+0F A1 	POP FS 	NP	W	RSP	RSP				V	NE		popq		Pop top of stack into FS; increment stack pointer by 64 bits.
+PREF.66+ 0F A9 	POP GS, p66	NP	W, I	RSP	RSP				V	V		popq		Pop top of stack into GS; increment stack pointer by 16 bits.
+0F A9 	POP GS 			RSP	RSP				NE	V				Pop top of stack into GS; increment stack pointer by 32 bits.
+0F A9 	POP GS 	NP	W	RSP	RSP				V	NE		popq		Pop top of stack into GS; increment stack pointer by 64 bits.
 														
-61	POPA 								I	V				Pop DI, SI, BP, BX, DX, CX, and AX.
-61	POPAD 								I	V				Pop EDI, ESI, EBP, EBX, EDX, ECX, and EAX.
+61	POPA 			RSP	RSP				I	V				Pop DI, SI, BP, BX, DX, CX, and AX.
+61	POPAD 			RSP	RSP				I	V				Pop EDI, ESI, EBP, EBX, EDX, ECX, and EAX.
 														
 F3 0F B8 /r 	POPCNT r16, r/m16 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	POPCNT	popcnt		POPCNT on r/m16
 F3 0F B8 /r 	POPCNT r32, r/m32 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	POPCNT	popcnt		POPCNT on r/m32
 F3 REX.W+ 0F B8 /r 	POPCNT r64, r/m64 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE	POPCNT	popcnt		POPCNT on r/m64
 														
-9D 	POPF 	NP			E.*				V	V		popf		Pop top of stack into lower 16 bits of EFLAGS.
+9D 	POPF 	NP		RSP	E.* RSP				V	V		popf		Pop top of stack into lower 16 bits of EFLAGS.
 9D 	POPFD 								NE	V				Pop top of stack into EFLAGS.
-9D 	POPFQ 	NP			E.*				V	NE		popfq		Pop top of stack and zero-extend into RFLAGS.
+9D 	POPFQ 	NP		RSP	E.* RSP				V	NE		popfq		Pop top of stack and zero-extend into RFLAGS.
 														
 0F EB /r 	POR mm, mm/m64	RM	RW, R						V	V	MMX	por		Bitwise OR of mm/m64 and mm.
 66 0F EB /r	POR xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	por		Bitwise OR of xmm2/m128 and xmm1.
@@ -1930,28 +1930,28 @@ VEX.NDS.256.66.0F.WIG 61 /r	VPUNPCKLWD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	
 VEX.NDS.256.66.0F.WIG 62 /r	VPUNPCKLDQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpunpckldq		Interleave low-order doublewords from ymm2 and ymm3/m256 into ymm1 register.
 VEX.NDS.256.66.0F.WIG 6C /r	VPUNPCKLQDQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpunpcklqdq		Interleave low-order quadword from ymm2 and ymm3/m256 into ymm1 register.
 														
-FF /6	PUSH r/m16 	M	R						V	V		pushw		Push r/m16.
-FF /6	PUSH r/m32								NE	V				Push r/m32.
-FF /6	PUSH r/m64	M	R						V	NE		pushq		Push r/m64.
-50 +rw	PUSH r16	O	R						V	V		pushw	YES	Push r16.
-50 +rd	PUSH r32								NE	V				Push r32.
-50 +rd	PUSH r64	O	R						V	NE		pushq	YES	Push r64.
-6A	PUSH imm8	I	R						V	V		pushq		Push imm8.
-68	PUSH imm16	I	R						V	V		pushq		Push imm16.
-68	PUSH imm32	I	R						V	V		pushq		Push imm32.
-0E	PUSH CS								I	V				Push CS.
-16	PUSH SS								I	V				Push SS.
-1E	PUSH DS								I	V				Push DS.
-06	PUSH ES								I	V				Push ES.
-0F A0	PUSH FS	NP	R						V	V		pushq		Push FS.
-0F A8	PUSH GS	NP	R						V	V		pushq		Push GS.
+FF /6	PUSH r/m16 	M	R	RSP	RSP				V	V		pushw		Push r/m16.
+FF /6	PUSH r/m32			RSP	RSP				NE	V				Push r/m32.
+FF /6	PUSH r/m64	M	R	RSP	RSP				V	NE		pushq		Push r/m64.
+50 +rw	PUSH r16	O	R	RSP	RSP				V	V		pushw	YES	Push r16.
+50 +rd	PUSH r32			RSP	RSP				NE	V				Push r32.
+50 +rd	PUSH r64	O	R	RSP	RSP				V	NE		pushq	YES	Push r64.
+6A	PUSH imm8	I	R	RSP	RSP				V	V		pushq		Push imm8.
+68	PUSH imm16	I	R	RSP	RSP				V	V		pushq		Push imm16.
+68	PUSH imm32	I	R	RSP	RSP				V	V		pushq		Push imm32.
+0	PUSH CS			RSP	RSP				I	V				Push CS.
+16	PUSH SS			RSP	RSP				I	V				Push SS.
+1	PUSH DS			RSP	RSP				I	V				Push DS.
+6	PUSH ES			RSP	RSP				I	V				Push ES.
+0F A0	PUSH FS	NP	R	RSP	RSP				V	V		pushq		Push FS.
+0F A8	PUSH GS	NP	R	RSP	RSP				V	V		pushq		Push GS.
 														
-60	PUSHA								I	V				Push AX, CX, DX, BX, original SP, BP, SI, and DI.
-60	PUSHAD								I	V				Push EAX, ECX, EDX, EBX, original ESP, EBP, ESI, and EDI.
+60	PUSHA			RSP	RSP				I	V				Push AX, CX, DX, BX, original SP, BP, SI, and DI.
+60	PUSHAD			RSP	RSP				I	V				Push EAX, ECX, EDX, EBX, original ESP, EBP, ESI, and EDI.
 														
-9C	PUSHF	NP		E.*					V	V		pushf		Push lower 16 bits of EFLAGS.
+9C	PUSHF	NP		E.* RSP	RSP				V	V		pushf		Push lower 16 bits of EFLAGS.
 9C	PUSHFD								NE	V				Push EFLAGS.
-9C	PUSHFQ	NP		E.*					V	NE		pushfq		Push RFLAGS.
+9C	PUSHFQ	NP		E.* RSP	RSP				V	NE		pushfq		Push RFLAGS.
 														
 0F EF /r	PXOR mm, mm/m64	RM	RW, R						V	V	MMX	pxor		Bitwise XOR of mm/m64 and mm.
 66 0F EF /r	PXOR xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pxor		Bitwise XOR of xmm2/m128 and xmm1. 
@@ -2120,7 +2120,7 @@ VEX.256.0F.WIG 52 /r	VRSQRTPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vrsqrtps		Com
 F3 0F 52 /r	RSQRTSS xmm1, xmm2/m32	RM	W, R						V	V	SSE	rsqrtss		Computes the approximate reciprocal of the square root of the low single-precision floating-point value in xmm2/m32 and stores the results in xmm1.
 VEX.NDS.LIG.F3.0F.WIG 52 /r	VRSQRTSS xmm1, xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vrsqrtss		Computes the approximate reciprocal of the square root of the low single precision floating-point value in xmm3/m32 and stores the results in xmm1. Also, upper single precision floating-point values (bits[127:32]) from xmm2 are copied to xmm1[127:32].
 														
-9E	SAHF	NP		AH	E.SF E.ZF E.AF E.PF E.CF				V	V		sahf		Loads SF, ZF, AF, PF, and CF from AH into EFLAGS register.
+9	SAHF	NP		AH	E.SF E.ZF E.AF E.PF E.CF				V	V		sahf		Loads SF, ZF, AF, PF, and CF from AH into EFLAGS register.
 														
 D0 /4	SAL r/m8, 1	M1	RW, R		E.CF E.OF E.PF E.SF E.ZF	E.AF			V	V		salb		Multiply r/m8 by 2, once.
 REX+ D0 /4	SAL r/m8, 1	M1	RW, R		E.CF E.OF E.PF E.SF E.ZF	E.AF			V	NE		salb		Multiply r/m8 by 2, once.
