@@ -65,7 +65,7 @@ class Constants {
       return Eflags {11, 1};
     }
     static constexpr Eflags eflags_iopl() {
-      return Eflags {13, 1};
+      return Eflags {12, 2};
     }
     static constexpr Eflags eflags_nt()   {
       return Eflags {14, 1};
