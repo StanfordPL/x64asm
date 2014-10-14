@@ -134,8 +134,35 @@ class Instruction {
     /** Does this instruction invoke a function call. */
     bool is_call() const;
 
-		/** Does this instruction dereference memory? @todo check for implicit. */
-		bool derefs_mem() const;
+		/** Is this a variant of the lea instruction? */
+		bool is_lea() const {
+			return opcode_ >= LEA_R16_M16 && opcode_ <= LEA_R64_M64;
+		}
+		/** Is this a variant of the push instruction? */
+		bool is_push() const {
+			return opcode_ >= PUSH_M16 && opcode_ <= PUSH_R64;
+		}
+		/** Is this a variant of the pop instruction? */
+		bool is_pop() const {
+			return opcode_ >= POP_M16 && opcode_ <= POP_R64;
+		}
+		/** Is this a variant of the return instruction? */
+		bool is_ret() const {
+			return opcode_ == RET;
+		}
+
+		/** Does this instruction implicitly dereference memory? @todo missing cases */
+		bool is_implicit_memory_dereference() const {
+			return is_push() || is_pop() || is_ret();
+		}
+		/** Does this instruction explicitly dereference memory? */
+		bool is_explicit_memory_dereference() const {
+			return mem_index() != -1 && !is_lea();
+		}
+		/** Does this instruction dereference memory? */
+		bool is_memory_dereference() const {
+			return is_explicit_memory_dereference() || is_implicit_memory_dereference();
+		}
 		/** Returns the index of a memory operand if present, -1 otherwise. */
 		int mem_index() const;
 
@@ -195,6 +222,11 @@ class Instruction {
 
     /** Writes this instruction to an ostream using at&t syntax. */
     std::ostream& write_att(std::ostream& os) const;
+
+		/** @Deprecated. Use is_explicit_memory_dereference() */
+		bool derefs_mem() const {
+			return is_explicit_memory_dereference();
+		}
 
   private:
     /** Instruction mnemonic. */
@@ -392,13 +424,6 @@ inline bool Instruction::is_uncond_jump() const {
 inline bool Instruction::is_call() const {
   assert((size_t)get_opcode() < is_call_.size());
   return is_call_[get_opcode()];
-}
-
-inline bool Instruction::derefs_mem() const {
-  const auto o = get_opcode();
-	if ( o >= LEA_R16_M16 && o <= LEA_R64_M64 )
-		return false;
-	return mem_index() != -1;
 }
 
 inline int Instruction::mem_index() const {
