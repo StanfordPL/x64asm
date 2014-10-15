@@ -89,7 +89,7 @@ RegSet& Instruction::explicit_must_read_set(RegSet& ret) const {
         ret += get_operand<Rh>(i);
         break;
       case Type::RB:
-        ret += get_operand<R8>(i);
+        ret += get_operand<Rb>(i);
         break;
       case Type::AL:
       case Type::CL:
@@ -183,7 +183,7 @@ RegSet& Instruction::explicit_maybe_read_set(RegSet& ret) const {
         ret += get_operand<Rh>(i);
         break;
       case Type::RB:
-        ret += get_operand<R8>(i);
+        ret += get_operand<Rb>(i);
         break;
       case Type::AL:
       case Type::CL:
@@ -253,7 +253,7 @@ RegSet& Instruction::explicit_must_write_set(RegSet& ret) const {
           ret += get_operand<Rh>(i);
           break;
         case Type::RB:
-          ret += get_operand<R8>(i);
+          ret += get_operand<Rb>(i);
           break;
         case Type::AL:
         case Type::CL:
@@ -325,7 +325,7 @@ RegSet& Instruction::explicit_maybe_write_set(RegSet& ret) const {
           ret += get_operand<Rh>(i);
           break;
         case Type::RB:
-          ret += get_operand<R8>(i);
+          ret += get_operand<Rb>(i);
           break;
         case Type::AL:
         case Type::CL:
@@ -383,7 +383,7 @@ RegSet& Instruction::explicit_must_undef_set(RegSet& ret) const {
           ret += get_operand<Rh>(i);
           break;
         case Type::RB:
-          ret += get_operand<R8>(i);
+          ret += get_operand<Rb>(i);
           break;
         case Type::AL:
         case Type::CL:
@@ -440,7 +440,7 @@ RegSet& Instruction::explicit_maybe_undef_set(RegSet& ret) const {
           ret += get_operand<Rh>(i);
           break;
         case Type::RB:
-          ret += get_operand<R8>(i);
+          ret += get_operand<Rb>(i);
           break;
         case Type::AL:
         case Type::CL:
@@ -599,7 +599,7 @@ bool Instruction::check() const {
         }
         break;
       case Type::RB:
-        if (!get_operand<R8>(i).check()) {
+        if (!get_operand<Rb>(i).check()) {
           return false;
         }
         break;
@@ -794,7 +794,7 @@ ostream& Instruction::write_att(ostream& os) const {
           get_operand<Rh>(i).write_att(os);
           break;
         case Type::RB:
-          get_operand<R8>(i).write_att(os);
+          get_operand<Rb>(i).write_att(os);
           break;
         case Type::AL:
         case Type::CL:

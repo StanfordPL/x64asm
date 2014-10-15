@@ -53,7 +53,7 @@ class R : public Operand {
 /** One of the byte general-purpose registers: BPL, SPL, DIL and SIL; or one of
     the byte registers (R8B - R15B) available when using REX.R and 64-bit mode.
 */
-class R8 : public R {
+class Rb : public R {
     // Needs access to constructor.
     friend class Constants;
 
@@ -62,27 +62,24 @@ class R8 : public R {
     constexpr bool check();
 
     /** Comparison based on on val_. */
-    constexpr bool operator<(const R8& rhs);
+    constexpr bool operator<(const Rb& rhs);
     /** Comparison based on on val_. */
-    constexpr bool operator==(const R8& rhs);
+    constexpr bool operator==(const Rb& rhs);
     /** Comparison based on on val_. */
-    constexpr bool operator!=(const R8& rhs);
+    constexpr bool operator!=(const Rb& rhs);
 
     /** Writes this register to an ostream using at&t syntax. */
     std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr R8(uint64_t val);
+    constexpr Rb(uint64_t val);
 };
-
-/** @deprecated. Use R8 instead of Rb. */
-typedef R8 Rb;
 
 
 
 /** One of the byte general-purpose registers: AL, CL, DL, BL. */
-class Rl : public R8 {
+class Rl : public Rb {
     // Needs access to constructor.
     friend class Constants;
 
@@ -317,7 +314,7 @@ ostream& operator<<(ostream& os, const x64asm::Rl& r);
 ostream& operator<<(ostream& os, const x64asm::Rh& r);
 
 /** I/O overload. */
-ostream& operator<<(ostream& os, const x64asm::R8& r);
+ostream& operator<<(ostream& os, const x64asm::Rb& r);
 
 /** I/O overload. */
 ostream& operator<<(ostream& os, const x64asm::R16& r);
@@ -389,7 +386,7 @@ inline std::ostream& Rl::write_att(std::ostream& os) const {
 }
 
 inline constexpr Rl::Rl(uint64_t val) : 
-    R8 {val} {
+    Rb {val} {
 }
 
 inline constexpr bool Al::check() {
@@ -434,23 +431,23 @@ inline constexpr Rh::Rh(uint64_t val) :
     R {val} {
 }
 
-inline constexpr bool R8::check() {
+inline constexpr bool Rb::check() {
   return val_ < 16;
 }
 
-inline constexpr bool R8::operator<(const R8& rhs) {
+inline constexpr bool Rb::operator<(const Rb& rhs) {
   return val_ < rhs.val_;
 }
 
-inline constexpr bool R8::operator==(const R8& rhs) {
+inline constexpr bool Rb::operator==(const Rb& rhs) {
   return val_ == rhs.val_;
 }
 
-inline constexpr bool R8::operator!=(const R8& rhs) {
+inline constexpr bool Rb::operator!=(const Rb& rhs) {
   return !(*this == rhs);
 }
 
-inline std::ostream& R8::write_att(std::ostream& os) const {
+inline std::ostream& Rb::write_att(std::ostream& os) const {
   assert(check());
   const char* rbs[16] = {"al", "cl", "dl", "bl", 
       "spl","bpl","sil","dil","r8b","r9b","r10b",
@@ -458,7 +455,7 @@ inline std::ostream& R8::write_att(std::ostream& os) const {
   return (os << "%" << rbs[val_]);
 }
 
-inline constexpr R8::R8(uint64_t val) : 
+inline constexpr Rb::Rb(uint64_t val) : 
     R {val} {
 }
 
@@ -595,7 +592,7 @@ inline ostream& operator<<(ostream& os, const x64asm::Rh& r) {
   return r.write_att(os);
 }
 
-inline ostream& operator<<(ostream& os, const x64asm::R8& r) {
+inline ostream& operator<<(ostream& os, const x64asm::Rb& r) {
   return r.write_att(os);
 }
 

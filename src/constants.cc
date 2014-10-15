@@ -349,44 +349,44 @@ const array<Rh,4> rhs {
   ah, ch, dh, bh
 };
 
-const R8 spl {
+const Rb spl {
   Constants::spl()
 };
-const R8 bpl {
+const Rb bpl {
   Constants::bpl()
 };
-const R8 sil {
+const Rb sil {
   Constants::sil()
 };
-const R8 dil {
+const Rb dil {
   Constants::dil()
 };
-const R8 r8b {
+const Rb r8b {
   Constants::r8b()
 };
-const R8 r9b {
+const Rb r9b {
   Constants::r9b()
 };
-const R8 r10b {
+const Rb r10b {
   Constants::r10b()
 };
-const R8 r11b {
+const Rb r11b {
   Constants::r11b()
 };
-const R8 r12b {
+const Rb r12b {
   Constants::r12b()
 };
-const R8 r13b {
+const Rb r13b {
   Constants::r13b()
 };
-const R8 r14b {
+const Rb r14b {
   Constants::r14b()
 };
-const R8 r15b {
+const Rb r15b {
   Constants::r15b()
 };
 
-const array<R8,12> rbs {
+const array<Rb,12> rbs {
   spl, bpl, sil, dil, r8b, r9b, r10b, r11b, r12b, r13b, r14b, r15b
 };
 
