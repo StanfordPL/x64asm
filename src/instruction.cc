@@ -930,48 +930,6 @@ const array<array<Type, 4>, 3801> Instruction::type_ {{
   #include "src/type.table"
 }};
 
-const array<bool, 3801> Instruction::is_return_ {{
-  // Internal mnemonics
-  false
-  // Auto-generated mnemonics
-  #include "src/return.table"
-}};
-
-const array<bool, 3801> Instruction::is_nop_ {{
-  // Internal mnemonics
-  false
-  // Auto-generated mnemonics
-  #include "src/nop.table"
-}};
-
-const array<bool, 3801> Instruction::is_jump_ {{
-  // Internal mnemonics
-  false
-  // Auto-generated mnemonics
-  #include "src/jump.table"
-}};
-
-const array<bool, 3801> Instruction::is_cond_jump_ {{
-  // Internal mnemonics
-  false
-  // Auto-generated mnemonics
-  #include "src/cond_jump.table"
-}};
-
-const array<bool, 3801> Instruction::is_uncond_jump_ {{
-  // Internal mnemonics
-  false
-  // Auto-generated mnemonics
-  #include "src/uncond_jump.table"
-}};
-
-const array<bool, 3801> Instruction::is_call_ {{
-  // Internal mnemonics
-  false
-  // Auto-generated mnemonics
-  #include "src/call.table"
-}};
-
 const array<int, 3801> Instruction::mem_index_ {{
   // Internal mnemonics
   -1

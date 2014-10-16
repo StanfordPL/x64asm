@@ -119,36 +119,86 @@ class Instruction {
     /** Returns the type expected at index for this instruction. */
     Type type(size_t index) const;
 
-    /** Returns true if this instruction is a label definiton. */
-    bool is_label_defn() const;
-    /** Returns true if this instruction causes control to return. */
-    bool is_return() const;
-    /** Returns true if this instruction does not modify machine state. */
-    bool is_nop() const;
-    /** Does this instruction cause a control jump. */
-    bool is_jump() const;
-    /** Does this instruction conditionally cause a control jump. */
-    bool is_cond_jump() const;
-    /** Does this instruction unconditionally cause a control jump. */
-    bool is_uncond_jump() const;
     /** Does this instruction invoke a function call. */
-    bool is_call() const;
+    bool is_any_call() const {
+			return is_call() || is_enter() || is_syscall() || is_sysenter();
+		}
+		/** Returns true if this instruction causes a control flow jump. */
+		bool is_any_jump() const {
+			return opcode_ >= JA_REL32 && opcode_ <= JZ_REL8_HINT;
+		}
+		/** Returns true if this instruction does not modify machine state. */
+		bool is_any_nop() const {
+			return is_nop() || is_fnop();
+		}
+    /** Returns true if this instruction causes control to return. */
+    bool is_any_return() const {
+			return is_ret() || is_iret() || is_sysret() || is_sysexit();
+		}
 
+		/** Is this a variant of the call instruction? */
+		bool is_call() const {
+			return opcode_ >= CALL_FARPTR1616 && opcode_ <= CALL_LABEL;
+		}
+		/** Is this a variant of the enter instruction? */
+		bool is_enter() const {
+			return opcode_ >= ENTER_IMM8_IMM16 && opcode_ <= ENTER_ZERO_IMM16;
+		}
+		/** Is this a variant of the fnop instruction? */
+		bool is_fnop() const {
+			return opcode_ == FNOP;
+		}
+		/** Is this a variant of the jcc (jump conditional) instruction? */
+		bool is_jcc() const {
+			return opcode_ >= JA_REL32 && opcode_ <= JZ_REL8_HINT && !is_jmp();
+		}
+		/** Is this a variant of the jmp instruction? */
+		bool is_jmp() const {
+			return opcode_ >= JMP_FARPTR1616 && opcode_ <= JMP_REL8;
+		}
+    /** Returns true if this instruction is a label definiton. */
+    bool is_label_defn() const {
+		  return opcode_ == LABEL_DEFN;
+		}
+		/** Is this a variant of the nop instruction? */
+		bool is_nop() const {
+			return opcode_ >= NOP && opcode_ <= NOP_R32;
+		}
+		/** Is this a variant of the iret instruction? */
+		bool is_iret() const {
+			return opcode_ >= IRET && opcode_ <= IRETQ;
+		}	
 		/** Is this a variant of the lea instruction? */
 		bool is_lea() const {
 			return opcode_ >= LEA_R16_M16 && opcode_ <= LEA_R64_M64;
-		}
-		/** Is this a variant of the push instruction? */
-		bool is_push() const {
-			return opcode_ >= PUSH_M16 && opcode_ <= PUSH_R64;
 		}
 		/** Is this a variant of the pop instruction? */
 		bool is_pop() const {
 			return opcode_ >= POP_M16 && opcode_ <= POP_R64;
 		}
-		/** Is this a variant of the return instruction? */
+		/** Is this a variant of the push instruction? */
+		bool is_push() const {
+			return opcode_ >= PUSH_M16 && opcode_ <= PUSH_R64;
+		}
+		/** Is this a variant of the ret instruction? */
 		bool is_ret() const {
-			return opcode_ == RET;
+			return opcode_ >= RET && opcode_ <= RET_IMM16_FAR;
+		}
+		/** Is this a variant of the syscall instruction? */
+		bool is_syscall() const {
+			return opcode_ == SYSCALL;
+		}
+		/** Is this a variant of the sysenter instruction? */
+		bool is_sysenter() const {
+			return opcode_ == SYSENTER;
+		}
+		/** Is this a variant of the sysexit instruction? */
+		bool is_sysexit() const {
+			return opcode_ == SYSEXIT || opcode_ == SYSEXIT_PREFREXW;
+		}
+		/** Is this a variant of the sysret instruction? */
+		bool is_sysret() const {
+			return opcode_ == SYSRET || opcode_ == SYSRET_PREFREXW;
 		}
 
 		/** Does this instruction implicitly dereference memory? @todo missing cases */
@@ -227,6 +277,18 @@ class Instruction {
 		bool derefs_mem() const {
 			return is_explicit_memory_dereference();
 		}
+    /** @Deprecated. Use is_any_jump() */
+    bool is_jump() const {
+			return is_any_jump();
+		}
+    /** @Deprecated. Use is_jcc() */
+    bool is_cond_jump() const {
+			return is_jcc();
+		}
+    /** @Deprecated. Use is_jmp() */
+    bool is_uncond_jump() const {
+			return is_jmp();
+		}
 
   private:
     /** Instruction mnemonic. */
@@ -238,12 +300,6 @@ class Instruction {
     static const std::array<size_t, 3801> arity_;
     static const std::array<std::array<Properties, 4>, 3801> properties_;
     static const std::array<std::array<Type, 4>, 3801> type_;
-    static const std::array<bool, 3801> is_return_;
-    static const std::array<bool, 3801> is_nop_;
-    static const std::array<bool, 3801> is_jump_;
-    static const std::array<bool, 3801> is_cond_jump_;
-    static const std::array<bool, 3801> is_uncond_jump_;
-    static const std::array<bool, 3801> is_call_;
 		static const std::array<int, 3801> mem_index_;
     static const std::array<RegSet, 3801> implicit_must_read_set_;
     static const std::array<RegSet, 3801> implicit_maybe_read_set_;
@@ -390,40 +446,6 @@ inline Type Instruction::type(size_t index) const {
   assert((size_t)get_opcode() < type_.size());
   assert(index < type_[get_opcode()].size());
   return type_[get_opcode()][index];
-}
-
-inline bool Instruction::is_label_defn() const {
-  return get_opcode() == Opcode::LABEL_DEFN;
-}
-
-inline bool Instruction::is_return() const {
-  assert((size_t)get_opcode() < is_return_.size());
-  return is_return_[get_opcode()];
-}
-
-inline bool Instruction::is_nop() const {
-  assert((size_t)get_opcode() < is_nop_.size());
-  return is_nop_[get_opcode()];
-}
-
-inline bool Instruction::is_jump() const {
-  assert((size_t)get_opcode() < is_jump_.size());
-  return is_jump_[get_opcode()];
-}
-
-inline bool Instruction::is_cond_jump() const {
-  assert((size_t)get_opcode() < is_cond_jump_.size());
-  return is_cond_jump_[get_opcode()];
-}
-
-inline bool Instruction::is_uncond_jump() const {
-  assert((size_t)get_opcode() < is_uncond_jump_.size());
-  return is_uncond_jump_[get_opcode()];
-}
-
-inline bool Instruction::is_call() const {
-  assert((size_t)get_opcode() < is_call_.size());
-  return is_call_[get_opcode()];
 }
 
 inline int Instruction::mem_index() const {

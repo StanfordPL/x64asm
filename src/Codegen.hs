@@ -170,10 +170,6 @@ is_cond_jump i = let mn = raw_mnemonic i in
 is_uncond_jump :: Instr -> Bool
 is_uncond_jump i = raw_mnemonic i == "JMP"
 
--- Returns true for call instructions
-is_call :: Instr -> Bool
-is_call i = (raw_mnemonic i == "CALL") || (raw_mnemonic i == "SYSCALL")
-
 -- Extract arity
 arity :: Instr -> Int
 arity i = length $ operands i
@@ -820,72 +816,6 @@ type_row i = "{{" ++ intercalate "," (map type_elem (operands i)) ++ "}}"
 -- Converts all instruction to type table
 type_table is = to_table is type_row 
 
--- Converts an instruction to return table row
-return_row :: Instr -> String
-return_row i = case raw_mnemonic i of
-  "IRET" -> "true"
-  "IRETD" -> "true"
-  "IRETQ" -> "true"
-  "RET" -> "true"
-  "SYSEXIT" -> "true"
-  "SYSRET" -> "true"
-  _ -> "false"
-
--- Converts all instructions to return table
-return_table :: [Instr] -> String
-return_table is = to_table is return_row 
-
--- Converts an instruction to nop table row
-nop_row :: Instr -> String
-nop_row i = case raw_mnemonic i of
-  "NOP" -> "true"
-  "FNOP" -> "true"
-  _ -> "false"
-
--- Converts all instruction to nop table
-nop_table :: [Instr] -> String
-nop_table is = to_table is nop_row
-
--- Converts an instruction to jump table row
-jump_row :: Instr -> String
-jump_row i = case (is_cond_jump i) || (is_uncond_jump i) of
-  True -> "true"
-  False -> "false"
-
--- Converts all instructions to jump table
-jump_table :: [Instr] -> String
-jump_table is = to_table is jump_row 
-
--- Converts an instruction to cond_jump table row
-cond_jump_row :: Instr -> String
-cond_jump_row i = case is_cond_jump i of
-  True -> "true"
-  False -> "false"
-
--- Converts all instructions to cond_jump table
-cond_jump_table :: [Instr] -> String
-cond_jump_table is = to_table is cond_jump_row 
-
--- Converts an instruction to uncond_jump table row
-uncond_jump_row :: Instr -> String
-uncond_jump_row i = case is_uncond_jump i of
-  True -> "true"
-  False -> "false"
-
--- Converts all instructions to uncond_jump table
-uncond_jump_table :: [Instr] -> String
-uncond_jump_table is = to_table is uncond_jump_row 
-
--- Converts an instruction to call table row
-call_row :: Instr -> String
-call_row i = case is_call i of
-  True -> "true"
-  False -> "false" 
-
--- Converts all instructions to call table
-call_table :: [Instr] -> String
-call_table is = to_table is call_row
-
 -- Converts an instruction mem_index table row
 mem_index_row :: Instr -> String
 mem_index_row i = case findIndex mem_op (operands i) of
@@ -1396,12 +1326,6 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "arity.table"       $ arity_table is
                    writeFile "properties.table"  $ properties_table is
                    writeFile "type.table"        $ type_table is
-                   writeFile "return.table"      $ return_table is
-                   writeFile "nop.table"         $ nop_table is
-                   writeFile "jump.table"        $ jump_table is
-                   writeFile "cond_jump.table"   $ cond_jump_table is
-                   writeFile "uncond_jump.table" $ uncond_jump_table is
-                   writeFile "call.table"        $ call_table is
                    writeFile "mem_index.table"   $ mem_index_table is
                    writeFile "must_read.table"   $ must_read_table is
                    writeFile "maybe_read.table"  $ maybe_read_table is
