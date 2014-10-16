@@ -1358,10 +1358,10 @@ EE 	OUT DX, AL 	NP	R, R	E.IOPL E.VM					V	V		outb		Output byte in AL to I/O port
 EF 	OUT DX, AX 	NP	R, R	E.IOPL E.VM					V	V		outw		Output word in AX to I/O port address in DX.
 EF 	OUT DX, EAX 	NP	R, R	E.IOPL E.VM					V	V		outl		Output doubleword in EAX to I/O port address in DX.
 														
-6	OUTS DX, m8 	NP	R, I	E.IOPL E.VM E.DF RSI					V	V		outs		Output byte from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
+6E 	OUTS DX, m8 	NP	R, I	E.IOPL E.VM E.DF RSI					V	V		outs		Output byte from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 6F 	OUTS DX, m16 	NP	R, I	E.IOPL E.VM E.DF RSI					V	V		outs		Output word from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 6F 	OUTS DX, m32 	NP	R, I	E.IOPL E.VM E.DF RSI					V	V		outs		Output doubleword from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
-6	OUTSB 	NP		E.IOPL E.VM E.DF DX RSI					V	V		outsb		Output byte from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
+6E 	OUTSB 	NP		E.IOPL E.VM E.DF DX RSI					V	V		outsb		Output byte from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 PREF.66+ 6F 	OUTSW 	NP		E.IOPL E.VM E.DF DX RSI					V	V		outsw		Output word from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 6F 	OUTSD 	NP		E.IOPL E.VM E.DF DX RSI					V	V		outsl		Output doubleword from memory location specified in DS:(E)SI or RSI to I/O port specified in DX.
 														
@@ -1719,8 +1719,8 @@ VEX.NDS.256.66.0F.WIG F4 /r	VPMULUDQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	
 58 +rd 	POP r32 			RSP	RSP				NE	V				Pop top of stack into r32; increment stack pointer.
 58 +rd 	POP r64 	O	W	RSP	RSP				V	NE		popq	YES	Pop top of stack into r64; increment stack pointer. Cannot encode 32-bit operand size.
 1F 	POP DS 			RSP	RSP				I	V				Pop top of stack into DS; increment stack pointer.
-7	POP ES 			RSP	RSP				I	V				Pop top of stack into ES; increment stack pointer.
-17	POP SS 			RSP	RSP				I	V				Pop top of stack into SS; increment stack pointer.
+07 	POP ES 			RSP	RSP				I	V				Pop top of stack into ES; increment stack pointer.
+17 	POP SS 			RSP	RSP				I	V				Pop top of stack into SS; increment stack pointer.
 PREF.66+ 0F A1 	POP FS, p66	NP	W, I	RSP	RSP				V	V		popq		Pop top of stack into FS; increment stack pointer by 16 bits.
 0F A1 	POP FS 			RSP	RSP				NE	V				Pop top of stack into FS; increment stack pointer by 32 bits.
 0F A1 	POP FS 	NP	W	RSP	RSP				V	NE		popq		Pop top of stack into FS; increment stack pointer by 64 bits.
@@ -1939,10 +1939,10 @@ FF /6	PUSH r/m64	M	R	RSP	RSP				V	NE		pushq		Push r/m64.
 6A	PUSH imm8	I	R	RSP	RSP				V	V		pushq		Push imm8.
 68	PUSH imm16	I	R	RSP	RSP				V	V		pushq		Push imm16.
 68	PUSH imm32	I	R	RSP	RSP				V	V		pushq		Push imm32.
-0	PUSH CS			RSP	RSP				I	V				Push CS.
+0E	PUSH CS			RSP	RSP				I	V				Push CS.
 16	PUSH SS			RSP	RSP				I	V				Push SS.
-1	PUSH DS			RSP	RSP				I	V				Push DS.
-6	PUSH ES			RSP	RSP				I	V				Push ES.
+1E	PUSH DS			RSP	RSP				I	V				Push DS.
+06	PUSH ES			RSP	RSP				I	V				Push ES.
 0F A0	PUSH FS	NP	R	RSP	RSP				V	V		pushq		Push FS.
 0F A8	PUSH GS	NP	R	RSP	RSP				V	V		pushq		Push GS.
 														
@@ -2120,7 +2120,7 @@ VEX.256.0F.WIG 52 /r	VRSQRTPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vrsqrtps		Com
 F3 0F 52 /r	RSQRTSS xmm1, xmm2/m32	RM	W, R						V	V	SSE	rsqrtss		Computes the approximate reciprocal of the square root of the low single-precision floating-point value in xmm2/m32 and stores the results in xmm1.
 VEX.NDS.LIG.F3.0F.WIG 52 /r	VRSQRTSS xmm1, xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vrsqrtss		Computes the approximate reciprocal of the square root of the low single precision floating-point value in xmm3/m32 and stores the results in xmm1. Also, upper single precision floating-point values (bits[127:32]) from xmm2 are copied to xmm1[127:32].
 														
-9	SAHF	NP		AH	E.SF E.ZF E.AF E.PF E.CF				V	V		sahf		Loads SF, ZF, AF, PF, and CF from AH into EFLAGS register.
+9E	SAHF	NP		AH	E.SF E.ZF E.AF E.PF E.CF				V	V		sahf		Loads SF, ZF, AF, PF, and CF from AH into EFLAGS register.
 														
 D0 /4	SAL r/m8, 1	M1	RW, R		E.CF E.OF E.PF E.SF E.ZF	E.AF			V	V		salb		Multiply r/m8 by 2, once.
 REX+ D0 /4	SAL r/m8, 1	M1	RW, R		E.CF E.OF E.PF E.SF E.ZF	E.AF			V	NE		salb		Multiply r/m8 by 2, once.
