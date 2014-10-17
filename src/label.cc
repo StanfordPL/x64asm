@@ -20,7 +20,8 @@ using namespace std;
 
 namespace x64asm {
 
-map<string, uint64_t> Label::labels_;
+map<string, uint64_t> Label::label2val_;
+map<uint64_t, string> Label::val2label_;
 uint64_t Label::next_val_ = 0;
 
 } // namespace x64asm
