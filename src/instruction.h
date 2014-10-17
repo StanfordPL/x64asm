@@ -140,6 +140,10 @@ class Instruction {
 		bool is_call() const {
 			return opcode_ >= CALL_FARPTR1616 && opcode_ <= CALL_LABEL;
 		}
+		/** Is this a variant of the div instruction? */
+		bool is_div() const {
+			return opcode_ >= DIV_M16 && opcode_ <= DIV_RL;
+		}
 		/** Is this a variant of the enter instruction? */
 		bool is_enter() const {
 			return opcode_ >= ENTER_IMM8_IMM16 && opcode_ <= ENTER_ZERO_IMM16;
@@ -147,6 +151,10 @@ class Instruction {
 		/** Is this a variant of the fnop instruction? */
 		bool is_fnop() const {
 			return opcode_ == FNOP;
+		}
+		/** Is this a variant of the idiv instruction? */
+		bool is_idiv() const {
+			return opcode_ >= IDIV_M16 && opcode_ <= IDIV_RL;
 		}
 		/** Is this a variant of the jcc (jump conditional) instruction? */
 		bool is_jcc() const {
