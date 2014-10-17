@@ -277,13 +277,17 @@ class Instruction {
 		bool derefs_mem() const {
 			return is_explicit_memory_dereference();
 		}
+    /** @Deprecated. Use is_jcc() */
+    bool is_cond_jump() const {
+			return is_jcc();
+		}
     /** @Deprecated. Use is_any_jump() */
     bool is_jump() const {
 			return is_any_jump();
 		}
-    /** @Deprecated. Use is_jcc() */
-    bool is_cond_jump() const {
-			return is_jcc();
+		/** @Deprecated. Use is_any_return() */
+		bool is_return() const {
+			return is_any_return();
 		}
     /** @Deprecated. Use is_jmp() */
     bool is_uncond_jump() const {
