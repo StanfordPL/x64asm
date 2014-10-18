@@ -69,6 +69,12 @@ class Label : public Operand {
 			return val2label_.find(val_) != val2label_.end();
 		}
 
+		/** Returns the text value of this label. */
+		const std::string& get_text() const {
+			assert(check());
+			return val2label_[val_];
+		}
+
     /** Comparison based on label id. */
     bool operator<(const Label& rhs) const {
 			return val_ < rhs.val_;
@@ -85,11 +91,6 @@ class Label : public Operand {
     /** Conversion based on label value. */
     operator uint64_t() const {
 			return val_;
-		}
-		/** Conversion based on label value. */
-		operator std::string() const {
-			assert(check());
-			return val2label_[val_];
 		}
 
     /** STL-compliant hash. */
