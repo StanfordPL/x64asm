@@ -411,7 +411,8 @@ inline constexpr RegSet RegSet::linux_call_parameters() {
       Constants::xmm3() + Constants::xmm4() + Constants::xmm5() +
       Constants::xmm6() + Constants::xmm7() +
       Constants::rdi()  + Constants::rsi()  + Constants::rdx()  + 
-      Constants::rcx()  + Constants::r8()   + Constants::r9();
+      Constants::rcx()  + Constants::r8()   + Constants::r9() +
+      Constants::rax();
 }
 
 inline constexpr RegSet RegSet::linux_call_scratch() {
