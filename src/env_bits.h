@@ -51,6 +51,19 @@ class EnvBits {
 			return width_;
 		}
 
+		/** Less than. */
+		constexpr bool operator<(const EnvBits& rhs) {
+			return index_ == rhs.index_ ? width_ < rhs.width_ : index_ < rhs.index_;
+		}
+		/** Equality. */
+		constexpr bool operator==(const EnvBits& rhs) {
+			return index_ == rhs.index_ && width_ == rhs.width_;
+		}
+		/** Inequality. */
+		constexpr bool operator!=(const EnvBits& rhs) {
+			return !(*this == rhs);
+		}
+
 		/** STL-compliant swap. */
 		void swap(EnvBits& rhs) {
 			std::swap(index_, rhs.index_);
