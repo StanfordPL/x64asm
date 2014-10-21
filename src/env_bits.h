@@ -18,26 +18,55 @@ limitations under the License.
 #define X64ASM_ENV_BITS_H
 
 #include <iostream>
+#include <stdint.h>
 
 namespace x64asm {
 
 /** An environment register bit. */
 class EnvBits {
   public:
+		/** Copy constructor. */
+		EnvBits(const EnvBits& rhs) : index_(rhs.index_), width_(rhs.width_) {
+		}
+		/** Move constructor. */
+		EnvBits(const EnvBits&& rhs) : index_(rhs.index_), width_(rhs.width_) {
+		}
+		/** Assignment operator. */
+		EnvBits& operator=(const EnvBits& rhs) {
+			EnvBits(rhs).swap(*this);
+			return *this;
+		}
+		/** Move assignment operator. */
+		EnvBits& operator=(const EnvBits&& rhs) {
+			EnvBits(std::move(rhs)).swap(*this);
+			return *this;
+		}
+
     /** Returns this bit's upper register index. */
-    constexpr size_t index();
+    constexpr size_t index() {
+			return index_;
+		}
     /** Returns the number of bits this register bit spans. */
-    constexpr size_t width();
+    constexpr size_t width() {
+			return width_;
+		}
+
+		/** STL-compliant swap. */
+		void swap(EnvBits& rhs) {
+			std::swap(index_, rhs.index_);
+			std::swap(width_, rhs.width_);
+		}
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr EnvBits(size_t i, size_t w);
+    constexpr EnvBits(size_t i, size_t w) : index_(i), width_(w) {
+		}
 
   private:
     /** This bit's upper register index. */
-    const size_t index_;
+    uint32_t index_;
     /** The number of bits this register bit spans. */
-    const size_t width_;
+    uint32_t width_;
 };
 
 /** An EFLAGS register bit. */
@@ -47,7 +76,8 @@ class Eflags : public EnvBits {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Eflags(size_t i, size_t w);
+    constexpr Eflags(size_t i, size_t w) : EnvBits(i, w) {
+		}
 };
 
 /** An FPU control register bit. */
@@ -57,7 +87,8 @@ class FpuControl : public EnvBits {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuControl(size_t i, size_t w);
+    constexpr FpuControl(size_t i, size_t w) : EnvBits(i, w) {
+		}
 };
 
 /** An FPU status register bit. */
@@ -67,7 +98,8 @@ class FpuStatus : public EnvBits {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuStatus(size_t i, size_t w);
+    constexpr FpuStatus(size_t i, size_t w) : EnvBits(i, w) {
+		}
 };
 
 /** An FPU tag register. */
@@ -77,7 +109,8 @@ class FpuTag : public EnvBits {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuTag(size_t i, size_t w);
+    constexpr FpuTag(size_t i, size_t w) : EnvBits(i, w) {
+		}
 };
 
 /** An MXCSR register bit. */
@@ -87,39 +120,17 @@ class Mxcsr : public EnvBits {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Mxcsr(size_t i, size_t w);
+    constexpr Mxcsr(size_t i, size_t w) : EnvBits(i, w) {
+		}
 };
 
-inline constexpr size_t EnvBits::index() {
-  return index_;
-}
+} // namespace std
 
-inline constexpr size_t EnvBits::width() {
-  return width_;
-}
+namespace std {
 
-inline constexpr EnvBits::EnvBits(size_t i, size_t w) :
-    index_{i}, width_{w} {
-}
-
-inline constexpr Eflags::Eflags(size_t i, size_t w) : 
-    EnvBits {i, w} { 
-}
-
-inline constexpr FpuControl::FpuControl(size_t i, size_t w) : 
-    EnvBits {i, w} { 
-}
-
-inline constexpr FpuStatus::FpuStatus(size_t i, size_t w) : 
-    EnvBits {i, w} { 
-}
-
-inline constexpr FpuTag::FpuTag(size_t i, size_t w) : 
-    EnvBits {i, w} { 
-}
-
-inline constexpr Mxcsr::Mxcsr(size_t i, size_t w) : 
-    EnvBits {i, w} { 
+// STL-compliant swap
+inline void swap(x64asm::EnvBits& lhs, x64asm::EnvBits& rhs) {
+	lhs.swap(rhs);
 }
 
 } // namespace std
