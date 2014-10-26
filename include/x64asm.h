@@ -30,6 +30,7 @@ limitations under the License.
 #include "src/imm.h"
 #include "src/instruction.h"
 #include "src/label.h"
+#include "src/linker.h"
 #include "src/m.h"
 #include "src/mm.h"
 #include "src/modifier.h"
