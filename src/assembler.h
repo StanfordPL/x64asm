@@ -84,19 +84,23 @@ class Assembler {
     }
 
     /** Finishes compiling a function. Replaces relative placeholders by
-        actual values.
+        actual values, and deletes references after doing so.
     */
     void finish() {
+			std::vector<std::pair<size_t, uint64_t>> unresolved;
+
       for (const auto & l : fxn_->label_rels_) {
         const auto pos = l.first;
         const auto itr = fxn_->label_defs_.find(l.second);
 
         if (itr == fxn_->label_defs_.end()) {
-          fxn_->emit_long(0, pos);
+					unresolved.push_back(l);
         } else {
-          fxn_->emit_long(itr->second - pos - 4, pos);
+          fxn_->emit_long(itr->second-pos-4, pos);
         }
       }
+
+			fxn_->label_rels_ = unresolved;
     }
 
     /** Assembles an instruction. This method will print a hex dump to
@@ -208,11 +212,12 @@ class Assembler {
     }
 
     /** Records internal state for a label reference. Saves the current code
-        position and reserves space for the resolved address.
+        position and reserves space for the resolved address by emitting zero
+				bytes.
     */
     void disp_imm(Label l) {
       fxn_->label_rels_.push_back(std::make_pair(fxn_->size(), l.val_));
-      fxn_->advance_long();
+      fxn_->emit_long(0);
     }
 
     /** Emits an eight-byte memory offset. */

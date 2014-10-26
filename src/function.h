@@ -44,6 +44,8 @@ class Function {
     friend class Assembler;
     // Needs access to internal buffer.
     friend class Imm64;
+		// Needs access to label data.
+		friend class Linker;
 
   public:
     /** Returns a new function; internal buffer may be larger than specified. */
@@ -101,9 +103,13 @@ class Function {
 			}
 		}
 
+		/** Returns a pointer to the internal buffer */
+		void* data() const {
+			return buffer_;
+		}
     /** Returns the address of the entrypoint of this function. */
 		void* get_entrypoint() const {
-			return buffer_;
+			return data();
 		}
 
     /** Zero argument usage form. */
@@ -143,11 +149,6 @@ class Function {
               typename X4, typename X5, typename X6>
     Y call(X1 x1, X2 x2, X3 x3, X4 x4, X5 x5, X6 x6) const {
 			return ((Y(*)(X1, X2, X3, X4, X5, X6)) buffer_)(x1, x2, x3, x4, x5, x6);
-		}
-
-    /** Checks that the internal buffer was allocated correctly. */
-    bool good() const {
-			return (long) buffer_ != -1;
 		}
 
     /** Returns the number of bytes written to the internal buffer. */
@@ -246,6 +247,11 @@ class Function {
 			head_ += 8;
 		}
 
+    /** Checks that the internal buffer was allocated correctly. */
+    bool good() const {
+			return (long) buffer_ != -1;
+		}
+
     /** Equality using hex contents. */
     bool operator==(const Function& rhs) const {
 			if ( !good() || !rhs.good() )
@@ -293,12 +299,11 @@ class Function {
 			return os;
 		}
 
-    /** get pointer to the internal buffer (dangerous!) */
+    /** Deprecated: Use data() */
     unsigned char* get_buffer() {
       return buffer_;
     }
-
-    /** get pointer to the head (dangerous!) */
+    /** Deprecated: Use data() + size() */
     unsigned char* get_head() {
       return head_;
     }

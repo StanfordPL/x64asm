@@ -1,6 +1,6 @@
 CC  = g++ -std=c++0x
 OPT = -Werror -O3
-EX  = abi constants context dataflow functions hello
+EX  = abi constants context dataflow functions hello linker
 
 all: $(EX)
 
@@ -21,6 +21,9 @@ functions: functions.cc
 
 hello: hello.cc
 	$(CC) $(OPT) hello.cc -I../ ../lib/libx64asm.a -o hello
+
+linker: linker.cc
+	$(CC) $(OPT) linker.cc -I../ ../lib/libx64asm.a -o linker
 
 clean:
 	rm -f $(EX)
