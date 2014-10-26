@@ -19,7 +19,6 @@ limitations under the License.
 
 #include <iostream>
 #include <type_traits>
-#include <unordered_map>
 
 #include "src/function.h"
 #include "src/code.h"
@@ -82,20 +81,17 @@ class Assembler {
     void start(Function& fxn) {
       fxn_ = &fxn;
       fxn_->clear();
-
-      label_defs_.clear();
-      label_rels_.clear();
     }
 
     /** Finishes compiling a function. Replaces relative placeholders by
         actual values.
     */
     void finish() {
-      for (const auto & l : label_rels_) {
+      for (const auto & l : fxn_->label_rels_) {
         const auto pos = l.first;
-        const auto itr = label_defs_.find(l.second);
+        const auto itr = fxn_->label_defs_.find(l.second);
 
-        if (itr == label_defs_.end()) {
+        if (itr == fxn_->label_defs_.end()) {
           fxn_->emit_long(0, pos);
         } else {
           fxn_->emit_long(itr->second - pos - 4, pos);
@@ -110,20 +106,15 @@ class Assembler {
 
     /** Bind a label definition to the current assembler position. */
     void bind(Label label) {
-      label_defs_[label.val_] = fxn_->size();
+      fxn_->label_defs_[label.val_] = fxn_->size();
     }
 
     // void adc(const Al& arg0, const Imm8& arg1); ...
-#include "src/assembler.decl"
+		#include "src/assembler.decl"
 
   private:
     /** Pointer to the function being compiled. */
     Function* fxn_;
-
-    /** Maps label definitions to code position. */
-    std::unordered_map<uint64_t, size_t> label_defs_;
-    /** Keeps track of unresolved label references. */
-    std::vector<std::pair<size_t, uint64_t>> label_rels_;
 
     /** Emits an fwait prefix byte. */
     void pref_fwait(uint8_t c) {
@@ -220,7 +211,7 @@ class Assembler {
         position and reserves space for the resolved address.
     */
     void disp_imm(Label l) {
-      label_rels_.push_back(std::make_pair(fxn_->size(), l.val_));
+      fxn_->label_rels_.push_back(std::make_pair(fxn_->size(), l.val_));
       fxn_->advance_long();
     }
 
