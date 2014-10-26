@@ -125,11 +125,11 @@ class Instruction {
 		}
 		/** Returns true if this instruction causes a control flow jump. */
 		bool is_any_jump() const {
-			return is_jcc() || is_jmp();
+			return opcode_ >= JA_REL32 && opcode_ <= JZ_REL8_HINT;
 		}
     /** Returns true if this instruction is a jmp or jmpcc to an indirect pointer. */
     bool is_any_indirect_jump() const {
-      return is_any_jump() && is_explicit_memory_dereference();
+			return opcode_ >= JMP_FARPTR1616 && opcode_ <= JMP_M64;
     }
 		/** Returns true if this instruction does not modify machine state. */
 		bool is_any_nop() const {
