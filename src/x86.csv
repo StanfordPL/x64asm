@@ -227,16 +227,16 @@ REX.W+ 0F BA /5 ib	BTS r/m64, imm8	MI	RW, R		E.CF	E.OF E.SF E.AF E.PF			V	NE		bt
 VEX.NDS.LZ.0F38.W0 F5 /r	BZHI r32a, r/m32, r32b	RMV	W, R, R		E.ZF E.CF E.SF E.OF	E.AF E.PF			V	V	BMI2	bzhil		Zero bits in r/m32 starting with the position in r32b, write result to r32a.
 VEX.NDS.LZ.0F38.W1 F5 /r	BZHI r64a, r/m64, r64b	RMV	W, R, R		E.ZF E.CF E.SF E.OF	E.AF E.PF			V	NE	BMI2	bzhiq		Zero bits in r/m64 starting with the position in r64b, write result to r64a.
 														
-E8 cw 	CALL rel16 								NS	V				Call near, relative, displacement relative to next instruction.
-E8 cd	CALL rel32	D	R	???	???	???			V	V		callq		Call near, relative, displacement relative to next instruction. 32-bit displacement sign extended to 64-bits in 64-bit mode.
-FF /2	CALL r/m16								NE	V				Call near, absolute indirect, address given in r/m16.
-FF /2	CALL r/m32								NE	V				Call near, absolute indirect, address given in r/m32.
-FF /2	CALL r/m64	M	R	???	???	???			V	NE		callq		Call near, absolute indirect, address given in r/m64.
-9A cd 	CALL ptr16:16 								I	V				Call far, absolute, address given in operand.
-9A cp 	CALL ptr16:32 								I	V				Call far, absolute, address given in operand.
-FF /3	CALL m16:16	M	R	???	???	???			V	V		callq		Call far, absolute indirect address given in m16:16. In 32-bit mode: if selector points to a gate, then RIP = 32-bit zero extended displacement taken from gate; else RIP = zero extended 16- bit offset from far pointer referenced in the instruction.
-FF /3	CALL m16:32	M	R	???	???	???			V	V		callq		In 64-bit mode: If selector points to a gate, then RIP = 64-bit displacement taken from gate; else RIP = zero extended 32-bit offset from far pointer referenced in the instruction.
-REX.W+ FF /3	CALL m16:64	M	R	???	???	???			V	NE		callq		In 64-bit mode: If selector points to a gate, then RIP = 64-bit displacement taken from gate; else RIP = 64-bit offset from far pointer referenced in the instruction.
+E8 cw 	CALL rel16 			rdi rsi rdx rcx r8 r9 rax xmm0 xmm1 xmm2 xmm3 xmm4 xmm5 xmm6 xmm7	RAX RDX XMM0 XMM1	RDI RSI RCX R8 R9 R10 R11 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 XMM9 XMM10 XMM11 XMM12 XMM13 XMM14 XMM15			NS	V				Call near, relative, displacement relative to next instruction.
+E8 cd	CALL rel32	D	R	rdi rsi rdx rcx r8 r9 rax xmm0 xmm1 xmm2 xmm3 xmm4 xmm5 xmm6 xmm7	RAX RDX XMM0 XMM1	RDI RSI RCX R8 R9 R10 R11 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 XMM9 XMM10 XMM11 XMM12 XMM13 XMM14 XMM15			V	V		callq		Call near, relative, displacement relative to next instruction. 32-bit displacement sign extended to 64-bits in 64-bit mode.
+FF /2	CALL r/m16			rdi rsi rdx rcx r8 r9 rax xmm0 xmm1 xmm2 xmm3 xmm4 xmm5 xmm6 xmm7	RAX RDX XMM0 XMM1	RDI RSI RCX R8 R9 R10 R11 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 XMM9 XMM10 XMM11 XMM12 XMM13 XMM14 XMM15			NE	V				Call near, absolute indirect, address given in r/m16.
+FF /2	CALL r/m32			rdi rsi rdx rcx r8 r9 rax xmm0 xmm1 xmm2 xmm3 xmm4 xmm5 xmm6 xmm7	RAX RDX XMM0 XMM1	RDI RSI RCX R8 R9 R10 R11 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 XMM9 XMM10 XMM11 XMM12 XMM13 XMM14 XMM15			NE	V				Call near, absolute indirect, address given in r/m32.
+FF /2	CALL r/m64	M	R	rdi rsi rdx rcx r8 r9 rax xmm0 xmm1 xmm2 xmm3 xmm4 xmm5 xmm6 xmm7	RAX RDX XMM0 XMM1	RDI RSI RCX R8 R9 R10 R11 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 XMM9 XMM10 XMM11 XMM12 XMM13 XMM14 XMM15			V	NE		callq		Call near, absolute indirect, address given in r/m64.
+9A cd 	CALL ptr16:16 			rdi rsi rdx rcx r8 r9 rax xmm0 xmm1 xmm2 xmm3 xmm4 xmm5 xmm6 xmm7	RAX RDX XMM0 XMM1	RDI RSI RCX R8 R9 R10 R11 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 XMM9 XMM10 XMM11 XMM12 XMM13 XMM14 XMM15			I	V				Call far, absolute, address given in operand.
+9A cp 	CALL ptr16:32 			rdi rsi rdx rcx r8 r9 rax xmm0 xmm1 xmm2 xmm3 xmm4 xmm5 xmm6 xmm7	RAX RDX XMM0 XMM1	RDI RSI RCX R8 R9 R10 R11 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 XMM9 XMM10 XMM11 XMM12 XMM13 XMM14 XMM15			I	V				Call far, absolute, address given in operand.
+FF /3	CALL m16:16	M	R	rdi rsi rdx rcx r8 r9 rax xmm0 xmm1 xmm2 xmm3 xmm4 xmm5 xmm6 xmm7	RAX RDX XMM0 XMM1	RDI RSI RCX R8 R9 R10 R11 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 XMM9 XMM10 XMM11 XMM12 XMM13 XMM14 XMM15			V	V		callq		Call far, absolute indirect address given in m16:16. In 32-bit mode: if selector points to a gate, then RIP = 32-bit zero extended displacement taken from gate; else RIP = zero extended 16- bit offset from far pointer referenced in the instruction.
+FF /3	CALL m16:32	M	R	rdi rsi rdx rcx r8 r9 rax xmm0 xmm1 xmm2 xmm3 xmm4 xmm5 xmm6 xmm7	RAX RDX XMM0 XMM1	RDI RSI RCX R8 R9 R10 R11 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 XMM9 XMM10 XMM11 XMM12 XMM13 XMM14 XMM15			V	V		callq		In 64-bit mode: If selector points to a gate, then RIP = 64-bit displacement taken from gate; else RIP = zero extended 32-bit offset from far pointer referenced in the instruction.
+REX.W+ FF /3	CALL m16:64	M	R	rdi rsi rdx rcx r8 r9 rax xmm0 xmm1 xmm2 xmm3 xmm4 xmm5 xmm6 xmm7	RAX RDX XMM0 XMM1	RDI RSI RCX R8 R9 R10 R11 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 XMM9 XMM10 XMM11 XMM12 XMM13 XMM14 XMM15			V	NE		callq		In 64-bit mode: If selector points to a gate, then RIP = 64-bit displacement taken from gate; else RIP = 64-bit offset from far pointer referenced in the instruction.
 														
 PREF.66+ 98	CBW	NP		AL	AX				V	V		cbtw		AX = sign-extend of AL.
 98	CWDE	NP		AX	EAX				V	V		cwtl		EAX = sign-extend of AX.
@@ -1719,8 +1719,8 @@ VEX.NDS.256.66.0F.WIG F4 /r	VPMULUDQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	
 58 +rd 	POP r32 			RSP	RSP				NE	V				Pop top of stack into r32; increment stack pointer.
 58 +rd 	POP r64 	O	W	RSP	RSP				V	NE		popq	YES	Pop top of stack into r64; increment stack pointer. Cannot encode 32-bit operand size.
 1F 	POP DS 			RSP	RSP				I	V				Pop top of stack into DS; increment stack pointer.
-07 	POP ES 			RSP	RSP				I	V				Pop top of stack into ES; increment stack pointer.
-17 	POP SS 			RSP	RSP				I	V				Pop top of stack into SS; increment stack pointer.
+07	POP ES 			RSP	RSP				I	V				Pop top of stack into ES; increment stack pointer.
+17	POP SS 			RSP	RSP				I	V				Pop top of stack into SS; increment stack pointer.
 PREF.66+ 0F A1 	POP FS, p66	NP	W, I	RSP	RSP				V	V		popq		Pop top of stack into FS; increment stack pointer by 16 bits.
 0F A1 	POP FS 			RSP	RSP				NE	V				Pop top of stack into FS; increment stack pointer by 32 bits.
 0F A1 	POP FS 	NP	W	RSP	RSP				V	NE		popq		Pop top of stack into FS; increment stack pointer by 64 bits.
