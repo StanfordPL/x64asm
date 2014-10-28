@@ -285,10 +285,6 @@ class Instruction {
     /** Writes this instruction to an ostream using at&t syntax. */
     std::ostream& write_att(std::ostream& os) const;
 
-		/** @Deprecated. Use is_explicit_memory_dereference() */
-		bool derefs_mem() const {
-			return is_explicit_memory_dereference();
-		}
     /** @Deprecated. Use is_jcc() */
     bool is_cond_jump() const {
 			return is_jcc();
