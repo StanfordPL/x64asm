@@ -23,7 +23,7 @@ namespace x64asm {
 class EnvReg {
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr EnvReg(size_t val);
+    constexpr EnvReg(size_t val) : val_(val) {}
 
   private:
     /** Globally unique id. */
@@ -37,7 +37,7 @@ class FpuData : public EnvReg {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuData();
+    constexpr FpuData() : EnvReg(0) {}
 };
 
 /** The FPU Instruction register. */
@@ -47,7 +47,7 @@ class FpuInstruction : public EnvReg {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuInstruction();
+    constexpr FpuInstruction() : EnvReg(0) {}
 };
 
 /** The FPU Opcode regiter. */
@@ -57,7 +57,7 @@ class FpuOpcode : public EnvReg {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuOpcode();
+    constexpr FpuOpcode() : EnvReg(0) {}
 };
 
 /** The instruction pointer register. */
@@ -67,28 +67,8 @@ class Rip : public EnvReg {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Rip();
+    constexpr Rip() : EnvReg(0) {}
 };
-
-inline constexpr EnvReg::EnvReg(size_t val) : 
-    val_ {val} { 
-}
-
-inline constexpr FpuData::FpuData() : 
-    EnvReg {0} { 
-}
-
-inline constexpr FpuInstruction::FpuInstruction() : 
-    EnvReg {0} { 
-}
-
-inline constexpr FpuOpcode::FpuOpcode() :
-    EnvReg {0} {
-}
-
-inline constexpr Rip::Rip() : 
-    EnvReg {0} { 
-}
 
 } // namespace x64asm
 
