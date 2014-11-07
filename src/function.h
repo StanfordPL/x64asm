@@ -289,6 +289,7 @@ class Function {
 
     /** Writes this function to an ostream in human-readable hex. */
     std::ostream& write_hex(std::ostream& os) const {
+			const auto fmt = os.flags();
 			for (size_t i = 0, ie = size(); i < ie; ++i) {
 				os << std::hex << std::noshowbase << std::setw(2) << std::setfill('0');
 				os << (int32_t)buffer_[i] << " ";
@@ -296,6 +297,7 @@ class Function {
 					os << std::endl;
 				}
 			}
+			os.flags(fmt);
 			return os;
 		}
 

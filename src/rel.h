@@ -138,7 +138,10 @@ inline constexpr Rel::operator uint64_t() {
 }
 
 inline std::ostream& Rel::write_att(std::ostream& os) const {
-  return (os << std::hex << std::showbase << val_);
+	const auto fmt = os.flags();
+  os << std::hex << std::showbase << val_;
+	os.flags(fmt);
+	return os;
 }
 
 inline constexpr size_t Rel::hash() {

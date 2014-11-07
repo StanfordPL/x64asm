@@ -222,7 +222,10 @@ inline void Imm::swap(Imm& rhs) {
 }
 
 inline std::ostream& Imm::write_att(std::ostream& os) const {
-  return (os << "$0x" << std::noshowbase << std::hex << val_);
+	const auto fmt = os.flags();
+  os << "$0x" << std::noshowbase << std::hex << val_;
+	os.flags(fmt);
+	return os;
 }
 
 inline constexpr Imm8::Imm8(uint8_t i) : 
