@@ -2222,66 +2222,66 @@ PREF.66+ AF	SCASW	NP		E.DF RDI AX					V	V		scasw		Compare AX with word at ES:(E)
 AF	SCASD	NP		E.DF RDI EAX					V	V		scasl		Compare EAX with doubleword at ES:(E)DI or RDI then set status flags.
 REX.W+ AF	SCASQ	NP		E.DF RDI RAX					V	NE		scasq		Compare RAX with quadword at RDI or EDI then set status flags.
 														
-0F 97 /0	SETA r/m8	M	w	E.CF E.ZF					V	V		seta		Set byte if above (CF=0 and ZF=0).
-REX+ 0F 97 /0 	SETA r/m8	M	w	E.CF E.ZF					V	NE		seta		Set byte if above (CF=0 and ZF=0).
-0F 93 /0	SETAE r/m8	M	w	E.CF					V	V		setae		Set byte if above or equal (CF=0).
-REX+ 0F 93 /0	SETAE r/m8	M	w	E.CF					V	NE		setae		Set byte if above or equal (CF=0).
-0F 92 /0	SETB r/m8	M	w	E.CF					V	V		setb		Set byte if below (CF=1).
-REX+ 0F 92 /0	SETB r/m8	M	w	E.CF					V	NE		setb		Set byte if below (CF=1).
-0F 96 /0	SETBE r/m8	M	w	E.CF E.ZF					V	V		setbe		Set byte if below or equal (CF=1 or ZF=1).
-REX+ 0F 96 /0	SETBE r/m8	M	w	E.CF E.ZF					V	NE		setbe		Set byte if below or equal (CF=1 or ZF=1).
-0F 92 /0	SETC r/m8	M	w	E.CF					V	V		setc		Set byte if carry (CF=1).
-REX+ 0F 92 /0	SETC r/m8	M	w	E.CF					V	NE		setc		Set byte if carry (CF=1).
-0F 94 /0	SETE r/m8	M	w	E.ZF					V	V		sete		Set byte if equal (ZF=1).
-REX+ 0F 94 /0	SETE r/m8	M	w	E.ZF					V	NE		sete		Set byte if equal (ZF=1).
-0F 9F /0	SETG r/m8	M	w	E.ZF E.SF E.OF					V	V		setg		Set byte if greater (ZF=0 and SF=OF).
-REX+ 0F 9F /0	SETG r/m8	M	w	E.ZF E.SF E.OF					V	NE		setg		Set byte if greater (ZF=0 and SF=OF).
-0F 9D /0	SETGE r/m8	M	w	E.SF E.OF					V	V		setge		Set byte if greater or equal (SF=OF).
-REX+ 0F 9D /0	SETGE r/m8	M	w	E.SF E.OF					V	NE		setge		Set byte if greater or equal (SF=OF).
-0F 9C /0	SETL r/m8	M	w	E.SF E.OF					V	V		setl		Set byte if less (SF!= OF).
-REX+ 0F 9C /0	SETL r/m8	M	w	E.SF E.OF					V	NE		setl		Set byte if less (SF!= OF).
-0F 9E /0	SETLE r/m8	M	w	E.ZF E.SF E.OF					V	V		setle		Set byte if less or equal (ZF=1 or SF!= OF).
-REX+ 0F 9E /0	SETLE r/m8	M	w	E.ZF E.SF E.OF					V	NE		setle		Set byte if less or equal (ZF=1 or SF!= OF).
-0F 96 /0	SETNA r/m8	M	w	E.CF E.ZF					V	V		setna		Set byte if not above (CF=1 or ZF=1).
-REX+ 0F 96 /0	SETNA r/m8	M	w	E.CF E.ZF					V	NE		setna		Set byte if not above (CF=1 or ZF=1).
-0F 92 /0	SETNAE r/m8	M	w	E.CF					V	V		setnae		Set byte if not above or equal (CF=1).
-REX+ 0F 92 /0	SETNAE r/m8	M	w	E.CF					V	NE		setnae		Set byte if not above or equal (CF=1).
-0F 93 /0	SETNB r/m8	M	w	E.CF					V	V		setnb		Set byte if not below (CF=0).
-REX+ 0F 93 /0	SETNB r/m8	M	w	E.CF					V	NE		setnb		Set byte if not below (CF=0).
-0F 97 /0	SETNBE r/m8	M	w	E.CF E.ZF					V	V		setnbe		Set byte if not below or equal (CF=0 and ZF=0).
-REX+ 0F 97 /0	SETNBE r/m8	M	w	E.CF E.ZF					V	NE		setnbe		Set byte if not below or equal (CF=0 and ZF=0).
-0F 93 /0	SETNC r/m8	M	w	E.CF					V	V		setnc		Set byte if not carry (CF=0).
-REX+ 0F 93 /0	SETNC r/m8	M	w	E.CF					V	NE		setnc		Set byte if not carry (CF=0).
-0F 95 /0	SETNE r/m8	M	w	E.ZF					V	V		setne		Set byte if not equal (ZF=0).
-REX+ 0F 95 /0	SETNE r/m8	M	w	E.ZF					V	NE		setne		Set byte if not equal (ZF=0).
-0F 9E /0	SETNG r/m8	M	w	E.ZF E.SF E.OF					V	V		setng		Set byte if not greater (ZF=1 or SF!= OF)
-REX+ 0F 9E /0	SETNG r/m8	M	w	E.ZF E.SF E.OF					V	NE		setng		Set byte if not greater (ZF=1 or SF!= OF)
-0F 9C /0	SETNGE r/m8	M	w	E.SF E.OF					V	V		setnge		Set byte if not greater or equal (SF!= OF).
-REX+ 0F 9C /0	SETNGE r/m8	M	w	E.SF E.OF					V	NE		setnge		Set byte if not greater or equal (SF!= OF).
-0F 9D /0	SETNL r/m8	M	w	E.SF E.OF					V	V		setnl		Set byte if not less (SF=OF).
-REX+ 0F 9D /0	SETNL r/m8	M	w	E.SF E.OF					V	NE		setnl		Set byte if not less (SF=OF).
-0F 9F /0	SETNLE r/m8	M	w	E.ZF E.SF E.OF					V	V		setnle		Set byte if not less or equal (ZF=0 and SF=OF).
-REX+ 0F 9F /0	SETNLE r/m8	M	w	E.ZF E.SF E.OF					V	NE		setnle		Set byte if not less or equal (ZF=0 and SF=OF).
-0F 91 /0	SETNO r/m8	M	w	E.OF					V	V		setno		Set byte if not overflow (OF=0).
-REX+ 0F 91 /0	SETNO r/m8	M	w	E.OF					V	NE		setno		Set byte if not overflow (OF=0).
-0F 9B /0	SETNP r/m8	M	w	E.PF					V	V		setnp		Set byte if not parity (PF=0).
-REX+ 0F 9B /0	SETNP r/m8	M	w	E.PF					V	NE		setnp		Set byte if not parity (PF=0).
-0F 99 /0	SETNS r/m8	M	w	E.SF					V	V		setns		Set byte if not sign (SF=0).
-REX+ 0F 99 /0	SETNS r/m8	M	w	E.SF					V	NE		setns		Set byte if not sign (SF=0).
-0F 95 /0	SETNZ r/m8	M	w	E.ZF					V	V		setnz		Set byte if not zero (ZF=0).
-REX+ 0F 95 /0	SETNZ r/m8	M	w	E.ZF					V	NE		setnz		Set byte if not zero (ZF=0).
-0F 90 /0	SETO r/m8	M	w	E.OF					V	V		seto		Set byte if overflow (OF=1)
-REX+ 0F 90 /0	SETO r/m8	M	w	E.OF					V	NE		seto		Set byte if overflow (OF=1)
-0F 9A /0	SETP r/m8	M	w	E.PF					V	V		setp		Set byte if parity (PF=1).
-REX+ 0F 9A /0	SETP r/m8	M	w	E.PF					V	NE		setp		Set byte if parity (PF=1).
-0F 9A /0	SETPE r/m8	M	w	E.PF					V	V		setpe		Set byte if parity even (PF=1).
-REX+ 0F 9A /0	SETPE r/m8	M	w	E.PF					V	NE		setpe		Set byte if parity even (PF=1).
-0F 9B /0	SETPO r/m8	M	w	E.PF					V	V		setpo		Set byte if parity odd (PF=0).
-REX+ 0F 9B /0	SETPO r/m8	M	w	E.PF					V	NE		setpo		Set byte if parity odd (PF=0).
-0F 98 /0	SETS r/m8	M	w	E.SF					V	V		sets		Set byte if sign (SF=1).
-REX+ 0F 98 /0	SETS r/m8	M	w	E.SF					V	NE		sets		Set byte if sign (SF=1).
-0F 94 /0	SETZ r/m8	M	w	E.ZF					V	V		setz		Set byte if zero (ZF=1).
-REX+ 0F 94 /0	SETZ r/m8	M	w	E.ZF					V	NE		setz		Set byte if zero (ZF=1).
+0F 97 /0	SETA r/m8	M	W	E.CF E.ZF					V	V		seta		Set byte if above (CF=0 and ZF=0).
+REX+ 0F 97 /0 	SETA r/m8	M	W	E.CF E.ZF					V	NE		seta		Set byte if above (CF=0 and ZF=0).
+0F 93 /0	SETAE r/m8	M	W	E.CF					V	V		setae		Set byte if above or equal (CF=0).
+REX+ 0F 93 /0	SETAE r/m8	M	W	E.CF					V	NE		setae		Set byte if above or equal (CF=0).
+0F 92 /0	SETB r/m8	M	W	E.CF					V	V		setb		Set byte if below (CF=1).
+REX+ 0F 92 /0	SETB r/m8	M	W	E.CF					V	NE		setb		Set byte if below (CF=1).
+0F 96 /0	SETBE r/m8	M	W	E.CF E.ZF					V	V		setbe		Set byte if below or equal (CF=1 or ZF=1).
+REX+ 0F 96 /0	SETBE r/m8	M	W	E.CF E.ZF					V	NE		setbe		Set byte if below or equal (CF=1 or ZF=1).
+0F 92 /0	SETC r/m8	M	W	E.CF					V	V		setc		Set byte if carry (CF=1).
+REX+ 0F 92 /0	SETC r/m8	M	W	E.CF					V	NE		setc		Set byte if carry (CF=1).
+0F 94 /0	SETE r/m8	M	W	E.ZF					V	V		sete		Set byte if equal (ZF=1).
+REX+ 0F 94 /0	SETE r/m8	M	W	E.ZF					V	NE		sete		Set byte if equal (ZF=1).
+0F 9F /0	SETG r/m8	M	W	E.ZF E.SF E.OF					V	V		setg		Set byte if greater (ZF=0 and SF=OF).
+REX+ 0F 9F /0	SETG r/m8	M	W	E.ZF E.SF E.OF					V	NE		setg		Set byte if greater (ZF=0 and SF=OF).
+0F 9D /0	SETGE r/m8	M	W	E.SF E.OF					V	V		setge		Set byte if greater or equal (SF=OF).
+REX+ 0F 9D /0	SETGE r/m8	M	W	E.SF E.OF					V	NE		setge		Set byte if greater or equal (SF=OF).
+0F 9C /0	SETL r/m8	M	W	E.SF E.OF					V	V		setl		Set byte if less (SF!= OF).
+REX+ 0F 9C /0	SETL r/m8	M	W	E.SF E.OF					V	NE		setl		Set byte if less (SF!= OF).
+0F 9E /0	SETLE r/m8	M	W	E.ZF E.SF E.OF					V	V		setle		Set byte if less or equal (ZF=1 or SF!= OF).
+REX+ 0F 9E /0	SETLE r/m8	M	W	E.ZF E.SF E.OF					V	NE		setle		Set byte if less or equal (ZF=1 or SF!= OF).
+0F 96 /0	SETNA r/m8	M	W	E.CF E.ZF					V	V		setna		Set byte if not above (CF=1 or ZF=1).
+REX+ 0F 96 /0	SETNA r/m8	M	W	E.CF E.ZF					V	NE		setna		Set byte if not above (CF=1 or ZF=1).
+0F 92 /0	SETNAE r/m8	M	W	E.CF					V	V		setnae		Set byte if not above or equal (CF=1).
+REX+ 0F 92 /0	SETNAE r/m8	M	W	E.CF					V	NE		setnae		Set byte if not above or equal (CF=1).
+0F 93 /0	SETNB r/m8	M	W	E.CF					V	V		setnb		Set byte if not below (CF=0).
+REX+ 0F 93 /0	SETNB r/m8	M	W	E.CF					V	NE		setnb		Set byte if not below (CF=0).
+0F 97 /0	SETNBE r/m8	M	W	E.CF E.ZF					V	V		setnbe		Set byte if not below or equal (CF=0 and ZF=0).
+REX+ 0F 97 /0	SETNBE r/m8	M	W	E.CF E.ZF					V	NE		setnbe		Set byte if not below or equal (CF=0 and ZF=0).
+0F 93 /0	SETNC r/m8	M	W	E.CF					V	V		setnc		Set byte if not carry (CF=0).
+REX+ 0F 93 /0	SETNC r/m8	M	W	E.CF					V	NE		setnc		Set byte if not carry (CF=0).
+0F 95 /0	SETNE r/m8	M	W	E.ZF					V	V		setne		Set byte if not equal (ZF=0).
+REX+ 0F 95 /0	SETNE r/m8	M	W	E.ZF					V	NE		setne		Set byte if not equal (ZF=0).
+0F 9E /0	SETNG r/m8	M	W	E.ZF E.SF E.OF					V	V		setng		Set byte if not greater (ZF=1 or SF!= OF)
+REX+ 0F 9E /0	SETNG r/m8	M	W	E.ZF E.SF E.OF					V	NE		setng		Set byte if not greater (ZF=1 or SF!= OF)
+0F 9C /0	SETNGE r/m8	M	W	E.SF E.OF					V	V		setnge		Set byte if not greater or equal (SF!= OF).
+REX+ 0F 9C /0	SETNGE r/m8	M	W	E.SF E.OF					V	NE		setnge		Set byte if not greater or equal (SF!= OF).
+0F 9D /0	SETNL r/m8	M	W	E.SF E.OF					V	V		setnl		Set byte if not less (SF=OF).
+REX+ 0F 9D /0	SETNL r/m8	M	W	E.SF E.OF					V	NE		setnl		Set byte if not less (SF=OF).
+0F 9F /0	SETNLE r/m8	M	W	E.ZF E.SF E.OF					V	V		setnle		Set byte if not less or equal (ZF=0 and SF=OF).
+REX+ 0F 9F /0	SETNLE r/m8	M	W	E.ZF E.SF E.OF					V	NE		setnle		Set byte if not less or equal (ZF=0 and SF=OF).
+0F 91 /0	SETNO r/m8	M	W	E.OF					V	V		setno		Set byte if not overflow (OF=0).
+REX+ 0F 91 /0	SETNO r/m8	M	W	E.OF					V	NE		setno		Set byte if not overflow (OF=0).
+0F 9B /0	SETNP r/m8	M	W	E.PF					V	V		setnp		Set byte if not parity (PF=0).
+REX+ 0F 9B /0	SETNP r/m8	M	W	E.PF					V	NE		setnp		Set byte if not parity (PF=0).
+0F 99 /0	SETNS r/m8	M	W	E.SF					V	V		setns		Set byte if not sign (SF=0).
+REX+ 0F 99 /0	SETNS r/m8	M	W	E.SF					V	NE		setns		Set byte if not sign (SF=0).
+0F 95 /0	SETNZ r/m8	M	W	E.ZF					V	V		setnz		Set byte if not zero (ZF=0).
+REX+ 0F 95 /0	SETNZ r/m8	M	W	E.ZF					V	NE		setnz		Set byte if not zero (ZF=0).
+0F 90 /0	SETO r/m8	M	W	E.OF					V	V		seto		Set byte if overflow (OF=1)
+REX+ 0F 90 /0	SETO r/m8	M	W	E.OF					V	NE		seto		Set byte if overflow (OF=1)
+0F 9A /0	SETP r/m8	M	W	E.PF					V	V		setp		Set byte if parity (PF=1).
+REX+ 0F 9A /0	SETP r/m8	M	W	E.PF					V	NE		setp		Set byte if parity (PF=1).
+0F 9A /0	SETPE r/m8	M	W	E.PF					V	V		setpe		Set byte if parity even (PF=1).
+REX+ 0F 9A /0	SETPE r/m8	M	W	E.PF					V	NE		setpe		Set byte if parity even (PF=1).
+0F 9B /0	SETPO r/m8	M	W	E.PF					V	V		setpo		Set byte if parity odd (PF=0).
+REX+ 0F 9B /0	SETPO r/m8	M	W	E.PF					V	NE		setpo		Set byte if parity odd (PF=0).
+0F 98 /0	SETS r/m8	M	W	E.SF					V	V		sets		Set byte if sign (SF=1).
+REX+ 0F 98 /0	SETS r/m8	M	W	E.SF					V	NE		sets		Set byte if sign (SF=1).
+0F 94 /0	SETZ r/m8	M	W	E.ZF					V	V		setz		Set byte if zero (ZF=1).
+REX+ 0F 94 /0	SETZ r/m8	M	W	E.ZF					V	NE		setz		Set byte if zero (ZF=1).
 														
 0F AE F8	SFENCE	NP							V	V		sfence		Serializes store operations.
 														
