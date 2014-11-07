@@ -218,11 +218,13 @@ inline void Moffs::swap(Moffs& rhs) {
 }
 
 inline std::ostream& Moffs::write_att(std::ostream& os) const {
+	const auto fmt = os.flags();
   if (contains_seg()) {
     get_seg().write_att(os);
     os << ":";
   }
   os << "0x" << std::noshowbase << std::hex << (uint64_t)get_offset();
+	os.flags(fmt);
   return os;
 }
 

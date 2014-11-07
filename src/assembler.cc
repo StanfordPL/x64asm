@@ -111,6 +111,8 @@ void Assembler::mod_rm_sib(const M& rm, const Operand& r) {
 }
 
 void Assembler::debug(const Instruction& instr, size_t idx) const {
+	const auto fmt = cerr.flags();
+
   cerr << instr << endl;
   cerr << "  ";
 
@@ -120,6 +122,8 @@ void Assembler::debug(const Instruction& instr, size_t idx) const {
   }
 
   cerr << endl;
+
+	cerr.flags(fmt);
 }
 
 } // namespace x64asm

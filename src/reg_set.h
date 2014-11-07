@@ -898,7 +898,7 @@ inline void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs) {
 }
 
 inline ostream& operator<<(ostream& os, const x64asm::RegSet& rs) {
-
+	const auto fmt = os.flags();
   class gp_stack {
 
     public:
@@ -1109,6 +1109,8 @@ inline ostream& operator<<(ostream& os, const x64asm::RegSet& rs) {
   os << ", " << rs.get_group3() << ", " << rs.get_group4() << dec << ")";
 #endif
   os << " }";
+
+	os.flags(fmt);
   return os;
 }
 
