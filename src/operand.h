@@ -40,24 +40,39 @@ class Operand {
 
   public:
     /** Copy constructor. */
-    Operand(const Operand& rhs);
+    Operand(const Operand& rhs) {
+			val_ = rhs.val_;
+			val2_ = rhs.val2_;
+		}
     /** Move constructor. */
-    Operand(Operand&& rhs);
+    Operand(Operand&& rhs) {
+			val_ = rhs.val_;
+			val2_ = rhs.val2_;
+		}
     /** Copy assignment operator. */
-    Operand& operator=(const Operand& rhs);
+    Operand& operator=(const Operand& rhs) {
+			Operand(rhs).swap(*this);
+			return *this;
+		}
     /** Move assignment operator. */
-    Operand& operator=(Operand&& rhs);
+    Operand& operator=(Operand&& rhs) {
+			Operand(std::move(rhs)).swap(*this);
+			return *this;
+		}
 
     /** STL-compliant swap. */
-    void swap(Operand& rhs);
+    void swap(Operand& rhs) {
+			std::swap(val_, rhs.val_);
+			std::swap(val2_, rhs.val2_);
+		}
 
   protected:
     /** Creates an operand with no underlying value. */
-    constexpr Operand();
+    constexpr Operand() : val_(0), val2_(0) {}
     /** Creates an operand with one underlying value. */
-    constexpr Operand(uint64_t val);
+    constexpr Operand(uint64_t val) : val_(val), val2_(0) {}
     /** Creates an operand with two underlying values. */
-    constexpr Operand(uint64_t val, uint64_t val2);
+    constexpr Operand(uint64_t val, uint64_t val2) : val_(val), val2_(val2) {}
 
     /** Underlying value. */
     uint64_t val_;
@@ -66,61 +81,18 @@ class Operand {
 
   private:  
     /** Comparison based on underlying values. */
-    bool operator<(const Operand& rhs) const;
+    bool operator<(const Operand& rhs) const {
+			return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
+		}
     /** Comparison based on underlying values. */
-    bool operator==(const Operand& rhs) const;
+    bool operator==(const Operand& rhs) const {
+			return std::make_pair(val_, val2_) == std::make_pair(rhs.val_, rhs.val2_);
+		}
     /** Comparison based on underlying values. */
-    bool operator!=(const Operand& rhs) const;
+    bool operator!=(const Operand& rhs) const {
+  		return !(*this == rhs);
+		}
 };
-
-inline Operand::Operand(const Operand& rhs) {
-  val_ = rhs.val_;
-  val2_ = rhs.val2_;
-}
-
-inline Operand::Operand(Operand&& rhs) {
-  val_ = rhs.val_;
-  val2_ = rhs.val2_;
-}
-
-inline Operand& Operand::operator=(const Operand& rhs) {
-  Operand(rhs).swap(*this);
-  return *this;
-}
-
-inline Operand& Operand::operator=(Operand&& rhs) {
-  Operand(std::move(rhs)).swap(*this);
-  return *this;
-}
-
-inline void Operand::swap(Operand& rhs) {
-  std::swap(val_, rhs.val_);
-  std::swap(val2_, rhs.val2_);
-}
-
-inline constexpr Operand::Operand() : 
-    val_ {0}, val2_ {0} { 
-}
-
-inline constexpr Operand::Operand(uint64_t val) : 
-    val_ {val}, val2_ {0} { 
-}
-
-inline constexpr Operand::Operand(uint64_t val, uint64_t val2) : 
-    val_ {val}, val2_ {val2} { 
-}
-
-inline bool Operand::operator<(const Operand& rhs) const {
-  return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
-}
-
-inline bool Operand::operator==(const Operand& rhs) const {
-  return std::make_pair(val_, val2_) == std::make_pair(rhs.val_, rhs.val2_);
-}
-
-inline bool Operand::operator!=(const Operand& rhs) const {
-  return !(*this == rhs);
-}
 
 } // namespace x64asm
 
