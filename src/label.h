@@ -102,6 +102,11 @@ class Label : public Operand {
 			std::swap(val_, rhs.val_);
 		}
 
+		/** @todo This method is undefined. */
+		std::istream& read_att(std::istream& is) {
+			is.setstate(std::ios::failbit);
+			return is;
+		}
     /** Writes this label to an ostream using at&t syntax. */
     std::ostream& write_att(std::ostream& os) const {
 			assert(check());
@@ -134,7 +139,11 @@ inline void swap(x64asm::Label& lhs, x64asm::Label& rhs) {
 	lhs.swap(rhs);
 }
 
-/** I/O overload. */
+/** iostream overload. */
+inline istream& operator>>(istream& is, x64asm::Label& l) {
+	return l.read_att(is);
+}
+/** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Label& l) {
 	return l.write_att(os);
 }

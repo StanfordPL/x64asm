@@ -31,38 +31,70 @@ class Mm : public Operand {
 
   public:
     /** Copy constructor. */
-    Mm(const Mm& rhs);
+    Mm(const Mm& rhs) : Operand(0,0) {
+			val_ = rhs.val_;
+		}
     /** Move constructor. */
-    Mm(Mm&& rhs);
+    Mm(Mm&& rhs) {
+			val_ = rhs.val_;
+		}
     /** Copy assignment operator. */
-    Mm& operator=(const Mm& rhs);
+		Mm& operator=(const Mm& rhs) {
+			Mm(rhs).swap(*this);
+			return *this;
+		}
     /** Move assignment operator. */
-    Mm& operator=(Mm&& rhs);
+    Mm& operator=(Mm&& rhs) {
+			Mm(std::move(rhs)).swap(*this);
+			return *this;
+		}
 
     /** Returns true if this xmm register is well-formed. */
-    constexpr bool check();
+    constexpr bool check() {
+			return val_ < 8;
+		}
 
     /** Comparison based on on val_. */
-    constexpr bool operator<(const Mm& rhs);
+    constexpr bool operator<(const Mm& rhs) {
+			return val_ < rhs.val_;
+		}
     /** Comparison based on on val_. */
-    constexpr bool operator==(const Mm& rhs);
+    constexpr bool operator==(const Mm& rhs) {
+			return val_ == rhs.val_;
+		}
     /** Comparison based on on val_. */
-    constexpr bool operator!=(const Mm& rhs);
+    constexpr bool operator!=(const Mm& rhs) {
+			return !(*this == rhs);
+		}
 
     /** Conversion based on underlying value. */
-    constexpr operator uint64_t();
+    constexpr operator uint64_t() {
+			return val_;
+		}
 
     /** STL-compliant hash. */
-    constexpr size_t hash();
+    constexpr size_t hash() {
+			return val_;
+		}
     /** STL-compliant swap. */
-    void swap(Mm& rhs);
+    void swap(Mm& rhs) {
+  		std::swap(val_, rhs.val_);
+		}
 
+		/** @todo This method is undefined. */
+		std::istream& read_att(std::istream& is) {
+			is.setstate(std::ios::failbit);
+			return is;
+		}
     /** Writes this xmm register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const;
+    std::ostream& write_att(std::ostream& os) const {
+  		assert(check());
+  		return (os << "%mm" << std::dec << val_);
+		}
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Mm(uint64_t val);
+    constexpr Mm(uint64_t val) : Operand(val) {}
 };
 
 } // namespace x64asm
@@ -72,90 +104,25 @@ namespace std {
 /** STL hash specialization. */
 template <>
 struct hash<x64asm::Mm> {
-  size_t operator()(const x64asm::Mm& m) const;
+  size_t operator()(const x64asm::Mm& m) const {
+		return m.hash();
+	}
 };
 
 /** STL swap overload. */
-void swap(x64asm::Mm& lhs, x64asm::Mm& rhs);
-
-/** I/O overload. */
-ostream& operator<<(ostream& os, const x64asm::Mm& m);
-
-} // namespace std
-
-namespace x64asm {
-
-inline Mm::Mm(const Mm& rhs) : Operand{0,0} {
-  val_ = rhs.val_;
-}
-
-inline Mm::Mm(Mm&& rhs) {
-  val_ = rhs.val_;
-}
-
-inline Mm& Mm::operator=(const Mm& rhs) {
-  Mm(rhs).swap(*this);
-  return *this;
-}
-
-inline Mm& Mm::operator=(Mm&& rhs) {
-  Mm(std::move(rhs)).swap(*this);
-  return *this;
-}
-
-inline constexpr bool Mm::check() {
-  return val_ < 8;
-}
-
-inline constexpr bool Mm::operator<(const Mm& rhs) {
-  return val_ < rhs.val_;
-}
-
-inline constexpr bool Mm::operator==(const Mm& rhs) {
-  return val_ == rhs.val_;
-}
-
-inline constexpr bool Mm::operator!=(const Mm& rhs) {
-  return val_ != rhs.val_;
-}
-
-inline constexpr Mm::operator uint64_t() {
-  return val_;
-}
-
-inline std::ostream& Mm::write_att(std::ostream& os) const {
-  assert(check());
-  return (os << "%mm" << std::dec << val_);
-}
-
-inline constexpr size_t Mm::hash() {
-  return val_;
-}
-
-inline void Mm::swap(Mm& rhs) {
-  std::swap(val_, rhs.val_);
-}
-
-inline constexpr Mm::Mm(uint64_t val) : Operand{val} {
-}
-
-} // namespace x64asm
-
-namespace std {
-
-inline size_t hash<x64asm::Mm>::operator()(const x64asm::Mm& m) const {
-  return m.hash();
-}
-
 inline void swap(x64asm::Mm& lhs, x64asm::Mm& rhs) {
-  lhs.swap(rhs);
+	lhs.swap(rhs);
 }
 
+/** iostream overload. */
+inline istream& operator>>(istream& is, x64asm::Mm& m) {
+	return m.read_att(is);
+}
+/** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Mm& m) {
-  return m.write_att(os);
+	return m.write_att(os);
 }
 
 } // namespace std
 
 #endif
-

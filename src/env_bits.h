@@ -26,11 +26,9 @@ namespace x64asm {
 class EnvBits {
   public:
 		/** Copy constructor. */
-		EnvBits(const EnvBits& rhs) : index_(rhs.index_), width_(rhs.width_) {
-		}
+		EnvBits(const EnvBits& rhs) : index_(rhs.index_), width_(rhs.width_) {}
 		/** Move constructor. */
-		EnvBits(const EnvBits&& rhs) : index_(rhs.index_), width_(rhs.width_) {
-		}
+		EnvBits(const EnvBits&& rhs) : index_(rhs.index_), width_(rhs.width_) {}
 		/** Assignment operator. */
 		EnvBits& operator=(const EnvBits& rhs) {
 			EnvBits(rhs).swap(*this);
@@ -72,10 +70,8 @@ class EnvBits {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr EnvBits(size_t i, size_t w) : index_(i), width_(w) {
-		}
+    constexpr EnvBits(size_t i, size_t w) : index_(i), width_(w) {}
 
-  private:
     /** This bit's upper register index. */
     uint32_t index_;
     /** The number of bits this register bit spans. */
@@ -87,10 +83,15 @@ class Eflags : public EnvBits {
     // Needs access to constructor.
     friend class Constants;
 
+	public:
+		/** Read from an istream using text. */
+		std::istream& read_text(std::istream& is);
+		/** Write to an ostream using text. */
+		std::ostream& write_text(std::ostream& os) const;
+
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Eflags(size_t i, size_t w) : EnvBits(i, w) {
-		}
+    constexpr Eflags(size_t i, size_t w) : EnvBits(i, w) {}
 };
 
 /** An FPU control register bit. */
@@ -98,10 +99,15 @@ class FpuControl : public EnvBits {
     // Needs access to constructor.
     friend class Constants;
 
+	public:	
+		/** Read from an istream using text. */
+		std::istream& read_text(std::istream& is);
+		/** Write to an ostream using text. */
+		std::ostream& write_text(std::ostream& os) const;
+
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuControl(size_t i, size_t w) : EnvBits(i, w) {
-		}
+    constexpr FpuControl(size_t i, size_t w) : EnvBits(i, w) {}
 };
 
 /** An FPU status register bit. */
@@ -109,10 +115,15 @@ class FpuStatus : public EnvBits {
     // Needs access to constructor.
     friend class Constants;
 
+	public:
+		/** Read from an istream using text. */
+		std::istream& read_text(std::istream& is);
+		/** Write to an ostream using text. */
+		std::ostream& write_text(std::ostream& os) const;
+
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuStatus(size_t i, size_t w) : EnvBits(i, w) {
-		}
+    constexpr FpuStatus(size_t i, size_t w) : EnvBits(i, w) {}
 };
 
 /** An FPU tag register. */
@@ -120,10 +131,15 @@ class FpuTag : public EnvBits {
     // Needs access to constructor.
     friend class Constants;
 
+	public:
+		/** Read from an istream using text. */
+		std::istream& read_text(std::istream& is);
+		/** Write to an ostream using text. */
+		std::ostream& write_text(std::ostream& os) const;
+
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr FpuTag(size_t i, size_t w) : EnvBits(i, w) {
-		}
+    constexpr FpuTag(size_t i, size_t w) : EnvBits(i, w) {}
 };
 
 /** An MXCSR register bit. */
@@ -131,19 +147,69 @@ class Mxcsr : public EnvBits {
     // Needs access to constructor.
     friend class Constants;
 
+	public:
+		/** Read from an istream using text. */
+		std::istream& read_text(std::istream& is);
+		/** Write to an ostream using text. */
+		std::ostream& write_text(std::ostream& os) const;
+
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Mxcsr(size_t i, size_t w) : EnvBits(i, w) {
-		}
+    constexpr Mxcsr(size_t i, size_t w) : EnvBits(i, w) {}
 };
 
 } // namespace std
 
 namespace std {
 
-// STL-compliant swap
+/** STL-compliant swap */
 inline void swap(x64asm::EnvBits& lhs, x64asm::EnvBits& rhs) {
 	lhs.swap(rhs);
+}
+
+/** iostream overload */
+inline istream& operator>>(istream& is, x64asm::Eflags& e) {
+	return e.read_text(is);
+}
+/** iostream overload */
+inline ostream& operator<<(ostream& os, const x64asm::Eflags& e) {
+	return e.write_text(os);
+}
+
+/** iostream overload */
+inline istream& operator>>(istream& is, x64asm::FpuControl& f) {
+	return f.read_text(is);
+}
+/** iostream overload */
+inline ostream& operator<<(ostream& os, const x64asm::FpuControl& f) {
+	return f.write_text(os);
+}
+
+/** iostream overload */
+inline istream& operator>>(istream& is, x64asm::FpuStatus& s) {
+	return s.read_text(is);
+}
+/** iostream overload */
+inline ostream& operator<<(ostream& os, const x64asm::FpuStatus& s) {
+	return s.write_text(os);
+}
+
+/** iostream overload */
+inline istream& operator>>(istream& is, x64asm::FpuTag& t) {
+	return t.read_text(is);
+}
+/** iostream overload */
+inline ostream& operator<<(ostream& os, const x64asm::FpuTag& t) {
+	return t.write_text(os);
+}
+
+/** iostream overload */
+inline istream& operator>>(istream& is, x64asm::Mxcsr& m) {
+	return m.read_text(is);
+}
+/** iostream overload */
+inline ostream& operator<<(ostream& os, const x64asm::Mxcsr& m) {
+	return m.write_text(os);
 }
 
 } // namespace std
