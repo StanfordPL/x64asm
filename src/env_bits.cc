@@ -18,7 +18,6 @@ limitations under the License.
 
 #include <array>
 #include <string>
-#include <utility>
 
 #include "src/constants.h"
 

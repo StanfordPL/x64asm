@@ -83,16 +83,10 @@ class Ymm : public Operand {
 			std::swap(val_, rhs.val_);
 		}
 
-		/** @todo This method is undefined. */
-		std::istream& read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-			return is;
-		}
-    /** Writes this xmm register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const {
-			assert(check());
-			return (os << "%ymm" << std::dec << val_);
-		}
+		/** Reads this ymm register from an ostream using at&t syntax. */
+		std::istream& read_att(std::istream& is);
+    /** Writes this ymm register to an ostream using at&t syntax. */
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */

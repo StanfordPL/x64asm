@@ -17,7 +17,6 @@ limitations under the License.
 #ifndef X64ASM_SRC_XMM_H
 #define X64ASM_SRC_XMM_H
 
-#include <cassert>
 #include <iostream>
 
 #include "src/operand.h"
@@ -83,16 +82,10 @@ class Xmm : public Operand {
   		std::swap(val_, rhs.val_);
 		}
 
-		/** @todo This method is undefined. */
-		std::istream& read_att(std::istream& is) const {
-			is.setstate(std::ios::failbit);
-			return is;
-		}
+		/** Reads this xmm register from an ostream using at&t syntax. */
+		std::istream& read_att(std::istream& is);
     /** Writes this xmm register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const {
-			assert(check());
-			return (os << "%xmm" << std::dec << val_);
-		}
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
