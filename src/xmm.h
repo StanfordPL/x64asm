@@ -33,38 +33,70 @@ class Xmm : public Operand {
 
   public:
     /** Copy constructor. */
-    Xmm(const Xmm& rhs);
+    Xmm(const Xmm& rhs) : Operand(0,0) {
+			val_ = rhs.val_;
+		}
     /** Move constructor. */
-    Xmm(Xmm&& rhs);
+    Xmm(Xmm&& rhs) {
+			val_ = rhs.val_;
+		}
     /** Copy assignment operator. */
-    Xmm& operator=(const Xmm& rhs);
+    Xmm& operator=(const Xmm& rhs) {
+			Xmm(rhs).swap(*this);
+			return *this;
+		}
     /** Move assignment operator. */
-    Xmm& operator=(Xmm&& rhs);
+    Xmm& operator=(Xmm&& rhs) {
+			Xmm(std::move(rhs)).swap(*this);
+			return *this;
+		}
 
     /** Returns true if this xmm register is well-formed. */
-    constexpr bool check();
+    constexpr bool check() {
+  		return val_ < 16;
+		}
 
     /** Comparison based on on val_. */
-    constexpr bool operator<(const Xmm& rhs);
+    constexpr bool operator<(const Xmm& rhs) {
+			return val_ < rhs.val_;
+		}
     /** Comparison based on on val_. */
-    constexpr bool operator==(const Xmm& rhs);
+    constexpr bool operator==(const Xmm& rhs) {
+  		return val_ == rhs.val_;
+		}
     /** Comparison based on on val_. */
-    constexpr bool operator!=(const Xmm& rhs);
+    constexpr bool operator!=(const Xmm& rhs) {
+			return !(*this == rhs);
+		}
 
     /** Conversion based on underlying value. */
-    constexpr operator uint64_t();
+    constexpr operator uint64_t() {
+			return val_;
+		}
 
     /** STL-compliant hash. */
-    constexpr size_t hash();
+    constexpr size_t hash() {
+			return val_;
+		}
     /** STL-compliant swap. */
-    void swap(Xmm& rhs);
+    void swap(Xmm& rhs) {
+  		std::swap(val_, rhs.val_);
+		}
 
+		/** @todo This method is undefined. */
+		std::istream& read_att(std::istream& is) const {
+			is.setstate(std::ios::failbit);
+			return is;
+		}
     /** Writes this xmm register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const;
+    std::ostream& write_att(std::ostream& os) const {
+			assert(check());
+			return (os << "%xmm" << std::dec << val_);
+		}
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Xmm(uint64_t val);
+    constexpr Xmm(uint64_t val) : Operand(val) {}
 };
 
 /** The XMM register XMM0. */
@@ -74,11 +106,13 @@ class Xmm0 : public Xmm {
 
   public:
     /** Returns true if this xmm register is %xmm0. */
-    constexpr bool check();
+    constexpr bool check() {
+			return val_ == 0;
+		}
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Xmm0();
+    constexpr Xmm0() : Xmm(0) {}
 };
 
 } // namespace x64asm
@@ -88,95 +122,23 @@ namespace std {
 /** STL hash specialization. */
 template <>
 struct hash<x64asm::Xmm> {
-  size_t operator()(const x64asm::Xmm& x) const;
+  size_t operator()(const x64asm::Xmm& x) const {
+		return x.hash();
+	}
 };
 
 /** STL swap overload. */
-void swap(x64asm::Xmm& lhs, x64asm::Xmm& rhs);
-
-/** I/O overload. */
-ostream& operator<<(ostream& os, const x64asm::Xmm& x);
-
-} // namespace std
-
-namespace x64asm {
-
-inline Xmm::Xmm(const Xmm& rhs) : Operand{0,0} {
-  val_ = rhs.val_;
-}
-
-inline Xmm::Xmm(Xmm&& rhs) {
-  val_ = rhs.val_;
-}
-
-inline Xmm& Xmm::operator=(const Xmm& rhs) {
-  Xmm(rhs).swap(*this);
-  return *this;
-}
-
-inline Xmm& Xmm::operator=(Xmm&& rhs) {
-  Xmm(std::move(rhs)).swap(*this);
-  return *this;
-}
-
-inline constexpr bool Xmm::check() {
-  return val_ < 16;
-}
-
-inline constexpr bool Xmm::operator<(const Xmm& rhs) {
-  return val_ < rhs.val_;
-}
-
-inline constexpr bool Xmm::operator==(const Xmm& rhs) {
-  return val_ == rhs.val_;
-}
-
-inline constexpr bool Xmm::operator!=(const Xmm& rhs) {
-  return val_ != rhs.val_;
-}
-
-inline constexpr Xmm::operator uint64_t() {
-  return val_;
-}
-
-inline std::ostream& Xmm::write_att(std::ostream& os) const {
-  assert(check());
-  return (os << "%xmm" << std::dec << val_);
-}
-
-inline constexpr size_t Xmm::hash() {
-  return val_;
-}
-
-inline void Xmm::swap(Xmm& rhs) {
-  std::swap(val_, rhs.val_);
-}
-
-inline constexpr Xmm::Xmm(uint64_t val) : Operand{val} {
-}
-
-inline constexpr bool Xmm0::check() {
-  return val_ == 0;
-}
-
-inline constexpr Xmm0::Xmm0() : 
-    Xmm {0} {
-}
-
-} // namespace x64asm
-
-namespace std {
-
-inline size_t hash<x64asm::Xmm>::operator()(const x64asm::Xmm& x) const {
-  return x.hash();
-}
-
 inline void swap(x64asm::Xmm& lhs, x64asm::Xmm& rhs) {
-  lhs.swap(rhs);
+	lhs.swap(rhs);
 }
 
+/** iostream overload. */
+inline istream& operator>>(istream& is, x64asm::Xmm& x) {
+	return x.read_att(is);
+}
+/** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Xmm& x) {
-  return x.write_att(os);
+	return x.write_att(os);
 }
 
 } // namespace std
