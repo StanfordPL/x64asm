@@ -60,12 +60,6 @@ class R : public Operand {
 			std::swap(val_, rhs.val_);
 		}
 
-		/** @todo This method is undefined. */
-		std::istream& read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-			return is;
-		}
-
   protected:
     /** Direct access to this constructor is disallowed. */
     constexpr R(uint64_t val) : Operand(val) {}
@@ -98,21 +92,15 @@ class Rb : public R {
 			return !(*this == rhs);
 		}
 
+		/** Reads this register from an ostream using at&t syntax. */
+		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const {
-			assert(check());
-			const char* rbs[16] = {"al", "cl", "dl", "bl", 
-				"spl","bpl","sil","dil","r8b","r9b","r10b",
-				"r11b","r12b","r13b","r14b","r15b"};
-			return (os << "%" << rbs[val_]);
-		}
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
     constexpr Rb(uint64_t val) : R(val) {}
 };
-
-
 
 /** One of the byte general-purpose registers: AL, CL, DL, BL. */
 class Rl : public Rb {
@@ -138,12 +126,10 @@ class Rl : public Rb {
 			return !(*this == rhs);
 		}
 
+		/** Reads this register from an ostream using at&t syntax. */
+		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const {
-			assert(check());
-			const char* rls[4] = {"al","cl","dl","bl"};
-			return (os << "%" << rls[val_]);
-		}
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
@@ -206,12 +192,10 @@ class Rh : public R {
 			return !(*this == rhs);
 		}
 
+		/** Reads this register from an ostream using at&t syntax. */
+		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const {
-			assert(check());
-			const char* rhs[4] = {"ah","ch","dh","bh"};
-			return (os << "%" << rhs[val_-4]);
-		}
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
@@ -245,13 +229,10 @@ class R16 : public R {
 			return !(*this == rhs);
 		}
 
+		/** Reads this register from an ostream using at&t syntax. */
+		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const {
-			assert(check());
-			const char* r16s[16] = {"ax","cx","dx","bx","sp","bp","si","di","r8w",
-				"r9w","r10w","r11w","r12w","r13w","r14w","r15w"};
-			return (os << "%" << r16s[val_]);
-		}
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
@@ -319,13 +300,10 @@ class R32 : public R {
 			return !(*this == rhs);
 		}
 
+		/** Reads this register from an ostream using at&t syntax. */
+		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const {
-			assert(check());
-			const char* r32s[16] = {"eax","ecx","edx","ebx","esp","ebp","esi","edi",
-				"r8d","r9d","r10d","r11d","r12d","r13d","r14d","r15d"};
-			return (os << "%" << r32s[val_]);
-		}
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
@@ -376,13 +354,10 @@ class R64 : public R {
 			return !(*this == rhs);
 		}
 
+		/** Reads this register from an ostream using at&t syntax. */
+		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const {
-			assert(check());
-			const char* r64s[16] = {"rax","rcx","rdx","rbx","rsp","rbp","rsi","rdi",
-				"r8","r9","r10","r11","r12","r13","r14","r15"};
-			return (os << "%" << r64s[val_]);
-		}
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
@@ -423,28 +398,53 @@ inline void swap(x64asm::R& lhs, x64asm::R& rhs) {
 }
 
 /** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::R& r) {
+inline istream& operator>>(istream& is, x64asm::Rl& r) {
 	return r.read_att(is);
 }
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Rl& r) {
 	return r.write_att(os);
 }
+
+/** iostream overload. */
+inline istream& operator>>(istream& is, x64asm::Rh& r) {
+	return r.read_att(is);
+}
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Rh& r) {
 	return r.write_att(os);
+}
+
+/** iostream overload. */
+inline istream& operator>>(istream& is, x64asm::Rb& r) {
+	return r.read_att(is);
 }
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Rb& r) {
 	return r.write_att(os);
 }
+
+/** iostream overload. */
+inline istream& operator>>(istream& is, x64asm::R16& r) {
+	return r.read_att(is);
+}
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::R16& r) {
 	return r.write_att(os);
 }
+
+/** iostream overload. */
+inline istream& operator>>(istream& is, x64asm::R32& r) {
+	return r.read_att(is);
+}
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::R32& r) {
 	return r.write_att(os);
+}
+
+/** iostream overload. */
+inline istream& operator>>(istream& is, x64asm::R64& r) {
+	return r.read_att(is);
 }
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::R64& r) {
