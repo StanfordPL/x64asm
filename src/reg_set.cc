@@ -97,7 +97,7 @@ istream& RegSet::read_text(istream& is) {
 
 ostream& RegSet::write_text(ostream& os) const {
   os << "{";
-	for (size_t i = 0; i < r64s.size(); ++i) {
+	for (size_t i = 0, ie = r64s.size(); i < ie; ++i) {
 		if (contains(r64s[i])) {
 			os << " " << r64s[i];
 		} else if (contains(r32s[i])) {
@@ -115,14 +115,14 @@ ostream& RegSet::write_text(ostream& os) const {
 			os << " " << rbs[i-4];
 		}
 	}
-	for (size_t i = 0; i < ymms.size(); ++i) {
+	for (size_t i = 0, ie = ymms.size(); i < ie; ++i) {
 		if (contains(ymms[i])) {
 			os << " " << ymms[i];
 		} else if (contains(xmms[i])) {
 			os << " " << xmms[i];
 		}
 	}
-	for (size_t i = 0; i < eflags.size(); i += eflags[i].width()) {
+	for (size_t i = 0, ie = eflags.size(); i < ie; i += eflags[i].width()) {
 		if (contains(eflags[i])) {
 			os << " " << eflags[i];
 		}
