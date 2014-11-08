@@ -76,8 +76,8 @@ class R : public Operand {
     the byte registers (R8B - R15B) available when using REX.R and 64-bit mode.
 */
 class Rb : public R {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
   public:
     /** Returns true if this register is well-formed. */
@@ -116,8 +116,8 @@ class Rb : public R {
 
 /** One of the byte general-purpose registers: AL, CL, DL, BL. */
 class Rl : public Rb {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
   public:
     /** Returns true if this register is well-formed. */
@@ -152,8 +152,8 @@ class Rl : public Rb {
 
 /** The byte general-purpose register AL. */
 class Al : public Rl {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
   public:
     /** Returns true if this register is well-formed. */
@@ -168,8 +168,8 @@ class Al : public Rl {
 
 /** The byte general-purpose register CL. */
 class Cl : public Rl {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
   public:
     /** Returns true if this register is well-formed. */
@@ -184,8 +184,8 @@ class Cl : public Rl {
 
 /** One of the byte general-purpose registers: AH, CH, DH, BH. */
 class Rh : public R {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
   public:
     /** Returns true if this register is well-formed. */
@@ -223,8 +223,8 @@ class Rh : public R {
     64-bit mode.
 */
 class R16 : public R {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
   public:
     /** Returns true if this register is well-formed. */
@@ -260,8 +260,8 @@ class R16 : public R {
 
 /** The word general-purpose register AX. */
 class Ax : public R16 {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
   public:
     /** Returns true if this register is well-formed. */
@@ -276,8 +276,8 @@ class Ax : public R16 {
 
 /** The word general-purpose register DX. */
 class Dx : public R16 {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
   public:
     /** Returns true if this register is well-formed. */
@@ -295,10 +295,10 @@ class Dx : public R16 {
     when using REX.R in 64-bit mode.
 */
 class R32 : public R {
-    // Needs access to constructor.
-    friend class Constants;
-    // Needs access to consturctor.
-    friend class M;
+  // Needs access to constructor.
+  friend class Constants;
+  // Needs access to consturctor.
+  friend class M;
 
   public:
     /** Returns true if this register is well-formed. */
@@ -334,8 +334,8 @@ class R32 : public R {
 
 /** The doubleword general-purpose register EAX. */
 class Eax : public R32 {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
   public:
     /** Returns true if this register is well-formed. */
@@ -352,10 +352,10 @@ class Eax : public R32 {
     RBP, RSP, R8–R15. These are available when using REX.R and 64-bit mode.
 */
 class R64 : public R {
-    // Needs access to constructor.
-    friend class Constants;
-    // Needs access to consturctor.
-    friend class M;
+  // Needs access to constructor.
+  friend class Constants;
+  // Needs access to consturctor.
+  friend class M;
 
   public:
     /** Returns true if this register is well-formed. */
@@ -391,8 +391,8 @@ class R64 : public R {
 
 /** The quadword general-purpose register RAX. */
 class Rax : public R64 {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
   public:
     /** Returns true if this register is well-formed. */

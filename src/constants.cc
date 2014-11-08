@@ -23,11 +23,20 @@ namespace x64asm {
 const Eflags eflags_cf {
   Constants::eflags_cf()
 };
+const Eflags eflags_res1 {
+	Constants::eflags_res1()
+};
 const Eflags eflags_pf {
   Constants::eflags_pf()
 };
+const Eflags eflags_res3 {
+	Constants::eflags_res3()
+};
 const Eflags eflags_af {
   Constants::eflags_af()
+};
+const Eflags eflags_res5 {
+	Constants::eflags_res5()
 };
 const Eflags eflags_zf {
   Constants::eflags_zf()
@@ -53,6 +62,9 @@ const Eflags eflags_iopl {
 const Eflags eflags_nt {
   Constants::eflags_nt()
 };
+const Eflags eflags_res15 {
+	Constants::eflags_res15()
+};
 const Eflags eflags_rf {
   Constants::eflags_rf()
 };
@@ -72,11 +84,12 @@ const Eflags eflags_id {
   Constants::eflags_id()
 };
 
-const array<Eflags,17> eflags {
-  eflags_cf, eflags_pf,   eflags_af,  eflags_zf,
-  eflags_sf, eflags_tf,   eflags_if,  eflags_df,
-  eflags_of, eflags_iopl, eflags_nt,  eflags_rf,
-  eflags_vm, eflags_ac,   eflags_vif, eflags_vip,
+const array<Eflags,21> eflags {
+  eflags_cf,   eflags_res1, eflags_pf,    eflags_res3,
+	eflags_af,   eflags_res5, eflags_zf,    eflags_sf, 
+	eflags_tf,   eflags_if,   eflags_df,    eflags_of, 
+	eflags_iopl, eflags_nt,   eflags_res15, eflags_rf,
+  eflags_vm,   eflags_ac,   eflags_vif,   eflags_vip,
   eflags_id
 };
 
@@ -98,6 +111,12 @@ const FpuControl fpu_control_um {
 const FpuControl fpu_control_pm {
   Constants::fpu_control_pm()
 };
+const FpuControl fpu_control_res6 {
+	Constants::fpu_control_res6()
+};
+const FpuControl fpu_control_res7 {
+	Constants::fpu_control_res7()
+};
 const FpuControl fpu_control_pc {
   Constants::fpu_control_pc()
 };
@@ -107,11 +126,21 @@ const FpuControl fpu_control_rc {
 const FpuControl fpu_control_x {
   Constants::fpu_control_x()
 };
+const FpuControl fpu_control_res13 {
+	Constants::fpu_control_res13()
+};
+const FpuControl fpu_control_res14 {
+	Constants::fpu_control_res14()
+};
+const FpuControl fpu_control_res15 {
+	Constants::fpu_control_res15()
+};
 
-const array<FpuControl,9> fpu_control {
-  fpu_control_im, fpu_control_dm, fpu_control_zm, fpu_control_om,
-  fpu_control_um, fpu_control_pm, fpu_control_pc, fpu_control_rc,
-  fpu_control_x
+const array<FpuControl,14> fpu_control {
+  fpu_control_im,    fpu_control_dm,   fpu_control_zm,   fpu_control_om,
+  fpu_control_um,    fpu_control_pm,   fpu_control_res6, fpu_control_res7,
+	fpu_control_pc,    fpu_control_rc,   fpu_control_x,    fpu_control_res13, 
+	fpu_control_res14, fpu_control_res15
 };
 
 const FpuStatus fpu_status_ie {

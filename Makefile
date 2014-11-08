@@ -26,7 +26,8 @@ OBJ=src/assembler.o \
 		src/flag_set.o \
 		src/instruction.o \
 		src/label.o \
-		src/m.o
+		src/m.o \
+		src/reg_set.o
 
 LIB=lib/libx64asm.a
 

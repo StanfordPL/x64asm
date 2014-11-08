@@ -28,8 +28,8 @@ namespace x64asm {
     through XMM15 are available using REX.R in 64-bit mode.
 */
 class Xmm : public Operand {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
   public:
     /** Copy constructor. */

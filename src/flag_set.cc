@@ -28,6 +28,11 @@ std::istream& FlagSet::read_text(std::istream& is) {
 	string s;
 
 	is >> s;	
+	if (s != "{") {
+		is.setstate(ios::failbit);
+		return is;
+	}
+
 	while (true) {
 		is >> s;
 		if (s == "}") {

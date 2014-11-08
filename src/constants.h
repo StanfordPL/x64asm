@@ -40,12 +40,21 @@ class Constants {
     static constexpr Eflags eflags_cf()   {
       return {0, 1};
     }
+		static constexpr Eflags eflags_res1() {
+			return {1, 1};
+		}
     static constexpr Eflags eflags_pf()   {
       return {2, 1};
     }
+		static constexpr Eflags eflags_res3() {
+			return {3, 1};
+		}
     static constexpr Eflags eflags_af()   {
       return {4, 1};
     }
+		static constexpr Eflags eflags_res5() {
+			return {5, 1};
+		}
     static constexpr Eflags eflags_zf()   {
       return {6, 1};
     }
@@ -70,6 +79,9 @@ class Constants {
     static constexpr Eflags eflags_nt()   {
       return {14, 1};
     }
+		static constexpr Eflags eflags_res15() {
+			return {15, 1};
+		}
     static constexpr Eflags eflags_rf()   {
       return {16, 1};
     }
@@ -107,6 +119,12 @@ class Constants {
     static constexpr FpuControl fpu_control_pm() {
       return {5, 1};
     }
+    static constexpr FpuControl fpu_control_res6() {
+      return {6, 1};
+    }
+    static constexpr FpuControl fpu_control_res7() {
+      return {7, 1};
+    }
     static constexpr FpuControl fpu_control_pc() {
       return {8, 2};
     }
@@ -115,6 +133,15 @@ class Constants {
     }
     static constexpr FpuControl fpu_control_x()  {
       return {12, 1};
+    }
+    static constexpr FpuControl fpu_control_res13() {
+      return {13, 1};
+    }
+    static constexpr FpuControl fpu_control_res14() {
+      return {14, 1};
+    }
+    static constexpr FpuControl fpu_control_res15() {
+      return {15, 1};
     }
 
     static constexpr FpuStatus fpu_status_ie()  {
@@ -161,28 +188,28 @@ class Constants {
     }
 
     static constexpr FpuTag tag0() {
-      return {1, 2};
+      return {0, 2};
     }
     static constexpr FpuTag tag1() {
-      return {3, 2};
+      return {2, 2};
     }
     static constexpr FpuTag tag2() {
-      return {5, 2};
+      return {4, 2};
     }
     static constexpr FpuTag tag3() {
-      return {7, 2};
+      return {6, 2};
     }
     static constexpr FpuTag tag4() {
-      return {9, 2};
+      return {8, 2};
     }
     static constexpr FpuTag tag5() {
-      return {11, 2};
+      return {10, 2};
     }
     static constexpr FpuTag tag6() {
-      return {13, 2};
+      return {12, 2};
     }
     static constexpr FpuTag tag7() {
-      return {15, 2};
+      return {14, 2};
     }
 
     static constexpr Mxcsr mxcsr_ie()  {
@@ -225,7 +252,7 @@ class Constants {
       return {12, 1};
     }
     static constexpr Mxcsr mxcsr_rc()  {
-      return {14, 2};
+      return {13, 2};
     }
     static constexpr Mxcsr mxcsr_fz()  {
       return {15, 1};
@@ -657,15 +684,23 @@ extern const FpuControl fpu_control_zm;
 extern const FpuControl fpu_control_om;
 extern const FpuControl fpu_control_um;
 extern const FpuControl fpu_control_pm;
+extern const FpuControl fpu_control_res6;
+extern const FpuControl fpu_control_res7;
 extern const FpuControl fpu_control_pc;
 extern const FpuControl fpu_control_rc;
 extern const FpuControl fpu_control_x;
+extern const FpuControl fpu_control_res13;
+extern const FpuControl fpu_control_res14;
+extern const FpuControl fpu_control_res15;
 
-extern const std::array<FpuControl,9> fpu_control;
+extern const std::array<FpuControl,14> fpu_control;
 
 extern const Eflags eflags_cf;
+extern const Eflags eflags_res1;
 extern const Eflags eflags_pf;
+extern const Eflags eflags_res3;
 extern const Eflags eflags_af;
+extern const Eflags eflags_res5;
 extern const Eflags eflags_zf;
 extern const Eflags eflags_sf;
 extern const Eflags eflags_tf;
@@ -674,6 +709,7 @@ extern const Eflags eflags_df;
 extern const Eflags eflags_of;
 extern const Eflags eflags_iopl;
 extern const Eflags eflags_nt;
+extern const Eflags eflags_res15;
 extern const Eflags eflags_rf;
 extern const Eflags eflags_vm;
 extern const Eflags eflags_ac;
@@ -681,7 +717,7 @@ extern const Eflags eflags_vif;
 extern const Eflags eflags_vip;
 extern const Eflags eflags_id;
 
-extern const std::array<Eflags,17> eflags;
+extern const std::array<Eflags,21> eflags;
 
 extern const Mxcsr mxcsr_ie;
 extern const Mxcsr mxcsr_de;
