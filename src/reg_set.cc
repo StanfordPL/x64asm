@@ -61,14 +61,14 @@ istream& RegSet::read_text(istream& is) {
 			break;
 		}
 
-    auto rh = ah;
-    auto r8 = al;
-    auto r16 = ax; 
-    auto r32 = eax;
-    auto r64 = rax;
-    auto xmm = xmm0;
-    auto ymm = ymm0;
-		auto ef = eflags_cf;
+    Rh rh = ah;
+    Rb r8 = al;
+    R16 r16 = ax; 
+    R32 r32 = eax;
+    R64 r64 = rax;
+    Xmm xmm = xmm0;
+    Ymm ymm = ymm0;
+		Eflags ef = eflags_cf;
 
 		if (istringstream(s) >> r64) {
 			(*this) += r64;
