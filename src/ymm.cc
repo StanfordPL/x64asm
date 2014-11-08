@@ -43,8 +43,8 @@ istream& Ymm::read_att(istream& is) {
 	for (size_t i = 0, ie = ymms_.size(); i < ie; ++i) {
 		if (temp == ymms_[i]) {
 			*this == ymms[i];
+			return is;
 		}
-		return is;
 	}
 
 	is.setstate(ios::failbit);
