@@ -14,13 +14,16 @@
 
 ##### CONSTANT DEFINITIONS
 
-GCC=ccache g++ -Werror -Wextra -pedantic -std=c++11
+GCC=ccache g++ -Werror -Wextra -Wfatal-errors -pedantic -std=c++11
 
 INC=-I./
 		
 OBJ=src/assembler.o \
 		src/code.o \
 		src/constants.o \
+		src/env_bits.o \
+		src/flag.o \
+		src/flag_set.o \
 		src/instruction.o \
 		src/label.o \
 		src/m.o

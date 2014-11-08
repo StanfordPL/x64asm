@@ -104,7 +104,7 @@ class Code : public std::vector<Instruction> {
 			for (size_t i = 0, ie = size(); i < ie; ++i) {
 				(*this)[i].write_att(os);
 				if (i+1 != ie) {
-					os << "\n";
+					os << std::endl;
 				}
 			}
 			return os;

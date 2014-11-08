@@ -42,8 +42,6 @@ namespace x64asm {
 class Function {
     // Needs access to internal buffer.
     friend class Assembler;
-    // Needs access to internal buffer.
-    friend class Imm64;
 		// Needs access to label data.
 		friend class Linker;
 
@@ -287,6 +285,11 @@ class Function {
 			return good() ? std::hash<std::string>()(std::string((const char*)buffer_, size())) : 0;
 		}
 
+		/** @todo This method is undefined. */
+		std::istream& read_hex(std::istream& is) {
+			is.setstate(std::ios::failbit);
+			return is;
+		}
     /** Writes this function to an ostream in human-readable hex. */
     std::ostream& write_hex(std::ostream& os) const {
 			const auto fmt = os.flags();
@@ -355,7 +358,10 @@ struct hash<x64asm::Function> {
 	}
 };
 
-/** I/O overload. */
+/** iostream overload. */
+inline istream& operator>>(istream& is, x64asm::Function& f) {
+	return f.read_hex(is);
+}
 inline ostream& operator<<(ostream& os, const x64asm::Function& f) {
 	return f.write_hex(os);
 }

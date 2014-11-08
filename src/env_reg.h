@@ -17,10 +17,20 @@ limitations under the License.
 #ifndef X64ASM_ENV_REG_H
 #define X64ASM_ENV_REG_H
 
+#include <cassert>
+#include <iostream>
+
 namespace x64asm {
 
 /** An environment register. */
 class EnvReg {
+	public:
+		/** @todo This method is undefined. */
+		std::istream& read_text(std::istream& is) {
+			is.setstate(std::ios::failbit);
+			return is;
+		}
+
   protected:
     /** Direct access to this constructor is disallowed. */
     constexpr EnvReg(size_t val) : val_(val) {}
@@ -35,6 +45,12 @@ class FpuData : public EnvReg {
     // Needs access to constructor.
     friend class Constants;
 
+	public:
+		/** Writes to an ostream using text. */
+		std::ostream& write_text(std::ostream& os) const {
+			return (os << "%data");
+		}
+
   private:
     /** Direct access to this constructor is disallowed. */
     constexpr FpuData() : EnvReg(0) {}
@@ -44,6 +60,12 @@ class FpuData : public EnvReg {
 class FpuInstruction : public EnvReg {
     // Needs access to constructor.
     friend class Constants;
+
+	public:
+		/** Writes to an ostream using text. */
+		std::ostream& write_text(std::ostream& os) const {
+			return (os << "%instruction");
+		}
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -55,6 +77,12 @@ class FpuOpcode : public EnvReg {
     // Needs access to constructor.
     friend class Constants;
 
+	public:
+		/** Writes to an ostream using text. */
+		std::ostream& write_text(std::ostream& os) const {
+			return (os << "%opcode");
+		}
+
   private:
     /** Direct access to this constructor is disallowed. */
     constexpr FpuOpcode() : EnvReg(0) {}
@@ -65,6 +93,12 @@ class Rip : public EnvReg {
     // Needs access to constructor.
     friend class Constants;
 
+	public:
+		/** Writes to an ostream using text. */
+		std::ostream& write_text(std::ostream& os) const {
+			return (os << "%rip");
+		}
+
   private:
     /** Direct access to this constructor is disallowed. */
     constexpr Rip() : EnvReg(0) {}
@@ -72,5 +106,44 @@ class Rip : public EnvReg {
 
 } // namespace x64asm
 
-#endif
+namespace std {
 
+/** iostream overload */
+inline istream& operator>>(istream& is, x64asm::FpuData& f) {
+	return f.read_text(is);
+}
+/** iostream overload */
+inline ostream& operator<<(ostream& os, const x64asm::FpuData& f) {
+	return f.write_text(os);
+}
+
+/** iostream overload */
+inline istream& operator>>(istream& is, x64asm::FpuInstruction& f) {
+	return f.read_text(is);
+}
+/** iostream overload */
+inline ostream& operator<<(ostream& os, const x64asm::FpuInstruction& f) {
+	return f.write_text(os);
+}
+
+/** iostream overload */
+inline istream& operator>>(istream& is, x64asm::FpuOpcode& f) {
+	return f.read_text(is);
+}
+/** iostream overload */
+inline ostream& operator<<(ostream& os, const x64asm::FpuOpcode& f) {
+	return f.write_text(os);
+}
+
+/** iostream overload */
+inline istream& operator>>(istream& is, x64asm::Rip& r) {
+	return r.read_text(is);
+}
+/** iostream overload */
+inline ostream& operator<<(ostream& os, const x64asm::Rip& r) {
+	return r.write_text(os);
+}
+
+} // namespace std
+
+#endif

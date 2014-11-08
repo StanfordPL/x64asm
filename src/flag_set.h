@@ -19,6 +19,8 @@ limitations under the License.
 
 #include "src/flag.h"
 
+#include <iostream>
+
 /** A compact representation of cpuid feature flag sets. */
 namespace x64asm {
 
@@ -89,6 +91,11 @@ class FlagSet {
 			std::swap(mask_, rhs.mask_);
 		}
 
+		/** Reads a flag set from an istream in text. */
+		std::istream& read_text(std::istream& is);
+		/** Reads a flag set to an ostream in text. */
+		std::ostream& write_text(std::ostream& os) const;
+
   private:
     /** Underlying bitmask. */
     uint64_t mask_;  
@@ -109,6 +116,15 @@ struct hash<x64asm::FlagSet> {
 /** STL swap overload. */
 inline void swap(x64asm::FlagSet& lhs, x64asm::FlagSet& rhs) {
   lhs.swap(rhs);
+}
+
+/** iostream overload. */
+inline istream& operator>>(istream& is, x64asm::FlagSet& fs) {
+	return fs.read_text(is);
+}
+/** iostream overload. */
+inline ostream& operator<<(ostream& os, const x64asm::FlagSet& fs) {
+	return fs.write_text(os);
 }
 
 } // namespace std

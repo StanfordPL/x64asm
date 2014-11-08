@@ -19,6 +19,7 @@ limitations under the License.
 
 #include <cassert>
 #include <iostream>
+#include <string>
 
 #include "src/operand.h"
 
@@ -81,10 +82,14 @@ class Hint : public Operand {
 			std::swap(val_, rhs.val_);
 		}
 
-    /** Writes this hint to an ostream using (something like) at&t syntax. */
+    /** @todo This method is undefined. */
+		std::istream& read_att(std::istream& is) {
+			is.setstate(std::ios::failbit);
+			return is;
+		}
+    /** Does nothing. AT&T syntax is undefined for hints. */
 		std::ostream& write_att(std::ostream& os) const {
-			assert(check());
-			return (os << (val_ == 0 ? "<taken>" : "<not taken>"));
+			return os;
 		}
 
   private:
@@ -109,7 +114,11 @@ inline void swap(x64asm::Hint& lhs, x64asm::Hint& rhs) {
 	lhs.swap(rhs);
 }
 
-/** I/O overload. */
+/** iostream overload. */
+inline istream& operator<<(istream& is, x64asm::Hint& h) {
+	return h.read_att(is);
+}
+/** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Hint& h) {
 	return h.write_att(os);
 }
