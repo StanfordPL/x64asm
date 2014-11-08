@@ -30,35 +30,69 @@ namespace x64asm {
 class Modifier : public Operand {
   public:
     /** Copy constructor. */
-    Modifier(const Modifier& rhs);
+    Modifier(const Modifier& rhs) : Operand(0,0) {
+			val_ = rhs.val_;
+		}
     /** Move constructor. */
-    Modifier(Modifier&& rhs);
+    Modifier(Modifier&& rhs) {
+			val_ = rhs.val_;
+		}
     /** Copy assignment operator. */
-    Modifier& operator=(const Modifier& rhs);
+    Modifier& operator=(const Modifier& rhs) {
+			Modifier(rhs).swap(*this);
+			return *this;
+		}
     /** Move assignment operator. */
-    Modifier& operator=(Modifier&& rhs);
+    Modifier& operator=(Modifier&& rhs) {
+			Modifier(std::move(rhs)).swap(*this);
+			return *this;
+		}
 
     /** Returns true if this modifier is well-formed. */
-    constexpr bool check();
+    constexpr bool check() {
+			return val_ == 0;
+		}
 
     /** Comparison based on on val_. */
-    constexpr bool operator<(const Modifier& rhs);
+    constexpr bool operator<(const Modifier& rhs) {
+			return val_ < rhs.val_;
+		}
     /** Comparison based on on val_. */
-    constexpr bool operator==(const Modifier& rhs);
+    constexpr bool operator==(const Modifier& rhs) {
+			return val_ == rhs.val_;
+		}
     /** Comparison based on on val_. */
-    constexpr bool operator!=(const Modifier& rhs);
+    constexpr bool operator!=(const Modifier& rhs) {
+			return !(*this == rhs);
+		}
 
     /** Conversion based on val_. */
-    constexpr operator uint64_t();
+    constexpr operator uint64_t() {
+			return val_;
+		}
 
     /** STL-compliant hash. */
-    constexpr size_t hash();
+    constexpr size_t hash() {
+			return val_;
+		}
     /** STL-compliant swap. */
-    void swap(Modifier& rhs);
+    void swap(Modifier& rhs) {
+			std::swap(val_, rhs.val_);
+		}
+
+		/** @todo This method is undefined. */
+		std::istream& read_att(std::istream& is) {
+			is.setstate(std::ios::failbit);
+			return is;
+		}
+		/** Does nothing. AT&T syntax is undefined for modifiers. */
+		std::ostream& write_att(std::ostream& os) const {
+			return os;
+		}
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Modifier(uint64_t val);
+    constexpr Modifier(uint64_t val) : Operand(val) {}
 };
 
 /** The 32-bit memory address override prefix: 0x66. */
@@ -66,13 +100,9 @@ class Pref66 : public Modifier {
     // Needs access to constructor.
     friend class Constants;
 
-  public:
-    /** Writes this modifier to an ostream using (something like) at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const;
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Pref66();
+    constexpr Pref66() : Modifier(0) {}
 };
 
 /** The REX.w prefix: 0x48. */
@@ -80,13 +110,9 @@ class PrefRexW : public Modifier {
     // Needs access to constructor.
     friend class Constants;
 
-  public:
-    /** Writes this modifier to an ostream using (something like) at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const;
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr PrefRexW();
+    constexpr PrefRexW() : Modifier(0) {}
 };
 
 /** Far instruction variant. */
@@ -94,13 +120,9 @@ class Far : public Modifier {
     // Needs access to constructor.
     friend class Constants;
 
-  public:
-    /** Writes this modifier to an ostream using (something like) at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const;
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Far();
+    constexpr Far() : Modifier(0) {}
 };
 
 } // namespace x64asm
@@ -110,119 +132,23 @@ namespace std {
 /** STL hash specialization. */
 template <>
 struct hash<x64asm::Modifier> {
-  size_t operator()(const x64asm::Modifier& m) const;
+  size_t operator()(const x64asm::Modifier& m) const {
+		return m.hash();
+	}
 };
 
 /** STL swap overload. */
-void swap(x64asm::Modifier& lhs, x64asm::Modifier& rhs);
-
-/** I/O overload. */
-ostream& operator<<(ostream& os, const x64asm::Pref66& p);
-/** I/O overload. */
-ostream& operator<<(ostream& os, const x64asm::PrefRexW& p);
-/** I/O overload. */
-ostream& operator<<(ostream& os, const x64asm::Far& f);
-
-} // namespace std
-
-namespace x64asm {
-
-inline Modifier::Modifier(const Modifier& rhs) : Operand{0,0} {
-  val_ = rhs.val_;
-}
-
-inline Modifier::Modifier(Modifier&& rhs) {
-  val_ = rhs.val_;
-}
-
-inline Modifier& Modifier::operator=(const Modifier& rhs) {
-  Modifier(rhs).swap(*this);
-  return *this;
-}
-
-inline Modifier& Modifier::operator=(Modifier&& rhs) {
-  Modifier(std::move(rhs)).swap(*this);
-  return *this;
-}
-
-inline constexpr bool Modifier::check() {
-  return val_ == 0;
-}
-
-inline constexpr bool Modifier::operator<(const Modifier& rhs) {
-  return val_ < rhs.val_;
-}
-
-inline constexpr bool Modifier::operator==(const Modifier& rhs) {
-  return val_ == rhs.val_;
-}
-
-inline constexpr bool Modifier::operator!=(const Modifier& rhs) {
-  return val_ != rhs.val_;
-}
-
-inline constexpr Modifier::operator uint64_t() {
-  return val_;
-}
-
-inline constexpr size_t Modifier::hash() {
-  return val_;
-}
-
-inline void Modifier::swap(Modifier& rhs) {
-  std::swap(val_, rhs.val_);
-}
-
-inline constexpr Modifier::Modifier(uint64_t val) : 
-    Operand {val} {
-}
-
-inline std::ostream& Pref66::write_att(std::ostream& os) const {
-  return (os << "<66>");
-}
-
-inline constexpr Pref66::Pref66() :
-    Modifier {0} {
-}
-
-inline std::ostream& PrefRexW::write_att(std::ostream& os) const {
-  return (os << "<rexw>");
-}
-
-inline constexpr PrefRexW::PrefRexW() :
-    Modifier {0} {
-}
-
-inline std::ostream& Far::write_att(std::ostream& os) const {
-  return (os << "<far>");
-}
-
-inline constexpr Far::Far() :
-    Modifier {0} {
-}
-
-} // namespace x64asm
-
-namespace std {
-
-inline size_t hash<x64asm::Modifier>::operator()(const x64asm::Modifier& m) const {
-  return m.hash();
-}
-
 inline void swap(x64asm::Modifier& lhs, x64asm::Modifier& rhs) {
-  lhs.swap(rhs);
+	lhs.swap(rhs);
 }
 
-inline ostream& operator<<(ostream& os, const x64asm::Pref66& p) {
-  return p.write_att(os);
+/** iostream overload. */
+inline istream& operator>>(istream& is, x64asm::Modifier& m) {
+	return m.read_att(is);
 }
-
-inline ostream& operator<<(ostream& os, const x64asm::PrefRexW& p) {
-  return p.write_att(os);
-}
-
-inline ostream& operator<<(ostream& os, const x64asm::Far& f) {
-  return f.write_att(os);
+/** iostream overload. */
+inline ostream& operator<<(ostream& os, const x64asm::Modifier& m) {
+	return m.write_att(os);
 }
 
 } // namespace std
