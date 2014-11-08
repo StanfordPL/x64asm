@@ -36,7 +36,7 @@ const array<string, 16> xmms_ {{
 
 namespace x64asm {
 
-istream& Xmm::read_att(istream& is) const {
+istream& Xmm::read_att(istream& is) {
 	string temp;
 	is >> temp;
 

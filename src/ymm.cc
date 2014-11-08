@@ -36,7 +36,7 @@ const array<string, 16> ymms_ {{
 
 namespace x64asm {
 
-istream& Ymm::read_att(istream& is) const {
+istream& Ymm::read_att(istream& is) {
 	string temp;
 	is >> temp;
 

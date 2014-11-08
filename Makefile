@@ -29,7 +29,7 @@ OBJ=src/assembler.o \
 		src/m.o \
 		src/reg_set.o \
 		src/xmm.o \
-		src.ymm.o
+		src/ymm.o
 
 LIB=lib/libx64asm.a
 
