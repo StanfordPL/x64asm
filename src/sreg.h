@@ -87,6 +87,9 @@ class Sreg : public Operand {
 			std::swap(val_, rhs.val_);
 		}
 
+    /** Returns the type of this operand */
+    virtual Type type() const { return SREG; }
+
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
 			is.setstate(std::ios::failbit);
@@ -115,6 +118,9 @@ class Fs : public Sreg {
 			return val_ == 4;
 		}
 
+    /** Returns the type of this operand */
+    Type type() const { return FS; }
+
   private:
     /** Direct access to this constructor is disallowed. */
     constexpr Fs() : Sreg(4) {}
@@ -130,6 +136,9 @@ class Gs : public Sreg {
     constexpr bool check() {
 			return val_ == 5;
 		}
+
+    /** Returns the type of this operand */
+    Type type() const { return GS; }
 
   private:
     /** Direct access to this constructor is disallowed. */

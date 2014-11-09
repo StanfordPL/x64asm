@@ -106,8 +106,8 @@ class Imm8 : public Imm {
   		return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
 		}
 
-    /** Returns the bitwidth of this immediate */
-    uint16_t size() const { return 8; }
+    /** Returns the type of this immediate */
+    virtual Type type() const { return IMM_8; }
 };
 
 /** An immediate word value used for instructions whose operand-size attribute
@@ -123,8 +123,8 @@ class Imm16 : public Imm {
   		return ((val_>>16) == 0x0ul) || ((val_>>16) == 0xfffffffffffful);
 		}
 
-    /** Returns the bitwidth of this immediate */
-    uint16_t size() const { return 16; }
+    /** Returns the type of this immediate */
+    Type type() const { return IMM_16; }
 
 };
 
@@ -142,8 +142,8 @@ class Imm32 : public Imm {
 			return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
 		}
 
-    /** Returns the bitwidth of this immediate */
-    uint16_t size() const { return 32; }
+    /** Returns the type of this immediate */
+    Type type() const { return IMM_32; }
 
 };
 
@@ -166,8 +166,8 @@ class Imm64 : public Imm {
 			return true;
 		}
 
-    /** Returns the bitwidth of this immediate */
-    uint16_t size() const { return 64; }
+    /** Returns the type of this immediate */
+    Type type() const { return IMM_64; }
 };
 
 /** The immediate constant value zero */
@@ -180,6 +180,9 @@ class Zero : public Imm8 {
     constexpr bool check() {
 			return val_ == 0;
 		}
+
+    /** Returns the type of this immediate */
+    Type type() const { return ZERO; }
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -197,6 +200,9 @@ class One : public Imm8 {
 			return val_ == 1;
 		}
 
+    /** Returns the type of this immediate */
+    Type type() const { return ONE; }
+
   private:
     /** Direct access to this construcotr is disallowed. */
     constexpr One() : Imm8(1) {}
@@ -212,6 +218,9 @@ class Three : public Imm8 {
     constexpr bool check() {
 			return val_ == 3;
 		}
+
+    /** Returns the type of this immediate */
+    Type type() const { return THREE; }
 
   private:
     /** Direct access to this constructor is disallosed. */

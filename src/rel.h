@@ -102,6 +102,9 @@ class Rel8 : public Rel {
     constexpr bool check() {
 			return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
 		}
+
+    /** Gets the type of this operand */
+    Type type() const { return REL_8; }
 };
 
 /** A relative address within the same code segment as the instruction
@@ -117,6 +120,9 @@ class Rel32 : public Rel {
     constexpr bool check() {
 			return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
 		}
+
+    /** Gets the type of this operand */
+    Type type() const { return REL_32; }
 };
 
 } // namespace x64asm

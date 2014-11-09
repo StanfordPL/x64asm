@@ -83,8 +83,8 @@ class Ymm : public Operand {
 			std::swap(val_, rhs.val_);
 		}
 
-    /** Returns the size of this operand */
-    uint16_t size() { return 256; }
+    /** Returns the type of this operand */
+    virtual Type type() const { return YMM; }
 
 		/** Reads this ymm register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
