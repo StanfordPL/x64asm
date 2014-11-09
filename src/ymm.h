@@ -84,7 +84,7 @@ class Ymm : public Operand {
 		}
 
     /** Returns the size of this operand */
-    void uint16_t size() { return 256; }
+    uint16_t size() { return 256; }
 
 		/** Reads this ymm register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);

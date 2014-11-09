@@ -83,7 +83,7 @@ class Xmm : public Operand {
 		}
 
     /** Returns the size of this operand */
-    void uint16_t size() { return 128; }
+    uint16_t size() { return 128; }
 
 		/** Reads this xmm register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
