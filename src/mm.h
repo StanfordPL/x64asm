@@ -81,8 +81,8 @@ class Mm : public Operand {
   		std::swap(val_, rhs.val_);
 		}
 
-    /** Returns the size of an MMX register. */
-    uint16_t size() const { return 64; }
+    /** Returns the type of an MMX register. */
+    Type type() const { return Type::MM; }
 
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {

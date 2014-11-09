@@ -20,6 +20,8 @@ limitations under the License.
 #include <array>
 #include <stdint.h>
 
+#include "src/type.h"
+
 namespace x64asm {
 
 class RegSet;
@@ -66,10 +68,18 @@ class Operand {
 			std::swap(val2_, rhs.val2_);
 		}
 
+    /** Return the type of this operand */
+    virtual Type type() const { return Type::NONE; }
     /** Return the bitwidth of this operand */
-    virtual uint16_t size() const { 
-      return 0; 
-    }
+    uint16_t size() const;
+    /** Is this a general purpose register? */
+    bool is_gp_register() const;
+    /** Is this an SSE register? */
+    bool is_sse_register() const;
+    /** Is this a normal 8/16/32/64/128/256-bit memory operand? */
+    bool is_typical_memory() const;
+    /** Is this an immediate? */
+    bool is_immediate() const;
 
   protected:
     /** Creates an operand with no underlying value. */

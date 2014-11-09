@@ -100,6 +100,9 @@ class Pref66 : public Modifier {
     // Needs access to constructor.
     friend class Constants;
 
+  public:
+    Type type() const { return Type::PREF_66; }
+
   private:
     /** Direct access to this constructor is disallowed. */
     constexpr Pref66() : Modifier(0) {}
@@ -110,6 +113,9 @@ class PrefRexW : public Modifier {
     // Needs access to constructor.
     friend class Constants;
 
+  public:
+    Type type() const { return Type::PREF_REX_W; }
+
   private:
     /** Direct access to this constructor is disallowed. */
     constexpr PrefRexW() : Modifier(0) {}
@@ -119,6 +125,9 @@ class PrefRexW : public Modifier {
 class Far : public Modifier {
     // Needs access to constructor.
     friend class Constants;
+
+  public:
+    Type type() const { return Type::FAR; }
 
   private:
     /** Direct access to this constructor is disallowed. */

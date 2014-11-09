@@ -92,8 +92,8 @@ class Rb : public R {
 			return !(*this == rhs);
 		}
 
-    /** Returns the size of this operand */
-    uint16_t size() const { return 8; }
+    /** Returns the type of this operand */
+    virtual Type type() const { return Type::RB; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -129,8 +129,8 @@ class Rl : public Rb {
 			return !(*this == rhs);
 		}
 
-    /** Returns the size of this operand */
-    uint16_t size() const { return 8; }
+    /** Returns the type of this operand */
+    virtual Type type() const { return Type::RL; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -153,6 +153,9 @@ class Al : public Rl {
 			return val_ == 0;
 		}
 
+    /** Returns the type of this operand */
+    Type type() const { return Type::AL; }
+
   private:
     /** Direct access to this constructor is disallowed. */
     constexpr Al() : Rl(0) {}
@@ -168,6 +171,9 @@ class Cl : public Rl {
     constexpr bool check() {
 			return val_ == 1;
 		}
+
+    /** Returns the type of this operand */
+    Type type() const { return Type::CL; }
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -197,6 +203,9 @@ class Rh : public R {
     constexpr bool operator!=(const Rh& rhs) {
 			return !(*this == rhs);
 		}
+
+    /** Returns the type of this operand */
+    Type type() const { return Type::RH; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -235,8 +244,8 @@ class R16 : public R {
 			return !(*this == rhs);
 		}
 
-    /** Returns the size of this operand */
-    uint16_t size() const { return 16; }
+    /** Returns the type of this operand */
+    virtual Type type() const { return Type::R_16; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -259,6 +268,9 @@ class Ax : public R16 {
 			return val_ == 0;
 		}
 
+    /** Returns the type of this operand */
+    Type type() const { return Type::AX; }
+
   private:
     /** Direct access to this constructor is disallowed. */
     constexpr Ax() : R16(0) {}
@@ -274,6 +286,9 @@ class Dx : public R16 {
     constexpr bool check() {
 			return val_ == 2;
 		}
+
+    /** Returns the type of this operand */
+    Type type() const { return Type::DX; }
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -309,8 +324,8 @@ class R32 : public R {
 			return !(*this == rhs);
 		}
 
-    /** Returns the size of this operand */
-    uint16_t size() const { return 32; }
+    /** Returns the type of this operand */
+    virtual Type type() const { return Type::R_32; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -332,6 +347,9 @@ class Eax : public R32 {
     constexpr bool check() {
 			return val_ == 0;
 		}
+
+    /** Returns the type of this operand */
+    Type type() const { return Type::EAX; }
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -366,8 +384,8 @@ class R64 : public R {
 			return !(*this == rhs);
 		}
 
-    /** Returns the size of this operand */
-    uint16_t size() const { return 64; }
+    /** Returns the type of this operand */
+    virtual Type type() const { return Type::R_64; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -389,6 +407,11 @@ class Rax : public R64 {
     constexpr bool check() {
 			return val_ == 0;
 		}
+
+    /** Returns the type of this operand */
+    Type type() const { return Type::RAX; }
+
+
 
   private:
     /** Direct access to this constructor is disallowed. */

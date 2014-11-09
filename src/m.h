@@ -374,8 +374,8 @@ class M8 : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 8; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_8; }
 
 };
 
@@ -387,8 +387,8 @@ class M16 : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 16; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_16; }
 
 };
 
@@ -400,8 +400,8 @@ class M32 : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 32; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_32; }
 
 };
 
@@ -410,8 +410,8 @@ class M64 : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 64; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_64; }
 
 };
 
@@ -420,8 +420,8 @@ class M128 : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 128; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_128; }
 };
 
 /** A 32-byte operand in memory. This nomenclature is used only with AVX
@@ -431,8 +431,8 @@ class M256 : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 256; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_256; }
 };
 
 /** A word integer operand in memory. This symbol designates integers that are
@@ -443,8 +443,8 @@ class M16Int : public M {
 		using M::M;
 
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 16; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_16_INT; }
 
 };
 
@@ -455,8 +455,8 @@ class M32Int : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 32; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_32_INT; }
 
 
 };
@@ -468,8 +468,8 @@ class M64Int : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 64; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_64_INT; }
 
 
 };
@@ -482,8 +482,8 @@ class M32Fp : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 32; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_32_FP; }
 
 
 };
@@ -496,8 +496,8 @@ class M64Fp : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 64; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_64_FP; }
 };
 
 /** A double extended-precision floating-point operand in memory. This symbol
@@ -508,8 +508,8 @@ class M80Fp : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 80; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_80_FP; }
 };
 
 /** A double extended-precision binary-coded-decimaly operand in memory. */
@@ -517,8 +517,8 @@ class M80Bcd : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 80; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_80_BCD; }
 
 };
 
@@ -527,8 +527,8 @@ class M2Byte : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 2; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_2_BYTE; }
 };
 
 /** A 28 byte operand in memory. */
@@ -536,8 +536,8 @@ class M28Byte : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 28; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_28_BYTE; }
 
 };
 
@@ -546,8 +546,8 @@ class M108Byte : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 108; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_108_BYTE; }
 
 };
 
@@ -556,8 +556,8 @@ class M512Byte : public M {
   public:
 		using M::M;
 
-    /** Returns the bitwidth of this operand */
-    uint16_t size() const { return 512; }
+    /** Returns the type of this operand */
+    Type type() const { return Type::M_512_BYTE; }
 
 };
 
@@ -568,6 +568,11 @@ class M512Byte : public M {
 class FarPtr1616 : public M {
   public:
 		using M::M;
+
+    /** Returns the type of this operand */
+    Type type() const { return Type::FAR_PTR_16_16; }
+
+
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -577,6 +582,10 @@ class FarPtr1616 : public M {
 class FarPtr1632 : public M {
   public:
 		using M::M;
+
+    /** Returns the type of this operand */
+    Type type() const { return Type::FAR_PTR_16_32; }
+
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -586,6 +595,10 @@ class FarPtr1632 : public M {
 class FarPtr1664 : public M {
   public:
 		using M::M;
+
+    /** Returns the type of this operand */
+    Type type() const { return Type::FAR_PTR_16_64; }
+
 };
 
 } // namespace x64asm

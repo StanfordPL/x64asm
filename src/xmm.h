@@ -82,8 +82,8 @@ class Xmm : public Operand {
   		std::swap(val_, rhs.val_);
 		}
 
-    /** Returns the size of this operand */
-    uint16_t size() { return 128; }
+    /** Returns the type of this operand */
+    virtual Type type() const { return Type::XMM; }
 
 		/** Reads this xmm register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -105,6 +105,9 @@ class Xmm0 : public Xmm {
     constexpr bool check() {
 			return val_ == 0;
 		}
+
+    /** Returns the type of this operand */
+    Type type() const { return Type::XMM_0; }
 
   private:
     /** Direct access to this constructor is disallowed. */

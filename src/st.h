@@ -82,6 +82,9 @@ class St : public Operand {
 			std::swap(val_, rhs.val_);
 		}
 
+    /** Return the type of this operand */
+    virtual Type type() const { return Type::ST; }
+
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
 			is.setstate(std::ios::failbit);
@@ -114,6 +117,9 @@ class St0 : public St {
     constexpr bool check() {
 			return val_ == 0;
 		}
+
+    /** Return the type of this operand */
+    Type type() const { return Type::ST_0; }
 
   private:
     /** Direct access to this constructor is disallowed. */
