@@ -44,6 +44,9 @@ template <typename T>
 struct is_operand : public std::false_type { };
 
 template <>
+struct is_operand<Operand> : public std::true_type { };
+
+template <>
 struct is_operand<Hint> : public std::true_type { };
 
 template <>
