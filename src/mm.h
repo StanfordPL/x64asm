@@ -82,7 +82,7 @@ class Mm : public Operand {
 		}
 
     /** Returns the size of an MMX register. */
-    uint16_t size() static { return 64; }
+    uint16_t size() const { return 64; }
 
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
