@@ -93,7 +93,7 @@ class Rb : public R {
 		}
 
     /** Returns the size of this operand */
-    void uint16_t size() const { return 8; }
+    uint16_t size() const { return 8; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -130,7 +130,7 @@ class Rl : public Rb {
 		}
 
     /** Returns the size of this operand */
-    void uint16_t size() const { return 8; }
+    uint16_t size() const { return 8; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -236,7 +236,7 @@ class R16 : public R {
 		}
 
     /** Returns the size of this operand */
-    void uint16_t size() const { return 16; }
+    uint16_t size() const { return 16; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -310,7 +310,7 @@ class R32 : public R {
 		}
 
     /** Returns the size of this operand */
-    void uint16_t size() const { return 32; }
+    uint16_t size() const { return 32; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -367,7 +367,7 @@ class R64 : public R {
 		}
 
     /** Returns the size of this operand */
-    void uint16_t size() const { return 64; }
+    uint16_t size() const { return 64; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
