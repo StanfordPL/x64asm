@@ -120,29 +120,13 @@ class RegSet {
     static constexpr RegSet all_ymms() {
 			return {Mask::EMPTY, Mask::YMMS, Mask::EMPTY, Mask::EMPTY};
 		}
-    /** Creates a register set containing linux caller save registers. */
-    static constexpr RegSet linux_caller_save() {
-			return all_xmms() + 
-				Constants::rdi()  + Constants::rsi()  + Constants::rdx()  + 
-				Constants::rcx()  + Constants::r8()   + Constants::r9();
-		}
-    /** Creates a register set containing linux callee save registers. */
-    static constexpr RegSet linux_callee_save() {
-			return empty() + 
-				Constants::rbx()  + Constants::rbp()  + Constants::rsp()  + 
-				Constants::r12()  + Constants::r13()  + Constants::r14()  +
-				Constants::r15();
-		}
     /** Creates a register set containing registers that must be preserved
         by the callee. */
     static constexpr RegSet linux_call_preserved() {
 			return empty() + 
-				Constants::xmm0() + Constants::xmm1() + Constants::xmm2() +
-				Constants::xmm3() + Constants::xmm4() + Constants::xmm5() +
-				Constants::xmm6() + Constants::xmm7() +
-				Constants::rdi()  + Constants::rsi()  + Constants::rdx()  + 
-				Constants::rcx()  + Constants::r8()   + Constants::r9() +
-				Constants::rax();
+				Constants::rbx()  + Constants::rbp()  + Constants::rsp()  + 
+				Constants::r12()  + Constants::r13()  + Constants::r14()  +
+				Constants::r15();
 		}
     /** Creates a regster set containing registers that can be changed by 
         the callee at any time. */
@@ -155,9 +139,12 @@ class RegSet {
     /** Creates a RegSet containing registers used as parameters. */
     static constexpr RegSet linux_call_parameters() {
 			return empty() + 
-				Constants::rbx()  + Constants::rbp()  + Constants::rsp()  + 
-				Constants::r12()  + Constants::r13()  + Constants::r14()  +
-				Constants::r15();
+				Constants::xmm0() + Constants::xmm1() + Constants::xmm2() +
+				Constants::xmm3() + Constants::xmm4() + Constants::xmm5() +
+				Constants::xmm6() + Constants::xmm7() +
+				Constants::rdi()  + Constants::rsi()  + Constants::rdx()  + 
+				Constants::rcx()  + Constants::r8()   + Constants::r9() +
+				Constants::rax();
 		}
     /** Creates a RegSet containing registers returned by linux calls. */
     static constexpr RegSet linux_call_return() {
