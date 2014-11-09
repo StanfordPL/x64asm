@@ -92,6 +92,9 @@ class Rb : public R {
 			return !(*this == rhs);
 		}
 
+    /** Returns the size of this operand */
+    void uint16_t size() const { return 8; }
+
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
@@ -125,6 +128,9 @@ class Rl : public Rb {
     constexpr bool operator!=(const Rl& rhs) {
 			return !(*this == rhs);
 		}
+
+    /** Returns the size of this operand */
+    void uint16_t size() const { return 8; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -229,6 +235,9 @@ class R16 : public R {
 			return !(*this == rhs);
 		}
 
+    /** Returns the size of this operand */
+    void uint16_t size() const { return 16; }
+
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
@@ -300,6 +309,9 @@ class R32 : public R {
 			return !(*this == rhs);
 		}
 
+    /** Returns the size of this operand */
+    void uint16_t size() const { return 32; }
+
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
@@ -353,6 +365,9 @@ class R64 : public R {
     constexpr bool operator!=(const R64& rhs) {
 			return !(*this == rhs);
 		}
+
+    /** Returns the size of this operand */
+    void uint16_t size() const { return 64; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);

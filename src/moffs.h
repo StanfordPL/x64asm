@@ -153,6 +153,8 @@ class Moffs8 : public Moffs {
     constexpr Moffs8(const Sreg& seg, const Imm64& offset) : Moffs(seg, offset) {}
     /** Create a moffs using offset form. */
     constexpr Moffs8(const Imm64& offset) : Moffs(offset) {}
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 8; }
 };
 
 /** A simple memory variable (memory offset) of type word. */
@@ -162,6 +164,9 @@ class Moffs16 : public Moffs {
     constexpr Moffs16(const Sreg& seg, const Imm64& offset) : Moffs(seg, offset) {}
     /** Create a moffs using offset form. */
     constexpr Moffs16(const Imm64& offset) : Moffs(offset) {}
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 16; }
 };
 
 /** A simple memory variable (memory offset) of type doubleword. */
@@ -171,6 +176,9 @@ class Moffs32 : public Moffs {
     constexpr Moffs32(const Sreg& seg, const Imm64& offset) : Moffs(seg, offset) {}
     /** Create a moffs using offset form. */
     constexpr Moffs32(const Imm64& offset) : Moffs(offset) {}
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 32; }
 };
 
 /** A simple memory variable (memory offset) of type quadword. */
@@ -180,6 +188,9 @@ class Moffs64 : public Moffs {
     constexpr Moffs64(const Sreg& seg, const Imm64& offset) : Moffs(seg, offset) {}
     /** Create a moffs using offset form. */
     constexpr Moffs64(const Imm64& offset) : Moffs(offset) {}
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 64; }
 };
 
 } // namespace x64asm

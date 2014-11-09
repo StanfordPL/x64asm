@@ -66,6 +66,11 @@ class Operand {
 			std::swap(val2_, rhs.val2_);
 		}
 
+    /** Return the bitwidth of this operand */
+    virtual uint16_t size() const { 
+      return 0; 
+    }
+
   protected:
     /** Creates an operand with no underlying value. */
     constexpr Operand() : val_(0), val2_(0) {}

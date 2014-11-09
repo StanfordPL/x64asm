@@ -105,6 +105,9 @@ class Imm8 : public Imm {
     constexpr bool check() {
   		return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
 		}
+
+    /** Returns the bitwidth of this immediate */
+    uint16_t size() const { return 8; }
 };
 
 /** An immediate word value used for instructions whose operand-size attribute
@@ -119,6 +122,10 @@ class Imm16 : public Imm {
     constexpr bool check() {
   		return ((val_>>16) == 0x0ul) || ((val_>>16) == 0xfffffffffffful);
 		}
+
+    /** Returns the bitwidth of this immediate */
+    uint16_t size() const { return 16; }
+
 };
 
 /** An immediate doubleword value used for instructions whose operand-size
@@ -134,6 +141,10 @@ class Imm32 : public Imm {
     constexpr bool check() {
 			return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
 		}
+
+    /** Returns the bitwidth of this immediate */
+    uint32_t size() const { return 32; }
+
 };
 
 /** An immediate quadword value used for instructions whose operand-size
@@ -154,6 +165,9 @@ class Imm64 : public Imm {
     constexpr bool check() {
 			return true;
 		}
+
+    /** Returns the bitwidth of this immediate */
+    uint64_t size() const { return 64; }
 };
 
 /** The immediate constant value zero */
