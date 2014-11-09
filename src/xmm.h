@@ -82,6 +82,9 @@ class Xmm : public Operand {
   		std::swap(val_, rhs.val_);
 		}
 
+    /** Returns the size of this operand */
+    uint16_t size() { return 128; }
+
 		/** Reads this xmm register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
     /** Writes this xmm register to an ostream using at&t syntax. */

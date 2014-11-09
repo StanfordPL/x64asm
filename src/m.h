@@ -373,6 +373,10 @@ class M : public Operand {
 class M8 : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 8; }
+
 };
 
 /** A word operand in memory, usually expressed as a variable or array name,
@@ -382,6 +386,10 @@ class M8 : public M {
 class M16 : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 16; }
+
 };
 
 /** A doubleword operand in memory, usually expressed as a variable or array
@@ -391,18 +399,29 @@ class M16 : public M {
 class M32 : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 32; }
+
 };
 
 /** A memory quadword operand in memory. */
 class M64 : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 64; }
+
 };
 
 /** A memory double quadword operand in memory. */
 class M128 : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 128; }
 };
 
 /** A 32-byte operand in memory. This nomenclature is used only with AVX
@@ -411,6 +430,9 @@ class M128 : public M {
 class M256 : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 256; }
 };
 
 /** A word integer operand in memory. This symbol designates integers that are
@@ -419,6 +441,11 @@ class M256 : public M {
 class M16Int : public M {
   public:
 		using M::M;
+
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 16; }
+
 };
 
 /** A doubleword integer operand in memory. This symbol designates integers
@@ -427,6 +454,11 @@ class M16Int : public M {
 class M32Int : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 32; }
+
+
 };
 
 /** A quadword integer operand in memory. This symbol designates integers
@@ -435,6 +467,11 @@ class M32Int : public M {
 class M64Int : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 64; }
+
+
 };
 
 /** A single-precision floating-point operand in memory. This symbol designates
@@ -444,6 +481,11 @@ class M64Int : public M {
 class M32Fp : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 32; }
+
+
 };
 
 /** A double-precision floating-point operand in memory. This symbol designates
@@ -453,6 +495,9 @@ class M32Fp : public M {
 class M64Fp : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 64; }
 };
 
 /** A double extended-precision floating-point operand in memory. This symbol
@@ -462,36 +507,58 @@ class M64Fp : public M {
 class M80Fp : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 80; }
 };
 
 /** A double extended-precision binary-coded-decimaly operand in memory. */
 class M80Bcd : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 80; }
+
 };
 
 /** A 2 byte operand in memory. */
 class M2Byte : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 2; }
 };
 
 /** A 28 byte operand in memory. */
 class M28Byte : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 28; }
+
 };
 
 /** A 108 byte operand in memory. */
 class M108Byte : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 108; }
+
 };
 
 /** A 512 byte operand in memory. */
 class M512Byte : public M {
   public:
 		using M::M;
+
+    /** Returns the bitwidth of this operand */
+    uint16_t size() const { return 512; }
+
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
