@@ -143,7 +143,7 @@ class Imm32 : public Imm {
 		}
 
     /** Returns the bitwidth of this immediate */
-    uint32_t size() const { return 32; }
+    uint16_t size() const { return 32; }
 
 };
 
@@ -167,7 +167,7 @@ class Imm64 : public Imm {
 		}
 
     /** Returns the bitwidth of this immediate */
-    uint64_t size() const { return 64; }
+    uint16_t size() const { return 64; }
 };
 
 /** The immediate constant value zero */
