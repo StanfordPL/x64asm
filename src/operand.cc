@@ -1,46 +1,48 @@
 
 #include "src/operand.h"
 
-uint16_t Operand::size() {
+using namespace x64asm;
+
+uint16_t Operand::size() const {
 
   switch(type()) {
-    case IMM_8:
-    case ZERO:
-    case ONE:
-    case THREE:
-    case M_8:
-    case MOFFS_8:
-    case RL:
-    case RB:
-    case RH:
-    case AL:
-    case CL:
+    case Type::IMM_8:
+    case Type::ZERO:
+    case Type::ONE:
+    case Type::THREE:
+    case Type::M_8:
+    case Type::MOFFS_8:
+    case Type::RL:
+    case Type::RB:
+    case Type::RH:
+    case Type::AL:
+    case Type::CL:
       return 8;
 
-    case IMM_16:
-    case M_16:
-    case R_16:
-    case AX:
-    case DX:
+    case Type::IMM_16:
+    case Type::M_16:
+    case Type::R_16:
+    case Type::AX:
+    case Type::DX:
       return 16;
 
-    case IMM_32:
-    case M_32:
-    case R_32:
-    case EAX:
+    case Type::IMM_32:
+    case Type::M_32:
+    case Type::R_32:
+    case Type::EAX:
       return 32;
 
-    case IMM_64:
-    case M_64:
-    case R_64:
-    case RAX:
+    case Type::IMM_64:
+    case Type::M_64:
+    case Type::R_64:
+    case Type::RAX:
       return 64;
 
-    case XMM:
-    case XMM_0:
+    case Type::XMM:
+    case Type::XMM_0:
       return 128;
 
-    case YMM:
+    case Type::YMM:
       return 256;
 
     default:
@@ -48,21 +50,21 @@ uint16_t Operand::size() {
   }
 }
 
-bool Operand::is_gp_register() {
+bool Operand::is_gp_register() const {
 
   switch(type()) {
-    case RL:
-    case RH:
-    case RB:
-    case AL:
-    case CL:
-    case R_16:
-    case AX:
-    case DX:
-    case R_32:
-    case EAX:
-    case R_64:
-    case RAX:
+    case Type::RL:
+    case Type::RH:
+    case Type::RB:
+    case Type::AL:
+    case Type::CL:
+    case Type::R_16:
+    case Type::AX:
+    case Type::DX:
+    case Type::R_32:
+    case Type::EAX:
+    case Type::R_64:
+    case Type::RAX:
       return true;
 
     default:
@@ -70,23 +72,23 @@ bool Operand::is_gp_register() {
   }
 }
 
-bool Operand::is_sse_register() {
-  return type() == XMM || type() == YMM;
+bool Operand::is_sse_register() const {
+  return type() == Type::XMM || type() == Type::YMM;
 }
 
-bool Operand::is_typical_memory() {
+bool Operand::is_typical_memory() const {
 
   switch(type()) {
-    case M_8:
-    case M_16:
-    case M_32:
-    case M_64:
-    case M_128:
-    case M_256:
-    case MOFFS_8:
-    case MOFFS_16:
-    case MOFFS_32:
-    case MOFFS_64:
+    case Type::M_8:
+    case Type::M_16:
+    case Type::M_32:
+    case Type::M_64:
+    case Type::M_128:
+    case Type::M_256:
+    case Type::MOFFS_8:
+    case Type::MOFFS_16:
+    case Type::MOFFS_32:
+    case Type::MOFFS_64:
       return true;
 
     default:
@@ -95,16 +97,16 @@ bool Operand::is_typical_memory() {
 
 }
 
-bool Operand::is_immediate() {
+bool Operand::is_immediate() const {
 
   switch(type()) {
-    case IMM_8:
-    case IMM_16:
-    case IMM_32:
-    case IMM_64:
-    case ZERO:
-    case ONE:
-    case THREE:
+    case Type::IMM_8:
+    case Type::IMM_16:
+    case Type::IMM_32:
+    case Type::IMM_64:
+    case Type::ZERO:
+    case Type::ONE:
+    case Type::THREE:
       return true;
 
     default:

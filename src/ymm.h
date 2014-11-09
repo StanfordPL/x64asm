@@ -84,7 +84,7 @@ class Ymm : public Operand {
 		}
 
     /** Returns the type of this operand */
-    virtual Type type() const { return YMM; }
+    virtual Type type() const { return Type::YMM; }
 
 		/** Reads this ymm register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);

@@ -83,7 +83,7 @@ class St : public Operand {
 		}
 
     /** Return the type of this operand */
-    virtual Type type() const { return ST; }
+    virtual Type type() const { return Type::ST; }
 
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
@@ -119,7 +119,7 @@ class St0 : public St {
 		}
 
     /** Return the type of this operand */
-    Type type() const { return ST_0; }
+    Type type() const { return Type::ST_0; }
 
   private:
     /** Direct access to this constructor is disallowed. */

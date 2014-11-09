@@ -82,7 +82,7 @@ class Mm : public Operand {
 		}
 
     /** Returns the type of an MMX register. */
-    Type type() const { return MM; }
+    Type type() const { return Type::MM; }
 
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {

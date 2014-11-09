@@ -103,7 +103,7 @@ class Label : public Operand {
 		}
 
     /** Returns the type of this operand */
-    Type type() const { return LABEL; }
+    Type type() const { return Type::LABEL; }
 
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {

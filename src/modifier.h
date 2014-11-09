@@ -101,7 +101,7 @@ class Pref66 : public Modifier {
     friend class Constants;
 
   public:
-    Type type() { return PREF_66; }
+    Type type() const { return Type::PREF_66; }
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -114,7 +114,7 @@ class PrefRexW : public Modifier {
     friend class Constants;
 
   public:
-    Type type() { return PREF_REX_W; }
+    Type type() const { return Type::PREF_REX_W; }
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -127,7 +127,7 @@ class Far : public Modifier {
     friend class Constants;
 
   public:
-    Type type() { return FAR; }
+    Type type() const { return Type::FAR; }
 
   private:
     /** Direct access to this constructor is disallowed. */

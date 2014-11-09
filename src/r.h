@@ -93,7 +93,7 @@ class Rb : public R {
 		}
 
     /** Returns the type of this operand */
-    virtual Type type() const { return RB; }
+    virtual Type type() const { return Type::RB; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -130,7 +130,7 @@ class Rl : public Rb {
 		}
 
     /** Returns the type of this operand */
-    virtual Type type() const { return RL; }
+    virtual Type type() const { return Type::RL; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -154,7 +154,7 @@ class Al : public Rl {
 		}
 
     /** Returns the type of this operand */
-    Type type() const { return AL; }
+    Type type() const { return Type::AL; }
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -173,7 +173,7 @@ class Cl : public Rl {
 		}
 
     /** Returns the type of this operand */
-    Type type() const { return CL; }
+    Type type() const { return Type::CL; }
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -205,7 +205,7 @@ class Rh : public R {
 		}
 
     /** Returns the type of this operand */
-    Type type() const { return RH; }
+    Type type() const { return Type::RH; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -245,7 +245,7 @@ class R16 : public R {
 		}
 
     /** Returns the type of this operand */
-    virtual Type type() const { return R_16; }
+    virtual Type type() const { return Type::R_16; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -269,7 +269,7 @@ class Ax : public R16 {
 		}
 
     /** Returns the type of this operand */
-    Type type() const { return AX; }
+    Type type() const { return Type::AX; }
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -288,7 +288,7 @@ class Dx : public R16 {
 		}
 
     /** Returns the type of this operand */
-    Type type() const { return DX; }
+    Type type() const { return Type::DX; }
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -325,7 +325,7 @@ class R32 : public R {
 		}
 
     /** Returns the type of this operand */
-    virtual Type type() const { return R_32; }
+    virtual Type type() const { return Type::R_32; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -349,7 +349,7 @@ class Eax : public R32 {
 		}
 
     /** Returns the type of this operand */
-    Type type() const { return EAX; }
+    Type type() const { return Type::EAX; }
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -385,7 +385,7 @@ class R64 : public R {
 		}
 
     /** Returns the type of this operand */
-    virtual Type type() const { return R_64; }
+    virtual Type type() const { return Type::R_64; }
 
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -409,7 +409,7 @@ class Rax : public R64 {
 		}
 
     /** Returns the type of this operand */
-    Type type() const { return RAX; }
+    Type type() const { return Type::RAX; }
 
 
 

@@ -107,7 +107,7 @@ class Imm8 : public Imm {
 		}
 
     /** Returns the type of this immediate */
-    virtual Type type() const { return IMM_8; }
+    virtual Type type() const { return Type::IMM_8; }
 };
 
 /** An immediate word value used for instructions whose operand-size attribute
@@ -124,7 +124,7 @@ class Imm16 : public Imm {
 		}
 
     /** Returns the type of this immediate */
-    Type type() const { return IMM_16; }
+    Type type() const { return Type::IMM_16; }
 
 };
 
@@ -143,7 +143,7 @@ class Imm32 : public Imm {
 		}
 
     /** Returns the type of this immediate */
-    Type type() const { return IMM_32; }
+    Type type() const { return Type::IMM_32; }
 
 };
 
@@ -167,7 +167,7 @@ class Imm64 : public Imm {
 		}
 
     /** Returns the type of this immediate */
-    Type type() const { return IMM_64; }
+    Type type() const { return Type::IMM_64; }
 };
 
 /** The immediate constant value zero */
@@ -182,7 +182,7 @@ class Zero : public Imm8 {
 		}
 
     /** Returns the type of this immediate */
-    Type type() const { return ZERO; }
+    Type type() const { return Type::ZERO; }
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -201,7 +201,7 @@ class One : public Imm8 {
 		}
 
     /** Returns the type of this immediate */
-    Type type() const { return ONE; }
+    Type type() const { return Type::ONE; }
 
   private:
     /** Direct access to this construcotr is disallowed. */
@@ -220,7 +220,7 @@ class Three : public Imm8 {
 		}
 
     /** Returns the type of this immediate */
-    Type type() const { return THREE; }
+    Type type() const { return Type::THREE; }
 
   private:
     /** Direct access to this constructor is disallosed. */

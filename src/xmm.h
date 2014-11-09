@@ -83,7 +83,7 @@ class Xmm : public Operand {
 		}
 
     /** Returns the type of this operand */
-    virtual Type type() const { return XMM; }
+    virtual Type type() const { return Type::XMM; }
 
 		/** Reads this xmm register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -107,7 +107,7 @@ class Xmm0 : public Xmm {
 		}
 
     /** Returns the type of this operand */
-    Type type() const { return XMM_0; }
+    Type type() const { return Type::XMM_0; }
 
   private:
     /** Direct access to this constructor is disallowed. */

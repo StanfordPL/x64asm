@@ -88,7 +88,7 @@ class Sreg : public Operand {
 		}
 
     /** Returns the type of this operand */
-    virtual Type type() const { return SREG; }
+    virtual Type type() const { return Type::SREG; }
 
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
@@ -119,7 +119,7 @@ class Fs : public Sreg {
 		}
 
     /** Returns the type of this operand */
-    Type type() const { return FS; }
+    Type type() const { return Type::FS; }
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -138,7 +138,7 @@ class Gs : public Sreg {
 		}
 
     /** Returns the type of this operand */
-    Type type() const { return GS; }
+    Type type() const { return Type::GS; }
 
   private:
     /** Direct access to this constructor is disallowed. */

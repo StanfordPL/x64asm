@@ -154,7 +154,7 @@ class Moffs8 : public Moffs {
     /** Create a moffs using offset form. */
     constexpr Moffs8(const Imm64& offset) : Moffs(offset) {}
     /** Returns the type of this operand */
-    Type type() const { return MOFFS_8; }
+    Type type() const { return Type::MOFFS_8; }
 };
 
 /** A simple memory variable (memory offset) of type word. */
@@ -166,7 +166,7 @@ class Moffs16 : public Moffs {
     constexpr Moffs16(const Imm64& offset) : Moffs(offset) {}
 
     /** Returns the type of this operand */
-    Type type() const { return MOFFS_16; }
+    Type type() const { return Type::MOFFS_16; }
 };
 
 /** A simple memory variable (memory offset) of type doubleword. */
@@ -178,7 +178,7 @@ class Moffs32 : public Moffs {
     constexpr Moffs32(const Imm64& offset) : Moffs(offset) {}
 
     /** Returns the type of this operand */
-    Type type() const { return MOFFS_32; }
+    Type type() const { return Type::MOFFS_32; }
 };
 
 /** A simple memory variable (memory offset) of type quadword. */
@@ -190,7 +190,7 @@ class Moffs64 : public Moffs {
     constexpr Moffs64(const Imm64& offset) : Moffs(offset) {}
 
     /** Returns the type of this operand */
-    Type type() const { return MOFFS_64; }
+    Type type() const { return Type::MOFFS_64; }
 };
 
 } // namespace x64asm

@@ -104,7 +104,7 @@ class Rel8 : public Rel {
 		}
 
     /** Gets the type of this operand */
-    Type type() const { return REL_8; }
+    Type type() const { return Type::REL_8; }
 };
 
 /** A relative address within the same code segment as the instruction
@@ -122,7 +122,7 @@ class Rel32 : public Rel {
 		}
 
     /** Gets the type of this operand */
-    Type type() const { return REL_32; }
+    Type type() const { return Type::REL_32; }
 };
 
 } // namespace x64asm

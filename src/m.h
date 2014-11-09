@@ -375,7 +375,7 @@ class M8 : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_8; }
+    Type type() const { return Type::M_8; }
 
 };
 
@@ -388,7 +388,7 @@ class M16 : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_16; }
+    Type type() const { return Type::M_16; }
 
 };
 
@@ -401,7 +401,7 @@ class M32 : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_32; }
+    Type type() const { return Type::M_32; }
 
 };
 
@@ -411,7 +411,7 @@ class M64 : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_64; }
+    Type type() const { return Type::M_64; }
 
 };
 
@@ -421,7 +421,7 @@ class M128 : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_128; }
+    Type type() const { return Type::M_128; }
 };
 
 /** A 32-byte operand in memory. This nomenclature is used only with AVX
@@ -432,7 +432,7 @@ class M256 : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_256; }
+    Type type() const { return Type::M_256; }
 };
 
 /** A word integer operand in memory. This symbol designates integers that are
@@ -444,7 +444,7 @@ class M16Int : public M {
 
 
     /** Returns the type of this operand */
-    Type type() const { return M_16_INT; }
+    Type type() const { return Type::M_16_INT; }
 
 };
 
@@ -456,7 +456,7 @@ class M32Int : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_32_INT; }
+    Type type() const { return Type::M_32_INT; }
 
 
 };
@@ -469,7 +469,7 @@ class M64Int : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_64_INT; }
+    Type type() const { return Type::M_64_INT; }
 
 
 };
@@ -483,7 +483,7 @@ class M32Fp : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_32_FP; }
+    Type type() const { return Type::M_32_FP; }
 
 
 };
@@ -497,7 +497,7 @@ class M64Fp : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_64_FP; }
+    Type type() const { return Type::M_64_FP; }
 };
 
 /** A double extended-precision floating-point operand in memory. This symbol
@@ -509,7 +509,7 @@ class M80Fp : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_80_FP; }
+    Type type() const { return Type::M_80_FP; }
 };
 
 /** A double extended-precision binary-coded-decimaly operand in memory. */
@@ -518,7 +518,7 @@ class M80Bcd : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_80_BCD; }
+    Type type() const { return Type::M_80_BCD; }
 
 };
 
@@ -528,7 +528,7 @@ class M2Byte : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_2_BYTE; }
+    Type type() const { return Type::M_2_BYTE; }
 };
 
 /** A 28 byte operand in memory. */
@@ -537,7 +537,7 @@ class M28Byte : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_28_BYTE; }
+    Type type() const { return Type::M_28_BYTE; }
 
 };
 
@@ -547,7 +547,7 @@ class M108Byte : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_108_BYTE; }
+    Type type() const { return Type::M_108_BYTE; }
 
 };
 
@@ -557,7 +557,7 @@ class M512Byte : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return M_512_BYTE; }
+    Type type() const { return Type::M_512_BYTE; }
 
 };
 
@@ -570,7 +570,7 @@ class FarPtr1616 : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return FAR_PTR_16_16; }
+    Type type() const { return Type::FAR_PTR_16_16; }
 
 
 };
@@ -584,7 +584,7 @@ class FarPtr1632 : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return FAR_PTR_16_32; }
+    Type type() const { return Type::FAR_PTR_16_32; }
 
 };
 
@@ -597,7 +597,7 @@ class FarPtr1664 : public M {
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return FAR_PTR_16_64; }
+    Type type() const { return Type::FAR_PTR_16_64; }
 
 };
 
