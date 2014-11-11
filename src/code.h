@@ -42,16 +42,20 @@ class Code : public std::vector<Instruction> {
     /** Returns the set of registers this code must read. */
     RegSet must_read_set() const {
 			auto rs = RegSet::empty();
+			auto mod = RegSet::empty();
 			for (const auto& instr : *this) {
-				rs |= instr.must_read_set();
+				rs |= (instr.must_read_set() - mod);
+				mod |= (instr.maybe_write_set() | instr.maybe_undef_set());
 			}
 			return rs;
 		}
     /** Returns the set of registers this code might read. */
     RegSet maybe_read_set() const {
 			auto rs = RegSet::empty();
+			auto mod = RegSet::empty();
 			for (const auto& instr : *this) {
-				rs |= instr.maybe_read_set();
+				rs |= (instr.maybe_read_set() - mod);
+				mod |= (instr.maybe_write_set() | instr.maybe_undef_set());
 			}
 			return rs;
 		}
@@ -60,6 +64,7 @@ class Code : public std::vector<Instruction> {
 			auto rs = RegSet::empty();
 			for (const auto& instr : *this) {
 				rs |= instr.must_write_set();
+				rs -= instr.maybe_undef_set();
 			}
 			return rs;
 		}
@@ -68,6 +73,7 @@ class Code : public std::vector<Instruction> {
 			auto rs = RegSet::empty();
 			for (const auto& instr : *this) {
 				rs |= instr.maybe_write_set();
+				rs -= instr.maybe_undef_set();
 			}
 			return rs;
 		}
@@ -76,6 +82,7 @@ class Code : public std::vector<Instruction> {
 			auto rs = RegSet::empty();
 			for (const auto& instr : *this) {
 				rs |= instr.must_undef_set();
+				rs -= instr.maybe_write_set();
 			}
 			return rs;
 		}
@@ -84,6 +91,7 @@ class Code : public std::vector<Instruction> {
 			auto rs = RegSet::empty();
 			for (const auto& instr : *this) {
 				rs |= instr.maybe_undef_set();
+				rs -= instr.maybe_write_set();
 			}
 			return rs;
 		}
