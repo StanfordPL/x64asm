@@ -42,11 +42,11 @@ BIN=bin/x64asm
 all: release
 
 debug:
-	make -C . erthing FLEXOPS="-d" BISONOPS="-t --report=state" OPT="-g"
+	$(MAKE) -C . erthing FLEXOPS="-d" BISONOPS="-t --report=state" OPT="-g"
 release:
-	make -C . erthing OPT="-DNDEBUG -O3"
+	$(MAKE) -C . erthing OPT="-DNDEBUG -O3"
 profile:
-	make -C . erthing OPT="-DNDEBUG -O3 -pg"
+	$(MAKE) -C . erthing OPT="-DNDEBUG -O3 -pg"
 
 erthing: $(LIB) $(BIN)
 
