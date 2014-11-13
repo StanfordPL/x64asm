@@ -208,8 +208,13 @@ R32 base32(const Operand* o) {
 }
 
 R64 base64(const Operand* o) { 
+  std::cout << "in base64 w/ o = " << hex << o << std::endl;
+  std::cout << "((uint64_t*)o)[0] = " << hex << ((uint64_t*)o)[0] << std::endl;
+  std::cout << "((uint64_t*)o)[1] = " << hex << ((uint64_t*)o)[1] << std::endl;
 	const auto ret = *(static_cast<const R64*>(o));
+  std::cout << "deleting..." << std::endl;
 	delete o;
+  std::cout << "deleted." << std::endl;
 	return ret;
 }
 
