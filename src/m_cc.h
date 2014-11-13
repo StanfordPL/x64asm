@@ -15,13 +15,11 @@ limitations under the License.
 */
 
 #include "src/alias.h"
-#include "src/m.h"
-
-using namespace std;
 
 namespace x64asm {
 
-bool M::check() const {
+template <class T>
+bool M<T>::check() const {
   // Check seg
   if (contains_seg() && !get_seg().check()) {
     return false;
@@ -60,7 +58,8 @@ bool M::check() const {
   return true;
 }
 
-ostream& M::write_att(ostream& os) const {
+template <class T>
+std::ostream& M<T>::write_att(std::ostream& os) const {
   if (contains_seg()) {
     get_seg().write_att(os);
     os << ":";
@@ -69,9 +68,9 @@ ostream& M::write_att(ostream& os) const {
 		const auto d = (int32_t)(get_disp() & 0x00000000ffffffff);
 		const auto fmt = os.flags();
 		if (d < 0) {
-			os << "-0x" << noshowbase << hex << -d;
+			os << "-0x" << std::noshowbase << std::hex << -d;
 		} else {
-			os << "0x" << noshowbase << hex << d;
+			os << "0x" << std::noshowbase << std::hex << d;
 		}
 		os.flags(fmt);
   }

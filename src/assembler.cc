@@ -40,7 +40,8 @@ void Assembler::assemble(const Instruction& instr) {
   }
 }
 
-void Assembler::mod_rm_sib(const M& rm, const Operand& r) {
+template <typename T>
+void Assembler::mod_rm_sib(const M<T>& rm, const Operand& r) {
   // Every path we take needs these bits for the mod/rm byte
   const auto rrr = (r.val_ << 3) & 0x38;
 

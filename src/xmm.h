@@ -31,25 +31,6 @@ class Xmm : public Operand {
   friend class Constants;
 
   public:
-    /** Copy constructor. */
-    Xmm(const Xmm& rhs) : Operand(0,0) {
-			val_ = rhs.val_;
-		}
-    /** Move constructor. */
-    Xmm(Xmm&& rhs) {
-			val_ = rhs.val_;
-		}
-    /** Copy assignment operator. */
-    Xmm& operator=(const Xmm& rhs) {
-			Xmm(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Xmm& operator=(Xmm&& rhs) {
-			Xmm(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Returns true if this xmm register is well-formed. */
     constexpr bool check() {
   		return val_ < 16;
@@ -82,9 +63,6 @@ class Xmm : public Operand {
   		std::swap(val_, rhs.val_);
 		}
 
-    /** Returns the type of this operand */
-    virtual Type type() const { return Type::XMM; }
-
 		/** Reads this xmm register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
     /** Writes this xmm register to an ostream using at&t syntax. */
@@ -92,7 +70,8 @@ class Xmm : public Operand {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Xmm(uint64_t val) : Operand(val) {}
+    constexpr Xmm(uint64_t val) : Operand(Type::XMM, val) {}
+    constexpr Xmm(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 /** The XMM register XMM0. */
@@ -106,12 +85,9 @@ class Xmm0 : public Xmm {
 			return val_ == 0;
 		}
 
-    /** Returns the type of this operand */
-    Type type() const { return Type::XMM_0; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Xmm0() : Xmm(0) {}
+    constexpr Xmm0() : Xmm(Type::XMM_0, 0) {}
 };
 
 } // namespace x64asm
@@ -125,11 +101,6 @@ struct hash<x64asm::Xmm> {
 		return x.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Xmm& lhs, x64asm::Xmm& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Xmm& x) {

@@ -30,25 +30,6 @@ class Mm : public Operand {
     friend class Constants;
 
   public:
-    /** Copy constructor. */
-    Mm(const Mm& rhs) : Operand(0,0) {
-			val_ = rhs.val_;
-		}
-    /** Move constructor. */
-    Mm(Mm&& rhs) {
-			val_ = rhs.val_;
-		}
-    /** Copy assignment operator. */
-		Mm& operator=(const Mm& rhs) {
-			Mm(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Mm& operator=(Mm&& rhs) {
-			Mm(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Returns true if this xmm register is well-formed. */
     constexpr bool check() {
 			return val_ < 8;
@@ -76,13 +57,6 @@ class Mm : public Operand {
     constexpr size_t hash() {
 			return val_;
 		}
-    /** STL-compliant swap. */
-    void swap(Mm& rhs) {
-  		std::swap(val_, rhs.val_);
-		}
-
-    /** Returns the type of an MMX register. */
-    Type type() const { return Type::MM; }
 
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
@@ -97,7 +71,7 @@ class Mm : public Operand {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Mm(uint64_t val) : Operand(val) {}
+    constexpr Mm(uint64_t val) : Operand(Type::MM, val) {}
 };
 
 } // namespace x64asm
@@ -111,11 +85,6 @@ struct hash<x64asm::Mm> {
 		return m.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Mm& lhs, x64asm::Mm& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Mm& m) {

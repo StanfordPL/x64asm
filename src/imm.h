@@ -27,24 +27,6 @@ namespace x64asm {
 /** An immediate value. */
 class Imm : public Operand {
   public:
-    /** Copy constructor. */
-    Imm(const Imm& rhs) : Operand(0,0) {
-			val_ = rhs.val_;
-		}
-    /** Move constructor. */
-    Imm(Imm&& rhs) {
-			val_ = rhs.val_;
-		}
-    /** Copy assignment operator. */
-    Imm& operator=(const Imm& rhs) {
-			Imm(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Imm& operator=(Imm&& rhs) {
-			Imm(std::move(rhs)).swap(*this);
-		}
-
     /** Comparison based on immediate value. */
     constexpr bool operator==(const Imm& rhs) {
 			return val_ == rhs.val_;
@@ -67,10 +49,6 @@ class Imm : public Operand {
     constexpr size_t hash() {
 			return val_;
 		}
-    /** STL-compliant swap. */
-    void swap(Imm& rhs) {
-			std::swap(val_, rhs.val_);
-		}
 
 		/** @todo This method is undefined */
 		std::istream& read_att(std::istream& is) {
@@ -87,7 +65,7 @@ class Imm : public Operand {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Imm(uint64_t val) : Operand {val} { }
+    constexpr Imm(Type t, uint64_t value) : Operand(t, value) {}
 };
 
 /** An immediate byte value. The imm8 symbol is a signed number between –128
@@ -99,15 +77,13 @@ class Imm : public Operand {
 class Imm8 : public Imm {
   public:
     /** Creates a 8-bit immediate. */
-    constexpr Imm8(uint8_t i) : Imm(i) {}
+    constexpr Imm8(uint8_t i) : Imm(Type::IMM_8, i) {}
 
     /** Checks that this immediate value fits in 8 bits. */
     constexpr bool check() {
   		return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
 		}
 
-    /** Returns the type of this immediate */
-    virtual Type type() const { return Type::IMM_8; }
 };
 
 /** An immediate word value used for instructions whose operand-size attribute
@@ -116,15 +92,13 @@ class Imm8 : public Imm {
 class Imm16 : public Imm {
   public:
     /** Creates a 16-bit immediate. */
-    constexpr Imm16(uint16_t i) : Imm(i) {}
+    constexpr Imm16(uint16_t i) : Imm(Type::IMM_16, i) {}
 
     /** Checks that this immediate value fits in 16 bits. */
     constexpr bool check() {
   		return ((val_>>16) == 0x0ul) || ((val_>>16) == 0xfffffffffffful);
 		}
 
-    /** Returns the type of this immediate */
-    Type type() const { return Type::IMM_16; }
 
 };
 
@@ -135,15 +109,13 @@ class Imm16 : public Imm {
 class Imm32 : public Imm {
   public:
     /** Creates a 32-bit immediate. */
-    constexpr Imm32(uint32_t i) : Imm(i) {}
+    constexpr Imm32(uint32_t i) : Imm(Type::IMM_32, i) {}
 
     /** Check that this immediate value fits in 32 bits. */
     constexpr bool check() {
 			return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
 		}
 
-    /** Returns the type of this immediate */
-    Type type() const { return Type::IMM_32; }
 
 };
 
@@ -154,20 +126,18 @@ class Imm32 : public Imm {
 class Imm64 : public Imm {
   public:
     /** Creates a 64-bit immediate. */
-    constexpr Imm64(uint64_t i) : Imm(i) {}
+    constexpr Imm64(uint64_t i) : Imm(Type::IMM_64, i) {}
     /** Creates a 64-bit immediate from a 64-bit pointer. */
     template <typename T>
-    constexpr Imm64(T* t) : Imm((uint64_t)t) {}
+    constexpr Imm64(T* t) : Imm(Type::IMM_64, (uint64_t)t) {}
     /** Creates a 64-bit immediate from the address of a function. */
-    Imm64(const Function& f) : Imm((uint64_t)f.data()) {}
+    Imm64(const Function& f) : Imm(Type::IMM_64, (uint64_t)f.data()) {}
 
     /** Checks that this immediate value fits in 64-bits. */
     constexpr bool check() {
 			return true;
 		}
 
-    /** Returns the type of this immediate */
-    Type type() const { return Type::IMM_64; }
 };
 
 /** The immediate constant value zero */
@@ -181,8 +151,6 @@ class Zero : public Imm8 {
 			return val_ == 0;
 		}
 
-    /** Returns the type of this immediate */
-    Type type() const { return Type::ZERO; }
 
   private:
     /** Direct access to this constructor is disallowed. */
@@ -200,8 +168,6 @@ class One : public Imm8 {
 			return val_ == 1;
 		}
 
-    /** Returns the type of this immediate */
-    Type type() const { return Type::ONE; }
 
   private:
     /** Direct access to this construcotr is disallowed. */
@@ -219,8 +185,6 @@ class Three : public Imm8 {
 			return val_ == 3;
 		}
 
-    /** Returns the type of this immediate */
-    Type type() const { return Type::THREE; }
 
   private:
     /** Direct access to this constructor is disallosed. */
@@ -238,11 +202,6 @@ struct hash<x64asm::Imm> {
 		return i.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Imm& lhs, x64asm::Imm& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Imm& i) {

@@ -27,25 +27,6 @@ namespace x64asm {
 /** A general-purpose register. */
 class R : public Operand {
   public:
-    /** Copy constructor. */
-    R(const R& rhs) : Operand(0,0) {
-			val_ = rhs.val_;
-		}
-    /** Move constructor. */
-    R(R&& rhs) {
-			val_ = rhs.val_;
-		}
-    /** Copy assignment operator. */
-    R& operator=(const R& rhs) {
-			R(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    R& operator=(R&& rhs) {
-			R(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Conversion based on underlying value. */
     constexpr operator uint64_t() {
 			return val_;
@@ -55,14 +36,10 @@ class R : public Operand {
     constexpr size_t hash() {
 			return val_;
 		}
-    /** STL-compliant swap. */
-    void swap(R& rhs) {
-			std::swap(val_, rhs.val_);
-		}
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr R(uint64_t val) : Operand(val) {}
+    constexpr R(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 
@@ -92,9 +69,6 @@ class Rb : public R {
 			return !(*this == rhs);
 		}
 
-    /** Returns the type of this operand */
-    virtual Type type() const { return Type::RB; }
-
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
@@ -102,7 +76,8 @@ class Rb : public R {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Rb(uint64_t val) : R(val) {}
+    constexpr Rb(uint64_t val) : R(Type::RB, val) {}
+    constexpr Rb(Type t, uint64_t val) : R(t, val) {}
 };
 
 /** One of the byte general-purpose registers: AL, CL, DL, BL. */
@@ -129,9 +104,6 @@ class Rl : public Rb {
 			return !(*this == rhs);
 		}
 
-    /** Returns the type of this operand */
-    virtual Type type() const { return Type::RL; }
-
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
@@ -139,7 +111,8 @@ class Rl : public Rb {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Rl(uint64_t val) : Rb(val) {}
+    constexpr Rl(uint64_t val) : Rb(Type::RL, val) {}
+    constexpr Rl(Type t, uint64_t val) : Rb(t, val) {}
 };
 
 /** The byte general-purpose register AL. */
@@ -153,12 +126,9 @@ class Al : public Rl {
 			return val_ == 0;
 		}
 
-    /** Returns the type of this operand */
-    Type type() const { return Type::AL; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Al() : Rl(0) {}
+    constexpr Al() : Rl(Type::AL, 0) {}
 };
 
 /** The byte general-purpose register CL. */
@@ -172,12 +142,9 @@ class Cl : public Rl {
 			return val_ == 1;
 		}
 
-    /** Returns the type of this operand */
-    Type type() const { return Type::CL; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Cl() : Rl(1) {}
+    constexpr Cl() : Rl(Type::CL, 1) {}
 };
 
 /** One of the byte general-purpose registers: AH, CH, DH, BH. */
@@ -204,9 +171,6 @@ class Rh : public R {
 			return !(*this == rhs);
 		}
 
-    /** Returns the type of this operand */
-    Type type() const { return Type::RH; }
-
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
@@ -214,7 +178,7 @@ class Rh : public R {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Rh(uint64_t val) : R(val) {}
+    constexpr Rh(uint64_t val) : R(Type::RH, val) {}
 };
 
 /** One of the word general-purpose registers: AX, CX, DX, BX, SP, BP, SI, DI;
@@ -244,9 +208,6 @@ class R16 : public R {
 			return !(*this == rhs);
 		}
 
-    /** Returns the type of this operand */
-    virtual Type type() const { return Type::R_16; }
-
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
@@ -254,7 +215,8 @@ class R16 : public R {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr R16(uint64_t val) : R(val) {}
+    constexpr R16(uint64_t val) : R(Type::R_16, val) {}
+    constexpr R16(Type t, uint64_t val) : R(t, val) {}
 };
 
 /** The word general-purpose register AX. */
@@ -268,12 +230,9 @@ class Ax : public R16 {
 			return val_ == 0;
 		}
 
-    /** Returns the type of this operand */
-    Type type() const { return Type::AX; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Ax() : R16(0) {}
+    constexpr Ax() : R16(Type::AX, 0) {}
 };
 
 /** The word general-purpose register DX. */
@@ -287,12 +246,9 @@ class Dx : public R16 {
 			return val_ == 2;
 		}
 
-    /** Returns the type of this operand */
-    Type type() const { return Type::DX; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Dx() : R16(2) {}
+    constexpr Dx() : R16(Type::DX, 2) {}
 };
 
 /** One of the doubleword general-purpose registers: EAX, ECX, EDX, EBX, ESP,
@@ -303,6 +259,7 @@ class R32 : public R {
   // Needs access to constructor.
   friend class Constants;
   // Needs access to consturctor.
+  template <class T>
   friend class M;
 
   public:
@@ -324,9 +281,6 @@ class R32 : public R {
 			return !(*this == rhs);
 		}
 
-    /** Returns the type of this operand */
-    virtual Type type() const { return Type::R_32; }
-
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
@@ -334,7 +288,8 @@ class R32 : public R {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr R32(uint64_t val) : R(val) {}
+    constexpr R32(uint64_t val) : R(Type::R_32, val) {}
+    constexpr R32(Type t, uint64_t val) : R(t, val) {}
 };
 
 /** The doubleword general-purpose register EAX. */
@@ -348,12 +303,9 @@ class Eax : public R32 {
 			return val_ == 0;
 		}
 
-    /** Returns the type of this operand */
-    Type type() const { return Type::EAX; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Eax() : R32(0) {}
+    constexpr Eax() : R32(Type::EAX, 0) {}
 };
 
 /** One of the quadword general-purpose registers: RAX, RBX, RCX, RDX, RDI, RSI,
@@ -363,6 +315,7 @@ class R64 : public R {
   // Needs access to constructor.
   friend class Constants;
   // Needs access to consturctor.
+  template <class T>
   friend class M;
 
   public:
@@ -384,9 +337,6 @@ class R64 : public R {
 			return !(*this == rhs);
 		}
 
-    /** Returns the type of this operand */
-    virtual Type type() const { return Type::R_64; }
-
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */
@@ -394,7 +344,8 @@ class R64 : public R {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr R64(uint64_t val) : R(val) {}
+    constexpr R64(uint64_t val) : R(Type::R_64, val) {}
+    constexpr R64(Type t, uint64_t val) : R(t, val) {}
 };
 
 /** The quadword general-purpose register RAX. */
@@ -408,14 +359,9 @@ class Rax : public R64 {
 			return val_ == 0;
 		}
 
-    /** Returns the type of this operand */
-    Type type() const { return Type::RAX; }
-
-
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Rax() : R64(0) {}
+    constexpr Rax() : R64(Type::RAX, 0) {}
 };
 
 } // namespace x64asm
@@ -429,11 +375,6 @@ struct hash<x64asm::R> {
 		return r.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::R& lhs, x64asm::R& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Rl& r) {

@@ -31,25 +31,6 @@ class Hint : public Operand {
     friend class Constants;
 
   public:
-    /** Copy constructor. */
-    Hint(const Hint& rhs) : Operand(0,0) {
-			val_ = rhs.val_;
-		}
-    /** Move constructor. */
-    Hint(Hint&& rhs) {
-			val_ = rhs.val_;
-		}
-    /** Copy assignment operator. */
-    Hint& operator=(const Hint& rhs) {
-			Hint(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Hint& operator=(Hint&& rhs) {
-			Hint(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Checks that this hint is well-formed. */
     constexpr bool check() {
 			return val_ < 2;
@@ -77,13 +58,6 @@ class Hint : public Operand {
     constexpr size_t hash() {
 			return val_;
 		}
-    /** STL-compliant swap. */
-    void swap(Hint& rhs) {
-			std::swap(val_, rhs.val_);
-		}
-
-    /** Returns the type of this operand */
-    Type type() const { return Type::HINT; }
 
     /** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
@@ -97,7 +71,7 @@ class Hint : public Operand {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Hint(uint64_t val) : Operand(val) {}
+    constexpr Hint(uint64_t val) : Operand(Type::HINT, val) {}
 };
 
 } // namespace x64asm
@@ -111,11 +85,6 @@ struct hash<x64asm::Hint> {
 		return h.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Hint& lhs, x64asm::Hint& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator<<(istream& is, x64asm::Hint& h) {

@@ -5,6 +5,7 @@ using namespace x64asm;
 
 uint16_t Operand::size() const {
 
+  uint16_t ret = 0;
   switch(type()) {
     case Type::IMM_8:
     case Type::ZERO:
@@ -17,41 +18,51 @@ uint16_t Operand::size() const {
     case Type::RH:
     case Type::AL:
     case Type::CL:
-      return 8;
+      ret = 8;
+      break;
 
     case Type::IMM_16:
     case Type::M_16:
     case Type::R_16:
     case Type::AX:
     case Type::DX:
-      return 16;
+      ret = 16;
+      break;
 
     case Type::IMM_32:
     case Type::M_32:
     case Type::R_32:
     case Type::EAX:
-      return 32;
+      ret = 32;
+      break;
 
     case Type::IMM_64:
     case Type::M_64:
     case Type::R_64:
     case Type::RAX:
-      return 64;
+      ret = 64;
+      break;
 
     case Type::XMM:
     case Type::XMM_0:
-      return 128;
+      ret = 128;
+      break;
 
     case Type::YMM:
-      return 256;
+      ret = 256;
+      break;
 
     default:
-      return 0;
+      ret = 0;
+      break;
   }
+
+  return ret;
 }
 
 bool Operand::is_gp_register() const {
 
+  bool b = false;
   switch(type()) {
     case Type::RL:
     case Type::RH:
@@ -65,11 +76,15 @@ bool Operand::is_gp_register() const {
     case Type::EAX:
     case Type::R_64:
     case Type::RAX:
-      return true;
+      b = true;
+      break;
 
     default:
-      return false;
+      b = false;
+      break;
   }
+
+  return b;
 }
 
 bool Operand::is_sse_register() const {
@@ -78,6 +93,7 @@ bool Operand::is_sse_register() const {
 
 bool Operand::is_typical_memory() const {
 
+  bool b = false;
   switch(type()) {
     case Type::M_8:
     case Type::M_16:
@@ -89,16 +105,20 @@ bool Operand::is_typical_memory() const {
     case Type::MOFFS_16:
     case Type::MOFFS_32:
     case Type::MOFFS_64:
-      return true;
+      b = true;
+      break;
 
     default:
-      return false;
+      b = false;
+      break;
   }
 
+  return b;
 }
 
 bool Operand::is_immediate() const {
 
+  bool b = false;
   switch(type()) {
     case Type::IMM_8:
     case Type::IMM_16:
@@ -107,11 +127,15 @@ bool Operand::is_immediate() const {
     case Type::ZERO:
     case Type::ONE:
     case Type::THREE:
-      return true;
+      b = true;
+      break;
 
     default:
-      return false;
+      b = false;
+      break;
   }
+
+  return b;
 }
 
 

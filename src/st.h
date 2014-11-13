@@ -31,25 +31,6 @@ class St : public Operand {
     friend class Constants;
 
   public:
-    /** Copy constructor. */
-    St(const St& rhs) : Operand(0,0) {
-			val_ = rhs.val_;
-		}
-    /** Move constructor. */
-    St(St&& rhs) {
-			val_ = rhs.val_;
-		}
-    /** Copy assignment operator. */
-    St& operator=(const St& rhs) {
-			St(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    St& operator=(St&& rhs) {
-			St(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Returns true if this stack register is well-formed. */
     constexpr bool check() {
 			return val_ < 8;
@@ -77,13 +58,6 @@ class St : public Operand {
     constexpr size_t hash() {
 			return val_;
 		}
-    /** STL-compliant swap. */
-    void swap(St& rhs) {
-			std::swap(val_, rhs.val_);
-		}
-
-    /** Return the type of this operand */
-    virtual Type type() const { return Type::ST; }
 
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
@@ -104,7 +78,8 @@ class St : public Operand {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr St(uint64_t val) : Operand(val) {}
+    constexpr St(uint64_t val) : Operand(Type::ST, val) {}
+    constexpr St(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 /** The top element of the FPU register stack. */
@@ -118,12 +93,9 @@ class St0 : public St {
 			return val_ == 0;
 		}
 
-    /** Return the type of this operand */
-    Type type() const { return Type::ST_0; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr St0() : St(0) {}
+    constexpr St0() : St(Type::ST_0, 0) {}
 };
 
 } // namespace x64asm
@@ -137,11 +109,6 @@ struct hash<x64asm::St> {
 		return s.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::St& lhs, x64asm::St& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::St& s) {

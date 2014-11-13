@@ -131,7 +131,8 @@ class Assembler {
     }
 
     /** Emits a group 2 non-hint prefix byte. */
-    void pref_group2(const M& m) {
+    template <typename T>
+    void pref_group2(const M<T>& m) {
       static uint8_t pref[6] {0x26, 0x2e, 0x36, 0x3e, 0x64, 0x65};
       if (m.contains_seg()) {
         fxn_->emit_byte(pref[m.get_seg().val_]);
@@ -149,7 +150,8 @@ class Assembler {
     }
 
     /** Emits a group 4 prefix byte. */
-    void pref_group4(const M& m) {
+    template <typename T>
+    void pref_group4(const M<T>& m) {
       if (m.addr_or()) {
         fxn_->emit_byte(0x67);
       }
@@ -253,14 +255,16 @@ class Assembler {
     /** Conditionally emits a rex prefix.
         See Figure 2.4: Intel Manual Vol 2A 2-8.
     */
-    void rex(const M& rm, const Operand& r, uint8_t val) {
+    template <typename T>
+    void rex(const M<T>& rm, const Operand& r, uint8_t val) {
       rex(rm, val | ((r.val_ >> 1) & 0x4));
     }
 
     /** Conditionally emits a rex prefix.
         See Figure 2.6: Intel Manual Vol 2A 2.9.
     */
-    void rex(const M& rm, uint8_t val) {
+    template <typename T>
+    void rex(const M<T>& rm, uint8_t val) {
       if (rm.contains_base()) {
         val |= (rm.get_base().val_ >> 3);
       }
@@ -290,7 +294,8 @@ class Assembler {
     }
 
     /** Emits a mod/rm sib byte pair. */
-    void mod_rm_sib(const M& rm, const Operand& r);
+    template <typename T>
+    void mod_rm_sib(const M<T>& rm, const Operand& r);
 
     /** Emits a mod/rm sib byte pair. */
     void mod_rm_sib(const Operand& rm, const Operand& r) {
@@ -313,8 +318,9 @@ class Assembler {
     }
 
     // Emits a vex prefix. See Figure 2-9: Intel Manual Vol 2A 2-14. */
+    template <typename T>
     void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
-             const Operand& vvvv, const M& rm,
+             const Operand& vvvv, const M<T>& rm,
              const Operand& r) {
       uint8_t r_bit = (~r.val_ << 4) & 0x80;
       uint8_t x_bit = rm.contains_index() ?

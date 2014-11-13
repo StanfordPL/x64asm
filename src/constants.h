@@ -272,10 +272,10 @@ class Constants {
     }
 
     static constexpr Hint taken() {
-      return {0};
+      return Hint(0);
     }
     static constexpr Hint not_taken() {
-      return {1};
+      return Hint(1);
     }
 
     static constexpr Zero zero() {
@@ -289,28 +289,28 @@ class Constants {
     }
 
     static constexpr Mm mm0() {
-      return {0};
+      return Mm(0);
     }
     static constexpr Mm mm1() {
-      return {1};
+      return Mm(1);
     }
     static constexpr Mm mm2() {
-      return {2};
+      return Mm(2);
     }
     static constexpr Mm mm3() {
-      return {3};
+      return Mm(3);
     }
     static constexpr Mm mm4() {
-      return {4};
+      return Mm(4);
     }
     static constexpr Mm mm5() {
-      return {5};
+      return Mm(5);
     }
     static constexpr Mm mm6() {
-      return {6};
+      return Mm(6);
     }
     static constexpr Mm mm7() {
-      return {7};
+      return Mm(7);
     }
 
     static constexpr Pref66 pref_66() {
@@ -330,220 +330,220 @@ class Constants {
       return Cl();
     }
     static constexpr Rl dl() {
-      return {2};
+      return Rl(2);
     }
     static constexpr Rl bl() {
-      return {3};
+      return Rl(3);
     }
 
     static constexpr Rh ah() {
-      return {4};
+      return Rh(4);
     }
     static constexpr Rh ch() {
-      return {5};
+      return Rh(5);
     }
     static constexpr Rh dh() {
-      return {6};
+      return Rh(6);
     }
     static constexpr Rh bh() {
-      return {7};
+      return Rh(7);
     }
 
     static constexpr Rb spl()  {
-      return {4};
+      return Rb(4);
     }
     static constexpr Rb bpl()  {
-      return {5};
+      return Rb(5);
     }
     static constexpr Rb sil()  {
-      return {6};
+      return Rb(6);
     }
     static constexpr Rb dil()  {
-      return {7};
+      return Rb(7);
     }
     static constexpr Rb r8b()  {
-      return {8};
+      return Rb(8);
     }
     static constexpr Rb r9b()  {
-      return {9};
+      return Rb(9);
     }
     static constexpr Rb r10b() {
-      return {10};
+      return Rb(10);
     }
     static constexpr Rb r11b() {
-      return {11};
+      return Rb(11);
     }
     static constexpr Rb r12b() {
-      return {12};
+      return Rb(12);
     }
     static constexpr Rb r13b() {
-      return {13};
+      return Rb(13);
     }
     static constexpr Rb r14b() {
-      return {14};
+      return Rb(14);
     }
     static constexpr Rb r15b() {
-      return {15};
+      return Rb(15);
     }
 
     static constexpr Ax ax()    {
       return Ax();
     }
     static constexpr R16 cx()   {
-      return {1};
+      return R16(2);
     }
     static constexpr Dx dx()    {
       return Dx();
     }
     static constexpr R16 bx()   {
-      return {3};
+      return R16(3);
     }
     static constexpr R16 sp()   {
-      return {4};
+      return R16(4);
     }
     static constexpr R16 bp()   {
-      return {5};
+      return R16(5);
     }
     static constexpr R16 si()   {
-      return {6};
+      return R16(6);
     }
     static constexpr R16 di()   {
-      return {7};
+      return R16(7);
     }
     static constexpr R16 r8w()  {
-      return {8};
+      return R16(8);
     }
     static constexpr R16 r9w()  {
-      return {9};
+      return R16(9);
     }
     static constexpr R16 r10w() {
-      return {10};
+      return R16(10);
     }
     static constexpr R16 r11w() {
-      return {11};
+      return R16(11);
     }
     static constexpr R16 r12w() {
-      return {12};
+      return R16(12);
     }
     static constexpr R16 r13w() {
-      return {13};
+      return R16(13);
     }
     static constexpr R16 r14w() {
-      return {14};
+      return R16(14);
     }
     static constexpr R16 r15w() {
-      return {15};
+      return R16(15);
     }
 
     static constexpr Eax eax()  {
       return Eax();
     }
     static constexpr R32 ecx()  {
-      return {1};
+      return R32(1);
     }
     static constexpr R32 edx()  {
-      return {2};
+      return R32(2);
     }
     static constexpr R32 ebx()  {
-      return {3};
+      return R32(3);
     }
     static constexpr R32 esp()  {
-      return {4};
+      return R32(4);
     }
     static constexpr R32 ebp()  {
-      return {5};
+      return R32(5);
     }
     static constexpr R32 esi()  {
-      return {6};
+      return R32(6);
     }
     static constexpr R32 edi()  {
-      return {7};
+      return R32(7);
     }
     static constexpr R32 r8d()  {
-      return {8};
+      return R32(8);
     }
     static constexpr R32 r9d()  {
-      return {9};
+      return R32(9);
     }
     static constexpr R32 r10d() {
-      return {10};
+      return R32(10);
     }
     static constexpr R32 r11d() {
-      return {11};
+      return R32(11);
     }
     static constexpr R32 r12d() {
-      return {12};
+      return R32(12);
     }
     static constexpr R32 r13d() {
-      return {13};
+      return R32(13);
     }
     static constexpr R32 r14d() {
-      return {14};
+      return R32(14);
     }
     static constexpr R32 r15d() {
-      return {15};
+      return R32(15);
     }
 
     static constexpr Rax rax() {
       return Rax();
     }
     static constexpr R64 rcx() {
-      return {1};
+      return R64(1);
     }
     static constexpr R64 rdx() {
-      return {2};
+      return R64(2);
     }
     static constexpr R64 rbx() {
-      return {3};
+      return R64(3);
     }
     static constexpr R64 rsp() {
-      return {4};
+      return R64(4);
     }
     static constexpr R64 rbp() {
-      return {5};
+      return R64(5);
     }
     static constexpr R64 rsi() {
-      return {6};
+      return R64(6);
     }
     static constexpr R64 rdi() {
-      return {7};
+      return R64(7);
     }
     static constexpr R64 r8()  {
-      return {8};
+      return R64(8);
     }
     static constexpr R64 r9()  {
-      return {9};
+      return R64(9);
     }
     static constexpr R64 r10() {
-      return {10};
+      return R64(10);
     }
     static constexpr R64 r11() {
-      return {11};
+      return R64(11);
     }
     static constexpr R64 r12() {
-      return {12};
+      return R64(12);
     }
     static constexpr R64 r13() {
-      return {13};
+      return R64(13);
     }
     static constexpr R64 r14() {
-      return {14};
+      return R64(14);
     }
     static constexpr R64 r15() {
-      return {15};
+      return R64(15);
     }
 
     static constexpr Sreg es() {
-      return {0};
+      return Sreg(0);
     }
     static constexpr Sreg cs() {
-      return {1};
+      return Sreg(1);
     }
     static constexpr Sreg ss() {
-      return {2};
+      return Sreg(2);
     }
     static constexpr Sreg ds() {
-      return {3};
+      return Sreg(3);
     }
     static constexpr Fs fs()   {
       return Fs();
@@ -556,123 +556,123 @@ class Constants {
       return St0();
     }
     static constexpr St st1()  {
-      return {1};
+      return St(1);
     }
     static constexpr St st2()  {
-      return {2};
+      return St(2);
     }
     static constexpr St st3()  {
-      return {3};
+      return St(3);
     }
     static constexpr St st4()  {
-      return {4};
+      return St(4);
     }
     static constexpr St st5()  {
-      return {5};
+      return St(5);
     }
     static constexpr St st6()  {
-      return {6};
+      return St(6);
     }
     static constexpr St st7()  {
-      return {7};
+      return St(7);
     }
 
     static constexpr Xmm0 xmm0()  {
       return Xmm0();
     }
     static constexpr Xmm xmm1()   {
-      return {1};
+      return Xmm(1);
     }
     static constexpr Xmm xmm2()   {
-      return {2};
+      return Xmm(2);
     }
     static constexpr Xmm xmm3()   {
-      return {3};
+      return Xmm(3);
     }
     static constexpr Xmm xmm4()   {
-      return {4};
+      return Xmm(4);
     }
     static constexpr Xmm xmm5()   {
-      return {5};
+      return Xmm(5);
     }
     static constexpr Xmm xmm6()   {
-      return {6};
+      return Xmm(6);
     }
     static constexpr Xmm xmm7()   {
-      return {7};
+      return Xmm(7);
     }
     static constexpr Xmm xmm8()   {
-      return {8};
+      return Xmm(8);
     }
     static constexpr Xmm xmm9()   {
-      return {9};
+      return Xmm(9);
     }
     static constexpr Xmm xmm10()  {
-      return {10};
+      return Xmm(10);
     }
     static constexpr Xmm xmm11()  {
-      return {11};
+      return Xmm(11);
     }
     static constexpr Xmm xmm12()  {
-      return {12};
+      return Xmm(12);
     }
     static constexpr Xmm xmm13()  {
-      return {13};
+      return Xmm(13);
     }
     static constexpr Xmm xmm14()  {
-      return {14};
+      return Xmm(14);
     }
     static constexpr Xmm xmm15()  {
-      return {15};
+      return Xmm(15);
     }
 
     static constexpr Ymm ymm0()  {
-      return {0};
+      return Ymm(0);
     }
     static constexpr Ymm ymm1()  {
-      return {1};
+      return Ymm(1);
     }
     static constexpr Ymm ymm2()  {
-      return {2};
+      return Ymm(2);
     }
     static constexpr Ymm ymm3()  {
-      return {3};
+      return Ymm(3);
     }
     static constexpr Ymm ymm4()  {
-      return {4};
+      return Ymm(4);
     }
     static constexpr Ymm ymm5()  {
-      return {5};
+      return Ymm(5);
     }
     static constexpr Ymm ymm6()  {
-      return {6};
+      return Ymm(6);
     }
     static constexpr Ymm ymm7()  {
-      return {7};
+      return Ymm(7);
     }
     static constexpr Ymm ymm8()  {
-      return {8};
+      return Ymm(8);
     }
     static constexpr Ymm ymm9()  {
-      return {9};
+      return Ymm(9);
     }
     static constexpr Ymm ymm10() {
-      return {10};
+      return Ymm(10);
     }
     static constexpr Ymm ymm11() {
-      return {11};
+      return Ymm(11);
     }
     static constexpr Ymm ymm12() {
-      return {12};
+      return Ymm(12);
     }
     static constexpr Ymm ymm13() {
-      return {13};
+      return Ymm(13);
     }
     static constexpr Ymm ymm14() {
-      return {14};
+      return Ymm(14);
     }
     static constexpr Ymm ymm15() {
-      return {15};
+      return Ymm(15);
     }
 };
 

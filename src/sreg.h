@@ -31,30 +31,12 @@ class Sreg : public Operand {
     // Needs access to constructor.
     friend class Constants;
     // Needs access to constructor.
+    template <class T>
     friend class M;
     // Needs access to constructor.
     friend class Moffs;
 
   public:
-    /** Copy constructor. */
-    Sreg(const Sreg& rhs) : Operand(0,0) {
-			val_ = rhs.val_;
-		}
-    /** Move constructor. */
-    Sreg(Sreg&& rhs) {
-			val_ = rhs.val_;
-		}
-    /** Copy assignment operator. */
-    Sreg& operator=(const Sreg& rhs) {
-			Sreg(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Sreg& operator=(Sreg&& rhs) {
-			Sreg(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Returns true if this segment register is well-formed. */
     constexpr bool check() {
 			return val_ < 6;
@@ -82,13 +64,6 @@ class Sreg : public Operand {
     constexpr size_t hash() {
 			return val_;
 		}
-    /** STL-compliant swap. */
-    void swap(Sreg& rhs) {
-			std::swap(val_, rhs.val_);
-		}
-
-    /** Returns the type of this operand */
-    virtual Type type() const { return Type::SREG; }
 
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
@@ -104,7 +79,8 @@ class Sreg : public Operand {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Sreg(uint64_t val) : Operand(val) {}
+    constexpr Sreg(uint64_t val) : Operand(Type::SREG, val) {}
+    constexpr Sreg(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 /** The segment register FS. */
@@ -118,12 +94,9 @@ class Fs : public Sreg {
 			return val_ == 4;
 		}
 
-    /** Returns the type of this operand */
-    Type type() const { return Type::FS; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Fs() : Sreg(4) {}
+    constexpr Fs() : Sreg(Type::FS, 4) {}
 };
 
 /** The segment register GS. */
@@ -137,12 +110,9 @@ class Gs : public Sreg {
 			return val_ == 5;
 		}
 
-    /** Returns the type of this operand */
-    Type type() const { return Type::GS; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Gs() : Sreg(5) {}
+    constexpr Gs() : Sreg(Type::GS, 5) {}
 };
 
 } // namespace x64asm
@@ -156,11 +126,6 @@ struct hash<x64asm::Sreg> {
 		return s.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Sreg& lhs, x64asm::Sreg& rhs) {
-  lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Sreg& s) {
