@@ -310,7 +310,7 @@ Imm64 offset(const Operand* o) {
 blank : /* empty */ | blank ENDL { }
 
 code : blank instrs { 
-	code.assign($2->begin(), $2->end()); delete $2; 
+	code.assign($2->begin(), $2->end());  
 }
 
 instrs : /* empty */ {
@@ -319,26 +319,16 @@ instrs : /* empty */ {
 | instr { 
   $$ = new vector<Instruction>(); 
 	$$->push_back(*$1); 
-	delete $1; 
 } 
 | instrs instr { 
 	$1->push_back(*$2); 
-	delete($2); 
 }
 
 instr : LABEL COLON ENDL blank {
   $$ = new Instruction{Opcode::LABEL_DEFN, {*$1}};
-	delete $1;
 }
 | OPCODE typed_operands ENDL blank {
 	$$ = to_instr(*$1, *$2);
-
-	delete $1;
-	for ( const auto op : *$2 ) {
-		delete op->first;
-		delete op;
-	}
-	delete $2;
 
 	if ( !$$->check() )
 		yyerror(is, code, "Unable to parse instruction!");
