@@ -37,27 +37,6 @@ class Sreg : public Operand {
     friend class Moffs;
 
   public:
-    /** Copy constructor. */
-    Sreg(const Sreg& rhs) : Operand(Type::SREG) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Move constructor. */
-    Sreg(Sreg&& rhs) : Operand(Type::SREG) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Copy assignment operator. */
-    Sreg& operator=(const Sreg& rhs) {
-			Sreg(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Sreg& operator=(Sreg&& rhs) {
-			Sreg(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Returns true if this segment register is well-formed. */
     constexpr bool check() {
 			return val_ < 6;
@@ -84,10 +63,6 @@ class Sreg : public Operand {
     /** STL-compliant hash. */
     constexpr size_t hash() {
 			return val_;
-		}
-    /** STL-compliant swap. */
-    void swap(Sreg& rhs) {
-			std::swap(val_, rhs.val_);
 		}
 
 		/** @todo This method is undefined. */
@@ -151,11 +126,6 @@ struct hash<x64asm::Sreg> {
 		return s.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Sreg& lhs, x64asm::Sreg& rhs) {
-  lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Sreg& s) {

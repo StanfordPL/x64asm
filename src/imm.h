@@ -27,26 +27,6 @@ namespace x64asm {
 /** An immediate value. */
 class Imm : public Operand {
   public:
-    /** Copy constructor. */
-    Imm(const Imm& rhs) : Operand(Type::NONE) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Move constructor. */
-    Imm(Imm&& rhs) : Operand(Type::NONE) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Copy assignment operator. */
-    Imm& operator=(const Imm& rhs) {
-			Imm(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Imm& operator=(Imm&& rhs) {
-			Imm(std::move(rhs)).swap(*this);
-		}
-
     /** Comparison based on immediate value. */
     constexpr bool operator==(const Imm& rhs) {
 			return val_ == rhs.val_;
@@ -68,10 +48,6 @@ class Imm : public Operand {
     /** STL-compliant hash. */
     constexpr size_t hash() {
 			return val_;
-		}
-    /** STL-compliant swap. */
-    void swap(Imm& rhs) {
-			std::swap(val_, rhs.val_);
 		}
 
 		/** @todo This method is undefined */
@@ -226,11 +202,6 @@ struct hash<x64asm::Imm> {
 		return i.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Imm& lhs, x64asm::Imm& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Imm& i) {

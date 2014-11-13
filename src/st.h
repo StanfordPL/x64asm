@@ -31,27 +31,6 @@ class St : public Operand {
     friend class Constants;
 
   public:
-    /** Copy constructor. */
-    St(const St& rhs) : Operand(Type::ST) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Move constructor. */
-    St(St&& rhs) : Operand(Type::ST) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Copy assignment operator. */
-    St& operator=(const St& rhs) {
-			St(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    St& operator=(St&& rhs) {
-			St(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Returns true if this stack register is well-formed. */
     constexpr bool check() {
 			return val_ < 8;
@@ -78,10 +57,6 @@ class St : public Operand {
     /** STL-compliant hash. */
     constexpr size_t hash() {
 			return val_;
-		}
-    /** STL-compliant swap. */
-    void swap(St& rhs) {
-			std::swap(val_, rhs.val_);
 		}
 
 		/** @todo This method is undefined. */
@@ -134,11 +109,6 @@ struct hash<x64asm::St> {
 		return s.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::St& lhs, x64asm::St& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::St& s) {

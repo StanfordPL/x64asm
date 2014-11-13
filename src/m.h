@@ -69,27 +69,6 @@ class M : public Operand {
     };
 
   public:
-    /** Copy constructor. */
-    M(const M& rhs) : Operand(Type::NONE) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Move constructor. */
-    M(M&& rhs) : Operand(Type::NONE) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Copy assignment operator. */
-    M& operator=(const M& rhs) {
-			M(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    M& operator=(M&& rhs) {
-			M(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Returns true if this memory contains a segment register. */
     constexpr bool contains_seg() {
 			return (val_ & (uint64_t)Mask::SEG) != ((uint64_t)Null::SEG << (uint64_t)Index::SEG);
@@ -620,12 +599,6 @@ struct hash<x64asm::M<T>> {
 		return m.hash();
 	}
 };
-
-/** STL swap overload. */
-template <class T>
-inline void swap(x64asm::M<T>& lhs, x64asm::M<T>& rhs) {
-  lhs.swap(rhs);
-}
 
 /** iostream overload. */
 template <class T>

@@ -31,25 +31,6 @@ class Hint : public Operand {
     friend class Constants;
 
   public:
-    /** Copy constructor. */
-    Hint(const Hint& rhs) : Operand(Type::HINT) {
-			val_ = rhs.val_;
-		}
-    /** Move constructor. */
-    Hint(Hint&& rhs) : Operand(Type::HINT) {
-			val_ = rhs.val_;
-		}
-    /** Copy assignment operator. */
-    Hint& operator=(const Hint& rhs) {
-			Hint(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Hint& operator=(Hint&& rhs) {
-			Hint(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Checks that this hint is well-formed. */
     constexpr bool check() {
 			return val_ < 2;
@@ -76,10 +57,6 @@ class Hint : public Operand {
     /** STL-compliant hash. */
     constexpr size_t hash() {
 			return val_;
-		}
-    /** STL-compliant swap. */
-    void swap(Hint& rhs) {
-			std::swap(val_, rhs.val_);
 		}
 
     /** @todo This method is undefined. */
@@ -108,11 +85,6 @@ struct hash<x64asm::Hint> {
 		return h.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Hint& lhs, x64asm::Hint& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator<<(istream& is, x64asm::Hint& h) {

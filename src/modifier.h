@@ -29,27 +29,6 @@ namespace x64asm {
 */
 class Modifier : public Operand {
   public:
-    /** Copy constructor. */
-    Modifier(const Modifier& rhs) : Operand(Type::NONE) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Move constructor. */
-    Modifier(Modifier&& rhs) : Operand(Type::NONE) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Copy assignment operator. */
-    Modifier& operator=(const Modifier& rhs) {
-			Modifier(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Modifier& operator=(Modifier&& rhs) {
-			Modifier(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Returns true if this modifier is well-formed. */
     constexpr bool check() {
 			return val_ == 0;
@@ -77,11 +56,6 @@ class Modifier : public Operand {
     constexpr size_t hash() {
 			return val_;
 		}
-    /** STL-compliant swap. */
-    void swap(Modifier& rhs) {
-			std::swap(val_, rhs.val_);
-		}
-
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
 			is.setstate(std::ios::failbit);
@@ -138,11 +112,6 @@ struct hash<x64asm::Modifier> {
 		return m.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Modifier& lhs, x64asm::Modifier& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Modifier& m) {

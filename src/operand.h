@@ -41,33 +41,6 @@ class Operand {
     friend class Instruction;
 
   public:
-    /** Copy constructor. */
-    Operand(const Operand& rhs) {
-			val_ = rhs.val_;
-			val2_ = rhs.val2_;
-		}
-    /** Move constructor. */
-    Operand(Operand&& rhs) {
-			val_ = rhs.val_;
-			val2_ = rhs.val2_;
-		}
-    /** Copy assignment operator. */
-    Operand& operator=(const Operand& rhs) {
-			Operand(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Operand& operator=(Operand&& rhs) {
-			Operand(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
-    /** STL-compliant swap. */
-    void swap(Operand& rhs) {
-			std::swap(val_, rhs.val_);
-			std::swap(val2_, rhs.val2_);
-		}
-
     /** Return the type of this operand */
     constexpr Type type() { return (Type)(val2_ >> 3); }
     /** Return the size of this operand */

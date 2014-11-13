@@ -26,27 +26,6 @@ namespace x64asm {
 /** A relative address. */
 class Rel : public Operand {
   public:
-    /** Copy constructor. */
-    Rel(const Rel& rhs) : Operand(Type::NONE) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Move constructor. */
-    Rel(Rel&& rhs) : Operand(Type::NONE) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Copy assignment operator. */
-    Rel& operator=(const Rel& rhs) {
-			Rel(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Rel& operator=(Rel&& rhs) {
-			Rel(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Comparison based on on val_. */
     constexpr bool operator<(const Rel& rhs) {
 			return val_ < rhs.val_;
@@ -68,10 +47,6 @@ class Rel : public Operand {
     /** STL-compliant hash. */
     constexpr size_t hash() {
 			return val_;
-		}
-    /** STL-compliant swap. */
-    void swap(Rel& rhs) {
-			std::swap(val_, rhs.val_);
 		}
 
 		/** @todo This method is undefined. */
@@ -132,11 +107,6 @@ struct hash<x64asm::Rel> {
 		return r.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Rel& lhs, x64asm::Rel& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Rel& r) {

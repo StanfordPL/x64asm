@@ -31,27 +31,6 @@ class Xmm : public Operand {
   friend class Constants;
 
   public:
-    /** Copy constructor. */
-    Xmm(const Xmm& rhs) : Operand(Type::XMM) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Move constructor. */
-    Xmm(Xmm&& rhs) : Operand(Type::XMM) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Copy assignment operator. */
-    Xmm& operator=(const Xmm& rhs) {
-			Xmm(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Xmm& operator=(Xmm&& rhs) {
-			Xmm(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Returns true if this xmm register is well-formed. */
     constexpr bool check() {
   		return val_ < 16;
@@ -122,11 +101,6 @@ struct hash<x64asm::Xmm> {
 		return x.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Xmm& lhs, x64asm::Xmm& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Xmm& x) {

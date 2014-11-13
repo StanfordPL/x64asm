@@ -27,27 +27,6 @@ namespace x64asm {
 /** A general-purpose register. */
 class R : public Operand {
   public:
-    /** Copy constructor. */
-    R(const R& rhs) : Operand(Type::NONE) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Move constructor. */
-    R(R&& rhs) : Operand(Type::NONE) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Copy assignment operator. */
-    R& operator=(const R& rhs) {
-			R(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    R& operator=(R&& rhs) {
-			R(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Conversion based on underlying value. */
     constexpr operator uint64_t() {
 			return val_;
@@ -56,10 +35,6 @@ class R : public Operand {
     /** STL-compliant hash. */
     constexpr size_t hash() {
 			return val_;
-		}
-    /** STL-compliant swap. */
-    void swap(R& rhs) {
-			std::swap(val_, rhs.val_);
 		}
 
   protected:
@@ -400,11 +375,6 @@ struct hash<x64asm::R> {
 		return r.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::R& lhs, x64asm::R& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Rl& r) {

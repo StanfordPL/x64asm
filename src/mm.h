@@ -30,25 +30,6 @@ class Mm : public Operand {
     friend class Constants;
 
   public:
-    /** Copy constructor. */
-    Mm(const Mm& rhs) : Operand(Type::MM) {
-			val_ = rhs.val_;
-		}
-    /** Move constructor. */
-    Mm(Mm&& rhs) : Operand(Type::MM) {
-			val_ = rhs.val_;
-		}
-    /** Copy assignment operator. */
-		Mm& operator=(const Mm& rhs) {
-			Mm(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Mm& operator=(Mm&& rhs) {
-			Mm(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Returns true if this xmm register is well-formed. */
     constexpr bool check() {
 			return val_ < 8;
@@ -75,10 +56,6 @@ class Mm : public Operand {
     /** STL-compliant hash. */
     constexpr size_t hash() {
 			return val_;
-		}
-    /** STL-compliant swap. */
-    void swap(Mm& rhs) {
-  		std::swap(val_, rhs.val_);
 		}
 
 		/** @todo This method is undefined. */
@@ -108,11 +85,6 @@ struct hash<x64asm::Mm> {
 		return m.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Mm& lhs, x64asm::Mm& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Mm& m) {

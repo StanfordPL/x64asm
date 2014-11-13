@@ -45,27 +45,6 @@ class Label : public Operand {
 			}
 		}
 
-    /** Copy constructor. */
-    Label(const Label& rhs) : Operand(Type::LABEL) {
-  		val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Move constructor. */
-    Label(Label&& rhs) : Operand(Type::LABEL) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Copy assignment operator. */
-    Label& operator=(const Label& rhs) {
-			Label(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Label& operator=(Label&& rhs) {
-			Label(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Returns true if this label is well-formed. */
     bool check() const {
 			return val2label_.find(val_) != val2label_.end();
@@ -99,11 +78,6 @@ class Label : public Operand {
     size_t hash() const {
 			return val_;
 		}
-    /** STL-compliant swap. */
-    void swap(Label& rhs) {
-			std::swap(val_, rhs.val_);
-		}
-
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
 			is.setstate(std::ios::failbit);
@@ -135,11 +109,6 @@ struct hash<x64asm::Label> {
 		return l.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Label& lhs, x64asm::Label& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Label& l) {

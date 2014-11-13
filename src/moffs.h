@@ -41,27 +41,6 @@ class Moffs : public Operand {
     };
 
   public:
-    /** Copy constructor. */
-    Moffs(const Moffs& rhs) : Operand(Type::NONE) {
-			val_ = rhs.val_;
-			val2_ = rhs.val2_;
-		}
-    /** Move constructor. */
-    Moffs(Moffs&& rhs) : Operand(Type::NONE) {
-			val_ = rhs.val_;
-			val2_ = rhs.val2_;
-		}
-    /** Copy assignment operator. */
-    Moffs& operator=(const Moffs& rhs) {
-			Moffs(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Moffs& operator=(Moffs&& rhs) {
-			Moffs(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Returns true if this moffs contains a segment register. */
     constexpr bool contains_seg() {
 			return (val2_ & (uint64_t)Mask::SEG) != (uint64_t)Null::SEG;
@@ -112,12 +91,6 @@ class Moffs : public Operand {
     constexpr size_t hash() {
 			return val_ ^ val2_;
 		}
-    /** STL-compliant swap. */
-    void swap(Moffs& rhs) {
-			std::swap(val_, rhs.val_);
-			std::swap(val2_, rhs.val2_);
-		}
-
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
 			is.setstate(std::ios::failbit);
@@ -193,11 +166,6 @@ struct hash<x64asm::Moffs> {
 		return m.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Moffs& lhs, x64asm::Moffs& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Moffs& m) {

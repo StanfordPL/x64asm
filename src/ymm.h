@@ -32,27 +32,6 @@ class Ymm : public Operand {
   friend class Constants;
 
   public:
-    /** Copy constructor. */
-    Ymm(const Ymm& rhs) : Operand(Type::YMM) {
-			val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Move constructor. */
-    Ymm(Ymm&& rhs) : Operand(Type::YMM) {
-  		val_ = rhs.val_;
-      val2_ = rhs.val2_;
-		}
-    /** Copy assignment operator. */
-    Ymm& operator=(const Ymm& rhs) {
-			Ymm(rhs).swap(*this);
-			return *this;
-		}
-    /** Move assignment operator. */
-    Ymm& operator=(Ymm&& rhs) {
-			Ymm(std::move(rhs)).swap(*this);
-			return *this;
-		}
-
     /** Returns true if this xmm register is well-formed. */
     constexpr bool check() {
 			return val_ < 16;
@@ -80,10 +59,6 @@ class Ymm : public Operand {
     constexpr size_t hash() {
 			return val_;
 		}
-    /** STL-compliant swap. */
-    void swap(Ymm& rhs) {
-			std::swap(val_, rhs.val_);
-		}
 
 		/** Reads this ymm register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
@@ -106,11 +81,6 @@ struct hash<x64asm::Ymm> {
 		return y.hash();
 	}
 };
-
-/** STL swap overload. */
-inline void swap(x64asm::Ymm& lhs, x64asm::Ymm& rhs) {
-	lhs.swap(rhs);
-}
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Ymm& y) {
