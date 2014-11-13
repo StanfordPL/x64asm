@@ -33,12 +33,14 @@ class Ymm : public Operand {
 
   public:
     /** Copy constructor. */
-    Ymm(const Ymm& rhs) : Operand(0,0) {
+    Ymm(const Ymm& rhs) : Operand(Type::YMM) {
 			val_ = rhs.val_;
+      val2_ = rhs.val2_;
 		}
     /** Move constructor. */
-    Ymm(Ymm&& rhs) {
+    Ymm(Ymm&& rhs) : Operand(Type::YMM) {
   		val_ = rhs.val_;
+      val2_ = rhs.val2_;
 		}
     /** Copy assignment operator. */
     Ymm& operator=(const Ymm& rhs) {
@@ -83,9 +85,6 @@ class Ymm : public Operand {
 			std::swap(val_, rhs.val_);
 		}
 
-    /** Returns the type of this operand */
-    virtual Type type() const { return Type::YMM; }
-
 		/** Reads this ymm register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
     /** Writes this ymm register to an ostream using at&t syntax. */
@@ -93,7 +92,7 @@ class Ymm : public Operand {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Ymm(uint64_t val) : Operand(val) {}
+    constexpr Ymm(uint64_t val) : Operand(Type::YMM, val) {}
 };
 
 } // namespace x64asm

@@ -37,6 +37,7 @@ enum class Scale {
 };
 
 /** An operand in memory. */
+template <class T>
 class M : public Operand {
   private:
     /** Constant bit masks used to represent absent operands. */
@@ -69,12 +70,14 @@ class M : public Operand {
 
   public:
     /** Copy constructor. */
-    M(const M& rhs) : Operand(0,0) {
+    M(const M& rhs) : Operand(Type::NONE) {
 			val_ = rhs.val_;
+      val2_ = rhs.val2_;
 		}
     /** Move constructor. */
-    M(M&& rhs) {
+    M(M&& rhs) : Operand(Type::NONE) {
 			val_ = rhs.val_;
+      val2_ = rhs.val2_;
 		}
     /** Copy assignment operator. */
     M& operator=(const M& rhs) {
@@ -243,126 +246,126 @@ class M : public Operand {
 				(rip << (uint64_t)Index::RIP);
 		}
 
-	public:
+  public:
     /** Creates a memory using disp form. */
     constexpr M(const Imm32& d) :
-			Operand(init(d, r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
+			Operand(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
 		}
     /** Creates a memory using seg:disp form. */
     constexpr M(const Sreg& s, const Imm32& d) :
-			Operand(init(d, r_null(), r_null(), Scale::TIMES_1, s, 0, 0)) {
+			Operand(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s, 0, 0)) {
 		}
     /** Creates a memroy using (base64) form. */
     constexpr M(const R32& b) :
-			Operand(init(Imm32(0), b, r_null(), Scale::TIMES_1, s_null(), 1, 0)) {
+			Operand(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s_null(), 1, 0)) {
 		}
     /** Creates a memory using (base32) form. */
     constexpr M(const R64& b) :
-    	Operand(init(Imm32(0), b, r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
+    	Operand(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
 		}
     /** Creates a memory using RIP form. */
     constexpr M(Rip rip) :
-    	Operand(init(Imm32(0), r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 1)) {
+    	Operand(T::m_type(), init(Imm32(0), r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 1)) {
 		}
     /** Creates a memory using seg:base32 form. */
     constexpr M(const Sreg& s, const R32& b) :
-    	Operand(init(Imm32(0), b, r_null(), Scale::TIMES_1, s, 1, 0)) {
+    	Operand(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s, 1, 0)) {
 		}
     /** Creates a memory using seg:base64 form. */
     constexpr M(const Sreg& s, const R64& b) :
-	    Operand(init(Imm32(0), b, r_null(), Scale::TIMES_1, s, 0, 0)) {
+	    Operand(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s, 0, 0)) {
 		}
     /** Creates a memory using seg:RIP form. */
     constexpr M(const Sreg& s, Rip rip) :
-    	Operand(init(Imm32(0), r_null(), r_null(), Scale::TIMES_1, s, 0, 1)) {
+    	Operand(T::m_type(), init(Imm32(0), r_null(), r_null(), Scale::TIMES_1, s, 0, 1)) {
 		}
     /** Creates a memory using disp(base32) form. */
     constexpr M(const R32& b, const Imm32& d) :
-    	Operand(init(d, b, r_null(), Scale::TIMES_1, s_null(), 1, 0)) {
+    	Operand(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s_null(), 1, 0)) {
 		}
     /** Creates a memory using disp(base64) form. */
     constexpr M(const R64& b, const Imm32& d) :
-    	Operand(init(d, b, r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
+    	Operand(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
 		}
     /** Creates a memory using RIP+disp form. */
     constexpr M(Rip rip, const Imm32& d) :
-    	Operand(init(d, r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 1)) {
+    	Operand(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 1)) {
 		}
     /** Creates a memory using seg:disp(base32) form. */
     constexpr M(const Sreg& s, const R32& b, const Imm32& d) :
-    	Operand(init(d, b, r_null(), Scale::TIMES_1, s, 1, 0)) {
+    	Operand(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s, 1, 0)) {
 		}
     /** Creates a memory using seg:disp(base64) form. */
     constexpr M(const Sreg& s, const R64& b, const Imm32& d) :
-    	Operand(init(d, b, r_null(), Scale::TIMES_1, s, 0, 0)) {
+    	Operand(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s, 0, 0)) {
 		}
     /** Creates a memory using seg:RIP+disp form. */
     constexpr M(const Sreg& s, Rip rip, const Imm32& d) :
-    	Operand(init(d, r_null(), r_null(), Scale::TIMES_1, s, 0, 1)) {
+    	Operand(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s, 0, 1)) {
 		}
     /** Creates a memory using (index32,scale) form. */
     constexpr M(const R32& i, Scale sc) :
-    	Operand(init(Imm32(0), r_null(), i, sc, s_null(), 1, 0)) {
+    	Operand(T::m_type(), init(Imm32(0), r_null(), i, sc, s_null(), 1, 0)) {
 		}
     /** Creates a memory using (index64,scale) form. */
     constexpr M(const R64& i, Scale sc) :
-    	Operand(init(Imm32(0), r_null(), i, sc, s_null(), 0, 0)) {
+    	Operand(T::m_type(), init(Imm32(0), r_null(), i, sc, s_null(), 0, 0)) {
 		}
     /** Creates a memory using seg:(index32,scale) form. */
     constexpr M(const Sreg& s, const R32& i, Scale sc) :
-    	Operand(init(Imm32(0), r_null(), i, sc, s, 1, 0)) {
+    	Operand(T::m_type(), init(Imm32(0), r_null(), i, sc, s, 1, 0)) {
 		}
     /** Creates a memory using seg:(index64,scale) form. */
     constexpr M(const Sreg& s, const R64& i, Scale sc) :
-    	Operand(init(Imm32(0), r_null(), i, sc, s, 0, 0)) {
+    	Operand(T::m_type(), init(Imm32(0), r_null(), i, sc, s, 0, 0)) {
 		}
     /** Creates a memory using disp(index32,scale) form. */
     constexpr M(const R32& i, Scale sc, const Imm32& d) :
-    	Operand(init(d, r_null(), i, sc, s_null(), 1, 0)) {
+    	Operand(T::m_type(), init(d, r_null(), i, sc, s_null(), 1, 0)) {
 		}
     /** Creates a memory using disp(index64,scale) form. */
     constexpr M(const R64& i, Scale sc, const Imm32& d) :
-    	Operand(init(d, r_null(), i, sc, s_null(), 0, 0)) {
+    	Operand(T::m_type(), init(d, r_null(), i, sc, s_null(), 0, 0)) {
 		}
     /** Creates a memory using seg:disp(index32,scale) form. */
     constexpr M(const Sreg& s, const R32& i, Scale sc, const Imm32& d) :
-    	Operand(init(d, r_null(), i, sc, s, 1, 0)) {
+    	Operand(T::m_type(), init(d, r_null(), i, sc, s, 1, 0)) {
 		}
     /** Creates a memory using seg:disp(index64,scale) form. */
     constexpr M(const Sreg& s, const R64& i, Scale sc, const Imm32& d) :
-    	Operand(init(d, r_null(), i, sc, s, 0, 0)) {
+    	Operand(T::m_type(), init(d, r_null(), i, sc, s, 0, 0)) {
 		}
     /** Creates a memory using (base32,index32,scale) form. */
     constexpr M(const R32& b, const R32& i, Scale sc) :
-    	Operand(init(Imm32(0), b, i, sc, s_null(), 1, 0)) {
+    	Operand(T::m_type(), init(Imm32(0), b, i, sc, s_null(), 1, 0)) {
 		}
     /** Creates a memory using (base64,index64,scale) form. */
     constexpr M(const R64& b, const R64& i, Scale sc) :
-    	Operand(init(Imm32(0), b, i, sc, s_null(), 0, 0)) {
+    	Operand(T::m_type(), init(Imm32(0), b, i, sc, s_null(), 0, 0)) {
 		}
     /** Creates a memory using seg:(base32,index32,scale) form. */
     constexpr M(const Sreg& s, const R32& b, const R32& i, Scale sc) :
-	    Operand(init(Imm32(0), b, i, sc, s, 1, 0)) {
+	    Operand(T::m_type(), init(Imm32(0), b, i, sc, s, 1, 0)) {
 		}
     /** Creates a memory using seg:(base64,index64,scale) form. */
     constexpr M(const Sreg& s, const R64& b, const R64& i, Scale sc) :
-    	Operand(init(Imm32(0), b, i, sc, s, 0, 0)) {
+    	Operand(T::m_type(), init(Imm32(0), b, i, sc, s, 0, 0)) {
 		}
     /** Creates a memory using disp(base32,index32,scale) form. */
     constexpr M(const R32& b, const R32& i, Scale sc, const Imm32& d) :
-    	Operand(init(d, b, i, sc, s_null(), 1, 0)) {
+    	Operand(T::m_type(), init(d, b, i, sc, s_null(), 1, 0)) {
 		}
     /** Creates a memory using disp(base64,index64,scale) form. */
     constexpr M(const R64& b, const R64& i, Scale sc, const Imm32& d) :
-    	Operand(init(d, b, i, sc, s_null(), 0, 0)) {
+    	Operand(T::m_type(), init(d, b, i, sc, s_null(), 0, 0)) {
 		}
     /** Creates a memory using seg:disp(base32,index32,scale) form. */
     constexpr M(const Sreg& s, const R32& b, const R32& i, Scale sc, const Imm32& d) :
-    	Operand(init(d, b, i, sc, s, 1, 0)) {
+    	Operand(T::m_type(), init(d, b, i, sc, s, 1, 0)) {
 		}
     /** Creates a memory using seg:disp(base64,index64,scale) form. */
     constexpr M(const Sreg& s, const R64& b, const R64& i, Scale sc, const Imm32& d) :
-    	Operand(init(d, b, i, sc, s, 0, 0)) {
+    	Operand(T::m_type(), init(d, b, i, sc, s, 0, 0)) {
 		}
 };
 
@@ -370,12 +373,12 @@ class M : public Operand {
     but pointed to by the DS:(E)SI or ES:(E)DI registers.
     In 64-bit mode, it is pointed to by the RSI or RDI registers.
 */
-class M8 : public M {
+class M8 : public M<M8> {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_8; }
+    static constexpr Type m_type() { return Type::M_8; }
 
 };
 
@@ -383,12 +386,12 @@ class M8 : public M {
     but pointed to by the DS:(E)SI or ES:(E)DI registers. This nomenclature is
     used only with the string instructions.
 */
-class M16 : public M {
+class M16 : public M<M16> {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_16; }
+    static constexpr Type m_type() { return Type::M_16; }
 
 };
 
@@ -396,67 +399,67 @@ class M16 : public M {
     name, but pointed to by the DS:(E)SI or ES:(E)DI registers. This
     nomenclature is used only with the string instructions.
 */
-class M32 : public M {
+class M32 : public M<M32> {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_32; }
+    static constexpr Type m_type() { return Type::M_32; }
 
 };
 
 /** A memory quadword operand in memory. */
-class M64 : public M {
+class M64 : public M<M64> {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_64; }
+    static constexpr Type m_type() { return Type::M_64; }
 
 };
 
 /** A memory double quadword operand in memory. */
-class M128 : public M {
+class M128 : public M<M128>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_128; }
+    static constexpr Type m_type() { return Type::M_128; }
 };
 
 /** A 32-byte operand in memory. This nomenclature is used only with AVX
     instructions.
 */
-class M256 : public M {
+class M256 : public M<M256>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_256; }
+    static constexpr Type m_type() { return Type::M_256; }
 };
 
 /** A word integer operand in memory. This symbol designates integers that are
     used as operands for x87 FPU integer instructions.
 */
-class M16Int : public M {
+class M16Int : public M<M16Int>  {
   public:
 		using M::M;
 
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_16_INT; }
+    static constexpr Type m_type() { return Type::M_16_INT; }
 
 };
 
 /** A doubleword integer operand in memory. This symbol designates integers
     that are used as operands for x87 FPU integer instructions.
 */
-class M32Int : public M {
+class M32Int : public M<M32Int>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_32_INT; }
+    static constexpr Type m_type() { return Type::M_32_INT; }
 
 
 };
@@ -464,12 +467,12 @@ class M32Int : public M {
 /** A quadword integer operand in memory. This symbol designates integers
     that are used as operands for x87 FPU integer instructions.
 */
-class M64Int : public M {
+class M64Int : public M<M64Int>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_64_INT; }
+    static constexpr Type m_type() { return Type::M_64_INT; }
 
 
 };
@@ -478,12 +481,12 @@ class M64Int : public M {
     floating-point values that are used as operands for x87 FPU floating-point
     instructions.
 */
-class M32Fp : public M {
+class M32Fp : public M<M32Fp>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_32_FP; }
+    static constexpr Type m_type() { return Type::M_32_FP; }
 
 
 };
@@ -492,72 +495,72 @@ class M32Fp : public M {
     floating-point values that are used as operands for x87 FPU floating-point
     instructions.
 */
-class M64Fp : public M {
+class M64Fp : public M<M64Fp>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_64_FP; }
+    static constexpr Type m_type() { return Type::M_64_FP; }
 };
 
 /** A double extended-precision floating-point operand in memory. This symbol
     designates floating-point values that are used as operands for x87 FPU
     floating-point instructions.
 */
-class M80Fp : public M {
+class M80Fp : public M<M80Fp>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_80_FP; }
+    static constexpr Type m_type() { return Type::M_80_FP; }
 };
 
 /** A double extended-precision binary-coded-decimaly operand in memory. */
-class M80Bcd : public M {
+class M80Bcd : public M<M80Bcd>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_80_BCD; }
+    static constexpr Type m_type() { return Type::M_80_BCD; }
 
 };
 
 /** A 2 byte operand in memory. */
-class M2Byte : public M {
+class M2Byte : public M<M2Byte>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_2_BYTE; }
+    static constexpr Type m_type() { return Type::M_2_BYTE; }
 };
 
 /** A 28 byte operand in memory. */
-class M28Byte : public M {
+class M28Byte : public M<M28Byte>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_28_BYTE; }
+    static constexpr Type m_type() { return Type::M_28_BYTE; }
 
 };
 
 /** A 108 byte operand in memory. */
-class M108Byte : public M {
+class M108Byte : public M<M108Byte>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_108_BYTE; }
+    static constexpr Type m_type() { return Type::M_108_BYTE; }
 
 };
 
 /** A 512 byte operand in memory. */
-class M512Byte : public M {
+class M512Byte : public M<M512Byte>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::M_512_BYTE; }
+    static constexpr Type m_type() { return Type::M_512_BYTE; }
 
 };
 
@@ -565,12 +568,12 @@ class M512Byte : public M {
     number to the left of the colon corresponds to the pointer's segment
     selector. The number to the right corresponds to its offset.
 */
-class FarPtr1616 : public M {
+class FarPtr1616 : public M<FarPtr1616>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::FAR_PTR_16_16; }
+    static constexpr Type m_type() { return Type::FAR_PTR_16_16; }
 
 
 };
@@ -579,12 +582,12 @@ class FarPtr1616 : public M {
     number to the left of the colon corresponds to the pointer's segment
     selector. The number to the right corresponds to its offset.
 */
-class FarPtr1632 : public M {
+class FarPtr1632 : public M<FarPtr1632>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::FAR_PTR_16_32; }
+    static constexpr Type m_type() { return Type::FAR_PTR_16_32; }
 
 };
 
@@ -592,38 +595,46 @@ class FarPtr1632 : public M {
     number to the left of the colon corresponds to the pointer's segment
     selector. The number to the right corresponds to its offset.
 */
-class FarPtr1664 : public M {
+class FarPtr1664 : public M<FarPtr1664>  {
   public:
 		using M::M;
 
     /** Returns the type of this operand */
-    Type type() const { return Type::FAR_PTR_16_64; }
+    static constexpr Type m_type() { return Type::FAR_PTR_16_64; }
 
 };
 
 } // namespace x64asm
 
+
+/** Implementation of functions; needed due to templating */
+#include "src/m_cc.h"
+
+
 namespace std {
 
 /** STL hash specialization. */
-template <>
-struct hash<x64asm::M> {
-  size_t operator()(const x64asm::M& m) const {
+template <class T>
+struct hash<x64asm::M<T>> {
+  size_t operator()(const x64asm::M<T>& m) const {
 		return m.hash();
 	}
 };
 
 /** STL swap overload. */
-inline void swap(x64asm::M& lhs, x64asm::M& rhs) {
+template <class T>
+inline void swap(x64asm::M<T>& lhs, x64asm::M<T>& rhs) {
   lhs.swap(rhs);
 }
 
 /** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::M& m) {
+template <class T>
+inline istream& operator>>(istream& is, x64asm::M<T>& m) {
 	return m.read_att(is);
 }
 /** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::M& m) {
+template <class T>
+inline ostream& operator<<(ostream& os, const x64asm::M<T>& m) {
 	return m.write_att(os);
 }
 

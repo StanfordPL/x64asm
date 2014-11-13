@@ -31,18 +31,21 @@ class Sreg : public Operand {
     // Needs access to constructor.
     friend class Constants;
     // Needs access to constructor.
+    template <class T>
     friend class M;
     // Needs access to constructor.
     friend class Moffs;
 
   public:
     /** Copy constructor. */
-    Sreg(const Sreg& rhs) : Operand(0,0) {
+    Sreg(const Sreg& rhs) : Operand(Type::SREG) {
 			val_ = rhs.val_;
+      val2_ = rhs.val2_;
 		}
     /** Move constructor. */
-    Sreg(Sreg&& rhs) {
+    Sreg(Sreg&& rhs) : Operand(Type::SREG) {
 			val_ = rhs.val_;
+      val2_ = rhs.val2_;
 		}
     /** Copy assignment operator. */
     Sreg& operator=(const Sreg& rhs) {
@@ -87,9 +90,6 @@ class Sreg : public Operand {
 			std::swap(val_, rhs.val_);
 		}
 
-    /** Returns the type of this operand */
-    virtual Type type() const { return Type::SREG; }
-
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
 			is.setstate(std::ios::failbit);
@@ -104,7 +104,8 @@ class Sreg : public Operand {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Sreg(uint64_t val) : Operand(val) {}
+    constexpr Sreg(uint64_t val) : Operand(Type::SREG, val) {}
+    constexpr Sreg(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 /** The segment register FS. */
@@ -118,12 +119,9 @@ class Fs : public Sreg {
 			return val_ == 4;
 		}
 
-    /** Returns the type of this operand */
-    Type type() const { return Type::FS; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Fs() : Sreg(4) {}
+    constexpr Fs() : Sreg(Type::FS, 4) {}
 };
 
 /** The segment register GS. */
@@ -137,12 +135,9 @@ class Gs : public Sreg {
 			return val_ == 5;
 		}
 
-    /** Returns the type of this operand */
-    Type type() const { return Type::GS; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Gs() : Sreg(5) {}
+    constexpr Gs() : Sreg(Type::GS, 5) {}
 };
 
 } // namespace x64asm

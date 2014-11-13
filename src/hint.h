@@ -32,11 +32,11 @@ class Hint : public Operand {
 
   public:
     /** Copy constructor. */
-    Hint(const Hint& rhs) : Operand(0,0) {
+    Hint(const Hint& rhs) : Operand(Type::HINT) {
 			val_ = rhs.val_;
 		}
     /** Move constructor. */
-    Hint(Hint&& rhs) {
+    Hint(Hint&& rhs) : Operand(Type::HINT) {
 			val_ = rhs.val_;
 		}
     /** Copy assignment operator. */
@@ -82,9 +82,6 @@ class Hint : public Operand {
 			std::swap(val_, rhs.val_);
 		}
 
-    /** Returns the type of this operand */
-    Type type() const { return Type::HINT; }
-
     /** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
 			is.setstate(std::ios::failbit);
@@ -97,7 +94,7 @@ class Hint : public Operand {
 
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Hint(uint64_t val) : Operand(val) {}
+    constexpr Hint(uint64_t val) : Operand(Type::HINT, val) {}
 };
 
 } // namespace x64asm

@@ -26,24 +26,7 @@ using namespace std;
 
 namespace x64asm {
 
-RegSet& RegSet::operator+=(const M& rhs) {
-	if (rhs.addr_or()) {
-		if (rhs.contains_base()) {
-			*this += Alias::to_double(rhs.get_base());
-		}
-		if (rhs.contains_index()) {
-			*this += Alias::to_double(rhs.get_index());
-		}
-	} else {
-		if (rhs.contains_base()) {
-			*this += rhs.get_base();
-		}
-		if (rhs.contains_index()) {
-			*this += rhs.get_index();
-		}
-	}
-	return *this;
-}
+
 
 istream& RegSet::read_text(istream& is) {
 	*this = RegSet::empty();

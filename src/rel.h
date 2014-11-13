@@ -27,12 +27,14 @@ namespace x64asm {
 class Rel : public Operand {
   public:
     /** Copy constructor. */
-    Rel(const Rel& rhs) : Operand(0,0) {
+    Rel(const Rel& rhs) : Operand(Type::NONE) {
 			val_ = rhs.val_;
+      val2_ = rhs.val2_;
 		}
     /** Move constructor. */
-    Rel(Rel&& rhs) {
+    Rel(Rel&& rhs) : Operand(Type::NONE) {
 			val_ = rhs.val_;
+      val2_ = rhs.val2_;
 		}
     /** Copy assignment operator. */
     Rel& operator=(const Rel& rhs) {
@@ -87,7 +89,7 @@ class Rel : public Operand {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Rel(uint64_t val) : Operand(val) {}
+    constexpr Rel(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 /** A relative address in the range from 128 bytes before the end of the
@@ -96,15 +98,12 @@ class Rel : public Operand {
 class Rel8 : public Rel {
   public:
     /** Creates an 8-bit relative offset. */
-    constexpr Rel8(int8_t val) : Rel((uint64_t)val) {}
+    constexpr Rel8(int8_t val) : Rel(Type::REL_8, (uint64_t)val) {}
 
     /** Checks that this offset fits in 8 bits. */
     constexpr bool check() {
 			return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
 		}
-
-    /** Gets the type of this operand */
-    Type type() const { return Type::REL_8; }
 };
 
 /** A relative address within the same code segment as the instruction
@@ -114,15 +113,12 @@ class Rel8 : public Rel {
 class Rel32 : public Rel {
   public:
     /** Creates a 32-bit relative offset. */
-    constexpr Rel32(int64_t val) : Rel((uint64_t)val) {}
+    constexpr Rel32(int64_t val) : Rel(Type::REL_32, (uint64_t)val) {}
 
     /** Checks that this offset value fits in 32-bits. */
     constexpr bool check() {
 			return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
 		}
-
-    /** Gets the type of this operand */
-    Type type() const { return Type::REL_32; }
 };
 
 } // namespace x64asm

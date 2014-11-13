@@ -31,11 +31,11 @@ class Mm : public Operand {
 
   public:
     /** Copy constructor. */
-    Mm(const Mm& rhs) : Operand(0,0) {
+    Mm(const Mm& rhs) : Operand(Type::MM) {
 			val_ = rhs.val_;
 		}
     /** Move constructor. */
-    Mm(Mm&& rhs) {
+    Mm(Mm&& rhs) : Operand(Type::MM) {
 			val_ = rhs.val_;
 		}
     /** Copy assignment operator. */
@@ -97,7 +97,7 @@ class Mm : public Operand {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Mm(uint64_t val) : Operand(val) {}
+    constexpr Mm(uint64_t val) : Operand(Type::MM, val) {}
 };
 
 } // namespace x64asm

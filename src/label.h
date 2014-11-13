@@ -30,11 +30,11 @@ namespace x64asm {
 class Label : public Operand {
   public:
     /** Creates a new, globally unique label. */
-    Label() {
+    Label() : Operand(Type::LABEL) {
   		val_ = next_val_++;
 		}
     /** Creates a named label. Repeated calls will produce identical results. */
-    Label(const std::string& s) {
+    Label(const std::string& s) : Operand(Type::LABEL) {
 			auto itr = label2val_.find(s);
 			if (itr == label2val_.end()) {
 				val_ = next_val_++;
@@ -46,12 +46,14 @@ class Label : public Operand {
 		}
 
     /** Copy constructor. */
-    Label(const Label& rhs) : Operand(0,0) {
+    Label(const Label& rhs) : Operand(Type::LABEL) {
   		val_ = rhs.val_;
+      val2_ = rhs.val2_;
 		}
     /** Move constructor. */
-    Label(Label&& rhs) {
+    Label(Label&& rhs) : Operand(Type::LABEL) {
 			val_ = rhs.val_;
+      val2_ = rhs.val2_;
 		}
     /** Copy assignment operator. */
     Label& operator=(const Label& rhs) {
@@ -101,9 +103,6 @@ class Label : public Operand {
     void swap(Label& rhs) {
 			std::swap(val_, rhs.val_);
 		}
-
-    /** Returns the type of this operand */
-    Type type() const { return Type::LABEL; }
 
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {

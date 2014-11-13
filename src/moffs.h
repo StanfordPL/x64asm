@@ -42,12 +42,12 @@ class Moffs : public Operand {
 
   public:
     /** Copy constructor. */
-    Moffs(const Moffs& rhs) : Operand(0,0) {
+    Moffs(const Moffs& rhs) : Operand(Type::NONE) {
 			val_ = rhs.val_;
 			val2_ = rhs.val2_;
 		}
     /** Move constructor. */
-    Moffs(Moffs&& rhs) {
+    Moffs(Moffs&& rhs) : Operand(Type::NONE) {
 			val_ = rhs.val_;
 			val2_ = rhs.val2_;
 		}
@@ -137,12 +137,12 @@ class Moffs : public Operand {
 
   protected:
     /** Create a moffs using seg:offset form. */
-    constexpr Moffs(const Sreg& seg, const Imm64& offset) :
-	    Operand((uint64_t)offset, seg.val_) {
+    constexpr Moffs(Type t, const Sreg& seg, const Imm64& offset) :
+	    Operand(t, (uint64_t)offset, seg.val_) {
 		}
     /** Create a moffs using offset form. */
-    constexpr Moffs(const Imm64& offset) :
-    	Operand((uint64_t)offset, (uint64_t)Null::SEG) {
+    constexpr Moffs(Type t, const Imm64& offset) :
+    	Operand(t, (uint64_t)offset, (uint64_t)Null::SEG) {
 		}
 };
 
@@ -150,47 +150,36 @@ class Moffs : public Operand {
 class Moffs8 : public Moffs {
   public:
     /** Create a moffs using seg:offset form. */
-    constexpr Moffs8(const Sreg& seg, const Imm64& offset) : Moffs(seg, offset) {}
+    constexpr Moffs8(const Sreg& seg, const Imm64& offset) : Moffs(Type::MOFFS_8, seg, offset) {}
     /** Create a moffs using offset form. */
-    constexpr Moffs8(const Imm64& offset) : Moffs(offset) {}
-    /** Returns the type of this operand */
-    Type type() const { return Type::MOFFS_8; }
+    constexpr Moffs8(const Imm64& offset) : Moffs(Type::MOFFS_8, offset) {}
 };
 
 /** A simple memory variable (memory offset) of type word. */
 class Moffs16 : public Moffs {
   public:
     /** Create a moffs using seg:offset form. */
-    constexpr Moffs16(const Sreg& seg, const Imm64& offset) : Moffs(seg, offset) {}
+    constexpr Moffs16(const Sreg& seg, const Imm64& offset) : Moffs(Type::MOFFS_16, seg, offset) {}
     /** Create a moffs using offset form. */
-    constexpr Moffs16(const Imm64& offset) : Moffs(offset) {}
-
-    /** Returns the type of this operand */
-    Type type() const { return Type::MOFFS_16; }
+    constexpr Moffs16(const Imm64& offset) : Moffs(Type::MOFFS_16, offset) {}
 };
 
 /** A simple memory variable (memory offset) of type doubleword. */
 class Moffs32 : public Moffs {
   public:
     /** Create a moffs using seg:offset form. */
-    constexpr Moffs32(const Sreg& seg, const Imm64& offset) : Moffs(seg, offset) {}
+    constexpr Moffs32(const Sreg& seg, const Imm64& offset) : Moffs(Type::MOFFS_32, seg, offset) {}
     /** Create a moffs using offset form. */
-    constexpr Moffs32(const Imm64& offset) : Moffs(offset) {}
-
-    /** Returns the type of this operand */
-    Type type() const { return Type::MOFFS_32; }
+    constexpr Moffs32(const Imm64& offset) : Moffs(Type::MOFFS_32, offset) {}
 };
 
 /** A simple memory variable (memory offset) of type quadword. */
 class Moffs64 : public Moffs {
   public:
     /** Create a moffs using seg:offset form. */
-    constexpr Moffs64(const Sreg& seg, const Imm64& offset) : Moffs(seg, offset) {}
+    constexpr Moffs64(const Sreg& seg, const Imm64& offset) : Moffs(Type::MOFFS_64, seg, offset) {}
     /** Create a moffs using offset form. */
-    constexpr Moffs64(const Imm64& offset) : Moffs(offset) {}
-
-    /** Returns the type of this operand */
-    Type type() const { return Type::MOFFS_64; }
+    constexpr Moffs64(const Imm64& offset) : Moffs(Type::MOFFS_64, offset) {}
 };
 
 } // namespace x64asm

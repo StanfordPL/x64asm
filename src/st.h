@@ -32,12 +32,14 @@ class St : public Operand {
 
   public:
     /** Copy constructor. */
-    St(const St& rhs) : Operand(0,0) {
+    St(const St& rhs) : Operand(Type::ST) {
 			val_ = rhs.val_;
+      val2_ = rhs.val2_;
 		}
     /** Move constructor. */
-    St(St&& rhs) {
+    St(St&& rhs) : Operand(Type::ST) {
 			val_ = rhs.val_;
+      val2_ = rhs.val2_;
 		}
     /** Copy assignment operator. */
     St& operator=(const St& rhs) {
@@ -104,7 +106,8 @@ class St : public Operand {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr St(uint64_t val) : Operand(val) {}
+    constexpr St(uint64_t val) : Operand(Type::ST, val) {}
+    constexpr St(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 /** The top element of the FPU register stack. */
@@ -118,12 +121,9 @@ class St0 : public St {
 			return val_ == 0;
 		}
 
-    /** Return the type of this operand */
-    Type type() const { return Type::ST_0; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr St0() : St(0) {}
+    constexpr St0() : St(Type::ST_0, 0) {}
 };
 
 } // namespace x64asm

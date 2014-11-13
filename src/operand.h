@@ -69,8 +69,8 @@ class Operand {
 		}
 
     /** Return the type of this operand */
-    virtual Type type() const { return Type::NONE; }
-    /** Return the bitwidth of this operand */
+    constexpr Type type() { return (Type)(val2_ >> 3); }
+    /** Return the size of this operand */
     uint16_t size() const;
     /** Is this a general purpose register? */
     bool is_gp_register() const;
@@ -82,12 +82,14 @@ class Operand {
     bool is_immediate() const;
 
   protected:
-    /** Creates an operand with no underlying value. */
+    /** Creates an operand with a type and no underlying value. */
+    constexpr Operand(Type t) : val_(0), val2_((uint64_t)t << 3) {}
+    /** Creates an operand with a type and one underlying value. */
+    constexpr Operand(Type t, uint64_t val) : val_(val), val2_((uint64_t)t << 3) {}
+    /** Creates an operand with a type and two underlying values. */
+    constexpr Operand(Type t, uint64_t val, uint64_t val2) : val_(val), val2_(val2 | ((uint64_t)t << 3)) {}
+    /** Creates an operand with no type and no underlying value. */
     constexpr Operand() : val_(0), val2_(0) {}
-    /** Creates an operand with one underlying value. */
-    constexpr Operand(uint64_t val) : val_(val), val2_(0) {}
-    /** Creates an operand with two underlying values. */
-    constexpr Operand(uint64_t val, uint64_t val2) : val_(val), val2_(val2) {}
 
     /** Underlying value. */
     uint64_t val_;

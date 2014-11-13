@@ -30,12 +30,14 @@ namespace x64asm {
 class Modifier : public Operand {
   public:
     /** Copy constructor. */
-    Modifier(const Modifier& rhs) : Operand(0,0) {
+    Modifier(const Modifier& rhs) : Operand(Type::NONE) {
 			val_ = rhs.val_;
+      val2_ = rhs.val2_;
 		}
     /** Move constructor. */
-    Modifier(Modifier&& rhs) {
+    Modifier(Modifier&& rhs) : Operand(Type::NONE) {
 			val_ = rhs.val_;
+      val2_ = rhs.val2_;
 		}
     /** Copy assignment operator. */
     Modifier& operator=(const Modifier& rhs) {
@@ -92,7 +94,7 @@ class Modifier : public Operand {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Modifier(uint64_t val) : Operand(val) {}
+    constexpr Modifier(Type t) : Operand(t) {}
 };
 
 /** The 32-bit memory address override prefix: 0x66. */
@@ -100,12 +102,9 @@ class Pref66 : public Modifier {
     // Needs access to constructor.
     friend class Constants;
 
-  public:
-    Type type() const { return Type::PREF_66; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Pref66() : Modifier(0) {}
+    constexpr Pref66() : Modifier(Type::PREF_66) {}
 };
 
 /** The REX.w prefix: 0x48. */
@@ -113,12 +112,9 @@ class PrefRexW : public Modifier {
     // Needs access to constructor.
     friend class Constants;
 
-  public:
-    Type type() const { return Type::PREF_REX_W; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr PrefRexW() : Modifier(0) {}
+    constexpr PrefRexW() : Modifier(Type::PREF_REX_W) {}
 };
 
 /** Far instruction variant. */
@@ -126,12 +122,9 @@ class Far : public Modifier {
     // Needs access to constructor.
     friend class Constants;
 
-  public:
-    Type type() const { return Type::FAR; }
-
   private:
     /** Direct access to this constructor is disallowed. */
-    constexpr Far() : Modifier(0) {}
+    constexpr Far() : Modifier(Type::FAR) {}
 };
 
 } // namespace x64asm
