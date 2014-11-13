@@ -203,36 +203,43 @@ const Instruction* to_instr(const std::string& opc,
 
 R32 base32(const Operand* o) { 
 	const auto ret = *(static_cast<const R32*>(o));
+	delete o;
 	return ret;
 }
 
 R64 base64(const Operand* o) { 
 	const auto ret = *(static_cast<const R64*>(o));
+	delete o;
 	return ret;
 }
 
 R32 index32(const Operand* o) { 
 	const auto ret = *(static_cast<const R32*>(o));
+	delete o;
 	return ret;
 }
 
 R64 index64(const Operand* o) { 
 	const auto ret = *(static_cast<const R64*>(o));
+	delete o;
 	return ret;
 }
 
 Imm32 disp(const Operand* o) { 
 	const auto ret = *(static_cast<const Imm32*>(o));
+	delete o;
 	return ret;
 }
 
 Sreg seg(const Operand* o) { 
 	const auto ret = *(static_cast<const Sreg*>(o));
+	delete o;
 	return ret;
 }
 
 Imm64 offset(const Operand* o) { 
 	const auto ret = *(static_cast<const Imm64*>(o));
+	delete o;
 	return ret;
 }
 
@@ -310,7 +317,7 @@ Imm64 offset(const Operand* o) {
 blank : /* empty */ | blank ENDL { }
 
 code : blank instrs { 
-	code.assign($2->begin(), $2->end());  
+	code.assign($2->begin(), $2->end()); delete $2; 
 }
 
 instrs : /* empty */ {
@@ -319,16 +326,26 @@ instrs : /* empty */ {
 | instr { 
   $$ = new vector<Instruction>(); 
 	$$->push_back(*$1); 
+	delete $1; 
 } 
 | instrs instr { 
 	$1->push_back(*$2); 
+	delete($2); 
 }
 
 instr : LABEL COLON ENDL blank {
   $$ = new Instruction{Opcode::LABEL_DEFN, {*$1}};
+	delete $1;
 }
 | OPCODE typed_operands ENDL blank {
 	$$ = to_instr(*$1, *$2);
+
+	delete $1;
+	for ( const auto op : *$2 ) {
+		delete op->first;
+		delete op;
+	}
+	delete $2;
 
 	if ( !$$->check() )
 		yyerror(is, code, "Unable to parse instruction!");
