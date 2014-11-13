@@ -362,9 +362,6 @@ class R64 : public R {
 			return !(*this == rhs);
 		}
 
-    /** Returns the type of this operand */
-    virtual Type type() const { return Type::R_64; }
-
 		/** Reads this register from an ostream using at&t syntax. */
 		std::istream& read_att(std::istream& is);
     /** Writes this register to an ostream using at&t syntax. */

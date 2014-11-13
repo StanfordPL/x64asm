@@ -81,9 +81,6 @@ class Mm : public Operand {
   		std::swap(val_, rhs.val_);
 		}
 
-    /** Returns the type of an MMX register. */
-    Type type() const { return Type::MM; }
-
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
 			is.setstate(std::ios::failbit);

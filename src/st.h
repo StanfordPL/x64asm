@@ -84,9 +84,6 @@ class St : public Operand {
 			std::swap(val_, rhs.val_);
 		}
 
-    /** Return the type of this operand */
-    virtual Type type() const { return Type::ST; }
-
 		/** @todo This method is undefined. */
 		std::istream& read_att(std::istream& is) {
 			is.setstate(std::ios::failbit);
