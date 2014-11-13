@@ -203,48 +203,36 @@ const Instruction* to_instr(const std::string& opc,
 
 R32 base32(const Operand* o) { 
 	const auto ret = *(static_cast<const R32*>(o));
-	delete o;
 	return ret;
 }
 
 R64 base64(const Operand* o) { 
-  std::cout << "in base64 w/ o = " << hex << o << std::endl;
-  std::cout << "((uint64_t*)o)[0] = " << hex << ((uint64_t*)o)[0] << std::endl;
-  std::cout << "((uint64_t*)o)[1] = " << hex << ((uint64_t*)o)[1] << std::endl;
 	const auto ret = *(static_cast<const R64*>(o));
-  std::cout << "deleting..." << std::endl;
-	delete o;
-  std::cout << "deleted." << std::endl;
 	return ret;
 }
 
 R32 index32(const Operand* o) { 
 	const auto ret = *(static_cast<const R32*>(o));
-	delete o;
 	return ret;
 }
 
 R64 index64(const Operand* o) { 
 	const auto ret = *(static_cast<const R64*>(o));
-	delete o;
 	return ret;
 }
 
 Imm32 disp(const Operand* o) { 
 	const auto ret = *(static_cast<const Imm32*>(o));
-	delete o;
 	return ret;
 }
 
 Sreg seg(const Operand* o) { 
 	const auto ret = *(static_cast<const Sreg*>(o));
-	delete o;
 	return ret;
 }
 
 Imm64 offset(const Operand* o) { 
 	const auto ret = *(static_cast<const Imm64*>(o));
-	delete o;
 	return ret;
 }
 
