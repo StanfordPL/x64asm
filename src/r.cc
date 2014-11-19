@@ -177,4 +177,43 @@ ostream& R64::write_att(ostream& os) const {
 	return (os << r64s_[val_]);
 }
 
+ostream& R::write_att(ostream& os) const {
+  switch(type()) {
+    case Type::RL:
+      return static_cast<const Rl* const>(this)->write_att(os);
+      break;
+
+    case Type::RB:
+    case Type::AL:
+    case Type::CL:
+      return static_cast<const Rb* const>(this)->write_att(os);
+      break;
+
+    case Type::RH:
+      return static_cast<const Rh* const>(this)->write_att(os);
+      break;
+
+    case Type::R_16:
+    case Type::AX:
+    case Type::DX:
+      return static_cast<const R16 * const>(this)->write_att(os);
+      break;
+
+    case Type::R_32:
+    case Type::EAX:
+      return static_cast<const R32 * const>(this)->write_att(os);
+      break;
+
+    case Type::R_64:
+    case Type::RAX:
+      return static_cast<const R64 * const>(this)->write_att(os);
+      break;
+
+    default:
+      assert(false);
+      return os;
+      break;
+  }
+}
+
 } // namespace x64asm

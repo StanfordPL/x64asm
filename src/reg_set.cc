@@ -110,7 +110,10 @@ RegSet::GpIterator& RegSet::GpIterator::operator++() {
 
   for(; index_ < r64s.size() && !found; index_++) {
 
-    for(size_++; size_ < 5 && !found; size_++)  {
+    if(size_ > 4)
+      size_ = 0;
+
+    for(; size_ < 5 && !found; size_++)  {
       switch(size_) {
         case 0: {
           if(rs_->contains(r64s[index_])) {
@@ -157,6 +160,9 @@ RegSet::GpIterator& RegSet::GpIterator::operator++() {
     }
   }
 
+  // because we just unnecessarily added 1 to the index.
+  index_--;
+  
   if (!found) {
     finished_ = true;
     cout << "no more registers" << endl;
