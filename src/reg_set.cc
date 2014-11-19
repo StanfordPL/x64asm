@@ -80,24 +80,9 @@ istream& RegSet::read_text(istream& is) {
 
 ostream& RegSet::write_text(ostream& os) const {
   os << "{";
-	for (size_t i = 0, ie = r64s.size(); i < ie; ++i) {
-		if (contains(r64s[i])) {
-			os << " " << r64s[i];
-		} else if (contains(r32s[i])) {
-			os << " " << r32s[i];
-		} else if (contains(r16s[i])) {
-			os << " " << r16s[i];
-		} else if (i < 4) {
-			if (contains(rls[i])) {
-				os << " " << rls[i];
-			}
-			if (contains(rhs[i])) {
-				os << " " << rhs[i];
-			}
-		} else if (contains(rbs[i-4])) {
-			os << " " << rbs[i-4];
-		}
-	}
+  for(auto rit = gp_begin(); rit != gp_end(); ++rit) {
+    os << " " << *rit;
+  }
 	for (size_t i = 0, ie = ymms.size(); i < ie; ++i) {
 		if (contains(ymms[i])) {
 			os << " " << ymms[i];
@@ -114,5 +99,68 @@ ostream& RegSet::write_text(ostream& os) const {
 
 	return os;
 }
+
+RegSet::GpIterator& RegSet::GpIterator::operator++() {
+  if(finished_)
+    return *this;
+
+  bool found = false;
+
+  for(; index_ < r64s.size() && !found; index_++) {
+
+    for(size_++; size_ < 5 && !found; size_++)  {
+      switch(size_) {
+        case 0: {
+          if(rs_->contains(r64s[index_])) {
+            current_ = r64s[index_];
+            found = true;
+          }
+          break;
+        }
+        case 1: {
+          if(rs_->contains(r32s[index_])) {
+            current_ = r32s[index_];
+            found = true;
+          }
+          break;
+        }
+        case 2: {
+          if(rs_->contains(r16s[index_])) {
+            current_ = r16s[index_];
+            found = true;
+          }
+          break;
+        }
+        case 3: {
+          if(index_ < 4 && rs_->contains(rls[index_])) {
+            current_ = rbs[index_];
+            found = true;
+          }
+          if(index_ >= 4 && rs_->contains(rbs[index_])) {
+            current_ = rbs[index_-4];
+            found = true;
+          }
+          break;
+        }
+        case 4: {
+          if(index_ < 4 && rs_->contains(rhs[index_])) {
+            current_ = rhs[index_];
+            found = true;
+          }
+          break;
+        }
+        default:
+          assert(false);
+      }
+    }
+  }
+
+  if (!found) {
+    finished_ = true;
+  }
+
+  return *this;
+} 
+
 
 } // namespace x64asm
