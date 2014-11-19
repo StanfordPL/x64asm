@@ -666,7 +666,7 @@ class RegSet {
           if (finished_)
             return other.finished_;
 
-          return index_ == other.index_ && size_ == other.size_ && !other.finished_;
+          return index_ == other.index_ && !other.finished_;
         }
         /** Checks for inequality */
         bool operator!=(const GpIterator& other) {
@@ -678,9 +678,6 @@ class RegSet {
       private:
         /** Tracks the index of the current register */
         size_t index_;
-        /** Tracks the size of the current register
-          (0 = 64, 1 = 32, 2 = 16, 3 = 8L, 4 = 8H) */
-        size_t size_;
         /** The current register */
         R current_;
         /** If we've found all the registers */
@@ -689,7 +686,7 @@ class RegSet {
         const RegSet * const rs_;
 
         /** Creates iterator for GPs */
-        GpIterator(const RegSet* const rs) : rs_(rs), index_(0), size_(0), current_(rax) {
+        GpIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(rax) {
           ++(*this);
         }
         /** Go to end */
