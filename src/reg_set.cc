@@ -104,8 +104,6 @@ RegSet::GpIterator& RegSet::GpIterator::operator++() {
   if(finished_)
     return *this;
 
-  cout << "starting search at index=" << index_ << "  current: " << current_ << endl;
-
   bool found = false;
 
   for(; index_ < r64s.size() && !found; index_++) {
@@ -144,9 +142,6 @@ RegSet::GpIterator& RegSet::GpIterator::operator++() {
   
   if (!found) {
     finished_ = true;
-    cout << "no more registers" << endl;
-  } else {
-    cout << "Found register with index=" << index_ << " : " << current_ << endl;
   }
 
   index_++;

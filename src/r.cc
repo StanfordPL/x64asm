@@ -178,7 +178,6 @@ ostream& R64::write_att(ostream& os) const {
 }
 
 ostream& R::write_att(ostream& os) const {
-  cout << "Invoking R::write_att" << endl;
   switch(type()) {
     case Type::RL:
       return static_cast<const Rl* const>(this)->write_att(os);
