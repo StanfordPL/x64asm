@@ -651,6 +651,61 @@ class RegSet {
     constexpr bool contains_all(Mask m, uint64_t group) {
 			return ((uint64_t)m & group) == (uint64_t)m;
 		}
+
+    /** Iterator over GP registers in a regset */
+    class GpIterator {
+      friend class RegSet;
+
+      public:
+        /** Returns the current GP register we're looking at */
+        R operator*() {
+          return current_;
+        }
+        /** Checks for equality of two iterators */
+        bool operator==(const GpIterator& other) {
+          if (finished_)
+            return other.finished_;
+
+          return index_ == other.index_ && !other.finished_;
+        }
+        /** Checks for inequality */
+        bool operator!=(const GpIterator& other) {
+          return !(*this == other);
+        }
+        /** Advances to the next GP register */
+        GpIterator& operator++();
+
+      private:
+        /** Tracks the index of the current register */
+        size_t index_;
+        /** The current register */
+        R current_;
+        /** If we've found all the registers */
+        bool finished_;
+        /** Our regset */
+        const RegSet * const rs_;
+
+        /** Creates iterator for GPs */
+        GpIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(rax) {
+          ++(*this);
+        }
+        /** Go to end */
+        GpIterator& finish() {
+          finished_ = true;
+          return *this;
+        }
+    };
+
+    /** Iterate over largest general-purpose registers */
+    GpIterator gp_begin() const {
+      return GpIterator(this);
+    }
+    /** End iterator for the gp registers */
+    GpIterator gp_end() const {
+      return GpIterator(this).finish();
+    }
+
+
 };
 
 } // namespace x64asm

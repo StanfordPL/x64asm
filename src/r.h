@@ -37,6 +37,9 @@ class R : public Operand {
 			return val_;
 		}
 
+    /** Writes this register to an ostream using at&t syntax. */
+    std::ostream& write_att(std::ostream& os) const;
+
   protected:
     /** Direct access to this constructor is disallowed. */
     constexpr R(Type t, uint64_t val) : Operand(t, val) {}
@@ -427,6 +430,11 @@ inline istream& operator>>(istream& is, x64asm::R64& r) {
 }
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::R64& r) {
+	return r.write_att(os);
+}
+
+/** iostream overload. */
+inline ostream& operator<<(ostream& os, const x64asm::R& r) {
 	return r.write_att(os);
 }
 
