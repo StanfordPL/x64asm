@@ -110,58 +110,37 @@ RegSet::GpIterator& RegSet::GpIterator::operator++() {
 
   for(; index_ < r64s.size() && !found; index_++) {
 
-    if(size_ > 4)
-      size_ = 0;
-
-    for(; size_ < 5 && !found; size_++)  {
-      switch(size_) {
-        case 0: {
-          if(rs_->contains(r64s[index_])) {
-            current_ = r64s[index_];
-            found = true;
-          }
-          break;
-        }
-        case 1: {
-          if(rs_->contains(r32s[index_])) {
-            current_ = r32s[index_];
-            found = true;
-          }
-          break;
-        }
-        case 2: {
-          if(rs_->contains(r16s[index_])) {
-            current_ = r16s[index_];
-            found = true;
-          }
-          break;
-        }
-        case 3: {
-          if(index_ < 4 && rs_->contains(rls[index_])) {
-            current_ = rbs[index_];
-            found = true;
-          }
-          if(index_ >= 4 && rs_->contains(rbs[index_])) {
-            current_ = rbs[index_-4];
-            found = true;
-          }
-          break;
-        }
-        case 4: {
-          if(index_ < 4 && rs_->contains(rhs[index_])) {
-            current_ = rhs[index_];
-            found = true;
-          }
-          break;
-        }
-        default:
-          assert(false);
-      }
+    if(rs_->contains(r64s[index_])) {
+      current_ = r64s[index_];
+      found = true;
+      break;
+    }
+    if(rs_->contains(r32s[index_])) {
+      current_ = r32s[index_];
+      found = true;
+      break;
+    }
+    if(rs_->contains(r16s[index_])) {
+      current_ = r16s[index_];
+      found = true;
+      break;
+    }
+    if(index_ < 4 && rs_->contains(rhs[index_])) {
+      current_ = rhs[index_];
+      found = true;
+      break;
+    }
+    if(index_ < 4 && rs_->contains(rls[index_])) {
+      current_ = rbs[index_];
+      found = true;
+      break;
+    }
+    if(index_ >= 4 && rs_->contains(rbs[index_])) {
+      current_ = rbs[index_-4];
+      found = true;
+      break;
     }
   }
-
-  // because we just unnecessarily added 1 to the index.
-  index_--;
   
   if (!found) {
     finished_ = true;
