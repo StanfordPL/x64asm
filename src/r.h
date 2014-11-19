@@ -433,6 +433,11 @@ inline ostream& operator<<(ostream& os, const x64asm::R64& r) {
 	return r.write_att(os);
 }
 
+/** iostream overload. */
+inline ostream& operator<<(ostream& os, const x64asm::R& r) {
+	return r.write_att(os);
+}
+
 } // namespace std
 
 #endif
