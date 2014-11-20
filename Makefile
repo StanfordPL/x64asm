@@ -26,6 +26,7 @@ OBJ=src/assembler.o \
 		src/flag_set.o \
 		src/instruction.o \
 		src/label.o \
+		src/linker.o \
 		src/operand.o \
 		src/r.o \
 		src/reg_set.o \
