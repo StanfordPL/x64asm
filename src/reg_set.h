@@ -686,7 +686,7 @@ class RegSet {
         const RegSet * const rs_;
 
         /** Creates iterator for GPs */
-        GpIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(rax) {
+        GpIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(rax), finished_(false) {
           ++(*this);
         }
         /** Go to end */
@@ -730,7 +730,7 @@ class RegSet {
         const RegSet * const rs_;
 
         /** Creates iterator for GPs */
-        SseIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(xmm0) {
+        SseIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(xmm0), finished_(false) {
           ++(*this);
         }
         /** Go to end */
