@@ -652,6 +652,7 @@ class RegSet {
 			return ((uint64_t)m & group) == (uint64_t)m;
 		}
 
+  public:
     /** Iterator over GP registers in a regset */
     class GpIterator {
       friend class RegSet;
