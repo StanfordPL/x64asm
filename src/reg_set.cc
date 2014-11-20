@@ -151,7 +151,7 @@ RegSet::SseIterator& RegSet::SseIterator::operator++() {
 
   bool found = false;
 
-  for(; index_ < r64s.size() && !found; index_++) {
+  for(; index_ < ymms.size() && !found; index_++) {
 
     if(rs_->contains(ymms[index_])) {
       current_ = ymms[index_];
@@ -166,7 +166,10 @@ RegSet::SseIterator& RegSet::SseIterator::operator++() {
   }
   
   if (!found) {
+    cout << "at the end of the regset" << endl;
     finished_ = true;
+  } else {
+    cout << "find index_=" << index_ << " w/ current: " << current_ << endl;
   }
 
   index_++;
