@@ -702,7 +702,7 @@ class RegSet {
       friend class RegSet;
 
       public:
-        /** Returns the current GP register we're looking at */
+        /** Returns the current SSE register we're looking at */
         Sse operator*() {
           return current_;
         }
@@ -717,7 +717,7 @@ class RegSet {
         bool operator!=(const SseIterator& other) {
           return !(*this == other);
         }
-        /** Advances to the next GP register */
+        /** Advances to the next SSE register */
         SseIterator& operator++();
 
       private:
@@ -730,12 +730,55 @@ class RegSet {
         /** Our regset */
         const RegSet * const rs_;
 
-        /** Creates iterator for GPs */
+        /** Creates iterator for SSEs */
         SseIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(xmm0), finished_(false) {
           ++(*this);
         }
         /** Go to end */
         SseIterator& finish() {
+          finished_ = true;
+          return *this;
+        }
+    };
+    /** Iterator over status flags in a regset */
+    class FlagsIterator {
+      friend class RegSet;
+
+      public:
+        /** Returns the current flag we're looking at */
+        Eflags operator*() {
+          return current_;
+        }
+        /** Checks for equality of two iterators */
+        bool operator==(const FlagsIterator& other) {
+          if (finished_)
+            return other.finished_;
+
+          return index_ == other.index_ && !other.finished_;
+        }
+        /** Checks for inequality */
+        bool operator!=(const FlagsIterator& other) {
+          return !(*this == other);
+        }
+        /** Advances to the next flag */
+        FlagsIterator& operator++();
+
+      private:
+        /** Tracks the index of the current register */
+        size_t index_;
+        /** The current register */
+        Eflags current_;
+        /** If we've found all the registers */
+        bool finished_;
+        /** Our regset */
+        const RegSet * const rs_;
+
+        /** Creates iterator for flags */
+        FlagsIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(eflags_cf), finished_(false) {
+          ++(*this);
+        }
+        /** Go to end */
+        FlagsIterator& finish() {
           finished_ = true;
           return *this;
         }
@@ -757,6 +800,14 @@ class RegSet {
     /** End iterator for the SSE registers */
     SseIterator sse_end() const {
       return SseIterator(this).finish();
+    }
+    /** Iterates for the status eflags */
+    FlagsIterator flags_begin() const {
+      return FlagsIterator(this);
+    }
+    /** End iterator for the status eflags */
+    FlagsIterator flags_end() const {
+      return FlagsIterator(this).finish();
     }
 
 };
