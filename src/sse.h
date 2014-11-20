@@ -28,6 +28,11 @@ namespace x64asm {
 class Sse : public Operand {
 
   public:
+    /** Conversion based on underlying value. */
+    constexpr operator uint64_t() {
+      return val_;
+    }
+
     /** Writes this ymm register to an ostream using at&t syntax. */
     std::ostream& write_att(std::ostream& os) const;
 

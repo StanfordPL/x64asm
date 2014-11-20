@@ -173,5 +173,30 @@ RegSet::SseIterator& RegSet::SseIterator::operator++() {
   return *this;
 }
 
+RegSet::FlagsIterator& RegSet::FlagsIterator::operator++() {
+  if(finished_)
+    return *this;
+
+  bool found = false;
+
+  for(; index_ < eflags.size() && !found; index_++) {
+
+    if(rs_->contains(eflags[index_]) &&
+       (index_ == 0 || index_ == 2 || index_ == 4 ||
+        index_ == 6 || index_ == 7 || index_ == 11)) {
+      current_ = eflags[index_];
+      found = true;
+      break;
+    }
+  }
+  
+  if (!found)
+    finished_ = true;
+
+  index_++;
+
+  return *this;
+}
+
 
 } // namespace x64asm
