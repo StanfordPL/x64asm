@@ -19,14 +19,14 @@ limitations under the License.
 
 #include <iostream>
 
-#include "src/operand.h"
+#include "src/sse.h"
 
 namespace x64asm {
 
 /** An XMM register. The 128-bit XMM registers are: XMM0 through XMM7; XMM8
     through XMM15 are available using REX.R in 64-bit mode.
 */
-class Xmm : public Operand {
+class Xmm : public Sse {
   // Needs access to constructor.
   friend class Constants;
 
@@ -70,8 +70,8 @@ class Xmm : public Operand {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Xmm(uint64_t val) : Operand(Type::XMM, val) {}
-    constexpr Xmm(Type t, uint64_t val) : Operand(t, val) {}
+    constexpr Xmm(uint64_t val) : Sse(Type::XMM, val) {}
+    constexpr Xmm(Type t, uint64_t val) : Sse(t, val) {}
 };
 
 /** The XMM register XMM0. */

@@ -696,6 +696,51 @@ class RegSet {
         }
     };
 
+    /** Iterator over SSE registers in a regset */
+    class SseIterator {
+      friend class RegSet;
+
+      public:
+        /** Returns the current GP register we're looking at */
+        Sse operator*() {
+          return current_;
+        }
+        /** Checks for equality of two iterators */
+        bool operator==(const SseIterator& other) {
+          if (finished_)
+            return other.finished_;
+
+          return index_ == other.index_ && !other.finished_;
+        }
+        /** Checks for inequality */
+        bool operator!=(const SseIterator& other) {
+          return !(*this == other);
+        }
+        /** Advances to the next GP register */
+        SseIterator& operator++();
+
+      private:
+        /** Tracks the index of the current register */
+        size_t index_;
+        /** The current register */
+        Sse current_;
+        /** If we've found all the registers */
+        bool finished_;
+        /** Our regset */
+        const RegSet * const rs_;
+
+        /** Creates iterator for GPs */
+        SseIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(xmm0) {
+          ++(*this);
+        }
+        /** Go to end */
+        SseIterator& finish() {
+          finished_ = true;
+          return *this;
+        }
+    };
+
+
     /** Iterate over largest general-purpose registers */
     GpIterator gp_begin() const {
       return GpIterator(this);
@@ -704,7 +749,14 @@ class RegSet {
     GpIterator gp_end() const {
       return GpIterator(this).finish();
     }
-
+    /** Iterates over largest SSE registers */
+    SseIterator sse_begin() const {
+      return SseIterator(this);
+    }
+    /** End iterator for the SSE registers */
+    SseIterator sse_end() const {
+      return SseIterator(this).finish();
+    }
 
 };
 
