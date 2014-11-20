@@ -151,7 +151,7 @@ RegSet::SseIterator& RegSet::SseIterator::operator++() {
 
   bool found = false;
 
-  for(; index_ < r64s.size() && !found; index_++) {
+  for(; index_ < ymms.size() && !found; index_++) {
 
     if(rs_->contains(ymms[index_])) {
       current_ = ymms[index_];
@@ -165,9 +165,8 @@ RegSet::SseIterator& RegSet::SseIterator::operator++() {
     }
   }
   
-  if (!found) {
+  if (!found)
     finished_ = true;
-  }
 
   index_++;
 
