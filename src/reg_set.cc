@@ -165,12 +165,8 @@ RegSet::SseIterator& RegSet::SseIterator::operator++() {
     }
   }
   
-  if (!found) {
-    cout << "at the end of the regset" << endl;
+  if (!found)
     finished_ = true;
-  } else {
-    cout << "find index_=" << index_ << " w/ current: " << current_ << endl;
-  }
 
   index_++;
 
