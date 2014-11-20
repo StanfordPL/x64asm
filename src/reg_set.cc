@@ -83,13 +83,9 @@ ostream& RegSet::write_text(ostream& os) const {
   for(auto rit = gp_begin(); rit != gp_end(); ++rit) {
     os << " " << *rit;
   }
-	for (size_t i = 0, ie = ymms.size(); i < ie; ++i) {
-		if (contains(ymms[i])) {
-			os << " " << ymms[i];
-		} else if (contains(xmms[i])) {
-			os << " " << xmms[i];
-		}
-	}
+  for(auto sit = sse_begin(); sit != sse_end(); ++sit) {
+    os << " " << *sit;
+  }
 	for (size_t i = 0, ie = eflags.size(); i < ie; i += eflags[i].width()) {
 		if (contains(eflags[i])) {
 			os << " " << eflags[i];
@@ -148,6 +144,35 @@ RegSet::GpIterator& RegSet::GpIterator::operator++() {
 
   return *this;
 } 
+
+RegSet::SseIterator& RegSet::SseIterator::operator++() {
+  if(finished_)
+    return *this;
+
+  bool found = false;
+
+  for(; index_ < r64s.size() && !found; index_++) {
+
+    if(rs_->contains(ymms[index_])) {
+      current_ = ymms[index_];
+      found = true;
+      break;
+    }
+    if(rs_->contains(xmms[index_])) {
+      current_ = xmms[index_];
+      found = true;
+      break;
+    }
+  }
+  
+  if (!found) {
+    finished_ = true;
+  }
+
+  index_++;
+
+  return *this;
+}
 
 
 } // namespace x64asm

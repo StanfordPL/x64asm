@@ -20,14 +20,14 @@ limitations under the License.
 #include <cassert>
 #include <iostream>
 
-#include "src/operand.h"
+#include "src/sse.h"
 
 namespace x64asm {
 
 /** A YMM register. The 256-bit YMM registers are: YMM0 through YMM7; YMM8
     through YMM15 are available using REX.R in 64-bit mode.
 */
-class Ymm : public Operand {
+class Ymm : public Sse {
   // Needs access to constructor.
   friend class Constants;
 
@@ -67,7 +67,7 @@ class Ymm : public Operand {
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Ymm(uint64_t val) : Operand(Type::YMM, val) {}
+    constexpr Ymm(uint64_t val) : Sse(Type::YMM, val) {}
 };
 
 } // namespace x64asm
