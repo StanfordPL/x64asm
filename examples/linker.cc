@@ -25,8 +25,9 @@ using namespace x64asm;
 // functions produced by the assembler.
 
 int main() {
-  // Create an assembler
+  // Create an assembler and a linker
   Assembler assm;
+	Linker lnkr;
 
   // Compile a function, f(x) = x + 1
   Code c1 {
@@ -37,7 +38,7 @@ int main() {
 	};
   auto f1 = assm.assemble(c1);
 
-	// Compile a function that reference f1
+	// Compile a function that references f1
 	Code c2 {
 		{LABEL_DEFN, {Label{"f2"}}},
 		{XOR_R64_R64, {rdi, rdi}},
@@ -48,16 +49,39 @@ int main() {
 	};
 	auto f2 = assm.assemble(c2);
 
-	// Create a linker
-	Linker lnkr;
+	// Example 1:
+	// Linking just f2 should cause an undefined symbol error
+	lnkr.start();
+	lnkr.link(f2);
+	lnkr.finish();
 
-	// Link the two functions together
+	if (lnkr.undef_symbol()) {
+		cout << "Undefined Symbol Error!" << endl;
+	}
+
+	// Example 2:
+	// Linking f1 twice should cause a multiple definition error
+	lnkr.start();
+	lnkr.link(f1);
+	lnkr.link(f1);
+	lnkr.link(f2);
+	lnkr.finish();
+
+	if (lnkr.multiple_def()) {
+		cout << "Multiple Definition Error!" << endl;
+	}
+
+	// Example 3:
+	// Linking the two functions together should work correctly
 	lnkr.start();
 	lnkr.link(f1);
 	lnkr.link(f2);
 	lnkr.finish();
 
   // Calling f2 should return 2
+	if (lnkr.good()) {
+		cout << "Linking finished successfully!" << endl;
+	}
   cout << "f2() = " << f2.call<size_t>() << endl;
   cout << endl;
 
