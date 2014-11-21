@@ -37,7 +37,7 @@ class Moffs : public Operand {
 
     /** Bit mask representing where operand are stored in underlying value. */
     enum class Mask : uint64_t {
-      SEG = 0xf
+      SEG = 0x7
     };
 
   public:
