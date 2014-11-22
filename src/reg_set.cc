@@ -125,11 +125,11 @@ RegSet::GpIterator& RegSet::GpIterator::operator++() {
       break;
     }
     if(index_ < 4 && rs_->contains(rls[index_])) {
-      current_ = rbs[index_];
+      current_ = rls[index_];
       found = true;
       break;
     }
-    if(index_ >= 4 && rs_->contains(rbs[index_])) {
+    if(index_ >= 4 && rs_->contains(rbs[index_-4])) {
       current_ = rbs[index_-4];
       found = true;
       break;
