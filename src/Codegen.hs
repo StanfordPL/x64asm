@@ -1160,13 +1160,13 @@ vex_imm i = case "/is4" `elem` (opcode_suffix i) of
 
 -- Emits pre-assembly debug statement
 assm_debug_begin :: Instr -> String
-assm_debug_begin i = "\t#ifndef NDEBUG\n" ++
+assm_debug_begin i = "\t#ifdef DEBUG_ASSEMBLER\n" ++
                      "\t\tsize_t debug_i = fxn_->size();\n" ++
                      "\t#endif\n\n"
 
 -- Emits post-assembly debug statement
 assm_debug_end :: Instr -> String
-assm_debug_end i = "\t#ifndef NDEBUG\n" ++
+assm_debug_end i = "\t#ifdef DEBUG_ASSEMBLER\n" ++
                    "\t\tdebug(" ++ instr ++ ", debug_i);\n" ++
                    "\t#endif\n"
   where instr = "Instruction{" ++ (opc i) ++ ",{" ++ (ops i) ++ "}}"
