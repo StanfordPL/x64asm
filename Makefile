@@ -43,6 +43,8 @@ BIN=bin/x64asm
 all: release
 
 debug:
+	$(MAKE) -C . erthing BISONOPS="-t --report=state" OPT="-g"
+debug_flex:
 	$(MAKE) -C . erthing FLEXOPS="-d" BISONOPS="-t --report=state" OPT="-g"
 release:
 	$(MAKE) -C . erthing OPT="-DNDEBUG -O3"
