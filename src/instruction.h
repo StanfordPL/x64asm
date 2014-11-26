@@ -255,7 +255,7 @@ class Instruction {
 
 		/** Does this instruction implicitly dereference memory? @todo missing cases */
 		bool is_implicit_memory_dereference() const {
-			return is_push() || is_pop() || is_ret();
+			return is_push() || is_pop() || is_ret() || get_opcode() == LAHF || get_opcode() == SAHF;
 		}
 		/** Does this instruction explicitly dereference memory? */
 		bool is_explicit_memory_dereference() const {
