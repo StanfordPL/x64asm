@@ -181,7 +181,7 @@ class Instruction {
 		}
     /** Returns true if this instruction causes control to return. */
     bool is_any_return() const {
-			return is_ret() || is_iret() || is_sysret() || is_sysexit();
+			return is_ret() || is_iret() || is_leave() || is_sysret() || is_sysexit();
 		}
 
 		/** Is this a variant of the call instruction? */
@@ -204,6 +204,10 @@ class Instruction {
 		bool is_idiv() const {
 			return opcode_ >= IDIV_M16 && opcode_ <= IDIV_RL;
 		}
+		/** Is this a variant of the iret instruction? */
+		bool is_iret() const {
+			return opcode_ >= IRET && opcode_ <= IRETQ;
+		}	
 		/** Is this a variant of the jcc (jump conditional) instruction? */
 		bool is_jcc() const {
 			return opcode_ >= JA_REL32 && opcode_ <= JZ_REL8_HINT && !is_jmp();
@@ -216,17 +220,17 @@ class Instruction {
     bool is_label_defn() const {
 		  return opcode_ == LABEL_DEFN;
 		}
-		/** Is this a variant of the nop instruction? */
-		bool is_nop() const {
-			return opcode_ >= NOP && opcode_ <= NOP_R32;
-		}
-		/** Is this a variant of the iret instruction? */
-		bool is_iret() const {
-			return opcode_ >= IRET && opcode_ <= IRETQ;
-		}	
 		/** Is this a variant of the lea instruction? */
 		bool is_lea() const {
 			return opcode_ >= LEA_R16_M16 && opcode_ <= LEA_R64_M64;
+		}
+		/** Is this a variant of the leave instruction? */
+		bool is_leave() const {
+			return opcode_ == LEAVE || opcode_ == LEAVE_PREF66;
+		}
+		/** Is this a variant of the nop instruction? */
+		bool is_nop() const {
+			return opcode_ >= NOP && opcode_ <= NOP_R32;
 		}
 		/** Is this a variant of the pop instruction? */
 		bool is_pop() const {
