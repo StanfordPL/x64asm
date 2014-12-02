@@ -60,13 +60,16 @@ src/Codegen: src/Codegen.hs
 		ghc Codegen.hs && \
 		./Codegen && \
 		rm -f *.hi *.o
+src/lex.att.c: src/att.y src/att.l
 	flex $(FLEXOPS) -Patt src/att.l 
+	mv lex.*.* src/
+src/att.tab.c: src/att.y src/att.l src/lex.att.c
 	bison $(BISONOPS) -batt -patt --defines src/att.y && touch att.output 
-	mv lex.*.* src/ && mv *.tab.* src/ && mv *.output src/
-		
-src/code.o: src/code.cc src/code.h src/Codegen
-	$(GCC) -w -O0 -fno-stack-protector $(INC) -c $< -o $@
+	mv *.tab.* src/
+	mv *.output src/
 
+src/code.o: src/code.cc src/code.h src/lex.att.c src/att.tab.c src/Codegen
+	$(GCC) -w -O0 -fno-stack-protector $(INC) -c $< -o $@
 src/%.o: src/%.cc src/%.h src/Codegen
 	$(GCC) $(OPT) $(INC) -c $< -o $@
 
