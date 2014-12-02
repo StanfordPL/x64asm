@@ -240,6 +240,10 @@ class Instruction {
 		bool is_push() const {
 			return opcode_ >= PUSH_M16 && opcode_ <= PUSH_R64;
 		}
+		/** Is this a variant of the rdrand instruction? */
+		bool is_rdrand() const {
+			return opcode_ >= RDRAND_R16 && opcode_ <= RDRAND_R64;
+		}
 		/** Is this a variant of the ret instruction? */
 		bool is_ret() const {
 			return opcode_ >= RET && opcode_ <= RET_IMM16_FAR;
