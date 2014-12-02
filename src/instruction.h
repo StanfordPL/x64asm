@@ -163,14 +163,18 @@ class Instruction {
     bool is_any_call() const {
 			return is_call() || is_enter() || is_syscall() || is_sysenter();
 		}
-		/** Returns true if this instruction causes a control flow jump. */
-		bool is_any_jump() const {
-			return opcode_ >= JA_REL32 && opcode_ <= JZ_REL8_HINT;
-		}
     /** Returns true if this instruction is a jmp or jmpcc to an indirect pointer. */
     bool is_any_indirect_jump() const {
 			return opcode_ >= JMP_FARPTR1616 && opcode_ <= JMP_M64;
     }
+		/** Returns true if this instruction causes a control flow jump. */
+		bool is_any_jump() const {
+			return opcode_ >= JA_REL32 && opcode_ <= JZ_REL8_HINT;
+		}
+		/** Returns true if this instruction induces loop behavior. */
+		bool is_any_loop() const {
+			return opcode_ >= LOOP_REL8 && opcode_ <= LOOPNE_REL8;
+		}
 		/** Returns true if this instruction does not modify machine state. */
 		bool is_any_nop() const {
 			return is_nop() || is_fnop();
