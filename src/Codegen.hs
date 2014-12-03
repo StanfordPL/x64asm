@@ -1339,53 +1339,10 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "att.table"         $ att_table is		
 
 --------------------------------------------------------------------------------
--- Documentation
---------------------------------------------------------------------------------
-
--- Convert an instruction into an html table row
-html_row :: Instr -> String
-html_row i = "<tr>" ++
-             "<td>" ++ (opcode i) ++ "</td>" ++
-             "<td>" ++ (low (instruction i)) ++ "</td>" ++
-             "<td>" ++ (low (att_form i)) ++ "</td>" ++
-             "<td>" ++ (intercalate ", " (map (:[]) (op_en i))) ++ "</td>" ++
-             "<td>" ++ (property i) ++ "</td>" ++
-             "<td>" ++ (intercalate ", " (implicit_reads i)) ++ "</td>" ++
-             "<td>" ++ (intercalate ", " (implicit_writes i)) ++ "</td>" ++
-             "<td>" ++ (intercalate ", " (implicit_undefs i)) ++ "</td>" ++
-             "<td>" ++ (flag i) ++ "</td>" ++
-             "<td>" ++ (description i) ++ "</td>" ++
-             "</tr>"
-  where att_form i = (att i) ++ " " ++ (intercalate ", " (reverse (operands i)))
-
--- Convert all instructions into an html table
-html_table :: [Instr] -> String
-html_table is = "<table>" ++ 
-                "<tr>" ++
-                "<th>Hex Encoding</th>" ++
-                "<th>Intel Form</th>" ++
-                "<th>AT&T Form</th>" ++
-                "<th>Operand Encoding</th>" ++
-                "<th>Explicit Read/Write/Undef Properties</th>" ++
-                "<th>Implicit Reads</th>" ++
-                "<th>Implicit Write</th>" ++
-                "<th>Implicit Undefs</th>" ++
-                "<th>CPU ID Flag</th>" ++
-                "<th>Description</th>" ++
-                "</tr>\n" ++ 
-                intercalate "\n" (map html_row is) ++ 
-                "</table>"
-
--- Write the html table
-write_html :: [Instr] -> IO ()
-write_html is = writeFile "../doc/reference.html" $ html_table is
-
---------------------------------------------------------------------------------
 -- Main (read the spreadsheet and write some code)
 --------------------------------------------------------------------------------
 
 main :: IO ()		
 main = do is <- parse_instrs "x86.csv"       
           property_arity_check is 
-          write_html is
           write_code is
