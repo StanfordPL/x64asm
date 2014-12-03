@@ -15,14 +15,11 @@ set<Opcode> bad_parse_ {};
 set<Opcode> bad_asm_ {};
 
 // Opcodes that are known to produce hex different from g++
-set<Opcode> bad_hex_ {{
-	(Opcode)119,
-	(Opcode)985
-}};
+set<Opcode> bad_hex_ {};
 
 Opcode opcode() {
 	const auto num_opcs = (size_t)XTEST + 1;
-	return (Opcode) (rand() % num_opcs);
+	return (Opcode)(rand() % num_opcs);
 }
 
 Hint hint() {
@@ -51,24 +48,8 @@ Imm64 imm64() {
 	return Imm64(upper | lower);
 }
 
-M8 mem() {
-	return M8(rax);
-}
-
 Mm mm() {
 	return mms[rand() % mms.size()];
-}
-
-Sreg sreg() {
-	return sregs[rand() % sregs.size()];
-}
-
-Moffs8 moffs() {
-	auto m = Moffs8(sreg(), imm64());	
-	if (rand() % 2) {
-		m.clear_seg();
-	}
-	return m;
 }
 
 Rl rl() {
@@ -103,6 +84,10 @@ Rel32 rel32() {
 	return Rel32(rand() % (0x1ull << 32));
 }
 
+Sreg sreg() {
+	return sregs[rand() % sregs.size()];
+}
+
 St st() {
 	return sts[rand() % sts.size()];
 }
@@ -113,6 +98,37 @@ Xmm xmm() {
 
 Ymm ymm() {
 	return ymms[rand() % ymms.size()];
+}
+
+Scale scale() {
+	return (Scale)(rand() % 4);
+}
+
+M8 mem() {
+	auto m = M8(sreg(), r64(), r64(), scale(), imm32());
+	m.set_addr_or(rand() % 2);
+	if (rand() % 2) {
+		m.clear_seg();
+	}
+	if (rand() % 2) {
+		m.clear_base();
+	}
+	if (rand() % 2) {
+		m.clear_index();
+	}
+	if (m.contains_index() && m.get_index() == rsp) {
+		m.clear_index();
+	}
+
+	return m;
+}
+
+Moffs8 moffs() {
+	auto m = Moffs8(sreg(), imm64());	
+	if (rand() % 2) {
+		m.clear_seg();
+	}
+	return m;
 }
 
 Instruction instruction() {
