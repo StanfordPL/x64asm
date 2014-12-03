@@ -36,7 +36,8 @@ OBJ=src/assembler.o \
 
 LIB=lib/libx64asm.a
 
-BIN=bin/x64asm
+BIN=bin/asm \
+		bin/fuzz
 
 ##### TOP LEVEL TARGETS (release is default)
 
@@ -78,15 +79,15 @@ src/%.o: src/%.cc src/%.h src/Codegen
 $(LIB): $(OBJ)
 	ar rcs $@ $(OBJ)
 
-##### BINARY TARGET
+##### BINARY TARGETS
 
 bin/%: tools/%.cc $(LIB)
 	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
 
 ##### TEST TARGET
 
-check: 
-	cd test/ && ./test.sh && cd -
+check: $(BIN)
+	bin/fuzz 1000000
 
 ##### CLEAN TARGETS
 

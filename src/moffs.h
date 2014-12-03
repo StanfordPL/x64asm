@@ -48,7 +48,7 @@ class Moffs : public Operand {
 
     /** Returns this moffs' segment register; undefined if absent. */
     constexpr Sreg get_seg() {
-			return {val2_};
+			return {val2_ & (uint64_t)Mask::SEG};
 		}
     /** Returns this moffs' offset. */
     constexpr Imm64 get_offset() {
@@ -57,7 +57,7 @@ class Moffs : public Operand {
 
     /** Sets this moffs' segment register. */
     void set_seg(const Sreg& seg) {
-			val2_ = seg.val_;
+			val2_ |= seg.val_;
 		}
     /** Sets this moffs' offset. */
     void set_offset(const Imm64& offset) {
