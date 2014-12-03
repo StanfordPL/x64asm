@@ -390,7 +390,7 @@ class Constants {
       return Ax();
     }
     static constexpr R16 cx()   {
-      return R16(2);
+      return R16(1);
     }
     static constexpr Dx dx()    {
       return Dx();
