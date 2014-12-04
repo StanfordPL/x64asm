@@ -127,6 +127,7 @@ class RegSet {
 			RegSet(std::move(rhs)).swap(*this);
 			return *this;
 		}
+
     /** Creates an empty register set. */
     static constexpr RegSet empty() {
   		return {Mask::EMPTY, Mask::EMPTY, Mask::EMPTY, Mask::EMPTY};

@@ -25,11 +25,34 @@ limitations under the License.
 namespace x64asm {
 
 class FlagSet {
+	private:
+		/** Creates a flag set from a bit mask. */
+		constexpr FlagSet(uint64_t mask) : mask_(mask) { }
+
   public:
     /** Creates an empty flag set. */
     constexpr FlagSet() : mask_(0) {}
     /** Creates a flag set with a single element. */
     constexpr FlagSet(Flag f) : mask_((uint64_t)f) {}
+
+		/** Copy constructor. */
+		FlagSet(const FlagSet& rhs) {
+			mask_ = rhs.mask_;
+		}
+		/** Move constructor. */
+		FlagSet(FlagSet&& rhs) {
+			mask_ = rhs.mask_;
+		}
+		/** Copy assignment operator. */
+		FlagSet& operator=(const FlagSet& rhs) {
+			FlagSet(rhs).swap(*this);
+			return *this;
+		}
+		/** Move assignment operator. */
+		FlagSet& operator=(FlagSet&& rhs) {
+			FlagSet(std::move(rhs)).swap(*this);
+			return *this;
+		}
 
     /** Creates an empty flag set. */
     static constexpr FlagSet empty() {
@@ -57,6 +80,34 @@ class FlagSet {
     /** Removes a flag from this set. */
 		FlagSet& operator-=(Flag f) {
 			mask_ &= ~(uint64_t)f;
+			return *this;
+		}
+
+		/** Set union. */
+		constexpr FlagSet operator|(const FlagSet& rhs) {
+			return {mask_ | rhs.mask_};
+		}
+		/** Set difference. */
+		constexpr FlagSet operator-(const FlagSet& rhs) {
+			return {mask_ & ~rhs.mask_};
+		}
+		/** Set intersection. */
+		constexpr FlagSet operator&(const FlagSet& rhs) {
+			return {mask_ & rhs.mask_};
+		}
+		/** Set union. */
+		FlagSet& operator|=(const FlagSet& rhs) {
+			mask_ |= rhs.mask_;
+			return *this;
+		}
+		/** Set difference. */
+		FlagSet& operator-=(const FlagSet& rhs) {
+			mask_ &= ~rhs.mask_;
+			return *this;
+		}
+		/** Set intersection. */
+		FlagSet& operator&=(const FlagSet& rhs) {
+			mask_ &= rhs.mask_;
 			return *this;
 		}
 
