@@ -138,7 +138,7 @@ class FlagSet {
 			return mask_;
 		}
     /** STL compliant swap. */
-    void swap(FlagSet rhs) {
+    void swap(FlagSet& rhs) {
 			std::swap(mask_, rhs.mask_);
 		}
 
