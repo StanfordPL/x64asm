@@ -56,7 +56,12 @@ std::istream& FlagSet::read_text(std::istream& is) {
 std::ostream& FlagSet::write_text(std::ostream& os) const {
 	os << "{";
 	for (size_t i = 0; i < 64; ++i) {
-		const auto f = (Flag)(0x1ull << i);
+		uint64_t fi = 0x1ull << i;
+		// stop after last flag:
+		if (fi > (uint64_t) Flag::RTM) {
+			break;
+		}
+		const auto f = (Flag) fi;
 		if (contains(f)) {
 			os << " " << f;
 		}
