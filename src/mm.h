@@ -58,16 +58,10 @@ class Mm : public Operand {
 			return val_;
 		}
 
-		/** @todo This method is undefined. */
-		std::istream& read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-			return is;
-		}
-    /** Writes this xmm register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const {
-  		assert(check());
-  		return (os << "%mm" << std::dec << val_);
-		}
+		/** Reads this mm register from an ostream using at&t syntax. */
+		std::istream& read_att(std::istream& is);
+    /** Writes this mm register to an ostream using at&t syntax. */
+    std::ostream& write_att(std::ostream& os) const;
 
   protected:
     /** Direct access to this constructor is disallowed. */
