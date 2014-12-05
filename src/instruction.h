@@ -254,11 +254,15 @@ class Instruction {
 		}
 		/** Is this a variant of the pop instruction? */
 		bool is_pop() const {
-			return opcode_ >= POP_M16 && opcode_ <= POP_R64;
+			return opcode_ >= POP_FS && opcode_ <= POP_R64;
+		}
+		/** Is this a variant of the popcnt instruction? */
+		bool is_popcnt() const {
+			return opcode_ >= POPCNT_R16_M16 && opcode_ <= POPCNT_R64_R64;
 		}
 		/** Is this a variant of the push instruction? */
 		bool is_push() const {
-			return opcode_ >= PUSH_M16 && opcode_ <= PUSH_R64;
+			return opcode_ >= PUSH_FS && opcode_ <= PUSH_R64;
 		}
 		/** Is this a variant of the rdrand instruction? */
 		bool is_rdrand() const {
