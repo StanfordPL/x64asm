@@ -51,6 +51,7 @@ istream& RegSet::read_text(istream& is) {
     R64 r64 = rax;
     Xmm xmm = xmm0;
     Ymm ymm = ymm0;
+    Mm mm = mm0;
 		Eflags ef = eflags_cf;
 
 		if (istringstream(s) >> r64) {
@@ -65,9 +66,11 @@ istream& RegSet::read_text(istream& is) {
 			(*this) += rh;
 		}	else if (istringstream(s) >> ymm) {
 			(*this) += ymm;
-		}	else if (istringstream(s) >> xmm) {
-			(*this) += xmm;
-		}	else if (istringstream(s) >> ef) {
+		} else if (istringstream(s) >> xmm) {
+      (*this) += xmm;
+    } else if (istringstream(s) >> mm) {
+      (*this) += mm;
+    }	else if (istringstream(s) >> ef) {
 			(*this) += ef;
 		} else {
 			is.setstate(ios::failbit);
@@ -85,6 +88,9 @@ ostream& RegSet::write_text(ostream& os) const {
   }
   for(auto sit = sse_begin(); sit != sse_end(); ++sit) {
     os << " " << *sit;
+  }
+  for(auto mit = mm_begin(); mit != mm_end(); ++mit) {
+    os << " " << *mit;
   }
 	for (size_t i = 0, ie = eflags.size(); i < ie; i += eflags[i].width()) {
 		if (contains(eflags[i])) {
@@ -160,6 +166,28 @@ RegSet::SseIterator& RegSet::SseIterator::operator++() {
     }
     if(rs_->contains(xmms[index_])) {
       current_ = xmms[index_];
+      found = true;
+      break;
+    }
+  }
+  
+  if (!found)
+    finished_ = true;
+
+  index_++;
+
+  return *this;
+}
+
+RegSet::MmIterator& RegSet::MmIterator::operator++() {
+  if(finished_)
+    return *this;
+
+  bool found = false;
+
+  for(; index_ < mms.size() && !found; index_++) {
+    if(rs_->contains(mms[index_])) {
+      current_ = mms[index_];
       found = true;
       break;
     }
