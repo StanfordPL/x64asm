@@ -81,6 +81,12 @@ bool Instruction::is_xor_reg_reg() const {
     }
     break;
 
+    case XOR_RH_RH:
+    if (get_operand<Rl>(0) == get_operand<Rl>(1)) {
+      return true;
+    }
+    break;
+
     case XOR_R16_R16:
     if (get_operand<R16>(0) == get_operand<R16>(1)) {
       return true;
