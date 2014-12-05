@@ -284,7 +284,7 @@ RegSet& Instruction::explicit_must_write_set(RegSet& ret) const {
           break;
         case Type::XMM_0:
         case Type::XMM:
-          ret += get_operand<Ymm>(i);
+          ret += get_operand<Xmm>(i);
           break;
         case Type::YMM:
           ret += get_operand<Ymm>(i);
@@ -356,7 +356,7 @@ RegSet& Instruction::explicit_maybe_write_set(RegSet& ret) const {
           break;
         case Type::XMM_0:
         case Type::XMM:
-          ret += get_operand<Ymm>(i);
+          ret += get_operand<Xmm>(i);
           break;
         case Type::YMM:
           ret += get_operand<Ymm>(i);
