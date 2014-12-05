@@ -530,6 +530,10 @@ class Instruction {
     RegSet& explicit_must_undef_set(RegSet& rs) const;
     /** Returns the set of operands this instruction might undef. */
     RegSet& explicit_maybe_undef_set(RegSet& rs) const;
+
+    /** Is this a variant of an XOR instruction with the source and destination
+    operands being the same register? */
+    bool is_xor_reg_reg() const;
 };
 
 } // namespace x64asm
