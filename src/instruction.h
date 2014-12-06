@@ -159,6 +159,10 @@ class Instruction {
 			return type_[get_opcode()][index];
 		}
 
+		/** Is this any of the bt family of instructions. */
+		bool is_any_bt() const {
+			return opcode_ >= BT_M16_IMM8 && opcode_ <= BTS_R64_R64;
+		}
     /** Does this instruction invoke a function call. */
     bool is_any_call() const {
 			return is_call() || is_enter() || is_syscall() || is_sysenter();
@@ -184,6 +188,22 @@ class Instruction {
 			return is_ret() || is_iret() || is_leave() || is_sysret() || is_sysexit();
 		}
 
+		/** Is this a variant of the bt instruction? */
+		bool is_bt() const {
+			return opcode_ >= BT_M16_IMM8 && opcode_ <= BT_R64_R64;
+		}
+		/** Is this a variant of the btc instruction? */
+		bool is_btc() const {
+			return opcode_ >= BTC_M16_IMM8 && opcode_ <= BTC_R64_R64;
+		}
+		/** Is this a variant of the btr instruction? */
+		bool is_btr() const {
+			return opcode_ >= BTR_M16_IMM8 && opcode_ <= BTR_R64_R64;
+		}
+		/** Is this a variant of the bt instruction? */
+		bool is_bts() const {
+			return opcode_ >= BTS_M16_IMM8 && opcode_ <= BTS_R64_R64;
+		}
 		/** Is this a variant of the call instruction? */
 		bool is_call() const {
 			return opcode_ >= CALL_FARPTR1616 && opcode_ <= CALL_LABEL;
