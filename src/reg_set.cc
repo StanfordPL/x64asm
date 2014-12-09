@@ -53,6 +53,10 @@ istream& RegSet::read_text(istream& is) {
     Ymm ymm = ymm0;
     Mm mm = mm0;
 		Eflags ef = eflags_cf;
+    Mxcsr mxcsr = mxcsr_ie;
+    FpuStatus fpustatus = fpu_status_ie;
+    FpuTag fputag = tag0;
+    FpuControl fpucontrol = fpu_control_im;
 
 		if (istringstream(s) >> r64) {
 			(*this) += r64;
@@ -64,14 +68,22 @@ istream& RegSet::read_text(istream& is) {
 			(*this) += r8;
 		}	else if (istringstream(s) >> rh) {
 			(*this) += rh;
-		}	else if (istringstream(s) >> ymm) {
-			(*this) += ymm;
-		} else if (istringstream(s) >> xmm) {
+    } else if (istringstream(s) >> ymm) {
+      (*this) += ymm;
+    } else if (istringstream(s) >> xmm) {
       (*this) += xmm;
     } else if (istringstream(s) >> mm) {
       (*this) += mm;
-    }	else if (istringstream(s) >> ef) {
-			(*this) += ef;
+    } else if (istringstream(s) >> ef) {
+      (*this) += ef;
+    } else if (istringstream(s) >> mxcsr) {
+      (*this) += mxcsr;
+    } else if (istringstream(s) >> fpustatus) {
+      (*this) += fpustatus;
+    } else if (istringstream(s) >> fputag) {
+      (*this) += fputag;
+    } else if (istringstream(s) >> fpucontrol) {
+			(*this) += fpucontrol;
 		} else {
 			is.setstate(ios::failbit);
 			return is;
@@ -93,10 +105,30 @@ ostream& RegSet::write_text(ostream& os) const {
     os << " " << *mit;
   }
 	for (size_t i = 0, ie = eflags.size(); i < ie; i += eflags[i].width()) {
-		if (contains(eflags[i])) {
-			os << " " << eflags[i];
-		}
-	}
+    if (contains(eflags[i])) {
+      os << " " << eflags[i];
+    }
+  }
+  for (size_t i = 0, ie = fpu_control.size(); i < ie; i += fpu_control[i].width()) {
+    if (contains(fpu_control[i])) {
+      os << " " << fpu_control[i];
+    }
+  }
+  for (size_t i = 0, ie = mxcsr.size(); i < ie; i += mxcsr[i].width()) {
+    if (contains(mxcsr[i])) {
+      os << " " << mxcsr[i];
+    }
+  }
+  for (size_t i = 0, ie = fpu_status.size(); i < ie; i += fpu_status[i].width()) {
+    if (contains(fpu_status[i])) {
+      os << " " << fpu_status[i];
+    }
+  }
+  for (size_t i = 0, ie = fpu_tags.size(); i < ie; i += fpu_tags[i].width()) {
+    if (contains(fpu_tags[i])) {
+      os << " " << fpu_tags[i];
+    }
+  }
   os << " }";
 
 	return os;
