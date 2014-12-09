@@ -84,7 +84,7 @@ class RegSet {
       UNIV1    = 0xffffffffffffffff,
       UNIV2    = 0xffffffffffffffff,
       UNIV3    = 0xe7ff1a3f003f6fd5,
-      UNIV4    = 0x0000000f3fffdfff
+      UNIV4    = 0x0000000f3fffffff
     };
 
     /** Creates a register set from four bit masks. */
