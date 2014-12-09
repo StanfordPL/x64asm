@@ -33,13 +33,17 @@ const array<string, 22> eflags_ {{
 }};
 
 const array<string, 16> control_ {{
-	"%im", "%dm", "%zm", "%om", "%um", "%pm", "<res6>", "<res7>", 
-	"%pc", "%pc", "%rc", "%rc", "%x", "<res13>", "<res14>", "<res15>"
+	"%control::im", "%control::dm", "%control::zm", "%control::om",
+	"%control::um", "%control::pm", "<control::res6>", "<control::res7>", 
+	"%control::pc[0]", "%control::pc[1]", "%control::rc[0]", "%control::rc[1]",
+	"%control::x", "<control::res13>", "<control::res14>", "<control::res15>"
 }};
 
 const array<string, 16> status_ {{
-	"%ie", "%de", "%ze", "%oe", "%ue", "%pe", "%sf", "%es",
-	"%c0", "%c1", "%c2", "%top", "%top", "%top", "%c3", "%b"
+	"%status::ie", "%status::de", "%status::ze", "%status::oe",
+	"%status::ue", "%status::pe", "%status::sf", "%status::es",
+	"%status::c0", "%status::c1", "%status::c2", "%status::top[0]",
+	"%status::top[1]", "%status::top[2]", "%status::c3", "%status::b"
 }};
 
 const array<string, 16> tag_ {{
@@ -48,8 +52,10 @@ const array<string, 16> tag_ {{
 }};
 
 const array<string, 16> mxcsr_ {{
-	"%ie", "%de", "%ze", "%oe", "%ue", "%pe", "%daz", "%im",
-	"%dm", "%zm", "%om", "%um", "%pm", "%rc", "%rc", "%fz"
+	"%mxcsr::ie", "%mxcsr::de", "%mxcsr::ze", "%mxcsr::oe",
+	"%mxcsr::ue", "%mxcsr::pe", "%mxcsr::daz", "%mxcsr::im",
+	"%mxcsr::dm", "%mxcsr::zm", "%mxcsr::om", "%mxcsr::um",
+	"%mxcsr::pm", "%mxcsr::rc[0]", "%mxcsr::rc[1]", "%mxcsr::fz"
 }};
 
 } // namespace 
