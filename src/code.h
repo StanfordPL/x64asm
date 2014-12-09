@@ -21,6 +21,7 @@ limitations under the License.
 #include <iostream>
 #include <vector>
 
+#include "src/flag_set.h"
 #include "src/instruction.h"
 #include "src/reg_set.h"
 
@@ -38,6 +39,15 @@ class Code : public std::vector<Instruction> {
     /** Creates a code sequence using the instruction in an stl container. */
     template <typename InItr>
     Code(InItr begin, InItr end) : std::vector<Instruction>(begin, end) {}
+
+		/** Returns the set of cpu flags required to run this code. */
+		FlagSet required_flags() const {
+			auto fs = FlagSet::empty();
+			for (const auto& instr : *this) {
+				fs |= instr.required_flags();
+			}
+			return fs;
+		}
 
     /** Returns the set of registers this code must read. */
     RegSet must_read_set() const {

@@ -31,6 +31,7 @@ OBJ=src/assembler.o \
 		src/r.o \
 		src/reg_set.o \
 		src/sse.o \
+		src/mm.o \
 		src/xmm.o \
 		src/ymm.o
 

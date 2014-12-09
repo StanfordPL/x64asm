@@ -127,6 +127,7 @@ class RegSet {
 			RegSet(std::move(rhs)).swap(*this);
 			return *this;
 		}
+
     /** Creates an empty register set. */
     static constexpr RegSet empty() {
   		return {Mask::EMPTY, Mask::EMPTY, Mask::EMPTY, Mask::EMPTY};
@@ -740,6 +741,51 @@ class RegSet {
           return *this;
         }
     };
+
+    /** Iterator over MM registers in a regset */
+    class MmIterator {
+      friend class RegSet;
+
+      public:
+        /** Returns the current MM register we're looking at */
+        Mm operator*() {
+          return current_;
+        }
+        /** Checks for equality of two iterators */
+        bool operator==(const MmIterator& other) {
+          if (finished_)
+            return other.finished_;
+
+          return index_ == other.index_ && !other.finished_;
+        }
+        /** Checks for inequality */
+        bool operator!=(const MmIterator& other) {
+          return !(*this == other);
+        }
+        /** Advances to the next MM register */
+        MmIterator& operator++();
+
+      private:
+        /** Tracks the index of the current register */
+        size_t index_;
+        /** The current register */
+        Mm current_;
+        /** If we've found all the registers */
+        bool finished_;
+        /** Our regset */
+        const RegSet * const rs_;
+
+        /** Creates iterator for MMs */
+        MmIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(mm0), finished_(false) {
+          ++(*this);
+        }
+        /** Go to end */
+        MmIterator& finish() {
+          finished_ = true;
+          return *this;
+        }
+    };
+
     /** Iterator over status flags in a regset */
     class FlagsIterator {
       friend class RegSet;
@@ -784,7 +830,6 @@ class RegSet {
         }
     };
 
-
     /** Iterate over largest general-purpose registers */
     GpIterator gp_begin() const {
       return GpIterator(this);
@@ -800,6 +845,14 @@ class RegSet {
     /** End iterator for the SSE registers */
     SseIterator sse_end() const {
       return SseIterator(this).finish();
+    }
+    /** Iterates over MM registers */
+    MmIterator mm_begin() const {
+      return MmIterator(this);
+    }
+    /** End iterator for the MM registers */
+    MmIterator mm_end() const {
+      return MmIterator(this).finish();
     }
     /** Iterates for the status eflags */
     FlagsIterator flags_begin() const {

@@ -159,6 +159,10 @@ class Instruction {
 			return type_[get_opcode()][index];
 		}
 
+		/** Is this any of the bt family of instructions. */
+		bool is_any_bt() const {
+			return opcode_ >= BT_M16_IMM8 && opcode_ <= BTS_R64_R64;
+		}
     /** Does this instruction invoke a function call. */
     bool is_any_call() const {
 			return is_call() || is_enter() || is_syscall() || is_sysenter();
@@ -184,6 +188,22 @@ class Instruction {
 			return is_ret() || is_iret() || is_leave() || is_sysret() || is_sysexit();
 		}
 
+		/** Is this a variant of the bt instruction? */
+		bool is_bt() const {
+			return opcode_ >= BT_M16_IMM8 && opcode_ <= BT_R64_R64;
+		}
+		/** Is this a variant of the btc instruction? */
+		bool is_btc() const {
+			return opcode_ >= BTC_M16_IMM8 && opcode_ <= BTC_R64_R64;
+		}
+		/** Is this a variant of the btr instruction? */
+		bool is_btr() const {
+			return opcode_ >= BTR_M16_IMM8 && opcode_ <= BTR_R64_R64;
+		}
+		/** Is this a variant of the bt instruction? */
+		bool is_bts() const {
+			return opcode_ >= BTS_M16_IMM8 && opcode_ <= BTS_R64_R64;
+		}
 		/** Is this a variant of the call instruction? */
 		bool is_call() const {
 			return opcode_ >= CALL_FARPTR1616 && opcode_ <= CALL_LABEL;
@@ -224,9 +244,29 @@ class Instruction {
 		bool is_lea() const {
 			return opcode_ >= LEA_R16_M16 && opcode_ <= LEA_R64_M64;
 		}
+		/** Is this a variant of the lddqu instruction? */
+		bool is_lddqu() const {
+			return opcode_ == LDDQU_XMM_M128;
+		}
 		/** Is this a variant of the leave instruction? */
 		bool is_leave() const {
 			return opcode_ == LEAVE || opcode_ == LEAVE_PREF66;
+		}
+		/** Is this a variant of the maskmovdqu instruction? */
+		bool is_maskmovdqu() const {
+			return opcode_ == MASKMOVDQU_XMM_XMM;
+		}
+		/** Is this a variant of the movdqu instruction? */
+		bool is_movdqu() const {
+			return opcode_ >= MOVDQU_M128_XMM && opcode_ <= MOVDQU_XMM_XMM;
+		}
+		/** Is this a variant of the movupd instruction? */
+		bool is_movupd() const {
+			return opcode_ >= MOVUPD_M128_XMM && opcode_ <= MOVUPD_XMM_XMM;
+		}
+		/** Is this a variant of the movups instruction? */
+		bool is_movups() const {
+			return opcode_ >= MOVUPS_M128_XMM && opcode_ <= MOVUPS_XMM_XMM;
 		}
 		/** Is this a variant of the nop instruction? */
 		bool is_nop() const {
@@ -234,11 +274,15 @@ class Instruction {
 		}
 		/** Is this a variant of the pop instruction? */
 		bool is_pop() const {
-			return opcode_ >= POP_M16 && opcode_ <= POP_R64;
+			return opcode_ >= POP_FS && opcode_ <= POP_R64;
+		}
+		/** Is this a variant of the popcnt instruction? */
+		bool is_popcnt() const {
+			return opcode_ >= POPCNT_R16_M16 && opcode_ <= POPCNT_R64_R64;
 		}
 		/** Is this a variant of the push instruction? */
 		bool is_push() const {
-			return opcode_ >= PUSH_M16 && opcode_ <= PUSH_R64;
+			return opcode_ >= PUSH_FS && opcode_ <= PUSH_R64;
 		}
 		/** Is this a variant of the rdrand instruction? */
 		bool is_rdrand() const {
@@ -263,6 +307,32 @@ class Instruction {
 		/** Is this a variant of the sysret instruction? */
 		bool is_sysret() const {
 			return opcode_ == SYSRET || opcode_ == SYSRET_PREFREXW;
+		}
+		/** Is this a variant of the vlddqu instruction? */
+		bool is_vlddqu() const {
+			return opcode_ == VLDDQU_XMM_M128  || opcode_ == VLDDQU_YMM_M256;
+		}
+		/** Is this a variant of the vmaskmovdqu instruction? */
+		bool is_vmaskmovdqu() const {
+			return opcode_ == VMASKMOVDQU_XMM_XMM;
+		}
+		/** Is this a variant of the vmovdqu instruction? */
+		bool is_vmovdqu() const {
+			return opcode_ >= VMOVDQU_M128_XMM && opcode_ <= VMOVDQU_YMM_YMM;
+		}
+		/** Is this a variant of the vmovupd instruction? */
+		bool is_vmovupd() const {
+			return opcode_ >= VMOVUPD_M128_XMM && opcode_ <= VMOVUPD_YMM_YMM;
+		}
+		/** Is this a variant of the vmovups instruction? */
+		bool is_vmovups() const {
+			return opcode_ >= VMOVUPS_M128_XMM && opcode_ <= VMOVUPS_YMM_YMM;
+		}
+
+		/** Is this an unaligned instruction? */
+		bool is_unaligned() const {
+			return is_lddqu() || is_movdqu() || is_movupd() || is_movups() ||
+				is_vlddqu() || is_vmovdqu() || is_vmovupd() || is_vmovups();
 		}
 
 		/** Does this instruction implicitly dereference memory? @todo missing cases */
@@ -484,6 +554,10 @@ class Instruction {
     RegSet& explicit_must_undef_set(RegSet& rs) const;
     /** Returns the set of operands this instruction might undef. */
     RegSet& explicit_maybe_undef_set(RegSet& rs) const;
+
+    /** Is this a variant of an XOR instruction with the source and destination
+    operands being the same register? */
+    bool is_xor_reg_reg() const;
 };
 
 } // namespace x64asm
