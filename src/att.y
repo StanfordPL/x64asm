@@ -159,7 +159,10 @@ const Operand promote(const Operand* op, Type parse, Type target) {
 		}
 		if ( target == Type::REL_8 || target == Type::REL_32 )
 			return offs;
-	}
+	} else if (is_mem(parse)) {
+    M8 ret(*(reinterpret_cast<const M8*>(op)), target);
+    return ret;
+  }
 
 	return *op;
 }
