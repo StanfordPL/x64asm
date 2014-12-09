@@ -226,6 +226,18 @@ class M : public Operand {
 		}
 
   public:
+    /** Creates a memory using an existing one.  Used to change types. */
+    template <typename U>
+    constexpr M(const M<U>& m) :
+      Operand(T::m_type(), init(m.get_disp(), m.get_base(), m.get_index(), m.get_scale(),
+                                m.get_seg(), m.addr_or(), m.rip_offset())) {
+    }
+    /** Creates a memory using an existing one.  Used to change types. */
+    template <typename U>
+    constexpr M(const M<U>& m, Type t) :
+      Operand(t, init(m.get_disp(), m.get_base(), m.get_index(), m.get_scale(),
+                      m.get_seg(), m.addr_or(), m.rip_offset())) {
+    }
     /** Creates a memory using disp form. */
     constexpr M(const Imm32& d) :
 			Operand(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
