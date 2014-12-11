@@ -108,6 +108,13 @@ class Instruction {
         uint32_t mask_;
     };
 
+    /** Fix the types of all the operands */
+    void fix_operands_type() {
+      for(size_t i = 0; i < operands_.size(); ++i) {
+        operands_[i].set_type(type(i));
+      }
+    }
+
   public:
     /** Creates an instruction with no operands. */
     Instruction(Opcode opcode) : opcode_(opcode), operands_{{}} {}
@@ -116,6 +123,7 @@ class Instruction {
 				opcode_(opcode), operands_{{}} {
 			assert(operands.size() <= 4);
 			std::copy(operands.begin(), operands.end(), operands_.begin());
+      fix_operands_type();
 		}
     /** Creates an instruction from an stl container of operands. */
     template <typename InItr>
@@ -123,6 +131,7 @@ class Instruction {
 				opcode_(opcode), operands_ {} {
 			assert(end - begin <= 4);
 			std::copy(begin, end, operands_.begin());
+      fix_operands_type();
 		}
 
     /** Returns the current opcode. */
@@ -132,6 +141,7 @@ class Instruction {
     /** Sets the current opcode. */
     void set_opcode(Opcode o) {
 			opcode_ = o;
+      fix_operands_type();
 		}
 
     /** Gets an operand and casts it to a user-specified type. */
@@ -145,6 +155,7 @@ class Instruction {
     void set_operand(size_t index, const Operand& o) {
 			assert(index < operands_.size());
 			operands_[index] = o;
+      fix_operands_type();
 		}
 
     /** Returns the arity of this instruction. */
