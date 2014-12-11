@@ -82,6 +82,11 @@ class Operand {
     bool operator!=(const Operand& rhs) const {
   		return !(*this == rhs);
 		}
+
+    /** Forcibly change the underlying type */
+    void set_type(Type t) {
+      val2_ = ((uint64_t)t << 3) | (val2_ & 0x7);
+    }
 };
 
 } // namespace x64asm
