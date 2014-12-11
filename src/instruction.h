@@ -340,6 +340,23 @@ class Instruction {
 			return opcode_ >= VMOVUPS_M128_XMM && opcode_ <= VMOVUPS_YMM_YMM;
 		}
 
+    /** Is this an SSE instruction (any version) ? */
+    bool is_any_sse() const {
+      flags_[get_opcode()].contains(Flag::SSE) ||
+      flags_[get_opcode()].contains(Flag::SSE2) ||
+      flags_[get_opcode()].contains(Flag::SSSE3) ||
+      flags_[get_opcode()].contains(Flag::SSE4_1) ||
+      flags_[get_opcode()].contains(Flag::SSE4_2);
+    }
+    /** Is this an AVX 1 instruction? */
+    bool is_avx() const {
+      flags_[get_opcode()].contains(Flag::AVX);
+    }
+    /** Is this an AVX 2 instruction? */
+    bool is_avx2() const {
+      flags_[get_opcode()].contains(Flag::AVX2);
+    }
+
 		/** Is this an unaligned instruction? */
 		bool is_unaligned() const {
 			return is_lddqu() || is_movdqu() || is_movupd() || is_movups() ||
