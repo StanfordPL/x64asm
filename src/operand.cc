@@ -22,17 +22,20 @@ uint16_t Operand::size() const {
     case Type::IMM_16:
     case Type::M_16:
     case Type::R_16:
+    case Type::MOFFS_16:
     case Type::AX:
     case Type::DX:
       return 16;
 
     case Type::IMM_32:
+    case Type::MOFFS_32:
     case Type::M_32:
     case Type::R_32:
     case Type::EAX:
       return 32;
 
     case Type::IMM_64:
+    case Type::MOFFS_64:
     case Type::M_64:
     case Type::R_64:
     case Type::RAX:
@@ -40,9 +43,11 @@ uint16_t Operand::size() const {
 
     case Type::XMM:
     case Type::XMM_0:
+    case Type::M_128:
       return 128;
 
     case Type::YMM:
+    case Type::M_256:
       return 256;
 
     default:
