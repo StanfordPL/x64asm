@@ -1478,8 +1478,9 @@ VEX.NDS.128.66.0F3A.WIG 44 /r ib 	VPCLMULQDQ xmm1, xmm2, xmm3/m128, imm8 	RVMI	Z
 VEX.NDS.128.66.0F.WIG 74 /r	VPCMPEQB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpeqb		Compare packed bytes in xmm3/m128 and xmm2 for equality.
 VEX.NDS.128.66.0F.WIG 75 /r	VPCMPEQW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpeqw		Compare packed words in xmm3/m128 and xmm2 for equality.
 VEX.NDS.128.66.0F.WIG 76 /r	VPCMPEQD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpeqd		Compare packed doublewords in xmm3/m128 and xmm2 for equality.
-VEX.NDS.256.66.0F.WIG 75 /r	VPCMPEQW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpeqb		Compare packed words in ymm3/m256 and ymm2 for equality.
-VEX.NDS.256.66.0F.WIG 76 /r	VPCMPEQD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpeqw		Compare packed doublewords in ymm3/m256 and ymm2 for equality.
+VEX.NDS.256.66.0F.WIG 74 /r	VPCMPEQB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpeqb		Compare packed bytes in ymm3/m256 and ymm2 for equality.
+VEX.NDS.256.66.0F.WIG 75 /r	VPCMPEQW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpeqw		Compare packed words in ymm3/m256 and ymm2 for equality.
+VEX.NDS.256.66.0F.WIG 76 /r	VPCMPEQD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpeqd		Compare packed doublewords in ymm3/m256 and ymm2 for equality.
 														
 66 0F 38 29 /r 	PCMPEQQ xmm1, xmm2/m128 	RM	RW, R						V	V	SSE4_1	pcmpeqq		Compare packed qwords in xmm2/m128 and xmm1 for equality.
 VEX.NDS.128.66.0F38.WIG 29 /r 	VPCMPEQQ xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpcmpeqq		Compare packed quadwords in xmm3/m128 and xmm2 for equality.
