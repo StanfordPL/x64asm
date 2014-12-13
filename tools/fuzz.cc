@@ -2,6 +2,8 @@
 #include <fstream>
 #include <iostream>
 #include <set>
+#include <string>
+#include <vector>
 
 #include "include/x64asm.h"
 
@@ -296,6 +298,14 @@ Instruction instruction() {
 	return instr;
 }
 
+string tempfile(const string& temp) {
+	vector<char> v(temp.begin(), temp.end());
+	v.push_back('\0');
+
+	auto fd = mkstemp(v.data());
+	return string(v.begin(), v.end()-1);
+}
+
 int main(int argc, char** argv) {
 	srand(time(0));
 
@@ -308,18 +318,24 @@ int main(int argc, char** argv) {
 	const auto known_bad_asm = bad_asm_.size();
 	const auto known_bad_hex = bad_hex_.size();
 
+	// Temp filenames
+	auto s_file = tempfile("/tmp/x64asm_fuzz.s.XXXXXX");
+	auto hex_file = tempfile("/tmp/x64asm_fuzz.hex.XXXXXX");
+	auto o_file = tempfile("/tmp/x64asm_fuzz.o.XXXXXX");
+	auto od_file = tempfile("/tmp/x64asm_fuzz.od.XXXXXX");
+
 	for (size_t i = 0; i < itrs; ++i) {
 		// Generate a random instruction 
 		const auto instr = instruction();
 		const auto opcode = instr.get_opcode();
 
 		// Write it to a temp file
-		ofstream ofs("/tmp/instr.s");
+		ofstream ofs(s_file);
 		ofs << instr << endl;
 
 		// Try reading the instruction back in 
-		const auto cmd1 = "cat /tmp/instr.s | ./bin/asm 2>/dev/null | sed 'N;s/\\n//' | sed 's/ *$//' > /tmp/instr.hex";
-		const auto res1 = system(cmd1);
+		const auto cmd1 = "cat " + s_file + " | ./bin/asm 2>/dev/null | sed 'N;s/\\n//' | sed 's/ *$//' > " + hex_file;
+		const auto res1 = system(cmd1.c_str());
 		if (res1 != 0 && (bad_parse_.find(opcode) == bad_parse_.end())) {
 			bad_parse_.insert(opcode);
 			cout << "Unable to parse using asm: (" << opcode << ") " << instr << endl;
@@ -330,8 +346,8 @@ int main(int argc, char** argv) {
 		}
 
 		// Try assembling using g++
-		const auto cmd2 = "g++ -c /tmp/instr.s -o /tmp/instr.o 2> /dev/null";
-		const auto res2 = system(cmd2);
+		const auto cmd2 = "g++ -x assembler -c " + s_file + " -o " + o_file + " 2> /dev/null";
+		const auto res2 = system(cmd2.c_str());
 		if (res2 != 0 && (bad_asm_.find(opcode) == bad_asm_.end())) {
 			bad_asm_.insert(opcode);
 			cout << "Unable to assemble using g++: (" << opcode << ") " << instr << endl;
@@ -342,19 +358,23 @@ int main(int argc, char** argv) {
 		}
 
 		// Compare hex
-		const auto cmd3 = "objdump -d /tmp/instr.o | tail -n+8 | cut -c 7-27 | sed 'N;s/\\n//' | sed 's/ *$//' > /tmp/instr.od";
-		const auto res3 = system(cmd3);
-		const auto cmd4 = "diff /tmp/instr.hex /tmp/instr.od > /dev/null";
-		const auto res4 = system(cmd4);
+		const auto cmd3 = "objdump -d " + o_file + " | tail -n+8 | cut -c 7-27 | sed 'N;s/\\n//' | sed 's/ *$//' > " + od_file;
+		const auto res3 = system(cmd3.c_str());
+		const auto cmd4 = "diff " + hex_file + " " + od_file + " > /dev/null";
+		const auto res4 = system(cmd4.c_str());
 		if (res4 != 0 && (bad_hex_.find(opcode) == bad_hex_.end())) {
 			bad_hex_.insert(opcode);
 			cout << "Hex disagreement: (" << opcode << ") " << instr << endl;
+
 			cout << "  x64asm: ";
 			cout.flush();
-			const auto r1 = system("cat /tmp/instr.hex");
+			const auto cmd5 = "cat " + hex_file;
+			const auto res5 = system(cmd5.c_str());
+
 			cout << "  g++:    ";
 			cout.flush();
-			const auto r2 = system("cat /tmp/instr.od");
+			const auto cmd6 = "cat " + od_file;
+			const auto res6 = system(cmd6.c_str());
 			cout << endl;
 		}
 	}
