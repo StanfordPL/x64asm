@@ -28,7 +28,7 @@ std::array<const char*, 3803> att_ {{
 }};
 
 /** Get the string representation of an opcode */
-std::string opcode_write_att(Opcode o) {
+std::string x64asm::opcode_write_att(Opcode o) {
   return std::string(att_[o]);
 }
 
