@@ -14,24 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef X64ASM_SRC_OPCODE_H
-#define X64ASM_SRC_OPCODE_H
+#include <array>
 
-#include <string>
+#include "src/opcode.h"
+
+using namespace x64asm;
+
+std::array<const char*, 3803> att_ {{
+    // Internal mnemonics
+    "<label definition>"
+    // Auto-generated mnemonics
+    #include "src/opcode.att"
+}};
+
+/** Get the string representation of an opcode */
+std::string opcode_write_att(Opcode o) {
+  return std::string(att_[o]);
+}
 
 
-namespace x64asm {
 
-/** An instruction mnemonic. */
-enum Opcode : int32_t {
-  // Internal mnemonics
-  LABEL_DEFN = 0
-  // Auto-generated mnemonics
-  #include "src/opcode.enum"
-};
 
-std::string opcode_write_att(Opcode o);
-
-} // namespace x64asm
-
-#endif
