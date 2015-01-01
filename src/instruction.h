@@ -467,7 +467,7 @@ class Instruction {
 			return properties_[get_opcode()][index].contains(Property::MAYBE_UNDEF);
 		}
     /** Returns true if this instruction might undef memory. */
-    bool maybe_undef() const {
+    bool maybe_undef_memory() const {
       if(is_implicit_memory_dereference())
         return true;
       if(is_explicit_memory_dereference())
