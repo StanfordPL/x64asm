@@ -1,22 +1,23 @@
 x64asm
 =====
 
-x64asm is a c++11 library for working with x86_64 assembly. It provides a parser, an in memory assembler, and primitives for building data flow analyses. x64asm was built with the following design goals in mind:
+x64asm is a c++11 library for working with x86_64 assembly. It provides a parser, in-memory assembler and linker, and primitives for building data flow analyses. x64asm was built with the following design goals in mind:
 
-- __Simplicity:__ x64 asm does NOT include a register allocator, instruction scheduler, control flow graph builder, or any of the features you would expect of a proper compiler. It is a low-level library for building YOUR optimizing compiler.
+- __Simplicity:__ x64 asm does NOT include a register allocator, instruction scheduler, control flow graph builder, or any of the features you would expect of a full compiler. It is a low-level library for building YOUR optimizing compiler.
 
 - __Completeness:__ x64asm supports the entire ring 3 application level subset of the x86_64 instruction set, including the most recent AVX2/BMI1/BMI2/FMA extensions.
 
-- __Correctness:__ Compared to other x86 assemblers, the majority of the source in the x64asm repository is auto-generated using a declarative specification.  This means that bugs can be fixed quickly without major modifications to its codebase.
+- __Correctness:__ The majority of the source in the x64asm repository is auto-generated using a declarative specification.  This means that bugs can be fixed quickly without major modifications to its codebase.
 
 ### Supported Platforms:
 
 - Ubuntu 12.04 LTS
 - Ubuntu 13.10
+- Ubuntu 14.04 LTS
 
 ### Getting started:
 
-All of the x64asm dependencies are available through `apt-get`.
+Dependencies are available through `apt-get`.
    
     $ sudo apt-get install bison ccache doxygen flex g++ g++-multilib ghc libghc-regex-tdfa-dev libghc-regex-compat-dev libghc-split-dev
 
@@ -24,24 +25,21 @@ To build x64asm, type:
 
     $ make (release|profile|debug)
 
-To check the build by running the test suite, type:
+For examples of how to use the library, browse the `examples/` folder:
 
-    $ make check
-
-This will take a LONG TIME. While you're waiting, browse the `examples/` folder
-
-- `hello.cc` How to use the assembler API; look here first.
+- `abi.cc` How the assembler API interacts with the linux ABI.
 - `constants.cc` Shows off the set of built-in assembler constants.
 - `context.cc` How to assemble functions that modify program state.
-- `functions.cc` How to assemble functions that call other functions.
-- `abi.cc` How the assembler API interacts with the linux ABI.
 - `dataflow.cc` How to use the dataflow API.
+- `functions.cc` How to assemble functions that call other functions.
+- `hello.cc` How to use the assembler API; look here first.
+- `linker.cc` How to assemble functions with external linkage.
 
-To use the command line app, type:
+And to use x64asm as an assembler from the command line, type:
     
-    $ cat test.s | x64asm 
+    $ cat test.s | <path/to/here>/bin/asm 
 
-To use x64asm, include the header:
+To use x64asm as part of a larger project, include the header:
 
 ```c++
 #include "<path/to/here>/include/x64asm.h"
@@ -71,7 +69,7 @@ In many cases, the only thing distinguishing two otherwise identical instruction
 
 #### REX+
 
-Any instruction prefixed with REX+ has at least one 8-bit operand. We identify these instructions and replace them with as many variants as are necessary to represent all possible combinations of replacements by elements in the sets {rl,rb} and {rl,rh}. This follows from the x86_64 hardware, whichprevents the user from specifying the simultaneous use of rh registers at thesame time as operand or mnemonic which requires a REX prefix. As a result, opting to use any of these high registers for any operand implies that any other r8 registers must be drawn from {rl,rh}.
+Any instruction prefixed with REX+ has at least one 8-bit operand. We identify these instructions and replace them with as many variants as are necessary to represent all possible combinations of replacements by elements in the sets {rl,rb} and {rl,rh}. This follows from the x86_64 hardware, which prevents the user from specifying the simultaneous use of rh registers at the same time as operand or mnemonic which requires a REX prefix. As a result, opting to use any of these high registers for any operand implies that any other r8 registers must be drawn from {rl,rh}.
 
 #### Ambiguity
 
@@ -79,7 +77,7 @@ Even after we have (1) added the annotations described above, (2) ignored the me
 
 #### Intel Eratta
 
-Most of the source code in this project is automatically generated using the the x64.ods spreadsheet.  Unless otherwise noted below, the contents of the spreadsheet are transcribed directly from the Intel manuals. If you discover an error, or an edit which has not been documented below, please submit an error report.
+Most of the source code in this project is automatically generated using the the x64.csv spreadsheet.  Unless otherwise noted below, the contents of the spreadsheet are transcribed directly from the Intel manuals. If you discover an error, or an edit which has not been documented below, please submit an error report.
 
 #### LAHS/SAHF
 
@@ -133,8 +131,4 @@ The op/en values for this instruction are likely incorrect and have been modifie
 
 #### Dataflow Values
 
-Some dataflow information is missing and/or incomplete. I'm only human. If you discover an error, please submit a bug report.
-
-#### Misc
-
-Many small semantic errors and typos have been fixed. These and the above are annotated in x86.ods using bold red caps.
+Some dataflow information is missing and/or incomplete. If you discover an error, please submit a bug report.
