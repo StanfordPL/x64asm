@@ -29,7 +29,7 @@ using namespace std;
 
 namespace {
 
-array<const char*, 3801> att_ {{
+array<const char*, 3803> att_ {{
     // Internal mnemonics
     "<label definition>"
     // Auto-generated mnemonics
@@ -40,7 +40,80 @@ array<const char*, 3801> att_ {{
 
 namespace x64asm {
 
+bool Instruction::is_xor_reg_reg() const {
+  // we special case for xor of two identical registers.  in that case,
+  // the instruction sets the value of the register to zero, and this is a
+  // safe operation even if the register was undefined before.
+  switch (get_opcode()) {
+    case PXOR_MM_MM:
+    if (get_operand<Mm>(0) == get_operand<Mm>(1)) {
+      return true;
+    }
+    break;
+
+    case PXOR_XMM_XMM:
+    if (get_operand<Xmm>(0) == get_operand<Xmm>(1)) {
+      return true;
+    }
+    break;
+
+    case VPXOR_XMM_XMM_XMM:
+    if (get_operand<Xmm>(1) == get_operand<Xmm>(2)) {
+      return true;
+    }
+    break;
+
+    case VPXOR_YMM_YMM_YMM:
+    if (get_operand<Ymm>(1) == get_operand<Ymm>(2)) {
+      return true;
+    }
+    break;
+
+    case XOR_RB_RB:
+    if (get_operand<Rb>(0) == get_operand<Rb>(1)) {
+      return true;
+    }
+    break;
+
+    case XOR_RL_RL:
+    if (get_operand<Rl>(0) == get_operand<Rl>(1)) {
+      return true;
+    }
+    break;
+
+    case XOR_RH_RH:
+    if (get_operand<Rl>(0) == get_operand<Rl>(1)) {
+      return true;
+    }
+    break;
+
+    case XOR_R16_R16:
+    if (get_operand<R16>(0) == get_operand<R16>(1)) {
+      return true;
+    }
+    break;
+
+    case XOR_R32_R32:
+    if (get_operand<R32>(0) == get_operand<R32>(1)) {
+      return true;
+    }
+    break;
+
+    case XOR_R64_R64:
+    if (get_operand<R64>(0) == get_operand<R64>(1)) {
+      return true;
+    }
+    break;
+
+    default:
+    return false;
+  }
+}
+
 RegSet& Instruction::explicit_must_read_set(RegSet& ret) const {
+  if (is_xor_reg_reg()) {
+    return ret;
+  }
   for (size_t i = 0, ie = arity(); i < ie; ++i) {
     switch (type(i)) {
       case Type::M_8:
@@ -135,6 +208,9 @@ RegSet& Instruction::explicit_must_read_set(RegSet& ret) const {
 }
 
 RegSet& Instruction::explicit_maybe_read_set(RegSet& ret) const {
+  if (is_xor_reg_reg()) {
+    return ret;
+  }
   for (size_t i = 0, ie = arity(); i < ie; ++i) {
     switch (type(i)) {
       case Type::M_8:
@@ -284,7 +360,7 @@ RegSet& Instruction::explicit_must_write_set(RegSet& ret) const {
           break;
         case Type::XMM_0:
         case Type::XMM:
-          ret += get_operand<Ymm>(i);
+          ret += get_operand<Xmm>(i);
           break;
         case Type::YMM:
           ret += get_operand<Ymm>(i);
@@ -356,7 +432,7 @@ RegSet& Instruction::explicit_maybe_write_set(RegSet& ret) const {
           break;
         case Type::XMM_0:
         case Type::XMM:
-          ret += get_operand<Ymm>(i);
+          ret += get_operand<Xmm>(i);
           break;
         case Type::YMM:
           ret += get_operand<Ymm>(i);
@@ -909,119 +985,77 @@ size_t Instruction::hash() const {
   return res;
 }
 
-const array<size_t, 3801> Instruction::arity_ {{
+const array<size_t, 3803> Instruction::arity_ {{
   // Internal mnemonics
   1
   // Auto-generated mnemonics
   #include "src/arity.table"
 }};
 
-const array<array<Instruction::Properties, 4>, 3801> Instruction::properties_ {{
+const array<array<Instruction::Properties, 4>, 3803> Instruction::properties_ {{
   // Internal mnemonics
   {Properties::none() + Property::MUST_READ, Properties::none(), Properties::none(), Properties::none()}
   // Auto-generated mnemonics
   #include "src/properties.table"
 }};
 
-const array<array<Type, 4>, 3801> Instruction::type_ {{
+const array<array<Type, 4>, 3803> Instruction::type_ {{
   // Internal mnemonics
   {{Type::LABEL}}
   // Auto-generated mnemonics
   #include "src/type.table"
 }};
 
-const array<bool, 3801> Instruction::is_return_ {{
-  // Internal mnemonics
-  false
-  // Auto-generated mnemonics
-  #include "src/return.table"
-}};
-
-const array<bool, 3801> Instruction::is_nop_ {{
-  // Internal mnemonics
-  false
-  // Auto-generated mnemonics
-  #include "src/nop.table"
-}};
-
-const array<bool, 3801> Instruction::is_jump_ {{
-  // Internal mnemonics
-  false
-  // Auto-generated mnemonics
-  #include "src/jump.table"
-}};
-
-const array<bool, 3801> Instruction::is_cond_jump_ {{
-  // Internal mnemonics
-  false
-  // Auto-generated mnemonics
-  #include "src/cond_jump.table"
-}};
-
-const array<bool, 3801> Instruction::is_uncond_jump_ {{
-  // Internal mnemonics
-  false
-  // Auto-generated mnemonics
-  #include "src/uncond_jump.table"
-}};
-
-const array<bool, 3801> Instruction::is_call_ {{
-  // Internal mnemonics
-  false
-  // Auto-generated mnemonics
-  #include "src/call.table"
-}};
-
-const array<int, 3801> Instruction::mem_index_ {{
+const array<int, 3803> Instruction::mem_index_ {{
   // Internal mnemonics
   -1
   // Auto-generated mnemonics
   #include "src/mem_index.table"
 }};
 
-const array<RegSet, 3801> Instruction::implicit_must_read_set_ {{
+const array<RegSet, 3803> Instruction::implicit_must_read_set_ {{
   // Internal mnemonics
   RegSet::empty()
   // Auto-generated mnemonics
   #include "src/must_read.table"
 }};
 
-const array<RegSet, 3801> Instruction::implicit_maybe_read_set_ {{
+const array<RegSet, 3803> Instruction::implicit_maybe_read_set_ {{
   // Internal mnemonics
   RegSet::empty()
   // Auto-generated mnemonics
   #include "src/maybe_read.table"
 }};
 
-const array<RegSet, 3801> Instruction::implicit_must_write_set_ {{
+const array<RegSet, 3803> Instruction::implicit_must_write_set_ {{
   // Internal mnemonics
   RegSet::empty()
   // Auto-generated mnemonics
   #include "src/must_write.table"
 }};
 
-const array<RegSet, 3801> Instruction::implicit_maybe_write_set_ {{
+const array<RegSet, 3803> Instruction::implicit_maybe_write_set_ {{
   // Internal mnemonics
   RegSet::empty()
   // Auto-generated mnemonics
   #include "src/maybe_write.table"
 }};
 
-const array<RegSet, 3801> Instruction::implicit_must_undef_set_ {{
+const array<RegSet, 3803> Instruction::implicit_must_undef_set_ {{
   // Internal mnemonics
   RegSet::empty()
   // Auto-generated mnemonics
   #include "src/must_undef.table"
 }};
 
-const array<RegSet, 3801> Instruction::implicit_maybe_undef_set_ {{
+const array<RegSet, 3803> Instruction::implicit_maybe_undef_set_ {{
   // Internal mnemonics
   RegSet::empty()
   // Auto-generated mnemonics
   #include "src/maybe_undef.table"
 }};
 
-const array<FlagSet, 3801> Instruction::flags_ {{
+const array<FlagSet, 3803> Instruction::flags_ {{
   // Internal mnemonics
   FlagSet::empty()
   // Auto-generatred mnemonics

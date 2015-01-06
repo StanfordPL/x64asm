@@ -170,10 +170,6 @@ is_cond_jump i = let mn = raw_mnemonic i in
 is_uncond_jump :: Instr -> Bool
 is_uncond_jump i = raw_mnemonic i == "JMP"
 
--- Returns true for call instructions
-is_call :: Instr -> Bool
-is_call i = (raw_mnemonic i == "CALL") || (raw_mnemonic i == "SYSCALL")
-
 -- Extract arity
 arity :: Instr -> Int
 arity i = length $ operands i
@@ -820,72 +816,6 @@ type_row i = "{{" ++ intercalate "," (map type_elem (operands i)) ++ "}}"
 -- Converts all instruction to type table
 type_table is = to_table is type_row 
 
--- Converts an instruction to return table row
-return_row :: Instr -> String
-return_row i = case raw_mnemonic i of
-  "IRET" -> "true"
-  "IRETD" -> "true"
-  "IRETQ" -> "true"
-  "RET" -> "true"
-  "SYSEXIT" -> "true"
-  "SYSRET" -> "true"
-  _ -> "false"
-
--- Converts all instructions to return table
-return_table :: [Instr] -> String
-return_table is = to_table is return_row 
-
--- Converts an instruction to nop table row
-nop_row :: Instr -> String
-nop_row i = case raw_mnemonic i of
-  "NOP" -> "true"
-  "FNOP" -> "true"
-  _ -> "false"
-
--- Converts all instruction to nop table
-nop_table :: [Instr] -> String
-nop_table is = to_table is nop_row
-
--- Converts an instruction to jump table row
-jump_row :: Instr -> String
-jump_row i = case (is_cond_jump i) || (is_uncond_jump i) of
-  True -> "true"
-  False -> "false"
-
--- Converts all instructions to jump table
-jump_table :: [Instr] -> String
-jump_table is = to_table is jump_row 
-
--- Converts an instruction to cond_jump table row
-cond_jump_row :: Instr -> String
-cond_jump_row i = case is_cond_jump i of
-  True -> "true"
-  False -> "false"
-
--- Converts all instructions to cond_jump table
-cond_jump_table :: [Instr] -> String
-cond_jump_table is = to_table is cond_jump_row 
-
--- Converts an instruction to uncond_jump table row
-uncond_jump_row :: Instr -> String
-uncond_jump_row i = case is_uncond_jump i of
-  True -> "true"
-  False -> "false"
-
--- Converts all instructions to uncond_jump table
-uncond_jump_table :: [Instr] -> String
-uncond_jump_table is = to_table is uncond_jump_row 
-
--- Converts an instruction to call table row
-call_row :: Instr -> String
-call_row i = case is_call i of
-  True -> "true"
-  False -> "false" 
-
--- Converts all instructions to call table
-call_table :: [Instr] -> String
-call_table is = to_table is call_row
-
 -- Converts an instruction mem_index table row
 mem_index_row :: Instr -> String
 mem_index_row i = case findIndex mem_op (operands i) of
@@ -1230,13 +1160,13 @@ vex_imm i = case "/is4" `elem` (opcode_suffix i) of
 
 -- Emits pre-assembly debug statement
 assm_debug_begin :: Instr -> String
-assm_debug_begin i = "\t#ifndef NDEBUG\n" ++
+assm_debug_begin i = "\t#ifdef DEBUG_ASSEMBLER\n" ++
                      "\t\tsize_t debug_i = fxn_->size();\n" ++
                      "\t#endif\n\n"
 
 -- Emits post-assembly debug statement
 assm_debug_end :: Instr -> String
-assm_debug_end i = "\t#ifndef NDEBUG\n" ++
+assm_debug_end i = "\t#ifdef DEBUG_ASSEMBLER\n" ++
                    "\t\tdebug(" ++ instr ++ ", debug_i);\n" ++
                    "\t#endif\n"
   where instr = "Instruction{" ++ (opc i) ++ ",{" ++ (ops i) ++ "}}"
@@ -1396,12 +1326,6 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "arity.table"       $ arity_table is
                    writeFile "properties.table"  $ properties_table is
                    writeFile "type.table"        $ type_table is
-                   writeFile "return.table"      $ return_table is
-                   writeFile "nop.table"         $ nop_table is
-                   writeFile "jump.table"        $ jump_table is
-                   writeFile "cond_jump.table"   $ cond_jump_table is
-                   writeFile "uncond_jump.table" $ uncond_jump_table is
-                   writeFile "call.table"        $ call_table is
                    writeFile "mem_index.table"   $ mem_index_table is
                    writeFile "must_read.table"   $ must_read_table is
                    writeFile "maybe_read.table"  $ maybe_read_table is
@@ -1415,149 +1339,10 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "att.table"         $ att_table is		
 
 --------------------------------------------------------------------------------
--- Test Codegen
---------------------------------------------------------------------------------
-
--- Representative memory values
-test_mem :: [String]
-test_mem = ["(%rip)","(%eax)","(%rax)","(%rax,%r8,1)","(%rbx,%r12,4)","0x1(%rcx,%rbp,8)"]
-
--- Representative moffs values
-test_moffs :: [String]
-test_moffs = ["0x0","0x1","0x7fffffffffffffff","-0x7fffffffffffffff"]
-
--- Representative values for each operand type
-test_operand :: String -> [String]
-test_operand "rl"       = ["%al","%cl","%dl","%bl"] 
-test_operand "rh"       = ["%ah","%ch","%dh","%bh"] 
-test_operand "rb"       = ["%spl","%bpl","%sil","%dil","%r8b","%r9b","%r10b","%r11b","%r12b","%r13b","%r14b","%r15b"]
-test_operand "r16"      = ["%ax","%cx","%dx","%bx","%sp","%bp","%si","%di","%r8w","%r9w","%r10w","%r11w","%r12w","%r13w","%r14w","%r15w"]
-test_operand "r32"      = ["%eax","%ecx","%edx","%ebx","%esp","%ebp","%esi","%edi","%r8d","%r9d","%r10d","%r11d","%r12d","%r13d","%r14d","%r15d"]
-test_operand "r64"      = ["%rax","%rcx","%rdx","%rbx","%rsp","%rbp","%rsi","%rdi","%r8","%r9","%r10","%r11","%r12","%r13","%r14","%r15"]
-test_operand "AL"       = ["%al"]
-test_operand "CL"       = ["%cl"]
-test_operand "AX"       = ["%ax"]
-test_operand "DX"       = ["%dx"]
-test_operand "EAX"      = ["%eax"]
-test_operand "RAX"      = ["%rax"]
-test_operand "m8"       = test_mem
-test_operand "m16"      = test_mem
-test_operand "m32"      = test_mem
-test_operand "m64"      = test_mem
-test_operand "m128"     = test_mem
-test_operand "m256"     = test_mem
-test_operand "m16:16"   = test_mem
-test_operand "m16:32"   = test_mem
-test_operand "m16:64"   = test_mem
-test_operand "m16int"   = test_mem
-test_operand "m32int"   = test_mem
-test_operand "m64int"   = test_mem
-test_operand "m80bcd"   = test_mem
-test_operand "m32fp"    = test_mem
-test_operand "m64fp"    = test_mem
-test_operand "m80fp"    = test_mem
-test_operand "m2byte"   = test_mem
-test_operand "m28byte"  = test_mem
-test_operand "m108byte" = test_mem
-test_operand "m512byte" = test_mem
-test_operand "imm8"     = ["$0x0","$0x1","$0x7f","$-0x1","$-0x7f"]
-test_operand "imm16"    = ["$0x0","$0x1","$0x7fff","$-0x1","$-0x7fff"]
-test_operand "imm32"    = ["$0x0","$0x1","$0x7fffffff","$-0x1","$-0x7fffffff"]
-test_operand "imm64"    = ["$0x0","$0x1","$0x7fffffffffffffff","$-0x1","$-0x7fffffffffffffff"]
-test_operand "0"        = ["$0x0"]
-test_operand "1"        = ["$0x1"]
-test_operand "3"        = ["$0x3"]
-test_operand "mm"       = map (("%mm"++).show) [0..7]
-test_operand "xmm"      = map (("%xmm"++).show) [0..15]
-test_operand "<XMM0>"   = ["%xmm0"]
-test_operand "ymm"      = map (("%ymm"++).show) [0..15]
-test_operand "ST"       = ["%st(0)"]
-test_operand "ST(i)"    = ["%st(0)","%st(1)","%st(2)","%st(3)","%st(4)","%st(5)","%st(6)","%st(7)"]
-test_operand "rel8"     = ["0x0","0x1","0x7f","-0x1","-0x7f"]
-test_operand "rel32"    = ["0x0","0x1","0x7fffffff","-0x1","-0x7fffffff"]
-test_operand "moffs8"   = test_moffs
-test_operand "moffs16"  = test_moffs
-test_operand "moffs32"  = test_moffs
-test_operand "moffs64"  = test_moffs
-test_operand "Sreg"     = ["%es","%cs","%ss","%ds","%fs","%gs"]
-test_operand "FS"       = ["%fs"]
-test_operand "GS"       = ["%gs"]
--- Below this point are operand types we have introduced
-test_operand "p66"      = []
-test_operand "pw"       = []
-test_operand "far"      = []
-test_operand "label"    = [".L0"]
-test_operand "hint"     = []
-test_operand o = error $ "Unrecognized test operand type: \"" ++ o ++ "\""
-
--- Generates a list of test operands for an instruction
-test_operands :: Instr -> [String]
-test_operands i = map (intercalate ",") $ cp i
-  where cp i = sequence $ map test_operand $ reverse $ operands i
-
--- Convert an instruction into a list of instances for compilation
-test_instr :: Instr -> [String]
-test_instr i = map (mn ++) $ test_operands i
-  where mn = (att i ++ " ")
-
--- Convert an instruction into a test file
-write_test_file :: Instr -> IO ()
-write_test_file i = writeFile file $ (intercalate "\n" $ test_instr i) ++ "\n"
-  where file = "../test/" ++ (low (opcode_enum i)) ++ ".s"
-
--- Convert all instructions into a list of instances for compilation
-write_test_files :: [Instr] -> IO ()
-write_test_files is = mapM_ write_test_file is
-
---------------------------------------------------------------------------------
--- Documentation
---------------------------------------------------------------------------------
-
--- Convert an instruction into an html table row
-html_row :: Instr -> String
-html_row i = "<tr>" ++
-             "<td>" ++ (opcode i) ++ "</td>" ++
-             "<td>" ++ (low (instruction i)) ++ "</td>" ++
-             "<td>" ++ (low (att_form i)) ++ "</td>" ++
-             "<td>" ++ (intercalate ", " (map (:[]) (op_en i))) ++ "</td>" ++
-             "<td>" ++ (property i) ++ "</td>" ++
-             "<td>" ++ (intercalate ", " (implicit_reads i)) ++ "</td>" ++
-             "<td>" ++ (intercalate ", " (implicit_writes i)) ++ "</td>" ++
-             "<td>" ++ (intercalate ", " (implicit_undefs i)) ++ "</td>" ++
-             "<td>" ++ (flag i) ++ "</td>" ++
-             "<td>" ++ (description i) ++ "</td>" ++
-             "</tr>"
-  where att_form i = (att i) ++ " " ++ (intercalate ", " (reverse (operands i)))
-
--- Convert all instructions into an html table
-html_table :: [Instr] -> String
-html_table is = "<table>" ++ 
-                "<tr>" ++
-                "<th>Hex Encoding</th>" ++
-                "<th>Intel Form</th>" ++
-                "<th>AT&T Form</th>" ++
-                "<th>Operand Encoding</th>" ++
-                "<th>Explicit Read/Write/Undef Properties</th>" ++
-                "<th>Implicit Reads</th>" ++
-                "<th>Implicit Write</th>" ++
-                "<th>Implicit Undefs</th>" ++
-                "<th>CPU ID Flag</th>" ++
-                "<th>Description</th>" ++
-                "</tr>\n" ++ 
-                intercalate "\n" (map html_row is) ++ 
-                "</table>"
-
--- Write the html table
-write_html :: [Instr] -> IO ()
-write_html is = writeFile "../doc/reference.html" $ html_table is
-
---------------------------------------------------------------------------------
 -- Main (read the spreadsheet and write some code)
 --------------------------------------------------------------------------------
 
 main :: IO ()		
 main = do is <- parse_instrs "x86.csv"       
           property_arity_check is 
-          write_html is
           write_code is
-          write_test_files is					

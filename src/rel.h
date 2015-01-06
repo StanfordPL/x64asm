@@ -26,36 +26,45 @@ namespace x64asm {
 /** A relative address. */
 class Rel : public Operand {
   public:
-    /** Copy constructor. */
-    Rel(const Rel& rhs);
-    /** Move constructor. */
-    Rel(Rel&& rhs);
-    /** Copy assignment operator. */
-    Rel& operator=(const Rel& rhs);
-    /** Move assignment operator. */
-    Rel& operator=(Rel&& rhs);
-
     /** Comparison based on on val_. */
-    constexpr bool operator<(const Rel& rhs);
+    constexpr bool operator<(const Rel& rhs) {
+			return val_ < rhs.val_;
+		}
     /** Comparison based on on val_. */
-    constexpr bool operator==(const Rel& rhs);
+    constexpr bool operator==(const Rel& rhs) {
+			return val_ == rhs.val_;
+		}
     /** Comparison based on on val_. */
-    constexpr bool operator!=(const Rel& rhs);
+    constexpr bool operator!=(const Rel& rhs) {
+			return !(*this == rhs);
+		}
 
     /** Conversion based on underlying value. */
-    constexpr operator uint64_t();
+    constexpr operator uint64_t() {
+			return val_;
+		}
 
     /** STL-compliant hash. */
-    constexpr size_t hash();
-    /** STL-compliant swap. */
-    void swap(Rel& rhs);
+    constexpr size_t hash() {
+			return val_;
+		}
 
+		/** @todo This method is undefined. */
+		std::istream& read_att(std::istream& is) {
+			is.setstate(std::ios::failbit);
+			return is;
+		}
     /** Writes this rel to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const;
+    std::ostream& write_att(std::ostream& os) const {
+			const auto fmt = os.flags();
+			os << std::hex << std::showbase << val_;
+			os.flags(fmt);
+			return os;
+		}
 
   protected:
     /** Direct access to this constructor is disallowed. */
-    constexpr Rel(uint64_t val);
+    constexpr Rel(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 /** A relative address in the range from 128 bytes before the end of the
@@ -64,10 +73,12 @@ class Rel : public Operand {
 class Rel8 : public Rel {
   public:
     /** Creates an 8-bit relative offset. */
-    constexpr Rel8(int8_t val);
+    constexpr Rel8(int8_t val) : Rel(Type::REL_8, (uint64_t)val) {}
 
     /** Checks that this offset fits in 8 bits. */
-    constexpr bool check();
+    constexpr bool check() {
+			return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
+		}
 };
 
 /** A relative address within the same code segment as the instruction
@@ -77,10 +88,12 @@ class Rel8 : public Rel {
 class Rel32 : public Rel {
   public:
     /** Creates a 32-bit relative offset. */
-    constexpr Rel32(int64_t val);
+    constexpr Rel32(int64_t val) : Rel(Type::REL_32, (uint64_t)val) {}
 
     /** Checks that this offset value fits in 32-bits. */
-    constexpr bool check();
+    constexpr bool check() {
+			return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
+		}
 };
 
 } // namespace x64asm
@@ -90,98 +103,18 @@ namespace std {
 /** STL hash specialization. */
 template <>
 struct hash<x64asm::Rel> {
-  size_t operator()(const x64asm::Rel& r) const;
+  size_t operator()(const x64asm::Rel& r) const {
+		return r.hash();
+	}
 };
 
-/** STL swap overload. */
-void swap(x64asm::Rel& lhs, x64asm::Rel& rhs);
-
-/** I/O overload. */
-ostream& operator<<(ostream& os, const x64asm::Rel& r);
-
-} // namespace std
-
-namespace x64asm {
-
-inline Rel::Rel(const Rel& rhs) : Operand{0,0} {
-  val_ = rhs.val_;
+/** iostream overload. */
+inline istream& operator>>(istream& is, x64asm::Rel& r) {
+	return r.read_att(is);
 }
-
-inline Rel::Rel(Rel&& rhs) {
-  val_ = rhs.val_;
-}
-
-inline Rel& Rel::operator=(const Rel& rhs) {
-  Rel(rhs).swap(*this);
-  return *this;
-}
-
-inline Rel& Rel::operator=(Rel&& rhs) {
-  Rel(std::move(rhs)).swap(*this);
-  return *this;
-}
-
-inline constexpr bool Rel::operator<(const Rel& rhs) {
-  return val_ < rhs.val_;
-}
-
-inline constexpr bool Rel::operator==(const Rel& rhs) {
-  return val_ == rhs.val_;
-}
-
-inline constexpr bool Rel::operator!=(const Rel& rhs) {
-  return val_ != rhs.val_;
-}
-
-inline constexpr Rel::operator uint64_t() {
-  return val_;
-}
-
-inline std::ostream& Rel::write_att(std::ostream& os) const {
-  return (os << std::hex << std::showbase << val_);
-}
-
-inline constexpr size_t Rel::hash() {
-  return val_;
-}
-
-inline void Rel::swap(Rel& rhs) {
-  std::swap(val_, rhs.val_);
-}
-
-inline constexpr Rel::Rel(uint64_t val) : Operand{val} {
-}
-
-inline constexpr Rel8::Rel8(int8_t val) :
-    Rel {(uint64_t)val} {
-}
-
-inline constexpr bool Rel8::check() {
-  return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
-}
-
-inline constexpr Rel32::Rel32(int64_t val) :
-    Rel {(uint64_t)val} {
-}
-    
-inline constexpr bool Rel32::check() {
-  return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
-}
-
-} // namespace x64asm
-
-namespace std {
-
-inline size_t hash<x64asm::Rel>::operator()(const x64asm::Rel& r) const {
-  return r.hash();
-}
-
-inline void swap(x64asm::Rel& lhs, x64asm::Rel& rhs) {
-  lhs.swap(rhs);
-}
-
+/** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Rel& r) {
-  return r.write_att(os);
+	return r.write_att(os);
 }
 
 } // namespace std

@@ -19,7 +19,6 @@ limitations under the License.
 
 #include <iostream>
 #include <type_traits>
-#include <unordered_map>
 
 #include "src/function.h"
 #include "src/code.h"
@@ -82,25 +81,26 @@ class Assembler {
     void start(Function& fxn) {
       fxn_ = &fxn;
       fxn_->clear();
-
-      label_defs_.clear();
-      label_rels_.clear();
     }
 
     /** Finishes compiling a function. Replaces relative placeholders by
-        actual values.
+        actual values, and deletes references after doing so.
     */
     void finish() {
-      for (const auto & l : label_rels_) {
-        const auto pos = l.first;
-        const auto itr = label_defs_.find(l.second);
+			std::vector<std::pair<size_t, uint64_t>> unresolved;
 
-        if (itr == label_defs_.end()) {
-          fxn_->emit_long(0, pos);
+      for (const auto & l : fxn_->label_rels_) {
+        const auto pos = l.first;
+        const auto itr = fxn_->label_defs_.find(l.second);
+
+        if (itr == fxn_->label_defs_.end()) {
+					unresolved.push_back(l);
         } else {
-          fxn_->emit_long(itr->second - pos - 4, pos);
+          fxn_->emit_long(itr->second-pos-4, pos);
         }
       }
+
+			fxn_->label_rels_ = unresolved;
     }
 
     /** Assembles an instruction. This method will print a hex dump to
@@ -110,20 +110,15 @@ class Assembler {
 
     /** Bind a label definition to the current assembler position. */
     void bind(Label label) {
-      label_defs_[label.val_] = fxn_->size();
+      fxn_->label_defs_[label.val_] = fxn_->size();
     }
 
     // void adc(const Al& arg0, const Imm8& arg1); ...
-#include "src/assembler.decl"
+		#include "src/assembler.decl"
 
   private:
     /** Pointer to the function being compiled. */
     Function* fxn_;
-
-    /** Maps label definitions to code position. */
-    std::unordered_map<uint64_t, size_t> label_defs_;
-    /** Keeps track of unresolved label references. */
-    std::vector<std::pair<size_t, uint64_t>> label_rels_;
 
     /** Emits an fwait prefix byte. */
     void pref_fwait(uint8_t c) {
@@ -136,7 +131,8 @@ class Assembler {
     }
 
     /** Emits a group 2 non-hint prefix byte. */
-    void pref_group2(const M& m) {
+    template <typename T>
+    void pref_group2(const M<T>& m) {
       static uint8_t pref[6] {0x26, 0x2e, 0x36, 0x3e, 0x64, 0x65};
       if (m.contains_seg()) {
         fxn_->emit_byte(pref[m.get_seg().val_]);
@@ -154,7 +150,8 @@ class Assembler {
     }
 
     /** Emits a group 4 prefix byte. */
-    void pref_group4(const M& m) {
+    template <typename T>
+    void pref_group4(const M<T>& m) {
       if (m.addr_or()) {
         fxn_->emit_byte(0x67);
       }
@@ -217,11 +214,12 @@ class Assembler {
     }
 
     /** Records internal state for a label reference. Saves the current code
-        position and reserves space for the resolved address.
+        position and reserves space for the resolved address by emitting zero
+				bytes.
     */
     void disp_imm(Label l) {
-      label_rels_.push_back(std::make_pair(fxn_->size(), l.val_));
-      fxn_->advance_long();
+      fxn_->label_rels_.push_back(std::make_pair(fxn_->size(), l.val_));
+      fxn_->emit_long(0);
     }
 
     /** Emits an eight-byte memory offset. */
@@ -257,14 +255,16 @@ class Assembler {
     /** Conditionally emits a rex prefix.
         See Figure 2.4: Intel Manual Vol 2A 2-8.
     */
-    void rex(const M& rm, const Operand& r, uint8_t val) {
+    template <typename T>
+    void rex(const M<T>& rm, const Operand& r, uint8_t val) {
       rex(rm, val | ((r.val_ >> 1) & 0x4));
     }
 
     /** Conditionally emits a rex prefix.
         See Figure 2.6: Intel Manual Vol 2A 2.9.
     */
-    void rex(const M& rm, uint8_t val) {
+    template <typename T>
+    void rex(const M<T>& rm, uint8_t val) {
       if (rm.contains_base()) {
         val |= (rm.get_base().val_ >> 3);
       }
@@ -294,7 +294,8 @@ class Assembler {
     }
 
     /** Emits a mod/rm sib byte pair. */
-    void mod_rm_sib(const M& rm, const Operand& r);
+    template <typename T>
+    void mod_rm_sib(const M<T>& rm, const Operand& r);
 
     /** Emits a mod/rm sib byte pair. */
     void mod_rm_sib(const Operand& rm, const Operand& r) {
@@ -317,8 +318,9 @@ class Assembler {
     }
 
     // Emits a vex prefix. See Figure 2-9: Intel Manual Vol 2A 2-14. */
+    template <typename T>
     void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
-             const Operand& vvvv, const M& rm,
+             const Operand& vvvv, const M<T>& rm,
              const Operand& r) {
       uint8_t r_bit = (~r.val_ << 4) & 0x80;
       uint8_t x_bit = rm.contains_index() ?

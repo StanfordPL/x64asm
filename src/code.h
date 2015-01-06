@@ -21,7 +21,9 @@ limitations under the License.
 #include <iostream>
 #include <vector>
 
+#include "src/flag_set.h"
 #include "src/instruction.h"
+#include "src/reg_set.h"
 
 namespace x64asm {
 
@@ -31,20 +33,100 @@ namespace x64asm {
 class Code : public std::vector<Instruction> {
   public:
     /** Creates an empty code sequence. */
-    Code();
+    Code() : std::vector<Instruction>() {}
     /** Creates a code sequence using initializer list syntax. */
-    Code(const std::initializer_list<Instruction>& is);
+    Code(const std::initializer_list<Instruction>& is) : std::vector<Instruction>(is) {}
     /** Creates a code sequence using the instruction in an stl container. */
     template <typename InItr>
-    Code(InItr begin, InItr end);
+    Code(InItr begin, InItr end) : std::vector<Instruction>(begin, end) {}
+
+		/** Returns the set of cpu flags required to run this code. */
+		FlagSet required_flags() const {
+			auto fs = FlagSet::empty();
+			for (const auto& instr : *this) {
+				fs |= instr.required_flags();
+			}
+			return fs;
+		}
+
+    /** Returns the set of registers this code must read. */
+    RegSet must_read_set() const {
+			auto rs = RegSet::empty();
+			auto mod = RegSet::empty();
+			for (const auto& instr : *this) {
+				rs |= (instr.must_read_set() - mod);
+				mod |= (instr.maybe_write_set() | instr.maybe_undef_set());
+			}
+			return rs;
+		}
+    /** Returns the set of registers this code might read. */
+    RegSet maybe_read_set() const {
+			auto rs = RegSet::empty();
+			auto mod = RegSet::empty();
+			for (const auto& instr : *this) {
+				rs |= (instr.maybe_read_set() - mod);
+				mod |= (instr.maybe_write_set() | instr.maybe_undef_set());
+			}
+			return rs;
+		}
+    /** Returns the set of registers this code must write. */
+    RegSet must_write_set() const {
+			auto rs = RegSet::empty();
+			for (const auto& instr : *this) {
+				rs |= instr.must_write_set();
+				rs -= instr.maybe_undef_set();
+			}
+			return rs;
+		}
+    /** Returns the set of registers this code might write. */
+    RegSet maybe_write_set() const {
+			auto rs = RegSet::empty();
+			for (const auto& instr : *this) {
+				rs |= instr.maybe_write_set();
+				rs -= instr.maybe_undef_set();
+			}
+			return rs;
+		}
+    /** Returns the set of registers this code must undefine. */
+    RegSet must_undef_set() const {
+			auto rs = RegSet::empty();
+			for (const auto& instr : *this) {
+				rs |= instr.must_undef_set();
+				rs -= instr.maybe_write_set();
+			}
+			return rs;
+		}
+    /** Returns the set of registers this code might undefine. */
+    RegSet maybe_undef_set() const {
+			auto rs = RegSet::empty();
+			for (const auto& instr : *this) {
+				rs |= instr.maybe_undef_set();
+				rs -= instr.maybe_write_set();
+			}
+			return rs;
+		}
 
     /** Returns true iff every instruction is well-formed. */
-    bool check() const;
+		bool check() const {
+			for (const auto & i : *this)
+				if (!i.check()) {
+					return false;
+				}
+			return true;
+		}
 
     /** Reads a code sequence in at&t syntax from an istream. */
     std::istream& read_att(std::istream& is);
     /** Writes a code sequence to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const;
+		std::ostream& write_att(std::ostream& os) const {
+			for (size_t i = 0, ie = size(); i < ie; ++i) {
+				(*this)[i].write_att(os);
+				if (i+1 != ie) {
+					os << std::endl;
+				}
+			}
+			return os;
+		}
 };
 
 } // namespace x64asm
@@ -52,53 +134,10 @@ class Code : public std::vector<Instruction> {
 namespace std {
 
 /** I/O overload. */
-istream& operator>>(istream& is, x64asm::Code& c);
-/** I/O overload. */
-ostream& operator<<(ostream& os, const x64asm::Code& c);
-
-} // namespace std
-
-namespace x64asm {
-
-inline Code::Code() :
-    std::vector<Instruction> {} {
-}
-
-inline Code::Code(const std::initializer_list<Instruction>& is) : 
-    std::vector<Instruction> {is} {
-}
-
-template <typename InItr>
-inline Code::Code(InItr begin, InItr end) : 
-    std::vector<Instruction> {begin, end} {
-}
-
-inline bool Code::check() const {
-  for (const auto & i : *this)
-    if (!i.check()) {
-      return false;
-    }
-  return true;
-}
-
-inline std::ostream& Code::write_att(std::ostream& os) const {
-  for (size_t i = 0, ie = size(); i < ie; ++i) {
-    (*this)[i].write_att(os);
-    if (i+1 != ie) {
-      os << "\n";
-    }
-  }
-  return os;
-}
-
-} // namespace x64asm
-
-namespace std {
-
 inline istream& operator>>(istream& is, x64asm::Code& c) {
   return c.read_att(is);
 }
-
+/** I/O overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Code& c) {
   return c.write_att(os);
 }

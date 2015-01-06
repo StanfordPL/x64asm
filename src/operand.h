@@ -20,6 +20,8 @@ limitations under the License.
 #include <array>
 #include <stdint.h>
 
+#include "src/type.h"
+
 namespace x64asm {
 
 class RegSet;
@@ -39,25 +41,28 @@ class Operand {
     friend class Instruction;
 
   public:
-    /** Copy constructor. */
-    Operand(const Operand& rhs);
-    /** Move constructor. */
-    Operand(Operand&& rhs);
-    /** Copy assignment operator. */
-    Operand& operator=(const Operand& rhs);
-    /** Move assignment operator. */
-    Operand& operator=(Operand&& rhs);
-
-    /** STL-compliant swap. */
-    void swap(Operand& rhs);
+    /** Return the type of this operand */
+    constexpr Type type() { return (Type)(val2_ >> 3); }
+    /** Return the size of this operand */
+    uint16_t size() const;
+    /** Is this a general purpose register? */
+    bool is_gp_register() const;
+    /** Is this an SSE register? */
+    bool is_sse_register() const;
+    /** Is this a normal 8/16/32/64/128/256-bit memory operand? */
+    bool is_typical_memory() const;
+    /** Is this an immediate? */
+    bool is_immediate() const;
 
   protected:
-    /** Creates an operand with no underlying value. */
-    constexpr Operand();
-    /** Creates an operand with one underlying value. */
-    constexpr Operand(uint64_t val);
-    /** Creates an operand with two underlying values. */
-    constexpr Operand(uint64_t val, uint64_t val2);
+    /** Creates an operand with a type and no underlying value. */
+    constexpr Operand(Type t) : val_(0), val2_((uint64_t)t << 3) {}
+    /** Creates an operand with a type and one underlying value. */
+    constexpr Operand(Type t, uint64_t val) : val_(val), val2_((uint64_t)t << 3) {}
+    /** Creates an operand with a type and two underlying values. */
+    constexpr Operand(Type t, uint64_t val, uint64_t val2) : val_(val), val2_(val2 | ((uint64_t)t << 3)) {}
+    /** Creates an operand with no type and no underlying value. */
+    constexpr Operand() : val_(0), val2_(0) {}
 
     /** Underlying value. */
     uint64_t val_;
@@ -66,61 +71,23 @@ class Operand {
 
   private:  
     /** Comparison based on underlying values. */
-    bool operator<(const Operand& rhs) const;
+    bool operator<(const Operand& rhs) const {
+			return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
+		}
     /** Comparison based on underlying values. */
-    bool operator==(const Operand& rhs) const;
+    bool operator==(const Operand& rhs) const {
+			return std::make_pair(val_, val2_) == std::make_pair(rhs.val_, rhs.val2_);
+		}
     /** Comparison based on underlying values. */
-    bool operator!=(const Operand& rhs) const;
+    bool operator!=(const Operand& rhs) const {
+  		return !(*this == rhs);
+		}
+
+    /** Forcibly change the underlying type */
+    void set_type(Type t) {
+      val2_ = ((uint64_t)t << 3) | (val2_ & 0x7);
+    }
 };
-
-inline Operand::Operand(const Operand& rhs) {
-  val_ = rhs.val_;
-  val2_ = rhs.val2_;
-}
-
-inline Operand::Operand(Operand&& rhs) {
-  val_ = rhs.val_;
-  val2_ = rhs.val2_;
-}
-
-inline Operand& Operand::operator=(const Operand& rhs) {
-  Operand(rhs).swap(*this);
-  return *this;
-}
-
-inline Operand& Operand::operator=(Operand&& rhs) {
-  Operand(std::move(rhs)).swap(*this);
-  return *this;
-}
-
-inline void Operand::swap(Operand& rhs) {
-  std::swap(val_, rhs.val_);
-  std::swap(val2_, rhs.val2_);
-}
-
-inline constexpr Operand::Operand() : 
-    val_ {0}, val2_ {0} { 
-}
-
-inline constexpr Operand::Operand(uint64_t val) : 
-    val_ {val}, val2_ {0} { 
-}
-
-inline constexpr Operand::Operand(uint64_t val, uint64_t val2) : 
-    val_ {val}, val2_ {val2} { 
-}
-
-inline bool Operand::operator<(const Operand& rhs) const {
-  return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
-}
-
-inline bool Operand::operator==(const Operand& rhs) const {
-  return std::make_pair(val_, val2_) == std::make_pair(rhs.val_, rhs.val2_);
-}
-
-inline bool Operand::operator!=(const Operand& rhs) const {
-  return !(*this == rhs);
-}
 
 } // namespace x64asm
 

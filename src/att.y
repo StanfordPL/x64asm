@@ -159,7 +159,10 @@ const Operand promote(const Operand* op, Type parse, Type target) {
 		}
 		if ( target == Type::REL_8 || target == Type::REL_32 )
 			return offs;
-	}
+	} else if (is_mem(parse)) {
+    M8 ret(*(reinterpret_cast<const M8*>(op)), target);
+    return ret;
+  }
 
 	return *op;
 }
@@ -202,43 +205,43 @@ const Instruction* to_instr(const std::string& opc,
 }
 
 R32 base32(const Operand* o) { 
-	const auto ret = *((R32*)o);
+	const auto ret = *(static_cast<const R32*>(o));
 	delete o;
 	return ret;
 }
 
 R64 base64(const Operand* o) { 
-	const auto ret = *((R64*)o);
+	const auto ret = *(static_cast<const R64*>(o));
 	delete o;
 	return ret;
 }
 
 R32 index32(const Operand* o) { 
-	const auto ret = *((R32*)o);
+	const auto ret = *(static_cast<const R32*>(o));
 	delete o;
 	return ret;
 }
 
 R64 index64(const Operand* o) { 
-	const auto ret = *((R64*)o);
+	const auto ret = *(static_cast<const R64*>(o));
 	delete o;
 	return ret;
 }
 
 Imm32 disp(const Operand* o) { 
-	const auto ret = *((Imm32*)o);
+	const auto ret = *(static_cast<const Imm32*>(o));
 	delete o;
 	return ret;
 }
 
 Sreg seg(const Operand* o) { 
-	const auto ret = *((Sreg*)o);
+	const auto ret = *(static_cast<const Sreg*>(o));
 	delete o;
 	return ret;
 }
 
 Imm64 offset(const Operand* o) { 
-	const auto ret = *((Imm64*)o);
+	const auto ret = *(static_cast<const Imm64*>(o));
 	delete o;
 	return ret;
 }
@@ -398,54 +401,54 @@ typed_operand : HINT { $$ = new pair<const Operand*, Type>{$1, Type::HINT}; }
 	| m { $$ = new pair<const Operand*, Type>{$1, Type::M_8}; }
 
 moffs :
-  OFFSET { $$ = new Moffs8{offset($1)}; }
-| SREG COLON OFFSET { $$ = new Moffs8{seg($1), offset($3)}; }
+  OFFSET { $$ = new Moffs8(offset($1)); }
+| SREG COLON OFFSET { $$ = new Moffs8(seg($1), offset($3)); }
 
 m : 
-  OPEN R_32 CLOSE { $$ = new M8{base32($2)}; }
-| OPEN R_64 CLOSE { $$ = new M8{base64($2)}; }
-| OPEN RIP CLOSE { $$ = new M8{rip}; }
-| SREG COLON OPEN R_32 CLOSE { $$ = new M8{seg($1), base32($4)}; }
-| SREG COLON OPEN R_64 CLOSE { $$ = new M8{seg($1), base64($4)}; }
-| SREG COLON OPEN RIP CLOSE { $$ = new M8{seg($1), rip}; }
-| OFFSET OPEN R_32 CLOSE { $$ = new M8{base32($3), disp($1)}; }
-| OFFSET OPEN R_64 CLOSE { $$ = new M8{base64($3), disp($1)}; }
-| OFFSET OPEN RIP CLOSE { $$ = new M8{rip, disp($1)}; }
-| SREG COLON OFFSET OPEN R_32 CLOSE { $$ = new M8{seg($1), base32($5), disp($3)}; }
-| SREG COLON OFFSET OPEN R_64 CLOSE { $$ = new M8{seg($1), base64($5), disp($3)}; }
-| SREG COLON OFFSET OPEN RIP CLOSE { $$ = new M8{seg($1), rip, disp($3)}; }
-| OPEN COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{index32($3), $5}; }
-| OPEN COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{index64($3), $5}; }
-| OPEN COMMA R_32 CLOSE { $$ = new M8{index32($3), Scale::TIMES_1}; }
-| OPEN COMMA R_64 CLOSE { $$ = new M8{index64($3), Scale::TIMES_1}; }
-| SREG COLON OPEN COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{seg($1), index32($5), $7}; }
-| SREG COLON OPEN COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{seg($1), index64($5), $7}; }
-| SREG COLON OPEN COMMA R_32 CLOSE { $$ = new M8{seg($1), index32($5), Scale::TIMES_1}; }
-| SREG COLON OPEN COMMA R_64 CLOSE { $$ = new M8{seg($1), index64($5), Scale::TIMES_1}; }
-| OFFSET OPEN COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{index32($4), $6, disp($1)}; }
-| OFFSET OPEN COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{index64($4), $6, disp($1)}; }
-| OFFSET OPEN COMMA R_32 CLOSE { $$ = new M8{index32($4), Scale::TIMES_1, disp($1)}; }
-| OFFSET OPEN COMMA R_64 CLOSE { $$ = new M8{index64($4), Scale::TIMES_1, disp($1)}; }
-| SREG COLON OFFSET OPEN COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{seg($1), index32($6), $8, disp($3)}; }
-| SREG COLON OFFSET OPEN COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{seg($1), index64($6), $8, disp($3)}; }
-| SREG COLON OFFSET OPEN COMMA R_32 CLOSE { $$ = new M8{seg($1), index32($6), Scale::TIMES_1, disp($3)}; }
-| SREG COLON OFFSET OPEN COMMA R_64 CLOSE { $$ = new M8{seg($1), index64($6), Scale::TIMES_1, disp($3)}; }
-| OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{base32($2), index32($4), $6}; }
-| OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{base64($2), index64($4), $6}; }
-| OPEN R_32 COMMA R_32 CLOSE { $$ = new M8{base32($2), index32($4), Scale::TIMES_1}; }
-| OPEN R_64 COMMA R_64 CLOSE { $$ = new M8{base64($2), index64($4), Scale::TIMES_1}; }
-| SREG COLON OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{seg($1), base32($4), index32($6), $8}; }
-| SREG COLON OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{seg($1), base64($4), index64($6), $8}; }
-| SREG COLON OPEN R_32 COMMA R_32 CLOSE { $$ = new M8{seg($1), base32($4), index32($6), Scale::TIMES_1}; }
-| SREG COLON OPEN R_64 COMMA R_64 CLOSE { $$ = new M8{seg($1), base64($4), index64($6), Scale::TIMES_1}; }
-| OFFSET OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{base32($3), index32($5), $7, disp($1)}; }
-| OFFSET OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{base64($3), index64($5), $7, disp($1)}; }
-| OFFSET OPEN R_32 COMMA R_32 CLOSE { $$ = new M8{base32($3), index32($5), Scale::TIMES_1, disp($1)}; }
-| OFFSET OPEN R_64 COMMA R_64 CLOSE { $$ = new M8{base64($3), index64($5), Scale::TIMES_1, disp($1)}; }
-| SREG COLON OFFSET OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8{seg($1), base32($5), index32($7), $9, disp($3)}; }
-| SREG COLON OFFSET OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8{seg($1), base64($5), index64($7), $9, disp($3)}; }
-| SREG COLON OFFSET OPEN R_32 COMMA R_32 CLOSE { $$ = new M8{seg($1), base32($5), index32($7), Scale::TIMES_1, disp($3)}; }
-| SREG COLON OFFSET OPEN R_64 COMMA R_64 CLOSE { $$ = new M8{seg($1), base64($5), index64($7), Scale::TIMES_1, disp($3)}; }
+  OPEN R_32 CLOSE { $$ = new M8(base32($2)); }
+| OPEN R_64 CLOSE { $$ = new M8(base64($2)); }
+| OPEN RIP CLOSE { $$ = new M8(rip); }
+| SREG COLON OPEN R_32 CLOSE { $$ = new M8(seg($1), base32($4)); }
+| SREG COLON OPEN R_64 CLOSE { $$ = new M8(seg($1), base64($4)); }
+| SREG COLON OPEN RIP CLOSE { $$ = new M8(seg($1), rip); }
+| OFFSET OPEN R_32 CLOSE { $$ = new M8(base32($3), disp($1)); }
+| OFFSET OPEN R_64 CLOSE { $$ = new M8(base64($3), disp($1)); }
+| OFFSET OPEN RIP CLOSE { $$ = new M8(rip, disp($1)); }
+| SREG COLON OFFSET OPEN R_32 CLOSE { $$ = new M8(seg($1), base32($5), disp($3)); }
+| SREG COLON OFFSET OPEN R_64 CLOSE { $$ = new M8(seg($1), base64($5), disp($3)); }
+| SREG COLON OFFSET OPEN RIP CLOSE { $$ = new M8(seg($1), rip, disp($3)); }
+| OPEN COMMA R_32 COMMA SCALE CLOSE { $$ = new M8(index32($3), $5); }
+| OPEN COMMA R_64 COMMA SCALE CLOSE { $$ = new M8(index64($3), $5); }
+| OPEN COMMA R_32 CLOSE { $$ = new M8(index32($3), Scale::TIMES_1); }
+| OPEN COMMA R_64 CLOSE { $$ = new M8(index64($3), Scale::TIMES_1); }
+| SREG COLON OPEN COMMA R_32 COMMA SCALE CLOSE { $$ = new M8(seg($1), index32($5), $7); }
+| SREG COLON OPEN COMMA R_64 COMMA SCALE CLOSE { $$ = new M8(seg($1), index64($5), $7); }
+| SREG COLON OPEN COMMA R_32 CLOSE { $$ = new M8(seg($1), index32($5), Scale::TIMES_1); }
+| SREG COLON OPEN COMMA R_64 CLOSE { $$ = new M8(seg($1), index64($5), Scale::TIMES_1); }
+| OFFSET OPEN COMMA R_32 COMMA SCALE CLOSE { $$ = new M8(index32($4), $6, disp($1)); }
+| OFFSET OPEN COMMA R_64 COMMA SCALE CLOSE { $$ = new M8(index64($4), $6, disp($1)); }
+| OFFSET OPEN COMMA R_32 CLOSE { $$ = new M8(index32($4), Scale::TIMES_1, disp($1)); }
+| OFFSET OPEN COMMA R_64 CLOSE { $$ = new M8(index64($4), Scale::TIMES_1, disp($1)); }
+| SREG COLON OFFSET OPEN COMMA R_32 COMMA SCALE CLOSE { $$ = new M8(seg($1), index32($6), $8, disp($3)); }
+| SREG COLON OFFSET OPEN COMMA R_64 COMMA SCALE CLOSE { $$ = new M8(seg($1), index64($6), $8, disp($3)); }
+| SREG COLON OFFSET OPEN COMMA R_32 CLOSE { $$ = new M8(seg($1), index32($6), Scale::TIMES_1, disp($3)); }
+| SREG COLON OFFSET OPEN COMMA R_64 CLOSE { $$ = new M8(seg($1), index64($6), Scale::TIMES_1, disp($3)); }
+| OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8(base32($2), index32($4), $6); }
+| OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8(base64($2), index64($4), $6); }
+| OPEN R_32 COMMA R_32 CLOSE { $$ = new M8(base32($2), index32($4), Scale::TIMES_1); }
+| OPEN R_64 COMMA R_64 CLOSE { $$ = new M8(base64($2), index64($4), Scale::TIMES_1); }
+| SREG COLON OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8(seg($1), base32($4), index32($6), $8); }
+| SREG COLON OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8(seg($1), base64($4), index64($6), $8); }
+| SREG COLON OPEN R_32 COMMA R_32 CLOSE { $$ = new M8(seg($1), base32($4), index32($6), Scale::TIMES_1); }
+| SREG COLON OPEN R_64 COMMA R_64 CLOSE { $$ = new M8(seg($1), base64($4), index64($6), Scale::TIMES_1); }
+| OFFSET OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8(base32($3), index32($5), $7, disp($1)); }
+| OFFSET OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8(base64($3), index64($5), $7, disp($1)); }
+| OFFSET OPEN R_32 COMMA R_32 CLOSE { $$ = new M8(base32($3), index32($5), Scale::TIMES_1, disp($1)); }
+| OFFSET OPEN R_64 COMMA R_64 CLOSE { $$ = new M8(base64($3), index64($5), Scale::TIMES_1, disp($1)); }
+| SREG COLON OFFSET OPEN R_32 COMMA R_32 COMMA SCALE CLOSE { $$ = new M8(seg($1), base32($5), index32($7), $9, disp($3)); }
+| SREG COLON OFFSET OPEN R_64 COMMA R_64 COMMA SCALE CLOSE { $$ = new M8(seg($1), base64($5), index64($7), $9, disp($3)); }
+| SREG COLON OFFSET OPEN R_32 COMMA R_32 CLOSE { $$ = new M8(seg($1), base32($5), index32($7), Scale::TIMES_1, disp($3)); }
+| SREG COLON OFFSET OPEN R_64 COMMA R_64 CLOSE { $$ = new M8(seg($1), base64($5), index64($7), Scale::TIMES_1, disp($3)); }
 
 %% 
 

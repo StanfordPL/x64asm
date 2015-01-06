@@ -21,7 +21,9 @@ namespace x64asm {
 
 /** Any of the types which appear in the Intel Manual. */
 enum class Type {
-  HINT = 0,
+  NONE = 0, //for an operand constructed without a type
+
+  HINT,
 
   IMM_8,
   IMM_16,

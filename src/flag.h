@@ -17,6 +17,7 @@ limitations under the License.
 #ifndef X64ASM_SRC_FLAG_H
 #define X64ASM_SRC_FLAG_H
 
+#include <iostream>
 #include <stdint.h>
 
 namespace x64asm {
@@ -66,6 +67,24 @@ enum class Flag : uint64_t {
   RTM =       0x0000010000000000  // Restricted Transactional Memory
 };
 
+/** Reads a flag from an istream in text. */
+std::istream& read_text(std::istream& is, Flag& f);
+/** Writes a flag to an ostream using text. */
+std::ostream& write_text(std::ostream& os, const Flag f);
+
 } // namespace x64asm
+
+namespace std {
+
+/** iostream overload */
+inline istream& operator>>(istream& is, x64asm::Flag& f) {
+	return read_text(is, f);
+}
+/** iostream overload */
+inline ostream& operator<<(ostream& os, const x64asm::Flag f) {
+	return write_text(os, f);
+}
+
+} // namespace std
 
 #endif

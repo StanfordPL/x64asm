@@ -1,0 +1,16 @@
+src/*.table
+*.o
+src/*.output
+src/opcode.att
+src/opcode.enum
+src/att.output
+src/att.tab.c
+src/att.tab.h
+src/lex.att.c
+src/assembler.decl
+src/assembler.defn
+src/assembler.switch
+doc/reference.html
+src/Codegen
+test/*.s
+.~lock*

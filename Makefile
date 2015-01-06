@@ -14,31 +14,44 @@
 
 ##### CONSTANT DEFINITIONS
 
-GCC=ccache g++ -Werror -Wextra -pedantic -std=c++11
+GCC=ccache g++ -Werror -Wextra -Wfatal-errors -pedantic -std=c++11 -fPIC
 
 INC=-I./
 		
 OBJ=src/assembler.o \
 		src/code.o \
 		src/constants.o \
+		src/env_bits.o \
+		src/flag.o \
+		src/flag_set.o \
 		src/instruction.o \
 		src/label.o \
-		src/m.o
+		src/linker.o \
+		src/operand.o \
+		src/r.o \
+		src/reg_set.o \
+		src/sse.o \
+		src/mm.o \
+		src/xmm.o \
+		src/ymm.o
 
 LIB=lib/libx64asm.a
 
-BIN=bin/x64asm
+BIN=bin/asm \
+		bin/fuzz
 
 ##### TOP LEVEL TARGETS (release is default)
 
 all: release
 
 debug:
-	make -C . erthing FLEXOPS="-d" BISONOPS="-t --report=state" OPT="-g"
+	$(MAKE) -C . erthing BISONOPS="-t --report=state" OPT="-g"
+debug_flex:
+	$(MAKE) -C . erthing FLEXOPS="-d" BISONOPS="-t --report=state" OPT="-g"
 release:
-	make -C . erthing OPT="-DNDEBUG -O3"
+	$(MAKE) -C . erthing OPT="-DNDEBUG -O3"
 profile:
-	make -C . erthing OPT="-DNDEBUG -O3 -pg"
+	$(MAKE) -C . erthing OPT="-DNDEBUG -O3 -pg"
 
 erthing: $(LIB) $(BIN)
 
@@ -49,13 +62,16 @@ src/Codegen: src/Codegen.hs
 		ghc Codegen.hs && \
 		./Codegen && \
 		rm -f *.hi *.o
+src/lex.att.c: src/att.y src/att.l
 	flex $(FLEXOPS) -Patt src/att.l 
+	mv lex.*.* src/
+src/att.tab.c: src/att.y src/att.l src/lex.att.c
 	bison $(BISONOPS) -batt -patt --defines src/att.y && touch att.output 
-	mv lex.*.* src/ && mv *.tab.* src/ && mv *.output src/
-		
-src/code.o: src/code.cc src/code.h src/Codegen
-	$(GCC) -w -fno-stack-protector -O0 $(INC) -c $< -o $@
+	mv *.tab.* src/
+	mv *.output src/
 
+src/code.o: src/code.cc src/code.h src/lex.att.c src/att.tab.c src/Codegen
+	$(GCC) -w -O0 -fno-stack-protector $(INC) -c $< -o $@
 src/%.o: src/%.cc src/%.h src/Codegen
 	$(GCC) $(OPT) $(INC) -c $< -o $@
 
@@ -64,21 +80,20 @@ src/%.o: src/%.cc src/%.h src/Codegen
 $(LIB): $(OBJ)
 	ar rcs $@ $(OBJ)
 
-##### BINARY TARGET
+##### BINARY TARGETS
 
 bin/%: tools/%.cc $(LIB)
 	$(GCC) $(OPT) $< -o $@ $(INC) $(LIB)
 
 ##### TEST TARGET
 
-check: 
-	cd test/ && ./test.sh && cd -
+check: $(BIN)
+	bin/fuzz 1000000
 
 ##### CLEAN TARGETS
 
 clean:
 	rm -rf $(OBJ) $(LIB) $(BIN) src/Codegen
-	rm -f doc/reference.html
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.enum src/*.table
 	rm -f src/*.tab.c src/*.tab.h src/lex.*.c src/*.output
 	rm -f test/*.s test/*.log test/*.o test/*.out
