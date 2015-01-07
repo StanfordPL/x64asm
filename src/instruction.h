@@ -386,7 +386,7 @@ class Instruction {
 			assert(index < properties_[get_opcode()].size());
 			return properties_[get_opcode()][index].contains(Property::MUST_READ);
 		}
-    /** Returns true if this instruction might read memory. */
+    /** Returns true if this instruction must read memory. */
     bool must_read_memory() const {
       if(is_explicit_memory_dereference())
         return must_read(mem_index());
@@ -507,6 +507,68 @@ class Instruction {
 			return explicit_maybe_undef_set(rs);
 		}
 
+    /** Returns the set of registers this instruction must implicitly read. */
+    const RegSet& implicit_must_read_set() const {
+			assert((size_t)get_opcode() < implicit_must_read_set_.size());
+			return implicit_must_read_set_[get_opcode()];
+		}
+    /** Returns the set of registers this instruction might implicitly read. */
+    const RegSet& implicit_maybe_read_set() const {
+			assert((size_t)get_opcode() < implicit_maybe_read_set_.size());
+			return implicit_maybe_read_set_[get_opcode()];
+		}
+    /** Returns the set of registers this instruction must implicitly write. */
+    const RegSet& implicit_must_write_set() const {
+			assert((size_t)get_opcode() < implicit_must_write_set_.size());
+			return implicit_must_write_set_[get_opcode()];
+		}
+    /** Returns the set of registers this instruction might implicitly write. */
+    const RegSet& implicit_maybe_write_set() const {
+			assert((size_t)get_opcode() < implicit_maybe_write_set_.size());
+			return implicit_maybe_write_set_[get_opcode()];
+		}
+    /** Returns the set of registers this instruction must implicitly undef. */
+    const RegSet& implicit_must_undef_set() const {
+			assert((size_t)get_opcode() < implicit_must_undef_set_.size());
+			return implicit_must_undef_set_[get_opcode()];
+		}
+    /** Returns the set of registers this instruction might implicitly undef. */
+    const RegSet& implicit_maybe_undef_set() const {
+			assert((size_t)get_opcode() < implicit_maybe_undef_set_.size());
+			return implicit_maybe_undef_set_[get_opcode()];
+		}
+
+    /** Returns the set of registers this instruction must explicitly read. */
+    const RegSet& explicit_must_read_set() const {
+			auto rs = RegSet::empty();
+			return explicit_must_read_set(rs);
+		}
+    /** Returns the set of registers this instruction might explicitly read. */
+    const RegSet& explicit_maybe_read_set() const {
+			auto rs = RegSet::empty();
+			return explicit_maybe_read_set(rs);
+		}
+    /** Returns the set of registers this instruction must explicitly write. */
+    const RegSet& explicit_must_write_set() const {
+			auto rs = RegSet::empty();
+			return explicit_must_write_set(rs);
+		}
+    /** Returns the set of registers this instruction might explicitly write. */
+    const RegSet& explicit_maybe_write_set() const {
+			auto rs = RegSet::empty();
+			return explicit_maybe_write_set(rs);
+		}
+    /** Returns the set of registers this instruction must explicitly undef. */
+    const RegSet& explicit_must_undef_set() const {
+			auto rs = RegSet::empty();
+			return explicit_must_undef_set(rs);
+		}
+    /** Returns the set of registers this instruction might explicitly undef. */
+    const RegSet& explicit_maybe_undef_set() const {
+			auto rs = RegSet::empty();
+			return explicit_maybe_undef_set(rs);
+		}
+
     /** Returns the cpu flag set required by this instruction. */
     FlagSet required_flags() const {
 			assert((size_t)get_opcode() < flags_.size());
@@ -580,37 +642,6 @@ class Instruction {
     static const std::array<RegSet, 3803> implicit_must_undef_set_;
     static const std::array<RegSet, 3803> implicit_maybe_undef_set_;
     static const std::array<FlagSet, 3803> flags_;
-
-    /** Returns the set of registers this instruction must implicitly read. */
-    const RegSet& implicit_must_read_set() const {
-			assert((size_t)get_opcode() < implicit_must_read_set_.size());
-			return implicit_must_read_set_[get_opcode()];
-		}
-    /** Returns the set of registers this instruction might implicitly read. */
-    const RegSet& implicit_maybe_read_set() const {
-			assert((size_t)get_opcode() < implicit_maybe_read_set_.size());
-			return implicit_maybe_read_set_[get_opcode()];
-		}
-    /** Returns the set of registers this instruction must implicitly write. */
-    const RegSet& implicit_must_write_set() const {
-			assert((size_t)get_opcode() < implicit_must_write_set_.size());
-			return implicit_must_write_set_[get_opcode()];
-		}
-    /** Returns the set of registers this instruction might implicitly write. */
-    const RegSet& implicit_maybe_write_set() const {
-			assert((size_t)get_opcode() < implicit_maybe_write_set_.size());
-			return implicit_maybe_write_set_[get_opcode()];
-		}
-    /** Returns the set of registers this instruction must implicitly undef. */
-    const RegSet& implicit_must_undef_set() const {
-			assert((size_t)get_opcode() < implicit_must_undef_set_.size());
-			return implicit_must_undef_set_[get_opcode()];
-		}
-    /** Returns the set of registers this instruction might implicitly undef. */
-    const RegSet& implicit_maybe_undef_set() const {
-			assert((size_t)get_opcode() < implicit_maybe_undef_set_.size());
-			return implicit_maybe_undef_set_[get_opcode()];
-		}
 
     /** Returns the set of operands this instruction must read. */
     RegSet& explicit_must_read_set(RegSet& rs) const;
