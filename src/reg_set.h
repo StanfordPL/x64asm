@@ -246,6 +246,10 @@ class RegSet {
     constexpr bool contains(const RegSet& rhs) {
 			return (*this & rhs) == rhs;
 		}
+		/** Set intersection. */
+		constexpr bool intersects(const RegSet& rhs) {
+			return (*this - rhs) != *this;
+		}
 
     /** Insert a low register. */
     constexpr RegSet operator+(const Rl& rhs) {
