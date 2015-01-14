@@ -340,14 +340,32 @@ class Instruction {
 			return opcode_ >= VMOVUPS_M128_XMM && opcode_ <= VMOVUPS_YMM_YMM;
 		}
 
+		/** Is this an SSE instruction? */
+		bool is_sse() const {
+			return required_flags().contains(Flag::SSE);
+		}
+		/** Is this an SSE2 instruction? */
+		bool is_sse2() const {
+			return required_flags().contains(Flag::SSE2);
+		}
+		/** Is this an SSSE3 instruction? */
+		bool is_ssse3() const {
+			return required_flags().contains(Flag::SSSE3);
+		}
+		/** Is this an SSE4_1 instruction? */
+		bool is_sse4_1() const {
+			return required_flags().contains(Flag::SSE4_1);
+		}
+		/** Is this an SSE4_2 instruction? */
+		bool is_sse4_2() const {
+			return required_flags().contains(Flag::SSE4_2);
+		}
     /** Is this an SSE instruction (any version) ? */
     bool is_any_sse() const {
-      flags_[get_opcode()].contains(Flag::SSE) ||
-      flags_[get_opcode()].contains(Flag::SSE2) ||
-      flags_[get_opcode()].contains(Flag::SSSE3) ||
-      flags_[get_opcode()].contains(Flag::SSE4_1) ||
-      flags_[get_opcode()].contains(Flag::SSE4_2);
+			constexpr auto fs = FlagSet::empty() + Flag::SSE + Flag::SSE2 + Flag::SSSE3 + Flag::SSE4_1 + Flag::SSE4_2;
+			return required_flags().intersects(fs);
     }
+
     /** Is this an AVX 1 instruction? */
     bool is_avx() const {
       flags_[get_opcode()].contains(Flag::AVX);
@@ -356,6 +374,11 @@ class Instruction {
     bool is_avx2() const {
       flags_[get_opcode()].contains(Flag::AVX2);
     }
+		/** Is this any AVX instruction? */
+		bool is_any_avx() const {
+			constexpr auto fs = FlagSet::empty() + Flag::AVX + Flag::AVX2;
+			return required_flags().intersects(fs);
+		}
 
 		/** Is this an unaligned instruction? */
 		bool is_unaligned() const {
