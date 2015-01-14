@@ -36,9 +36,7 @@ class FlagSet {
     constexpr FlagSet(Flag f) : mask_((uint64_t)f) {}
 
 		/** Copy constructor. */
-		FlagSet(const FlagSet& rhs) {
-			mask_ = rhs.mask_;
-		}
+		constexpr FlagSet(const FlagSet& rhs) : mask_(rhs.mask_) { }
 		/** Move constructor. */
 		FlagSet(FlagSet&& rhs) {
 			mask_ = rhs.mask_;
@@ -84,29 +82,29 @@ class FlagSet {
 		}
 
 		/** Set union. */
-		constexpr FlagSet operator|(const FlagSet& rhs) {
+		constexpr FlagSet operator|(FlagSet rhs) {
 			return {mask_ | rhs.mask_};
 		}
 		/** Set difference. */
-		constexpr FlagSet operator-(const FlagSet& rhs) {
+		constexpr FlagSet operator-(FlagSet rhs) {
 			return {mask_ & ~rhs.mask_};
 		}
 		/** Set intersection. */
-		constexpr FlagSet operator&(const FlagSet& rhs) {
+		constexpr FlagSet operator&(FlagSet rhs) {
 			return {mask_ & rhs.mask_};
 		}
 		/** Set union. */
-		FlagSet& operator|=(const FlagSet& rhs) {
+		FlagSet& operator|=(FlagSet rhs) {
 			mask_ |= rhs.mask_;
 			return *this;
 		}
 		/** Set difference. */
-		FlagSet& operator-=(const FlagSet& rhs) {
+		FlagSet& operator-=(FlagSet rhs) {
 			mask_ &= ~rhs.mask_;
 			return *this;
 		}
 		/** Set intersection. */
-		FlagSet& operator&=(const FlagSet& rhs) {
+		FlagSet& operator&=(FlagSet rhs) {
 			mask_ &= rhs.mask_;
 			return *this;
 		}
@@ -118,6 +116,10 @@ class FlagSet {
     /** Does this set subsume another set? */
 		constexpr bool contains(FlagSet fs) {
 			return ((uint64_t)fs.mask_ & mask_) == (uint64_t)fs.mask_;
+		}
+		/** Do these sets intersect? */
+		constexpr bool intersects(FlagSet fs) {
+			return (*this - fs) != *this;
 		}
 
     /** Equality based on underlying bit mask. */
