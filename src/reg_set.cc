@@ -58,7 +58,9 @@ istream& RegSet::read_text(istream& is) {
     FpuTag fputag = tag0;
     FpuControl fpucontrol = fpu_control_im;
 
-		if (istringstream(s) >> r64) {
+    if (s == "...") {
+      (*this) = RegSet::universe();
+    } else if (istringstream(s) >> r64) {
 			(*this) += r64;
 		}	else if (istringstream(s) >> r32) {
 			(*this) += r32;
