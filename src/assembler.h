@@ -75,6 +75,18 @@ class Assembler {
       finish();
     }
 
+		/** Returns the number of bytes in the hex encoding of this instruction */
+		size_t hex_size(const Instruction& instr) {
+			static Function f;
+
+			const auto backup = fxn_;
+			start(f);
+			assemble(instr);
+			fxn_ = backup;
+
+			return f.size();
+		}
+
     /** Begin compiling a function. Clears the function's internal buffer.
         and erases previously stored label definitions.
     */
@@ -254,7 +266,7 @@ class Assembler {
 
     /** Conditionally emits a rex prefix.
         See Figure 2.4: Intel Manual Vol 2A 2-8.
-    */
+		 */
     template <typename T>
     void rex(const M<T>& rm, const Operand& r, uint8_t val) {
       rex(rm, val | ((r.val_ >> 1) & 0x4));
