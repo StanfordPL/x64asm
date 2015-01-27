@@ -36,6 +36,7 @@ for instance, adc $0x10, %al is parsed as ADC_IMM8_AL rather than ADC_IMM32_R32.
  */
 
 #include <map>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -350,8 +351,16 @@ instr : LABEL COLON ENDL blank {
 	}
 	delete $2;
 
-	if ( !$$->check() )
-		yyerror(is, code, "Unable to parse instruction!");
+	if ( !$$->check() ) {
+		ostringstream oss;
+		oss << "Unable to parse instruction (";
+		oss << *$1;
+		for (const auto& op : *$2) {
+			oss << " " << op;
+		}
+		oss << ")" << endl;
+		yyerror(is, code, oss.str().c_str());
+	}
 }
 
 typed_operands : /* empty */ { 
