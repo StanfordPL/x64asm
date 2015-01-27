@@ -343,6 +343,13 @@ instr : LABEL COLON ENDL blank {
 }
 | OPCODE typed_operands ENDL blank {
 	$$ = to_instr(*$1, *$2);
+	if ( !$$->check() ) {
+		ostringstream oss;
+		oss << "Unable to parse instruction (";
+		oss << *$1;
+		oss << ")";
+		yyerror(is, code, oss.str().c_str());
+	}
 
 	delete $1;
 	for ( const auto op : *$2 ) {
@@ -350,17 +357,6 @@ instr : LABEL COLON ENDL blank {
 		delete op;
 	}
 	delete $2;
-
-	if ( !$$->check() ) {
-		ostringstream oss;
-		oss << "Unable to parse instruction (";
-		oss << *$1;
-		for (const auto& op : *$2) {
-			oss << " " << op;
-		}
-		oss << ")" << endl;
-		yyerror(is, code, oss.str().c_str());
-	}
 }
 
 typed_operands : /* empty */ { 
