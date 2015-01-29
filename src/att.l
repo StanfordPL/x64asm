@@ -248,7 +248,7 @@ const Label* to_label(const char* c) {
 [a-z][a-z0-9]* { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
 "rep "[a-z]+   { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
 "repz "[a-z]+  { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
-"repze "[a-z]+ { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
+"repnz "[a-z]+ { yylval.opcode = to_str(yytext, yyleng); return OPCODE; }
 
 . { yyterminate(); }
 
