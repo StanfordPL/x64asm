@@ -646,7 +646,9 @@ no_pref66 i = (is_vex_encoded i) ||
               (en == "LEA_R64_M32") || (en == "LEA_R64_M64") ||
               (en == "MOV_SREG_R16") ||
               (en == "MOVSX_R32_R16") || (en == "MOVSX_R64_R16") ||
+              (en == "MOVSX_R32_M16") || (en == "MOVSX_R64_M16") ||
               (en == "MOVZX_R32_R16") || (en == "MOVZX_R64_R16") ||
+              (en == "MOVZX_R32_M16") || (en == "MOVZX_R64_M16") ||
               (op == "PINSRW") ||
               (op == "RET") ||
               (op == "VERR") || (op == "VERW")
