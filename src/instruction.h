@@ -176,7 +176,7 @@ class Instruction {
 		}
     /** Does this instruction invoke a function call. */
     bool is_any_call() const {
-			return is_call() || is_enter() || is_syscall() || is_sysenter();
+			return is_call() || is_syscall();
 		}
     /** Returns true if this instruction is a jmp or jmpcc to an indirect pointer. */
     bool is_any_indirect_jump() const {
@@ -196,7 +196,7 @@ class Instruction {
 		}
     /** Returns true if this instruction causes control to return. */
     bool is_any_return() const {
-			return is_ret() || is_iret() || is_leave() || is_sysret() || is_sysexit();
+			return is_ret() || is_iret() || is_sysret();
 		}
 
 		/** Is this a variant of the bt instruction? */
