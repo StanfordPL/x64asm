@@ -176,7 +176,7 @@ class Instruction {
 		}
     /** Does this instruction invoke a function call. */
     bool is_any_call() const {
-			return is_call() || is_enter() || is_syscall() || is_sysenter();
+			return is_call() || is_syscall();
 		}
     /** Returns true if this instruction is a jmp or jmpcc to an indirect pointer. */
     bool is_any_indirect_jump() const {
@@ -196,7 +196,7 @@ class Instruction {
 		}
     /** Returns true if this instruction causes control to return. */
     bool is_any_return() const {
-			return is_ret() || is_iret() || is_leave() || is_sysret() || is_sysexit();
+			return is_ret() || is_iret() || is_sysret();
 		}
 
 		/** Is this a variant of the bt instruction? */
@@ -396,7 +396,7 @@ class Instruction {
 
 		/** Does this instruction implicitly dereference memory? @todo missing cases */
 		bool is_implicit_memory_dereference() const {
-			return is_push() || is_pushf() || is_pop() || is_popf() || is_ret();
+			return is_leave() || is_push() || is_pushf() || is_pop() || is_popf() || is_ret();
 		}
 		/** Does this instruction explicitly dereference memory? */
 		bool is_explicit_memory_dereference() const {
