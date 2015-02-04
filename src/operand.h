@@ -54,6 +54,15 @@ class Operand {
     /** Is this an immediate? */
     bool is_immediate() const;
 
+    /** Comparison based on underlying values. */
+    bool operator==(const Operand& rhs) const {
+			return std::make_pair(val_, val2_) == std::make_pair(rhs.val_, rhs.val2_);
+		}
+    /** Comparison based on underlying values. */
+    bool operator!=(const Operand& rhs) const {
+  		return !(*this == rhs);
+		}
+
   protected:
     /** Creates an operand with a type and no underlying value. */
     constexpr Operand(Type t) : val_(0), val2_((uint64_t)t << 3) {}
@@ -73,14 +82,6 @@ class Operand {
     /** Comparison based on underlying values. */
     bool operator<(const Operand& rhs) const {
 			return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
-		}
-    /** Comparison based on underlying values. */
-    bool operator==(const Operand& rhs) const {
-			return std::make_pair(val_, val2_) == std::make_pair(rhs.val_, rhs.val2_);
-		}
-    /** Comparison based on underlying values. */
-    bool operator!=(const Operand& rhs) const {
-  		return !(*this == rhs);
 		}
 
     /** Forcibly change the underlying type */
