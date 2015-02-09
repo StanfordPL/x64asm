@@ -56,7 +56,7 @@ int main() {
 	lnkr.finish();
 
 	if (lnkr.undef_symbol()) {
-		cout << "Undefined Symbol Error!" << endl;
+		cout << "Undefined Symbol Error (" << lnkr.get_undef_symbol() << ")!" << endl;
 	}
 
 	// Example 2:
@@ -68,7 +68,7 @@ int main() {
 	lnkr.finish();
 
 	if (lnkr.multiple_def()) {
-		cout << "Multiple Definition Error!" << endl;
+		cout << "Multiple Definition Error (" << lnkr.get_multiple_def() << ")!" << endl;
 	}
 
 	// Example 3:
@@ -83,7 +83,6 @@ int main() {
 		cout << "Linking finished successfully!" << endl;
 	}
   cout << "f2() = " << f2.call<size_t>() << endl;
-  cout << endl;
 
   return 0;
 }
