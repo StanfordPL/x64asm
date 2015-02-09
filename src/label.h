@@ -28,6 +28,9 @@ namespace x64asm {
 
 /** A symbolic representation of a Rel32. No Rel8 eqivalent is provided. */
 class Label : public Operand {
+	/** Needs access to underlying value map */
+	friend class Linker;
+
   public:
     /** Creates a new, globally unique label. */
     Label() : Operand(Type::LABEL) {

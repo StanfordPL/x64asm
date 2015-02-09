@@ -21,6 +21,7 @@ limitations under the License.
 #include <vector>
 
 #include "src/function.h"
+#include "src/label.h"
 
 namespace x64asm {
 
@@ -46,9 +47,19 @@ class Linker {
 		bool multiple_def() const {
 			return multiple_def_;
 		}
+		/** Returns the symbol that caused a multiple definition error. */
+		Label get_multiple_def() const {
+			assert(multiple_def());
+			return Label::val2label_[md_symbol_];
+		}
 		/** Returns true if an undefined symbol error occurred. */
 		bool undef_symbol() const {
 			return undef_symbol_;
+		}
+		/** Returns the symbol that caused an undefined symbol error. */
+		Label get_undef_symbol() const {
+			assert(undef_symbol());
+			return Label::val2label_[us_symbol_];
 		}
 
 	private:
@@ -58,8 +69,12 @@ class Linker {
 		std::vector<Function*> fxns_;
 		/** Did a multiple definition error occur? */
 		bool multiple_def_;
+		/** What was the name of this symbol? */
+		uint64_t md_symbol_;
 		/** Did an undefined symbol error occur? */
 		bool undef_symbol_;
+		/** What was the name of this symbol? */
+		uint64_t us_symbol_;
 };
 
 } // namespace x64asm

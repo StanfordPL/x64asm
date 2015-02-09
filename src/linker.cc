@@ -33,6 +33,7 @@ void Linker::link(Function& fxn) {
 		const auto itr = label_defs_.find(l.first);
 		if (itr != label_defs_.end()) {
 			multiple_def_ = true;
+			md_symbol_ = itr->first;
 			return;
 		}
 		// Here we store global offsets, rather than function local offsets
@@ -48,6 +49,7 @@ void Linker::finish() {
 			const auto itr = label_defs_.find(l.second);
 			if (itr == label_defs_.end()) {
 				undef_symbol_ = true;
+				us_symbol_ = l.second;
 				return;
 			}
 
