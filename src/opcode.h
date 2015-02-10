@@ -22,6 +22,8 @@ limitations under the License.
 
 namespace x64asm {
 
+#define X64ASM_NUM_OPCODES 3804
+
 /** An instruction mnemonic. */
 enum Opcode : int32_t {
   // Internal mnemonics
