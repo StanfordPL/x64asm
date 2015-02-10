@@ -20,7 +20,7 @@ limitations under the License.
 
 using namespace x64asm;
 
-std::array<const char*, 3803> att_ {{
+std::array<const char*, X64ASM_NUM_OPCODES> att_ {{
     // Internal mnemonics
     "<label definition>"
     // Auto-generated mnemonics
