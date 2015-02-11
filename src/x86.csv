@@ -1516,7 +1516,7 @@ VEX.128.66.0F3A.WIG 63 /r ib 	VPCMPISTRI xmm1, xmm2/m128, imm8 	RM	R, R, R		ECX 
 VEX.128.66.0F3A.WIG 62 /r ib 	VPCMPISTRM xmm1, xmm2/m128, imm8 	RM	R, R, R		XMM0 E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	AVX	vpcmpistrm		Perform a packed comparison of string data with implicit lengths, generating a Mask, and storing the result in XMM0.
 														
 VEX.NDS.LZ.F2.0F38.W0 F5 /r	PDEP r32a, r32b, r/m32	RVM	W, R, R						V	V	BMI2	pdepl		Parallel deposit of bits from r32b using mask in r/m32, result is written to r32a.
-VEX.NDS.LZ.F2.0F38.W1 F5 /r	PDEP r64a, r64b, r/m64	RVM	W, R, R						V	NE	BMI2	pdelq		Parallel deposit of bits from r64b using mask in r/m64, result is written to r64a.
+VEX.NDS.LZ.F2.0F38.W1 F5 /r	PDEP r64a, r64b, r/m64	RVM	W, R, R						V	NE	BMI2	pdepq		Parallel deposit of bits from r64b using mask in r/m64, result is written to r64a.
 														
 VEX.NDS.LZ.F3.0F38.W0 F5 /r	PEXT r32a, r32b, r/m32	RVM	W, R, R						V	V	BMI2	pextl		Parallel extract of bits from r32b using mask in r/m32, result is written to r32a.
 VEX.NDS.LZ.F3.0F38.W1 F5 /r	PEXT r64a, r64b, r/m64	RVM	W, R, R						V	NE	BMI2	pextq		Parallel extract of bits from r64b using mask in r/m64, result is written to r64a.
