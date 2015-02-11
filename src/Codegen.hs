@@ -498,12 +498,7 @@ x64 :: [Instr] -> [Instr]
 x64 is = filter keep is
   where keep i = mode64 i == "V" &&
                  useful i /= "NO" && useful i /= "NO*" &&
-                 protected i /= "YES" && protected i /= "YES*" &&
-								 -- TODO: Figure out what these operands mean
-                 (not ("vm32x" `elem` (operands i))) &&
-                 (not ("vm32y" `elem` (operands i))) &&
-                 (not ("vm64x" `elem` (operands i))) &&
-                 (not ("vm64y" `elem` (operands i))) 
+                 protected i /= "YES" && protected i /= "YES*"
 
 -- Step 3: Split instructions with implicit or explicit disjunct operands
 --------------------------------------------------------------------------------
@@ -554,6 +549,10 @@ canonical_op "r32a"  = "r32"
 canonical_op "r32b"  = "r32"
 canonical_op "r64a"  = "r64"
 canonical_op "r64b"  = "r64"
+canonical_op "vm32x" = "m32"
+canonical_op "vm32y" = "m32"
+canonical_op "vm64x" = "m64"
+canonical_op "vm64y" = "m64"
 canonical_op "xmm0"  = "xmm"
 canonical_op "xmm1"  = "xmm"
 canonical_op "xmm2"  = "xmm"

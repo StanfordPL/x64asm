@@ -22,7 +22,7 @@ limitations under the License.
 
 namespace x64asm {
 
-#define X64ASM_NUM_OPCODES 3805
+#define X64ASM_NUM_OPCODES 3819
 
 /** An instruction mnemonic. */
 enum Opcode : int32_t {
