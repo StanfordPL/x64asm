@@ -82,7 +82,7 @@ bool Instruction::is_xor_reg_reg() const {
     break;
 
     case XOR_RH_RH:
-    if (get_operand<Rl>(0) == get_operand<Rl>(1)) {
+    if (get_operand<Rh>(0) == get_operand<Rh>(1)) {
       return true;
     }
     break;
@@ -108,6 +108,7 @@ bool Instruction::is_xor_reg_reg() const {
     default:
     return false;
   }
+  return false;
 }
 
 RegSet& Instruction::explicit_must_read_set(RegSet& ret) const {
