@@ -884,13 +884,14 @@ class RegSet {
 					return !(*this == rhs);
 				}
 				any_sub_gp_iterator& operator++() {
-					while (idx_ < 16) {
+					while (true) {
+						if (++idx_ >= 16) {
+							break;
+						}
 						const auto mask = idx_ < 4 ? (uint64_t)Mask::WORD : (uint64_t)Mask::LOW;
 						if ((mask << idx_) & rs_->group1_) {
 							break;
-						} else {
-							idx_++;
-						}
+						} 
 					}
 					return *this;
 				}
@@ -900,7 +901,9 @@ class RegSet {
 				size_t idx_; 
 
 				any_sub_gp_iterator(const RegSet* rs) : rs_(rs), idx_(0) { 
-					++(*this);
+					if ((rs_->group1_ & (uint64_t)Mask::WORD) == 0) {
+						++(*this);
+					}
 				}
 				any_sub_gp_iterator(const RegSet* rs, size_t idx) : rs_(rs), idx_(idx) {
 				}
@@ -924,8 +927,13 @@ class RegSet {
 				}
 				any_sub_sse_iterator& operator++() {
 					const auto mask = (uint64_t)Mask::XMM;
-					while ((((mask << idx_) & rs_->group2_) == 0) && idx_ < 16) {
-						idx_++;
+					while (true) {
+						if (++idx_ >= 16) {
+							break;
+						}
+						if ((mask << idx_) & rs_->group2_) {
+							break;
+						}
 					}
 					return *this;
 				}
@@ -935,7 +943,9 @@ class RegSet {
 				size_t idx_;
 
 				any_sub_sse_iterator(const RegSet* rs) : rs_(rs), idx_(0) {
-					++(*this);
+					if ((rs->group2_ & (uint64_t)Mask::XMM) == 0) {
+						++(*this);
+					}
 				}
 				any_sub_sse_iterator(const RegSet* rs, size_t idx) : rs_(rs), idx_(idx) { 
 				}
