@@ -867,6 +867,93 @@ class RegSet {
       return FlagsIterator(this).finish();
     }
 
+		/** Iterator over 64-bit registers with any sub-registers set */
+		class any_sub_gp_iterator {
+			friend class RegSet;
+			public:
+				const R64& operator*() const {
+					return r64s[idx_];
+				}
+				const R64* operator->() const {
+					return &r64s[idx_];
+				}
+				bool operator==(const any_sub_gp_iterator& rhs) const {
+					return idx_ == rhs.idx_ && rs_ == rhs.rs_;
+				}
+				bool operator!=(const any_sub_gp_iterator& rhs) const {
+					return !(*this == rhs);
+				}
+				any_sub_gp_iterator& operator++() {
+					while (idx_ < 16) {
+						const auto mask = idx_ < 4 ? (uint64_t)Mask::WORD : (uint64_t)Mask::LOW;
+						if ((mask << idx_) & rs_->group1_) {
+							break;
+						} else {
+							idx_++;
+						}
+					}
+					return *this;
+				}
+
+			private:
+				const RegSet* rs_;
+				size_t idx_; 
+
+				any_sub_gp_iterator(const RegSet* rs) : rs_(rs), idx_(0) { 
+					++(*this);
+				}
+				any_sub_gp_iterator(const RegSet* rs, size_t idx) : rs_(rs), idx_(idx) {
+				}
+		};
+
+		/** Iterator over ymm registers with any sub-registers set */
+		class any_sub_sse_iterator {
+			friend class RegSet;
+			public:
+				const Ymm& operator*() const {
+					return ymms[idx_];
+				}
+				const Ymm* operator->() const {
+					return &ymms[idx_];
+				}
+				bool operator==(const any_sub_sse_iterator& rhs) const {
+					return idx_ == rhs.idx_ && rs_ == rhs.rs_;
+				}
+				bool operator!=(const any_sub_sse_iterator& rhs) const {
+					return !(*this == rhs);
+				}
+				any_sub_sse_iterator& operator++() {
+					const auto mask = (uint64_t)Mask::XMM;
+					while ((((mask << idx_) & rs_->group2_) == 0) && idx_ < 16) {
+						idx_++;
+					}
+					return *this;
+				}
+
+			private:
+				const RegSet* rs_;
+				size_t idx_;
+
+				any_sub_sse_iterator(const RegSet* rs) : rs_(rs), idx_(0) {
+					++(*this);
+				}
+				any_sub_sse_iterator(const RegSet* rs, size_t idx) : rs_(rs), idx_(idx) { 
+				}
+		};
+
+		any_sub_gp_iterator any_sub_gp_begin() const {
+			return any_sub_gp_iterator(this);
+		}
+		any_sub_gp_iterator any_sub_gp_end() const {
+			return any_sub_gp_iterator(this, 16);
+		}
+
+		any_sub_sse_iterator any_sub_sse_begin() const {
+			return any_sub_sse_iterator(this);
+		}
+		any_sub_sse_iterator any_sub_sse_end() const {
+			return any_sub_sse_iterator(this, 16);
+		}
 };
 
 } // namespace x64asm
