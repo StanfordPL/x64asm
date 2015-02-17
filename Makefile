@@ -14,7 +14,9 @@
 
 ##### CONSTANT DEFINITIONS
 
-COMPILERBINARY=g++
+ifndef COMPILERBINARY
+	COMPILERBINARY=g++
+endif
 GCC=ccache ${COMPILERBINARY} -Werror -Wextra -Wfatal-errors -pedantic -std=c++11 -fPIC
 
 INC=-I./
