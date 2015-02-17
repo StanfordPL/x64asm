@@ -14,7 +14,8 @@
 
 ##### CONSTANT DEFINITIONS
 
-GCC=ccache g++ -Werror -Wextra -Wfatal-errors -pedantic -std=c++11 -fPIC
+COMPILERBINARY=g++
+GCC=ccache ${COMPILERBINARY} -Werror -Wextra -Wfatal-errors -pedantic -std=c++11 -fPIC
 
 INC=-I./
 		
