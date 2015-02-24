@@ -1148,28 +1148,28 @@ VEX.256.F3.0F.WIG 7F /r	VMOVDQU ymm2/m256, ymm1	MR	W, R						V	V	AVX	vmovdqu		Mo
 														
 F2 0F D6 	MOVDQ2Q mm, xmm 	RM	W, R						V	V	MMX	movdq2q		Move low quadword from xmm to mmx register.
 														
-0F 12 /r 	MOVHLPS xmm1, xmm2	RM	W, R						V	V	SSE	movhlps		Move two packed single-precision floating-point values from high quadword of xmm2 to low quadword of xmm1.
+0F 12 /r 	MOVHLPS xmm1, xmm2	RM	RW, R						V	V	SSE	movhlps		Move two packed single-precision floating-point values from high quadword of xmm2 to low quadword of xmm1.
 VEX.NDS.128.0F.WIG 12 /r	VMOVHLPS xmm1, xmm2, xmm3	RVM	Z, R, R						V	V	AVX	vmovhlps		Merge two packed single-precision floating-point values from high quadword of xmm3 and low quadword of xmm2.
 														
-66 0F 16 /r 	MOVHPD xmm, m64	RM	W, R						V	V	SSE2	movhpd		Move double-precision floating-point value from m64 to high quadword of xmm.
+66 0F 16 /r 	MOVHPD xmm, m64	RM	RW, R						V	V	SSE2	movhpd		Move double-precision floating-point value from m64 to high quadword of xmm.
 66 0F 17 /r	MOVHPD m64, xmm	MR	W, R						V	V	SSE2	movhpd		Move double-precision floating-point value from high quadword of xmm to m64.
 VEX.NDS.128.66.0F.WIG 16 /r	VMOVHPD xmm2, xmm1, m64	RVM	Z, R, R						V	V	AVX	vmovhpd		Merge double-precision floating-point value from m64 and the low quadword of xmm1.
 VEX128.66.0F.WIG 17 /r	VMOVHPD m64, xmm1	MR	W, R						V	V	AVX	vmovhpd		Move double-precision floating-point values from high quadword of xmm1 to m64.
 														
-0F 16 /r 	MOVHPS xmm, m64	RM	W, R						V	V	SSE	movhps		Move two packed single-precision floating-point values from m64 to high quadword of xmm.
+0F 16 /r 	MOVHPS xmm, m64	RM	RW, R						V	V	SSE	movhps		Move two packed single-precision floating-point values from m64 to high quadword of xmm.
 0F 17 /r	MOVHPS m64, xmm	MR	W, R						V	V	SSE	movhps		Move two packed single-precision floating-point values from high quadword of xmm to m64.
 VEX.NDS.128.0F.WIG 16 /r	VMOVHPS xmm2, xmm1, m64	RVM	Z, R, R						V	V	AVX	vmovhps		Merge two packed single-precision floating-point values from m64 and the low quadword of xmm1.
 VEX.128.0F.WIG 17 /r	VMOVHPS m64, xmm1	MR	W, R						V	V	AVX	vmovhps		Move two packed single-precision floating-point values from high quadword of xmm1to m64.
 														
-0F 16 /r 	MOVLHPS xmm1, xmm2	RM	W, R						V	V	SSE	movlhps		Move two packed single-precision floating-point values from low quadword of xmm2 to high quadword of xmm1.
+0F 16 /r 	MOVLHPS xmm1, xmm2	RM	RW, R						V	V	SSE	movlhps		Move two packed single-precision floating-point values from low quadword of xmm2 to high quadword of xmm1.
 VEX.NDS.128.0F.WIG 16 /r	VMOVLHPS xmm1, xmm2, xmm3	RVM	Z, R, R						V	V	AVX	vmovlhps		Merge two packed single-precision floating-point values from low quadword of xmm3 and low quadword of xmm2.
 														
-66 0F 12 /r 	MOVLPD xmm, m64	RM	W, R						V	V	SSE2	movlpd		Move double-precision floating-point value from m64 to low quadword of xmm register.
+66 0F 12 /r 	MOVLPD xmm, m64	RM	RW, R						V	V	SSE2	movlpd		Move double-precision floating-point value from m64 to low quadword of xmm register.
 66 0F 13 /r	MOVLPD m64, xmm	MR	W, R						V	V	SSE2	movlpd		Move double-precision floating-point nvalue from low quadword of xmm register to m64.
 VEX.NDS.128.66.0F.WIG 12 /r	VMOVLPD xmm2, xmm1, m64	RVM	Z, R, R						V	V	AVX	vmovlpd		Merge double-precision floating-point value from m64 and the high quadword of xmm1.
 VEX.128.66.0F.WIG 13 /r	VMOVLPD m64, xmm1	MR	W, R						V	V	AVX	vmovlpd		Move double-precision floating-point values from low quadword of xmm1 to m64.
 														
-0F 12 /r 	MOVLPS xmm, m64	RM	W, R						V	V	SSE	movlps		Move two packed single-precision floating-point values from m64 to low quadword of xmm.
+0F 12 /r 	MOVLPS xmm, m64	RM	RW, R						V	V	SSE	movlps		Move two packed single-precision floating-point values from m64 to low quadword of xmm.
 0F 13 /r	MOVLPS m64, xmm	MR	W, R						V	V	SSE	movlps		Move two packed single-precision floating-point values from low quadword of xmm to m64.
 VEX.NDS.128.0F.WIG 12 /r	VMOVLPS xmm2, xmm1, m64	RVM	Z, R, R						V	V	AVX	vmovlps		Merge two packed single-precision floating-point values from m64 and the high quadword of xmm1.
 VEX.128.0F.WIG 13 /r	VMOVLPS m64, xmm1	MR	W, R						V	V	AVX	vmovlps		Move two packed single-precision floating-point values from low quadword of xmm1 to m64.
@@ -1222,10 +1222,10 @@ PREF.66+ A5 	MOVSW 	NP		E.DF ESI rsi EDI rdi					V	V		movsw		For legacy mode, mo
 A5 	MOVSD 	NP		E.DF ESI rsi EDI rdi					V	V		movsl		For legacy mode, move dword from address DS:(E)SI to ES:(E)DI. For 64-bit mode move dword from address (R|E)SI to (R|E)DI.
 REX.W+ A5 	MOVSQ 	NP		E.DF ESI rsi EDI rdi					V	NE		movsq		Move qword from address (R|E)SI to (R|E)DI.
 														
-F2 0F 10 /r 	MOVSD xmm1, xmm2/m64	RM	W, R						V	V	SSE2	movsd	YES	Move scalar double-precision floating-point value from xmm2/m64 to xmm1 register.
+F2 0F 10 /r 	MOVSD xmm1, xmm2/m64	RM	RW, R						V	V	SSE2	movsd	YES	Move scalar double-precision floating-point value from xmm2/m64 to xmm1 register.
 VEX.NDS.LIG.F2.0F.WIG 10 /r	VMOVSD xmm1, xmm2, xmm3	RVM	W, R, R						V	V	AVX	vmovsd		Merge scalar double-precision floating-point value from xmm2 and xmm3 to xmm1 register.
 VEX.LIG.F2.0F.WIG 10 /r	VMOVSD xmm1, m64	XM	Z, R						V	V	AVX	vmovsd		Load scalar double-precision floating-point value from m64 to xmm1 register.
-F2 0F 11 /r	MOVSD xmm2/m64, xmm1	MR	W, R						V	V	SSE2	movsd		Move scalar double-precision floating-point value from xmm1 register to xmm2/m64.
+F2 0F 11 /r	MOVSD xmm2/m64, xmm1	MR	RW, R						V	V	SSE2	movsd		Move scalar double-precision floating-point value from xmm1 register to xmm2/m64.
 VEX.NDS.LIG.F2.0F.WIG 11 /r	VMOVSD xmm1, xmm2, xmm3	MVR	Z, R, R						V	V	AVX	vmovsd	YES	Merge scalar double-precision floating-point value from xmm2 and xmm3 registers to xmm1.
 VEX.LIG.F2.0F.WIG 11 /r	VMOVSD m64, xmm1	MR	W, R						V	V	AVX	vmovsd		Move scalar double-precision floating-point value from xmm1 register to m64.
 														
@@ -1237,10 +1237,10 @@ F3 0F 12 /r 	MOVSLDUP xmm1, xmm2/m128	RM	W, R						V	V	PNI	movsldup		Move two si
 VEX.128.F3.0F.WIG 12 /r	VMOVSLDUP xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vmovsldup		Move even index single-precision floating-point values from xmm2/mem and duplicate each element into xmm1.
 VEX.256.F3.0F.WIG 12 /r	VMOVSLDUP ymm1, ymm2/m256	RM	W, R						V	V	AVX	vmovsldup		Move even index single-precision floating-point values from ymm2/mem and duplicate each element into ymm1.
 														
-F3 0F 10 /r 	MOVSS xmm1, xmm2/m32	RM	W, R						V	V	SSE	movss	YES	Move scalar single-precision floating-point value from xmm2/m32 to xmm1 register.
+F3 0F 10 /r 	MOVSS xmm1, xmm2/m32	RM	RW, R						V	V	SSE	movss	YES	Move scalar single-precision floating-point value from xmm2/m32 to xmm1 register.
 VEX.NDS.LIG.F3.0F.WIG 10 /r	VMOVSS xmm1, xmm2, xmm3	RVM	Z, R, R						V	V	AVX	vmovss		Merge scalar single-precision floating-point value from xmm2 and xmm3 to xmm1 register.
 VEX.LIG.F3.0F.WIG 10 /r	VMOVSS xmm1, m32	XM	Z, R						V	V	AVX	vmovss		Load scalar single-precision floating-point value from m32 to xmm1 register.
-F3 0F 11 /r	MOVSS xmm2/m32, xmm	MR	W, R						V	V	SSE	movss		Move scalar single-precision floating-point value from xmm1 register to xmm2/m32.
+F3 0F 11 /r	MOVSS xmm2/m32, xmm	MR	RW, R						V	V	SSE	movss		Move scalar single-precision floating-point value from xmm1 register to xmm2/m32.
 VEX.NDS.LIG.F3.0F.WIG 11 /r	VMOVSS xmm1, xmm2, xmm3	MVR	Z, R, R						V	V	AVX	vmovss	YES	Move scalar single-precision floating-point value from xmm2 and xmm3 to xmm1 register.
 VEX.LIG.F3.0F.WIG 11 /r	VMOVSS m32, xmm1	MR	W, R						V	V	AVX	vmovss		Move scalar single-precision floating-point value from xmm1 register to m32.
 														
@@ -2024,7 +2024,7 @@ REX.W+ C1 /1 ib	ROR r/m64, imm8	MI	RW, R		e.cf e.of	e.of			V	NE		rorq		Rotate 64
 VEX.128.0F.WIG 53 /r	VRCPPS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vrcpps		Computes the approximate reciprocals of packed single-precision values in xmm2/mem and stores the results in xmm1.
 VEX.256.0F.WIG 53 /r	VRCPPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vrcpps		Computes the approximate reciprocals of packed single-precision values in ymm2/mem and stores the results in ymm1.
 														
-F3 0F 53 /r	RCPSS xmm1, xmm2/m32	RM	Z, R						V	V	SSE	rcpss		Computes the approximate reciprocal of the scalar single-precision floating-point value in xmm2/m32 and stores the result in xmm1.
+F3 0F 53 /r	RCPSS xmm1, xmm2/m32	RM	RZ, R						V	V	SSE	rcpss		Computes the approximate reciprocal of the scalar single-precision floating-point value in xmm2/m32 and stores the result in xmm1.
 VEX.NDS.LIG.F3.0F.WIG 53 /r	VRCPSS xmm1, xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vrcpss		Computes the approximate reciprocal of the scalar single-precision floating-point value in xmm3/m32 and stores the result in xmm1. Also, upper single precision floating-point values (bits[127:32]) from xmm2 are copied to xmm1[127:32].
 														
 F3 0F AE /0	RDFSBASE r32	M	W						V	I	FSGSBASE	rdfsbase		Load the 32-bit destination register with the FS base address.
@@ -2118,7 +2118,7 @@ VEX.NDS.LIG.66.0F3A.WIG 0A ib	VROUNDSS xmm1, xmm2, xmm3/m32, imm8	RVMI	Z, R, R, 
 VEX.128.0F.WIG 52 /r	VRSQRTPS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vrsqrtps		Computes the approximate reciprocals of the square roots of packed single-precision values in xmm2/mem and stores the results in xmm1.
 VEX.256.0F.WIG 52 /r	VRSQRTPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vrsqrtps		Computes the approximate reciprocals of the square roots of packed single-precision values in ymm2/mem and stores the results in ymm1.
 														
-F3 0F 52 /r	RSQRTSS xmm1, xmm2/m32	RM	W, R						V	V	SSE	rsqrtss		Computes the approximate reciprocal of the square root of the low single-precision floating-point value in xmm2/m32 and stores the results in xmm1.
+F3 0F 52 /r	RSQRTSS xmm1, xmm2/m32	RM	RW, R						V	V	SSE	rsqrtss		Computes the approximate reciprocal of the square root of the low single-precision floating-point value in xmm2/m32 and stores the results in xmm1.
 VEX.NDS.LIG.F3.0F.WIG 52 /r	VRSQRTSS xmm1, xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vrsqrtss		Computes the approximate reciprocal of the square root of the low single precision floating-point value in xmm3/m32 and stores the results in xmm1. Also, upper single precision floating-point values (bits[127:32]) from xmm2 are copied to xmm1[127:32].
 														
 9E	SAHF	NP		AH	E.SF E.ZF E.AF E.PF E.CF				V	V	LAHF_LM	sahf		Loads SF, ZF, AF, PF, and CF from AH into EFLAGS register.
@@ -2327,10 +2327,10 @@ VEX.256.66.0F.WIG 51 /r	VSQRTPD ymm1, ymm2/m256	RM	W, R						V	V	AVX	vsqrtpd		Co
 VEX.128.0F.WIG 51 /r	VSQRTPS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vsqrtps		Computes Square Roots of the packed single- precision floating-point values in xmm2/m128 and stores the result in xmm1.
 VEX.256.0F.WIG 51 /r	VSQRTPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vsqrtps		Computes Square Roots of the packed single- precision floating-point values in ymm2/m256 and stores the result in ymm1.
 														
-F2 0F 51 /r	SQRTSD xmm1, xmm2/m64	RM	W, R						V	V	SSE2	sqrtsd		Computes square root of the low double- precision floating-point value in xmm2/m64 and stores the results in xmm1.
+F2 0F 51 /r	SQRTSD xmm1, xmm2/m64	RM	RW, R						V	V	SSE2	sqrtsd		Computes square root of the low double- precision floating-point value in xmm2/m64 and stores the results in xmm1.
 VEX.NDS.LIG.F2.0F.WIG 51 /r	VSQRTSD xmm1,xmm2, xmm3/m64	RVM	Z, R, R						V	V	AVX	vsqrtsd		Computes square root of the low double- precision floating point value in xmm3/m64 and stores the results in xmm2. Also, upper double precision floating-point value (bits[127:64]) from xmm2 is copied to xmm1[127:64].
 														
-F3 0F 51 /r	SQRTSS xmm1, xmm2/m32	RM	W, R						V	V	SSE	sqrtss		Computes square root of the low single- precision floating-point value in xmm2/m32 and stores the results in xmm1.
+F3 0F 51 /r	SQRTSS xmm1, xmm2/m32	RM	RW, R						V	V	SSE	sqrtss		Computes square root of the low single- precision floating-point value in xmm2/m32 and stores the results in xmm1.
 VEX.NDS.LIG.F3.0F.WIG 51	VSQRTSS xmm1, xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vsqrtss		Computes square root of the low single- precision floating-point value in xmm3/m32 and stores the results in xmm1. Also, upper single precision floating-point values (bits[127:32]) from xmm2 are copied to xmm1[127:32].
 														
 F9	STC	NP			E.CF				V	V		stc		Set CF flag.
