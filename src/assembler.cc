@@ -29,14 +29,14 @@ namespace x64asm {
 
 void Assembler::assemble(const Instruction& instr) {
   switch (instr.get_opcode()) {
-    case LABEL_DEFN:
-      bind(instr.get_operand<Label>(0));
-      break;
-      // 4000-way switch
-      #include "src/assembler.switch"
+  case LABEL_DEFN:
+    bind(instr.get_operand<Label>(0));
+    break;
+    // 4000-way switch
+#include "src/assembler.switch"
 
-    default:
-      assert(false);
+  default:
+    assert(false);
   }
 }
 
@@ -57,8 +57,8 @@ void Assembler::mod_rm_sib(const M<T>& rm, const Operand& r) {
   if (!rm.contains_base()) {
     const auto mod_byte = 0x00 | rrr | 0x4;
     const auto sib_byte = rm.contains_index() ?
-      (((int)rm.get_scale() << 6) & 0xc0) | ((rm.get_index().val_ << 3) & 0x38) | 0x5 :
-      0x00 | 0x20 | 0x5;
+                          (((int)rm.get_scale() << 6) & 0xc0) | ((rm.get_index().val_ << 3) & 0x38) | 0x5 :
+                          0x00 | 0x20 | 0x5;
 
     fxn_->emit_byte(mod_byte);
     fxn_->emit_byte(sib_byte);
@@ -112,7 +112,7 @@ void Assembler::mod_rm_sib(const M<T>& rm, const Operand& r) {
 }
 
 void Assembler::debug(const Instruction& instr, size_t idx) const {
-	const auto fmt = cerr.flags();
+  const auto fmt = cerr.flags();
 
   cerr << instr << endl;
   cerr << "  ";
@@ -124,7 +124,7 @@ void Assembler::debug(const Instruction& instr, size_t idx) const {
 
   cerr << endl;
 
-	cerr.flags(fmt);
+  cerr.flags(fmt);
 }
 
 } // namespace x64asm

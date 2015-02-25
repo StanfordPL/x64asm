@@ -32,135 +32,135 @@ namespace x64asm {
 
 /** A static class for resolving hardware aliasing relationships. */
 class Alias {
-  public:
-    /** Convert a general purpose register to its low alias.
-        This method is undefined for byte registers and when no alias
-        exists (ie: %r12).
-    */
-    template <typename T>
-    static typename std::enable_if < is_reg<T>::value&&
-    !std::is_same<T, Rh>::value&&
-    !std::is_same<T, Rb>::value,
-    const Rl& >::type
-    to_low(const T& t) {
-      assert(t < 4);
-      return rls[t];
-    }
+public:
+  /** Convert a general purpose register to its low alias.
+      This method is undefined for byte registers and when no alias
+      exists (ie: %r12).
+  */
+  template <typename T>
+  static typename std::enable_if < is_reg<T>::value&&
+  !std::is_same<T, Rh>::value&&
+  !std::is_same<T, Rb>::value,
+  const Rl& >::type
+  to_low(const T& t) {
+    assert(t < 4);
+    return rls[t];
+  }
 
-    /** Convert a general purpose register to its low alias.
-        This method is undefined for byte registers and when no alias
-        exists (ie: %r12).
-    */
-    static const Rl& to_low(const Rh& r) {
-      // High registers are assigned internal values beginning from 4.
-      return rls[r - 4];
-    }
+  /** Convert a general purpose register to its low alias.
+      This method is undefined for byte registers and when no alias
+      exists (ie: %r12).
+  */
+  static const Rl& to_low(const Rh& r) {
+    // High registers are assigned internal values beginning from 4.
+    return rls[r - 4];
+  }
 
-    /** Convert a general purpose register to its high alias.
-        This method is undefined for byte registers and when no alias
-        exists (ie: %r12).
-    */
-    template <typename T>
-    static typename std::enable_if < is_reg<T>::value&&
-    !std::is_same<T, Rh>::value&&
-    !std::is_same<T, Rb>::value,
-    const Rh& >::type
-    to_high(const T& t) {
-      assert(t < 4);
-      return rhs[t];
-    }
+  /** Convert a general purpose register to its high alias.
+      This method is undefined for byte registers and when no alias
+      exists (ie: %r12).
+  */
+  template <typename T>
+  static typename std::enable_if < is_reg<T>::value&&
+  !std::is_same<T, Rh>::value&&
+  !std::is_same<T, Rb>::value,
+  const Rh& >::type
+  to_high(const T& t) {
+    assert(t < 4);
+    return rhs[t];
+  }
 
-    /** Convert a general purpose register to its high alias.
-        This method is undefined for byte registers and when no alias
-        exists (ie: %r12).
-    */
-    static const Rh& to_high(const Rh& r) {
-      return r;
-    }
+  /** Convert a general purpose register to its high alias.
+      This method is undefined for byte registers and when no alias
+      exists (ie: %r12).
+  */
+  static const Rh& to_high(const Rh& r) {
+    return r;
+  }
 
-    /** Convert a general purpose register to its byte alias.
-        This method is undefined for byte registers and when no alias
-        exists (ie: %r12).
-    */
-    template <typename T>
-    static typename std::enable_if < is_reg<T>::value&&
-    !std::is_same<T, Rl>::value&&
-    !std::is_same<T, Rh>::value,
-    const Rb& >::type
-    to_byte(const T& t) {
-      // The rbs array begins with rbp, which has an internal value of 4.
-      assert(t >= 4);
-      return rbs[t - 4];
-    }
+  /** Convert a general purpose register to its byte alias.
+      This method is undefined for byte registers and when no alias
+      exists (ie: %r12).
+  */
+  template <typename T>
+  static typename std::enable_if < is_reg<T>::value&&
+  !std::is_same<T, Rl>::value&&
+  !std::is_same<T, Rh>::value,
+  const Rb& >::type
+  to_byte(const T& t) {
+    // The rbs array begins with rbp, which has an internal value of 4.
+    assert(t >= 4);
+    return rbs[t - 4];
+  }
 
-    /** Convert a general purpose register to its word alias. */
-    template <typename T>
-    static typename std::enable_if < is_reg<T>::value&&
-    !std::is_same<T, Rh>::value,
-    const R16& >::type
-    to_word(const T& t) {
-      return r16s[t];
-    }
+  /** Convert a general purpose register to its word alias. */
+  template <typename T>
+  static typename std::enable_if < is_reg<T>::value&&
+  !std::is_same<T, Rh>::value,
+  const R16& >::type
+  to_word(const T& t) {
+    return r16s[t];
+  }
 
-    /** Convert a general purpose register to its word alias. */
-    static const R16& to_word(const Rh& r) {
-      // High registers are assigned internal values beginning from 4.
-      return r16s[r - 4];
-    }
+  /** Convert a general purpose register to its word alias. */
+  static const R16& to_word(const Rh& r) {
+    // High registers are assigned internal values beginning from 4.
+    return r16s[r - 4];
+  }
 
-    /** Convert a general purpose register to its double alias. */
-    template <typename T>
-    static typename std::enable_if < is_reg<T>::value&&
-    !std::is_same<T, Rh>::value,
-    const R32& >::type
-    to_double(const T& t) {
-      return r32s[t];
-    }
+  /** Convert a general purpose register to its double alias. */
+  template <typename T>
+  static typename std::enable_if < is_reg<T>::value&&
+  !std::is_same<T, Rh>::value,
+  const R32& >::type
+  to_double(const T& t) {
+    return r32s[t];
+  }
 
-    /** Convert a general purpose register to its double alias. */
-    static const R32& to_double(const Rh& r) {
-      // High registers are assigned internal values beginning from 4.
-      return r32s[r - 4];
-    }
+  /** Convert a general purpose register to its double alias. */
+  static const R32& to_double(const Rh& r) {
+    // High registers are assigned internal values beginning from 4.
+    return r32s[r - 4];
+  }
 
-    /** Convert a general purpose register to its quad alias. */
-    template <typename T>
-    static typename std::enable_if < is_reg<T>::value&&
-    !std::is_same<T, Rh>::value,
-    const R64& >::type
-    to_quad(const T& t) {
-      return r64s[t];
-    }
+  /** Convert a general purpose register to its quad alias. */
+  template <typename T>
+  static typename std::enable_if < is_reg<T>::value&&
+  !std::is_same<T, Rh>::value,
+  const R64& >::type
+  to_quad(const T& t) {
+    return r64s[t];
+  }
 
-    /** Convert a general purpose register to its quad alias. */
-    static const R64& to_quad(const Rh& r) {
-      // High registers are assigned internal values beginning from 4.
-      return r64s[r - 4];
-    }
+  /** Convert a general purpose register to its quad alias. */
+  static const R64& to_quad(const Rh& r) {
+    // High registers are assigned internal values beginning from 4.
+    return r64s[r - 4];
+  }
 
-    /** Convert an element of the floating point stack to its mmx alias.
-        Results are dependent on the value of the top pointer.
-    */
-    static const Mm& to_mm(const St& st, const St& top) {
-      return mms[(st + top) % 8];
-    }
+  /** Convert an element of the floating point stack to its mmx alias.
+      Results are dependent on the value of the top pointer.
+  */
+  static const Mm& to_mm(const St& st, const St& top) {
+    return mms[(st + top) % 8];
+  }
 
-    /** Convert an mmx register to its floating point stack alias.
-        Results are dependent on the value of the top pointer.
-    */
-    static const St& to_st(const Mm& mm, const St& top) {
-      return sts[(mm + top) % 8];
-    }
+  /** Convert an mmx register to its floating point stack alias.
+      Results are dependent on the value of the top pointer.
+  */
+  static const St& to_st(const Mm& mm, const St& top) {
+    return sts[(mm + top) % 8];
+  }
 
-    /** Converts a ymm register to its xmm alias. */
-    static const Xmm& to_xmm(const Ymm& y) {
-      return xmms[y];
-    }
+  /** Converts a ymm register to its xmm alias. */
+  static const Xmm& to_xmm(const Ymm& y) {
+    return xmms[y];
+  }
 
-    /** Converts an xmm register to its ymm alias. */
-    static const Ymm& to_ymm(const Xmm& x) {
-      return ymms[x];
-    }
+  /** Converts an xmm register to its ymm alias. */
+  static const Ymm& to_ymm(const Xmm& x) {
+    return ymms[x];
+  }
 };
 
 } // namespace x64asm

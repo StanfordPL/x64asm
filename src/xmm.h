@@ -30,64 +30,64 @@ class Xmm : public Sse {
   // Needs access to constructor.
   friend class Constants;
 
-  public:
-    /** Returns true if this xmm register is well-formed. */
-    constexpr bool check() {
-  		return val_ < 16;
-		}
+public:
+  /** Returns true if this xmm register is well-formed. */
+  constexpr bool check() {
+    return val_ < 16;
+  }
 
-    /** Comparison based on on val_. */
-    constexpr bool operator<(const Xmm& rhs) {
-			return val_ < rhs.val_;
-		}
-    /** Comparison based on on val_. */
-    constexpr bool operator==(const Xmm& rhs) {
-  		return val_ == rhs.val_;
-		}
-    /** Comparison based on on val_. */
-    constexpr bool operator!=(const Xmm& rhs) {
-			return !(*this == rhs);
-		}
+  /** Comparison based on on val_. */
+  constexpr bool operator<(const Xmm& rhs) {
+    return val_ < rhs.val_;
+  }
+  /** Comparison based on on val_. */
+  constexpr bool operator==(const Xmm& rhs) {
+    return val_ == rhs.val_;
+  }
+  /** Comparison based on on val_. */
+  constexpr bool operator!=(const Xmm& rhs) {
+    return !(*this == rhs);
+  }
 
-    /** Conversion based on underlying value. */
-    constexpr operator uint64_t() {
-			return val_;
-		}
+  /** Conversion based on underlying value. */
+  constexpr operator uint64_t() {
+    return val_;
+  }
 
-    /** STL-compliant hash. */
-    constexpr size_t hash() {
-			return val_;
-		}
-    /** STL-compliant swap. */
-    void swap(Xmm& rhs) {
-  		std::swap(val_, rhs.val_);
-		}
+  /** STL-compliant hash. */
+  constexpr size_t hash() {
+    return val_;
+  }
+  /** STL-compliant swap. */
+  void swap(Xmm& rhs) {
+    std::swap(val_, rhs.val_);
+  }
 
-		/** Reads this xmm register from an ostream using at&t syntax. */
-		std::istream& read_att(std::istream& is);
-    /** Writes this xmm register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const;
+  /** Reads this xmm register from an ostream using at&t syntax. */
+  std::istream& read_att(std::istream& is);
+  /** Writes this xmm register to an ostream using at&t syntax. */
+  std::ostream& write_att(std::ostream& os) const;
 
-  protected:
-    /** Direct access to this constructor is disallowed. */
-    constexpr Xmm(uint64_t val) : Sse(Type::XMM, val) {}
-    constexpr Xmm(Type t, uint64_t val) : Sse(t, val) {}
+protected:
+  /** Direct access to this constructor is disallowed. */
+  constexpr Xmm(uint64_t val) : Sse(Type::XMM, val) {}
+  constexpr Xmm(Type t, uint64_t val) : Sse(t, val) {}
 };
 
 /** The XMM register XMM0. */
 class Xmm0 : public Xmm {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
-  public:
-    /** Returns true if this xmm register is %xmm0. */
-    constexpr bool check() {
-			return val_ == 0;
-		}
+public:
+  /** Returns true if this xmm register is %xmm0. */
+  constexpr bool check() {
+    return val_ == 0;
+  }
 
-  private:
-    /** Direct access to this constructor is disallowed. */
-    constexpr Xmm0() : Xmm(Type::XMM_0, 0) {}
+private:
+  /** Direct access to this constructor is disallowed. */
+  constexpr Xmm0() : Xmm(Type::XMM_0, 0) {}
 };
 
 } // namespace x64asm
@@ -98,17 +98,17 @@ namespace std {
 template <>
 struct hash<x64asm::Xmm> {
   size_t operator()(const x64asm::Xmm& x) const {
-		return x.hash();
-	}
+    return x.hash();
+  }
 };
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Xmm& x) {
-	return x.read_att(is);
+  return x.read_att(is);
 }
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Xmm& x) {
-	return x.write_att(os);
+  return x.write_att(os);
 }
 
 } // namespace std

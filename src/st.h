@@ -24,78 +24,78 @@ limitations under the License.
 namespace x64asm {
 
 /** The ith element from the top of the FPU register stack
-	  (i = 0 through 7).
+    (i = 0 through 7).
 */
 class St : public Operand {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
-  public:
-    /** Returns true if this stack register is well-formed. */
-    constexpr bool check() {
-			return val_ < 8;
-		}
+public:
+  /** Returns true if this stack register is well-formed. */
+  constexpr bool check() {
+    return val_ < 8;
+  }
 
-    /** Comparison based on on val_. */
-    constexpr bool operator<(const St& rhs) {
-			return val_ < rhs.val_;
-		}
-    /** Comparison based on on val_. */
-    constexpr bool operator==(const St& rhs) {
-			return val_ == rhs.val_;
-		}
-    /** Comparison based on on val_. */
-    constexpr bool operator!=(const St& rhs) {
-			return !(*this == rhs);
-		}
+  /** Comparison based on on val_. */
+  constexpr bool operator<(const St& rhs) {
+    return val_ < rhs.val_;
+  }
+  /** Comparison based on on val_. */
+  constexpr bool operator==(const St& rhs) {
+    return val_ == rhs.val_;
+  }
+  /** Comparison based on on val_. */
+  constexpr bool operator!=(const St& rhs) {
+    return !(*this == rhs);
+  }
 
-    /** Conversion based on underlying value. */
-    constexpr operator uint64_t() {
-			return val_;
-		}
+  /** Conversion based on underlying value. */
+  constexpr operator uint64_t() {
+    return val_;
+  }
 
-    /** STL-compliant hash. */
-    constexpr size_t hash() {
-			return val_;
-		}
+  /** STL-compliant hash. */
+  constexpr size_t hash() {
+    return val_;
+  }
 
-		/** @todo This method is undefined. */
-		std::istream& read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-			return is;
-		}
-    /** Writes this stack register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const {
-			assert(check());
-			os << "%";
-			if (val_ == 0) {
-				os << "st";
-			} else {
-				os << "st(" << std::dec << val_ << ")";
-			}
-			return os;
-		}
+  /** @todo This method is undefined. */
+  std::istream& read_att(std::istream& is) {
+    is.setstate(std::ios::failbit);
+    return is;
+  }
+  /** Writes this stack register to an ostream using at&t syntax. */
+  std::ostream& write_att(std::ostream& os) const {
+    assert(check());
+    os << "%";
+    if (val_ == 0) {
+      os << "st";
+    } else {
+      os << "st(" << std::dec << val_ << ")";
+    }
+    return os;
+  }
 
-  protected:
-    /** Direct access to this constructor is disallowed. */
-    constexpr St(uint64_t val) : Operand(Type::ST, val) {}
-    constexpr St(Type t, uint64_t val) : Operand(t, val) {}
+protected:
+  /** Direct access to this constructor is disallowed. */
+  constexpr St(uint64_t val) : Operand(Type::ST, val) {}
+  constexpr St(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 /** The top element of the FPU register stack. */
 class St0 : public St {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
-  public:
-    /** Returns true if this stack register is %st(0). */
-    constexpr bool check() {
-			return val_ == 0;
-		}
+public:
+  /** Returns true if this stack register is %st(0). */
+  constexpr bool check() {
+    return val_ == 0;
+  }
 
-  private:
-    /** Direct access to this constructor is disallowed. */
-    constexpr St0() : St(Type::ST_0, 0) {}
+private:
+  /** Direct access to this constructor is disallowed. */
+  constexpr St0() : St(Type::ST_0, 0) {}
 };
 
 } // namespace x64asm
@@ -106,17 +106,17 @@ namespace std {
 template <>
 struct hash<x64asm::St> {
   size_t operator()(const x64asm::St& s) const {
-		return s.hash();
-	}
+    return s.hash();
+  }
 };
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::St& s) {
-	return s.read_att(is);
+  return s.read_att(is);
 }
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::St& s) {
-	return s.write_att(os);
+  return s.write_att(os);
 }
 
 } // namespace std

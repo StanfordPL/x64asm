@@ -63,39 +63,39 @@ void write() {
   cout << endl;
 
   // And in predefined convenience containers
-	for ( const auto& r : rls )
-		cout << r << " ";
-	cout << endl;
-	for ( const auto& r : rhs )
-		cout << r << " ";
-	cout << endl;
-	for ( const auto& r : rbs )
-		cout << r << " ";
-	cout << endl;
-	for ( const auto& r : r16s )
-		cout << r << " ";
-	cout << endl;
-	for ( const auto& r : r32s )
-		cout << r << " ";
-	cout << endl;
-	for ( const auto& r : r64s )
-		cout << r << " ";
-	cout << endl;
-	for ( const auto& s : sregs )
-		cout << s << " ";
-	cout << endl;
-	for ( const auto& m : mms )
-		cout << m << " ";
-	cout << endl;
-	for ( const auto& s : sts )
-		cout << s << " ";
-	cout << endl;
-	for ( const auto& x : xmms )
-		cout << x << " ";
-	cout << endl;
-	for ( const auto& y : ymms ) 
-		cout << y << " ";
-	cout << endl;
+  for ( const auto& r : rls )
+    cout << r << " ";
+  cout << endl;
+  for ( const auto& r : rhs )
+    cout << r << " ";
+  cout << endl;
+  for ( const auto& r : rbs )
+    cout << r << " ";
+  cout << endl;
+  for ( const auto& r : r16s )
+    cout << r << " ";
+  cout << endl;
+  for ( const auto& r : r32s )
+    cout << r << " ";
+  cout << endl;
+  for ( const auto& r : r64s )
+    cout << r << " ";
+  cout << endl;
+  for ( const auto& s : sregs )
+    cout << s << " ";
+  cout << endl;
+  for ( const auto& m : mms )
+    cout << m << " ";
+  cout << endl;
+  for ( const auto& s : sts )
+    cout << s << " ";
+  cout << endl;
+  for ( const auto& x : xmms )
+    cout << x << " ";
+  cout << endl;
+  for ( const auto& y : ymms )
+    cout << y << " ";
+  cout << endl;
   cout << endl;
 
   // In addition to register constnats, there are also predefined

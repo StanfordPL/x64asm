@@ -27,51 +27,51 @@ namespace x64asm {
 
 /** A taken/not-taken hint for conditional jumps. */
 class Hint : public Operand {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
-  public:
-    /** Checks that this hint is well-formed. */
-    constexpr bool check() {
-			return val_ < 2;
-		}
+public:
+  /** Checks that this hint is well-formed. */
+  constexpr bool check() {
+    return val_ < 2;
+  }
 
-    /** Comparison based on val_. */
-    constexpr bool operator==(const Hint& rhs) {
-			return val_ == rhs.val_;
-		}
-    /** Comparison based on val_. */
-    constexpr bool operator!=(const Hint& rhs) {
-			return !(*this == rhs);
-		}
-    /** Comparison based on val_. */
-    constexpr bool operator<(const Hint& rhs) {
-			return val_ < rhs.val_;
-		}
+  /** Comparison based on val_. */
+  constexpr bool operator==(const Hint& rhs) {
+    return val_ == rhs.val_;
+  }
+  /** Comparison based on val_. */
+  constexpr bool operator!=(const Hint& rhs) {
+    return !(*this == rhs);
+  }
+  /** Comparison based on val_. */
+  constexpr bool operator<(const Hint& rhs) {
+    return val_ < rhs.val_;
+  }
 
-    /** Conversion based on val_. */
-    constexpr operator uint64_t() {
-			return val_;
-		}
+  /** Conversion based on val_. */
+  constexpr operator uint64_t() {
+    return val_;
+  }
 
-    /** STL-compliant hash. */
-    constexpr size_t hash() {
-			return val_;
-		}
+  /** STL-compliant hash. */
+  constexpr size_t hash() {
+    return val_;
+  }
 
-    /** @todo This method is undefined. */
-		std::istream& read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-			return is;
-		}
-    /** Does nothing. AT&T syntax is undefined for hints. */
-		std::ostream& write_att(std::ostream& os) const {
-			return os;
-		}
+  /** @todo This method is undefined. */
+  std::istream& read_att(std::istream& is) {
+    is.setstate(std::ios::failbit);
+    return is;
+  }
+  /** Does nothing. AT&T syntax is undefined for hints. */
+  std::ostream& write_att(std::ostream& os) const {
+    return os;
+  }
 
-  private:
-    /** Direct access to this constructor is disallowed. */
-    constexpr Hint(uint64_t val) : Operand(Type::HINT, val) {}
+private:
+  /** Direct access to this constructor is disallowed. */
+  constexpr Hint(uint64_t val) : Operand(Type::HINT, val) {}
 };
 
 } // namespace x64asm
@@ -82,17 +82,17 @@ namespace std {
 template <>
 struct hash<x64asm::Hint> {
   size_t operator()(const x64asm::Hint& h) const {
-		return h.hash();
-	}
+    return h.hash();
+  }
 };
 
 /** iostream overload. */
 inline istream& operator<<(istream& is, x64asm::Hint& h) {
-	return h.read_att(is);
+  return h.read_att(is);
 }
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Hint& h) {
-	return h.write_att(os);
+  return h.write_att(os);
 }
 
 } // namespace std

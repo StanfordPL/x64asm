@@ -28,80 +28,80 @@ namespace x64asm {
 
 /** A symbolic representation of a Rel32. No Rel8 eqivalent is provided. */
 class Label : public Operand {
-	/** Needs access to underlying value map */
-	friend class Linker;
+  /** Needs access to underlying value map */
+  friend class Linker;
 
-  public:
-    /** Creates a new, globally unique label. */
-    Label() : Operand(Type::LABEL) {
-        val_ = next_val_++;
-      std::string s(".__x64asm_L" + std::to_string(val_));
+public:
+  /** Creates a new, globally unique label. */
+  Label() : Operand(Type::LABEL) {
+    val_ = next_val_++;
+    std::string s(".__x64asm_L" + std::to_string(val_));
+    label2val_[s] = val_;
+    val2label_[val_] = s;
+  }
+  /** Creates a named label. Repeated calls will produce identical results. */
+  Label(const std::string& s) : Operand(Type::LABEL) {
+    auto itr = label2val_.find(s);
+    if (itr == label2val_.end()) {
+      val_ = next_val_++;
       label2val_[s] = val_;
       val2label_[val_] = s;
-        }
-    /** Creates a named label. Repeated calls will produce identical results. */
-    Label(const std::string& s) : Operand(Type::LABEL) {
-            auto itr = label2val_.find(s);
-            if (itr == label2val_.end()) {
-                val_ = next_val_++;
-                label2val_[s] = val_;
-                val2label_[val_] = s;
-            } else {
-                val_ = itr->second;
-            }
-        }
+    } else {
+      val_ = itr->second;
+    }
+  }
 
-    /** Returns true if this label is well-formed. */
-    bool check() const {
-            return val2label_.find(val_) != val2label_.end();
-        }
+  /** Returns true if this label is well-formed. */
+  bool check() const {
+    return val2label_.find(val_) != val2label_.end();
+  }
 
-        /** Returns the text value of this label. */
-        const std::string& get_text() const {
-            assert(check());
-            return val2label_[val_];
-        }
+  /** Returns the text value of this label. */
+  const std::string& get_text() const {
+    assert(check());
+    return val2label_[val_];
+  }
 
-    /** Comparison based on label id. */
-    bool operator<(const Label& rhs) const {
-            return val_ < rhs.val_;
-        }
-    /** Comparison based on label id. */
-    bool operator==(const Label& rhs) const {
-            return val_ == rhs.val_;
-        }
-    /** Comparison based on label id. */
-    bool operator!=(const Label& rhs) const {
-            return !(*this == rhs);
-        }
+  /** Comparison based on label id. */
+  bool operator<(const Label& rhs) const {
+    return val_ < rhs.val_;
+  }
+  /** Comparison based on label id. */
+  bool operator==(const Label& rhs) const {
+    return val_ == rhs.val_;
+  }
+  /** Comparison based on label id. */
+  bool operator!=(const Label& rhs) const {
+    return !(*this == rhs);
+  }
 
-    /** Conversion based on label value. */
-    operator uint64_t() const {
-            return val_;
-        }
+  /** Conversion based on label value. */
+  operator uint64_t() const {
+    return val_;
+  }
 
-    /** STL-compliant hash. */
-    size_t hash() const {
-            return val_;
-        }
-        /** @todo This method is undefined. */
-        std::istream& read_att(std::istream& is) {
-            is.setstate(std::ios::failbit);
-            return is;
-        }
-    /** Writes this label to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const {
-            assert(check());
-            return (os << val2label_[val_]);
-        }
+  /** STL-compliant hash. */
+  size_t hash() const {
+    return val_;
+  }
+  /** @todo This method is undefined. */
+  std::istream& read_att(std::istream& is) {
+    is.setstate(std::ios::failbit);
+    return is;
+  }
+  /** Writes this label to an ostream using at&t syntax. */
+  std::ostream& write_att(std::ostream& os) const {
+    assert(check());
+    return (os << val2label_[val_]);
+  }
 
-  private:
-    /** Global map from label text to values. */
-    static std::map<std::string, uint64_t> label2val_;
-        /** Global map from values back to label text. */
-        static std::map<uint64_t, std::string> val2label_;
-    /** The next previously unused label value. */
-    static uint64_t next_val_;
+private:
+  /** Global map from label text to values. */
+  static std::map<std::string, uint64_t> label2val_;
+  /** Global map from values back to label text. */
+  static std::map<uint64_t, std::string> val2label_;
+  /** The next previously unused label value. */
+  static uint64_t next_val_;
 };
 
 } // namespace x64asm
@@ -112,17 +112,17 @@ namespace std {
 template <>
 struct hash<x64asm::Label> {
   size_t operator()(const x64asm::Label& l) const {
-        return l.hash();
-    }
+    return l.hash();
+  }
 };
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Label& l) {
-    return l.read_att(is);
+  return l.read_att(is);
 }
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Label& l) {
-    return l.write_att(os);
+  return l.write_att(os);
 }
 
 } // namespace std

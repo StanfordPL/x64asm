@@ -24,50 +24,50 @@ using namespace std;
 namespace x64asm {
 
 std::istream& FlagSet::read_text(std::istream& is) {
-	*this = FlagSet::empty();
-	string s;
+  *this = FlagSet::empty();
+  string s;
 
-	is >> s;	
-	if (s != "{") {
-		is.setstate(ios::failbit);
-		return is;
-	}
+  is >> s;
+  if (s != "{") {
+    is.setstate(ios::failbit);
+    return is;
+  }
 
-	while (true) {
-		is >> s;
-		if (s == "}") {
-			break;
-		}
+  while (true) {
+    is >> s;
+    if (s == "}") {
+      break;
+    }
 
-		Flag f;
-		istringstream iss(s);
-		iss >> f;
+    Flag f;
+    istringstream iss(s);
+    iss >> f;
 
-		if (iss.fail()) {
-			is.setstate(ios::failbit);
-			return is;
-		}
-		*this += f;
-	}
+    if (iss.fail()) {
+      is.setstate(ios::failbit);
+      return is;
+    }
+    *this += f;
+  }
 
-	return is;
+  return is;
 }
 
 std::ostream& FlagSet::write_text(std::ostream& os) const {
-	os << "{";
-	for (size_t i = 0; i < 64; ++i) {
-		uint64_t fi = 0x1ull << i;
-		// stop after last flag:
-		if (fi > (uint64_t) Flag::RTM) {
-			break;
-		}
-		const auto f = (Flag) fi;
-		if (contains(f)) {
-			os << " " << f;
-		}
-	}
-	os << " }";
-	return os;
+  os << "{";
+  for (size_t i = 0; i < 64; ++i) {
+    uint64_t fi = 0x1ull << i;
+    // stop after last flag:
+    if (fi > (uint64_t) Flag::RTM) {
+      break;
+    }
+    const auto f = (Flag) fi;
+    if (contains(f)) {
+      os << " " << f;
+    }
+  }
+  os << " }";
+  return os;
 }
 
 } // namespace x64asm

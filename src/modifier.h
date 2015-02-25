@@ -28,77 +28,77 @@ namespace x64asm {
     specification.
 */
 class Modifier : public Operand {
-  public:
-    /** Returns true if this modifier is well-formed. */
-    constexpr bool check() {
-			return val_ == 0;
-		}
+public:
+  /** Returns true if this modifier is well-formed. */
+  constexpr bool check() {
+    return val_ == 0;
+  }
 
-    /** Comparison based on on val_. */
-    constexpr bool operator<(const Modifier& rhs) {
-			return val_ < rhs.val_;
-		}
-    /** Comparison based on on val_. */
-    constexpr bool operator==(const Modifier& rhs) {
-			return val_ == rhs.val_;
-		}
-    /** Comparison based on on val_. */
-    constexpr bool operator!=(const Modifier& rhs) {
-			return !(*this == rhs);
-		}
+  /** Comparison based on on val_. */
+  constexpr bool operator<(const Modifier& rhs) {
+    return val_ < rhs.val_;
+  }
+  /** Comparison based on on val_. */
+  constexpr bool operator==(const Modifier& rhs) {
+    return val_ == rhs.val_;
+  }
+  /** Comparison based on on val_. */
+  constexpr bool operator!=(const Modifier& rhs) {
+    return !(*this == rhs);
+  }
 
-    /** Conversion based on val_. */
-    constexpr operator uint64_t() {
-			return val_;
-		}
+  /** Conversion based on val_. */
+  constexpr operator uint64_t() {
+    return val_;
+  }
 
-    /** STL-compliant hash. */
-    constexpr size_t hash() {
-			return val_;
-		}
-		/** @todo This method is undefined. */
-		std::istream& read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-			return is;
-		}
-		/** Does nothing. AT&T syntax is undefined for modifiers. */
-		std::ostream& write_att(std::ostream& os) const {
-			return os;
-		}
+  /** STL-compliant hash. */
+  constexpr size_t hash() {
+    return val_;
+  }
+  /** @todo This method is undefined. */
+  std::istream& read_att(std::istream& is) {
+    is.setstate(std::ios::failbit);
+    return is;
+  }
+  /** Does nothing. AT&T syntax is undefined for modifiers. */
+  std::ostream& write_att(std::ostream& os) const {
+    return os;
+  }
 
-  protected:
-    /** Direct access to this constructor is disallowed. */
-    constexpr Modifier(Type t) : Operand(t) {}
+protected:
+  /** Direct access to this constructor is disallowed. */
+  constexpr Modifier(Type t) : Operand(t) {}
 };
 
 /** The 32-bit memory address override prefix: 0x66. */
 class Pref66 : public Modifier {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
-  private:
-    /** Direct access to this constructor is disallowed. */
-    constexpr Pref66() : Modifier(Type::PREF_66) {}
+private:
+  /** Direct access to this constructor is disallowed. */
+  constexpr Pref66() : Modifier(Type::PREF_66) {}
 };
 
 /** The REX.w prefix: 0x48. */
 class PrefRexW : public Modifier {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
-  private:
-    /** Direct access to this constructor is disallowed. */
-    constexpr PrefRexW() : Modifier(Type::PREF_REX_W) {}
+private:
+  /** Direct access to this constructor is disallowed. */
+  constexpr PrefRexW() : Modifier(Type::PREF_REX_W) {}
 };
 
 /** Far instruction variant. */
 class Far : public Modifier {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
-  private:
-    /** Direct access to this constructor is disallowed. */
-    constexpr Far() : Modifier(Type::FAR) {}
+private:
+  /** Direct access to this constructor is disallowed. */
+  constexpr Far() : Modifier(Type::FAR) {}
 };
 
 } // namespace x64asm
@@ -109,17 +109,17 @@ namespace std {
 template <>
 struct hash<x64asm::Modifier> {
   size_t operator()(const x64asm::Modifier& m) const {
-		return m.hash();
-	}
+    return m.hash();
+  }
 };
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Modifier& m) {
-	return m.read_att(is);
+  return m.read_att(is);
 }
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Modifier& m) {
-	return m.write_att(os);
+  return m.write_att(os);
 }
 
 } // namespace std

@@ -25,60 +25,60 @@ namespace x64asm {
 
 /** A relative address. */
 class Rel : public Operand {
-  public:
-    /** Comparison based on on val_. */
-    constexpr bool operator<(const Rel& rhs) {
-			return val_ < rhs.val_;
-		}
-    /** Comparison based on on val_. */
-    constexpr bool operator==(const Rel& rhs) {
-			return val_ == rhs.val_;
-		}
-    /** Comparison based on on val_. */
-    constexpr bool operator!=(const Rel& rhs) {
-			return !(*this == rhs);
-		}
+public:
+  /** Comparison based on on val_. */
+  constexpr bool operator<(const Rel& rhs) {
+    return val_ < rhs.val_;
+  }
+  /** Comparison based on on val_. */
+  constexpr bool operator==(const Rel& rhs) {
+    return val_ == rhs.val_;
+  }
+  /** Comparison based on on val_. */
+  constexpr bool operator!=(const Rel& rhs) {
+    return !(*this == rhs);
+  }
 
-    /** Conversion based on underlying value. */
-    constexpr operator uint64_t() {
-			return val_;
-		}
+  /** Conversion based on underlying value. */
+  constexpr operator uint64_t() {
+    return val_;
+  }
 
-    /** STL-compliant hash. */
-    constexpr size_t hash() {
-			return val_;
-		}
+  /** STL-compliant hash. */
+  constexpr size_t hash() {
+    return val_;
+  }
 
-		/** @todo This method is undefined. */
-		std::istream& read_att(std::istream& is) {
-			is.setstate(std::ios::failbit);
-			return is;
-		}
-    /** Writes this rel to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const {
-			const auto fmt = os.flags();
-			os << std::hex << std::showbase << val_;
-			os.flags(fmt);
-			return os;
-		}
+  /** @todo This method is undefined. */
+  std::istream& read_att(std::istream& is) {
+    is.setstate(std::ios::failbit);
+    return is;
+  }
+  /** Writes this rel to an ostream using at&t syntax. */
+  std::ostream& write_att(std::ostream& os) const {
+    const auto fmt = os.flags();
+    os << std::hex << std::showbase << val_;
+    os.flags(fmt);
+    return os;
+  }
 
-  protected:
-    /** Direct access to this constructor is disallowed. */
-    constexpr Rel(Type t, uint64_t val) : Operand(t, val) {}
+protected:
+  /** Direct access to this constructor is disallowed. */
+  constexpr Rel(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 /** A relative address in the range from 128 bytes before the end of the
     instruction to 127 bytes after the end of the instruction.
 */
 class Rel8 : public Rel {
-  public:
-    /** Creates an 8-bit relative offset. */
-    constexpr Rel8(int8_t val) : Rel(Type::REL_8, (uint64_t)val) {}
+public:
+  /** Creates an 8-bit relative offset. */
+  constexpr Rel8(int8_t val) : Rel(Type::REL_8, (uint64_t)val) {}
 
-    /** Checks that this offset fits in 8 bits. */
-    constexpr bool check() {
-			return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
-		}
+  /** Checks that this offset fits in 8 bits. */
+  constexpr bool check() {
+    return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
+  }
 };
 
 /** A relative address within the same code segment as the instruction
@@ -86,14 +86,14 @@ class Rel8 : public Rel {
     operand-size attribute of 32 bits.
 */
 class Rel32 : public Rel {
-  public:
-    /** Creates a 32-bit relative offset. */
-    constexpr Rel32(int64_t val) : Rel(Type::REL_32, (uint64_t)val) {}
+public:
+  /** Creates a 32-bit relative offset. */
+  constexpr Rel32(int64_t val) : Rel(Type::REL_32, (uint64_t)val) {}
 
-    /** Checks that this offset value fits in 32-bits. */
-    constexpr bool check() {
-			return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
-		}
+  /** Checks that this offset value fits in 32-bits. */
+  constexpr bool check() {
+    return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
+  }
 };
 
 } // namespace x64asm
@@ -104,17 +104,17 @@ namespace std {
 template <>
 struct hash<x64asm::Rel> {
   size_t operator()(const x64asm::Rel& r) const {
-		return r.hash();
-	}
+    return r.hash();
+  }
 };
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Rel& r) {
-	return r.read_att(is);
+  return r.read_att(is);
 }
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Rel& r) {
-	return r.write_att(os);
+  return r.write_att(os);
 }
 
 } // namespace std

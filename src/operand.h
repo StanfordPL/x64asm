@@ -33,64 +33,66 @@ class RegSet;
     internal representation is the Moffs type.
  */
 class Operand {
-    // Needs access to default constructor.
-    friend class std::array<Operand, 4>;
-    // Needs access to underlying value.
-    friend class Assembler;
-    // Needs access to non-default constructor.
-    friend class Instruction;
+  // Needs access to default constructor.
+  friend class std::array<Operand, 4>;
+  // Needs access to underlying value.
+  friend class Assembler;
+  // Needs access to non-default constructor.
+  friend class Instruction;
 
-  public:
-    /** Return the type of this operand */
-    constexpr Type type() { return (Type)(val2_ >> 3); }
-    /** Return the size of this operand */
-    uint16_t size() const;
-    /** Is this a general purpose register? */
-    bool is_gp_register() const;
-    /** Is this an SSE register? */
-    bool is_sse_register() const;
-    /** Is this a normal 8/16/32/64/128/256-bit memory operand? */
-    bool is_typical_memory() const;
-    /** Is this an immediate? */
-    bool is_immediate() const;
+public:
+  /** Return the type of this operand */
+  constexpr Type type() {
+    return (Type)(val2_ >> 3);
+  }
+  /** Return the size of this operand */
+  uint16_t size() const;
+  /** Is this a general purpose register? */
+  bool is_gp_register() const;
+  /** Is this an SSE register? */
+  bool is_sse_register() const;
+  /** Is this a normal 8/16/32/64/128/256-bit memory operand? */
+  bool is_typical_memory() const;
+  /** Is this an immediate? */
+  bool is_immediate() const;
 
-    /** Comparison based on underlying values. */
-    bool operator==(const Operand& rhs) const {
-			return std::make_pair(val_, val2_) == std::make_pair(rhs.val_, rhs.val2_);
-		}
-    /** Comparison based on underlying values. */
-    bool operator!=(const Operand& rhs) const {
-  		return !(*this == rhs);
-		}
+  /** Comparison based on underlying values. */
+  bool operator==(const Operand& rhs) const {
+    return std::make_pair(val_, val2_) == std::make_pair(rhs.val_, rhs.val2_);
+  }
+  /** Comparison based on underlying values. */
+  bool operator!=(const Operand& rhs) const {
+    return !(*this == rhs);
+  }
 
-    /** Write this operator to an output stream */
-    std::ostream& write_att(std::ostream& os) const;
+  /** Write this operator to an output stream */
+  std::ostream& write_att(std::ostream& os) const;
 
-  protected:
-    /** Creates an operand with a type and no underlying value. */
-    constexpr Operand(Type t) : val_(0), val2_((uint64_t)t << 3) {}
-    /** Creates an operand with a type and one underlying value. */
-    constexpr Operand(Type t, uint64_t val) : val_(val), val2_((uint64_t)t << 3) {}
-    /** Creates an operand with a type and two underlying values. */
-    constexpr Operand(Type t, uint64_t val, uint64_t val2) : val_(val), val2_(val2 | ((uint64_t)t << 3)) {}
-    /** Creates an operand with no type and no underlying value. */
-    constexpr Operand() : val_(0), val2_(0) {}
+protected:
+  /** Creates an operand with a type and no underlying value. */
+  constexpr Operand(Type t) : val_(0), val2_((uint64_t)t << 3) {}
+  /** Creates an operand with a type and one underlying value. */
+  constexpr Operand(Type t, uint64_t val) : val_(val), val2_((uint64_t)t << 3) {}
+  /** Creates an operand with a type and two underlying values. */
+  constexpr Operand(Type t, uint64_t val, uint64_t val2) : val_(val), val2_(val2 | ((uint64_t)t << 3)) {}
+  /** Creates an operand with no type and no underlying value. */
+  constexpr Operand() : val_(0), val2_(0) {}
 
-    /** Underlying value. */
-    uint64_t val_;
-    /** Extended storage space for underlying value. */
-    uint64_t val2_;
+  /** Underlying value. */
+  uint64_t val_;
+  /** Extended storage space for underlying value. */
+  uint64_t val2_;
 
-  private:  
-    /** Comparison based on underlying values. */
-    bool operator<(const Operand& rhs) const {
-			return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
-		}
+private:
+  /** Comparison based on underlying values. */
+  bool operator<(const Operand& rhs) const {
+    return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
+  }
 
-    /** Forcibly change the underlying type */
-    void set_type(Type t) {
-      val2_ = ((uint64_t)t << 3) | (val2_ & 0x7);
-    }
+  /** Forcibly change the underlying type */
+  void set_type(Type t) {
+    val2_ = ((uint64_t)t << 3) | (val2_ & 0x7);
+  }
 };
 
 } // namespace x64asm
@@ -99,7 +101,7 @@ namespace std {
 
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Operand& op) {
-	return op.write_att(os);
+  return op.write_att(os);
 }
 
 } // namespace std

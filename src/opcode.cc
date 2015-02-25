@@ -24,8 +24,8 @@ std::array<const char*, X64ASM_NUM_OPCODES> att_ {{
     // Internal mnemonics
     "<label definition>"
     // Auto-generated mnemonics
-    #include "src/opcode.att"
-}};
+#include "src/opcode.att"
+  }};
 
 /** Get the string representation of an opcode */
 std::string x64asm::opcode_write_att(Opcode o) {
