@@ -1959,36 +1959,36 @@ FF /6	PUSH r/m64	M	R	RSP	RSP				V	NE		pushq		Push r/m64.
 VEX.NDS.128.66.0F.WIG EF /r	VPXOR xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpxor		Bitwise XOR of xmm3/m128 and xmm2.
 VEX.NDS.256.66.0F.WIG EF /r	VPXOR ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpxor		Bitwise XOR of ymm3/m256 and ymm2.
 														
-D0 /2	RCL r/m8, 1	M1	RW, R	e.cf	E.CF E.OF				V	V		rclb		Rotate 9 bits (CF, r/m8) left once.
-REX+ D0 /2	RCL r/m8, 1	M1	RW, R	e.cf	E.CF E.OF				V	NE		rclb		Rotate 9 bits (CF, r/m8) left once.
-D2 /2	RCL r/m8, CL	MC	RW, R	e.cf	e.cf e.of	e.of			V	V		rclb		Rotate 9 bits (CF, r/m8) left CL times.
-REX+ D2 /2	RCL r/m8, CL	MC	RW, R	e.cf	e.cf e.of	e.of			V	NE		rclb		Rotate 9 bits (CF, r/m8) left CL times.
-C0 /2 ib	RCL r/m8, imm8	MI	RW, R	e.cf	e.cf e.of	e.of			V	V		rclb		Rotate 9 bits (CF, r/m8) left imm8 times.
-REX+ C0 /2 ib	RCL r/m8, imm8	MI	RW, R	e.cf	e.cf e.of	e.of			V	NE		rclb		Rotate 9 bits (CF, r/m8) left imm8 times.
-D1 /2	RCL r/m16, 1	M1	RW, R	e.cf	E.CF E.OF				V	V		rclw		Rotate 17 bits (CF, r/m16) left once.
-D3 /2	RCL r/m16, CL	MC	RW, R	e.cf	e.cf e.of	e.of			V	V		rclw		Rotate 17 bits (CF, r/m16) left CL times.
-C1 /2 ib	RCL r/m16, imm8	MI	RW, R	e.cf	e.cf e.of	e.of			V	V		rclw		Rotate 17 bits (CF, r/m16) left imm8 times.
-D1 /2	RCL r/m32, 1	M1	RW, R	e.cf	E.CF E.OF				V	V		rcll		Rotate 33 bits (CF, r/m32) left once.
-REX.W+ D1 /2	RCL r/m64, 1	M1	RW, R	e.cf	E.CF E.OF				V	NE		rclq		Rotate 65 bits (CF, r/m64) left once. Uses a 6 bit count.
-D3 /2	RCL r/m32, CL	MC	RW, R	e.cf	e.cf e.of	e.of			V	V		rcll		Rotate 33 bits (CF, r/m32) left CL times.
-REX.W+ D3 /2	RCL r/m64, CL	MC	RW, R	e.cf	e.cf e.of	e.of			V	NE		rclq		Rotate 65 bits (CF, r/m64) left CL times. Uses a 6 bit count.
-C1 /2 ib	RCL r/m32, imm8	MI	RW, R	e.cf	e.cf e.of	e.of			V	V		rcll		Rotate 33 bits (CF, r/m32) left imm8 times.
-REX.W+ C1 /2 ib	RCL r/m64, imm8	MI	RW, R	e.cf	e.cf e.of	e.of			V	NE		rclq		Rotate 65 bits (CF, r/m64) left imm8 times. Uses a 6 bit count.
-D0 /3	RCR r/m8, 1	M1	RW, R	e.cf	E.CF E.OF				V	V		rcrb		Rotate 9 bits (CF, r/m8) right once.
-REX+ D0 /3	RCR r/m8, 1	M1	RW, R	e.cf	E.CF E.OF				V	NE		rcrb		Rotate 9 bits (CF, r/m8) right once.
-D2 /3	RCR r/m8, CL	MC	RW, R	e.cf	e.cf e.of	e.of			V	V		rcrb		Rotate 9 bits (CF, r/m8) right CL times.
-REX+ D2 /3	RCR r/m8, CL	MC	RW, R	e.cf	e.cf e.of	e.of			V	NE		rcrb		Rotate 9 bits (CF, r/m8) right CL times.
-C0 /3 ib	RCR r/m8, imm8	MI	RW, R	e.cf	e.cf e.of	e.of			V	V		rcrb		Rotate 9 bits (CF, r/m8) right imm8 times.
-REX+ C0 /3 ib	RCR r/m8, imm8	MI	RW, R	e.cf	e.cf e.of	e.of			V	NE		rcrb		Rotate 9 bits (CF, r/m8) right imm8 times.
-D1 /3	RCR r/m16, 1	M1	RW, R	e.cf	E.CF E.OF				V	V		rcrw		Rotate 17 bits (CF, r/m16) right once.
-D3 /3	RCR r/m16, CL	MC	RW, R	e.cf	e.cf e.of	e.of			V	V		rcrw		Rotate 17 bits (CF, r/m16) right CL times.
-C1 /3 ib	RCR r/m16, imm8	MI	RW, R	e.cf	e.cf e.of	e.of			V	V		rcrw		Rotate 17 bits (CF, r/m16) right imm8 times.
-D1 /3	RCR r/m32, 1	M1	RW, R	e.cf	E.CF E.OF				V	V		rcrl		Rotate 33 bits (CF, r/m32) right once. Uses a 6 bit count.
-REX.W+ D1 /3	RCR r/m64, 1	M1	RW, R	e.cf	E.CF E.OF				V	NE		rcrq		Rotate 65 bits (CF, r/m64) right once. Uses a 6 bit count.
-D3 /3	RCR r/m32, CL	MC	RW, R	e.cf	e.cf e.of	e.of			V	V		rcrl		Rotate 33 bits (CF, r/m32) right CL times.
-REX.W+ D3 /3	RCR r/m64, CL	MC	RW, R	e.cf	e.cf e.of	e.of			V	NE		rcrq		Rotate 65 bits (CF, r/m64) right CL times. Uses a 6 bit count.
-C1 /3 ib	RCR r/m32, imm8	MI	RW, R	e.cf	e.cf e.of	e.of			V	V		rcrl		Rotate 33 bits (CF, r/m32) right imm8 times.
-REX.W+ C1 /3 ib	RCR r/m64, imm8	MI	RW, R	e.cf	e.cf e.of	e.of			V	NE		rcrq		Rotate 65 bits (CF, r/m64) right imm8 times. Uses a 6 bit count.
+D0 /2	RCL r/m8, 1	M1	RW, R	E.CF	E.CF E.OF				V	V		rclb		Rotate 9 bits (CF, r/m8) left once.
+REX+ D0 /2	RCL r/m8, 1	M1	RW, R	E.CF	E.CF E.OF				V	NE		rclb		Rotate 9 bits (CF, r/m8) left once.
+D2 /2	RCL r/m8, CL	MC	RW, R	E.CF	e.cf e.of	e.of			V	V		rclb		Rotate 9 bits (CF, r/m8) left CL times.
+REX+ D2 /2	RCL r/m8, CL	MC	RW, R	E.CF	e.cf e.of	e.of			V	NE		rclb		Rotate 9 bits (CF, r/m8) left CL times.
+C0 /2 ib	RCL r/m8, imm8	MI	RW, R	E.CF	e.cf e.of	e.of			V	V		rclb		Rotate 9 bits (CF, r/m8) left imm8 times.
+REX+ C0 /2 ib	RCL r/m8, imm8	MI	RW, R	E.CF	e.cf e.of	e.of			V	NE		rclb		Rotate 9 bits (CF, r/m8) left imm8 times.
+D1 /2	RCL r/m16, 1	M1	RW, R	E.CF	E.CF E.OF				V	V		rclw		Rotate 17 bits (CF, r/m16) left once.
+D3 /2	RCL r/m16, CL	MC	RW, R	E.CF	e.cf e.of	e.of			V	V		rclw		Rotate 17 bits (CF, r/m16) left CL times.
+C1 /2 ib	RCL r/m16, imm8	MI	RW, R	E.CF	e.cf e.of	e.of			V	V		rclw		Rotate 17 bits (CF, r/m16) left imm8 times.
+D1 /2	RCL r/m32, 1	M1	RW, R	E.CF	E.CF E.OF				V	V		rcll		Rotate 33 bits (CF, r/m32) left once.
+REX.W+ D1 /2	RCL r/m64, 1	M1	RW, R	E.CF	E.CF E.OF				V	NE		rclq		Rotate 65 bits (CF, r/m64) left once. Uses a 6 bit count.
+D3 /2	RCL r/m32, CL	MC	RW, R	E.CF	e.cf e.of	e.of			V	V		rcll		Rotate 33 bits (CF, r/m32) left CL times.
+REX.W+ D3 /2	RCL r/m64, CL	MC	RW, R	E.CF	e.cf e.of	e.of			V	NE		rclq		Rotate 65 bits (CF, r/m64) left CL times. Uses a 6 bit count.
+C1 /2 ib	RCL r/m32, imm8	MI	RW, R	E.CF	e.cf e.of	e.of			V	V		rcll		Rotate 33 bits (CF, r/m32) left imm8 times.
+REX.W+ C1 /2 ib	RCL r/m64, imm8	MI	RW, R	E.CF	e.cf e.of	e.of			V	NE		rclq		Rotate 65 bits (CF, r/m64) left imm8 times. Uses a 6 bit count.
+D0 /3	RCR r/m8, 1	M1	RW, R	E.CF	E.CF E.OF				V	V		rcrb		Rotate 9 bits (CF, r/m8) right once.
+REX+ D0 /3	RCR r/m8, 1	M1	RW, R	E.CF	E.CF E.OF				V	NE		rcrb		Rotate 9 bits (CF, r/m8) right once.
+D2 /3	RCR r/m8, CL	MC	RW, R	E.CF	e.cf e.of	e.of			V	V		rcrb		Rotate 9 bits (CF, r/m8) right CL times.
+REX+ D2 /3	RCR r/m8, CL	MC	RW, R	E.CF	e.cf e.of	e.of			V	NE		rcrb		Rotate 9 bits (CF, r/m8) right CL times.
+C0 /3 ib	RCR r/m8, imm8	MI	RW, R	E.CF	e.cf e.of	e.of			V	V		rcrb		Rotate 9 bits (CF, r/m8) right imm8 times.
+REX+ C0 /3 ib	RCR r/m8, imm8	MI	RW, R	E.CF	e.cf e.of	e.of			V	NE		rcrb		Rotate 9 bits (CF, r/m8) right imm8 times.
+D1 /3	RCR r/m16, 1	M1	RW, R	E.CF	E.CF E.OF				V	V		rcrw		Rotate 17 bits (CF, r/m16) right once.
+D3 /3	RCR r/m16, CL	MC	RW, R	E.CF	e.cf e.of	e.of			V	V		rcrw		Rotate 17 bits (CF, r/m16) right CL times.
+C1 /3 ib	RCR r/m16, imm8	MI	RW, R	E.CF	e.cf e.of	e.of			V	V		rcrw		Rotate 17 bits (CF, r/m16) right imm8 times.
+D1 /3	RCR r/m32, 1	M1	RW, R	E.CF	E.CF E.OF				V	V		rcrl		Rotate 33 bits (CF, r/m32) right once. Uses a 6 bit count.
+REX.W+ D1 /3	RCR r/m64, 1	M1	RW, R	E.CF	E.CF E.OF				V	NE		rcrq		Rotate 65 bits (CF, r/m64) right once. Uses a 6 bit count.
+D3 /3	RCR r/m32, CL	MC	RW, R	E.CF	e.cf e.of	e.of			V	V		rcrl		Rotate 33 bits (CF, r/m32) right CL times.
+REX.W+ D3 /3	RCR r/m64, CL	MC	RW, R	E.CF	e.cf e.of	e.of			V	NE		rcrq		Rotate 65 bits (CF, r/m64) right CL times. Uses a 6 bit count.
+C1 /3 ib	RCR r/m32, imm8	MI	RW, R	E.CF	e.cf e.of	e.of			V	V		rcrl		Rotate 33 bits (CF, r/m32) right imm8 times.
+REX.W+ C1 /3 ib	RCR r/m64, imm8	MI	RW, R	E.CF	e.cf e.of	e.of			V	NE		rcrq		Rotate 65 bits (CF, r/m64) right imm8 times. Uses a 6 bit count.
 D0 /0	ROL r/m8, 1	M1	RW, R		E.CF E.OF				V	V		rolb		Rotate 8 bits r/m8 left once.
 REX+ D0 /0	ROL r/m8, 1	M1	RW, R		E.CF E.OF				V	NE		rolb		Rotate 8 bits r/m8 left once.
 D2 /0	ROL r/m8, CL	MC	RW, R		e.cf e.of	e.of			V	V		rolb		Rotate 8 bits r/m8 left CL times.
