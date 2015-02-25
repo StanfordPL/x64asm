@@ -816,7 +816,7 @@ PREF.66+ 6D 	INSW 	NP		E.IOPL E.VM E.DF DX RDI					V	V		insw		Input word from I/
 6D 	INSD 	NP		E.IOPL E.VM E.DF DX RDI					V	V		insl		Input doubleword from I/O port specified in DX into memory location specified in ES:(E)DI or RDI.
 														
 66 0F 3A 21 /r ib 	INSERTPS xmm1, xmm2/m32, imm8	RMI	RW, R, R						V	V	SSE4_1	insertps		Insert a single precision floating-point value selected by imm8 from xmm2/m32 into xmm1 at the specified destination element specified by imm8 and zero out destination elements in xmm1 as indicated in imm8.
-VEX.NDS.128.66.0F3A.WIG 21 /r ib	VINSERTPS xmm1, xmm2, xmm3/m32, imm8	RVMI	Z, W, R, R						V	V	AVX	vinsertps		Insert a single precision floating point value selected by imm8 from xmm3/m32 and merge into xmm2 at the specified destination element specified by imm8 and zero out destination elements in xmm1 as indicated in imm8.
+VEX.NDS.128.66.0F3A.WIG 21 /r ib	VINSERTPS xmm1, xmm2, xmm3/m32, imm8	RVMI	RZ, RW, R, R						V	V	AVX	vinsertps		Insert a single precision floating point value selected by imm8 from xmm3/m32 and merge into xmm2 at the specified destination element specified by imm8 and zero out destination elements in xmm1 as indicated in imm8.
 														
 CC 	INT 3 	NP	R	???	???	???			V	V		int		Interrupt 3-trap to debugger.
 CD ib 	INT imm8 	I	R	???	???	???			V	V		int		Interrupt vector number specified by immediate byte.
