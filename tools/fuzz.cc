@@ -3,6 +3,7 @@
 #include <iostream>
 #include <set>
 #include <string>
+#include <unistd.h>
 #include <vector>
 
 #include "include/x64asm.h"
@@ -302,7 +303,8 @@ string tempfile(const string& temp) {
 	vector<char> v(temp.begin(), temp.end());
 	v.push_back('\0');
 
-	auto fd = mkstemp(v.data());
+	const auto fd = mkstemp(v.data());
+  close(fd);
 	return string(v.begin(), v.end()-1);
 }
 
@@ -360,6 +362,9 @@ int main(int argc, char** argv) {
 		// Compare hex
 		const auto cmd3 = "objdump -d " + o_file + " | tail -n+8 | cut -c 7-27 | sed 'N;s/\\n//' | sed 's/ *$//' > " + od_file;
 		const auto res3 = system(cmd3.c_str());
+    if (res3 != 0) {
+      continue;
+    }
 		const auto cmd4 = "diff " + hex_file + " " + od_file + " > /dev/null";
 		const auto res4 = system(cmd4.c_str());
 		if (res4 != 0 && (bad_hex_.find(opcode) == bad_hex_.end())) {
@@ -370,12 +375,19 @@ int main(int argc, char** argv) {
 			cout.flush();
 			const auto cmd5 = "cat " + hex_file;
 			const auto res5 = system(cmd5.c_str());
+      if(res5 != 0) {
+        cout << "Error reading file." << endl;
+      }
 
 			cout << "  g++:    ";
 			cout.flush();
 			const auto cmd6 = "cat " + od_file;
 			const auto res6 = system(cmd6.c_str());
 			cout << endl;
+      if(res6 != 0) {
+        cout << "Error reading file." << endl;
+      }
+
 		}
 	}
 

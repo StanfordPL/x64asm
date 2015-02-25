@@ -139,5 +139,6 @@ ostream& Operand::write_att(ostream& os) const {
     return static_cast<const Sse*>(this)->write_att(os);
   }
   assert(false); //other Operands not supported for now.
+  return os;
 }
 

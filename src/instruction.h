@@ -376,11 +376,11 @@ class Instruction {
 
     /** Is this an AVX 1 instruction? */
     bool is_avx() const {
-      flags_[get_opcode()].contains(Flag::AVX);
+      return flags_[get_opcode()].contains(Flag::AVX);
     }
     /** Is this an AVX 2 instruction? */
     bool is_avx2() const {
-      flags_[get_opcode()].contains(Flag::AVX2);
+      return flags_[get_opcode()].contains(Flag::AVX2);
     }
 		/** Is this any AVX instruction? */
 		bool is_any_avx() const {
