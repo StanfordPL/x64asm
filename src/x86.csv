@@ -2679,7 +2679,7 @@ VEX.256.66.0F38.W0 0F /r	VTESTPD ymm1, ymm2/m256	RM	R, R		E.OF E.SF E.ZF E.AF E.
 														
 VEX.256.0F.WIG 77	VZEROALL	NP			YMM*				V	V	AVX	vzeroall		Zero all YMM registers.
 														
-VEX.128.0F.WIG 77	VZEROUPPER	NP			YMM*				V	V	AVX	vzeroupper		Zero upper 128 bits of all YMM registers.
+VEX.128.0F.WIG 77	VZEROUPPER	NP		XMM*	YMM*				V	V	AVX	vzeroupper		Zero upper 128 bits of all YMM registers.
 														
 9B	WAIT	NP				S.C0 S.C1 S.C2 S.C3			V	V	FPU	wait		Check pending unmasked floating-point exceptions.
 9B	FWAIT	NP				S.C0 S.C1 S.C2 S.C3			V	V	FPU	fwait		Check pending unmasked floating-point exceptions.
