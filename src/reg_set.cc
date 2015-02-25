@@ -29,30 +29,30 @@ namespace x64asm {
 
 
 istream& RegSet::read_text(istream& is) {
-	*this = RegSet::empty();
-	string s;
+  *this = RegSet::empty();
+  string s;
 
-	is >> s;
-	if (s != "{") {
-		is.setstate(ios::failbit);
-		return is;
-	}	
+  is >> s;
+  if (s != "{") {
+    is.setstate(ios::failbit);
+    return is;
+  }
 
-	while (true) {
-		is >> s;
-		if (s == "}") {
-			break;
-		}
+  while (true) {
+    is >> s;
+    if (s == "}") {
+      break;
+    }
 
     Rh rh = ah;
     Rb r8 = al;
-    R16 r16 = ax; 
+    R16 r16 = ax;
     R32 r32 = eax;
     R64 r64 = rax;
     Xmm xmm = xmm0;
     Ymm ymm = ymm0;
     Mm mm = mm0;
-		Eflags ef = eflags_cf;
+    Eflags ef = eflags_cf;
     Mxcsr mxcsr = mxcsr_ie;
     FpuStatus fpustatus = fpu_status_ie;
     FpuTag fputag = tag0;
@@ -61,15 +61,15 @@ istream& RegSet::read_text(istream& is) {
     if (s == "...") {
       (*this) = RegSet::universe();
     } else if (istringstream(s) >> r64) {
-			(*this) += r64;
-		}	else if (istringstream(s) >> r32) {
-			(*this) += r32;
-		}	else if (istringstream(s) >> r16) {
-			(*this) += r16;
-		}	else if (istringstream(s) >> r8) {
-			(*this) += r8;
-		}	else if (istringstream(s) >> rh) {
-			(*this) += rh;
+      (*this) += r64;
+    } else if (istringstream(s) >> r32) {
+      (*this) += r32;
+    } else if (istringstream(s) >> r16) {
+      (*this) += r16;
+    } else if (istringstream(s) >> r8) {
+      (*this) += r8;
+    } else if (istringstream(s) >> rh) {
+      (*this) += rh;
     } else if (istringstream(s) >> ymm) {
       (*this) += ymm;
     } else if (istringstream(s) >> xmm) {
@@ -85,14 +85,14 @@ istream& RegSet::read_text(istream& is) {
     } else if (istringstream(s) >> fputag) {
       (*this) += fputag;
     } else if (istringstream(s) >> fpucontrol) {
-			(*this) += fpucontrol;
-		} else {
-			is.setstate(ios::failbit);
-			return is;
-		}
-	}
+      (*this) += fpucontrol;
+    } else {
+      is.setstate(ios::failbit);
+      return is;
+    }
+  }
 
-	return is;
+  return is;
 }
 
 ostream& RegSet::write_text(ostream& os) const {
@@ -106,7 +106,7 @@ ostream& RegSet::write_text(ostream& os) const {
   for(auto mit = mm_begin(); mit != mm_end(); ++mit) {
     os << " " << *mit;
   }
-	for (size_t i = 0, ie = eflags.size(); i < ie; i += eflags[i].width()) {
+  for (size_t i = 0, ie = eflags.size(); i < ie; i += eflags[i].width()) {
     if (contains(eflags[i])) {
       os << " " << eflags[i];
     }
@@ -133,7 +133,7 @@ ostream& RegSet::write_text(ostream& os) const {
   }
   os << " }";
 
-	return os;
+  return os;
 }
 
 RegSet::GpIterator& RegSet::GpIterator::operator++() {
@@ -175,7 +175,7 @@ RegSet::GpIterator& RegSet::GpIterator::operator++() {
       break;
     }
   }
-  
+
   if (!found) {
     finished_ = true;
   }
@@ -183,7 +183,7 @@ RegSet::GpIterator& RegSet::GpIterator::operator++() {
   index_++;
 
   return *this;
-} 
+}
 
 RegSet::SseIterator& RegSet::SseIterator::operator++() {
   if(finished_)
@@ -204,7 +204,7 @@ RegSet::SseIterator& RegSet::SseIterator::operator++() {
       break;
     }
   }
-  
+
   if (!found)
     finished_ = true;
 
@@ -226,7 +226,7 @@ RegSet::MmIterator& RegSet::MmIterator::operator++() {
       break;
     }
   }
-  
+
   if (!found)
     finished_ = true;
 
@@ -244,14 +244,14 @@ RegSet::FlagsIterator& RegSet::FlagsIterator::operator++() {
   for(; index_ < eflags.size() && !found; index_++) {
 
     if(rs_->contains(eflags[index_]) &&
-       (index_ == 0 || index_ == 2 || index_ == 4 ||
-        index_ == 6 || index_ == 7 || index_ == 11)) {
+        (index_ == 0 || index_ == 2 || index_ == 4 ||
+         index_ == 6 || index_ == 7 || index_ == 11)) {
       current_ = eflags[index_];
       found = true;
       break;
     }
   }
-  
+
   if (!found)
     finished_ = true;
 

@@ -28,8 +28,8 @@ namespace x64asm {
 enum Opcode : int32_t {
   // Internal mnemonics
   LABEL_DEFN = 0
-  // Auto-generated mnemonics
-  #include "src/opcode.enum"
+               // Auto-generated mnemonics
+#include "src/opcode.enum"
 };
 
 std::string opcode_write_att(Opcode o);

@@ -26,46 +26,46 @@ namespace x64asm {
 
 /** An MMX register. The 64-bit MMX registers are: MM0 through MM7. */
 class Mm : public Operand {
-    // Needs access to constructor.
-    friend class Constants;
+  // Needs access to constructor.
+  friend class Constants;
 
-  public:
-    /** Returns true if this xmm register is well-formed. */
-    constexpr bool check() {
-			return val_ < 8;
-		}
+public:
+  /** Returns true if this xmm register is well-formed. */
+  constexpr bool check() {
+    return val_ < 8;
+  }
 
-    /** Comparison based on on val_. */
-    constexpr bool operator<(const Mm& rhs) {
-			return val_ < rhs.val_;
-		}
-    /** Comparison based on on val_. */
-    constexpr bool operator==(const Mm& rhs) {
-			return val_ == rhs.val_;
-		}
-    /** Comparison based on on val_. */
-    constexpr bool operator!=(const Mm& rhs) {
-			return !(*this == rhs);
-		}
+  /** Comparison based on on val_. */
+  constexpr bool operator<(const Mm& rhs) {
+    return val_ < rhs.val_;
+  }
+  /** Comparison based on on val_. */
+  constexpr bool operator==(const Mm& rhs) {
+    return val_ == rhs.val_;
+  }
+  /** Comparison based on on val_. */
+  constexpr bool operator!=(const Mm& rhs) {
+    return !(*this == rhs);
+  }
 
-    /** Conversion based on underlying value. */
-    constexpr operator uint64_t() {
-			return val_;
-		}
+  /** Conversion based on underlying value. */
+  constexpr operator uint64_t() {
+    return val_;
+  }
 
-    /** STL-compliant hash. */
-    constexpr size_t hash() {
-			return val_;
-		}
+  /** STL-compliant hash. */
+  constexpr size_t hash() {
+    return val_;
+  }
 
-		/** Reads this mm register from an ostream using at&t syntax. */
-		std::istream& read_att(std::istream& is);
-    /** Writes this mm register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const;
+  /** Reads this mm register from an ostream using at&t syntax. */
+  std::istream& read_att(std::istream& is);
+  /** Writes this mm register to an ostream using at&t syntax. */
+  std::ostream& write_att(std::ostream& os) const;
 
-  protected:
-    /** Direct access to this constructor is disallowed. */
-    constexpr Mm(uint64_t val) : Operand(Type::MM, val) {}
+protected:
+  /** Direct access to this constructor is disallowed. */
+  constexpr Mm(uint64_t val) : Operand(Type::MM, val) {}
 };
 
 } // namespace x64asm
@@ -76,17 +76,17 @@ namespace std {
 template <>
 struct hash<x64asm::Mm> {
   size_t operator()(const x64asm::Mm& m) const {
-		return m.hash();
-	}
+    return m.hash();
+  }
 };
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Mm& m) {
-	return m.read_att(is);
+  return m.read_att(is);
 }
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Mm& m) {
-	return m.write_att(os);
+  return m.write_att(os);
 }
 
 } // namespace std

@@ -27,17 +27,17 @@ namespace x64asm {
 /** A SSE register. Either Ymm or Xmm (for now...) */
 class Sse : public Operand {
 
-  public:
-    /** Conversion based on underlying value. */
-    constexpr operator uint64_t() {
-      return val_;
-    }
+public:
+  /** Conversion based on underlying value. */
+  constexpr operator uint64_t() {
+    return val_;
+  }
 
-    /** Writes this ymm register to an ostream using at&t syntax. */
-    std::ostream& write_att(std::ostream& os) const;
+  /** Writes this ymm register to an ostream using at&t syntax. */
+  std::ostream& write_att(std::ostream& os) const;
 
-  protected:
-    constexpr Sse(Type t, uint64_t val) : Operand(t, val) {}
+protected:
+  constexpr Sse(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 } // namespace x64asm
@@ -46,7 +46,7 @@ namespace std {
 
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Sse& s) {
-	return s.write_att(os);
+  return s.write_att(os);
 }
 
 } // namespace std

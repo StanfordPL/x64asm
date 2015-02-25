@@ -59,7 +59,7 @@ enum class Flag : uint64_t {
   XSAVEOPT =  0x0000000100000000, // Optimized XSave
   FSGSBASE =  0x0000000200000000, // {RD/WR}{FS/GS}BASE
   BMI1 =      0x0000000400000000, // 1st Group Bit-manipulation Extensions
-	HLE =       0x0000000800000000, // Hardware Lock Ellision
+  HLE =       0x0000000800000000, // Hardware Lock Ellision
   AVX2 =      0x0000001000000000, // AVX2 Instructions
   BMI2 =      0x0000002000000000, // 2nd Group Bit-manipulation Extensions
   ERMS =      0x0000004000000000, // Enhanced REP MOVSB/STOSB
@@ -78,11 +78,11 @@ namespace std {
 
 /** iostream overload */
 inline istream& operator>>(istream& is, x64asm::Flag& f) {
-	return read_text(is, f);
+  return read_text(is, f);
 }
 /** iostream overload */
 inline ostream& operator<<(ostream& os, const x64asm::Flag f) {
-	return write_text(os, f);
+  return write_text(os, f);
 }
 
 } // namespace std

@@ -8,19 +8,19 @@ using namespace x64asm;
 
 /** Prints a parse error. */
 int parse_error() {
-	cerr << "Unable to read input file!" << endl;
-	return 1;
+  cerr << "Unable to read input file!" << endl;
+  return 1;
 }
 
 /** A simple test program. Reads att syntax and prints human readable hex. */
 int main(int argc, char** argv) {
-	Code c;
-	cin >> c;
+  Code c;
+  cin >> c;
 
-	if (!cin.good())
-		return parse_error();
+  if (!cin.good())
+    return parse_error();
 
-	cout << Assembler().assemble(c) << endl;
+  cout << Assembler().assemble(c) << endl;
 
-	return 0;
+  return 0;
 }

@@ -28,31 +28,31 @@ using namespace x64asm;
 namespace {
 
 const array<string, 8> mms_ {{
-	"%mm0", "%mm1", "%mm2", "%mm3", "%mm4", "%mm5", "%mm6", "%mm7"
-}};
+    "%mm0", "%mm1", "%mm2", "%mm3", "%mm4", "%mm5", "%mm6", "%mm7"
+  }};
 
 } // namespace
 
 namespace x64asm {
 
 istream& Mm::read_att(istream& is) {
-	string temp;
-	is >> temp;
+  string temp;
+  is >> temp;
 
-	for (size_t i = 0, ie = mms_.size(); i < ie; ++i) {
-		if (temp == mms_[i]) {
-			*this = mms[i];
-			return is;
-		}
-	}
+  for (size_t i = 0, ie = mms_.size(); i < ie; ++i) {
+    if (temp == mms_[i]) {
+      *this = mms[i];
+      return is;
+    }
+  }
 
-	is.setstate(ios::failbit);
-	return is;
+  is.setstate(ios::failbit);
+  return is;
 }
 
 ostream& Mm::write_att(ostream& os) const {
-	assert(check());
-	return (os << mms_[val_]);
+  assert(check());
+  return (os << mms_[val_]);
 }
 
 } // namespace x64asm
