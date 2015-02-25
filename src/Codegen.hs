@@ -791,9 +791,9 @@ property_elem (t,p) = "Properties::none()" ++ (concat (map (elem t) p))
         elem t 'W' = case reg32_op t of 
                           True ->  "+Property::MUST_WRITE_ZX"
                           False -> "+Property::MUST_WRITE"
-        elem t 'Q' = case reg32_op t of 
-                          True ->  "+Property::MUST_READ"
-                          False -> ""
+        elem t 'Q' = case mem_op t of 
+                          True ->  ""
+                          False -> "+Property::MUST_READ"
         elem _ 'w' = "+Property::MAYBE_WRITE"
         elem _ 'U' = "+Property::MUST_UNDEF"
         elem _ 'u' = "+Property::MAYBE_UNDEF"
