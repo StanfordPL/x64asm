@@ -1,7 +1,11 @@
 
+#include "src/imm.h"
+#include "src/m.h"
 #include "src/operand.h"
+#include "src/r.h"
 
 using namespace x64asm;
+using namespace std;
 
 uint16_t Operand::size() const {
 
@@ -120,4 +124,20 @@ bool Operand::is_immediate() const {
 
 }
 
+
+ostream& Operand::write_att(ostream& os) const {
+  if(Operand::is_immediate()) {
+    return static_cast<const Imm*>(this)->write_att(os);
+  }
+  if(Operand::is_typical_memory()) {
+    return static_cast<const M<M8>*>(this)->write_att(os);
+  }
+  if(Operand::is_gp_register()) {
+    return static_cast<const R*>(this)->write_att(os);
+  }
+  if(Operand::is_sse_register()) {
+    return static_cast<const Sse*>(this)->write_att(os);
+  }
+  assert(false); //other Operands not supported for now.
+}
 

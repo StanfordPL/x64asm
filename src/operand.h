@@ -63,6 +63,9 @@ class Operand {
   		return !(*this == rhs);
 		}
 
+    /** Write this operator to an output stream */
+    std::ostream& write_att(std::ostream& os) const;
+
   protected:
     /** Creates an operand with a type and no underlying value. */
     constexpr Operand(Type t) : val_(0), val2_((uint64_t)t << 3) {}
@@ -91,5 +94,15 @@ class Operand {
 };
 
 } // namespace x64asm
+
+namespace std {
+
+/** iostream overload. */
+inline ostream& operator<<(ostream& os, const x64asm::Operand& op) {
+	return op.write_att(os);
+}
+
+} // namespace std
+
 
 #endif
