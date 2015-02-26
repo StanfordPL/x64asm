@@ -2125,19 +2125,19 @@ VEX.NDS.LIG.F3.0F.WIG 52 /r	VRSQRTSS xmm1, xmm2, xmm3/m32	RVM	Z, R, R						V	V	A
 														
 D0 /4	SAL r/m8, 1	M1	RW, R		E.CF E.OF E.PF E.SF E.ZF	E.AF			V	V		salb		Multiply r/m8 by 2, once.
 REX+ D0 /4	SAL r/m8, 1	M1	RW, R		E.CF E.OF E.PF E.SF E.ZF	E.AF			V	NE		salb		Multiply r/m8 by 2, once.
-D2 /4	SAL r/m8, CL	MC	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af			V	V		salb		Multiply r/m8 by 2, CL times.
-REX+ D2 /4	SAL r/m8, CL	MC	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af			V	NE		salb		Multiply r/m8 by 2, CL times.
-C0 /4 ib	SAL r/m8, imm8	MI	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af			V	V		salb		Multiply r/m8 by 2, imm8 times.
-REX+ C0 /4 ib	SAL r/m8, imm8	MI	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af			V	NE		salb		Multiply r/m8 by 2, imm8 times.
+D2 /4	SAL r/m8, CL	MC	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af e.cf			V	V		salb		Multiply r/m8 by 2, CL times.
+REX+ D2 /4	SAL r/m8, CL	MC	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af e.cf			V	NE		salb		Multiply r/m8 by 2, CL times.
+C0 /4 ib	SAL r/m8, imm8	MI	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af e.cf			V	V		salb		Multiply r/m8 by 2, imm8 times.
+REX+ C0 /4 ib	SAL r/m8, imm8	MI	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af e.cf			V	NE		salb		Multiply r/m8 by 2, imm8 times.
 D1 /4	SAL r/m16, 1	M1	RW, R		E.CF E.OF E.PF E.SF E.ZF	E.AF			V	V		salw		Multiply r/m16 by 2, once.
-D3 /4	SAL r/m16, CL	MC	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af			V	V		salw		Multiply r/m16 by 2, CL times.
-C1 /4 ib	SAL r/m16, imm8	MI	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af			V	V		salw		Multiply r/m16 by 2, imm8 times.
+D3 /4	SAL r/m16, CL	MC	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af e.cf			V	V		salw		Multiply r/m16 by 2, CL times.
+C1 /4 ib	SAL r/m16, imm8	MI	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af e.cf			V	V		salw		Multiply r/m16 by 2, imm8 times.
 D1 /4	SAL r/m32, 1	M1	RW, R		E.CF E.OF E.PF E.SF E.ZF	E.AF			V	V		sall		Multiply r/m32 by 2, once.
 REX.W+ D1 /4	SAL r/m64, 1	M1	RW, R		E.CF E.OF E.PF E.SF E.ZF	E.AF			V	NE		salq		Multiply r/m64 by 2, once.
-D3 /4	SAL r/m32, CL	MC	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af			V	V		sall		Multiply r/m32 by 2, CL times.
-REX.W+ D3 /4	SAL r/m64, CL	MC	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af			V	NE		salq		Multiply r/m64 by 2, CL times.
-C1 /4 ib	SAL r/m32, imm8	MI	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af			V	V		sall		Multiply r/m32 by 2, imm8 times.
-REX.W+ C1 /4 ib	SAL r/m64, imm8	MI	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af			V	NE		salq		Multiply r/m64 by 2, imm8 times.
+D3 /4	SAL r/m32, CL	MC	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af e.cf			V	V		sall		Multiply r/m32 by 2, CL times.
+REX.W+ D3 /4	SAL r/m64, CL	MC	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af e.cf			V	NE		salq		Multiply r/m64 by 2, CL times.
+C1 /4 ib	SAL r/m32, imm8	MI	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af e.cf			V	V		sall		Multiply r/m32 by 2, imm8 times.
+REX.W+ C1 /4 ib	SAL r/m64, imm8	MI	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af e.cf			V	NE		salq		Multiply r/m64 by 2, imm8 times.
 D0 /7	SAR r/m8, 1	M1	RW, R		E.CF E.OF E.PF E.SF E.ZF	E.AF			V	V		sarb		Signed divide r/m8 by 2, once.
 REX+ D0 /7	SAR r/m8, 1	M1	RW, R		E.CF E.OF E.PF E.SF E.ZF	E.AF			V	NE		sarb		Signed divide r/m8 by 2, once.
 D2 /7	SAR r/m8, CL	MC	RW, R		e.cf e.of e.pf e.sf e.zf	e.of e.af			V	V		sarb		Signed divide r/m8 by 2, CL times.
