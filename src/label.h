@@ -34,18 +34,18 @@ class Label : public Operand {
 public:
   /** Creates a new, globally unique label. */
   Label() : Operand(Type::LABEL) {
-    val_ = next_val_++;
+    val_ = next_val()++;
     std::string s(".__x64asm_L" + std::to_string(val_));
-    label2val_[s] = val_;
-    val2label_[val_] = s;
+    label2val()[s] = val_;
+    val2label()[val_] = s;
   }
   /** Creates a named label. Repeated calls will produce identical results. */
   Label(const std::string& s) : Operand(Type::LABEL) {
-    auto itr = label2val_.find(s);
-    if (itr == label2val_.end()) {
-      val_ = next_val_++;
-      label2val_[s] = val_;
-      val2label_[val_] = s;
+    auto itr = label2val().find(s);
+    if (itr == label2val().end()) {
+      val_ = next_val()++;
+      label2val()[s] = val_;
+      val2label()[val_] = s;
     } else {
       val_ = itr->second;
     }
@@ -53,13 +53,13 @@ public:
 
   /** Returns true if this label is well-formed. */
   bool check() const {
-    return val2label_.find(val_) != val2label_.end();
+    return val2label().find(val_) != val2label().end();
   }
 
   /** Returns the text value of this label. */
   const std::string& get_text() const {
     assert(check());
-    return val2label_[val_];
+    return val2label()[val_];
   }
 
   /** Comparison based on label id. */
@@ -92,16 +92,25 @@ public:
   /** Writes this label to an ostream using at&t syntax. */
   std::ostream& write_att(std::ostream& os) const {
     assert(check());
-    return (os << val2label_[val_]);
+    return (os << val2label()[val_]);
   }
 
 private:
-  /** Global map from label text to values. */
-  static std::map<std::string, uint64_t> label2val_;
-  /** Global map from values back to label text. */
-  static std::map<uint64_t, std::string> val2label_;
   /** The next previously unused label value. */
-  static uint64_t next_val_;
+  static uint64_t& next_val() {
+		static uint64_t val = 0;
+		return val;
+	}
+  /** Global map from label text to values. */
+	static std::map<std::string, uint64_t>& label2val() {
+		static std::map<std::string, uint64_t> m;
+		return m;
+	}	
+  /** Global map from label text to values. */
+	static std::map<uint64_t, std::string>& val2label() {
+		static std::map<uint64_t, std::string> m;
+		return m;
+	}
 };
 
 } // namespace x64asm

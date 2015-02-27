@@ -50,7 +50,7 @@ public:
   /** Returns the symbol that caused a multiple definition error. */
   Label get_multiple_def() const {
     assert(multiple_def());
-    return Label::val2label_[md_symbol_];
+    return Label::val2label()[md_symbol_];
   }
   /** Returns true if an undefined symbol error occurred. */
   bool undef_symbol() const {
@@ -59,7 +59,7 @@ public:
   /** Returns the symbol that caused an undefined symbol error. */
   Label get_undef_symbol() const {
     assert(undef_symbol());
-    return Label::val2label_[us_symbol_];
+    return Label::val2label()[us_symbol_];
   }
 
 private:
