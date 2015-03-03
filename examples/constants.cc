@@ -24,8 +24,7 @@ using namespace x64asm;
 
 // This example demonstrates the set of built-in constants supported by x64asm.
 
-// Write each of the built-in constants
-void write() {
+int main() {
   // Constants are available individually
   cout << al    << " " << cl    << " " << dl    << " " << bl    << endl;
   cout << ah    << " " << ch    << " " << dh    << " " << bh    << endl;
@@ -62,7 +61,7 @@ void write() {
 
   cout << endl;
 
-  // And in predefined convenience containers
+  // and in predefined convenience containers
   for ( const auto& r : rls )
     cout << r << " ";
   cout << endl;
@@ -98,19 +97,16 @@ void write() {
   cout << endl;
   cout << endl;
 
-  // In addition to register constnats, there are also predefined
+	// and also as part of reg sets
+	cout << RegSet::empty() << endl;
+	cout << RegSet::universe() << endl;
+	cout << endl;
+
+  // In addition to register constants, there are also predefined
   // special case immediates and instruction modifiers, which can be used as
   // assembler arguments to access special case instruction forms.
   cout << zero << " " << one << " " << three << endl;
   cout << pref_66 << " " << pref_rex_w << " " << far << endl;
-}
-
-int main() {
-  // Constants can be printed using AT&T syntax.
-
-  cout << "AT&T Constants:" << endl << endl;
-  write();
-  cout << endl;
 
   return 0;
 }
