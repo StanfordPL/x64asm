@@ -23,7 +23,6 @@ INC=-I./
 		
 OBJ=src/assembler.o \
 		src/code.o \
-		src/constants.o \
 		src/env_bits.o \
 		src/flag.o \
 		src/flag_set.o \

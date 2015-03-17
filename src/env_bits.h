@@ -26,9 +26,9 @@ namespace x64asm {
 class EnvBits {
 public:
   /** Copy constructor. */
-  EnvBits(const EnvBits& rhs) : index_(rhs.index_), width_(rhs.width_) {}
+  constexpr EnvBits(const EnvBits& rhs) : index_(rhs.index_), width_(rhs.width_) {}
   /** Move constructor. */
-  EnvBits(const EnvBits&& rhs) : index_(rhs.index_), width_(rhs.width_) {}
+  constexpr EnvBits(const EnvBits&& rhs) : index_(rhs.index_), width_(rhs.width_) {}
   /** Assignment operator. */
   EnvBits& operator=(const EnvBits& rhs) {
     EnvBits(rhs).swap(*this);
