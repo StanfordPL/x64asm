@@ -18,20 +18,27 @@ limitations under the License.
 
 #include "src/opcode.h"
 
+using namespace std;
 using namespace x64asm;
 
-std::array<const char*, X64ASM_NUM_OPCODES> att_ {{
+namespace {
+
+constexpr array<const char*, X64ASM_NUM_OPCODES> att_() {
+  return {
     // Internal mnemonics
     "<label definition>"
     // Auto-generated mnemonics
-#include "src/opcode.att"
-  }};
-
-/** Get the string representation of an opcode */
-std::string x64asm::opcode_write_att(Opcode o) {
-  return std::string(att_[o]);
+    #include "src/opcode.att"
+  };
 }
 
+} // namespace
 
+namespace x64asm {
 
+/** Get the string representation of an opcode */
+string opcode_write_att(Opcode o) {
+  return string(att_()[o]);
+}
 
+} // namespace x64asm

@@ -27,9 +27,11 @@ using namespace x64asm;
 
 namespace {
 
-const array<string, 8> mms_ {{
+constexpr array<const char*, 8> mms_() {
+  return {
     "%mm0", "%mm1", "%mm2", "%mm3", "%mm4", "%mm5", "%mm6", "%mm7"
-  }};
+  };
+}
 
 } // namespace
 
@@ -39,8 +41,8 @@ istream& Mm::read_att(istream& is) {
   string temp;
   is >> temp;
 
-  for (size_t i = 0, ie = mms_.size(); i < ie; ++i) {
-    if (temp == mms_[i]) {
+  for (size_t i = 0, ie = mms_().size(); i < ie; ++i) {
+    if (temp == mms_()[i]) {
       *this = Constants::mms()[i];
       return is;
     }
@@ -52,7 +54,7 @@ istream& Mm::read_att(istream& is) {
 
 ostream& Mm::write_att(ostream& os) const {
   assert(check());
-  return (os << mms_[val_]);
+  return (os << mms_()[val_]);
 }
 
 } // namespace x64asm

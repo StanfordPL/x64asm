@@ -27,29 +27,39 @@ using namespace x64asm;
 
 namespace {
 
-const array<string, 16> rbs_ {{
+constexpr array<const char*, 16> rbs_() {
+  return {
     "%al", "%cl", "%dl", "%bl", "%spl", "%bpl", "%sil", "%dil",
     "%r8b", "%r9b", "%r10b", "%r11b", "%r12b", "%r13b", "%r14b", "%r15b"
-  }};
+  };
+}
 
-const array<string, 4> rhs_ {{
+constexpr array<const char*, 4> rhs_() {
+  return {
     "%ah", "%ch", "%dh", "%bh"
-  }};
+  };
+}
 
-const array<string, 16> r16s_ {{
+constexpr array<const char*, 16> r16s_() {
+  return {
     "%ax", "%cx", "%dx", "%bx", "%sp", "%bp", "%si", "%di",
     "%r8w", "%r9w", "%r10w", "%r11w", "%r12w", "%r13w", "%r14w", "%r15w"
-  }};
+  };
+}
 
-const array<string, 16> r32s_ {{
+constexpr array<const char*, 16> r32s_() {
+  return {
     "%eax", "%ecx", "%edx", "%ebx", "%esp", "%ebp", "%esi", "%edi",
     "%r8d", "%r9d", "%r10d", "%r11d", "%r12d", "%r13d", "%r14d", "%r15d"
-  }};
+  };
+}
 
-const array<string, 16> r64s_ {{
+constexpr array<const char*, 16> r64s_() {
+  return {
     "%rax", "%rcx", "%rdx", "%rbx", "%rsp", "%rbp", "%rsi", "%rdi",
     "%r8", "%r9", "%r10", "%r11", "%r12", "%r13", "%r14", "%r15"
-  }};
+  };
+}
 
 } // namespace
 
@@ -59,8 +69,8 @@ istream& Rb::read_att(istream& is) {
   string temp;
   is >> temp;
 
-  for (size_t i = 0, ie = rbs_.size(); i < ie; ++i) {
-    if (temp == rbs_[i]) {
+  for (size_t i = 0, ie = rbs_().size(); i < ie; ++i) {
+    if (temp == rbs_()[i]) {
       // note: this is a little hacky until we fix this Rh thing
       val_ = i;
       return is;
@@ -73,7 +83,7 @@ istream& Rb::read_att(istream& is) {
 
 ostream& Rb::write_att(ostream& os) const {
   assert(check());
-  return (os << rbs_[val_]);
+  return (os << rbs_()[val_]);
 }
 
 istream& Rl::read_att(istream& is) {
@@ -81,7 +91,7 @@ istream& Rl::read_att(istream& is) {
   is >> temp;
 
   for (size_t i = 0; i < 4; ++i) {
-    if (temp == rbs_[i]) {
+    if (temp == rbs_()[i]) {
       // note: this is a little hacky until we fix this Rh thing
       val_ = i;
       return is;
@@ -94,15 +104,15 @@ istream& Rl::read_att(istream& is) {
 
 ostream& Rl::write_att(ostream& os) const {
   assert(check());
-  return (os << rbs_[val_]);
+  return (os << rbs_()[val_]);
 }
 
 istream& Rh::read_att(istream& is) {
   string temp;
   is >> temp;
 
-  for (size_t i = 0, ie = rhs_.size(); i < ie; ++i) {
-    if (temp == rhs_[i]) {
+  for (size_t i = 0, ie = rhs_().size(); i < ie; ++i) {
+    if (temp == rhs_()[i]) {
       *this = Constants::rhs()[i];
       return is;
     }
@@ -114,15 +124,15 @@ istream& Rh::read_att(istream& is) {
 
 ostream& Rh::write_att(ostream& os) const {
   assert(check());
-  return (os << rhs_[val_-4]);
+  return (os << rhs_()[val_-4]);
 }
 
 istream& R16::read_att(istream& is) {
   string temp;
   is >> temp;
 
-  for (size_t i = 0, ie = r16s_.size(); i < ie; ++i) {
-    if (temp == r16s_[i]) {
+  for (size_t i = 0, ie = r16s_().size(); i < ie; ++i) {
+    if (temp == r16s_()[i]) {
       *this = Constants::r16s()[i];
       return is;
     }
@@ -134,15 +144,15 @@ istream& R16::read_att(istream& is) {
 
 ostream& R16::write_att(ostream& os) const {
   assert(check());
-  return (os << r16s_[val_]);
+  return (os << r16s_()[val_]);
 }
 
 istream& R32::read_att(istream& is) {
   string temp;
   is >> temp;
 
-  for (size_t i = 0, ie = r32s_.size(); i < ie; ++i) {
-    if (temp == r32s_[i]) {
+  for (size_t i = 0, ie = r32s_().size(); i < ie; ++i) {
+    if (temp == r32s_()[i]) {
       *this = Constants::r32s()[i];
       return is;
     }
@@ -154,15 +164,15 @@ istream& R32::read_att(istream& is) {
 
 ostream& R32::write_att(ostream& os) const {
   assert(check());
-  return (os << r32s_[val_]);
+  return (os << r32s_()[val_]);
 }
 
 istream& R64::read_att(istream& is) {
   string temp;
   is >> temp;
 
-  for (size_t i = 0, ie = r64s_.size(); i < ie; ++i) {
-    if (temp == r64s_[i]) {
+  for (size_t i = 0, ie = r64s_().size(); i < ie; ++i) {
+    if (temp == r64s_()[i]) {
       *this = Constants::r64s()[i];
       return is;
     }
@@ -174,7 +184,7 @@ istream& R64::read_att(istream& is) {
 
 ostream& R64::write_att(ostream& os) const {
   assert(check());
-  return (os << r64s_[val_]);
+  return (os << r64s_()[val_]);
 }
 
 ostream& R::write_att(ostream& os) const {

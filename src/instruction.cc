@@ -27,17 +27,6 @@ limitations under the License.
 
 using namespace std;
 
-namespace {
-
-array<const char*, X64ASM_NUM_OPCODES> att_ {{
-    // Internal mnemonics
-    "<label definition>"
-    // Auto-generated mnemonics
-#include "src/opcode.att"
-  }};
-
-} // namespace
-
 namespace x64asm {
 
 bool Instruction::is_xor_reg_reg() const {
@@ -794,7 +783,7 @@ bool Instruction::check() const {
 }
 
 ostream& Instruction::write_att(ostream& os) const {
-  assert((size_t)get_opcode() < att_.size());
+  assert((size_t)get_opcode() < X64ASM_NUM_OPCODES);
 
   if (get_opcode() == LABEL_DEFN) {
     get_operand<Label>(0).write_att(os);
@@ -802,7 +791,7 @@ ostream& Instruction::write_att(ostream& os) const {
     return os;
   }
 
-  os << att_[get_opcode()] << " ";
+  os << opcode_write_att(get_opcode()) << " ";
   if (arity() > 0)
     for (int i = (int)arity() - 1; i >= 0; --i) {
       switch (type(i)) {
