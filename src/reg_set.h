@@ -872,11 +872,8 @@ public:
   class any_sub_gp_iterator {
     friend class RegSet;
   public:
-    const R64& operator*() const {
+    R64 operator*() const {
       return Constants::r64s()[idx_];
-    }
-    const R64* operator->() const {
-      return &Constants::r64s()[idx_];
     }
     bool operator==(const any_sub_gp_iterator& rhs) const {
       return idx_ == rhs.idx_ && rs_ == rhs.rs_;
@@ -914,11 +911,8 @@ public:
   class any_sub_sse_iterator {
     friend class RegSet;
   public:
-    const Ymm& operator*() const {
+    Ymm operator*() const {
       return Constants::ymms()[idx_];
-    }
-    const Ymm* operator->() const {
-      return &Constants::ymms()[idx_];
     }
     bool operator==(const any_sub_sse_iterator& rhs) const {
       return idx_ == rhs.idx_ && rs_ == rhs.rs_;
