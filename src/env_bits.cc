@@ -26,37 +26,47 @@ using namespace x64asm;
 
 namespace {
 
-const array<string, 22> eflags_ {{
+constexpr array<const char*, 22> eflags_() {
+  return {
     "%cf", "<res1>", "%pf", "<res3>", "%af", "<res5>", "%zf", "%sf",
     "%tf", "%if", "%df", "%of", "%iopl", "%iopl", "%nt", "<res15>",
     "%rf", "%vm", "%ac", "%vif", "%vip", "%id"
-  }};
+  };
+}
 
-const array<string, 16> control_ {{
+constexpr array<const char*, 16> control_() {
+  return {
     "%control::im", "%control::dm", "%control::zm", "%control::om",
     "%control::um", "%control::pm", "<control::res6>", "<control::res7>",
     "%control::pc[0]", "%control::pc[1]", "%control::rc[0]", "%control::rc[1]",
     "%control::x", "<control::res13>", "<control::res14>", "<control::res15>"
-  }};
+  };
+}
 
-const array<string, 16> status_ {{
+constexpr array<const char*, 16> status_() {
+  return {
     "%status::ie", "%status::de", "%status::ze", "%status::oe",
     "%status::ue", "%status::pe", "%status::sf", "%status::es",
     "%status::c0", "%status::c1", "%status::c2", "%status::top[0]",
     "%status::top[1]", "%status::top[2]", "%status::c3", "%status::b"
-  }};
+  };
+}
 
-const array<string, 16> tag_ {{
+constexpr array<const char*, 16> tag_() {
+  return {
     "%tag0", "%tag0", "%tag1", "%tag1", "%tag2", "%tag2", "%tag3", "%tag3",
     "%tag4", "%tag4", "%tag5", "%tag5", "%tag6", "%tag6", "%tag7", "%tag7"
-  }};
+  };
+}
 
-const array<string, 16> mxcsr_ {{
+constexpr array<const char*, 16> mxcsr_() {
+  return {
     "%mxcsr::ie", "%mxcsr::de", "%mxcsr::ze", "%mxcsr::oe",
     "%mxcsr::ue", "%mxcsr::pe", "%mxcsr::daz", "%mxcsr::im",
     "%mxcsr::dm", "%mxcsr::zm", "%mxcsr::om", "%mxcsr::um",
     "%mxcsr::pm", "%mxcsr::rc[0]", "%mxcsr::rc[1]", "%mxcsr::fz"
-  }};
+  };
+}
 
 } // namespace
 
@@ -66,9 +76,9 @@ istream& Eflags::read_text(istream& is) {
   string temp;
   is >> temp;
 
-  for (size_t i = 0, ie = eflags_.size(); i < ie; ++i) {
-    if (temp == eflags_[i]) {
-      *this = eflags[i];
+  for (size_t i = 0, ie = eflags_().size(); i < ie; ++i) {
+    if (temp == eflags_()[i]) {
+      *this = Constants::eflags()[i];
       return is;
     }
   }
@@ -78,11 +88,11 @@ istream& Eflags::read_text(istream& is) {
 }
 
 ostream& Eflags::write_text(ostream& os) const {
-  if (index() >= eflags_.size()) {
+  if (index() >= eflags_().size()) {
     os.setstate(ios::failbit);
     return os;
   }
-  os << eflags_[index()];
+  os << eflags_()[index()];
   return os;
 }
 
@@ -90,9 +100,9 @@ istream& FpuControl::read_text(istream& is) {
   string temp;
   is >> temp;
 
-  for (size_t i = 0, ie = control_.size(); i < ie; ++i) {
-    if (temp == control_[i]) {
-      *this = fpu_control[i];
+  for (size_t i = 0, ie = control_().size(); i < ie; ++i) {
+    if (temp == control_()[i]) {
+      *this = Constants::fpu_control()[i];
       return is;
     }
   }
@@ -102,11 +112,11 @@ istream& FpuControl::read_text(istream& is) {
 }
 
 ostream& FpuControl::write_text(ostream& os) const {
-  if (index() >= control_.size()) {
+  if (index() >= control_().size()) {
     os.setstate(ios::failbit);
     return os;
   }
-  os << control_[index()];
+  os << control_()[index()];
   return os;
 }
 
@@ -114,9 +124,9 @@ istream& FpuStatus::read_text(istream& is) {
   string temp;
   is >> temp;
 
-  for (size_t i = 0, ie = status_.size(); i < ie; ++i) {
-    if (temp == status_[i]) {
-      *this = fpu_status[i];
+  for (size_t i = 0, ie = status_().size(); i < ie; ++i) {
+    if (temp == status_()[i]) {
+      *this = Constants::fpu_status()[i];
       return is;
     }
   }
@@ -126,11 +136,11 @@ istream& FpuStatus::read_text(istream& is) {
 }
 
 ostream& FpuStatus::write_text(ostream& os) const {
-  if (index() >= status_.size()) {
+  if (index() >= status_().size()) {
     os.setstate(ios::failbit);
     return os;
   }
-  os << status_[index()];
+  os << status_()[index()];
   return os;
 }
 
@@ -138,9 +148,9 @@ istream& FpuTag::read_text(istream& is) {
   string temp;
   is >> temp;
 
-  for (size_t i = 0, ie = tag_.size(); i < ie; ++i) {
-    if (temp == tag_[i]) {
-      *this = fpu_tags[i];
+  for (size_t i = 0, ie = tag_().size(); i < ie; ++i) {
+    if (temp == tag_()[i]) {
+      *this = Constants::fpu_tags()[i];
       return is;
     }
   }
@@ -150,11 +160,11 @@ istream& FpuTag::read_text(istream& is) {
 }
 
 ostream& FpuTag::write_text(ostream& os) const {
-  if (index() >= tag_.size()) {
+  if (index() >= tag_().size()) {
     os.setstate(ios::failbit);
     return os;
   }
-  os << tag_[index()];
+  os << tag_()[index()];
   return os;
 }
 
@@ -162,9 +172,9 @@ istream& Mxcsr::read_text(istream& is) {
   string temp;
   is >> temp;
 
-  for (size_t i = 0, ie = mxcsr_.size(); i < ie; ++i) {
-    if (temp == mxcsr_[i]) {
-      *this = mxcsr[i];
+  for (size_t i = 0, ie = mxcsr_().size(); i < ie; ++i) {
+    if (temp == mxcsr_()[i]) {
+      *this = Constants::mxcsr()[i];
       return is;
     }
   }
@@ -174,11 +184,11 @@ istream& Mxcsr::read_text(istream& is) {
 }
 
 ostream& Mxcsr::write_text(ostream& os) const {
-  if (index() >= mxcsr_.size()) {
+  if (index() >= mxcsr_().size()) {
     os.setstate(ios::failbit);
     return os;
   }
-  os << mxcsr_[index()];
+  os << mxcsr_()[index()];
   return os;
 }
 

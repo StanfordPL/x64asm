@@ -98,6 +98,16 @@ public:
   static constexpr Eflags eflags_id()   {
     return {21, 1};
   }
+  static constexpr std::array<Eflags,21> eflags() {
+    return {
+      eflags_cf(),   eflags_res1(), eflags_pf(),    eflags_res3(),
+      eflags_af(),   eflags_res5(), eflags_zf(),    eflags_sf(),
+      eflags_tf(),   eflags_if(),   eflags_df(),    eflags_of(),
+      eflags_iopl(), eflags_nt(),   eflags_res15(), eflags_rf(),
+      eflags_vm(),   eflags_ac(),   eflags_vif(),   eflags_vip(),
+      eflags_id()
+    };
+  }
 
   static constexpr FpuControl fpu_control_im() {
     return {0, 1};
@@ -140,6 +150,14 @@ public:
   }
   static constexpr FpuControl fpu_control_res15() {
     return {15, 1};
+  }
+  static constexpr std::array<FpuControl,14> fpu_control() {
+    return {
+      fpu_control_im(),    fpu_control_dm(),   fpu_control_zm(),   fpu_control_om(),
+      fpu_control_um(),    fpu_control_pm(),   fpu_control_res6(), fpu_control_res7(),
+      fpu_control_pc(),    fpu_control_rc(),   fpu_control_x(),    fpu_control_res13(),
+      fpu_control_res14(), fpu_control_res15()
+    };
   }
 
   static constexpr FpuStatus fpu_status_ie()  {
@@ -184,6 +202,14 @@ public:
   static constexpr FpuStatus fpu_status_b()   {
     return {15, 1};
   }
+  static constexpr std::array<FpuStatus,14> fpu_status() {
+    return {
+      fpu_status_ie(), fpu_status_de(), fpu_status_ze(), fpu_status_oe(),
+      fpu_status_ue(), fpu_status_pe(), fpu_status_sf(), fpu_status_es(),
+      fpu_status_c0(), fpu_status_c1(), fpu_status_c2(), fpu_status_top(),
+      fpu_status_c3(), fpu_status_b()
+    };
+  }
 
   static constexpr FpuTag tag0() {
     return {0, 2};
@@ -208,6 +234,11 @@ public:
   }
   static constexpr FpuTag tag7() {
     return {14, 2};
+  }
+  static constexpr std::array<FpuTag,8> fpu_tags() {
+    return {
+      tag0(), tag1(), tag2(), tag3(), tag4(), tag5(), tag6(), tag7()
+    };
   }
 
   static constexpr Mxcsr mxcsr_ie()  {
@@ -255,445 +286,493 @@ public:
   static constexpr Mxcsr mxcsr_fz()  {
     return {15, 1};
   }
+  static constexpr std::array<Mxcsr,15> mxcsr() {
+    return {
+      mxcsr_ie(), mxcsr_de(), mxcsr_ze(),  mxcsr_oe(),
+      mxcsr_ue(), mxcsr_pe(), mxcsr_daz(), mxcsr_im(),
+      mxcsr_dm(), mxcsr_zm(), mxcsr_om(),  mxcsr_um(),
+      mxcsr_pm(), mxcsr_rc(), mxcsr_fz()
+    };
+  }
 
   static constexpr Rip rip() {
-    return Rip();
+    return {};
   }
   static constexpr FpuData fpu_data() {
-    return FpuData();
+    return {};
   }
   static constexpr FpuInstruction fpu_instruction() {
-    return FpuInstruction();
+    return {};
   }
   static constexpr FpuOpcode fpu_opcode() {
-    return FpuOpcode();
+    return {};
   }
 
   static constexpr Hint taken() {
-    return Hint(0);
+    return {0};
   }
   static constexpr Hint not_taken() {
-    return Hint(1);
+    return {1};
   }
 
   static constexpr Zero zero() {
-    return Zero();
+    return {};
   }
   static constexpr One one() {
-    return One();
+    return {};
   }
   static constexpr Three three() {
-    return Three();
+    return {};
   }
 
   static constexpr Mm mm0() {
-    return Mm(0);
+    return {0};
   }
   static constexpr Mm mm1() {
-    return Mm(1);
+    return {1};
   }
   static constexpr Mm mm2() {
-    return Mm(2);
+    return {2};
   }
   static constexpr Mm mm3() {
-    return Mm(3);
+    return {3};
   }
   static constexpr Mm mm4() {
-    return Mm(4);
+    return {4};
   }
   static constexpr Mm mm5() {
-    return Mm(5);
+    return {5};
   }
   static constexpr Mm mm6() {
-    return Mm(6);
+    return {6};
   }
   static constexpr Mm mm7() {
-    return Mm(7);
+    return {7};
+  }
+  static constexpr std::array<Mm,8> mms() {
+    return {
+      mm0(), mm1(), mm2(), mm3(), mm4(), mm5(), mm6(), mm7()
+    };
   }
 
   static constexpr Pref66 pref_66() {
-    return Pref66();
+    return {};
   }
   static constexpr PrefRexW pref_rex_w() {
-    return PrefRexW();
+    return {};
   }
   static constexpr Far far() {
-    return Far();
+    return {};
   }
 
   static constexpr Al al() {
-    return Al();
+    return {};
   }
   static constexpr Cl cl() {
-    return Cl();
+    return {};
   }
   static constexpr Rl dl() {
-    return Rl(2);
+    return {2};
   }
   static constexpr Rl bl() {
-    return Rl(3);
+    return {3};
+  }
+  static constexpr std::array<Rl,4> rls() {
+    return {
+      al(), cl(), dl(), bl()
+    };
   }
 
   static constexpr Rh ah() {
-    return Rh(4);
+    return {4};
   }
   static constexpr Rh ch() {
-    return Rh(5);
+    return {5};
   }
   static constexpr Rh dh() {
-    return Rh(6);
+    return {6};
   }
   static constexpr Rh bh() {
-    return Rh(7);
+    return {7};
+  }
+  static constexpr std::array<Rh,4> rhs() {
+    return {
+      ah(), ch(), dh(), bh()
+    };
   }
 
   static constexpr Rb spl()  {
-    return Rb(4);
+    return {4};
   }
   static constexpr Rb bpl()  {
-    return Rb(5);
+    return {5};
   }
   static constexpr Rb sil()  {
-    return Rb(6);
+    return {6};
   }
   static constexpr Rb dil()  {
-    return Rb(7);
+    return {7};
   }
   static constexpr Rb r8b()  {
-    return Rb(8);
+    return {8};
   }
   static constexpr Rb r9b()  {
-    return Rb(9);
+    return {9};
   }
   static constexpr Rb r10b() {
-    return Rb(10);
+    return {10};
   }
   static constexpr Rb r11b() {
-    return Rb(11);
+    return {11};
   }
   static constexpr Rb r12b() {
-    return Rb(12);
+    return {12};
   }
   static constexpr Rb r13b() {
-    return Rb(13);
+    return {13};
   }
   static constexpr Rb r14b() {
-    return Rb(14);
+    return {14};
   }
   static constexpr Rb r15b() {
-    return Rb(15);
+    return {15};
+  }
+  static constexpr std::array<Rb, 12> rbs() {
+    return {
+      spl(), bpl(), sil(), dil(), 
+      r8b(), r9b(), r10b(), r11b(), 
+      r12b(), r13b(), r14b(), r15b()
+    };
   }
 
   static constexpr Ax ax()    {
-    return Ax();
+    return {};
   }
   static constexpr R16 cx()   {
-    return R16(1);
+    return {1};
   }
   static constexpr Dx dx()    {
-    return Dx();
+    return {};
   }
   static constexpr R16 bx()   {
-    return R16(3);
+    return {3};
   }
   static constexpr R16 sp()   {
-    return R16(4);
+    return {4};
   }
   static constexpr R16 bp()   {
-    return R16(5);
+    return {5};
   }
   static constexpr R16 si()   {
-    return R16(6);
+    return {6};
   }
   static constexpr R16 di()   {
-    return R16(7);
+    return {7};
   }
   static constexpr R16 r8w()  {
-    return R16(8);
+    return {8};
   }
   static constexpr R16 r9w()  {
-    return R16(9);
+    return {9};
   }
   static constexpr R16 r10w() {
-    return R16(10);
+    return {10};
   }
   static constexpr R16 r11w() {
-    return R16(11);
+    return {11};
   }
   static constexpr R16 r12w() {
-    return R16(12);
+    return {12};
   }
   static constexpr R16 r13w() {
-    return R16(13);
+    return {13};
   }
   static constexpr R16 r14w() {
-    return R16(14);
+    return {14};
   }
   static constexpr R16 r15w() {
-    return R16(15);
+    return {15};
+  }
+  static constexpr std::array<R16, 16> r16s() {
+    return {
+      ax(),  cx(),  dx(),   bx(),   sp(),   bp(),   si(),   di(),
+      r8w(), r9w(), r10w(), r11w(), r12w(), r13w(), r14w(), r15w()
+    };
   }
 
   static constexpr Eax eax()  {
-    return Eax();
+    return {};
   }
   static constexpr R32 ecx()  {
-    return R32(1);
+    return {1};
   }
   static constexpr R32 edx()  {
-    return R32(2);
+    return {2};
   }
   static constexpr R32 ebx()  {
-    return R32(3);
+    return {3};
   }
   static constexpr R32 esp()  {
-    return R32(4);
+    return {4};
   }
   static constexpr R32 ebp()  {
-    return R32(5);
+    return {5};
   }
   static constexpr R32 esi()  {
-    return R32(6);
+    return {6};
   }
   static constexpr R32 edi()  {
-    return R32(7);
+    return {7};
   }
   static constexpr R32 r8d()  {
-    return R32(8);
+    return {8};
   }
   static constexpr R32 r9d()  {
-    return R32(9);
+    return {9};
   }
   static constexpr R32 r10d() {
-    return R32(10);
+    return {10};
   }
   static constexpr R32 r11d() {
-    return R32(11);
+    return {11};
   }
   static constexpr R32 r12d() {
-    return R32(12);
+    return {12};
   }
   static constexpr R32 r13d() {
-    return R32(13);
+    return {13};
   }
   static constexpr R32 r14d() {
-    return R32(14);
+    return {14};
   }
   static constexpr R32 r15d() {
-    return R32(15);
+    return {15};
+  }
+  static constexpr std::array<R32,16> r32s() {
+    return {
+      eax(), ecx(), edx(),  ebx(),  esp(),  ebp(),  esi(),  edi(),
+      r8d(), r9d(), r10d(), r11d(), r12d(), r13d(), r14d(), r15d()
+    };
   }
 
   static constexpr Rax rax() {
-    return Rax();
+    return {};
   }
   static constexpr R64 rcx() {
-    return R64(1);
+    return {1};
   }
   static constexpr R64 rdx() {
-    return R64(2);
+    return {2};
   }
   static constexpr R64 rbx() {
-    return R64(3);
+    return {3};
   }
   static constexpr R64 rsp() {
-    return R64(4);
+    return {4};
   }
   static constexpr R64 rbp() {
-    return R64(5);
+    return {5};
   }
   static constexpr R64 rsi() {
-    return R64(6);
+    return {6};
   }
   static constexpr R64 rdi() {
-    return R64(7);
+    return {7};
   }
   static constexpr R64 r8()  {
-    return R64(8);
+    return {8};
   }
   static constexpr R64 r9()  {
-    return R64(9);
+    return {9};
   }
   static constexpr R64 r10() {
-    return R64(10);
+    return {10};
   }
   static constexpr R64 r11() {
-    return R64(11);
+    return {11};
   }
   static constexpr R64 r12() {
-    return R64(12);
+    return {12};
   }
   static constexpr R64 r13() {
-    return R64(13);
+    return {13};
   }
   static constexpr R64 r14() {
-    return R64(14);
+    return {14};
   }
   static constexpr R64 r15() {
-    return R64(15);
+    return {15};
+  }
+  static constexpr std::array<R64, 16> r64s() {
+    return {
+      rax(), rcx(), rdx(), rbx(), rsp(), rbp(), rsi(), rdi(),
+      r8(),  r9(),  r10(), r11(), r12(), r13(), r14(), r15()
+    };
   }
 
   static constexpr Sreg es() {
-    return Sreg(0);
+    return {0};
   }
   static constexpr Sreg cs() {
-    return Sreg(1);
+    return {1};
   }
   static constexpr Sreg ss() {
-    return Sreg(2);
+    return {2};
   }
   static constexpr Sreg ds() {
-    return Sreg(3);
+    return {3};
   }
   static constexpr Fs fs()   {
-    return Fs();
+    return {};
   }
   static constexpr Gs gs()   {
-    return Gs();
+    return {};
+  }
+  static constexpr std::array<Sreg, 6> sregs() {
+    return {
+      es(), cs(), ss(), ds(), fs(), gs()
+    };
   }
 
   static constexpr St0 st0() {
-    return St0();
+    return {};
   }
   static constexpr St st1()  {
-    return St(1);
+    return {1};
   }
   static constexpr St st2()  {
-    return St(2);
+    return {2};
   }
   static constexpr St st3()  {
-    return St(3);
+    return {3};
   }
   static constexpr St st4()  {
-    return St(4);
+    return {4};
   }
   static constexpr St st5()  {
-    return St(5);
+    return {5};
   }
   static constexpr St st6()  {
-    return St(6);
+    return {6};
   }
   static constexpr St st7()  {
-    return St(7);
+    return {7};
+  }
+  static constexpr std::array<St,8> sts() {
+    return {
+      st0(), st1(), st2(), st3(), st4(), st5(), st6(), st7()
+    };
   }
 
   static constexpr Xmm0 xmm0()  {
-    return Xmm0();
+    return {};
   }
   static constexpr Xmm xmm1()   {
-    return Xmm(1);
+    return {1};
   }
   static constexpr Xmm xmm2()   {
-    return Xmm(2);
+    return {2};
   }
   static constexpr Xmm xmm3()   {
-    return Xmm(3);
+    return {3};
   }
   static constexpr Xmm xmm4()   {
-    return Xmm(4);
+    return {4};
   }
   static constexpr Xmm xmm5()   {
-    return Xmm(5);
+    return {5};
   }
   static constexpr Xmm xmm6()   {
-    return Xmm(6);
+    return {6};
   }
   static constexpr Xmm xmm7()   {
-    return Xmm(7);
+    return {7};
   }
   static constexpr Xmm xmm8()   {
-    return Xmm(8);
+    return {8};
   }
   static constexpr Xmm xmm9()   {
-    return Xmm(9);
+    return {9};
   }
   static constexpr Xmm xmm10()  {
-    return Xmm(10);
+    return {10};
   }
   static constexpr Xmm xmm11()  {
-    return Xmm(11);
+    return {11};
   }
   static constexpr Xmm xmm12()  {
-    return Xmm(12);
+    return {12};
   }
   static constexpr Xmm xmm13()  {
-    return Xmm(13);
+    return {13};
   }
   static constexpr Xmm xmm14()  {
-    return Xmm(14);
+    return {14};
   }
   static constexpr Xmm xmm15()  {
-    return Xmm(15);
+    return {15};
+  }
+  static constexpr std::array<Xmm,16> xmms() {
+    return {
+      xmm0(), xmm1(), xmm2(),  xmm3(),  xmm4(),  xmm5(),  xmm6(),  xmm7(),
+      xmm8(), xmm9(), xmm10(), xmm11(), xmm12(), xmm13(), xmm14(), xmm15()
+    };
   }
 
   static constexpr Ymm ymm0()  {
-    return Ymm(0);
+    return {0};
   }
   static constexpr Ymm ymm1()  {
-    return Ymm(1);
+    return {1};
   }
   static constexpr Ymm ymm2()  {
-    return Ymm(2);
+    return {2};
   }
   static constexpr Ymm ymm3()  {
-    return Ymm(3);
+    return {3};
   }
   static constexpr Ymm ymm4()  {
-    return Ymm(4);
+    return {4};
   }
   static constexpr Ymm ymm5()  {
-    return Ymm(5);
+    return {5};
   }
   static constexpr Ymm ymm6()  {
-    return Ymm(6);
+    return {6};
   }
   static constexpr Ymm ymm7()  {
-    return Ymm(7);
+    return {7};
   }
   static constexpr Ymm ymm8()  {
-    return Ymm(8);
+    return {8};
   }
   static constexpr Ymm ymm9()  {
-    return Ymm(9);
+    return {9};
   }
   static constexpr Ymm ymm10() {
-    return Ymm(10);
+    return {10};
   }
   static constexpr Ymm ymm11() {
-    return Ymm(11);
+    return {11};
   }
   static constexpr Ymm ymm12() {
-    return Ymm(12);
+    return {12};
   }
   static constexpr Ymm ymm13() {
-    return Ymm(13);
+    return {13};
   }
   static constexpr Ymm ymm14() {
-    return Ymm(14);
+    return {14};
   }
   static constexpr Ymm ymm15() {
-    return Ymm(15);
+    return {15};
   }
-};
-
-constexpr auto fpu_control_im = Constants::fpu_control_im();
-constexpr auto fpu_control_dm = Constants::fpu_control_dm();
-constexpr auto fpu_control_zm = Constants::fpu_control_zm();
-constexpr auto fpu_control_om = Constants::fpu_control_om();
-constexpr auto fpu_control_um = Constants::fpu_control_um();
-constexpr auto fpu_control_pm = Constants::fpu_control_pm();
-constexpr auto fpu_control_res6 = Constants::fpu_control_res6();
-constexpr auto fpu_control_res7 = Constants::fpu_control_res7();
-constexpr auto fpu_control_pc = Constants::fpu_control_pc();
-constexpr auto fpu_control_rc = Constants::fpu_control_rc();
-constexpr auto fpu_control_x = Constants::fpu_control_x();
-constexpr auto fpu_control_res13 = Constants::fpu_control_res13();
-constexpr auto fpu_control_res14 = Constants::fpu_control_res14();
-constexpr auto fpu_control_res15 = Constants::fpu_control_res15();
-
-constexpr std::array<FpuControl,14> fpu_control = {
-  fpu_control_im,    fpu_control_dm,   fpu_control_zm,   fpu_control_om,
-  fpu_control_um,    fpu_control_pm,   fpu_control_res6, fpu_control_res7,
-  fpu_control_pc,    fpu_control_rc,   fpu_control_x,    fpu_control_res13,
-  fpu_control_res14, fpu_control_res15
+  static constexpr std::array<Ymm,16> ymms() {
+    return {
+      ymm0(), ymm1(), ymm2(),  ymm3(),  ymm4(),  ymm5(),  ymm6(),  ymm7(),
+      ymm8(), ymm9(), ymm10(), ymm11(), ymm12(), ymm13(), ymm14(), ymm15()
+    };
+  }
 };
 
 constexpr auto eflags_cf = Constants::eflags_cf();
@@ -717,15 +796,49 @@ constexpr auto eflags_ac = Constants::eflags_ac();
 constexpr auto eflags_vif = Constants::eflags_vif();
 constexpr auto eflags_vip = Constants::eflags_vip();
 constexpr auto eflags_id = Constants::eflags_id();
+constexpr auto eflags = Constants::eflags();
 
-constexpr std::array<Eflags,21> eflags = {
-  eflags_cf,   eflags_res1, eflags_pf,    eflags_res3,
-  eflags_af,   eflags_res5, eflags_zf,    eflags_sf,
-  eflags_tf,   eflags_if,   eflags_df,    eflags_of,
-  eflags_iopl, eflags_nt,   eflags_res15, eflags_rf,
-  eflags_vm,   eflags_ac,   eflags_vif,   eflags_vip,
-  eflags_id
-};
+constexpr auto fpu_control_im = Constants::fpu_control_im();
+constexpr auto fpu_control_dm = Constants::fpu_control_dm();
+constexpr auto fpu_control_zm = Constants::fpu_control_zm();
+constexpr auto fpu_control_om = Constants::fpu_control_om();
+constexpr auto fpu_control_um = Constants::fpu_control_um();
+constexpr auto fpu_control_pm = Constants::fpu_control_pm();
+constexpr auto fpu_control_res6 = Constants::fpu_control_res6();
+constexpr auto fpu_control_res7 = Constants::fpu_control_res7();
+constexpr auto fpu_control_pc = Constants::fpu_control_pc();
+constexpr auto fpu_control_rc = Constants::fpu_control_rc();
+constexpr auto fpu_control_x = Constants::fpu_control_x();
+constexpr auto fpu_control_res13 = Constants::fpu_control_res13();
+constexpr auto fpu_control_res14 = Constants::fpu_control_res14();
+constexpr auto fpu_control_res15 = Constants::fpu_control_res15();
+constexpr auto fpu_control = Constants::fpu_control();
+
+constexpr auto fpu_status_ie = Constants::fpu_status_ie();
+constexpr auto fpu_status_de = Constants::fpu_status_de();
+constexpr auto fpu_status_ze = Constants::fpu_status_ze();
+constexpr auto fpu_status_oe = Constants::fpu_status_oe();
+constexpr auto fpu_status_ue = Constants::fpu_status_ue();
+constexpr auto fpu_status_pe = Constants::fpu_status_pe();
+constexpr auto fpu_status_sf = Constants::fpu_status_sf();
+constexpr auto fpu_status_es = Constants::fpu_status_es();
+constexpr auto fpu_status_c0 = Constants::fpu_status_c0();
+constexpr auto fpu_status_c1 = Constants::fpu_status_c1();
+constexpr auto fpu_status_c2 = Constants::fpu_status_c2();
+constexpr auto fpu_status_top = Constants::fpu_status_top();
+constexpr auto fpu_status_c3 = Constants::fpu_status_c3();
+constexpr auto fpu_status_b = Constants::fpu_status_b();
+constexpr auto fpu_status = Constants::fpu_status();
+
+constexpr auto tag0 = Constants::tag0();
+constexpr auto tag1 = Constants::tag1();
+constexpr auto tag2 = Constants::tag2();
+constexpr auto tag3 = Constants::tag3();
+constexpr auto tag4 = Constants::tag4();
+constexpr auto tag5 = Constants::tag5();
+constexpr auto tag6 = Constants::tag6();
+constexpr auto tag7 = Constants::tag7();
+constexpr auto fpu_tags = Constants::fpu_tags();
 
 constexpr auto mxcsr_ie = Constants::mxcsr_ie();
 constexpr auto mxcsr_de = Constants::mxcsr_de();
@@ -742,48 +855,7 @@ constexpr auto mxcsr_um = Constants::mxcsr_um();
 constexpr auto mxcsr_pm = Constants::mxcsr_pm();
 constexpr auto mxcsr_rc = Constants::mxcsr_rc();
 constexpr auto mxcsr_fz = Constants::mxcsr_fz();
-
-constexpr std::array<Mxcsr,15> mxcsr = {
-  mxcsr_ie, mxcsr_de, mxcsr_ze,  mxcsr_oe,
-  mxcsr_ue, mxcsr_pe, mxcsr_daz, mxcsr_im,
-  mxcsr_dm, mxcsr_zm, mxcsr_om,  mxcsr_um,
-  mxcsr_pm, mxcsr_rc, mxcsr_fz
-};
-
-constexpr auto fpu_status_ie = Constants::fpu_status_ie();
-constexpr auto fpu_status_de = Constants::fpu_status_de();
-constexpr auto fpu_status_ze = Constants::fpu_status_ze();
-constexpr auto fpu_status_oe = Constants::fpu_status_oe();
-constexpr auto fpu_status_ue = Constants::fpu_status_ue();
-constexpr auto fpu_status_pe = Constants::fpu_status_pe();
-constexpr auto fpu_status_sf = Constants::fpu_status_sf();
-constexpr auto fpu_status_es = Constants::fpu_status_es();
-constexpr auto fpu_status_c0 = Constants::fpu_status_c0();
-constexpr auto fpu_status_c1 = Constants::fpu_status_c1();
-constexpr auto fpu_status_c2 = Constants::fpu_status_c2();
-constexpr auto fpu_status_top = Constants::fpu_status_top();
-constexpr auto fpu_status_c3 = Constants::fpu_status_c3();
-constexpr auto fpu_status_b = Constants::fpu_status_b();
-
-constexpr std::array<FpuStatus,14> fpu_status = {
-  fpu_status_ie, fpu_status_de, fpu_status_ze, fpu_status_oe,
-  fpu_status_ue, fpu_status_pe, fpu_status_sf, fpu_status_es,
-  fpu_status_c0, fpu_status_c1, fpu_status_c2, fpu_status_top,
-  fpu_status_c3, fpu_status_b
-};
-
-constexpr auto tag0 = Constants::tag0();
-constexpr auto tag1 = Constants::tag1();
-constexpr auto tag2 = Constants::tag2();
-constexpr auto tag3 = Constants::tag3();
-constexpr auto tag4 = Constants::tag4();
-constexpr auto tag5 = Constants::tag5();
-constexpr auto tag6 = Constants::tag6();
-constexpr auto tag7 = Constants::tag7();
-
-constexpr std::array<FpuTag,8> fpu_tags = {
-  tag0, tag1, tag2, tag3, tag4, tag5, tag6, tag7
-};
+constexpr auto mxcsr = Constants::mxcsr();
 
 constexpr auto fpu_data = Constants::fpu_data();
 constexpr auto fpu_instruction = Constants::fpu_instruction();
@@ -805,10 +877,7 @@ constexpr auto mm4 = Constants::mm4();
 constexpr auto mm5 = Constants::mm5();
 constexpr auto mm6 = Constants::mm6();
 constexpr auto mm7 = Constants::mm7();
-
-constexpr std::array<Mm,8> mms = {
-  mm0, mm1, mm2, mm3, mm4, mm5, mm6, mm7
-};
+constexpr auto mms = Constants::mms();
 
 constexpr auto pref_66 = Constants::pref_66();
 constexpr auto pref_rex_w = Constants::pref_rex_w();
@@ -818,19 +887,13 @@ constexpr auto al = Constants::al();
 constexpr auto cl = Constants::cl();
 constexpr auto dl = Constants::dl();
 constexpr auto bl = Constants::bl();
-
-constexpr std::array<Rl,4> rls = {
-  al, cl, dl, bl
-};
+constexpr auto rls = Constants::rls();
 
 constexpr auto ah = Constants::ah();
 constexpr auto ch = Constants::ch();
 constexpr auto dh = Constants::dh();
 constexpr auto bh = Constants::bh();
-
-constexpr std::array<Rh,4> rhs = {
-  ah, ch, dh, bh
-};
+constexpr auto rhs = Constants::rhs();
 
 constexpr auto spl = Constants::spl();
 constexpr auto bpl = Constants::bpl();
@@ -844,10 +907,7 @@ constexpr auto r12b = Constants::r12b();
 constexpr auto r13b = Constants::r13b();
 constexpr auto r14b = Constants::r14b();
 constexpr auto r15b = Constants::r15b();
-
-constexpr std::array<Rb,12> rbs = {
-  spl, bpl, sil, dil, r8b, r9b, r10b, r11b, r12b, r13b, r14b, r15b
-};
+constexpr auto rbs = Constants::rbs();
 
 constexpr auto ax = Constants::ax();
 constexpr auto cx = Constants::cx();
@@ -865,11 +925,7 @@ constexpr auto r12w = Constants::r12w();
 constexpr auto r13w = Constants::r13w();
 constexpr auto r14w = Constants::r14w();
 constexpr auto r15w = Constants::r15w();
-
-constexpr std::array<R16,16> r16s = {
-  ax,  cx,  dx,   bx,   sp,   bp,   si,   di,
-  r8w, r9w, r10w, r11w, r12w, r13w, r14w, r15w
-};
+constexpr auto r16s = Constants::r16s();
 
 constexpr auto eax = Constants::eax();
 constexpr auto ecx = Constants::ecx();
@@ -887,11 +943,7 @@ constexpr auto r12d = Constants::r12d();
 constexpr auto r13d = Constants::r13d();
 constexpr auto r14d = Constants::r14d();
 constexpr auto r15d = Constants::r15d();
-
-constexpr std::array<R32,16> r32s = {
-  eax, ecx, edx,  ebx,  esp,  ebp,  esi,  edi,
-  r8d, r9d, r10d, r11d, r12d, r13d, r14d, r15d
-};
+constexpr auto r32s = Constants::r32s();
 
 constexpr auto rax = Constants::rax();
 constexpr auto rcx = Constants::rcx();
@@ -909,11 +961,7 @@ constexpr auto r12 = Constants::r12();
 constexpr auto r13 = Constants::r13();
 constexpr auto r14 = Constants::r14();
 constexpr auto r15 = Constants::r15();
-
-constexpr std::array<R64,16> r64s = {
-  rax, rcx, rdx, rbx, rsp, rbp, rsi, rdi,
-  r8,  r9,  r10, r11, r12, r13, r14, r15
-};
+constexpr auto r64s = Constants::r64s();
 
 constexpr auto es = Constants::es();
 constexpr auto cs = Constants::cs();
@@ -921,10 +969,7 @@ constexpr auto ss = Constants::ss();
 constexpr auto ds = Constants::ds();
 constexpr auto fs = Constants::fs();
 constexpr auto gs = Constants::gs();
-
-constexpr std::array<Sreg,6> sregs = {
-  es, cs, ss, ds, fs, gs
-};
+constexpr auto sregs = Constants::sregs();
 
 constexpr auto st0 = Constants::st0();
 constexpr auto st1 = Constants::st1();
@@ -934,10 +979,7 @@ constexpr auto st4 = Constants::st4();
 constexpr auto st5 = Constants::st5();
 constexpr auto st6 = Constants::st6();
 constexpr auto st7 = Constants::st7();
-
-constexpr std::array<St,8> sts = {
-  st0, st1, st2, st3, st4, st5, st6, st7
-};
+constexpr auto sts = Constants::sts();
 
 constexpr auto xmm0 = Constants::xmm0();
 constexpr auto xmm1 = Constants::xmm1();
@@ -955,11 +997,7 @@ constexpr auto xmm12 = Constants::xmm12();
 constexpr auto xmm13 = Constants::xmm13();
 constexpr auto xmm14 = Constants::xmm14();
 constexpr auto xmm15 = Constants::xmm15();
-
-constexpr std::array<Xmm,16> xmms = {
-  xmm0, xmm1, xmm2,  xmm3,  xmm4,  xmm5,  xmm6,  xmm7,
-  xmm8, xmm9, xmm10, xmm11, xmm12, xmm13, xmm14, xmm15
-};
+constexpr auto xmms = Constants::xmms();
 
 constexpr auto ymm0 = Constants::ymm0();
 constexpr auto ymm1 = Constants::ymm1();
@@ -977,11 +1015,7 @@ constexpr auto ymm12 = Constants::ymm12();
 constexpr auto ymm13 = Constants::ymm13();
 constexpr auto ymm14 = Constants::ymm14();
 constexpr auto ymm15 = Constants::ymm15();
-
-constexpr std::array<Ymm,16> ymms = {
-  ymm0, ymm1, ymm2,  ymm3,  ymm4,  ymm5,  ymm6,  ymm7,
-  ymm8, ymm9, ymm10, ymm11, ymm12, ymm13, ymm14, ymm15
-};
+constexpr auto ymms = Constants::ymms();
 
 } // namespace x64asm
 

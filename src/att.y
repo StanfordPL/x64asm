@@ -412,16 +412,16 @@ moffs :
 m : 
   OPEN R_32 CLOSE { $$ = new M8(base32($2)); }
 | OPEN R_64 CLOSE { $$ = new M8(base64($2)); }
-| OPEN RIP CLOSE { $$ = new M8(rip); }
+| OPEN RIP CLOSE { $$ = new M8(Constants::rip()); }
 | SREG COLON OPEN R_32 CLOSE { $$ = new M8(seg($1), base32($4)); }
 | SREG COLON OPEN R_64 CLOSE { $$ = new M8(seg($1), base64($4)); }
-| SREG COLON OPEN RIP CLOSE { $$ = new M8(seg($1), rip); }
+| SREG COLON OPEN RIP CLOSE { $$ = new M8(seg($1), Constants::rip()); }
 | OFFSET OPEN R_32 CLOSE { $$ = new M8(base32($3), disp($1)); }
 | OFFSET OPEN R_64 CLOSE { $$ = new M8(base64($3), disp($1)); }
-| OFFSET OPEN RIP CLOSE { $$ = new M8(rip, disp($1)); }
+| OFFSET OPEN RIP CLOSE { $$ = new M8(Constants::rip(), disp($1)); }
 | SREG COLON OFFSET OPEN R_32 CLOSE { $$ = new M8(seg($1), base32($5), disp($3)); }
 | SREG COLON OFFSET OPEN R_64 CLOSE { $$ = new M8(seg($1), base64($5), disp($3)); }
-| SREG COLON OFFSET OPEN RIP CLOSE { $$ = new M8(seg($1), rip, disp($3)); }
+| SREG COLON OFFSET OPEN RIP CLOSE { $$ = new M8(seg($1), Constants::rip(), disp($3)); }
 | OPEN COMMA R_32 COMMA SCALE CLOSE { $$ = new M8(index32($3), $5); }
 | OPEN COMMA R_64 COMMA SCALE CLOSE { $$ = new M8(index64($3), $5); }
 | OPEN COMMA R_32 CLOSE { $$ = new M8(index32($3), Scale::TIMES_1); }
