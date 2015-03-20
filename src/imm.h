@@ -83,7 +83,6 @@ public:
   constexpr bool check() {
     return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
   }
-
 };
 
 /** An immediate word value used for instructions whose operand-size attribute
@@ -98,8 +97,6 @@ public:
   constexpr bool check() {
     return ((val_>>16) == 0x0ul) || ((val_>>16) == 0xfffffffffffful);
   }
-
-
 };
 
 /** An immediate doubleword value used for instructions whose operand-size
@@ -115,8 +112,6 @@ public:
   constexpr bool check() {
     return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
   }
-
-
 };
 
 /** An immediate quadword value used for instructions whose operand-size
@@ -137,7 +132,6 @@ public:
   constexpr bool check() {
     return true;
   }
-
 };
 
 /** The immediate constant value zero */
@@ -150,7 +144,6 @@ public:
   constexpr bool check() {
     return val_ == 0;
   }
-
 
 private:
   /** Direct access to this constructor is disallowed. */
@@ -168,7 +161,6 @@ public:
     return val_ == 1;
   }
 
-
 private:
   /** Direct access to this construcotr is disallowed. */
   constexpr One() : Imm8(1) {}
@@ -184,7 +176,6 @@ public:
   constexpr bool check() {
     return val_ == 3;
   }
-
 
 private:
   /** Direct access to this constructor is disallosed. */

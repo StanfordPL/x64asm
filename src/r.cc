@@ -103,7 +103,7 @@ istream& Rh::read_att(istream& is) {
 
   for (size_t i = 0, ie = rhs_.size(); i < ie; ++i) {
     if (temp == rhs_[i]) {
-      *this = rhs[i];
+      *this = Constants::rhs()[i];
       return is;
     }
   }
@@ -123,7 +123,7 @@ istream& R16::read_att(istream& is) {
 
   for (size_t i = 0, ie = r16s_.size(); i < ie; ++i) {
     if (temp == r16s_[i]) {
-      *this = r16s[i];
+      *this = Constants::r16s()[i];
       return is;
     }
   }
@@ -143,7 +143,7 @@ istream& R32::read_att(istream& is) {
 
   for (size_t i = 0, ie = r32s_.size(); i < ie; ++i) {
     if (temp == r32s_[i]) {
-      *this = r32s[i];
+      *this = Constants::r32s()[i];
       return is;
     }
   }
@@ -163,7 +163,7 @@ istream& R64::read_att(istream& is) {
 
   for (size_t i = 0, ie = r64s_.size(); i < ie; ++i) {
     if (temp == r64s_[i]) {
-      *this = r64s[i];
+      *this = Constants::r64s()[i];
       return is;
     }
   }

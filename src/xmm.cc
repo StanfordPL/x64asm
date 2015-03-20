@@ -42,7 +42,7 @@ istream& Xmm::read_att(istream& is) {
 
   for (size_t i = 0, ie = xmms_.size(); i < ie; ++i) {
     if (temp == xmms_[i]) {
-      *this = xmms[i];
+      *this = Constants::xmms()[i];
       return is;
     }
   }

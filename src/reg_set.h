@@ -544,7 +544,8 @@ public:
   /** Returns true if this set contains any word registers. */
   constexpr bool contains_any_word() {
     return contains_any(Mask::A_WORD, group1_) ||
-           contains(ax) || contains(bx) || contains(cx) || contains(dx);
+           contains(Constants::ax()) || contains(Constants::bx()) || 
+           contains(Constants::cx()) || contains(Constants::dx());
   }
   /** Returns true if this set contains any double registers. */
   constexpr bool contains_any_double() {
@@ -692,7 +693,7 @@ public:
     const RegSet * const rs_;
 
     /** Creates iterator for GPs */
-    GpIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(rax), finished_(false) {
+    GpIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(Constants::rax()), finished_(false) {
       ++(*this);
     }
     /** Go to end */
@@ -736,7 +737,7 @@ public:
     const RegSet * const rs_;
 
     /** Creates iterator for SSEs */
-    SseIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(xmm0), finished_(false) {
+    SseIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(Constants::xmm0()), finished_(false) {
       ++(*this);
     }
     /** Go to end */
@@ -780,7 +781,7 @@ public:
     const RegSet * const rs_;
 
     /** Creates iterator for MMs */
-    MmIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(mm0), finished_(false) {
+    MmIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(Constants::mm0()), finished_(false) {
       ++(*this);
     }
     /** Go to end */
@@ -824,7 +825,7 @@ public:
     const RegSet * const rs_;
 
     /** Creates iterator for flags */
-    FlagsIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(eflags_cf), finished_(false) {
+    FlagsIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(Constants::eflags_cf()), finished_(false) {
       ++(*this);
     }
     /** Go to end */
@@ -872,10 +873,10 @@ public:
     friend class RegSet;
   public:
     const R64& operator*() const {
-      return r64s[idx_];
+      return Constants::r64s()[idx_];
     }
     const R64* operator->() const {
-      return &r64s[idx_];
+      return &Constants::r64s()[idx_];
     }
     bool operator==(const any_sub_gp_iterator& rhs) const {
       return idx_ == rhs.idx_ && rs_ == rhs.rs_;
@@ -914,10 +915,10 @@ public:
     friend class RegSet;
   public:
     const Ymm& operator*() const {
-      return ymms[idx_];
+      return Constants::ymms()[idx_];
     }
     const Ymm* operator->() const {
-      return &ymms[idx_];
+      return &Constants::ymms()[idx_];
     }
     bool operator==(const any_sub_sse_iterator& rhs) const {
       return idx_ == rhs.idx_ && rs_ == rhs.rs_;

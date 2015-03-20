@@ -126,7 +126,7 @@ public:
   }
 
   // void adc(const Al& arg0, const Imm8& arg1); ...
-#include "src/assembler.decl"
+  #include "src/assembler.decl"
 
 private:
   /** Pointer to the function being compiled. */

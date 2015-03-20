@@ -47,7 +47,7 @@ bool M<T>::check() const {
     return false;
   }
   // Index cannot be rsp/esp
-  if (contains_index() && get_index().val_ == esp.val_) {
+  if (contains_index() && get_index().val_ == Constants::esp().val_) {
     return false;
   }
   // Check for absence of base/index for RIP+offset form

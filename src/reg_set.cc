@@ -44,19 +44,19 @@ istream& RegSet::read_text(istream& is) {
       break;
     }
 
-    Rh rh = ah;
-    Rb r8 = al;
-    R16 r16 = ax;
-    R32 r32 = eax;
-    R64 r64 = rax;
-    Xmm xmm = xmm0;
-    Ymm ymm = ymm0;
-    Mm mm = mm0;
-    Eflags ef = eflags_cf;
-    Mxcsr mxcsr = mxcsr_ie;
-    FpuStatus fpustatus = fpu_status_ie;
-    FpuTag fputag = tag0;
-    FpuControl fpucontrol = fpu_control_im;
+    Rh rh = Constants::ah();
+    Rb r8 = Constants::al();
+    R16 r16 = Constants::ax();
+    R32 r32 = Constants::eax();
+    R64 r64 = Constants::rax();
+    Xmm xmm = Constants::xmm0();
+    Ymm ymm = Constants::ymm0();
+    Mm mm = Constants::mm0();
+    Eflags ef = Constants::eflags_cf();
+    Mxcsr mxcsr = Constants::mxcsr_ie();
+    FpuStatus fpustatus = Constants::fpu_status_ie();
+    FpuTag fputag = Constants::tag0();
+    FpuControl fpucontrol = Constants::fpu_control_im();
 
     if (s == "...") {
       (*this) = RegSet::universe();
@@ -106,29 +106,29 @@ ostream& RegSet::write_text(ostream& os) const {
   for(auto mit = mm_begin(); mit != mm_end(); ++mit) {
     os << " " << *mit;
   }
-  for (size_t i = 0, ie = eflags.size(); i < ie; i += eflags[i].width()) {
-    if (contains(eflags[i])) {
-      os << " " << eflags[i];
+  for (size_t i = 0, ie = Constants::eflags().size(); i < ie; i += Constants::eflags()[i].width()) {
+    if (contains(Constants::eflags()[i])) {
+      os << " " << Constants::eflags()[i];
     }
   }
-  for (size_t i = 0, ie = fpu_control.size(); i < ie; i += fpu_control[i].width()) {
-    if (contains(fpu_control[i])) {
-      os << " " << fpu_control[i];
+  for (size_t i = 0, ie = Constants::fpu_control().size(); i < ie; i += Constants::fpu_control()[i].width()) {
+    if (contains(Constants::fpu_control()[i])) {
+      os << " " << Constants::fpu_control()[i];
     }
   }
-  for (size_t i = 0, ie = mxcsr.size(); i < ie; i += mxcsr[i].width()) {
-    if (contains(mxcsr[i])) {
-      os << " " << mxcsr[i];
+  for (size_t i = 0, ie = Constants::mxcsr().size(); i < ie; i += Constants::mxcsr()[i].width()) {
+    if (contains(Constants::mxcsr()[i])) {
+      os << " " << Constants::mxcsr()[i];
     }
   }
-  for (size_t i = 0, ie = fpu_status.size(); i < ie; i += fpu_status[i].width()) {
-    if (contains(fpu_status[i])) {
-      os << " " << fpu_status[i];
+  for (size_t i = 0, ie = Constants::fpu_status().size(); i < ie; i += Constants::fpu_status()[i].width()) {
+    if (contains(Constants::fpu_status()[i])) {
+      os << " " << Constants::fpu_status()[i];
     }
   }
-  for (size_t i = 0, ie = fpu_tags.size(); i < ie; i += fpu_tags[i].width()) {
-    if (contains(fpu_tags[i])) {
-      os << " " << fpu_tags[i];
+  for (size_t i = 0, ie = Constants::fpu_tags().size(); i < ie; i += Constants::fpu_tags()[i].width()) {
+    if (contains(Constants::fpu_tags()[i])) {
+      os << " " << Constants::fpu_tags()[i];
     }
   }
   os << " }";
@@ -142,35 +142,35 @@ RegSet::GpIterator& RegSet::GpIterator::operator++() {
 
   bool found = false;
 
-  for(; index_ < r64s.size() && !found; index_++) {
+  for(; index_ < Constants::r64s().size() && !found; index_++) {
 
-    if(rs_->contains(r64s[index_])) {
-      current_ = r64s[index_];
+    if(rs_->contains(Constants::r64s()[index_])) {
+      current_ = Constants::r64s()[index_];
       found = true;
       break;
     }
-    if(rs_->contains(r32s[index_])) {
-      current_ = r32s[index_];
+    if(rs_->contains(Constants::r32s()[index_])) {
+      current_ = Constants::r32s()[index_];
       found = true;
       break;
     }
-    if(rs_->contains(r16s[index_])) {
-      current_ = r16s[index_];
+    if(rs_->contains(Constants::r16s()[index_])) {
+      current_ = Constants::r16s()[index_];
       found = true;
       break;
     }
-    if(index_ < 4 && rs_->contains(rhs[index_])) {
-      current_ = rhs[index_];
+    if(index_ < 4 && rs_->contains(Constants::rhs()[index_])) {
+      current_ = Constants::rhs()[index_];
       found = true;
       break;
     }
-    if(index_ < 4 && rs_->contains(rls[index_])) {
-      current_ = rls[index_];
+    if(index_ < 4 && rs_->contains(Constants::rls()[index_])) {
+      current_ = Constants::rls()[index_];
       found = true;
       break;
     }
-    if(index_ >= 4 && rs_->contains(rbs[index_-4])) {
-      current_ = rbs[index_-4];
+    if(index_ >= 4 && rs_->contains(Constants::rbs()[index_-4])) {
+      current_ = Constants::rbs()[index_-4];
       found = true;
       break;
     }
@@ -191,15 +191,15 @@ RegSet::SseIterator& RegSet::SseIterator::operator++() {
 
   bool found = false;
 
-  for(; index_ < ymms.size() && !found; index_++) {
+  for(; index_ < Constants::ymms().size() && !found; index_++) {
 
-    if(rs_->contains(ymms[index_])) {
-      current_ = ymms[index_];
+    if(rs_->contains(Constants::ymms()[index_])) {
+      current_ = Constants::ymms()[index_];
       found = true;
       break;
     }
-    if(rs_->contains(xmms[index_])) {
-      current_ = xmms[index_];
+    if(rs_->contains(Constants::xmms()[index_])) {
+      current_ = Constants::xmms()[index_];
       found = true;
       break;
     }
@@ -219,9 +219,9 @@ RegSet::MmIterator& RegSet::MmIterator::operator++() {
 
   bool found = false;
 
-  for(; index_ < mms.size() && !found; index_++) {
-    if(rs_->contains(mms[index_])) {
-      current_ = mms[index_];
+  for(; index_ < Constants::mms().size() && !found; index_++) {
+    if(rs_->contains(Constants::mms()[index_])) {
+      current_ = Constants::mms()[index_];
       found = true;
       break;
     }
@@ -241,12 +241,12 @@ RegSet::FlagsIterator& RegSet::FlagsIterator::operator++() {
 
   bool found = false;
 
-  for(; index_ < eflags.size() && !found; index_++) {
+  for(; index_ < Constants::eflags().size() && !found; index_++) {
 
-    if(rs_->contains(eflags[index_]) &&
+    if(rs_->contains(Constants::eflags()[index_]) &&
         (index_ == 0 || index_ == 2 || index_ == 4 ||
          index_ == 6 || index_ == 7 || index_ == 11)) {
-      current_ = eflags[index_];
+      current_ = Constants::eflags()[index_];
       found = true;
       break;
     }

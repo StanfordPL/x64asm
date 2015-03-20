@@ -68,7 +68,7 @@ istream& Eflags::read_text(istream& is) {
 
   for (size_t i = 0, ie = eflags_.size(); i < ie; ++i) {
     if (temp == eflags_[i]) {
-      *this = eflags[i];
+      *this = Constants::eflags()[i];
       return is;
     }
   }
@@ -92,7 +92,7 @@ istream& FpuControl::read_text(istream& is) {
 
   for (size_t i = 0, ie = control_.size(); i < ie; ++i) {
     if (temp == control_[i]) {
-      *this = fpu_control[i];
+      *this = Constants::fpu_control()[i];
       return is;
     }
   }
@@ -116,7 +116,7 @@ istream& FpuStatus::read_text(istream& is) {
 
   for (size_t i = 0, ie = status_.size(); i < ie; ++i) {
     if (temp == status_[i]) {
-      *this = fpu_status[i];
+      *this = Constants::fpu_status()[i];
       return is;
     }
   }
@@ -140,7 +140,7 @@ istream& FpuTag::read_text(istream& is) {
 
   for (size_t i = 0, ie = tag_.size(); i < ie; ++i) {
     if (temp == tag_[i]) {
-      *this = fpu_tags[i];
+      *this = Constants::fpu_tags()[i];
       return is;
     }
   }
@@ -164,7 +164,7 @@ istream& Mxcsr::read_text(istream& is) {
 
   for (size_t i = 0, ie = mxcsr_.size(); i < ie; ++i) {
     if (temp == mxcsr_[i]) {
-      *this = mxcsr[i];
+      *this = Constants::mxcsr()[i];
       return is;
     }
   }
