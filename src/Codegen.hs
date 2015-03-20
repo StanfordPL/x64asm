@@ -1056,7 +1056,7 @@ rm_args i = case op_en i of
 -- Optional Mod R/M SIB digit argument
 digit :: Instr -> String
 digit i = case find is_digit (opcode_suffix i) of
-  (Just ('/':d:[])) -> ",r64s[" ++ [d] ++ "]"
+  (Just ('/':d:[])) -> ",Constants::r64s()[" ++ [d] ++ "]"
   Nothing -> ""
 
 -- Implied rex values
@@ -1108,7 +1108,7 @@ vex_w i
 vex_vvvv :: Instr -> String
 vex_vvvv i = case findIndex (=='V') (op_en i) of
   (Just idx) -> "arg" ++ (show idx) 
-  Nothing -> "xmm0"
+  Nothing -> "Constants::xmm0()"
 
 -- Emits code for VEX Prefix
 vex_prefix :: Instr -> String

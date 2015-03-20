@@ -26,7 +26,8 @@ using namespace x64asm;
 
 namespace {
 
-array<pair<string, Flag>, 41> flags_ {{
+constexpr array<pair<const char*, Flag>, 41> flags_() {
+  return {{
     {"fpu", Flag::FPU},
     {"tsc", Flag::TSC},
     {"msr", Flag::MSR},
@@ -69,6 +70,7 @@ array<pair<string, Flag>, 41> flags_ {{
     {"invpcid", Flag::INVPCID},
     {"rtm", Flag::RTM}
   }};
+}
 
 } // namespace
 
@@ -78,7 +80,7 @@ istream& read_text(istream& is, Flag& f) {
   string temp;
   is >> temp;
 
-  for (const auto& p : flags_) {
+  for (const auto& p : flags_()) {
     if (temp == p.first) {
       f = p.second;
       return is;
@@ -90,7 +92,7 @@ istream& read_text(istream& is, Flag& f) {
 }
 
 ostream& write_text(ostream& os, const Flag f) {
-  for (const auto& p : flags_) {
+  for (const auto& p : flags_()) {
     if (f == p.second) {
       os << p.first;
       return os;
