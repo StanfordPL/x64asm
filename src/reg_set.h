@@ -613,7 +613,7 @@ public:
       } else if (idx_ < 4 && rs_->contains(Constants::rls()[idx_])) {
         return (R)Constants::rls()[idx_];
       } else if (idx_ >= 4 && rs_->contains(Constants::rbs()[idx_-4])) {
-        return (R)Constants::rls()[idx_-4];
+        return (R)Constants::rbs()[idx_-4];
       } else {
         assert(false);
         return (R)Constants::rax();
