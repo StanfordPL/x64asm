@@ -827,8 +827,7 @@ public:
     any_sub_gp_iterator(const RegSet* rs, size_t idx) : rs_(rs), idx_(idx) {
     }
     bool found_any() const {
-      const auto mask = idx_ < 4 ? (uint64_t)Mask::WORD : (uint64_t)Mask::LOW;
-      return (mask << idx_) & rs_->group1_;
+      return ((uint64_t)Mask::WORD << idx_) & rs_->group1_;
     }
   };
 
