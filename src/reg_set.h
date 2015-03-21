@@ -597,6 +597,287 @@ public:
     return contains_all(Mask::YMMS, group2_);
   }
 
+  /** Iterator over general purpose registers */
+  class gp_iterator {
+    friend class RegSet;
+  public:
+    R operator*() const {
+      if (rs_->contains(Constants::r64s()[idx_])) {
+        return (R)Constants::r64s()[idx_];
+      } else if (rs_->contains(Constants::r32s()[idx_])) {
+        return (R)Constants::r32s()[idx_];
+      } else if (rs_->contains(Constants::r16s()[idx_])) {
+        return (R)Constants::r16s()[idx_];
+      } else if (idx_ < 4 && rs_->contains(Constants::rhs()[idx_])) {
+        return (R)Constants::rhs()[idx_];
+      } else if (idx_ < 4 && rs_->contains(Constants::rls()[idx_])) {
+        return (R)Constants::rls()[idx_];
+      } else if (idx_ >= 4 && rs_->contains(Constants::rbs()[idx_-4])) {
+        return (R)Constants::rbs()[idx_-4];
+      } else {
+        assert(false);
+        return (R)Constants::rax();
+      }
+    }
+    bool operator==(const gp_iterator& rhs) const {
+      return idx_ == rhs.idx_ && rs_ == rhs.rs_;
+    }
+    bool operator!=(const gp_iterator& rhs) const {
+      return !(*this == rhs);
+    }
+    gp_iterator& operator++() {
+      for (; (++idx_ < 16) && !found_any(););
+      return *this;
+    }
+
+  private:
+    const RegSet* rs_;
+    size_t idx_;
+
+    gp_iterator(const RegSet* rs) : rs_(rs), idx_(0) {
+      if (!found_any()) {
+        ++(*this);
+      }
+    }
+    gp_iterator(const RegSet* rs, size_t idx) : rs_(rs), idx_(idx) {
+    }
+    bool found_any() const {
+      return ((uint64_t)Mask::WORD << idx_) & rs_->group1_;
+    }
+  };
+
+  /** Iterate over largest general-purpose registers */
+  gp_iterator gp_begin() const {
+    return gp_iterator(this);
+  }
+  /** End iterator for the gp registers */
+  gp_iterator gp_end() const {
+    return gp_iterator(this, 16);
+  }
+
+  /** Iterator over sse registers */
+  class sse_iterator {
+    friend class RegSet;
+  public:
+    Sse operator*() const {
+      if (rs_->contains(Constants::ymms()[idx_])) {
+        return (Sse)Constants::ymms()[idx_];
+      } else if (rs_->contains(Constants::xmms()[idx_])) {
+        return (Sse)Constants::xmms()[idx_];
+      } else {
+        assert(false);
+        return (Sse)Constants::xmm0();
+      }
+    }
+    bool operator==(const sse_iterator& rhs) const {
+      return idx_ == rhs.idx_ && rs_ == rhs.rs_;
+    }
+    bool operator!=(const sse_iterator& rhs) const {
+      return !(*this == rhs);
+    }
+    sse_iterator& operator++() {
+      for (; (++idx_ < 16) && !found_any(););
+      return *this;
+    }
+
+  private:
+    const RegSet* rs_;
+    size_t idx_;
+
+    sse_iterator(const RegSet* rs) : rs_(rs), idx_(0) {
+      if (!found_any()) {
+        ++(*this);
+      }
+    }
+    sse_iterator(const RegSet* rs, size_t idx) : rs_(rs), idx_(idx) {
+    }
+    bool found_any() const {
+      return ((uint64_t)Mask::XMM << idx_) & rs_->group2_;
+    }
+  };
+
+  /** Iterates over SSE registers */
+  sse_iterator sse_begin() const {
+    return sse_iterator(this);
+  }
+  /** End iterator for the SSE registers */
+  sse_iterator sse_end() const {
+    return sse_iterator(this, 16);
+  }
+
+  /** Iterator over mm registers */
+  class mm_iterator {
+    friend class RegSet;
+  public:
+    Mm operator*() const {
+      return Constants::mms()[idx_];
+    }
+    bool operator==(const mm_iterator& rhs) const {
+      return idx_ == rhs.idx_ && rs_ == rhs.rs_;
+    }
+    bool operator!=(const mm_iterator& rhs) const {
+      return !(*this == rhs);
+    }
+    mm_iterator& operator++() {
+      for (; (++idx_ < 8) && !rs_->contains(Constants::mms()[idx_]););
+      return *this;
+    }
+
+  private:
+    const RegSet* rs_;
+    size_t idx_;
+
+    mm_iterator(const RegSet* rs) : rs_(rs), idx_(0) {
+      if (!rs_->contains(Constants::mms()[idx_])) {
+        ++(*this);
+      }
+    }
+    mm_iterator(const RegSet* rs, size_t idx) : rs_(rs), idx_(idx) {
+    }
+  };
+
+  /** Iterates over MM registers */
+  mm_iterator mm_begin() const {
+    return mm_iterator(this);
+  }
+  /** End iterator for the MM registers */
+  mm_iterator mm_end() const {
+    return mm_iterator(this, 8);
+  }
+
+  /** Iterator over status flags bits */
+  class flags_iterator {
+    friend class RegSet;
+  public:
+    Eflags operator*() const {
+      return Constants::eflags()[idx_];
+    }
+    bool operator==(const flags_iterator& rhs) const {
+      return idx_ == rhs.idx_ && rs_ == rhs.rs_;
+    }
+    bool operator!=(const flags_iterator& rhs) const {
+      return !(*this == rhs);
+    }
+    flags_iterator& operator++() {
+      for (; (inc() < 12) && !rs_->contains(Constants::eflags()[idx_]););
+      return *this;
+    }
+
+  private:
+    const RegSet* rs_;
+    size_t idx_;
+
+    flags_iterator(const RegSet* rs) : rs_(rs), idx_(0) {
+      if (!rs_->contains(Constants::eflags()[idx_])) {
+        ++(*this);
+      }
+    }
+    flags_iterator(const RegSet* rs, size_t idx) : rs_(rs), idx_(idx) {
+    }
+    size_t& inc() {
+      switch (idx_) {
+        case 0:
+        case 2:
+        case 4:
+          return (idx_ += 2);
+        case 7:
+          return (idx_ += 4);
+        default:
+          return (++idx_);
+      }
+    }
+  };
+
+  /** Iterates for the status eflags */
+  flags_iterator flags_begin() const {
+    return flags_iterator(this);
+  }
+  /** End iterator for the status eflags */
+  flags_iterator flags_end() const {
+    return flags_iterator(this, 12);
+  }
+
+  /** Iterator over 64-bit registers with any sub-registers set */
+  class any_sub_gp_iterator {
+    friend class RegSet;
+  public:
+    R64 operator*() const {
+      return Constants::r64s()[idx_];
+    }
+    bool operator==(const any_sub_gp_iterator& rhs) const {
+      return idx_ == rhs.idx_ && rs_ == rhs.rs_;
+    }
+    bool operator!=(const any_sub_gp_iterator& rhs) const {
+      return !(*this == rhs);
+    }
+    any_sub_gp_iterator& operator++() {
+      for (; (++idx_ < 16) && !found_any(););
+      return *this;
+    }
+
+  private:
+    const RegSet* rs_;
+    size_t idx_;
+
+    any_sub_gp_iterator(const RegSet* rs) : rs_(rs), idx_(0) {
+      if (!found_any()) {
+        ++(*this);
+      }
+    }
+    any_sub_gp_iterator(const RegSet* rs, size_t idx) : rs_(rs), idx_(idx) {
+    }
+    bool found_any() const {
+      return ((uint64_t)Mask::WORD << idx_) & rs_->group1_;
+    }
+  };
+
+  any_sub_gp_iterator any_sub_gp_begin() const {
+    return any_sub_gp_iterator(this);
+  }
+  any_sub_gp_iterator any_sub_gp_end() const {
+    return any_sub_gp_iterator(this, 16);
+  }
+
+  /** Iterator over ymm registers with any sub-registers set */
+  class any_sub_sse_iterator {
+    friend class RegSet;
+  public:
+    Ymm operator*() const {
+      return Constants::ymms()[idx_];
+    }
+    bool operator==(const any_sub_sse_iterator& rhs) const {
+      return idx_ == rhs.idx_ && rs_ == rhs.rs_;
+    }
+    bool operator!=(const any_sub_sse_iterator& rhs) const {
+      return !(*this == rhs);
+    }
+    any_sub_sse_iterator& operator++() {
+      for (; (++idx_ < 16) && !found_any(););
+      return *this;
+    }
+
+  private:
+    const RegSet* rs_;
+    size_t idx_;
+
+    any_sub_sse_iterator(const RegSet* rs) : rs_(rs), idx_(0) {
+      if (!found_any()) {
+        ++(*this);
+      }
+    }
+    any_sub_sse_iterator(const RegSet* rs, size_t idx) : rs_(rs), idx_(idx) {
+    }
+    bool found_any() const {
+      return ((uint64_t)Mask::XMM << idx_) & rs_->group2_;
+    }
+  };
+
+  any_sub_sse_iterator any_sub_sse_begin() const {
+    return any_sub_sse_iterator(this);
+  }
+  any_sub_sse_iterator any_sub_sse_end() const {
+    return any_sub_sse_iterator(this, 16);
+  }
   /** STL compliant hash. */
   constexpr size_t hash() {
     return group1_ ^ group2_ ^ group3_ ^ group4_;
@@ -656,308 +937,6 @@ private:
   /** Helper method for checking containment in a group. */
   constexpr bool contains_all(Mask m, uint64_t group) {
     return ((uint64_t)m & group) == (uint64_t)m;
-  }
-
-public:
-  /** Iterator over GP registers in a regset */
-  class GpIterator {
-    friend class RegSet;
-
-  public:
-    /** Returns the current GP register we're looking at */
-    R operator*() {
-      return current_;
-    }
-    /** Checks for equality of two iterators */
-    bool operator==(const GpIterator& other) {
-      if (finished_)
-        return other.finished_;
-
-      return index_ == other.index_ && !other.finished_;
-    }
-    /** Checks for inequality */
-    bool operator!=(const GpIterator& other) {
-      return !(*this == other);
-    }
-    /** Advances to the next GP register */
-    GpIterator& operator++();
-
-  private:
-    /** Tracks the index of the current register */
-    size_t index_;
-    /** The current register */
-    R current_;
-    /** If we've found all the registers */
-    bool finished_;
-    /** Our regset */
-    const RegSet * const rs_;
-
-    /** Creates iterator for GPs */
-    GpIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(Constants::rax()), finished_(false) {
-      ++(*this);
-    }
-    /** Go to end */
-    GpIterator& finish() {
-      finished_ = true;
-      return *this;
-    }
-  };
-
-  /** Iterator over SSE registers in a regset */
-  class SseIterator {
-    friend class RegSet;
-
-  public:
-    /** Returns the current SSE register we're looking at */
-    Sse operator*() {
-      return current_;
-    }
-    /** Checks for equality of two iterators */
-    bool operator==(const SseIterator& other) {
-      if (finished_)
-        return other.finished_;
-
-      return index_ == other.index_ && !other.finished_;
-    }
-    /** Checks for inequality */
-    bool operator!=(const SseIterator& other) {
-      return !(*this == other);
-    }
-    /** Advances to the next SSE register */
-    SseIterator& operator++();
-
-  private:
-    /** Tracks the index of the current register */
-    size_t index_;
-    /** The current register */
-    Sse current_;
-    /** If we've found all the registers */
-    bool finished_;
-    /** Our regset */
-    const RegSet * const rs_;
-
-    /** Creates iterator for SSEs */
-    SseIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(Constants::xmm0()), finished_(false) {
-      ++(*this);
-    }
-    /** Go to end */
-    SseIterator& finish() {
-      finished_ = true;
-      return *this;
-    }
-  };
-
-  /** Iterator over MM registers in a regset */
-  class MmIterator {
-    friend class RegSet;
-
-  public:
-    /** Returns the current MM register we're looking at */
-    Mm operator*() {
-      return current_;
-    }
-    /** Checks for equality of two iterators */
-    bool operator==(const MmIterator& other) {
-      if (finished_)
-        return other.finished_;
-
-      return index_ == other.index_ && !other.finished_;
-    }
-    /** Checks for inequality */
-    bool operator!=(const MmIterator& other) {
-      return !(*this == other);
-    }
-    /** Advances to the next MM register */
-    MmIterator& operator++();
-
-  private:
-    /** Tracks the index of the current register */
-    size_t index_;
-    /** The current register */
-    Mm current_;
-    /** If we've found all the registers */
-    bool finished_;
-    /** Our regset */
-    const RegSet * const rs_;
-
-    /** Creates iterator for MMs */
-    MmIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(Constants::mm0()), finished_(false) {
-      ++(*this);
-    }
-    /** Go to end */
-    MmIterator& finish() {
-      finished_ = true;
-      return *this;
-    }
-  };
-
-  /** Iterator over status flags in a regset */
-  class FlagsIterator {
-    friend class RegSet;
-
-  public:
-    /** Returns the current flag we're looking at */
-    Eflags operator*() {
-      return current_;
-    }
-    /** Checks for equality of two iterators */
-    bool operator==(const FlagsIterator& other) {
-      if (finished_)
-        return other.finished_;
-
-      return index_ == other.index_ && !other.finished_;
-    }
-    /** Checks for inequality */
-    bool operator!=(const FlagsIterator& other) {
-      return !(*this == other);
-    }
-    /** Advances to the next flag */
-    FlagsIterator& operator++();
-
-  private:
-    /** Tracks the index of the current register */
-    size_t index_;
-    /** The current register */
-    Eflags current_;
-    /** If we've found all the registers */
-    bool finished_;
-    /** Our regset */
-    const RegSet * const rs_;
-
-    /** Creates iterator for flags */
-    FlagsIterator(const RegSet* const rs) : rs_(rs), index_(0), current_(Constants::eflags_cf()), finished_(false) {
-      ++(*this);
-    }
-    /** Go to end */
-    FlagsIterator& finish() {
-      finished_ = true;
-      return *this;
-    }
-  };
-
-  /** Iterate over largest general-purpose registers */
-  GpIterator gp_begin() const {
-    return GpIterator(this);
-  }
-  /** End iterator for the gp registers */
-  GpIterator gp_end() const {
-    return GpIterator(this).finish();
-  }
-  /** Iterates over largest SSE registers */
-  SseIterator sse_begin() const {
-    return SseIterator(this);
-  }
-  /** End iterator for the SSE registers */
-  SseIterator sse_end() const {
-    return SseIterator(this).finish();
-  }
-  /** Iterates over MM registers */
-  MmIterator mm_begin() const {
-    return MmIterator(this);
-  }
-  /** End iterator for the MM registers */
-  MmIterator mm_end() const {
-    return MmIterator(this).finish();
-  }
-  /** Iterates for the status eflags */
-  FlagsIterator flags_begin() const {
-    return FlagsIterator(this);
-  }
-  /** End iterator for the status eflags */
-  FlagsIterator flags_end() const {
-    return FlagsIterator(this).finish();
-  }
-
-  /** Iterator over 64-bit registers with any sub-registers set */
-  class any_sub_gp_iterator {
-    friend class RegSet;
-  public:
-    R64 operator*() const {
-      return Constants::r64s()[idx_];
-    }
-    bool operator==(const any_sub_gp_iterator& rhs) const {
-      return idx_ == rhs.idx_ && rs_ == rhs.rs_;
-    }
-    bool operator!=(const any_sub_gp_iterator& rhs) const {
-      return !(*this == rhs);
-    }
-    any_sub_gp_iterator& operator++() {
-      while (true) {
-        if (++idx_ >= 16) {
-          break;
-        }
-        const auto mask = idx_ < 4 ? (uint64_t)Mask::WORD : (uint64_t)Mask::LOW;
-        if ((mask << idx_) & rs_->group1_) {
-          break;
-        }
-      }
-      return *this;
-    }
-
-  private:
-    const RegSet* rs_;
-    size_t idx_;
-
-    any_sub_gp_iterator(const RegSet* rs) : rs_(rs), idx_(0) {
-      if ((rs_->group1_ & (uint64_t)Mask::WORD) == 0) {
-        ++(*this);
-      }
-    }
-    any_sub_gp_iterator(const RegSet* rs, size_t idx) : rs_(rs), idx_(idx) {
-    }
-  };
-
-  /** Iterator over ymm registers with any sub-registers set */
-  class any_sub_sse_iterator {
-    friend class RegSet;
-  public:
-    Ymm operator*() const {
-      return Constants::ymms()[idx_];
-    }
-    bool operator==(const any_sub_sse_iterator& rhs) const {
-      return idx_ == rhs.idx_ && rs_ == rhs.rs_;
-    }
-    bool operator!=(const any_sub_sse_iterator& rhs) const {
-      return !(*this == rhs);
-    }
-    any_sub_sse_iterator& operator++() {
-      const auto mask = (uint64_t)Mask::XMM;
-      while (true) {
-        if (++idx_ >= 16) {
-          break;
-        }
-        if ((mask << idx_) & rs_->group2_) {
-          break;
-        }
-      }
-      return *this;
-    }
-
-  private:
-    const RegSet* rs_;
-    size_t idx_;
-
-    any_sub_sse_iterator(const RegSet* rs) : rs_(rs), idx_(0) {
-      if ((rs->group2_ & (uint64_t)Mask::XMM) == 0) {
-        ++(*this);
-      }
-    }
-    any_sub_sse_iterator(const RegSet* rs, size_t idx) : rs_(rs), idx_(idx) {
-    }
-  };
-
-  any_sub_gp_iterator any_sub_gp_begin() const {
-    return any_sub_gp_iterator(this);
-  }
-  any_sub_gp_iterator any_sub_gp_end() const {
-    return any_sub_gp_iterator(this, 16);
-  }
-
-  any_sub_sse_iterator any_sub_sse_begin() const {
-    return any_sub_sse_iterator(this);
-  }
-  any_sub_sse_iterator any_sub_sse_end() const {
-    return any_sub_sse_iterator(this, 16);
   }
 };
 
