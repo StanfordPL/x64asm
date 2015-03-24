@@ -29,44 +29,38 @@ namespace x64asm {
     underlying value variables.
 */
 class Moffs : public Operand {
-private:
-  /** Constant bit masks used to represent absent operands. */
-  enum class Null : uint64_t {
-    SEG = 0x7
-  };
-
-  /** Bit mask representing where operand are stored in underlying value. */
-  enum class Mask : uint64_t {
-    SEG = 0x7
-  };
+  /** Value constants */
+  static constexpr uint64_t seg_null_ = 0x7ull;
+  /** Mask constants */
+  static constexpr uint64_t seg_mask_ = 0x7ull;
 
 public:
   /** Returns true if this moffs contains a segment register. */
   constexpr bool contains_seg() {
-    return (val2_ & (uint64_t)Mask::SEG) != (uint64_t)Null::SEG;
+    return val2(seg_mask_) != seg_null_;
   }
 
   /** Returns this moffs' segment register; undefined if absent. */
   constexpr Sreg get_seg() {
-    return {val2_ & (uint64_t)Mask::SEG};
+    return {val2(seg_mask_)};
   }
   /** Returns this moffs' offset. */
   constexpr Imm64 get_offset() {
-    return {val_};
+    return {val()};
   }
 
   /** Sets this moffs' segment register. */
   void set_seg(const Sreg& seg) {
-    val2_ |= seg.val_;
+    set_val2(seg, seg_mask_);
   }
   /** Sets this moffs' offset. */
   void set_offset(const Imm64& offset) {
-    val_ = (uint64_t)offset;
+    set_val(offset);
   }
 
   /** Removes the segment register from this moffs. */
   void clear_seg() {
-    set_seg({(uint64_t)Null::SEG});
+    set_val2(seg_null_, seg_mask_);
   }
 
   /** Returns true if this moffs contains a well-formed segment register. */
@@ -74,23 +68,6 @@ public:
     return (!contains_seg() || get_seg().check()) && get_offset().check();
   }
 
-  /** Comparison based on on val_. */
-  bool operator<(const Moffs& rhs) const {
-    return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
-  }
-  /** Comparison based on on val_. */
-  bool operator==(const Moffs& rhs) const {
-    return std::make_pair(val_, val2_) == std::make_pair(rhs.val_, rhs.val2_);
-  }
-  /** Comparison based on on val_. */
-  bool operator!=(const Moffs& rhs) const {
-    return !(*this == rhs);
-  }
-
-  /** STL-compliant hash. */
-  constexpr size_t hash() {
-    return val_ ^ val2_;
-  }
   /** @todo This method is undefined. */
   std::istream& read_att(std::istream& is) {
     is.setstate(std::ios::failbit);
@@ -111,11 +88,11 @@ public:
 protected:
   /** Create a moffs using seg:offset form. */
   constexpr Moffs(Type t, const Sreg& seg, const Imm64& offset) :
-    Operand(t, (uint64_t)offset, seg.val_) {
+    Operand(t, offset, seg) {
   }
   /** Create a moffs using offset form. */
   constexpr Moffs(Type t, const Imm64& offset) :
-    Operand(t, (uint64_t)offset, (uint64_t)Null::SEG) {
+    Operand(t, offset, seg_null_) {
   }
 };
 
@@ -158,14 +135,6 @@ public:
 } // namespace x64asm
 
 namespace std {
-
-/** STL hash specialization. */
-template <>
-struct hash<x64asm::Moffs> {
-  size_t operator()(const x64asm::Moffs& m) const {
-    return m.hash();
-  }
-};
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Moffs& m) {

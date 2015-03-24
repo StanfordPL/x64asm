@@ -33,57 +33,26 @@ class Label : public Operand {
 
 public:
   /** Creates a new, globally unique label. */
-  Label() : Operand(Type::LABEL) {
-    val_ = next_val()++;
-    std::string s(".__x64asm_L" + std::to_string(val_));
-    label2val()[s] = val_;
-    val2label()[val_] = s;
-  }
+  Label() : Operand(Type::LABEL, init()) {}
   /** Creates a named label. Repeated calls will produce identical results. */
-  Label(const std::string& s) : Operand(Type::LABEL) {
-    auto itr = label2val().find(s);
-    if (itr == label2val().end()) {
-      val_ = next_val()++;
-      label2val()[s] = val_;
-      val2label()[val_] = s;
-    } else {
-      val_ = itr->second;
-    }
-  }
+  Label(const std::string& s) : Operand(Type::LABEL, init(s)) {}
 
   /** Returns true if this label is well-formed. */
   bool check() const {
-    return val2label().find(val_) != val2label().end();
+    return val2label().find(val()) != val2label().end();
   }
 
   /** Returns the text value of this label. */
   const std::string& get_text() const {
     assert(check());
-    return val2label()[val_];
-  }
-
-  /** Comparison based on label id. */
-  bool operator<(const Label& rhs) const {
-    return val_ < rhs.val_;
-  }
-  /** Comparison based on label id. */
-  bool operator==(const Label& rhs) const {
-    return val_ == rhs.val_;
-  }
-  /** Comparison based on label id. */
-  bool operator!=(const Label& rhs) const {
-    return !(*this == rhs);
+    return val2label()[val()];
   }
 
   /** Conversion based on label value. */
   operator uint64_t() const {
-    return val_;
+    return val();
   }
 
-  /** STL-compliant hash. */
-  size_t hash() const {
-    return val_;
-  }
   /** @todo This method is undefined. */
   std::istream& read_att(std::istream& is) {
     is.setstate(std::ios::failbit);
@@ -92,7 +61,7 @@ public:
   /** Writes this label to an ostream using at&t syntax. */
   std::ostream& write_att(std::ostream& os) const {
     assert(check());
-    return (os << val2label()[val_]);
+    return (os << val2label()[val()]);
   }
 
 private:
@@ -111,19 +80,34 @@ private:
 		static std::map<uint64_t, std::string> m;
 		return m;
 	}
+
+  /** Returns the next anonymous value */
+  uint64_t init() {
+    const auto res = next_val()++;
+    std::string s(".__x64asm_L" + std::to_string(val()));
+    label2val()[s] = val();
+    val2label()[val()] = s;
+
+    return res;
+  }
+  /** Returns either a new label or the one that corresponds to this string */
+  uint64_t init(const std::string& s) {
+    auto itr = label2val().find(s);
+    auto res = 0;
+    if (itr == label2val().end()) {
+      res = next_val()++;
+      label2val()[s] = val();
+      val2label()[val()] = s;
+    } else {
+      res = itr->second;
+    }
+    return res;
+  }
 };
 
 } // namespace x64asm
 
 namespace std {
-
-/** STL hash specialization. */
-template <>
-struct hash<x64asm::Label> {
-  size_t operator()(const x64asm::Label& l) const {
-    return l.hash();
-  }
-};
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Label& l) {

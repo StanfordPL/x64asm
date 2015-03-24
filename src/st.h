@@ -17,6 +17,7 @@ limitations under the License.
 #ifndef X64ASM_SRC_ST_H
 #define X64ASM_SRC_ST_H
 
+#include <cassert>
 #include <iostream>
 
 #include "src/operand.h"
@@ -33,30 +34,12 @@ class St : public Operand {
 public:
   /** Returns true if this stack register is well-formed. */
   constexpr bool check() {
-    return val_ < 8;
-  }
-
-  /** Comparison based on on val_. */
-  constexpr bool operator<(const St& rhs) {
-    return val_ < rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator==(const St& rhs) {
-    return val_ == rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator!=(const St& rhs) {
-    return !(*this == rhs);
+    return val() < 8;
   }
 
   /** Conversion based on underlying value. */
   constexpr operator uint64_t() {
-    return val_;
-  }
-
-  /** STL-compliant hash. */
-  constexpr size_t hash() {
-    return val_;
+    return val();
   }
 
   /** @todo This method is undefined. */
@@ -68,10 +51,10 @@ public:
   std::ostream& write_att(std::ostream& os) const {
     assert(check());
     os << "%";
-    if (val_ == 0) {
+    if (val() == 0) {
       os << "st";
     } else {
-      os << "st(" << std::dec << val_ << ")";
+      os << "st(" << std::dec << val() << ")";
     }
     return os;
   }
@@ -90,7 +73,7 @@ class St0 : public St {
 public:
   /** Returns true if this stack register is %st(0). */
   constexpr bool check() {
-    return val_ == 0;
+    return val() == 0;
   }
 
 private:
@@ -101,14 +84,6 @@ private:
 } // namespace x64asm
 
 namespace std {
-
-/** STL hash specialization. */
-template <>
-struct hash<x64asm::St> {
-  size_t operator()(const x64asm::St& s) const {
-    return s.hash();
-  }
-};
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::St& s) {
