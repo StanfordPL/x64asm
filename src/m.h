@@ -205,44 +205,44 @@ public:
 
   /** Sets this memory's segment register. */
   void set_seg(const Sreg& seg) {
-    set_val(seg_mask_, seg_idx_, seg);
+    set_val(seg, seg_mask_, seg_idx_);
   }
   /** Sets this memory's base register. */
   void set_base(const R& base) {
-    set_val(base_mask_, base_idx_, base);
+    set_val(base, base_mask_, base_idx_);
   }
   /** Sets this memory's index register. */
   void set_index(const R& index) {
-    set_val(index_mask_, index_idx_, index);
+    set_val(index, index_mask_, index_idx_);
   }
   /** Sets this memory's scale register. */
   void set_scale(Scale scale) {
-    set_val(scale_mask_, scale_idx_, (uint64_t)scale);
+    set_val((uint64_t)scale, scale_mask_, scale_idx_);
   }
   /** Sets this memory's displacement. */
   void set_disp(const Imm32& disp) {
-    set_val(disp_mask_, disp_idx_, disp);
+    set_val(disp, disp_mask_, disp_idx_);
   }
   /** Sets the 32-bit address override bit for this memory. */
   void set_addr_or(bool addr_or) {
-    set_val(addr_or_mask_, addr_or_idx_, addr_or ? 1 : 0);
+    set_val(addr_or ? 1 : 0, addr_or_mask_, addr_or_idx_);
   }
   /** Sets the RIP+offset form flag for this memory. */
   void set_rip_offset(bool rip) {
-    set_val(rip_mask_, rip_idx_, rip ? 1 : 0);
+    set_val(rip ? 1 : 0, rip_mask_, rip_idx_);
   }
 
   /** Removes the segment register from this memory. */
   void clear_seg() {
-    set_val(seg_mask_, seg_idx_, seg_null_);
+    set_val(seg_null_, seg_idx_, seg_null_);
   }
   /** Removes the base register from this memory. */
   void clear_base() {
-    set_val(base_mask_, base_idx_, reg_null_);
+    set_val(reg_null_, base_idx_, reg_null_);
   }
   /** Remvoes the index register from this memory. */
   void clear_index() {
-    set_val(index_mask_, index_idx_, reg_null_);
+    set_val(reg_null_, index_mask_, index_idx_);
   }
 
   /** Returns true if this memory is well-formed: all present registers are
