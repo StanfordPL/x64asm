@@ -41,16 +41,16 @@ template <class T>
 class M : public Operand {
 private:
   /** Value constants */
-  static constexpr uint64_t reg_null_ = 0x10ull;
-  static constexpr uint64_t seg_null_ = 0x07ull;
+  static constexpr uint64_t reg_null_ = 0x10;
+  static constexpr uint64_t seg_null_ = 0x07;
   /** Mask constants */
-  static constexpr uint64_t disp_mask_    = 0xffffffffull;
-  static constexpr uint64_t base_mask_    = 0x1full;
-  static constexpr uint64_t index_mask_   = 0x1full;
-  static constexpr uint64_t scale_mask_   = 0x3ull;
-  static constexpr uint64_t seg_mask_     = 0x7ull;
-  static constexpr uint64_t addr_or_mask_ = 0x1ull;
-  static constexpr uint64_t rip_mask_     = 0x1ull;
+  static constexpr uint64_t disp_mask_    = 0xffffffff;
+  static constexpr uint64_t base_mask_    = 0x1f;
+  static constexpr uint64_t index_mask_   = 0x1f;
+  static constexpr uint64_t scale_mask_   = 0x3;
+  static constexpr uint64_t seg_mask_     = 0x7;
+  static constexpr uint64_t addr_or_mask_ = 0x1;
+  static constexpr uint64_t rip_mask_     = 0x1;
   /** Index constants */
   static constexpr size_t disp_idx_    = 0;
   static constexpr size_t base_idx_    = 32;

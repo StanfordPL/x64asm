@@ -39,7 +39,7 @@ class Operand : private std::pair<uint64_t, uint64_t> {
   friend class Instruction;
 
   /** Mask constants */
-  static constexpr uint64_t type_mask_ = 0x7ull;
+  static constexpr uint64_t type_mask_ = 0xff;
   /** Index constants */
   static constexpr size_t type_idx_ = 3;
 

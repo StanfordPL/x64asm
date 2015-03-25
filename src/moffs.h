@@ -30,9 +30,9 @@ namespace x64asm {
 */
 class Moffs : public Operand {
   /** Value constants */
-  static constexpr uint64_t seg_null_ = 0x7ull;
+  static constexpr uint64_t seg_null_ = 0x7;
   /** Mask constants */
-  static constexpr uint64_t seg_mask_ = 0x7ull;
+  static constexpr uint64_t seg_mask_ = 0x7;
 
 public:
   /** Returns true if this moffs contains a segment register. */
