@@ -25,9 +25,8 @@ limitations under the License.
 #include "src/modifier.h"
 #include "src/r.h"
 #include "src/sreg.h"
+#include "src/sse.h"
 #include "src/st.h"
-#include "src/xmm.h"
-#include "src/ymm.h"
 
 #include <array>
 

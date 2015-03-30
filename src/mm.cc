@@ -54,7 +54,7 @@ istream& Mm::read_att(istream& is) {
 
 ostream& Mm::write_att(ostream& os) const {
   assert(check());
-  return (os << mms_()[val_]);
+  return (os << mms_()[val()]);
 }
 
 } // namespace x64asm

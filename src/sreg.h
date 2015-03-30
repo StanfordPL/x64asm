@@ -30,39 +30,19 @@ namespace x64asm {
 class Sreg : public Operand {
   // Needs access to constructor.
   friend class Constants;
-  // Needs access to constructor.
-  template <class T>
-  friend class M;
-  // Needs access to constructor.
   friend class Moffs;
+  template <typename T>
+  friend class M;
 
 public:
   /** Returns true if this segment register is well-formed. */
   constexpr bool check() {
-    return val_ < 6;
-  }
-
-  /** Comparison based on on val_. */
-  constexpr bool operator<(const Sreg& rhs) {
-    return val_ < rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator==(const Sreg& rhs) {
-    return val_ == rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator!=(const Sreg& rhs) {
-    return !(*this == rhs);
+    return val() < 6;
   }
 
   /** Conversion based on underlying value. */
   constexpr operator uint64_t() {
-    return val_;
-  }
-
-  /** STL-compliant hash. */
-  constexpr size_t hash() {
-    return val_;
+    return val();
   }
 
   /** @todo This method is undefined. */
@@ -74,7 +54,7 @@ public:
   std::ostream& write_att(std::ostream& os) const {
     assert(check());
     const char* sregs[6] = {"es","cs","ss","ds","fs","gs"};
-    return (os << "%" << sregs[val_]);
+    return (os << "%" << sregs[val()]);
   }
 
 protected:
@@ -91,7 +71,7 @@ class Fs : public Sreg {
 public:
   /** Checks whether this segment register is %fs. */
   constexpr bool check() {
-    return val_ == 4;
+    return val() == 4;
   }
 
 private:
@@ -107,7 +87,7 @@ class Gs : public Sreg {
 public:
   /** Checks whether this segment register is %gs. */
   constexpr bool check() {
-    return val_ == 5;
+    return val() == 5;
   }
 
 private:
@@ -118,14 +98,6 @@ private:
 } // namespace x64asm
 
 namespace std {
-
-/** STL hash specialization. */
-template <>
-struct hash<x64asm::Sreg> {
-  size_t operator()(const x64asm::Sreg& s) const {
-    return s.hash();
-  }
-};
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Sreg& s) {

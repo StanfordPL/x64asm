@@ -21,9 +21,8 @@ limitations under the License.
 #include "src/mm.h"
 #include "src/moffs.h"
 #include "src/rel.h"
+#include "src/sse.h"
 #include "src/st.h"
-#include "src/xmm.h"
-#include "src/ymm.h"
 
 using namespace std;
 

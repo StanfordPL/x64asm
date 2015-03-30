@@ -26,27 +26,9 @@ namespace x64asm {
 /** A relative address. */
 class Rel : public Operand {
 public:
-  /** Comparison based on on val_. */
-  constexpr bool operator<(const Rel& rhs) {
-    return val_ < rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator==(const Rel& rhs) {
-    return val_ == rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator!=(const Rel& rhs) {
-    return !(*this == rhs);
-  }
-
   /** Conversion based on underlying value. */
   constexpr operator uint64_t() {
-    return val_;
-  }
-
-  /** STL-compliant hash. */
-  constexpr size_t hash() {
-    return val_;
+    return val();
   }
 
   /** @todo This method is undefined. */
@@ -57,7 +39,7 @@ public:
   /** Writes this rel to an ostream using at&t syntax. */
   std::ostream& write_att(std::ostream& os) const {
     const auto fmt = os.flags();
-    os << std::hex << std::showbase << val_;
+    os << std::hex << std::showbase << val();
     os.flags(fmt);
     return os;
   }
@@ -77,7 +59,7 @@ public:
 
   /** Checks that this offset fits in 8 bits. */
   constexpr bool check() {
-    return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
+    return ((val()>>8) == 0x0ul) || ((val()>>8) == 0xfffffffffffffful);
   }
 };
 
@@ -92,21 +74,13 @@ public:
 
   /** Checks that this offset value fits in 32-bits. */
   constexpr bool check() {
-    return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
+    return ((val()>>32) == 0x0ul) || ((val()>>32) == 0xfffffffful);
   }
 };
 
 } // namespace x64asm
 
 namespace std {
-
-/** STL hash specialization. */
-template <>
-struct hash<x64asm::Rel> {
-  size_t operator()(const x64asm::Rel& r) const {
-    return r.hash();
-  }
-};
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Rel& r) {

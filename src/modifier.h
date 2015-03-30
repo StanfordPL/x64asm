@@ -31,31 +31,14 @@ class Modifier : public Operand {
 public:
   /** Returns true if this modifier is well-formed. */
   constexpr bool check() {
-    return val_ == 0;
-  }
-
-  /** Comparison based on on val_. */
-  constexpr bool operator<(const Modifier& rhs) {
-    return val_ < rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator==(const Modifier& rhs) {
-    return val_ == rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator!=(const Modifier& rhs) {
-    return !(*this == rhs);
+    return val() == 0;
   }
 
   /** Conversion based on val_. */
   constexpr operator uint64_t() {
-    return val_;
+    return val();
   }
 
-  /** STL-compliant hash. */
-  constexpr size_t hash() {
-    return val_;
-  }
   /** @todo This method is undefined. */
   std::istream& read_att(std::istream& is) {
     is.setstate(std::ios::failbit);
@@ -104,14 +87,6 @@ private:
 } // namespace x64asm
 
 namespace std {
-
-/** STL hash specialization. */
-template <>
-struct hash<x64asm::Modifier> {
-  size_t operator()(const x64asm::Modifier& m) const {
-    return m.hash();
-  }
-};
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Modifier& m) {

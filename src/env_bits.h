@@ -18,64 +18,49 @@ limitations under the License.
 #define X64ASM_ENV_BITS_H
 
 #include <iostream>
-#include <stdint.h>
+#include <utility>
 
 namespace x64asm {
 
 /** An environment register bit. */
-class EnvBits {
+class EnvBits : private std::pair<size_t, size_t> {
 public:
-  /** Copy constructor. */
-  constexpr EnvBits(const EnvBits& rhs) : index_(rhs.index_), width_(rhs.width_) {}
-  /** Move constructor. */
-  constexpr EnvBits(const EnvBits&& rhs) : index_(rhs.index_), width_(rhs.width_) {}
-  /** Assignment operator. */
-  EnvBits& operator=(const EnvBits& rhs) {
-    EnvBits(rhs).swap(*this);
-    return *this;
-  }
-  /** Move assignment operator. */
-  EnvBits& operator=(const EnvBits&& rhs) {
-    EnvBits(std::move(rhs)).swap(*this);
-    return *this;
-  }
-
   /** Returns this bit's upper register index. */
   constexpr size_t index() {
-    return index_;
+    return this->first;
   }
   /** Returns the number of bits this register bit spans. */
   constexpr size_t width() {
-    return width_;
+    return this->second;
   }
 
-  /** Less than. */
-  constexpr bool operator<(const EnvBits& rhs) {
-    return index_ == rhs.index_ ? width_ < rhs.width_ : index_ < rhs.index_;
-  }
-  /** Equality. */
+  /** Comparison */
   constexpr bool operator==(const EnvBits& rhs) {
-    return index_ == rhs.index_ && width_ == rhs.width_;
+    return this->first == rhs.first && this->second == rhs.second;
   }
-  /** Inequality. */
+  /** Comparison */
   constexpr bool operator!=(const EnvBits& rhs) {
     return !(*this == rhs);
   }
+  /** Comparison */
+  constexpr bool operator<(const EnvBits& rhs) {
+    return (this->first < rhs.first) ? true :
+           (this->first == rhs.first)  ? false :
+           this->second < rhs.second;
+  }
 
-  /** STL-compliant swap. */
-  void swap(EnvBits& rhs) {
-    std::swap(index_, rhs.index_);
-    std::swap(width_, rhs.width_);
+  /** STL-compliant hash */
+  constexpr size_t hash() {
+    return this->first ^ this->second;
+  }
+  /** STL-compliant swap */
+  void swap (EnvBits& rhs) {
+    std::pair<size_t, size_t>::swap(rhs);
   }
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr EnvBits(size_t i, size_t w) : index_(i), width_(w) {}
-
-  /** This bit's upper register index. */
-  uint32_t index_;
-  /** The number of bits this register bit spans. */
-  uint32_t width_;
+  constexpr EnvBits(size_t i, size_t w) : std::pair<size_t, size_t>(i, w) {}
 };
 
 /** An EFLAGS register bit. */
@@ -162,9 +147,17 @@ private:
 
 namespace std {
 
-/** STL-compliant swap */
-inline void swap(x64asm::EnvBits& lhs, x64asm::EnvBits& rhs) {
-  lhs.swap(rhs);
+/** STL hash specialization. */
+template <>
+struct hash<x64asm::EnvBits> {
+  size_t operator()(const x64asm::EnvBits& e) const {
+    return e.hash();
+  }
+};
+
+/** STL swap specialization */
+inline void swap(x64asm::EnvBits& e1, x64asm::EnvBits& e2) {
+  e1.swap(e2);
 }
 
 /** iostream overload */

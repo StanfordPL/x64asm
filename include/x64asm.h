@@ -40,9 +40,8 @@ limitations under the License.
 #include "src/reg_set.h"
 #include "src/rel.h"
 #include "src/sreg.h"
+#include "src/sse.h"
 #include "src/st.h"
 #include "src/type.h"
-#include "src/xmm.h"
-#include "src/ymm.h"
 
 #endif

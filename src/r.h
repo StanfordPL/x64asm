@@ -17,7 +17,6 @@ limitations under the License.
 #ifndef X64ASM_SRC_R_H
 #define X64ASM_SRC_R_H
 
-#include <cassert>
 #include <iostream>
 
 #include "src/operand.h"
@@ -29,12 +28,7 @@ class R : public Operand {
 public:
   /** Conversion based on underlying value. */
   constexpr operator uint64_t() {
-    return val_;
-  }
-
-  /** STL-compliant hash. */
-  constexpr size_t hash() {
-    return val_;
+    return val();
   }
 
   /** Writes this register to an ostream using at&t syntax. */
@@ -56,20 +50,7 @@ class Rb : public R {
 public:
   /** Returns true if this register is well-formed. */
   constexpr bool check() {
-    return val_ < 16;
-  }
-
-  /** Comparison based on on val_. */
-  constexpr bool operator<(const Rb& rhs) {
-    return val_ < rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator==(const Rb& rhs) {
-    return val_ == rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator!=(const Rb& rhs) {
-    return !(*this == rhs);
+    return val() < 16;
   }
 
   /** Reads this register from an ostream using at&t syntax. */
@@ -91,20 +72,7 @@ class Rl : public Rb {
 public:
   /** Returns true if this register is well-formed. */
   constexpr bool check() {
-    return val_ < 4;
-  }
-
-  /** Comparison based on on val_. */
-  constexpr bool operator<(const Rl& rhs) {
-    return val_ < rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator==(const Rl& rhs) {
-    return val_ == rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator!=(const Rl& rhs) {
-    return !(*this == rhs);
+    return val() < 4;
   }
 
   /** Reads this register from an ostream using at&t syntax. */
@@ -126,7 +94,7 @@ class Al : public Rl {
 public:
   /** Returns true if this register is well-formed. */
   constexpr bool check() {
-    return val_ == 0;
+    return val() == 0;
   }
 
 private:
@@ -142,7 +110,7 @@ class Cl : public Rl {
 public:
   /** Returns true if this register is well-formed. */
   constexpr bool check() {
-    return val_ == 1;
+    return val() == 1;
   }
 
 private:
@@ -158,20 +126,7 @@ class Rh : public R {
 public:
   /** Returns true if this register is well-formed. */
   constexpr bool check() {
-    return val_ >= 4 && val_ < 8;
-  }
-
-  /** Comparison based on on val_. */
-  constexpr bool operator<(const Rh& rhs) {
-    return val_ < rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator==(const Rh& rhs) {
-    return val_ == rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator!=(const Rh& rhs) {
-    return !(*this == rhs);
+    return val() >= 4 && val() < 8;
   }
 
   /** Reads this register from an ostream using at&t syntax. */
@@ -195,20 +150,7 @@ class R16 : public R {
 public:
   /** Returns true if this register is well-formed. */
   constexpr bool check() {
-    return val_ < 16;
-  }
-
-  /** Comparison based on on val_. */
-  constexpr bool operator<(const R16& rhs) {
-    return val_ < rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator==(const R16& rhs) {
-    return val_ == rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator!=(const R16& rhs) {
-    return !(*this == rhs);
+    return val() < 16;
   }
 
   /** Reads this register from an ostream using at&t syntax. */
@@ -230,7 +172,7 @@ class Ax : public R16 {
 public:
   /** Returns true if this register is well-formed. */
   constexpr bool check() {
-    return val_ == 0;
+    return val() == 0;
   }
 
 private:
@@ -246,7 +188,7 @@ class Dx : public R16 {
 public:
   /** Returns true if this register is well-formed. */
   constexpr bool check() {
-    return val_ == 2;
+    return val() == 2;
   }
 
 private:
@@ -261,27 +203,13 @@ private:
 class R32 : public R {
   // Needs access to constructor.
   friend class Constants;
-  // Needs access to consturctor.
-  template <class T>
+  template <typename T>
   friend class M;
 
 public:
   /** Returns true if this register is well-formed. */
   constexpr bool check() {
-    return val_ < 16;
-  }
-
-  /** Comparison based on on val_. */
-  constexpr bool operator<(const R32& rhs) {
-    return val_ < rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator==(const R32& rhs) {
-    return val_ == rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator!=(const R32& rhs) {
-    return !(*this == rhs);
+    return val() < 16;
   }
 
   /** Reads this register from an ostream using at&t syntax. */
@@ -303,7 +231,7 @@ class Eax : public R32 {
 public:
   /** Returns true if this register is well-formed. */
   constexpr bool check() {
-    return val_ == 0;
+    return val() == 0;
   }
 
 private:
@@ -317,27 +245,13 @@ private:
 class R64 : public R {
   // Needs access to constructor.
   friend class Constants;
-  // Needs access to consturctor.
-  template <class T>
+  template <typename T>
   friend class M;
 
 public:
   /** Returns true if this register is well-formed. */
   constexpr bool check() {
-    return val_ < 16;
-  }
-
-  /** Comparison based on on val_. */
-  constexpr bool operator<(const R64& rhs) {
-    return val_ < rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator==(const R64& rhs) {
-    return val_ == rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator!=(const R64& rhs) {
-    return !(*this == rhs);
+    return val() < 16;
   }
 
   /** Reads this register from an ostream using at&t syntax. */
@@ -359,7 +273,7 @@ class Rax : public R64 {
 public:
   /** Returns true if this register is well-formed. */
   constexpr bool check() {
-    return val_ == 0;
+    return val() == 0;
   }
 
 private:
@@ -370,14 +284,6 @@ private:
 } // namespace x64asm
 
 namespace std {
-
-/** STL hash specialization. */
-template <>
-struct hash<x64asm::R> {
-  size_t operator()(const x64asm::R& r) const {
-    return r.hash();
-  }
-};
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Rl& r) {
