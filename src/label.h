@@ -85,8 +85,8 @@ private:
   uint64_t init() {
     const auto res = next_val()++;
     std::string s(".__x64asm_L" + std::to_string(val()));
-    label2val()[s] = val();
-    val2label()[val()] = s;
+    label2val()[s] = res;
+    val2label()[res] = s;
 
     return res;
   }
@@ -96,8 +96,8 @@ private:
     auto res = 0;
     if (itr == label2val().end()) {
       res = next_val()++;
-      label2val()[s] = val();
-      val2label()[val()] = s;
+      label2val()[s] = res;
+      val2label()[res] = s;
     } else {
       res = itr->second;
     }

@@ -121,7 +121,7 @@ public:
 
   /** Bind a label definition to the current assembler position. */
   void bind(Label label) {
-    fxn_->label_defs_[label.first] = fxn_->size();
+    fxn_->label_defs_[label.val()] = fxn_->size();
   }
 
   // void adc(const Al& arg0, const Imm8& arg1); ...
@@ -146,13 +146,13 @@ private:
   void pref_group2(const M<T>& m) {
     static uint8_t pref[6] {0x26, 0x2e, 0x36, 0x3e, 0x64, 0x65};
     if (m.contains_seg()) {
-      fxn_->emit_byte(pref[m.get_seg().first]);
+      fxn_->emit_byte(pref[m.get_seg().val()]);
     }
   }
 
   /** Emits a group 2 hint prefix byte. */
   void pref_group2(const Hint h) {
-    fxn_->emit_byte(h.first == 0 ? 0x3e : 0x2e);
+    fxn_->emit_byte(h.val() == 0 ? 0x3e : 0x2e);
   }
 
   /** Emits a group 3 prefix byte. */
@@ -175,7 +175,7 @@ private:
 
   /** Emits a register scaled one-byte opcode. */
   void opcode(uint8_t o1, const Operand& rcode) {
-    const auto delta = rcode.first & 0x7;
+    const auto delta = rcode.val() & 0x7;
     opcode(o1 + delta);
   }
 
@@ -187,7 +187,7 @@ private:
 
   /** Emits a register scaled two-byte opcode. */
   void opcode(uint8_t o1, uint8_t o2, const Operand& rcode) {
-    const auto delta = rcode.first & 0x7;
+    const auto delta = rcode.val() & 0x7;
     opcode(o1, o2 + delta);
   }
 
@@ -200,22 +200,22 @@ private:
 
   /** Emits a one-byte immediate. */
   void disp_imm(Imm8 i) {
-    fxn_->emit_byte(i.first);
+    fxn_->emit_byte(i.val());
   }
 
   /** Emits a two-byte immediate. */
   void disp_imm(Imm16 i) {
-    fxn_->emit_word(i.first);
+    fxn_->emit_word(i.val());
   }
 
   /** Emits a four-byte immediate. */
   void disp_imm(Imm32 i) {
-    fxn_->emit_long(i.first);
+    fxn_->emit_long(i.val());
   }
 
   /** Emits an eight-byte immediate. */
   void disp_imm(Imm64 i) {
-    fxn_->emit_quad(i.first);
+    fxn_->emit_quad(i.val());
   }
 
   /** Emits a pair of immediates. */
@@ -229,7 +229,7 @@ private:
       bytes.
   */
   void disp_imm(Label l) {
-    fxn_->label_rels_.push_back(std::make_pair(fxn_->size(), l.first));
+    fxn_->label_rels_.push_back(std::make_pair(fxn_->size(), l.val()));
     fxn_->emit_long(0);
   }
 
@@ -240,22 +240,22 @@ private:
 
   /** Emits a one-byte relative address. */
   void disp_imm(Rel8 r) {
-    fxn_->emit_byte(r.first);
+    fxn_->emit_byte(r.val());
   }
 
   /** Emits a four-byte relative address. */
   void disp_imm(Rel32 r) {
-    fxn_->emit_long(r.first);
+    fxn_->emit_long(r.val());
   }
 
   /** Emits an xmm register encoded as an immediats. */
   void disp_imm(Xmm x) {
-    fxn_->emit_byte(x.first << 4);
+    fxn_->emit_byte(x.val() << 4);
   }
 
   /** Emits a ymm register encoded as an immediats. */
   void disp_imm(Ymm y) {
-    fxn_->emit_byte(y.first << 4);
+    fxn_->emit_byte(y.val() << 4);
   }
 
   /** Unconditionally emits a rex prefix. */
@@ -268,7 +268,7 @@ private:
    */
   template <typename T>
   void rex(const M<T>& rm, const Operand& r, uint8_t val) {
-    rex(rm, val | ((r.first >> 1) & 0x4));
+    rex(rm, val | ((r.val() >> 1) & 0x4));
   }
 
   /** Conditionally emits a rex prefix.
@@ -277,10 +277,10 @@ private:
   template <typename T>
   void rex(const M<T>& rm, uint8_t val) {
     if (rm.contains_base()) {
-      val |= (rm.get_base().first >> 3);
+      val |= (rm.get_base().val() >> 3);
     }
     if (rm.contains_index()) {
-      val |= ((rm.get_index().first >> 2) & 0x2);
+      val |= ((rm.get_index().val() >> 2) & 0x2);
     }
     if (val) {
       fxn_->emit_byte(val | 0x40);
@@ -291,14 +291,14 @@ private:
       See Figure 2.5: Intel Manual Vol 2A 2-8.
   */
   void rex(const Operand& rm, const Operand& r, uint8_t val) {
-    rex(rm, val | ((r.first >> 1) & 0x4));
+    rex(rm, val | ((r.val() >> 1) & 0x4));
   }
 
   /** Conditionally emits a rex prefix.
       See Figure 2.7: Intel Manual Vol 2A 2-9.
   */
   void rex(const Operand& rm, uint8_t val) {
-    if (val |= (rm.first >> 3)) {
+    if (val |= (rm.val() >> 3)) {
       fxn_->emit_byte(val | 0x40);
     }
   }
@@ -309,14 +309,14 @@ private:
 
   /** Emits a mod/rm sib byte pair. */
   void mod_rm_sib(const Operand& rm, const Operand& r) {
-    auto mod = 0xc0 | ((r.first << 3) & 0x38) | (rm.first & 0x7);
+    auto mod = 0xc0 | ((r.val() << 3) & 0x38) | (rm.val() & 0x7);
     fxn_->emit_byte(mod);
   }
 
   /** Emits a 2-byte vex prefix. See Figure 2-9: Intel Manual Vol 2A 2-14. */
   void vex2(uint8_t r_bit, const Operand& vvvv, uint8_t l, uint8_t pp) {
     fxn_->emit_byte(0xc5);
-    fxn_->emit_byte(r_bit | ((~vvvv.first << 3) & 0x78) | (l << 2) | pp);
+    fxn_->emit_byte(r_bit | ((~vvvv.val() << 3) & 0x78) | (l << 2) | pp);
   }
 
   /** Emits a 3-byte vex prefix. See Figure 2-9: Intel Manual Vol 2A 2-14. */
@@ -324,7 +324,7 @@ private:
             uint8_t w, const Operand& vvvv, uint8_t l, uint8_t pp) {
     fxn_->emit_byte(0xc4);
     fxn_->emit_byte(r_bit | x_bit | b_bit | mmmmm);
-    fxn_->emit_byte((w << 7) | ((~vvvv.first << 3) & 0x78) | (l << 2) | pp);
+    fxn_->emit_byte((w << 7) | ((~vvvv.val() << 3) & 0x78) | (l << 2) | pp);
   }
 
   // Emits a vex prefix. See Figure 2-9: Intel Manual Vol 2A 2-14. */
@@ -332,11 +332,11 @@ private:
   void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
            const Operand& vvvv, const M<T>& rm,
            const Operand& r) {
-    uint8_t r_bit = (~r.first << 4) & 0x80;
+    uint8_t r_bit = (~r.val() << 4) & 0x80;
     uint8_t x_bit = rm.contains_index() ?
-                    (~rm.get_index().first << 3) & 0x40 : 0x40;
+                    (~rm.get_index().val() << 3) & 0x40 : 0x40;
     uint8_t b_bit = rm.contains_base() ?
-                    (~rm.get_base().first << 2) & 0x20 : 0x20;
+                    (~rm.get_base().val() << 2) & 0x20 : 0x20;
 
     if (x_bit == 0x40 && b_bit == 0x20 && mmmmm == 0x01 && w == 0) {
       vex2(r_bit, vvvv, l, pp);
@@ -349,8 +349,8 @@ private:
   void vex(uint8_t mmmmm, uint8_t l, uint8_t pp, uint8_t w,
            const Operand& vvvv, const Operand& rm,
            const Operand& r) {
-    uint8_t r_bit = (~r.first << 4) & 0x80;
-    uint8_t b_bit = (~rm.first << 2) & 0x20;
+    uint8_t r_bit = (~r.val() << 4) & 0x80;
+    uint8_t b_bit = (~rm.val() << 2) & 0x20;
 
     if (b_bit == 0x20 && mmmmm == 0x01 && w == 0) {
       vex2(r_bit, vvvv, l, pp);
