@@ -941,30 +941,4 @@ private:
 
 } // namespace x64asm
 
-namespace std {
-
-/** STL hash specialization. */
-template <>
-struct hash<x64asm::RegSet> {
-  size_t operator()(const x64asm::RegSet& rs) const {
-    return rs.hash();
-  }
-};
-
-/** STL swap overload. */
-inline void swap(x64asm::RegSet& lhs, x64asm::RegSet& rhs) {
-  lhs.swap(rhs);
-}
-
-/** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::RegSet& rs) {
-  return rs.read_text(is);
-}
-/** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::RegSet& rs) {
-  return rs.write_text(os);
-}
-
-} // namespace std
-
 #endif

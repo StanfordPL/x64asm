@@ -343,29 +343,4 @@ private:
 
 } // namespace x64asm
 
-namespace std {
-
-/** STL-swap overload. */
-inline void swap(x64asm::Function& f1, x64asm::Function& f2) {
-  f1.swap(f2);
-}
-
-/** STL-hash specialization. */
-template <>
-struct hash<x64asm::Function> {
-  size_t operator()(const x64asm::Function& f) const {
-    return f.hash();
-  }
-};
-
-/** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::Function& f) {
-  return f.read_hex(is);
-}
-inline ostream& operator<<(ostream& os, const x64asm::Function& f) {
-  return f.write_hex(os);
-}
-
-} // namespace std
-
 #endif

@@ -114,7 +114,8 @@ void Assembler::mod_rm_sib(const M<T>& rm, const Operand& r) {
 void Assembler::debug(const Instruction& instr, size_t idx) const {
   const auto fmt = cerr.flags();
 
-  cerr << instr << endl;
+  instr.write_att(cerr);
+  cerr << endl;
   cerr << "  ";
 
   for (; idx < fxn_->size(); ++idx) {

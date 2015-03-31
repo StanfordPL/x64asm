@@ -74,17 +74,4 @@ std::ostream& write_text(std::ostream& os, const Flag f);
 
 } // namespace x64asm
 
-namespace std {
-
-/** iostream overload */
-inline istream& operator>>(istream& is, x64asm::Flag& f) {
-  return read_text(is, f);
-}
-/** iostream overload */
-inline ostream& operator<<(ostream& os, const x64asm::Flag f) {
-  return write_text(os, f);
-}
-
-} // namespace std
-
 #endif

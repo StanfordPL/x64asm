@@ -97,17 +97,4 @@ private:
 
 } // namespace x64asm
 
-namespace std {
-
-/** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::Sreg& s) {
-  return s.read_att(is);
-}
-/** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::Sreg& s) {
-  return s.write_att(os);
-}
-
-} // namespace std
-
 #endif

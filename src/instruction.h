@@ -627,7 +627,9 @@ public:
   /** STL-compliant swap. */
   void swap(Instruction& rhs) {
     std::swap(opcode_, rhs.opcode_);
-    std::swap(operands_, rhs.operands_);
+    for (size_t i = 0; i < 4; ++i) {
+      std::swap(operands_[i], rhs.operands_[i]);
+    }
   }
 
   /** @todo This method is undefined. */
@@ -693,31 +695,5 @@ private:
 };
 
 } // namespace x64asm
-
-namespace std {
-
-/** STL hash specialization. */
-template <>
-struct hash<x64asm::Instruction> {
-  size_t operator()(const x64asm::Instruction& i) const {
-    return i.hash();
-  }
-};
-
-/** STL swap overload. */
-inline void swap(x64asm::Instruction& lhs, x64asm::Instruction& rhs) {
-  lhs.swap(rhs);
-}
-
-/** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::Instruction& i) {
-  return i.read_att(is);
-}
-/** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::Instruction& i) {
-  return i.write_att(os);
-}
-
-} // namespace std
 
 #endif

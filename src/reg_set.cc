@@ -56,33 +56,34 @@ istream& RegSet::read_text(istream& is) {
     FpuTag fputag = Constants::tag0();
     FpuControl fpucontrol = Constants::fpu_control_im();
 
+    istringstream iss;
     if (s == "...") {
       (*this) = RegSet::universe();
-    } else if (istringstream(s) >> r64) {
+    } else if (iss.str(s), r64.read_att(iss)) {
       (*this) += r64;
-    } else if (istringstream(s) >> r32) {
+    } else if (iss.str(s), r32.read_att(iss)) {
       (*this) += r32;
-    } else if (istringstream(s) >> r16) {
+    } else if (iss.str(s), r16.read_att(iss)) {
       (*this) += r16;
-    } else if (istringstream(s) >> r8) {
+    } else if (iss.str(s), r8.read_att(iss)) {
       (*this) += r8;
-    } else if (istringstream(s) >> rh) {
+    } else if (iss.str(s), rh.read_att(iss)) {
       (*this) += rh;
-    } else if (istringstream(s) >> ymm) {
+    } else if (iss.str(s), ymm.read_att(iss)) {
       (*this) += ymm;
-    } else if (istringstream(s) >> xmm) {
+    } else if (iss.str(s), xmm.read_att(iss)) {
       (*this) += xmm;
-    } else if (istringstream(s) >> mm) {
+    } else if (iss.str(s), mm.read_att(iss)) {
       (*this) += mm;
-    } else if (istringstream(s) >> ef) {
+    } else if (iss.str(s), ef.read_text(iss)) {
       (*this) += ef;
-    } else if (istringstream(s) >> mxcsr) {
+    } else if (iss.str(s), mxcsr.read_text(iss)) {
       (*this) += mxcsr;
-    } else if (istringstream(s) >> fpustatus) {
+    } else if (iss.str(s), fpustatus.read_text(iss)) {
       (*this) += fpustatus;
-    } else if (istringstream(s) >> fputag) {
+    } else if (iss.str(s), fputag.read_text(iss)) {
       (*this) += fputag;
-    } else if (istringstream(s) >> fpucontrol) {
+    } else if (iss.str(s), fpucontrol.read_text(iss)) {
       (*this) += fpucontrol;
     } else {
       is.setstate(ios::failbit);
@@ -94,42 +95,42 @@ istream& RegSet::read_text(istream& is) {
 }
 
 ostream& RegSet::write_text(ostream& os) const {
-  os << "{";
+  os << "{ ";
   for(auto rit = gp_begin(); rit != gp_end(); ++rit) {
-    os << " " << *rit;
+    (*rit).write_att(os) << " ";
   }
   for(auto sit = sse_begin(); sit != sse_end(); ++sit) {
-    os << " " << *sit;
+    (*sit).write_att(os) << " ";
   }
   for(auto mit = mm_begin(); mit != mm_end(); ++mit) {
-    os << " " << *mit;
+    (*mit).write_att(os) << " ";
   }
   for (size_t i = 0, ie = Constants::eflags().size(); i < ie; i += Constants::eflags()[i].width()) {
     if (contains(Constants::eflags()[i])) {
-      os << " " << Constants::eflags()[i];
+      Constants::eflags()[i].write_text(os) << " ";
     }
   }
   for (size_t i = 0, ie = Constants::fpu_control().size(); i < ie; i += Constants::fpu_control()[i].width()) {
     if (contains(Constants::fpu_control()[i])) {
-      os << " " << Constants::fpu_control()[i];
+      Constants::fpu_control()[i].write_text(os) << " ";
     }
   }
   for (size_t i = 0, ie = Constants::mxcsr().size(); i < ie; i += Constants::mxcsr()[i].width()) {
     if (contains(Constants::mxcsr()[i])) {
-      os << " " << Constants::mxcsr()[i];
+      Constants::mxcsr()[i].write_text(os) << " ";
     }
   }
   for (size_t i = 0, ie = Constants::fpu_status().size(); i < ie; i += Constants::fpu_status()[i].width()) {
     if (contains(Constants::fpu_status()[i])) {
-      os << " " << Constants::fpu_status()[i];
+      Constants::fpu_status()[i].write_text(os) << " ";
     }
   }
   for (size_t i = 0, ie = Constants::fpu_tags().size(); i < ie; i += Constants::fpu_tags()[i].width()) {
     if (contains(Constants::fpu_tags()[i])) {
-      os << " " << Constants::fpu_tags()[i];
+      Constants::fpu_tags()[i].write_text(os) << " ";
     }
   }
-  os << " }";
+  os << "}";
 
   return os;
 }

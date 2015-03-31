@@ -19,6 +19,8 @@ limitations under the License.
 
 #include <type_traits>
 
+#include "src/env_bits.h"
+#include "src/env_reg.h"
 #include "src/hint.h"
 #include "src/imm.h"
 #include "src/label.h"
@@ -179,32 +181,64 @@ struct is_operand<Ymm> : public std::true_type { };
 // Is this a register type?
 
 template <typename T>
-struct is_reg : public std::false_type { };
+struct is_gp_reg : public std::false_type { };
 
 template <>
-struct is_reg<Rl> : public std::true_type { };
+struct is_gp_reg<R> : public std::true_type { };
 template <>
-struct is_reg<Rh> : public std::true_type { };
+struct is_gp_reg<Rl> : public std::true_type { };
 template <>
-struct is_reg<Rb> : public std::true_type { };
+struct is_gp_reg<Rh> : public std::true_type { };
 template <>
-struct is_reg<Al> : public std::true_type { };
+struct is_gp_reg<Rb> : public std::true_type { };
 template <>
-struct is_reg<Cl> : public std::true_type { };
+struct is_gp_reg<Al> : public std::true_type { };
 template <>
-struct is_reg<R16> : public std::true_type { };
+struct is_gp_reg<Cl> : public std::true_type { };
 template <>
-struct is_reg<Ax> : public std::true_type { };
+struct is_gp_reg<R16> : public std::true_type { };
 template <>
-struct is_reg<Dx> : public std::true_type { };
+struct is_gp_reg<Ax> : public std::true_type { };
 template <>
-struct is_reg<R32> : public std::true_type { };
+struct is_gp_reg<Dx> : public std::true_type { };
 template <>
-struct is_reg<Eax> : public std::true_type { };
+struct is_gp_reg<R32> : public std::true_type { };
 template <>
-struct is_reg<R64> : public std::true_type { };
+struct is_gp_reg<Eax> : public std::true_type { };
 template <>
-struct is_reg<Rax> : public std::true_type { };
+struct is_gp_reg<R64> : public std::true_type { };
+template <>
+struct is_gp_reg<Rax> : public std::true_type { };
+
+// Is this an env_bit?
+
+template <typename T>
+struct is_env_bits : public std::false_type { };
+
+template <>
+struct is_env_bits<Eflags> : public std::true_type { };
+template <>
+struct is_env_bits<FpuControl> : public std::true_type { };
+template <>
+struct is_env_bits<FpuStatus> : public std::true_type { };
+template <>
+struct is_env_bits<FpuTag> : public std::true_type { };
+template <>
+struct is_env_bits<Mxcsr> : public std::true_type { };
+
+// Is this an env_reg?
+
+template <typename T>
+struct is_env_reg : public std::false_type { };
+
+template <>
+struct is_env_reg<FpuData> : public std::true_type { };
+template <>
+struct is_env_reg<FpuInstruction> : public std::true_type { };
+template <>
+struct is_env_reg<FpuOpcode> : public std::true_type { };
+template <>
+struct is_env_reg<Rip> : public std::true_type { };
 
 } // namespace x64asm
 

@@ -41,7 +41,7 @@ std::istream& FlagSet::read_text(std::istream& is) {
 
     Flag f;
     istringstream iss(s);
-    iss >> f;
+    x64asm::read_text(iss, f);
 
     if (iss.fail()) {
       is.setstate(ios::failbit);
@@ -63,7 +63,8 @@ std::ostream& FlagSet::write_text(std::ostream& os) const {
     }
     const auto f = (Flag) fi;
     if (contains(f)) {
-      os << " " << f;
+      os << " ";
+      x64asm::write_text(os, f);
     }
   }
   os << " }";

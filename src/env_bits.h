@@ -143,69 +143,7 @@ private:
   constexpr Mxcsr(size_t i, size_t w) : EnvBits(i, w) {}
 };
 
-} // namespace std
-
-namespace std {
-
-/** STL hash specialization. */
-template <>
-struct hash<x64asm::EnvBits> {
-  size_t operator()(const x64asm::EnvBits& e) const {
-    return e.hash();
-  }
-};
-
-/** STL swap specialization */
-inline void swap(x64asm::EnvBits& e1, x64asm::EnvBits& e2) {
-  e1.swap(e2);
-}
-
-/** iostream overload */
-inline istream& operator>>(istream& is, x64asm::Eflags& e) {
-  return e.read_text(is);
-}
-/** iostream overload */
-inline ostream& operator<<(ostream& os, const x64asm::Eflags& e) {
-  return e.write_text(os);
-}
-
-/** iostream overload */
-inline istream& operator>>(istream& is, x64asm::FpuControl& f) {
-  return f.read_text(is);
-}
-/** iostream overload */
-inline ostream& operator<<(ostream& os, const x64asm::FpuControl& f) {
-  return f.write_text(os);
-}
-
-/** iostream overload */
-inline istream& operator>>(istream& is, x64asm::FpuStatus& s) {
-  return s.read_text(is);
-}
-/** iostream overload */
-inline ostream& operator<<(ostream& os, const x64asm::FpuStatus& s) {
-  return s.write_text(os);
-}
-
-/** iostream overload */
-inline istream& operator>>(istream& is, x64asm::FpuTag& t) {
-  return t.read_text(is);
-}
-/** iostream overload */
-inline ostream& operator<<(ostream& os, const x64asm::FpuTag& t) {
-  return t.write_text(os);
-}
-
-/** iostream overload */
-inline istream& operator>>(istream& is, x64asm::Mxcsr& m) {
-  return m.read_text(is);
-}
-/** iostream overload */
-inline ostream& operator<<(ostream& os, const x64asm::Mxcsr& m) {
-  return m.write_text(os);
-}
-
-} // namespace std
+} // namespace x64asm
 
 #endif
 

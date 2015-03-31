@@ -785,12 +785,11 @@ ostream& Instruction::write_att(ostream& os) const {
   assert((size_t)get_opcode() < X64ASM_NUM_OPCODES);
 
   if (get_opcode() == LABEL_DEFN) {
-    get_operand<Label>(0).write_att(os);
-    os << ":";
+    get_operand<Label>(0).write_att(os) << ":";
     return os;
   }
 
-  os << opcode_write_att(get_opcode()) << " ";
+  x64asm::write_att(os, get_opcode()) << " ";
   if (arity() > 0)
     for (int i = (int)arity() - 1; i >= 0; --i) {
       switch (type(i)) {

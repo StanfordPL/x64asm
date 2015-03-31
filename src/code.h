@@ -131,17 +131,4 @@ public:
 
 } // namespace x64asm
 
-namespace std {
-
-/** I/O overload. */
-inline istream& operator>>(istream& is, x64asm::Code& c) {
-  return c.read_att(is);
-}
-/** I/O overload. */
-inline ostream& operator<<(ostream& os, const x64asm::Code& c) {
-  return c.write_att(os);
-}
-
-} // namespace std
-
 #endif

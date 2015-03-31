@@ -42,6 +42,7 @@ limitations under the License.
 #include "src/sreg.h"
 #include "src/sse.h"
 #include "src/st.h"
+#include "src/stl.h"
 #include "src/type.h"
 
 #endif

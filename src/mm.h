@@ -51,17 +51,4 @@ protected:
 
 } // namespace x64asm
 
-namespace std {
-
-/** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::Mm& m) {
-  return m.read_att(is);
-}
-/** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::Mm& m) {
-  return m.write_att(os);
-}
-
-} // namespace std
-
 #endif

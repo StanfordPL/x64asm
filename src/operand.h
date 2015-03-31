@@ -133,31 +133,4 @@ private:
 
 } // namespace x64asm
 
-namespace std {
-
-/** STL hash specialization. */
-template <>
-struct hash<x64asm::Operand> {
-  size_t operator()(const x64asm::Operand& o) const {
-    return o.hash();
-  }
-};
-
-/** STL swap specialization */
-inline void swap(x64asm::Operand& o1, x64asm::Operand& o2) {
-  o1.swap(o2);
-}
-
-/** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::Operand& op) {
-  return op.read_att(is);
-}
-
-/** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::Operand& op) {
-  return op.write_att(os);
-}
-
-} // namespace std
-
 #endif

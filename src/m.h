@@ -533,19 +533,4 @@ public:
 /** Implementation of functions; needed due to templating */
 #include "src/m_cc.h"
 
-namespace std {
-
-/** iostream overload. */
-template <class T>
-inline istream& operator>>(istream& is, x64asm::M<T>& m) {
-  return m.read_att(is);
-}
-/** iostream overload. */
-template <class T>
-inline ostream& operator<<(ostream& os, const x64asm::M<T>& m) {
-  return m.write_att(os);
-}
-
-} // namespace std
-
 #endif

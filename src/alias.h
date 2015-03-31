@@ -37,7 +37,7 @@ public:
       exists (ie: %r12).
   */
   template <typename T>
-  static typename std::enable_if <is_reg<T>::value && !std::is_same<T, Rh>::value && !std::is_same<T, Rb>::value, const Rl>::type
+  static typename std::enable_if <is_gp_reg<T>::value && !std::is_same<T, Rh>::value && !std::is_same<T, Rb>::value, const Rl>::type
   to_low(const T& t) {
     assert(t < 4);
     return Constants::rls()[t];
@@ -57,7 +57,7 @@ public:
       exists (ie: %r12).
   */
   template <typename T>
-  static typename std::enable_if <is_reg<T>::value && !std::is_same<T, Rh>::value && !std::is_same<T, Rb>::value, const Rh>::type
+  static typename std::enable_if <is_gp_reg<T>::value && !std::is_same<T, Rh>::value && !std::is_same<T, Rb>::value, const Rh>::type
   to_high(const T& t) {
     assert(t < 4);
     return Constants::rhs()[t];
@@ -76,7 +76,7 @@ public:
       exists (ie: %r12).
   */
   template <typename T>
-  static typename std::enable_if<is_reg<T>::value && !std::is_same<T, Rl>::value && !std::is_same<T, Rh>::value, const Rb>::type
+  static typename std::enable_if<is_gp_reg<T>::value && !std::is_same<T, Rl>::value && !std::is_same<T, Rh>::value, const Rb>::type
   to_byte(const T& t) {
     // The rbs array begins with rbp, which has an internal value of 4.
     assert(t >= 4);
@@ -85,7 +85,7 @@ public:
 
   /** Convert a general purpose register to its word alias. */
   template <typename T>
-  static typename std::enable_if <is_reg<T>::value && !std::is_same<T, Rh>::value, const R16>::type
+  static typename std::enable_if <is_gp_reg<T>::value && !std::is_same<T, Rh>::value, const R16>::type
   to_word(const T& t) {
     return Constants::r16s()[t];
   }
@@ -98,7 +98,7 @@ public:
 
   /** Convert a general purpose register to its double alias. */
   template <typename T>
-  static typename std::enable_if<is_reg<T>::value && !std::is_same<T, Rh>::value, const R32>::type
+  static typename std::enable_if<is_gp_reg<T>::value && !std::is_same<T, Rh>::value, const R32>::type
   to_double(const T& t) {
     return Constants::r32s()[t];
   }
@@ -111,7 +111,7 @@ public:
 
   /** Convert a general purpose register to its quad alias. */
   template <typename T>
-  static typename std::enable_if <is_reg<T>::value && !std::is_same<T, Rh>::value, const R64>::type
+  static typename std::enable_if <is_gp_reg<T>::value && !std::is_same<T, Rh>::value, const R64>::type
   to_quad(const T& t) {
     return Constants::r64s()[t];
   }

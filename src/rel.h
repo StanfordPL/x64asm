@@ -80,17 +80,4 @@ public:
 
 } // namespace x64asm
 
-namespace std {
-
-/** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::Rel& r) {
-  return r.read_att(is);
-}
-/** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::Rel& r) {
-  return r.write_att(os);
-}
-
-} // namespace std
-
 #endif

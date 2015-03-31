@@ -138,30 +138,4 @@ private:
 
 } // namespace x64asm
 
-namespace std {
-
-/** STL hash specialization. */
-template <>
-struct hash<x64asm::FlagSet> {
-  size_t operator()(const x64asm::FlagSet& fs) const {
-    return fs.hash();
-  }
-};
-
-/** STL swap specialization */
-inline void swap(x64asm::FlagSet& fs1, x64asm::FlagSet& fs2) {
-  fs1.swap(fs2);
-}
-
-/** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::FlagSet& fs) {
-  return fs.read_text(is);
-}
-/** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::FlagSet& fs) {
-  return fs.write_text(os);
-}
-
-} // namespace std
-
 #endif

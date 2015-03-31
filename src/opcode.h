@@ -17,8 +17,8 @@ limitations under the License.
 #ifndef X64ASM_SRC_OPCODE_H
 #define X64ASM_SRC_OPCODE_H
 
-#include <string>
-
+#include <cassert>
+#include <iostream>
 
 namespace x64asm {
 
@@ -32,7 +32,13 @@ enum Opcode : int32_t {
   #include "src/opcode.enum"
 };
 
-std::string opcode_write_att(Opcode o);
+/** This method is unimplemented */
+inline std::istream& read_att(std::istream& is, Opcode& o) {
+  assert(false);
+  return is;
+}
+
+std::ostream& write_att(std::ostream& os, const Opcode& o);
 
 } // namespace x64asm
 

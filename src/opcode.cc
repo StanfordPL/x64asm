@@ -37,8 +37,8 @@ constexpr array<const char*, X64ASM_NUM_OPCODES> att_() {
 namespace x64asm {
 
 /** Get the string representation of an opcode */
-string opcode_write_att(Opcode o) {
-  return string(att_()[o]);
+ostream& write_att(ostream& os, const Opcode& o) {
+  return (os << att_()[o]);
 }
 
 } // namespace x64asm

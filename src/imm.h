@@ -166,17 +166,4 @@ private:
 
 } // namespace x64asm
 
-namespace std {
-
-/** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::Imm& i) {
-  return i.read_att(is);
-}
-/** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::Imm& i) {
-  return i.write_att(os);
-}
-
-} // namespace std
-
 #endif
