@@ -627,9 +627,7 @@ public:
   /** STL-compliant swap. */
   void swap(Instruction& rhs) {
     std::swap(opcode_, rhs.opcode_);
-    for (size_t i = 0; i < 4; ++i) {
-      std::swap(operands_[i], rhs.operands_[i]);
-    }
+    std::swap(operands_, rhs.operands_);
   }
 
   /** @todo This method is undefined. */

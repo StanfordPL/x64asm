@@ -106,11 +106,9 @@ struct hash {
       is_same<T, x64asm::Function>::value ||
       is_same<T, x64asm::Code>::value ||
       is_same<T, x64asm::Instruction>::value ||
-      is_same<T, x64asm::Opcode>::value ||
       x64asm::is_operand<T>::value ||
       x64asm::is_env_bits<T>::value ||
       x64asm::is_env_reg<T>::value ||
-      is_same<T, x64asm::Flag>::value ||
       is_same<T, x64asm::FlagSet>::value ||
       is_same<T, x64asm::RegSet>:: value,
       size_t>::type
@@ -118,25 +116,6 @@ struct hash {
     return t.hash();
   }
 };
-
-// swap specialization
-
-template <typename T>
-inline typename enable_if<
-    is_same<T, x64asm::Function>::value ||
-    is_same<T, x64asm::Code>::value ||
-    is_same<T, x64asm::Instruction>::value ||
-    is_same<T, x64asm::Opcode>::value ||
-    x64asm::is_operand<T>::value ||
-    x64asm::is_env_bits<T>::value ||
-    x64asm::is_env_reg<T>::value ||
-    is_same<T, x64asm::Flag>::value ||
-    is_same<T, x64asm::FlagSet>::value ||
-    is_same<T, x64asm::RegSet>:: value,
-    void>::type 
-swap(T& t1, T& t2) {
-  t1.swap(t2);
-}
 
 } // namespace std
 
