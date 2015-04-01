@@ -22,6 +22,7 @@ limitations under the License.
 #include "src/constants.h"
 
 using namespace std;
+using namespace x64asm;
 
 namespace {
 

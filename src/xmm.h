@@ -14,38 +14,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef X64ASM_SRC_ST_H
-#define X64ASM_SRC_ST_H
+#ifndef X64ASM_SRC_XMM_H
+#define X64ASM_SRC_XMM_H
 
 #include <iostream>
 
-#include "src/operand.h"
+#include "src/sse.h"
 
 namespace x64asm {
 
-/** The ith element from the top of the FPU register stack
-    (i = 0 through 7).
+/** An XMM register. The 128-bit XMM registers are: XMM0 through XMM7; XMM8
+    through XMM15 are available using REX.R in 64-bit mode.
 */
-class St : public Operand {
+class Xmm : public Sse {
   // Needs access to constructor.
   friend class Constants;
 
 public:
-  /** Returns true if this stack register is well-formed. */
+  /** Returns true if this xmm register is well-formed. */
   constexpr bool check() {
-    return val_ < 8;
+    return val_ < 16;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const St& rhs) {
+  constexpr bool operator<(const Xmm& rhs) {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const St& rhs) {
+  constexpr bool operator==(const Xmm& rhs) {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const St& rhs) {
+  constexpr bool operator!=(const Xmm& rhs) {
     return !(*this == rhs);
   }
 
@@ -58,44 +58,36 @@ public:
   constexpr size_t hash() {
     return val_;
   }
+  /** STL-compliant swap. */
+  void swap(Xmm& rhs) {
+    std::swap(val_, rhs.val_);
+  }
 
-  /** @todo This method is undefined. */
-  std::istream& read_att(std::istream& is) {
-    is.setstate(std::ios::failbit);
-    return is;
-  }
-  /** Writes this stack register to an ostream using at&t syntax. */
-  std::ostream& write_att(std::ostream& os) const {
-    assert(check());
-    os << "%";
-    if (val_ == 0) {
-      os << "st";
-    } else {
-      os << "st(" << std::dec << val_ << ")";
-    }
-    return os;
-  }
+  /** Reads this xmm register from an ostream using at&t syntax. */
+  std::istream& read_att(std::istream& is);
+  /** Writes this xmm register to an ostream using at&t syntax. */
+  std::ostream& write_att(std::ostream& os) const;
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr St(uint64_t val) : Operand(Type::ST, val) {}
-  constexpr St(Type t, uint64_t val) : Operand(t, val) {}
+  constexpr Xmm(uint64_t val) : Sse(Type::XMM, val) {}
+  constexpr Xmm(Type t, uint64_t val) : Sse(t, val) {}
 };
 
-/** The top element of the FPU register stack. */
-class St0 : public St {
+/** The XMM register XMM0. */
+class Xmm0 : public Xmm {
   // Needs access to constructor.
   friend class Constants;
 
 public:
-  /** Returns true if this stack register is %st(0). */
+  /** Returns true if this xmm register is %xmm0. */
   constexpr bool check() {
     return val_ == 0;
   }
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr St0() : St(Type::ST_0, 0) {}
+  constexpr Xmm0() : Xmm(Type::XMM_0, 0) {}
 };
 
 } // namespace x64asm
@@ -104,19 +96,19 @@ namespace std {
 
 /** STL hash specialization. */
 template <>
-struct hash<x64asm::St> {
-  size_t operator()(const x64asm::St& s) const {
-    return s.hash();
+struct hash<x64asm::Xmm> {
+  size_t operator()(const x64asm::Xmm& x) const {
+    return x.hash();
   }
 };
 
 /** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::St& s) {
-  return s.read_att(is);
+inline istream& operator>>(istream& is, x64asm::Xmm& x) {
+  return x.read_att(is);
 }
 /** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::St& s) {
-  return s.write_att(os);
+inline ostream& operator<<(ostream& os, const x64asm::Xmm& x) {
+  return x.write_att(os);
 }
 
 } // namespace std

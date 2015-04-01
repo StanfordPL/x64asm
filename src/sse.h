@@ -17,6 +17,7 @@ limitations under the License.
 #ifndef X64ASM_SRC_SSE_H
 #define X64ASM_SRC_SSE_H
 
+#include <cassert>
 #include <iostream>
 
 #include "src/operand.h"
@@ -27,14 +28,9 @@ namespace x64asm {
 class Sse : public Operand {
 
 public:
-  /** Returns true if this xmm register is well-formed. */
-  constexpr bool check() {
-    return val() < 16;
-  }
-
   /** Conversion based on underlying value. */
   constexpr operator uint64_t() {
-    return val();
+    return val_;
   }
 
   /** Writes this ymm register to an ostream using at&t syntax. */
@@ -44,59 +40,6 @@ protected:
   constexpr Sse(Type t, uint64_t val) : Operand(t, val) {}
 };
 
-/** An XMM register. The 128-bit XMM registers are: XMM0 through XMM7; XMM8
-    through XMM15 are available using REX.R in 64-bit mode.
-*/
-class Xmm : public Sse {
-  // Needs access to constructor.
-  friend class Constants;
-
-public:
-  /** Reads this xmm register from an ostream using at&t syntax. */
-  std::istream& read_att(std::istream& is);
-  /** Writes this xmm register to an ostream using at&t syntax. */
-  std::ostream& write_att(std::ostream& os) const;
-
-protected:
-  /** Direct access to this constructor is disallowed. */
-  constexpr Xmm(uint64_t val) : Sse(Type::XMM, val) {}
-  constexpr Xmm(Type t, uint64_t val) : Sse(t, val) {}
-};
-
-/** The XMM register XMM0. */
-class Xmm0 : public Xmm {
-  // Needs access to constructor.
-  friend class Constants;
-
-public:
-  /** Returns true if this xmm register is %xmm0. */
-  constexpr bool check() {
-    return val() == 0;
-  }
-
-private:
-  /** Direct access to this constructor is disallowed. */
-  constexpr Xmm0() : Xmm(Type::XMM_0, 0) {}
-};
-
-/** A YMM register. The 256-bit YMM registers are: YMM0 through YMM7; YMM8
-    through YMM15 are available using REX.R in 64-bit mode.
-*/
-class Ymm : public Sse {
-  // Needs access to constructor.
-  friend class Constants;
-
-public:
-  /** Reads this ymm register from an ostream using at&t syntax. */
-  std::istream& read_att(std::istream& is);
-  /** Writes this ymm register to an ostream using at&t syntax. */
-  std::ostream& write_att(std::ostream& os) const;
-
-protected:
-  /** Direct access to this constructor is disallowed. */
-  constexpr Ymm(uint64_t val) : Sse(Type::YMM, val) {}
-};
-
 } // namespace x64asm
 
 namespace std {
@@ -104,24 +47,6 @@ namespace std {
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::Sse& s) {
   return s.write_att(os);
-}
-
-/** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::Xmm& x) {
-  return x.read_att(is);
-}
-/** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::Xmm& x) {
-  return x.write_att(os);
-}
-
-/** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::Ymm& y) {
-  return y.read_att(is);
-}
-/** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::Ymm& y) {
-  return y.write_att(os);
 }
 
 } // namespace std

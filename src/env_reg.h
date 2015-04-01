@@ -17,6 +17,7 @@ limitations under the License.
 #ifndef X64ASM_ENV_REG_H
 #define X64ASM_ENV_REG_H
 
+#include <cassert>
 #include <iostream>
 
 namespace x64asm {
@@ -28,28 +29,6 @@ public:
   std::istream& read_text(std::istream& is) {
     is.setstate(std::ios::failbit);
     return is;
-  }
-
-  /** Comparison */
-  constexpr bool operator==(const EnvReg& rhs) {
-    return val_ == rhs.val_;
-  }
-  /** Comparison */
-  constexpr bool operator!=(const EnvReg& rhs) {
-    return !(*this == rhs);
-  }
-  /** Comparison */
-  constexpr bool operator<(const EnvReg& rhs) {
-    return val_ < rhs.val_;
-  }
-
-  /** STL-compliant hash */
-  constexpr size_t hash() {
-    return val_;
-  }
-  /** STL_compliant swap */
-  void swap(EnvReg& rhs) {
-    std::swap(val_, rhs.val_);
   }
 
 protected:
@@ -128,19 +107,6 @@ private:
 } // namespace x64asm
 
 namespace std {
-
-/** STL hash specialization. */
-template <>
-struct hash<x64asm::EnvReg> {
-  size_t operator()(const x64asm::EnvReg& e) const {
-    return e.hash();
-  }
-};
-
-/** STL swap specialization */
-inline void swap(x64asm::EnvReg& e1, x64asm::EnvReg& e2) {
-  e1.swap(e2);
-}
 
 /** iostream overload */
 inline istream& operator>>(istream& is, x64asm::FpuData& f) {

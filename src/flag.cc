@@ -17,6 +17,7 @@ limitations under the License.
 #include "src/flag.h"
 
 #include <array>
+#include <cassert>
 #include <string>
 #include <utility>
 

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "src/mm.h"
+#include "src/xmm.h"
 
 #include <array>
 #include <cassert>
@@ -27,9 +27,10 @@ using namespace x64asm;
 
 namespace {
 
-constexpr array<const char*, 8> mms_() {
+constexpr array<const char*, 16> xmms_() {
   return {
-    "%mm0", "%mm1", "%mm2", "%mm3", "%mm4", "%mm5", "%mm6", "%mm7"
+    "%xmm0", "%xmm1", "%xmm2", "%xmm3", "%xmm4", "%xmm5", "%xmm6", "%xmm7",
+    "%xmm8", "%xmm9", "%xmm10", "%xmm11", "%xmm12", "%xmm13", "%xmm14", "%xmm15"
   };
 }
 
@@ -37,13 +38,13 @@ constexpr array<const char*, 8> mms_() {
 
 namespace x64asm {
 
-istream& Mm::read_att(istream& is) {
+istream& Xmm::read_att(istream& is) {
   string temp;
   is >> temp;
 
-  for (size_t i = 0, ie = mms_().size(); i < ie; ++i) {
-    if (temp == mms_()[i]) {
-      *this = Constants::mms()[i];
+  for (size_t i = 0, ie = xmms_().size(); i < ie; ++i) {
+    if (temp == xmms_()[i]) {
+      *this = Constants::xmms()[i];
       return is;
     }
   }
@@ -52,9 +53,9 @@ istream& Mm::read_att(istream& is) {
   return is;
 }
 
-ostream& Mm::write_att(ostream& os) const {
+ostream& Xmm::write_att(ostream& os) const {
   assert(check());
-  return (os << mms_()[val_]);
+  return (os << xmms_()[val_]);
 }
 
 } // namespace x64asm

@@ -34,20 +34,20 @@ bool M<T>::check() const {
   }
   // Check scale
   switch (get_scale()) {
-    case Scale::TIMES_1:
-    case Scale::TIMES_2:
-    case Scale::TIMES_4:
-    case Scale::TIMES_8:
-      break;
-    default:
-      return false;
+  case Scale::TIMES_1:
+  case Scale::TIMES_2:
+  case Scale::TIMES_4:
+  case Scale::TIMES_8:
+    break;
+  default:
+    return false;
   }
   // Check disp
   if (!get_disp().check()) {
     return false;
   }
   // Index cannot be rsp/esp
-  if (contains_index() && get_index() == Constants::esp()) {
+  if (contains_index() && get_index().val_ == Constants::esp().val_) {
     return false;
   }
   // Check for absence of base/index for RIP+offset form

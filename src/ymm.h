@@ -14,37 +14,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#ifndef X64ASM_SRC_MM_H
-#define X64ASM_SRC_MM_H
+#ifndef X64ASM_SRC_YMM_H
+#define X64ASM_SRC_YMM_H
 
 #include <cassert>
 #include <iostream>
 
-#include "src/operand.h"
+#include "src/sse.h"
 
 namespace x64asm {
 
-/** An MMX register. The 64-bit MMX registers are: MM0 through MM7. */
-class Mm : public Operand {
+/** A YMM register. The 256-bit YMM registers are: YMM0 through YMM7; YMM8
+    through YMM15 are available using REX.R in 64-bit mode.
+*/
+class Ymm : public Sse {
   // Needs access to constructor.
   friend class Constants;
 
 public:
   /** Returns true if this xmm register is well-formed. */
   constexpr bool check() {
-    return val_ < 8;
+    return val_ < 16;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const Mm& rhs) {
+  constexpr bool operator<(const Ymm& rhs) {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const Mm& rhs) {
+  constexpr bool operator==(const Ymm& rhs) {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const Mm& rhs) {
+  constexpr bool operator!=(const Ymm& rhs) {
     return !(*this == rhs);
   }
 
@@ -58,14 +60,14 @@ public:
     return val_;
   }
 
-  /** Reads this mm register from an ostream using at&t syntax. */
+  /** Reads this ymm register from an ostream using at&t syntax. */
   std::istream& read_att(std::istream& is);
-  /** Writes this mm register to an ostream using at&t syntax. */
+  /** Writes this ymm register to an ostream using at&t syntax. */
   std::ostream& write_att(std::ostream& os) const;
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr Mm(uint64_t val) : Operand(Type::MM, val) {}
+  constexpr Ymm(uint64_t val) : Sse(Type::YMM, val) {}
 };
 
 } // namespace x64asm
@@ -74,19 +76,19 @@ namespace std {
 
 /** STL hash specialization. */
 template <>
-struct hash<x64asm::Mm> {
-  size_t operator()(const x64asm::Mm& m) const {
-    return m.hash();
+struct hash<x64asm::Ymm> {
+  size_t operator()(const x64asm::Ymm& y) const {
+    return y.hash();
   }
 };
 
 /** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::Mm& m) {
-  return m.read_att(is);
+inline istream& operator>>(istream& is, x64asm::Ymm& y) {
+  return y.read_att(is);
 }
 /** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::Mm& m) {
-  return m.write_att(os);
+inline ostream& operator<<(ostream& os, const x64asm::Ymm& y) {
+  return y.write_att(os);
 }
 
 } // namespace std

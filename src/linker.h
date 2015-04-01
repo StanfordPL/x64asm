@@ -17,7 +17,6 @@ limitations under the License.
 #ifndef X64ASM_SRC_LINKER_H
 #define X64ASM_SRC_LINKER_H
 
-#include <cassert>
 #include <unordered_map>
 #include <vector>
 

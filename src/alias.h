@@ -23,9 +23,10 @@ limitations under the License.
 #include "src/constants.h"
 #include "src/mm.h"
 #include "src/r.h"
-#include "src/sse.h"
 #include "src/st.h"
 #include "src/type_traits.h"
+#include "src/xmm.h"
+#include "src/ymm.h"
 
 namespace x64asm {
 

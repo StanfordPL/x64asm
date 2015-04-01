@@ -27,9 +27,27 @@ namespace x64asm {
 /** An immediate value. */
 class Imm : public Operand {
 public:
+  /** Comparison based on immediate value. */
+  constexpr bool operator==(const Imm& rhs) {
+    return val_ == rhs.val_;
+  }
+  /** Comparison based on immediate value. */
+  constexpr bool operator!=(const Imm& rhs) {
+    return !(*this == rhs);
+  }
+  /** Comparison based on immediate value. */
+  constexpr bool operator<(const Imm& rhs) {
+    return val_ < rhs.val_;
+  }
+
   /** Conversion based on underlying value. */
   constexpr operator uint64_t() {
-    return val();
+    return val_;
+  }
+
+  /** STL-compliant hash. */
+  constexpr size_t hash() {
+    return val_;
   }
 
   /** @todo This method is undefined */
@@ -40,12 +58,12 @@ public:
   /** Writes this immediate to an ostream using at&t syntax. */
   std::ostream& write_att(std::ostream& os) const {
     const auto fmt = os.flags();
-    os << "$0x" << std::noshowbase << std::hex << val();
+    os << "$0x" << std::noshowbase << std::hex << val_;
     os.flags(fmt);
     return os;
   }
 
-public:
+protected:
   /** Direct access to this constructor is disallowed. */
   constexpr Imm(Type t, uint64_t value) : Operand(t, value) {}
 };
@@ -63,7 +81,7 @@ public:
 
   /** Checks that this immediate value fits in 8 bits. */
   constexpr bool check() {
-    return ((val()>>8) == 0x0ul) || ((val()>>8) == 0xfffffffffffffful);
+    return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
   }
 };
 
@@ -77,7 +95,7 @@ public:
 
   /** Checks that this immediate value fits in 16 bits. */
   constexpr bool check() {
-    return ((val()>>16) == 0x0ul) || ((val()>>16) == 0xfffffffffffful);
+    return ((val_>>16) == 0x0ul) || ((val_>>16) == 0xfffffffffffful);
   }
 };
 
@@ -92,7 +110,7 @@ public:
 
   /** Check that this immediate value fits in 32 bits. */
   constexpr bool check() {
-    return ((val()>>32) == 0x0ul) || ((val()>>32) == 0xfffffffful);
+    return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
   }
 };
 
@@ -124,7 +142,7 @@ class Zero : public Imm8 {
 public:
   /** Checks that this immediate value equals zero. */
   constexpr bool check() {
-    return val() == 0;
+    return val_ == 0;
   }
 
 private:
@@ -140,7 +158,7 @@ class One : public Imm8 {
 public:
   /** Checks that this immediate value equals one. */
   constexpr bool check() {
-    return val() == 1;
+    return val_ == 1;
   }
 
 private:
@@ -156,7 +174,7 @@ class Three : public Imm8 {
 public:
   /** Checks that this immediate value equals three. */
   constexpr bool check() {
-    return val() == 3;
+    return val_ == 3;
   }
 
 private:
@@ -167,6 +185,14 @@ private:
 } // namespace x64asm
 
 namespace std {
+
+/** STL hash specialization. */
+template <>
+struct hash<x64asm::Imm> {
+  size_t operator()(const x64asm::Imm& i) const {
+    return i.hash();
+  }
+};
 
 /** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Imm& i) {

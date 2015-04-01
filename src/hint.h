@@ -17,7 +17,9 @@ limitations under the License.
 #ifndef X64ASM_SRC_HINT_H
 #define X64ASM_SRC_HINT_H
 
+#include <cassert>
 #include <iostream>
+#include <string>
 
 #include "src/operand.h"
 
@@ -31,12 +33,30 @@ class Hint : public Operand {
 public:
   /** Checks that this hint is well-formed. */
   constexpr bool check() {
-    return val() < 2;
+    return val_ < 2;
   }
 
-  /** Conversion based on val. */
+  /** Comparison based on val_. */
+  constexpr bool operator==(const Hint& rhs) {
+    return val_ == rhs.val_;
+  }
+  /** Comparison based on val_. */
+  constexpr bool operator!=(const Hint& rhs) {
+    return !(*this == rhs);
+  }
+  /** Comparison based on val_. */
+  constexpr bool operator<(const Hint& rhs) {
+    return val_ < rhs.val_;
+  }
+
+  /** Conversion based on val_. */
   constexpr operator uint64_t() {
-    return val();
+    return val_;
+  }
+
+  /** STL-compliant hash. */
+  constexpr size_t hash() {
+    return val_;
   }
 
   /** @todo This method is undefined. */
@@ -58,8 +78,16 @@ private:
 
 namespace std {
 
+/** STL hash specialization. */
+template <>
+struct hash<x64asm::Hint> {
+  size_t operator()(const x64asm::Hint& h) const {
+    return h.hash();
+  }
+};
+
 /** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::Hint& h) {
+inline istream& operator<<(istream& is, x64asm::Hint& h) {
   return h.read_att(is);
 }
 /** iostream overload. */

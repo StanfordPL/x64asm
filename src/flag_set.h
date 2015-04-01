@@ -25,11 +25,32 @@ limitations under the License.
 namespace x64asm {
 
 class FlagSet {
+private:
+  /** Creates a flag set from a bit mask. */
+  constexpr FlagSet(uint64_t mask) : mask_(mask) { }
+
 public:
   /** Creates an empty flag set. */
   constexpr FlagSet() : mask_(0) {}
   /** Creates a flag set with a single element. */
   constexpr FlagSet(Flag f) : mask_((uint64_t)f) {}
+
+  /** Copy constructor. */
+  constexpr FlagSet(const FlagSet& rhs) : mask_(rhs.mask_) { }
+  /** Move constructor. */
+  FlagSet(FlagSet&& rhs) {
+    mask_ = rhs.mask_;
+  }
+  /** Copy assignment operator. */
+  FlagSet& operator=(const FlagSet& rhs) {
+    FlagSet(rhs).swap(*this);
+    return *this;
+  }
+  /** Move assignment operator. */
+  FlagSet& operator=(FlagSet&& rhs) {
+    FlagSet(std::move(rhs)).swap(*this);
+    return *this;
+  }
 
   /** Creates an empty flag set. */
   static constexpr FlagSet empty() {
@@ -101,15 +122,15 @@ public:
     return (*this - fs) != *this;
   }
 
-  /** Comparison operator. */
+  /** Equality based on underlying bit mask. */
   constexpr bool operator==(FlagSet rhs) {
     return mask_ == rhs.mask_;
   }
-  /** Comparison operator. */
+  /** Equality based on underlying bit mask. */
   constexpr bool operator!=(FlagSet rhs) {
     return mask_ != rhs.mask_;
   }
-  /** Comparison operator. */
+  /** Equality based on underlying bit mask. */
   constexpr bool operator<(FlagSet rhs) {
     return mask_ < rhs.mask_;
   }
@@ -129,9 +150,6 @@ public:
   std::ostream& write_text(std::ostream& os) const;
 
 private:
-  /** Creates a flag set from a bit mask. */
-  constexpr FlagSet(uint64_t mask) : mask_(mask) { }
-
   /** Underlying bitmask. */
   uint64_t mask_;
 };
@@ -148,9 +166,9 @@ struct hash<x64asm::FlagSet> {
   }
 };
 
-/** STL swap specialization */
-inline void swap(x64asm::FlagSet& fs1, x64asm::FlagSet& fs2) {
-  fs1.swap(fs2);
+/** STL swap overload. */
+inline void swap(x64asm::FlagSet& lhs, x64asm::FlagSet& rhs) {
+  lhs.swap(rhs);
 }
 
 /** iostream overload. */

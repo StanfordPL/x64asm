@@ -17,7 +17,6 @@ limitations under the License.
 #ifndef X64ASM_SRC_REG_SET_H
 #define X64ASM_SRC_REG_SET_H
 
-#include <cassert>
 #include <iostream>
 
 #include "src/env_bits.h"
@@ -27,13 +26,15 @@ limitations under the License.
 #include "src/moffs.h"
 #include "src/r.h"
 #include "src/sreg.h"
-#include "src/sse.h"
 #include "src/st.h"
+#include "src/xmm.h"
+#include "src/ymm.h"
 
 namespace x64asm {
 
 /** A compact implementation of a bit set for registers. */
 class RegSet {
+  friend class Instruction;
 private:
   /** Per register type position masks. */
   enum class Mask : uint64_t {

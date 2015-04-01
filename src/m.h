@@ -40,209 +40,132 @@ enum class Scale {
 template <class T>
 class M : public Operand {
 private:
-  /** Value constants */
-  static constexpr uint64_t reg_null_ = 0x10;
-  static constexpr uint64_t seg_null_ = 0x07;
-  /** Mask constants */
-  static constexpr uint64_t disp_mask_    = 0xffffffff;
-  static constexpr uint64_t base_mask_    = 0x1f;
-  static constexpr uint64_t index_mask_   = 0x1f;
-  static constexpr uint64_t scale_mask_   = 0x3;
-  static constexpr uint64_t seg_mask_     = 0x7;
-  static constexpr uint64_t addr_or_mask_ = 0x1;
-  static constexpr uint64_t rip_mask_     = 0x1;
-  /** Index constants */
-  static constexpr size_t disp_idx_    = 0;
-  static constexpr size_t base_idx_    = 32;
-  static constexpr size_t index_idx_   = 40;
-  static constexpr size_t scale_idx_   = 48;
-  static constexpr size_t seg_idx_     = 56;
-  static constexpr size_t addr_or_idx_ = 60;
-  static constexpr size_t rip_idx_     = 61;
+  /** Constant bit masks used to represent absent operands. */
+  enum class Null : uint64_t {
+    REG  = 0x10,
+    SEG  = 0x7
+  };
+
+  /** Bit mask representing where operand are stored in underlying value. */
+  enum class Mask : uint64_t {
+    DISP    = 0x00000000ffffffff,
+    BASE    = 0x0000001f00000000,
+    INDEX   = 0x00001f0000000000,
+    SCALE   = 0x0003000000000000,
+    SEG     = 0x0700000000000000,
+    ADDR_OR = 0x1000000000000000,
+    RIP     = 0x2000000000000000
+  };
+
+  /** Index of operand in underlying bit mask. */
+  enum class Index {
+    DISP    = 0,
+    BASE    = 32,
+    INDEX   = 40,
+    SCALE   = 48,
+    SEG     = 56,
+    ADDR_OR = 60,
+    RIP     = 61
+  };
 
 public:
-  /** Creates a memory using an existing one.  Used to change types. */
-  template <typename U>
-  constexpr M(const M<U>& m) : 
-    Operand(T::m_type(), m.val(), m.val2()) {}
-  /** Creates a memory using an existing one.  Used to change types. */
-  template <typename U>
-  constexpr M(const M<U>& m, Type t) : 
-    Operand(t, m.val(), m.val2()) {}
-  /** Creates a memory using disp form. */
-  constexpr M(const Imm32& d) :
-    Operand(T::m_type(), init(d, reg_null_, reg_null_, Scale::TIMES_1, seg_null_, 0, 0)) {}
-  /** Creates a memory using seg:disp form. */
-  constexpr M(const Sreg& s, const Imm32& d) :
-    Operand(T::m_type(), init(d, reg_null_, reg_null_, Scale::TIMES_1, s, 0, 0)) {}
-  /** Creates a memroy using (base64) form. */
-  constexpr M(const R32& b) :
-    Operand(T::m_type(), init(Imm32(0), b, reg_null_, Scale::TIMES_1, seg_null_, 1, 0)) {}
-  /** Creates a memory using (base32) form. */
-  constexpr M(const R64& b) :
-    Operand(T::m_type(), init(Imm32(0), b, reg_null_, Scale::TIMES_1, seg_null_, 0, 0)) {}
-  /** Creates a memory using RIP form. */
-  constexpr M(Rip rip) :
-    Operand(T::m_type(), init(Imm32(0), reg_null_, reg_null_, Scale::TIMES_1, seg_null_, 0, 1)) {}
-  /** Creates a memory using seg:base32 form. */
-  constexpr M(const Sreg& s, const R32& b) :
-    Operand(T::m_type(), init(Imm32(0), b, reg_null_, Scale::TIMES_1, s, 1, 0)) {}
-  /** Creates a memory using seg:base64 form. */
-  constexpr M(const Sreg& s, const R64& b) :
-    Operand(T::m_type(), init(Imm32(0), b, reg_null_, Scale::TIMES_1, s, 0, 0)) {}
-  /** Creates a memory using seg:RIP form. */
-  constexpr M(const Sreg& s, Rip rip) :
-    Operand(T::m_type(), init(Imm32(0), reg_null_, reg_null_, Scale::TIMES_1, s, 0, 1)) {}
-  /** Creates a memory using disp(base32) form. */
-  constexpr M(const R32& b, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, reg_null_, Scale::TIMES_1, seg_null_, 1, 0)) {}
-  /** Creates a memory using disp(base64) form. */
-  constexpr M(const R64& b, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, reg_null_, Scale::TIMES_1, seg_null_, 0, 0)) {}
-  /** Creates a memory using RIP+disp form. */
-  constexpr M(Rip rip, const Imm32& d) :
-    Operand(T::m_type(), init(d, reg_null_, reg_null_, Scale::TIMES_1, seg_null_, 0, 1)) {}
-  /** Creates a memory using seg:disp(base32) form. */
-  constexpr M(const Sreg& s, const R32& b, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, reg_null_, Scale::TIMES_1, s, 1, 0)) {}
-  /** Creates a memory using seg:disp(base64) form. */
-  constexpr M(const Sreg& s, const R64& b, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, reg_null_, Scale::TIMES_1, s, 0, 0)) {}
-  /** Creates a memory using seg:RIP+disp form. */
-  constexpr M(const Sreg& s, Rip rip, const Imm32& d) :
-    Operand(T::m_type(), init(d, reg_null_, reg_null_, Scale::TIMES_1, s, 0, 1)) {}
-  /** Creates a memory using (index32,scale) form. */
-  constexpr M(const R32& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), reg_null_, i, sc, seg_null_, 1, 0)) {}
-  /** Creates a memory using (index64,scale) form. */
-  constexpr M(const R64& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), reg_null_, i, sc, seg_null_, 0, 0)) {}
-  /** Creates a memory using seg:(index32,scale) form. */
-  constexpr M(const Sreg& s, const R32& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), reg_null_, i, sc, s, 1, 0)) {}
-  /** Creates a memory using seg:(index64,scale) form. */
-  constexpr M(const Sreg& s, const R64& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), reg_null_, i, sc, s, 0, 0)) {}
-  /** Creates a memory using disp(index32,scale) form. */
-  constexpr M(const R32& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, reg_null_, i, sc, seg_null_, 1, 0)) {}
-  /** Creates a memory using disp(index64,scale) form. */
-  constexpr M(const R64& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, reg_null_, i, sc, seg_null_, 0, 0)) {}
-  /** Creates a memory using seg:disp(index32,scale) form. */
-  constexpr M(const Sreg& s, const R32& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, reg_null_, i, sc, s, 1, 0)) {}
-  /** Creates a memory using seg:disp(index64,scale) form. */
-  constexpr M(const Sreg& s, const R64& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, reg_null_, i, sc, s, 0, 0)) {}
-  /** Creates a memory using (base32,index32,scale) form. */
-  constexpr M(const R32& b, const R32& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), b, i, sc, seg_null_, 1, 0)) {}
-  /** Creates a memory using (base64,index64,scale) form. */
-  constexpr M(const R64& b, const R64& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), b, i, sc, seg_null_, 0, 0)) {}
-  /** Creates a memory using seg:(base32,index32,scale) form. */
-  constexpr M(const Sreg& s, const R32& b, const R32& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), b, i, sc, s, 1, 0)) {}
-  /** Creates a memory using seg:(base64,index64,scale) form. */
-  constexpr M(const Sreg& s, const R64& b, const R64& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), b, i, sc, s, 0, 0)) {}
-  /** Creates a memory using disp(base32,index32,scale) form. */
-  constexpr M(const R32& b, const R32& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, i, sc, seg_null_, 1, 0)) {}
-  /** Creates a memory using disp(base64,index64,scale) form. */
-  constexpr M(const R64& b, const R64& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, i, sc, seg_null_, 0, 0)) {}
-  /** Creates a memory using seg:disp(base32,index32,scale) form. */
-  constexpr M(const Sreg& s, const R32& b, const R32& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, i, sc, s, 1, 0)) {}
-  /** Creates a memory using seg:disp(base64,index64,scale) form. */
-  constexpr M(const Sreg& s, const R64& b, const R64& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, i, sc, s, 0, 0)) {}
-
   /** Returns true if this memory contains a segment register. */
   constexpr bool contains_seg() {
-    return val(seg_mask_, seg_idx_) != seg_null_;
+    return (val_ & (uint64_t)Mask::SEG) != ((uint64_t)Null::SEG << (uint64_t)Index::SEG);
   }
   /** Returns true if this memory contains a base register. */
   constexpr bool contains_base() {
-    return val(base_mask_, base_idx_) != reg_null_;
+    return (val_ & (uint64_t)Mask::BASE) != (r_null() << (uint64_t)Index::BASE);
   }
   /** Returns true if this memory contains an index register. */
   constexpr bool contains_index() {
-    return val(index_mask_, index_idx_) != reg_null_;
+    return (val_ & (uint64_t)Mask::INDEX) != (r_null() << (uint64_t)Index::INDEX);
   }
 
   /** Returns true if this memory uses a 32-bit address override. */
   constexpr bool addr_or() {
-    return val(addr_or_mask_, addr_or_idx_);
+    return val_ & (uint64_t)Mask::ADDR_OR;
   }
   /** Returns true if this memory uses RIP+offset form. */
   constexpr bool rip_offset() {
-    return val(rip_mask_, rip_idx_);
+    return val_ & (uint64_t)Mask::RIP;
   }
 
   /** Returns this memory's segment register; undefined if absent. */
   constexpr Sreg get_seg() {
-    return {val(seg_mask_, seg_idx_)};
+    return {(val_ & (uint64_t)Mask::SEG) >> (uint64_t)Index::SEG};
   }
   /** Returns this memory's base register; undefined if absent. */
   constexpr R64 get_base() {
-    return {val(base_mask_, base_idx_)};
+    return {(val_ & (uint64_t)Mask::BASE) >> (uint64_t)Index::BASE};
   }
   /** Returns this memory's index register; undefined if absent. */
   constexpr R64 get_index() {
-    return {val(index_mask_, index_idx_)};
+    return {(val_ & (uint64_t)Mask::INDEX) >> (uint64_t)Index::INDEX};
   }
   /** Returns this memory's index scaling constant; 1 if absent. */
   constexpr Scale get_scale() {
-    return (Scale)val(scale_mask_, scale_idx_);
+    return (Scale)((val_ & (uint64_t)Mask::SCALE) >> (uint64_t)Index::SCALE);
   }
   /** Returns this memory's displacement; 0 if absent. */
   constexpr Imm32 get_disp() {
-    return {(uint32_t)val(disp_mask_, disp_idx_)};
+    return {(uint32_t)(val_ & (uint64_t)Mask::DISP)};
   }
 
   /** Sets this memory's segment register. */
   void set_seg(const Sreg& seg) {
-    set_val(seg, seg_mask_, seg_idx_);
+    val_ &= ~(uint64_t)Mask::SEG;
+    val_ |= (uint64_t)seg << (uint64_t)Index::SEG;
   }
   /** Sets this memory's base register. */
   void set_base(const R& base) {
-    set_val(base, base_mask_, base_idx_);
+    val_ &= ~(uint64_t)Mask::BASE;
+    val_ |= (uint64_t)base << (uint64_t)Index::BASE;
   }
   /** Sets this memory's index register. */
   void set_index(const R& index) {
-    set_val(index, index_mask_, index_idx_);
+    val_ &= ~(uint64_t)Mask::INDEX;
+    val_ |= (uint64_t)index << (uint64_t)Index::INDEX;
   }
   /** Sets this memory's scale register. */
   void set_scale(Scale scale) {
-    set_val((uint64_t)scale, scale_mask_, scale_idx_);
+    val_ &= ~(uint64_t)Mask::SCALE;
+    val_ |= (uint64_t)scale << (uint64_t)Index::SCALE;
   }
   /** Sets this memory's displacement. */
   void set_disp(const Imm32& disp) {
-    set_val(disp, disp_mask_, disp_idx_);
+    val_ &= ~(uint64_t)Mask::DISP;
+    val_ |= (uint64_t)disp << (uint64_t)Index::DISP;
   }
+
   /** Sets the 32-bit address override bit for this memory. */
   void set_addr_or(bool addr_or) {
-    set_val(addr_or ? 1 : 0, addr_or_mask_, addr_or_idx_);
+    if (addr_or) {
+      val_ |= (uint64_t)Mask::ADDR_OR;
+    } else {
+      val_ &= ~(uint64_t)Mask::ADDR_OR;
+    }
   }
   /** Sets the RIP+offset form flag for this memory. */
   void set_rip_offset(bool rip) {
-    set_val(rip ? 1 : 0, rip_mask_, rip_idx_);
+    if (rip) {
+      val_ |= (uint64_t)Mask::RIP;
+    } else {
+      val_ &= ~(uint64_t)Mask::RIP;
+    }
   }
 
   /** Removes the segment register from this memory. */
   void clear_seg() {
-    set_val(seg_null_, seg_idx_, seg_null_);
+    set_seg(s_null());
   }
   /** Removes the base register from this memory. */
   void clear_base() {
-    set_val(reg_null_, base_idx_, reg_null_);
+    set_base(r_null());
   }
   /** Remvoes the index register from this memory. */
   void clear_index() {
-    set_val(reg_null_, index_mask_, index_idx_);
+    set_index(r_null());
   }
 
   /** Returns true if this memory is well-formed: all present registers are
@@ -250,6 +173,28 @@ public:
     is set only if base and index registers are absent.
   */
   bool check() const;
+
+  /** Comparison based on on val_. */
+  constexpr bool operator<(const M& rhs) {
+    return val_ < rhs.val_;
+  }
+  /** Comparison based on on val_. */
+  constexpr bool operator==(const M& rhs) {
+    return val_ == rhs.val_;
+  }
+  /** Comparison based on on val_. */
+  constexpr bool operator!=(const M& rhs) {
+    return !(*this == rhs);
+  }
+
+  /** STL-compliant hash. */
+  constexpr size_t hash() {
+    return val_;
+  }
+  /** STL-compliant swap. */
+  void swap(M& rhs) {
+    std::swap(val_, rhs.val_);
+  }
 
   /** @todo This method is undefined. */
   std::istream& read_att(std::istream& is) {
@@ -259,17 +204,159 @@ public:
   /** Writes this xmm register to an ostream using at&t syntax. */
   std::ostream& write_att(std::ostream& os) const;
 
-private:
+protected:
+  /** Helper method: returns a null register. */
+  static constexpr R64 r_null() {
+    return {(uint64_t)Null::REG};
+  }
+  /** Helper method: returns a null segment register. */
+  static constexpr Sreg s_null() {
+    return {(uint64_t)Null::SEG};
+  }
   /** Helper method: initializes all internal fields. */
-  static constexpr uint64_t init(uint64_t d, uint64_t b, uint64_t i,
-      Scale sc, uint64_t s, uint64_t ao, uint64_t r) {
-    return (d  << disp_idx_) |
-           (b  << base_idx_) |
-           (i  << index_idx_) |
-           ((uint64_t)sc << scale_idx_) |
-           (s  << seg_idx_) |
-           (ao << addr_or_idx_) |
-           (r  << rip_idx_);
+  static constexpr uint64_t init(const Imm32& d, const R& b, const R& i,
+                                 Scale sc, const Sreg& s, uint64_t addr_or, uint64_t rip) {
+    return ((uint64_t)d & (uint64_t)Mask::DISP) |
+           ((uint64_t)b << (uint64_t)Index::BASE) |
+           ((uint64_t)i << (uint64_t)Index::INDEX) |
+           ((uint64_t)sc << (uint64_t)Index::SCALE) |
+           ((uint64_t)s << (uint64_t)Index::SEG) |
+           (addr_or << (uint64_t)Index::ADDR_OR) |
+           (rip << (uint64_t)Index::RIP);
+  }
+
+public:
+  /** Creates a memory using an existing one.  Used to change types. */
+  template <typename U>
+  constexpr M(const M<U>& m) :
+    Operand(T::m_type(), init(m.get_disp(), m.get_base(), m.get_index(), m.get_scale(),
+                              m.get_seg(), m.addr_or(), m.rip_offset())) {
+  }
+  /** Creates a memory using an existing one.  Used to change types. */
+  template <typename U>
+  constexpr M(const M<U>& m, Type t) :
+    Operand(t, init(m.get_disp(), m.get_base(), m.get_index(), m.get_scale(),
+                    m.get_seg(), m.addr_or(), m.rip_offset())) {
+  }
+  /** Creates a memory using disp form. */
+  constexpr M(const Imm32& d) :
+    Operand(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
+  }
+  /** Creates a memory using seg:disp form. */
+  constexpr M(const Sreg& s, const Imm32& d) :
+    Operand(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s, 0, 0)) {
+  }
+  /** Creates a memroy using (base64) form. */
+  constexpr M(const R32& b) :
+    Operand(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s_null(), 1, 0)) {
+  }
+  /** Creates a memory using (base32) form. */
+  constexpr M(const R64& b) :
+    Operand(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
+  }
+  /** Creates a memory using RIP form. */
+  constexpr M(Rip rip) :
+    Operand(T::m_type(), init(Imm32(0), r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 1)) {
+  }
+  /** Creates a memory using seg:base32 form. */
+  constexpr M(const Sreg& s, const R32& b) :
+    Operand(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s, 1, 0)) {
+  }
+  /** Creates a memory using seg:base64 form. */
+  constexpr M(const Sreg& s, const R64& b) :
+    Operand(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s, 0, 0)) {
+  }
+  /** Creates a memory using seg:RIP form. */
+  constexpr M(const Sreg& s, Rip rip) :
+    Operand(T::m_type(), init(Imm32(0), r_null(), r_null(), Scale::TIMES_1, s, 0, 1)) {
+  }
+  /** Creates a memory using disp(base32) form. */
+  constexpr M(const R32& b, const Imm32& d) :
+    Operand(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s_null(), 1, 0)) {
+  }
+  /** Creates a memory using disp(base64) form. */
+  constexpr M(const R64& b, const Imm32& d) :
+    Operand(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
+  }
+  /** Creates a memory using RIP+disp form. */
+  constexpr M(Rip rip, const Imm32& d) :
+    Operand(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 1)) {
+  }
+  /** Creates a memory using seg:disp(base32) form. */
+  constexpr M(const Sreg& s, const R32& b, const Imm32& d) :
+    Operand(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s, 1, 0)) {
+  }
+  /** Creates a memory using seg:disp(base64) form. */
+  constexpr M(const Sreg& s, const R64& b, const Imm32& d) :
+    Operand(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s, 0, 0)) {
+  }
+  /** Creates a memory using seg:RIP+disp form. */
+  constexpr M(const Sreg& s, Rip rip, const Imm32& d) :
+    Operand(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s, 0, 1)) {
+  }
+  /** Creates a memory using (index32,scale) form. */
+  constexpr M(const R32& i, Scale sc) :
+    Operand(T::m_type(), init(Imm32(0), r_null(), i, sc, s_null(), 1, 0)) {
+  }
+  /** Creates a memory using (index64,scale) form. */
+  constexpr M(const R64& i, Scale sc) :
+    Operand(T::m_type(), init(Imm32(0), r_null(), i, sc, s_null(), 0, 0)) {
+  }
+  /** Creates a memory using seg:(index32,scale) form. */
+  constexpr M(const Sreg& s, const R32& i, Scale sc) :
+    Operand(T::m_type(), init(Imm32(0), r_null(), i, sc, s, 1, 0)) {
+  }
+  /** Creates a memory using seg:(index64,scale) form. */
+  constexpr M(const Sreg& s, const R64& i, Scale sc) :
+    Operand(T::m_type(), init(Imm32(0), r_null(), i, sc, s, 0, 0)) {
+  }
+  /** Creates a memory using disp(index32,scale) form. */
+  constexpr M(const R32& i, Scale sc, const Imm32& d) :
+    Operand(T::m_type(), init(d, r_null(), i, sc, s_null(), 1, 0)) {
+  }
+  /** Creates a memory using disp(index64,scale) form. */
+  constexpr M(const R64& i, Scale sc, const Imm32& d) :
+    Operand(T::m_type(), init(d, r_null(), i, sc, s_null(), 0, 0)) {
+  }
+  /** Creates a memory using seg:disp(index32,scale) form. */
+  constexpr M(const Sreg& s, const R32& i, Scale sc, const Imm32& d) :
+    Operand(T::m_type(), init(d, r_null(), i, sc, s, 1, 0)) {
+  }
+  /** Creates a memory using seg:disp(index64,scale) form. */
+  constexpr M(const Sreg& s, const R64& i, Scale sc, const Imm32& d) :
+    Operand(T::m_type(), init(d, r_null(), i, sc, s, 0, 0)) {
+  }
+  /** Creates a memory using (base32,index32,scale) form. */
+  constexpr M(const R32& b, const R32& i, Scale sc) :
+    Operand(T::m_type(), init(Imm32(0), b, i, sc, s_null(), 1, 0)) {
+  }
+  /** Creates a memory using (base64,index64,scale) form. */
+  constexpr M(const R64& b, const R64& i, Scale sc) :
+    Operand(T::m_type(), init(Imm32(0), b, i, sc, s_null(), 0, 0)) {
+  }
+  /** Creates a memory using seg:(base32,index32,scale) form. */
+  constexpr M(const Sreg& s, const R32& b, const R32& i, Scale sc) :
+    Operand(T::m_type(), init(Imm32(0), b, i, sc, s, 1, 0)) {
+  }
+  /** Creates a memory using seg:(base64,index64,scale) form. */
+  constexpr M(const Sreg& s, const R64& b, const R64& i, Scale sc) :
+    Operand(T::m_type(), init(Imm32(0), b, i, sc, s, 0, 0)) {
+  }
+  /** Creates a memory using disp(base32,index32,scale) form. */
+  constexpr M(const R32& b, const R32& i, Scale sc, const Imm32& d) :
+    Operand(T::m_type(), init(d, b, i, sc, s_null(), 1, 0)) {
+  }
+  /** Creates a memory using disp(base64,index64,scale) form. */
+  constexpr M(const R64& b, const R64& i, Scale sc, const Imm32& d) :
+    Operand(T::m_type(), init(d, b, i, sc, s_null(), 0, 0)) {
+  }
+  /** Creates a memory using seg:disp(base32,index32,scale) form. */
+  constexpr M(const Sreg& s, const R32& b, const R32& i, Scale sc, const Imm32& d) :
+    Operand(T::m_type(), init(d, b, i, sc, s, 1, 0)) {
+  }
+  /** Creates a memory using seg:disp(base64,index64,scale) form. */
+  constexpr M(const Sreg& s, const R64& b, const R64& i, Scale sc, const Imm32& d) :
+    Operand(T::m_type(), init(d, b, i, sc, s, 0, 0)) {
   }
 };
 
@@ -285,6 +372,7 @@ public:
   static constexpr Type m_type() {
     return Type::M_8;
   }
+
 };
 
 /** A word operand in memory, usually expressed as a variable or array name,
@@ -299,6 +387,7 @@ public:
   static constexpr Type m_type() {
     return Type::M_16;
   }
+
 };
 
 /** A doubleword operand in memory, usually expressed as a variable or array
@@ -313,6 +402,7 @@ public:
   static constexpr Type m_type() {
     return Type::M_32;
   }
+
 };
 
 /** A memory quadword operand in memory. */
@@ -324,6 +414,7 @@ public:
   static constexpr Type m_type() {
     return Type::M_64;
   }
+
 };
 
 /** A memory double quadword operand in memory. */
@@ -357,10 +448,12 @@ class M16Int : public M<M16Int>  {
 public:
   using M::M;
 
+
   /** Returns the type of this operand */
   static constexpr Type m_type() {
     return Type::M_16_INT;
   }
+
 };
 
 /** A doubleword integer operand in memory. This symbol designates integers
@@ -374,6 +467,8 @@ public:
   static constexpr Type m_type() {
     return Type::M_32_INT;
   }
+
+
 };
 
 /** A quadword integer operand in memory. This symbol designates integers
@@ -387,6 +482,8 @@ public:
   static constexpr Type m_type() {
     return Type::M_64_INT;
   }
+
+
 };
 
 /** A single-precision floating-point operand in memory. This symbol designates
@@ -401,6 +498,8 @@ public:
   static constexpr Type m_type() {
     return Type::M_32_FP;
   }
+
+
 };
 
 /** A double-precision floating-point operand in memory. This symbol designates
@@ -440,6 +539,7 @@ public:
   static constexpr Type m_type() {
     return Type::M_80_BCD;
   }
+
 };
 
 /** A 2 byte operand in memory. */
@@ -462,6 +562,7 @@ public:
   static constexpr Type m_type() {
     return Type::M_28_BYTE;
   }
+
 };
 
 /** A 108 byte operand in memory. */
@@ -473,6 +574,7 @@ public:
   static constexpr Type m_type() {
     return Type::M_108_BYTE;
   }
+
 };
 
 /** A 512 byte operand in memory. */
@@ -484,6 +586,7 @@ public:
   static constexpr Type m_type() {
     return Type::M_512_BYTE;
   }
+
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -498,6 +601,8 @@ public:
   static constexpr Type m_type() {
     return Type::FAR_PTR_16_16;
   }
+
+
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -512,6 +617,7 @@ public:
   static constexpr Type m_type() {
     return Type::FAR_PTR_16_32;
   }
+
 };
 
 /** A memory operand containing a far pointer composed of two numbers. The
@@ -526,14 +632,25 @@ public:
   static constexpr Type m_type() {
     return Type::FAR_PTR_16_64;
   }
+
 };
 
 } // namespace x64asm
 
+
 /** Implementation of functions; needed due to templating */
 #include "src/m_cc.h"
 
+
 namespace std {
+
+/** STL hash specialization. */
+template <class T>
+struct hash<x64asm::M<T>> {
+  size_t operator()(const x64asm::M<T>& m) const {
+    return m.hash();
+  }
+};
 
 /** iostream overload. */
 template <class T>

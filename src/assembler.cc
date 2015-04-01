@@ -33,7 +33,7 @@ void Assembler::assemble(const Instruction& instr) {
     bind(instr.get_operand<Label>(0));
     break;
     // 4000-way switch
-    #include "src/assembler.switch"
+#include "src/assembler.switch"
 
   default:
     assert(false);
@@ -43,7 +43,7 @@ void Assembler::assemble(const Instruction& instr) {
 template <typename T>
 void Assembler::mod_rm_sib(const M<T>& rm, const Operand& r) {
   // Every path we take needs these bits for the mod/rm byte
-  const auto rrr = (r.first << 3) & 0x38;
+  const auto rrr = (r.val_ << 3) & 0x38;
 
   // First special case check for RIP+disp32
   if (rm.rip_offset()) {
@@ -57,7 +57,7 @@ void Assembler::mod_rm_sib(const M<T>& rm, const Operand& r) {
   if (!rm.contains_base()) {
     const auto mod_byte = 0x00 | rrr | 0x4;
     const auto sib_byte = rm.contains_index() ?
-                          (((int)rm.get_scale() << 6) & 0xc0) | ((rm.get_index().first << 3) & 0x38) | 0x5 :
+                          (((int)rm.get_scale() << 6) & 0xc0) | ((rm.get_index().val_ << 3) & 0x38) | 0x5 :
                           0x00 | 0x20 | 0x5;
 
     fxn_->emit_byte(mod_byte);
@@ -68,11 +68,11 @@ void Assembler::mod_rm_sib(const M<T>& rm, const Operand& r) {
   }
 
   // Every path we take now requires the non-null base value.
-  const auto bbb = rm.get_base().first & 0x7;
+  const auto bbb = rm.get_base().val_ & 0x7;
 
   // This logic determines what the value of the mod bits will be.
   // It also controls how many immediate bytes we emit later.
-  const auto disp = (int32_t)rm.get_disp().first;
+  const auto disp = (int32_t)rm.get_disp().val_;
   size_t mod = 0x40;
   if (disp < -128 || disp >= 128) {
     mod = 0x80;
@@ -84,7 +84,7 @@ void Assembler::mod_rm_sib(const M<T>& rm, const Operand& r) {
   if (rm.contains_index()) {
     const auto mod_byte = mod | rrr | 0x4;
     const auto sib_byte = (((int)rm.get_scale() << 6) & 0xc0) |
-                          ((rm.get_index().first << 3) & 0x38) | bbb;
+                          ((rm.get_index().val_ << 3) & 0x38) | bbb;
 
     fxn_->emit_byte(mod_byte);
     fxn_->emit_byte(sib_byte);
