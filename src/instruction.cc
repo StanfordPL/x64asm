@@ -553,6 +553,10 @@ RegSet& Instruction::explicit_maybe_undef_set(RegSet& ret) const {
 }
 
 bool Instruction::check() const {
+  // does this instruction have an operand that is greater or equal than 8 (like r10)
+  bool has_gp_gte_8 = false;
+  // does this instruction have an rh operand
+  bool has_rh = false;
   for (size_t i = 0, ie = arity(); i < ie; ++i)
     switch (type(i)) {
     case Type::HINT:
@@ -663,11 +667,13 @@ bool Instruction::check() const {
       if (!get_operand<Rh>(i).check()) {
         return false;
       }
+      has_rh = true;
       break;
     case Type::RB:
       if (!get_operand<Rb>(i).check()) {
         return false;
       }
+      has_gp_gte_8 = true;
       break;
     case Type::AL:
       if (!get_operand<Al>(i).check()) {
@@ -698,6 +704,9 @@ bool Instruction::check() const {
       if (!get_operand<R16>(i).check()) {
         return false;
       }
+      if (get_operand<R16>(i) >= 8) {
+        has_gp_gte_8 = true;
+      }
       break;
     case Type::EAX:
       if (!get_operand<Eax>(i).check()) {
@@ -708,6 +717,9 @@ bool Instruction::check() const {
       if (!get_operand<R32>(i).check()) {
         return false;
       }
+      if (get_operand<R32>(i) >= 8) {
+        has_gp_gte_8 = true;
+      }
       break;
     case Type::RAX:
       if (!get_operand<Rax>(i).check()) {
@@ -717,6 +729,9 @@ bool Instruction::check() const {
     case Type::R_64:
       if (!get_operand<R64>(i).check()) {
         return false;
+      }
+      if (get_operand<R64>(i) >= 8) {
+        has_gp_gte_8 = true;
       }
       break;
 
@@ -778,6 +793,11 @@ bool Instruction::check() const {
     default:
       assert(false);
     }
+
+  if (has_rh && has_gp_gte_8) {
+    // such an instruction would both require to have a prefix byte, and be required to not have one
+    return false;
+  }
 
   return true;
 }
