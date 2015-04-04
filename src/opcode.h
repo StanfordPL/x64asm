@@ -32,10 +32,10 @@ enum Opcode : int32_t {
   , X64ASM_NUM_OPCODES
 };
 
-#define X64ASM_NUM_OPCODES Opcode::X64ASM_NUM_OPCODES
-
 std::string opcode_write_att(Opcode o);
 
 } // namespace x64asm
+
+#define X64ASM_NUM_OPCODES x64asm::Opcode::X64ASM_NUM_OPCODES
 
 #endif
