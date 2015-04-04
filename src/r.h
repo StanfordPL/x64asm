@@ -46,10 +46,10 @@ protected:
 };
 
 
-/** One of the byte general-purpose registers: BPL, SPL, DIL and SIL; or one of
-    the byte registers (R8B - R15B) available when using REX.R and 64-bit mode.
+/** One of the byte general-purpose registers: Al, CL, DL, BL, BPL, SPL, DIL and SIL; 
+    or one of the byte registers (R8B - R15B) available when using REX.R and 64-bit mode.
 */
-class Rb : public R {
+class R8 : public R {
   // Needs access to constructor.
   friend class Constants;
 
@@ -60,15 +60,15 @@ public:
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const Rb& rhs) {
+  constexpr bool operator<(const R8& rhs) {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const Rb& rhs) {
+  constexpr bool operator==(const R8& rhs) {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const Rb& rhs) {
+  constexpr bool operator!=(const R8& rhs) {
     return !(*this == rhs);
   }
 
@@ -79,47 +79,12 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr Rb(uint64_t val) : R(Type::RB, val) {}
-  constexpr Rb(Type t, uint64_t val) : R(t, val) {}
-};
-
-/** One of the byte general-purpose registers: AL, CL, DL, BL. */
-class Rl : public Rb {
-  // Needs access to constructor.
-  friend class Constants;
-
-public:
-  /** Returns true if this register is well-formed. */
-  constexpr bool check() {
-    return val_ < 4;
-  }
-
-  /** Comparison based on on val_. */
-  constexpr bool operator<(const Rl& rhs) {
-    return val_ < rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator==(const Rl& rhs) {
-    return val_ == rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator!=(const Rl& rhs) {
-    return !(*this == rhs);
-  }
-
-  /** Reads this register from an ostream using at&t syntax. */
-  std::istream& read_att(std::istream& is);
-  /** Writes this register to an ostream using at&t syntax. */
-  std::ostream& write_att(std::ostream& os) const;
-
-protected:
-  /** Direct access to this constructor is disallowed. */
-  constexpr Rl(uint64_t val) : Rb(Type::RL, val) {}
-  constexpr Rl(Type t, uint64_t val) : Rb(t, val) {}
+  constexpr R8(uint64_t val) : R(Type::R8, val) {}
+  constexpr R8(Type t, uint64_t val) : R(t, val) {}
 };
 
 /** The byte general-purpose register AL. */
-class Al : public Rl {
+class Al : public R8 {
   // Needs access to constructor.
   friend class Constants;
 
@@ -131,11 +96,11 @@ public:
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Al() : Rl(Type::AL, 0) {}
+  constexpr Al() : R8(Type::AL, 0) {}
 };
 
 /** The byte general-purpose register CL. */
-class Cl : public Rl {
+class Cl : public R8 {
   // Needs access to constructor.
   friend class Constants;
 
@@ -147,7 +112,7 @@ public:
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Cl() : Rl(Type::CL, 1) {}
+  constexpr Cl() : R8(Type::CL, 1) {}
 };
 
 /** One of the byte general-purpose registers: AH, CH, DH, BH. */
@@ -380,15 +345,6 @@ struct hash<x64asm::R> {
 };
 
 /** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::Rl& r) {
-  return r.read_att(is);
-}
-/** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::Rl& r) {
-  return r.write_att(os);
-}
-
-/** iostream overload. */
 inline istream& operator>>(istream& is, x64asm::Rh& r) {
   return r.read_att(is);
 }
@@ -398,11 +354,11 @@ inline ostream& operator<<(ostream& os, const x64asm::Rh& r) {
 }
 
 /** iostream overload. */
-inline istream& operator>>(istream& is, x64asm::Rb& r) {
+inline istream& operator>>(istream& is, x64asm::R8& r) {
   return r.read_att(is);
 }
 /** iostream overload. */
-inline ostream& operator<<(ostream& os, const x64asm::Rb& r) {
+inline ostream& operator<<(ostream& os, const x64asm::R8& r) {
   return r.write_att(os);
 }
 
