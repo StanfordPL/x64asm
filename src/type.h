@@ -67,7 +67,7 @@ enum class Type {
   MOFFS_32,
   MOFFS_64,
 
-  R8,
+  R_8,
   RH,
   AL,
   CL,

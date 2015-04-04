@@ -22,15 +22,17 @@ limitations under the License.
 
 namespace x64asm {
 
-#define X64ASM_NUM_OPCODES 3819
-
 /** An instruction mnemonic. */
 enum Opcode : int32_t {
   // Internal mnemonics
   LABEL_DEFN = 0
   // Auto-generated mnemonics
   #include "src/opcode.enum"
+  // Max number of opcodes
+  , X64ASM_NUM_OPCODES
 };
+
+#define X64ASM_NUM_OPCODES Opcode::X64ASM_NUM_OPCODES
 
 std::string opcode_write_att(Opcode o);
 

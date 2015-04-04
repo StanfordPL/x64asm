@@ -221,7 +221,7 @@ public:
   }
   /** Is this a variant of the div instruction? */
   bool is_div() const {
-    return opcode_ >= DIV_M16 && opcode_ <= DIV_RL;
+    return opcode_ >= DIV_M16 && opcode_ <= DIV_RH;
   }
   /** Is this a variant of the enter instruction? */
   bool is_enter() const {
@@ -233,7 +233,7 @@ public:
   }
   /** Is this a variant of the idiv instruction? */
   bool is_idiv() const {
-    return opcode_ >= IDIV_M16 && opcode_ <= IDIV_RL;
+    return opcode_ >= IDIV_M16 && opcode_ <= IDIV_RH;
   }
   /** Is this a variant of the iret instruction? */
   bool is_iret() const {

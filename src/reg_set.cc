@@ -43,7 +43,7 @@ istream& RegSet::read_text(istream& is) {
     }
 
     Rh rh = Constants::ah();
-    Rb r8 = Constants::al();
+    R8 r8 = Constants::al();
     R16 r16 = Constants::ax();
     R32 r32 = Constants::eax();
     R64 r64 = Constants::rax();

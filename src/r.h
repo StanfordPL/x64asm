@@ -79,7 +79,7 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr R8(uint64_t val) : R(Type::R8, val) {}
+  constexpr R8(uint64_t val) : R(Type::R_8, val) {}
   constexpr R8(Type t, uint64_t val) : R(t, val) {}
 };
 
