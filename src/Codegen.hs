@@ -577,25 +577,30 @@ fix_ops is = map fix_op is
 -- Step 5: Fix up REX rows
 --------------------------------------------------------------------------------
 
--- Add an rh variant to a non-rex row 
-fix_norex_row :: Instr -> [Instr]
-fix_norex_row i = case "REX+" `notElem` (opcode_terms i) of
-  True  -> [(repl_first_op i "r8" "rh"), i]
-  False -> []
+-- Split r8 into two cases, rh and r8
+fix_r8_op :: Instr -> [Instr]
+fix_r8_op i = case "r8" `elem` (operands i) of
+  True  -> [(repl_first_op i "r8" "rh"), (repl_first_op i "r8" "RTEMP")]
+  False -> [i]
 
--- Is this one of three instructions that require REX+ no matter what
-needs_rex :: Instr -> Bool
-needs_rex i = mn == "LSS" || mn == "LFS" || mn == "LGS"
-  where mn = raw_mnemonic i
+-- Change RTEMP back to r8
+fix_rtemp :: Instr -> Instr
+fix_rtemp i = repl_op i "RTEMP" "r8"
 
--- Remove REX+ rows which correspond to the mem half of r/m8 splits
-remove_m8_rex :: [Instr] -> [Instr]
-remove_m8_rex is = filter keep is
-  where keep i = "REX+" `notElem` (opcode_terms i) || "r8" `elem` (operands i) || needs_rex i
+-- Split rows that contain r8 into two cases for each occurrance
+fix_r8_row :: Instr -> [Instr]
+fix_r8_row i = map fix_rtemp $ concat $ map fix_r8_op $ fix_r8_op i
+
+-- Remove REX+ rows for instructions that don't require REX+ no matter what
+remove_rex :: [Instr] -> [Instr]
+remove_rex is = filter keep is
+  where keep i = "REX+" `notElem` (opcode_terms i) || needs_rex i
+        needs_rex i = (mn i) == "LSS" || (mn i) == "LFS" || (mn i) == "LGS"
+        mn i = raw_mnemonic i
 
 -- Fix all rex rows (we do this twice to handle instructions with 2 r8 operands)
 fix_rex_rows :: [Instr] -> [Instr]
-fix_rex_rows is = remove_m8_rex $ concat $ map fix_norex_row $ concat $ map fix_norex_row is
+fix_rex_rows is = concat $ map fix_r8_row $ remove_rex is
 
 -- Step 6: Remove duplicate rows by using the preferred encoding
 --------------------------------------------------------------------------------
