@@ -259,6 +259,11 @@ private:
     fxn_->emit_byte(y.val_ << 4);
   }
 
+  /** Does this operand require a rex prefix? */
+  bool requires_rex(const Operand& o) const {
+    return o.type() == Type::R_8 && o.val_ >= 4;
+  }
+
   /** Unconditionally emits a rex prefix. */
   void rex(uint8_t val) {
     fxn_->emit_byte(val);
@@ -269,7 +274,8 @@ private:
    */
   template <typename T>
   void rex(const M<T>& rm, const Operand& r, uint8_t val) {
-    rex(rm, val | ((r.val_ >> 1) & 0x4));
+    const auto v = requires_rex(r) ? 0x40 : 0;
+    rex(rm, v | ((r.val_ >> 1) & 0x4));
   }
 
   /** Conditionally emits a rex prefix.
@@ -291,16 +297,16 @@ private:
   /** Conditonally emits a rex prefix.
       See Figure 2.5: Intel Manual Vol 2A 2-8.
   */
-  void rex(const Operand& rm, const Operand& r,
-           uint8_t val) {
-    rex(rm, val | ((r.val_ >> 1) & 0x4));
+  void rex(const Operand& rm, const Operand& r, uint8_t val) {
+    const auto v = requires_rex(rm) || requires_rex(r) ? 0x40 : 0;
+    rex(rm, v | ((r.val_ >> 1) & 0x4));
   }
 
   /** Conditionally emits a rex prefix.
       See Figure 2.7: Intel Manual Vol 2A 2-9.
   */
   void rex(const Operand& rm, uint8_t val) {
-    if (val |= (rm.val_ >> 3)) {
+    if (val |= (rm.val_ >> 3) || requires_rex(rm)) {
       fxn_->emit_byte(val | 0x40);
     }
   }
