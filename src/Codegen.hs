@@ -1052,9 +1052,9 @@ digit i = case find is_digit (opcode_suffix i) of
 -- Implied rex values
 implied_rex :: Instr -> String
 implied_rex i
-  | "REX.W+" `elem` (opcode_prefix i) = "(uint8_t)0x48"
-  | "REX.R+" `elem` (opcode_prefix i) = "(uint8_t)0x44"
-  | "REX+"   `elem` (opcode_prefix i) = "(uint8_t)0x40"
+  | "REX.W+" `elem` (opcode_prefix i) = "rex_w()"
+  | "REX.R+" `elem` (opcode_prefix i) = "rex_r()"
+  | "REX+"   `elem` (opcode_prefix i) = "rex()"
   | otherwise = "(uint8_t)0x00"
 
 -- Emits code for REX Prefix 
