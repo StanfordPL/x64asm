@@ -29,13 +29,13 @@ enum Opcode : int32_t {
   // Auto-generated mnemonics
   #include "src/opcode.enum"
   // Max number of opcodes
-  , X64ASM_NUM_OPCODES
+  , NUM_OPCODES
 };
 
 std::string opcode_write_att(Opcode o);
 
 } // namespace x64asm
 
-#define X64ASM_NUM_OPCODES x64asm::Opcode::X64ASM_NUM_OPCODES
+#define X64ASM_NUM_OPCODES x64asm::Opcode::NUM_OPCODES
 
 #endif

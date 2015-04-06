@@ -1039,4 +1039,11 @@ const array<FlagSet, X64ASM_NUM_OPCODES> Instruction::flags_ {{
 #include "src/flag.table"
   }};
 
+const array<size_t, X64ASM_NUM_OPCODES> Instruction::haswell_latency_ {{
+    // Internal mnemonics
+    0
+    // Auto-generatred mnemonics
+    #include "../codegen/haswell_latency.inc"
+  }};
+
 } // namespace x64asm

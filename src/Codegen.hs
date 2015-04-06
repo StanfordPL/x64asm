@@ -812,9 +812,10 @@ type_table is = to_table is type_row
 
 -- Converts an instruction mem_index table row
 mem_index_row :: Instr -> String
-mem_index_row i = case findIndex mem_op (operands i) of
+mem_index_row i = case findIndex mem_or_moffs (operands i) of
   (Just idx) -> show idx
   Nothing -> "-1"
+  where mem_or_moffs i = mem_op i || moffs_op i
 
 -- Converts all instruction to mem_index table
 mem_index_table :: [Instr] -> String
