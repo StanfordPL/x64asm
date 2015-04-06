@@ -55,16 +55,12 @@ Mm mm() {
   return mms[rand() % mms.size()];
 }
 
-Rl rl() {
-  return rls[rand() % rls.size()];
-}
-
 Rh rh() {
   return rhs[rand() % rhs.size()];
 }
 
-Rb rb() {
-  return rbs[rand() % rbs.size()];
+R8 r8_() {
+  return r8s[rand() % r8s.size()];
 }
 
 R16 r16() {
@@ -213,14 +209,11 @@ Instruction instruction() {
       instr.set_operand(i, moffs());
       break;
 
-    case Type::RL:
-      instr.set_operand(i, rl());
-      break;
     case Type::RH:
       instr.set_operand(i, rh());
       break;
-    case Type::RB:
-      instr.set_operand(i, rb());
+    case Type::R_8:
+      instr.set_operand(i, r8_());
       break;
     case Type::AL:
       instr.set_operand(i, al);

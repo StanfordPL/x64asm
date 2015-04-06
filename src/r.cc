@@ -27,16 +27,16 @@ using namespace x64asm;
 
 namespace {
 
-constexpr array<const char*, 16> rbs_() {
-  return {
-    "%al", "%cl", "%dl", "%bl", "%spl", "%bpl", "%sil", "%dil",
-    "%r8b", "%r9b", "%r10b", "%r11b", "%r12b", "%r13b", "%r14b", "%r15b"
-  };
-}
-
 constexpr array<const char*, 4> rhs_() {
   return {
     "%ah", "%ch", "%dh", "%bh"
+  };
+}
+
+constexpr array<const char*, 16> r8s_() {
+  return {
+    "%al", "%cl", "%dl", "%bl", "%spl", "%bpl", "%sil", "%dil",
+    "%r8b", "%r9b", "%r10b", "%r11b", "%r12b", "%r13b", "%r14b", "%r15b"
   };
 }
 
@@ -65,14 +65,13 @@ constexpr array<const char*, 16> r64s_() {
 
 namespace x64asm {
 
-istream& Rb::read_att(istream& is) {
+istream& R8::read_att(istream& is) {
   string temp;
   is >> temp;
 
-  for (size_t i = 0, ie = rbs_().size(); i < ie; ++i) {
-    if (temp == rbs_()[i]) {
-      // note: this is a little hacky until we fix this Rh thing
-      val_ = i;
+  for (size_t i = 0; i < r8s_().size(); ++i) {
+    if (temp == r8s_()[i]) {
+      *this = Constants::r8s()[i];
       return is;
     }
   }
@@ -81,30 +80,9 @@ istream& Rb::read_att(istream& is) {
   return is;
 }
 
-ostream& Rb::write_att(ostream& os) const {
+ostream& R8::write_att(ostream& os) const {
   assert(check());
-  return (os << rbs_()[val_]);
-}
-
-istream& Rl::read_att(istream& is) {
-  string temp;
-  is >> temp;
-
-  for (size_t i = 0; i < 4; ++i) {
-    if (temp == rbs_()[i]) {
-      // note: this is a little hacky until we fix this Rh thing
-      val_ = i;
-      return is;
-    }
-  }
-
-  is.setstate(ios::failbit);
-  return is;
-}
-
-ostream& Rl::write_att(ostream& os) const {
-  assert(check());
-  return (os << rbs_()[val_]);
+  return (os << r8s_()[val_]);
 }
 
 istream& Rh::read_att(istream& is) {
@@ -189,18 +167,14 @@ ostream& R64::write_att(ostream& os) const {
 
 ostream& R::write_att(ostream& os) const {
   switch(type()) {
-  case Type::RL:
-    return static_cast<const Rl* const>(this)->write_att(os);
-    break;
-
-  case Type::RB:
-  case Type::AL:
-  case Type::CL:
-    return static_cast<const Rb* const>(this)->write_att(os);
-    break;
-
   case Type::RH:
     return static_cast<const Rh* const>(this)->write_att(os);
+    break;
+
+  case Type::R_8:
+  case Type::AL:
+  case Type::CL:
+    return static_cast<const R8* const>(this)->write_att(os);
     break;
 
   case Type::R_16:
