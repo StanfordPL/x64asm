@@ -274,8 +274,8 @@ private:
    */
   template <typename T>
   void rex(const M<T>& rm, const Operand& r, uint8_t val) {
-    const auto v = requires_rex(r) ? 0x40 : 0;
-    rex(rm, v | ((r.val_ >> 1) & 0x4));
+    const auto def = requires_rex(r) ? 0x40 : 0;
+    rex(rm, def | val | ((r.val_ >> 1) & 0x4));
   }
 
   /** Conditionally emits a rex prefix.
@@ -298,8 +298,8 @@ private:
       See Figure 2.5: Intel Manual Vol 2A 2-8.
   */
   void rex(const Operand& rm, const Operand& r, uint8_t val) {
-    const auto v = requires_rex(rm) || requires_rex(r) ? 0x40 : 0;
-    rex(rm, v | ((r.val_ >> 1) & 0x4));
+    const auto def = requires_rex(rm) || requires_rex(r) ? 0x40 : 0;
+    rex(rm, def | val | ((r.val_ >> 1) & 0x4));
   }
 
   /** Conditionally emits a rex prefix.
