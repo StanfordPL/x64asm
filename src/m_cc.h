@@ -47,8 +47,11 @@ bool M<T>::check() const {
     return false;
   }
   // Index cannot be rsp/esp
-  if (contains_index() && get_index().val_ == Constants::esp().val_) {
-    return false;
+  if (contains_index()) {
+    const auto index = get_index();
+    if (index == Constants::esp() || index == Constants::rsp()) {
+      return false;
+    }
   }
   // Check for absence of base/index for RIP+offset form
   if (rip_offset() && (contains_base() || contains_index())) {
@@ -82,23 +85,13 @@ std::ostream& M<T>::write_att(std::ostream& os) const {
     os << "%rip";
   }
   if (contains_base()) {
-    const auto b = get_base();
-    if (addr_or()) {
-      Alias::to_double(b).write_att(os);
-    } else {
-      b.write_att(os);
-    }
+    get_base().write_att(os);
   }
   if (contains_index()) {
     os << ",";
   }
   if (contains_index()) {
-    const auto i = get_index();
-    if (addr_or()) {
-      Alias::to_double(i).write_att(os);
-    } else {
-      i.write_att(os);
-    }
+    get_index().write_att(os);
     os << ",";
     switch (get_scale()) {
     case Scale::TIMES_1:

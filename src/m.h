@@ -96,12 +96,16 @@ public:
     return {(val_ & (uint64_t)Mask::SEG) >> (uint64_t)Index::SEG};
   }
   /** Returns this memory's base register; undefined if absent. */
-  constexpr R64 get_base() {
-    return {(val_ & (uint64_t)Mask::BASE) >> (uint64_t)Index::BASE};
+  constexpr R get_base() {
+    return addr_or() ? 
+      (R)R32((val_ & (uint64_t)Mask::BASE) >> (uint64_t)Index::BASE) :
+      (R)R64((val_ & (uint64_t)Mask::BASE) >> (uint64_t)Index::BASE);
   }
   /** Returns this memory's index register; undefined if absent. */
-  constexpr R64 get_index() {
-    return {(val_ & (uint64_t)Mask::INDEX) >> (uint64_t)Index::INDEX};
+  constexpr R get_index() {
+    return addr_or() ?
+      (R)R32((val_ & (uint64_t)Mask::INDEX) >> (uint64_t)Index::INDEX) :
+      (R)R64((val_ & (uint64_t)Mask::INDEX) >> (uint64_t)Index::INDEX);
   }
   /** Returns this memory's index scaling constant; 1 if absent. */
   constexpr Scale get_scale() {

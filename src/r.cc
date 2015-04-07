@@ -165,29 +165,54 @@ ostream& R64::write_att(ostream& os) const {
   return (os << r64s_()[val_]);
 }
 
+bool R::check() const {
+  switch(type()) {
+  case Type::RH:
+    return static_cast<const Rh* const>(this)->check();
+  case Type::R_8:
+    return static_cast<const R8* const>(this)->check();
+  case Type::AL:
+    return static_cast<const Al* const>(this)->check();
+  case Type::CL:
+    return static_cast<const Cl* const>(this)->check();
+  case Type::R_16:
+    return static_cast<const R16* const>(this)->check();
+  case Type::AX:
+    return static_cast<const Ax* const>(this)->check();
+  case Type::DX:
+    return static_cast<const Dx* const>(this)->check();
+  case Type::R_32:
+    return static_cast<const R32* const>(this)->check();
+  case Type::EAX:
+    return static_cast<const Eax* const>(this)->check();
+  case Type::R_64:
+    return static_cast<const R64* const>(this)->check();
+  case Type::RAX:
+    return static_cast<const Rax* const>(this)->check();
+    break;
+
+  default:
+    assert(false);
+    return false;
+  }
+}
+    
+
 ostream& R::write_att(ostream& os) const {
   switch(type()) {
   case Type::RH:
     return static_cast<const Rh* const>(this)->write_att(os);
-    break;
-
   case Type::R_8:
   case Type::AL:
   case Type::CL:
     return static_cast<const R8* const>(this)->write_att(os);
-    break;
-
   case Type::R_16:
   case Type::AX:
   case Type::DX:
     return static_cast<const R16 * const>(this)->write_att(os);
-    break;
-
   case Type::R_32:
   case Type::EAX:
     return static_cast<const R32 * const>(this)->write_att(os);
-    break;
-
   case Type::R_64:
   case Type::RAX:
     return static_cast<const R64 * const>(this)->write_att(os);
@@ -196,7 +221,6 @@ ostream& R::write_att(ostream& os) const {
   default:
     assert(false);
     return os;
-    break;
   }
 }
 

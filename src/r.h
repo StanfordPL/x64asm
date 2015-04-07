@@ -37,6 +37,9 @@ public:
     return val_;
   }
 
+  /** Returns true if this register is well-formed. */
+  bool check() const;
+
   /** Writes this register to an ostream using at&t syntax. */
   std::ostream& write_att(std::ostream& os) const;
 

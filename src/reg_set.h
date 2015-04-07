@@ -417,17 +417,17 @@ public:
   RegSet& operator+=(const M<T>& rhs) {
     if (rhs.addr_or()) {
       if (rhs.contains_base()) {
-        *this += Alias::to_double(rhs.get_base());
+        *this += Constants::r32s()[rhs.get_base()];
       }
       if (rhs.contains_index()) {
-        *this += Alias::to_double(rhs.get_index());
+        *this += Constants::r32s()[rhs.get_index()];
       }
     } else {
       if (rhs.contains_base()) {
-        *this += rhs.get_base();
+        *this += Constants::r64s()[rhs.get_base()];
       }
       if (rhs.contains_index()) {
-        *this += rhs.get_index();
+        *this += Constants::r64s()[rhs.get_index()];
       }
     }
     return *this;
