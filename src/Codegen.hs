@@ -770,6 +770,18 @@ arity_row i = show $ arity i
 arity_table :: [Instr] -> String
 arity_table is = to_table is arity_row
 
+-- Converts an instruction to a must rex row
+must_rex_row :: Instr -> String
+must_rex_row i
+  | "REX.W+" `elem` (opcode_prefix i) = "1"
+  | "REX.R+" `elem` (opcode_prefix i) = "1"
+  | "REX+"   `elem` (opcode_prefix i) = "1"
+  | otherwise = "0"
+
+-- Converts all instructions to rex table
+must_rex_table :: [Instr] -> String
+must_rex_table is = to_table is must_rex_row
+
 -- Creates an entry for a property element
 property_elem :: (String, String) -> String
 property_elem (t,p) = "Properties::none()" ++ (concat (map (elem t) p))
@@ -1319,6 +1331,7 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "assembler.defn"    $ assm_src_defns is
                    writeFile "assembler.switch"  $ assm_cases is
                    writeFile "arity.table"       $ arity_table is
+                   writeFile "rex.table"         $ must_rex_table is
                    writeFile "properties.table"  $ properties_table is
                    writeFile "type.table"        $ type_table is
                    writeFile "mem_index.table"   $ mem_index_table is

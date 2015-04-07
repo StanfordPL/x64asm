@@ -530,9 +530,16 @@ RegSet& Instruction::explicit_maybe_undef_set(RegSet& ret) const {
 
 bool Instruction::check() const {
   // does this instruction have an operand that is greater or equal than 8 (like r10)
+  // this includes registers that are nested inside a memory operand
   bool has_gp_gte_8 = false;
   // does this instruction have an rh operand
   bool has_rh = false;
+  // does this instruction definitely require a rex prefix?
+  assert((size_t)get_opcode() < rex_.size());
+  bool definitely_require_rex = rex_[get_opcode()];
+  // does this instruction have an r8 operand that is not al-dl?
+  // does not include nested operands inside registers (because r8 cannot appear there)
+  bool has_non_aldl_r8_operand = false;
   for (size_t i = 0, ie = arity(); i < ie; ++i)
     switch (type(i)) {
     case Type::HINT:
@@ -603,8 +610,17 @@ bool Instruction::check() const {
     case Type::FAR_PTR_16_16:
     case Type::FAR_PTR_16_32:
     case Type::FAR_PTR_16_64:
-      if (!get_operand<M8>(i).check()) {
-        return false;
+      {
+        auto mem_op = get_operand<M8>(i);
+        if (!mem_op.check()) {
+          return false;
+        }
+        if (mem_op.contains_base() && mem_op.get_base() >= 8) {
+          has_gp_gte_8 = true;
+        }
+        if (mem_op.contains_index() && mem_op.get_index() >= 8) {
+          has_gp_gte_8 = true;
+        }
       }
       break;
 
@@ -658,6 +674,11 @@ bool Instruction::check() const {
     case Type::R_8:
       if (!get_operand<R8>(i).check()) {
         return false;
+      }
+      // we don't distinguish between has_gp_gte_8 and has_non_aldl_r8_operand here,
+      // because setting either of them to true has the same effect
+      if (get_operand<R16>(i) >= 4) {
+        has_non_aldl_r8_operand = true;
       }
       break;
     case Type::AX:
@@ -764,8 +785,9 @@ bool Instruction::check() const {
       assert(false);
     }
 
-  if (has_rh && has_gp_gte_8) {
-    // such an instruction would both require to have a prefix byte, and be required to not have one
+  if (has_rh && (definitely_require_rex || has_gp_gte_8 || has_non_aldl_r8_operand)) {
+    // such an instruction would both require to have a prefix byte,
+    // and be required to not have one
     return false;
   }
 
@@ -1044,6 +1066,13 @@ const array<size_t, X64ASM_NUM_OPCODES> Instruction::haswell_latency_ {{
     0
     // Auto-generatred mnemonics
     #include "../codegen/haswell_latency.inc"
+  }};
+
+const array<bool, X64ASM_NUM_OPCODES> Instruction::rex_ {{
+    // Internal mnemonics
+    0
+    // Auto-generated mnemonics
+#include "src/rex.table"
   }};
 
 } // namespace x64asm
