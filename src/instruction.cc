@@ -533,6 +533,11 @@ bool Instruction::check() const {
   bool has_gp_gte_8 = false;
   // does this instruction have an rh operand
   bool has_rh = false;
+  // does this instruction definitely require a rex prefix?
+  assert((size_t)get_opcode() < rex_.size());
+  bool definitely_require_rex = rex_[get_opcode()];
+  // does this instruction have an r8 operand that is not al-dl?
+  bool has_non_aldl_r8_operand = false;
   for (size_t i = 0, ie = arity(); i < ie; ++i)
     switch (type(i)) {
     case Type::HINT:
@@ -659,6 +664,11 @@ bool Instruction::check() const {
       if (!get_operand<R8>(i).check()) {
         return false;
       }
+      // we don't distinguish between has_gp_gte_8 and has_non_aldl_r8_operand here,
+      // because setting either of them to true has the same effect
+      if (get_operand<R16>(i) >= 4) {
+        has_non_aldl_r8_operand = true;
+      }
       break;
     case Type::AX:
       if (!get_operand<Ax>(i).check()) {
@@ -764,8 +774,9 @@ bool Instruction::check() const {
       assert(false);
     }
 
-  if (has_rh && has_gp_gte_8) {
-    // such an instruction would both require to have a prefix byte, and be required to not have one
+  if (has_rh && (definitely_require_rex || has_gp_gte_8 || has_non_aldl_r8_operand)) {
+    // such an instruction would both require to have a prefix byte,
+    // and be required to not have one
     return false;
   }
 
@@ -1044,6 +1055,13 @@ const array<size_t, X64ASM_NUM_OPCODES> Instruction::haswell_latency_ {{
     0
     // Auto-generatred mnemonics
     #include "../codegen/haswell_latency.inc"
+  }};
+
+const array<bool, X64ASM_NUM_OPCODES> Instruction::rex_ {{
+    // Internal mnemonics
+    0
+    // Auto-generated mnemonics
+#include "src/rex.table"
   }};
 
 } // namespace x64asm

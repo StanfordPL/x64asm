@@ -751,6 +751,7 @@ private:
   static const std::array<RegSet, X64ASM_NUM_OPCODES> implicit_maybe_undef_set_;
   static const std::array<FlagSet, X64ASM_NUM_OPCODES> flags_;
   static const std::array<size_t, X64ASM_NUM_OPCODES> haswell_latency_;
+  static const std::array<bool, X64ASM_NUM_OPCODES> rex_;
 
   /** Returns the set of operands this instruction must read. */
   RegSet& explicit_must_read_set(RegSet& rs) const;
