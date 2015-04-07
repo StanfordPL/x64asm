@@ -120,28 +120,27 @@ const Label* to_label(const char* c) {
 "%mm6" { yylval.operand = new Mm(Constants::mm6()); return MM; }
 "%mm7" { yylval.operand = new Mm(Constants::mm7()); return MM; }
 
-"%al" { yylval.operand = new Al(Constants::al()); return RL; }
-"%cl" { yylval.operand = new Cl(Constants::cl()); return RL; }
-"%dl" { yylval.operand = new Rl(Constants::dl()); return RL; }
-"%bl" { yylval.operand = new Rl(Constants::bl()); return RL; }
-
 "%ah" { yylval.operand = new Rh(Constants::ah()); return RH; }
 "%ch" { yylval.operand = new Rh(Constants::ch()); return RH; }
 "%dh" { yylval.operand = new Rh(Constants::dh()); return RH; }
 "%bh" { yylval.operand = new Rh(Constants::bh()); return RH; }
  
-"%spl"  { yylval.operand = new Rb(Constants::spl());  return RB; }
-"%bpl"  { yylval.operand = new Rb(Constants::bpl());  return RB; }
-"%sil"  { yylval.operand = new Rb(Constants::sil());  return RB; }
-"%dil"  { yylval.operand = new Rb(Constants::dil());  return RB; }
-"%r8b"  { yylval.operand = new Rb(Constants::r8b());  return RB; }
-"%r9b"  { yylval.operand = new Rb(Constants::r9b());  return RB; }
-"%r10b" { yylval.operand = new Rb(Constants::r10b()); return RB; }
-"%r11b" { yylval.operand = new Rb(Constants::r11b()); return RB; }
-"%r12b" { yylval.operand = new Rb(Constants::r12b()); return RB; }
-"%r13b" { yylval.operand = new Rb(Constants::r13b()); return RB; }
-"%r14b" { yylval.operand = new Rb(Constants::r14b()); return RB; }
-"%r15b" { yylval.operand = new Rb(Constants::r15b()); return RB; }
+"%al"   { yylval.operand = new Al(Constants::al());   return R_8; }
+"%cl"   { yylval.operand = new Cl(Constants::cl());   return R_8; }
+"%dl"   { yylval.operand = new R8(Constants::dl());   return R_8; }
+"%bl"   { yylval.operand = new R8(Constants::bl());   return R_8; }
+"%spl"  { yylval.operand = new R8(Constants::spl());  return R_8; }
+"%bpl"  { yylval.operand = new R8(Constants::bpl());  return R_8; }
+"%sil"  { yylval.operand = new R8(Constants::sil());  return R_8; }
+"%dil"  { yylval.operand = new R8(Constants::dil());  return R_8; }
+"%r8b"  { yylval.operand = new R8(Constants::r8b());  return R_8; }
+"%r9b"  { yylval.operand = new R8(Constants::r9b());  return R_8; }
+"%r10b" { yylval.operand = new R8(Constants::r10b()); return R_8; }
+"%r11b" { yylval.operand = new R8(Constants::r11b()); return R_8; }
+"%r12b" { yylval.operand = new R8(Constants::r12b()); return R_8; }
+"%r13b" { yylval.operand = new R8(Constants::r13b()); return R_8; }
+"%r14b" { yylval.operand = new R8(Constants::r14b()); return R_8; }
+"%r15b" { yylval.operand = new R8(Constants::r15b()); return R_8; }
 
 "%ax"   { yylval.operand = new Ax(Constants::ax());    return R_16; }
 "%cx"   { yylval.operand = new R16(Constants::cx());   return R_16; }

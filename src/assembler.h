@@ -132,6 +132,36 @@ private:
   /** Pointer to the function being compiled. */
   Function* fxn_;
 
+  /** REX prefix constant */
+  constexpr uint8_t rex() {
+    return 0x40;
+  }
+  /** REX.W prefix constant */
+  constexpr uint8_t rex_w() {
+    return 0x48;
+  }
+  /** REX.R prefix constant */
+  constexpr uint8_t rex_r() {
+    return 0x44;
+  }
+  /** REX.X prefix constant */
+  constexpr uint8_t rex_x() {
+    return 0x42;
+  }
+  /** REX.B prefix constant */
+  constexpr uint8_t rex_b() {
+    return 0x41;
+  }
+
+  /** Does this operand require a REX prefix? */
+  constexpr bool requires_rex_byte(const Operand& o) {
+    return o.type() == Type::R_8 && o.val_ > 3;
+  }
+  /** Does this operand require a REX.[R,X,B] prefix? */
+  constexpr bool requires_rex_bit(const Operand& o) {
+    return o.val_ > 7;
+  }
+
   /** Emits an fwait prefix byte. */
   void pref_fwait(uint8_t c) {
     fxn_->emit_byte(c);
@@ -259,50 +289,43 @@ private:
     fxn_->emit_byte(y.val_ << 4);
   }
 
-  /** Unconditionally emits a rex prefix. */
-  void rex(uint8_t val) {
-    fxn_->emit_byte(val);
+  /** Conditionally emits a rex prefix; zero values are not printed. */
+  void rex(uint8_t byte) {
+    if (byte) {
+      fxn_->emit_byte(byte);
+    }
   }
 
-  /** Conditionally emits a rex prefix.
-      See Figure 2.4: Intel Manual Vol 2A 2-8.
-   */
+  /** Emits a rex prefix for rm/r memory/register instructions */
   template <typename T>
-  void rex(const M<T>& rm, const Operand& r, uint8_t val) {
-    rex(rm, val | ((r.val_ >> 1) & 0x4));
+  void rex(const M<T>& rm, const Operand& r, uint8_t byte) {
+    byte |= requires_rex_byte(r) ? rex() : 0x00;
+    byte |= requires_rex_bit(r) ? rex_r() : 0x00;
+    rex(rm, byte);
   }
 
-  /** Conditionally emits a rex prefix.
-      See Figure 2.6: Intel Manual Vol 2A 2.9.
-  */
+  /** Emits a rex prefix for rm memory instructions */
   template <typename T>
-  void rex(const M<T>& rm, uint8_t val) {
-    if (rm.contains_base()) {
-      val |= (rm.get_base().val_ >> 3);
-    }
-    if (rm.contains_index()) {
-      val |= ((rm.get_index().val_ >> 2) & 0x2);
-    }
-    if (val) {
-      fxn_->emit_byte(val | 0x40);
-    }
+  void rex(const M<T>& rm, uint8_t byte) {
+    byte |= (rm.contains_base() && requires_rex_bit(rm.get_base())) ?
+      rex_b() : 0x00;
+    byte |= (rm.contains_index() && requires_rex_bit(rm.get_index())) ?
+      rex_x() : 0x00;
+    rex(byte);
   }
 
-  /** Conditonally emits a rex prefix.
-      See Figure 2.5: Intel Manual Vol 2A 2-8.
-  */
-  void rex(const Operand& rm, const Operand& r,
-           uint8_t val) {
-    rex(rm, val | ((r.val_ >> 1) & 0x4));
+  /** Emits a rex prefix for rm/r register/register instructions */
+  void rex(const Operand& rm, const Operand& r, uint8_t byte) {
+    byte |= requires_rex_byte(r) ? rex() : 0x00;
+    byte |= requires_rex_bit(r) ? rex_r() : 0x00;
+    rex(rm, byte);
   }
 
-  /** Conditionally emits a rex prefix.
-      See Figure 2.7: Intel Manual Vol 2A 2-9.
-  */
-  void rex(const Operand& rm, uint8_t val) {
-    if (val |= (rm.val_ >> 3)) {
-      fxn_->emit_byte(val | 0x40);
-    }
+  /** Emits a rex prefix for rm register instructions */
+  void rex(const Operand& rm, uint8_t byte) {
+    byte |= requires_rex_byte(rm) ? rex() : 0x00;
+    byte |= requires_rex_bit(rm) ? rex_b() : 0x00;
+    rex(byte);
   }
 
   /** Emits a mod/rm sib byte pair. */

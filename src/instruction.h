@@ -198,6 +198,11 @@ public:
   bool is_any_return() const {
     return is_ret() || is_iret() || is_sysret();
   }
+  /** Returns true if this is any of the string family of instructions */
+  bool is_any_string() const {
+    return is_cmps() || is_ins() || is_lods() || is_movs() || 
+      is_outs() || is_scas() || is_stos();
+  }
 
   /** Is this a variant of the bt instruction? */
   bool is_bt() const {
@@ -219,9 +224,14 @@ public:
   bool is_call() const {
     return opcode_ >= CALL_FARPTR1616 && opcode_ <= CALL_LABEL;
   }
+  /** Is this a variant of the cmps instruction? */
+  bool is_cmps() const {
+    return (opcode_ >= CMPS_M16_M16 && opcode_ <= CMPSD) ||
+      opcode_ == CMPSQ || opcode_ == CMPSW;
+  }
   /** Is this a variant of the div instruction? */
   bool is_div() const {
-    return opcode_ >= DIV_M16 && opcode_ <= DIV_RL;
+    return opcode_ >= DIV_M16 && opcode_ <= DIV_RH;
   }
   /** Is this a variant of the enter instruction? */
   bool is_enter() const {
@@ -233,7 +243,19 @@ public:
   }
   /** Is this a variant of the idiv instruction? */
   bool is_idiv() const {
-    return opcode_ >= IDIV_M16 && opcode_ <= IDIV_RL;
+    return opcode_ >= IDIV_M16 && opcode_ <= IDIV_RH;
+  }
+  /** Is this a variant of the in instruction ? */
+  bool is_in() const {
+    return opcode_ >= IN_AL_DX && opcode_ <= IN_EAX_IMM8;
+  }
+  /** Is this a variant of the ins instruction? */
+  bool is_ins() const {
+    return (opcode_>= INS_M16_DX && opcode_ <= INSD) || opcode_ == INSW;
+  }
+  /** Is this a variant of the int instruction? */
+  bool is_int() const {
+    return opcode_ >= INT_IMM8 && opcode_ <= INT_THREE;
   }
   /** Is this a variant of the iret instruction? */
   bool is_iret() const {
@@ -263,6 +285,14 @@ public:
   bool is_leave() const {
     return opcode_ == LEAVE || opcode_ == LEAVE_PREF66;
   }
+  /** Is this the lock prefix? */
+  bool is_lock() const {
+    return opcode_ == LOCK;
+  }
+  /** Is this a variant of the lods instruction? */
+  bool is_lods() const {
+    return opcode_ >= LODS_M16 && opcode_ <= LODSW;
+  }
   /** Is this a variant of the maskmovdqu instruction? */
   bool is_maskmovdqu() const {
     return opcode_ == MASKMOVDQU_XMM_XMM;
@@ -270,6 +300,11 @@ public:
   /** Is this a variant of the movdqu instruction? */
   bool is_movdqu() const {
     return opcode_ >= MOVDQU_M128_XMM && opcode_ <= MOVDQU_XMM_XMM;
+  }
+  /** Is this a variant of the movs instruction? */
+  bool is_movs() const {
+    return (opcode_ >= MOVS_M16_M16 && opcode_ <= MOVSD) ||
+      opcode_ == MOVSQ || opcode_ == MOVSW;
   }
   /** Is this a variant of the movupd instruction? */
   bool is_movupd() const {
@@ -282,6 +317,14 @@ public:
   /** Is this a variant of the nop instruction? */
   bool is_nop() const {
     return opcode_ >= NOP && opcode_ <= NOP_R32;
+  }
+  /** Is this a variant of the out instruction ? */
+  bool is_out() const {
+    return opcode_ >= OUT_DX_AL && opcode_ <= OUT_IMM8_EAX;
+  }
+  /** Is this a variant of the outs instruction ? */
+  bool is_outs() const {
+    return opcode_ >= OUTS_DX_M16 && opcode_ <= OUTSW;
   }
   /** Is this a variant of the pop instruction? */
   bool is_pop() const {
@@ -303,6 +346,14 @@ public:
   bool is_pushf() const {
     return opcode_ == PUSHF || opcode_ == PUSHFQ;
   }
+  /** Is this a variant of the rdfsbase instruction? */
+  bool is_rdfsbase() const {
+    return opcode_ >= RDFSBASE_R32 && opcode_ <= RDFSBASE_R64;
+  }
+  /** Is this a variant of the rdgsbase instruction? */
+  bool is_rdgsbase() const {
+    return opcode_ >= RDGSBASE_R32 && opcode_ <= RDGSBASE_R64;
+  }
   /** Is this a variant of the rdrand instruction? */
   bool is_rdrand() const {
     return opcode_ >= RDRAND_R16 && opcode_ <= RDRAND_R64;
@@ -310,6 +361,14 @@ public:
   /** Is this a variant of the ret instruction? */
   bool is_ret() const {
     return opcode_ >= RET && opcode_ <= RET_IMM16_FAR;
+  }
+  /** Is this a variant of the scas instruction? */
+  bool is_scas() const {
+    return opcode_ >= SCAS_M16 && opcode_ <= SCASW;
+  }
+  /** Is this a variant of the stos instruction? */
+  bool is_stos() const {
+    return opcode_ >= STOS_M16 && opcode_ <= STOSW;
   }
   /** Is this a variant of the syscall instruction? */
   bool is_syscall() const {
@@ -346,6 +405,18 @@ public:
   /** Is this a variant of the vmovups instruction? */
   bool is_vmovups() const {
     return opcode_ >= VMOVUPS_M128_XMM && opcode_ <= VMOVUPS_YMM_YMM;
+  }
+  /** Is this a variant of the wrfsbase instruction? */
+  bool is_wrfsbase() const {
+    return opcode_ >= WRFSBASE_R32 && opcode_ <= WRFSBASE_R64;
+  }
+  /** Is this a variant of the wrgsbase instruction? */
+  bool is_wrgsbase() const {
+    return opcode_ >= WRGSBASE_R32 && opcode_ <= WRGSBASE_R64;
+  }
+  /** Is this a variant of the xbegin instruction? */
+  bool is_xbegin() const {
+    return opcode_ >= XBEGIN_REL32 && opcode_ <= XBEGIN_LABEL;
   }
 
   /** Is this an SSE instruction? */
@@ -610,6 +681,12 @@ public:
     return fs.contains(required_flags());
   }
 
+  /** Returns an estimate of this instruction's haswell latency in nanoseconds/100 */
+  size_t haswell_latency() const {
+    assert((size_t)get_opcode() < haswell_latency_.size());
+    return haswell_latency_[get_opcode()];
+  }
+
   /** Returns true if this instruction is well-formed. */
   bool check() const;
 
@@ -673,6 +750,7 @@ private:
   static const std::array<RegSet, X64ASM_NUM_OPCODES> implicit_must_undef_set_;
   static const std::array<RegSet, X64ASM_NUM_OPCODES> implicit_maybe_undef_set_;
   static const std::array<FlagSet, X64ASM_NUM_OPCODES> flags_;
+  static const std::array<size_t, X64ASM_NUM_OPCODES> haswell_latency_;
 
   /** Returns the set of operands this instruction must read. */
   RegSet& explicit_must_read_set(RegSet& rs) const;

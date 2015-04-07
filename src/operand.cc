@@ -16,9 +16,8 @@ uint16_t Operand::size() const {
   case Type::THREE:
   case Type::M_8:
   case Type::MOFFS_8:
-  case Type::RL:
-  case Type::RB:
   case Type::RH:
+  case Type::R_8:
   case Type::AL:
   case Type::CL:
     return 8;
@@ -62,9 +61,8 @@ uint16_t Operand::size() const {
 bool Operand::is_gp_register() const {
 
   switch(type()) {
-  case Type::RL:
   case Type::RH:
-  case Type::RB:
+  case Type::R_8:
   case Type::AL:
   case Type::CL:
   case Type::R_16:

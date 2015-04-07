@@ -111,7 +111,7 @@ bool is_a(const Operand* o, Type parse, Type target) {
 		return true;
 
 	// Now try simple promotions.
-	if ( parse == Type::RL ) {
+	if ( parse == Type::R_8 ) {
 		if ( target == Type::AL )
 			return ((const Al*)o)->check();
 		if ( target == Type::CL )
@@ -287,9 +287,8 @@ Imm64 offset(const Operand* o) {
 %token <operand> PREF_REX_W
 %token <operand> FAR
 %token <operand> MM
-%token <operand> RL
 %token <operand> RH
-%token <operand> RB
+%token <operand> R_8
 %token <operand> R_16
 %token <operand> R_32
 %token <operand> R_64
@@ -392,9 +391,8 @@ typed_operand : HINT { $$ = new pair<const Operand*, Type>{$1, Type::HINT}; }
 	| PREF_REX_W { $$ = new pair<const Operand*, Type>{$1, Type::PREF_REX_W}; }
 	| FAR { $$ = new pair<const Operand*, Type>{$1, Type::FAR}; }
 	| MM { $$ = new pair<const Operand*, Type>{$1, Type::MM}; }
-	| RL { $$ = new pair<const Operand*, Type>{$1, Type::RL}; }
 	| RH { $$ = new pair<const Operand*, Type>{$1, Type::RH}; }
-	| RB { $$ = new pair<const Operand*, Type>{$1, Type::RB}; }
+	| R_8 { $$ = new pair<const Operand*, Type>{$1, Type::R_8}; }
 	| R_16 { $$ = new pair<const Operand*, Type>{$1, Type::R_16}; }
 	| R_32 { $$ = new pair<const Operand*, Type>{$1, Type::R_32}; }
 	| R_64 { $$ = new pair<const Operand*, Type>{$1, Type::R_64}; }

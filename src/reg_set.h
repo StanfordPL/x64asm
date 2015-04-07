@@ -39,7 +39,7 @@ private:
   /** Per register type position masks. */
   enum class Mask : uint64_t {
     // Group 1 (general purpose)
-    LOW      = 0x0000000000000001,
+    BYTE     = 0x0000000000000001,
     HIGH     = 0x0000000000010000,
     WORD     = 0x0000000000010001,
     DOUBLE   = 0x0000000100010001,
@@ -62,18 +62,16 @@ private:
     OPCODE   = 0x0000000400000000,
     RIP      = 0x0000000800000000,
     // Any Masks
-    A_LOW    = 0x000000000000000f,
     A_HIGH   = 0x00000000000f0000,
-    A_BYTE   = 0x000000000000fff0,
+    A_BYTE   = 0x000000000000ffff,
     A_WORD   = 0x00000000fff00000, // (this one is tricky -- see below)
     A_DOUBLE = 0x0000ffff00000000,
     A_QUAD   = 0xffff000000000000,
     A_XMM    = 0x000000000000ffff,
     A_YMM    = 0x00000000ffff0000,
     // All Masks
-    LOWS     = 0x000000000000000f,
     HIGHS    = 0x00000000000f0000,
-    BYTES    = 0x000000000000fff0,
+    BYTES    = 0x000000000000ffff,
     WORDS    = 0x00000000ffffffff,
     DOUBLES  = 0x0000ffffffffffff,
     QUADS    = 0xffffffffffffffff,
@@ -251,17 +249,13 @@ public:
     return (*this - rhs) != *this;
   }
 
-  /** Insert a low register. */
-  constexpr RegSet operator+(const Rl& rhs) {
-    return plus_group1(Mask::LOW, (uint64_t)rhs);
-  }
   /** Insert a high register. */
   constexpr RegSet operator+(const Rh& rhs) {
     return plus_group1(Mask::HIGH, (uint64_t)rhs-4);
   }
   /** Insert a byte register. */
-  constexpr RegSet operator+(const Rb& rhs) {
-    return plus_group1(Mask::LOW, (uint64_t)rhs);
+  constexpr RegSet operator+(const R8& rhs) {
+    return plus_group1(Mask::BYTE, (uint64_t)rhs);
   }
   /** Insert a word register. */
   constexpr RegSet operator+(const R16& rhs) {
@@ -342,17 +336,13 @@ public:
     return rhs.contains_seg() ? plus_group4(Mask::SREG, rhs.get_seg()) : *this;
   }
 
-  /** Insert a low register. */
-  RegSet& operator+=(const Rl& rhs) {
-    return plus_equal(Mask::LOW, group1_, (uint64_t)rhs);
-  }
   /** Insert a high register. */
   RegSet& operator+=(const Rh& rhs) {
     return plus_equal(Mask::HIGH, group1_, (uint64_t)rhs - 4);
   }
   /** Insert a byte register. */
-  RegSet& operator+=(const Rb& rhs) {
-    return plus_equal(Mask::LOW, group1_, (uint64_t)rhs);
+  RegSet& operator+=(const R8& rhs) {
+    return plus_equal(Mask::BYTE, group1_, (uint64_t)rhs);
   }
   /** Insert a word register. */
   RegSet& operator+=(const R16& rhs) {
@@ -448,17 +438,13 @@ public:
     return rhs.contains_seg() ? plus_equal(Mask::SREG, group4_, rhs.get_seg()) : *this;
   }
 
-  /** Returns true if this set contains a low register. */
-  constexpr bool contains(const Rl& rhs) {
-    return contains(Mask::LOW, group1_, (uint64_t)rhs);
-  }
   /** Returns true if this set contains a high register. */
   constexpr bool contains(const Rh& rhs) {
     return contains(Mask::HIGH, group1_, (uint64_t)rhs - 4);
   }
   /** Returns true if this set contains a byte register. */
-  constexpr bool contains(const Rb& rhs) {
-    return contains(Mask::LOW, group1_, (uint64_t)rhs);
+  constexpr bool contains(const R8& rhs) {
+    return contains(Mask::BYTE, group1_, (uint64_t)rhs);
   }
   /** Returns true if this set contains a word register. */
   constexpr bool contains(const R16& rhs) {
@@ -529,21 +515,17 @@ public:
     return contains(Mask::MXCSR, group4_, rhs.index());
   }
 
-  /** Returns true if this set contains any low registers. */
-  constexpr bool contains_any_rl() {
-    return contains_any(Mask::A_LOW, group1_);
-  }
   /** Returns true if this set contains any high registers. */
   constexpr bool contains_any_rh() {
     return contains_any(Mask::A_HIGH, group1_);
   }
   /** Returns true if this set contains any byte registers. */
-  constexpr bool contains_any_rb() {
+  constexpr bool contains_any_r8() {
     return contains_any(Mask::A_BYTE, group1_);
   }
   /** Returns true if this set contains any word registers. */
   constexpr bool contains_any_word() {
-    return contains_any(Mask::A_WORD, group1_) ||
+    return contains_any(Mask::A_WORD, group1_) || 
            contains(Constants::ax()) || contains(Constants::bx()) || 
            contains(Constants::cx()) || contains(Constants::dx());
   }
@@ -564,16 +546,12 @@ public:
     return contains_any(Mask::A_YMM, group2_);
   }
 
-  /** Returns true if this set contains all low registers. */
-  constexpr bool contains_all_rl() {
-    return contains_all(Mask::LOWS, group1_);
-  }
   /** Returns true if this set contains all high registers. */
   constexpr bool contains_all_rh() {
     return contains_all(Mask::HIGHS, group1_);
   }
   /** Returns true if this set contains all byte registers. */
-  constexpr bool contains_all_rb() {
+  constexpr bool contains_all_r8() {
     return contains_all(Mask::BYTES, group1_);
   }
   /** Returns true if this set contains all word registers. */
@@ -608,12 +586,10 @@ public:
         return (R)Constants::r32s()[idx_];
       } else if (rs_->contains(Constants::r16s()[idx_])) {
         return (R)Constants::r16s()[idx_];
+      } else if (rs_->contains(Constants::r8s()[idx_])) {
+        return (R)Constants::r8s()[idx_];
       } else if (idx_ < 4 && rs_->contains(Constants::rhs()[idx_])) {
         return (R)Constants::rhs()[idx_];
-      } else if (idx_ < 4 && rs_->contains(Constants::rls()[idx_])) {
-        return (R)Constants::rls()[idx_];
-      } else if (idx_ >= 4 && rs_->contains(Constants::rbs()[idx_-4])) {
-        return (R)Constants::rbs()[idx_-4];
       } else {
         assert(false);
         return (R)Constants::rax();

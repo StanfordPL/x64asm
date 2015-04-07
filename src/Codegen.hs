@@ -181,9 +181,8 @@ operands i = let x = (splitOn ",") $ concat $ tail $ words (instruction i) in
 
 -- Returns true for register operands
 reg_op :: String -> Bool
-reg_op "rl"  = True
 reg_op "rh"  = True
-reg_op "rb"  = True
+reg_op "r8"  = True
 reg_op "r16" = True
 reg_op "r32" = True
 reg_op "r64" = True
@@ -273,9 +272,8 @@ xmm_op _        = False
 
 -- Transform operand into c++ type
 op2type :: String -> String
-op2type "rl"       = "Rl"
 op2type "rh"       = "Rh"
-op2type "rb"       = "Rb"
+op2type "r8"       = "R8"
 op2type "r16"      = "R16"
 op2type "r32"      = "R32"
 op2type "r64"      = "R64"
@@ -337,9 +335,8 @@ op2type o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
 
 -- Transform operand into type tag
 op2tag :: String -> String
-op2tag "rl"       = "RL"
 op2tag "rh"       = "RH"
-op2tag "rb"       = "RB"
+op2tag "r8"       = "R_8"
 op2tag "r16"      = "R_16"
 op2tag "r32"      = "R_32"
 op2tag "r64"      = "R_64"
@@ -580,37 +577,30 @@ fix_ops is = map fix_op is
 -- Step 5: Fix up REX rows
 --------------------------------------------------------------------------------
 
--- Replace an r8 in a rex row by rl and rb
-fix_rex_r8 :: Instr -> [Instr]
-fix_rex_r8 i = case "REX+" `elem` (opcode_terms i) of
-  True  -> [(repl_first_op i "r8" "rl"), (repl_first_op i "r8" "rb")]
-  False -> []
+-- Split r8 into two cases, rh and r8
+fix_r8_op :: Instr -> [Instr]
+fix_r8_op i = case "r8" `elem` (operands i) of
+  True  -> [(repl_first_op i "r8" "rh"), (repl_first_op i "r8" "RTEMP")]
+  False -> [i]
 
--- Replace an r8 in a non-rex row by rl and rh
-fix_norex_r8 :: Instr -> [Instr]
-fix_norex_r8 i = case "REX+" `notElem` (opcode_terms i) of
-  True  -> [(repl_first_op i "r8" "rl"), (repl_first_op i "r8" "rh")]
-  False -> []
+-- Change RTEMP back to r8
+fix_rtemp :: Instr -> Instr
+fix_rtemp i = repl_op i "RTEMP" "r8"
 
--- Replace an r8 in a rex row if necessary
-fix_rex_row :: Instr -> [Instr]
-fix_rex_row i = case "r8" `elem` (operands i) of 
-	True -> concat [(fix_norex_r8 i), (fix_rex_r8 i)]
-	False -> [i]
+-- Split rows that contain r8 into two cases for each occurrance
+fix_r8_row :: Instr -> [Instr]
+fix_r8_row i = map fix_rtemp $ concat $ map fix_r8_op $ fix_r8_op i
 
--- Is this one of three instructions that require REX+ no matter what
-needs_rex :: Instr -> Bool
-needs_rex i = mn == "LSS" || mn == "LFS" || mn == "LGS"
-  where mn = raw_mnemonic i
-
--- Remove REX+ rows which correspond to the mem half of r/m8 splits
-remove_m8_rex :: [Instr] -> [Instr]
-remove_m8_rex is = filter keep is
-  where keep i = "REX+" `notElem` (opcode_terms i) || "rb" `elem` (operands i) || needs_rex i
+-- Remove REX+ rows for instructions that don't require REX+ no matter what
+remove_rex :: [Instr] -> [Instr]
+remove_rex is = filter keep is
+  where keep i = "REX+" `notElem` (opcode_terms i) || needs_rex i
+        needs_rex i = (mn i) == "LSS" || (mn i) == "LFS" || (mn i) == "LGS"
+        mn i = raw_mnemonic i
 
 -- Fix all rex rows (we do this twice to handle instructions with 2 r8 operands)
 fix_rex_rows :: [Instr] -> [Instr]
-fix_rex_rows is = remove_m8_rex $ concat $ map fix_rex_row $ concat $ map fix_rex_row is
+fix_rex_rows is = concat $ map fix_r8_row $ remove_rex is
 
 -- Step 6: Remove duplicate rows by using the preferred encoding
 --------------------------------------------------------------------------------
@@ -822,9 +812,10 @@ type_table is = to_table is type_row
 
 -- Converts an instruction mem_index table row
 mem_index_row :: Instr -> String
-mem_index_row i = case findIndex mem_op (operands i) of
+mem_index_row i = case findIndex mem_or_moffs (operands i) of
   (Just idx) -> show idx
   Nothing -> "-1"
+  where mem_or_moffs i = mem_op i || moffs_op i
 
 -- Converts all instruction to mem_index table
 mem_index_table :: [Instr] -> String
@@ -994,7 +985,7 @@ assm_header_decls is = intercalate "\n\n" $ map assm_header_decl is
 -- Assembler source definitions
 --------------------------------------------------------------------------------
 
--- Emits code for the FWAIT prefi
+-- Emits code for the FWAIT prefix
 pref_fwait :: Instr -> String
 pref_fwait i
   | "9B" `elem` opcode_prefix i = "pref_fwait(0x9b);\n"
@@ -1062,9 +1053,9 @@ digit i = case find is_digit (opcode_suffix i) of
 -- Implied rex values
 implied_rex :: Instr -> String
 implied_rex i
-  | "REX.W+" `elem` (opcode_prefix i) = "(uint8_t)0x48"
-  | "REX.R+" `elem` (opcode_prefix i) = "(uint8_t)0x44"
-  | "REX+"   `elem` (opcode_prefix i) = "(uint8_t)0x40"
+  | "REX.W+" `elem` (opcode_prefix i) = "rex_w()"
+  | "REX.R+" `elem` (opcode_prefix i) = "rex_r()"
+  | "REX+"   `elem` (opcode_prefix i) = "rex()"
   | otherwise = "(uint8_t)0x00"
 
 -- Emits code for REX Prefix 
@@ -1255,7 +1246,7 @@ op_order = ["hint",
   "0","1","3","imm8","imm16","imm32","imm64",
   "label",
   "p66","pw","far",
-  "AL","CL","rl","rh","rb","AX","DX","r16","EAX","r32","RAX","r64",
+  "rh","AL","CL","r8","AX","DX","r16","EAX","r32","RAX","r64",
   "rel8","rel32",
   "moffs8","moffs16","moffs32","moffs64",
   "m8","m16","m32","m64","m128","m256","m16:16","m16:32","m16:64",

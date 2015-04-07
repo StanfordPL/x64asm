@@ -61,14 +61,10 @@ int main() {
 
   cout << endl;
 
-  // and in predefined convenience containers
-  for ( const auto& r : rls )
-    cout << r << " ";
-  cout << endl;
   for ( const auto& r : rhs )
     cout << r << " ";
   cout << endl;
-  for ( const auto& r : rbs )
+  for ( const auto& r : r8s )
     cout << r << " ";
   cout << endl;
   for ( const auto& r : r16s )

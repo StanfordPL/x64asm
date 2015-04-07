@@ -33,32 +33,11 @@ namespace x64asm {
 /** A static class for resolving hardware aliasing relationships. */
 class Alias {
 public:
-  /** Convert a general purpose register to its low alias.
-      This method is undefined for byte registers and when no alias
-      exists (ie: %r12).
-  */
-  template <typename T>
-  static typename std::enable_if <is_reg<T>::value && !std::is_same<T, Rh>::value && !std::is_same<T, Rb>::value, const Rl>::type
-  to_low(const T& t) {
-    assert(t < 4);
-    return Constants::rls()[t];
-  }
-
-  /** Convert a general purpose register to its low alias.
-      This method is undefined for byte registers and when no alias
-      exists (ie: %r12).
-  */
-  static const Rl to_low(const Rh& r) {
-    // High registers are assigned internal values beginning from 4.
-    return Constants::rls()[r - 4];
-  }
-
   /** Convert a general purpose register to its high alias.
-      This method is undefined for byte registers and when no alias
-      exists (ie: %r12).
+      This method is undefined when no alias exists (eg: %r12).
   */
   template <typename T>
-  static typename std::enable_if <is_reg<T>::value && !std::is_same<T, Rh>::value && !std::is_same<T, Rb>::value, const Rh>::type
+  static typename std::enable_if <is_reg<T>::value && !std::is_same<T, Rh>::value, const Rh>::type
   to_high(const T& t) {
     assert(t < 4);
     return Constants::rhs()[t];
@@ -72,16 +51,16 @@ public:
     return r;
   }
 
-  /** Convert a general purpose register to its byte alias.
-      This method is undefined for byte registers and when no alias
-      exists (ie: %r12).
-  */
+  /** Convert a general purpose register to its byte alias. */
   template <typename T>
-  static typename std::enable_if<is_reg<T>::value && !std::is_same<T, Rl>::value && !std::is_same<T, Rh>::value, const Rb>::type
+  static typename std::enable_if<is_reg<T>::value && !std::is_same<T, Rh>::value, const R8>::type
   to_byte(const T& t) {
-    // The rbs array begins with rbp, which has an internal value of 4.
-    assert(t >= 4);
-    return Constants::rbs()[t - 4];
+    return Constants::r8s()[t];
+  }
+
+  /** Convert a general purpose register to its byte alias. */
+  static const R8 to_byte(const Rh& r) {
+    return Constants::r8s()[r-4];
   }
 
   /** Convert a general purpose register to its word alias. */

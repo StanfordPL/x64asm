@@ -371,15 +371,54 @@ public:
   static constexpr Cl cl() {
     return {};
   }
-  static constexpr Rl dl() {
+  static constexpr R8 dl() {
     return {2};
   }
-  static constexpr Rl bl() {
+  static constexpr R8 bl() {
     return {3};
   }
-  static constexpr std::array<Rl,4> rls() {
+  static constexpr R8 spl()  {
+    return {4};
+  }
+  static constexpr R8 bpl()  {
+    return {5};
+  }
+  static constexpr R8 sil()  {
+    return {6};
+  }
+  static constexpr R8 dil()  {
+    return {7};
+  }
+  static constexpr R8 r8b()  {
+    return {8};
+  }
+  static constexpr R8 r9b()  {
+    return {9};
+  }
+  static constexpr R8 r10b() {
+    return {10};
+  }
+  static constexpr R8 r11b() {
+    return {11};
+  }
+  static constexpr R8 r12b() {
+    return {12};
+  }
+  static constexpr R8 r13b() {
+    return {13};
+  }
+  static constexpr R8 r14b() {
+    return {14};
+  }
+  static constexpr R8 r15b() {
+    return {15};
+  }
+  static constexpr std::array<R8, 16> r8s() {
     return {
-      al(), cl(), dl(), bl()
+      al(), cl(), dl(), bl(),
+      spl(), bpl(), sil(), dil(), 
+      r8b(), r9b(), r10b(), r11b(), 
+      r12b(), r13b(), r14b(), r15b()
     };
   }
 
@@ -398,50 +437,6 @@ public:
   static constexpr std::array<Rh,4> rhs() {
     return {
       ah(), ch(), dh(), bh()
-    };
-  }
-
-  static constexpr Rb spl()  {
-    return {4};
-  }
-  static constexpr Rb bpl()  {
-    return {5};
-  }
-  static constexpr Rb sil()  {
-    return {6};
-  }
-  static constexpr Rb dil()  {
-    return {7};
-  }
-  static constexpr Rb r8b()  {
-    return {8};
-  }
-  static constexpr Rb r9b()  {
-    return {9};
-  }
-  static constexpr Rb r10b() {
-    return {10};
-  }
-  static constexpr Rb r11b() {
-    return {11};
-  }
-  static constexpr Rb r12b() {
-    return {12};
-  }
-  static constexpr Rb r13b() {
-    return {13};
-  }
-  static constexpr Rb r14b() {
-    return {14};
-  }
-  static constexpr Rb r15b() {
-    return {15};
-  }
-  static constexpr std::array<Rb, 12> rbs() {
-    return {
-      spl(), bpl(), sil(), dil(), 
-      r8b(), r9b(), r10b(), r11b(), 
-      r12b(), r13b(), r14b(), r15b()
     };
   }
 
@@ -887,14 +882,6 @@ constexpr auto al = Constants::al();
 constexpr auto cl = Constants::cl();
 constexpr auto dl = Constants::dl();
 constexpr auto bl = Constants::bl();
-constexpr auto rls = Constants::rls();
-
-constexpr auto ah = Constants::ah();
-constexpr auto ch = Constants::ch();
-constexpr auto dh = Constants::dh();
-constexpr auto bh = Constants::bh();
-constexpr auto rhs = Constants::rhs();
-
 constexpr auto spl = Constants::spl();
 constexpr auto bpl = Constants::bpl();
 constexpr auto sil = Constants::sil();
@@ -907,7 +894,13 @@ constexpr auto r12b = Constants::r12b();
 constexpr auto r13b = Constants::r13b();
 constexpr auto r14b = Constants::r14b();
 constexpr auto r15b = Constants::r15b();
-constexpr auto rbs = Constants::rbs();
+constexpr auto r8s = Constants::r8s();
+
+constexpr auto ah = Constants::ah();
+constexpr auto ch = Constants::ch();
+constexpr auto dh = Constants::dh();
+constexpr auto bh = Constants::bh();
+constexpr auto rhs = Constants::rhs();
 
 constexpr auto ax = Constants::ax();
 constexpr auto cx = Constants::cx();

@@ -58,14 +58,8 @@ bool Instruction::is_xor_reg_reg() const {
     }
     break;
 
-  case XOR_RB_RB:
-    if (get_operand<Rb>(0) == get_operand<Rb>(1)) {
-      return true;
-    }
-    break;
-
-  case XOR_RL_RL:
-    if (get_operand<Rl>(0) == get_operand<Rl>(1)) {
+  case XOR_R8_R8:
+    if (get_operand<R8>(0) == get_operand<R8>(1)) {
       return true;
     }
     break;
@@ -151,13 +145,10 @@ RegSet& Instruction::explicit_must_read_set(RegSet& ret) const {
     case Type::RH:
       ret += get_operand<Rh>(i);
       break;
-    case Type::RB:
-      ret += get_operand<Rb>(i);
-      break;
     case Type::AL:
     case Type::CL:
-    case Type::RL:
-      ret += get_operand<Rl>(i);
+    case Type::R_8:
+      ret += get_operand<R8>(i);
       break;
     case Type::AX:
     case Type::DX:
@@ -248,13 +239,10 @@ RegSet& Instruction::explicit_maybe_read_set(RegSet& ret) const {
     case Type::RH:
       ret += get_operand<Rh>(i);
       break;
-    case Type::RB:
-      ret += get_operand<Rb>(i);
-      break;
     case Type::AL:
     case Type::CL:
-    case Type::RL:
-      ret += get_operand<Rl>(i);
+    case Type::R_8:
+      ret += get_operand<R8>(i);
       break;
     case Type::AX:
     case Type::DX:
@@ -318,13 +306,10 @@ RegSet& Instruction::explicit_must_write_set(RegSet& ret) const {
       case Type::RH:
         ret += get_operand<Rh>(i);
         break;
-      case Type::RB:
-        ret += get_operand<Rb>(i);
-        break;
       case Type::AL:
       case Type::CL:
-      case Type::RL:
-        ret += get_operand<Rl>(i);
+      case Type::R_8:
+        ret += get_operand<R8>(i);
         break;
       case Type::AX:
       case Type::DX:
@@ -390,13 +375,10 @@ RegSet& Instruction::explicit_maybe_write_set(RegSet& ret) const {
       case Type::RH:
         ret += get_operand<Rh>(i);
         break;
-      case Type::RB:
-        ret += get_operand<Rb>(i);
-        break;
       case Type::AL:
       case Type::CL:
-      case Type::RL:
-        ret += get_operand<Rl>(i);
+      case Type::R_8:
+        ret += get_operand<R8>(i);
         break;
       case Type::AX:
       case Type::DX:
@@ -448,13 +430,10 @@ RegSet& Instruction::explicit_must_undef_set(RegSet& ret) const {
       case Type::RH:
         ret += get_operand<Rh>(i);
         break;
-      case Type::RB:
-        ret += get_operand<Rb>(i);
-        break;
       case Type::AL:
       case Type::CL:
-      case Type::RL:
-        ret += get_operand<Rl>(i);
+      case Type::R_8:
+        ret += get_operand<R8>(i);
         break;
       case Type::AX:
       case Type::DX:
@@ -505,13 +484,10 @@ RegSet& Instruction::explicit_maybe_undef_set(RegSet& ret) const {
       case Type::RH:
         ret += get_operand<Rh>(i);
         break;
-      case Type::RB:
-        ret += get_operand<Rb>(i);
-        break;
       case Type::AL:
       case Type::CL:
-      case Type::RL:
-        ret += get_operand<Rl>(i);
+      case Type::R_8:
+        ret += get_operand<R8>(i);
         break;
       case Type::AX:
       case Type::DX:
@@ -669,12 +645,6 @@ bool Instruction::check() const {
       }
       has_rh = true;
       break;
-    case Type::RB:
-      if (!get_operand<Rb>(i).check()) {
-        return false;
-      }
-      has_gp_gte_8 = true;
-      break;
     case Type::AL:
       if (!get_operand<Al>(i).check()) {
         return false;
@@ -685,8 +655,8 @@ bool Instruction::check() const {
         return false;
       }
       break;
-    case Type::RL:
-      if (!get_operand<Rl>(i).check()) {
+    case Type::R_8:
+      if (!get_operand<R8>(i).check()) {
         return false;
       }
       break;
@@ -879,13 +849,10 @@ ostream& Instruction::write_att(ostream& os) const {
       case Type::RH:
         get_operand<Rh>(i).write_att(os);
         break;
-      case Type::RB:
-        get_operand<Rb>(i).write_att(os);
-        break;
       case Type::AL:
       case Type::CL:
-      case Type::RL:
-        get_operand<Rl>(i).write_att(os);
+      case Type::R_8:
+        get_operand<R8>(i).write_att(os);
         break;
       case Type::AX:
       case Type::DX:
@@ -1070,6 +1037,13 @@ const array<FlagSet, X64ASM_NUM_OPCODES> Instruction::flags_ {{
     FlagSet::empty()
     // Auto-generatred mnemonics
 #include "src/flag.table"
+  }};
+
+const array<size_t, X64ASM_NUM_OPCODES> Instruction::haswell_latency_ {{
+    // Internal mnemonics
+    0
+    // Auto-generatred mnemonics
+    #include "../codegen/haswell_latency.inc"
   }};
 
 } // namespace x64asm
