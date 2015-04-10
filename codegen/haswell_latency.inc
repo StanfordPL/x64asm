@@ -508,7 +508,6 @@
 , 999		// crc32b %es:(%rax,%rax,1), %rax
 , 1		// crc32q %rax, %rax
 , 1		// crc32b %al, %rax
-, 1		// crc32b %ah, %rax
 , 999		// cvtdq2pd %es:(%rax,%rax,1), %xmm0
 , 1		// cvtdq2pd %xmm0, %xmm0
 , 999		// cvtdq2ps %es:(%rax,%rax,1), %xmm0
@@ -1235,7 +1234,6 @@
 , 999		// movsbq %es:(%rax,%rax,1), %rax
 , 1		// movswq %ax, %rax
 , 1		// movsbq %al, %rax
-, 1		// movsbq %ah, %rax
 , 999		// movslq %es:(%rax,%rax,1), %rax
 , 1		// movslq %eax, %rax
 , 999		// movupd %xmm0, %es:(%rax,%rax,1)
@@ -1256,7 +1254,6 @@
 , 999		// movzbq %es:(%rax,%rax,1), %rax
 , 1		// movzwq %ax, %rax
 , 1		// movzbq %al, %rax
-, 1		// movzbq %ah, %rax
 , 999		// mpsadbw $0x0, %es:(%rax,%rax,1), %xmm0
 , 1		// mpsadbw $0x0, %xmm0, %xmm0
 , 999		// mulw %es:(%rax,%rax,1)

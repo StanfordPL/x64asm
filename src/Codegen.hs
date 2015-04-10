@@ -598,9 +598,14 @@ remove_rex is = filter keep is
         needs_rex i = (mn i) == "LSS" || (mn i) == "LFS" || (mn i) == "LGS"
         mn i = raw_mnemonic i
 
+-- Remove instruction variants that both require a REX prefix, and cannot have a rex prefix
+remove_invalid_rex :: [Instr] -> [Instr]
+remove_invalid_rex is = filter keep is
+  where keep i = not (("REX.W+" `elem` (opcode_terms i)) && ("rh" `elem` (operands i)))
+
 -- Fix all rex rows (we do this twice to handle instructions with 2 r8 operands)
 fix_rex_rows :: [Instr] -> [Instr]
-fix_rex_rows is = concat $ map fix_r8_row $ remove_rex is
+fix_rex_rows is = remove_invalid_rex $ concat $ map fix_r8_row $ remove_rex is
 
 -- Step 6: Remove duplicate rows by using the preferred encoding
 --------------------------------------------------------------------------------
