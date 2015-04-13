@@ -67,21 +67,13 @@ Deciding between the 8- and 32-bit relative displacement forms of jump instructi
 	
 In many cases, the only thing distinguishing two otherwise identical instructions is operand type. Furthermore, certain operand types (ie. M16) are required for infering prefix bytes. We account for this by introducing a distinct memory type for each operand type appearing in the Intel manual. Barring these requirements, a single memory type would simplify our implementation.
 
-#### REX+
-
-Any instruction prefixed with REX+ has at least one 8-bit operand. We identify these instructions and replace them with as many variants as are necessary to represent all possible combinations of replacements by elements in the sets {rl,rb} and {rl,rh}. This follows from the x86_64 hardware, which prevents the user from specifying the simultaneous use of rh registers at the same time as operand or mnemonic which requires a REX prefix. As a result, opting to use any of these high registers for any operand implies that any other r8 registers must be drawn from {rl,rh}.
-
 #### Ambiguity
 
-Even after we have (1) added the annotations described above, (2) ignored the meaningless rows described above, and (3) rewritten rows that use the REX+ prefix, we are still left with rows which are indistinguishable up to mnemonic and operand. These ambiguities represent a distinction without a difference. They are alternate hardware methods for performing the same operation, which as far as we know, have no noticable performance tradeoffs. We remove this redudancy by choosing the encoding preferred by g++.
+The x86_64 instruction set contains many instructions that are indistinguishable up to mnemonic and operand. These ambiguities represent a distinction without a difference. They are alternate hardware methods for performing the same operation, which as far as we know, have no noticable performance tradeoffs. We remove this redudancy by choosing the encoding preferred by g++.
 
 #### Intel Eratta
 
 Most of the source code in this project is automatically generated using the the x64.csv spreadsheet.  Unless otherwise noted below, the contents of the spreadsheet are transcribed directly from the Intel manuals. If you discover an error, or an edit which has not been documented below, please submit an error report.
-
-#### LAHS/SAHF
-
-These instructions are conditionally invalid in 64-bit mode based on processor model. We list these as valid.
 
 #### String Instructions
 
@@ -101,7 +93,7 @@ Each of the instructions in this class would have a similar problem to the above
 
 #### IRET/IRETD/IRETQ
 
-Each of the instructions in this class APPEAR as though they would have a similar problem to the above. But in fact, they don't. We've left them unmodified.
+Each of the instructions in this class APPEAR as though they would have a similar problem to the above, but don't. We've left them unmodified.
 
 #### LEAVE/MOV/POP/RET/SYSEXT/SYSRET
 
@@ -115,19 +107,9 @@ The rex.w prefix is a meaningless distinction in 64-bit mode.  As a result, we d
 
 The REX.w prefix has no control over count register for these instructions. It functions simply to disambiguate the 64-bit operand version of some versions of the instruction. Count register width is controled by the address width prefix which follows from the long form version of each instruction. Note that in contrast to the non-repeated versions of these instructions, no short form is given.
 
-It seems likely that there is a typo in the Intel manual, and that the first five rows (REP INS) are missing REX.w+ prefix annotations. We have added these. Furthermore, we note that the fifth entry for REP INS and REP OUTS  are the only REP instruction which the Intel manual allows register operands for. This is asymmetric with the INS / OUTS documentation and likely a typo. we have removed these register operands.
-
 In either case, where the REX.w prefix isn't used to disambiguate a 64 bit operand form, it's use is meaningless. For these rows, any arbitrary choice of encoding will suffice.
 
 Note that we have also added underscores to these mnemonics to maintain the one-word-per-mnemonic invariant.
-
-#### SETxx
-
-The SETxx class of instructions is missing the /0 register code annotation. This has been added.
-
-#### AND
-
-The op/en values for this instruction are likely incorrect and have been modified to match those from ADC,SBB,etc.
 
 #### Dataflow Values
 
