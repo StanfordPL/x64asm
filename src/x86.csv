@@ -1756,7 +1756,7 @@ VEX.NDS.128.66.0F.WIG F6 /r	VPSADBW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	A
 VEX.NDS.256.66.0F.WIG F6 /r	VPSADBW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpsadbw		Computes the absolute differences of the packed unsigned byte integers from ymm3/m256 and ymm2; then each consecutive 8 differences are summed separately to produce four unsigned word integer results.
 														
 0F 38 00 /r 	PSHUFB mm1, mm2/m64	RM	RW, R						V	V	SSSE3	pshufb		Shuffle bytes in mm1 according to contents of mm2/m64.
-66 0F 38 00 /r	PSHUFB xmm1, xmm2/m128	RM	RZ, R						V	V	SSSE3	pshufb		Shuffle bytes in xmm1 according to contents of xmm2/m128.
+66 0F 38 00 /r	PSHUFB xmm1, xmm2/m128	RM	RW, R						V	V	SSSE3	pshufb		Shuffle bytes in xmm1 according to contents of xmm2/m128.
 VEX.NDS.128.66.0F38.WIG 00 /r	VPSHUFB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpshufb		Shuffle bytes in xmm2 according to contents of xmm3/m128.
 VEX.NDS.256.66.0F38.WIG 00 /r	VPSHUFB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpshufb		Shuffle bytes in ymm2 according to contents of ymm3/m256.
 														
