@@ -2024,7 +2024,7 @@ REX.W+ C1 /1 ib	ROR r/m64, imm8	MI	RW, R		e.cf e.of	e.of			V	NE		rorq		Rotate 64
 VEX.128.0F.WIG 53 /r	VRCPPS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vrcpps		Computes the approximate reciprocals of packed single-precision values in xmm2/mem and stores the results in xmm1.
 VEX.256.0F.WIG 53 /r	VRCPPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vrcpps		Computes the approximate reciprocals of packed single-precision values in ymm2/mem and stores the results in ymm1.
 														
-F3 0F 53 /r	RCPSS xmm1, xmm2/m32	RM	W, R						V	V	SSE	rcpss		Computes the approximate reciprocal of the scalar single-precision floating-point value in xmm2/m32 and stores the result in xmm1.
+F3 0F 53 /r	RCPSS xmm1, xmm2/m32	RM	RW, R						V	V	SSE	rcpss		Computes the approximate reciprocal of the scalar single-precision floating-point value in xmm2/m32 and stores the result in xmm1.
 VEX.NDS.LIG.F3.0F.WIG 53 /r	VRCPSS xmm1, xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vrcpss		Computes the approximate reciprocal of the scalar single-precision floating-point value in xmm3/m32 and stores the result in xmm1. Also, upper single precision floating-point values (bits[127:32]) from xmm2 are copied to xmm1[127:32].
 														
 F3 0F AE /0	RDFSBASE r32	M	W						V	I	FSGSBASE	rdfsbase		Load the 32-bit destination register with the FS base address.
@@ -2464,7 +2464,7 @@ VEX.128.66.0F3A.W0 1D /r ib	VCVTPS2PH xmm1/m64, xmm2, imm8	MR	Z, R, R	M.RC					V
 														
 VEX.256.66.0F3A.W0 19 /r ib	VEXTRACTF128 xmm1/m128, ymm2, imm8	MR	QZ, R, R						V	V	AVX	vextractf128		Extract 128 bits of packed floating-point values from ymm2 and store results in xmm1/mem.
 														
-VEX.256.66.0F3A.W0 39 /r ib	VEXTRACTI128 xmm1/m128, ymm2, imm8	RMI	W, R, R						V	V	AVX2	vextracti128		Extract 128 bits of integer data from ymm2 and store results in xmm1/mem.
+VEX.256.66.0F3A.W0 39 /r ib	VEXTRACTI128 xmm1/m128, ymm2, imm8	RMI	RW, R, R						V	V	AVX2	vextracti128		Extract 128 bits of integer data from ymm2 and store results in xmm1/mem.
 														
 VEX.DDS.128.66.0F38.W1 98 /r	VFMADD132PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmadd132pd		Multiply packed double-precision floating-point values from xmm0 and xmm2/mem, add to xmm1 and put result in xmm0.
 VEX.DDS.128.66.0F38.W1 A8 /r	VFMADD213PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmadd213pd		Multiply packed double-precision floating-point values from xmm0 and xmm1, add to xmm2/mem and put result in xmm0.
