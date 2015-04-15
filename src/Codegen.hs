@@ -788,14 +788,14 @@ must_rex_table :: [Instr] -> String
 must_rex_table is = to_table is must_rex_row
 
 -- Creates an entry for a property element
-property_elem :: (String, String) -> String
-property_elem (t,p) = "Properties::none()" ++ (concat (map (elem t) p))
+property_elem :: Instr -> (String, String) -> String
+property_elem i (t,p) = "Properties::none()" ++ (concat (map (elem t) p))
   where elem _ 'R' = "+Property::MUST_READ"
         elem _ 'r' = "+Property::MAYBE_READ"
         elem t 'Z' = case mem_op t of 
                           True ->  "+Property::MUST_WRITE"
                           False -> "+Property::MUST_WRITE_ZX"
-        elem t 'W' = case reg32_op t of 
+        elem t 'W' = case ((reg32_op t) && (raw_mnemonic i /= "XCHG")) of 
                           True ->  "+Property::MUST_WRITE_ZX"
                           False -> "+Property::MUST_WRITE"
         elem t 'Q' = case mem_op t of 
@@ -810,7 +810,7 @@ property_elem (t,p) = "Properties::none()" ++ (concat (map (elem t) p))
 -- Converts an instruction to properties table row
 properties_row :: Instr -> String
 properties_row i = "{{" ++ intercalate "," ps4 ++ "}}"
-  where ps = map property_elem $ zip (operands i) (properties i)
+  where ps = map (property_elem i) $ zip (operands i) (properties i)
         ps4 = take 4 $ ps ++ (repeat "Properties::none()")
 
 -- Converts all instruction to properties table
