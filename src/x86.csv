@@ -2024,7 +2024,7 @@ REX.W+ C1 /1 ib	ROR r/m64, imm8	MI	RW, R		e.cf e.of	e.of			V	NE		rorq		Rotate 64
 VEX.128.0F.WIG 53 /r	VRCPPS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vrcpps		Computes the approximate reciprocals of packed single-precision values in xmm2/mem and stores the results in xmm1.
 VEX.256.0F.WIG 53 /r	VRCPPS ymm1, ymm2/m256	RM	W, R						V	V	AVX	vrcpps		Computes the approximate reciprocals of packed single-precision values in ymm2/mem and stores the results in ymm1.
 														
-F3 0F 53 /r	RCPSS xmm1, xmm2/m32	RM	RZ, R						V	V	SSE	rcpss		Computes the approximate reciprocal of the scalar single-precision floating-point value in xmm2/m32 and stores the result in xmm1.
+F3 0F 53 /r	RCPSS xmm1, xmm2/m32	RM	W, R						V	V	SSE	rcpss		Computes the approximate reciprocal of the scalar single-precision floating-point value in xmm2/m32 and stores the result in xmm1.
 VEX.NDS.LIG.F3.0F.WIG 53 /r	VRCPSS xmm1, xmm2, xmm3/m32	RVM	Z, R, R						V	V	AVX	vrcpss		Computes the approximate reciprocal of the scalar single-precision floating-point value in xmm3/m32 and stores the result in xmm1. Also, upper single precision floating-point values (bits[127:32]) from xmm2 are copied to xmm1[127:32].
 														
 F3 0F AE /0	RDFSBASE r32	M	W						V	I	FSGSBASE	rdfsbase		Load the 32-bit destination register with the FS base address.
