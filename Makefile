@@ -59,7 +59,7 @@ erthing: $(LIB) $(BIN)
 
 ##### BUILD TARGETS
 
-src/Codegen: src/Codegen.hs
+src/Codegen: src/Codegen.hs src/x86.csv
 	cd src && \
 		ghc Codegen.hs && \
 		./Codegen && \
