@@ -63,6 +63,7 @@ bool M<T>::check() const {
 template <class T>
 std::istream& M<T>::read_att(std::istream& is) {
 
+  bool ok = false;
   char tmp;
 
   // Segment register
@@ -86,6 +87,7 @@ std::istream& M<T>::read_att(std::istream& is) {
   }
   tmp = is.peek();
   if(tmp == '0') {
+    ok = true;
     is.ignore();
     tmp = is.peek();
     if(tmp == 'x') {
@@ -97,6 +99,7 @@ std::istream& M<T>::read_att(std::istream& is) {
       disp = 0;
     }
   } else if ('1' <= tmp && tmp <= '9') {
+    ok = true;
     is >> std::dec >> disp; 
   }
   if(neg)
@@ -105,6 +108,7 @@ std::istream& M<T>::read_att(std::istream& is) {
 
   // base/index/scale?
   if(is.peek() == '(') {
+    ok = true;
     is.ignore();
     is >> std::ws;
 
@@ -160,10 +164,14 @@ std::istream& M<T>::read_att(std::istream& is) {
 
     if(is.get() != ')') {
       is.setstate(std::ios::failbit);
+      return is;
     }
 
   }
 
+  if(!ok)
+    is.setstate(std::ios::failbit);
+  
   return is;
 }
 

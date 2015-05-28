@@ -45,10 +45,10 @@ istream& Code::read_att(istream& is) {
     auto instr = Instruction(NOP);
     line_ss >> instr;
 
-    if(line_ss.rdstate() == ios::failbit) {
-      cout << "Failed to parse line " << line_no << ": " << line << endl;
-    } else if (is.good()) {
+    if (line_ss.good() || line_ss.eof()) {
       push_back(instr);
+    } else {
+      cerr << "Failed to parse line " << line_no << ": " << line << endl;
     }
   }
 

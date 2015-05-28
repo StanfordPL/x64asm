@@ -198,6 +198,7 @@ istream& Operand::read_att(istream& is) {
 
 
   } else if (is.peek() == '$') {
+    // Immediates
     is.ignore();
     uint64_t value = 0;
 
@@ -225,6 +226,13 @@ istream& Operand::read_att(istream& is) {
     Imm64 imm(value);
     *this = imm;
 
+    return is;
+  } else if (is.peek() == '.') {
+    // Labels
+    string name;
+    is >> name;
+    Label label(name);
+    *this = label;
     return is;
   }
 
