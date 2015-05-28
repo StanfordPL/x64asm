@@ -69,6 +69,7 @@ namespace {
            t == Type::FAR_PTR_16_32 || t == Type::FAR_PTR_16_64;
   }
 
+
   /** Used in parsing to determine if an operand can be 
     rewritten to a given type. */
   bool is_a(const Operand* o, Type target) {
@@ -142,6 +143,37 @@ namespace {
 
 namespace x64asm {
 
+/** Promotes an operand to a given type.  Returns 'true' if 
+  the fit is dangerous and would best be avoided; e.g. if 0x80..0xff are put
+  into an 8-bit immediate, this could mess up the sign.  We can assume is_a()
+  on the same arguments has returned true.  */
+bool Instruction::promote(Operand* op, Type target) {
+
+  switch(target) {
+    case Type::IMM_8: {
+      uint64_t value = (uint64_t)*static_cast<Imm64*>(op);
+      *op = Imm8(value & 0xff);
+      return (0x80 <= value && value <= 0xff) || (0xffffffffffffff00 <= value && value <= 0xffffffffffffff80);
+    }
+    case Type::IMM_16: {
+      uint64_t value = (uint64_t)*static_cast<Imm64*>(op);
+      *op = Imm16(value & 0xffff);
+      return (0x8000 <= value && value <= 0xffff) || (0xffffffffffff0000 <= value && value <= 0xffffffffffff8000);
+    }
+    case Type::IMM_32: {
+      uint64_t value = (uint64_t)*static_cast<Imm64*>(op);
+      *op = Imm32(value & 0xffffffff);
+      return (0x80000000 <= value && value <= 0xffffffff) || (0xffffffff00000000 <= value && value <= 0xffffffff80000000);
+    }
+    default:
+      op->set_type(target);
+      return false;
+  }
+
+}
+
+
+
 istream& Instruction::read_att(istream& is) {
 
   string line;
@@ -179,7 +211,6 @@ istream& Instruction::read_att(istream& is) {
   // Parse operands
   std::vector<Operand> operands;
   while(input.good()) {
-    cout << "attempting to read operand." << endl;
     Operand op = Constants::rax();
     input >> std::ws >> op;
     if(!input.fail()) {
@@ -195,8 +226,36 @@ istream& Instruction::read_att(istream& is) {
   }
 
   // See if we can match this up to an instruction
+  bool found_poor = false;
+  Row possible_encodings = att_table[opcode];
+  for(auto entry : possible_encodings) {
 
-  is.setstate(ios::failbit);
+    if(entry.second.size() != operands.size())
+      continue;
+
+    bool works = true;
+    for(size_t i = 0; i < entry.second.size(); ++i)
+      works &= is_a(&operands[i], entry.second[i]);
+    if(!works)
+      continue;
+
+    bool poor = false;
+    for(size_t i = 0; i < entry.second.size(); ++i) {
+      operands_[i] = operands[i];
+      poor |= promote(&operands_[i], entry.second[i]);
+    }
+
+    set_opcode(entry.first);
+
+    if(!poor)
+      return is;
+    else 
+      found_poor = true;
+  }
+
+  if(!found_poor)
+    is.setstate(ios::failbit);
+
   return is;
 }
 

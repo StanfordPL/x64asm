@@ -194,6 +194,12 @@ istream& Operand::read_att(istream& is) {
     is.ignore();
     uint64_t value = 0;
 
+    bool neg = false;
+    if(is.peek() == '-') {
+      is.ignore();
+      neg = true;
+    }
+
     if(is.peek() == '0') {
       is.ignore();
       if(is.peek() == 'x') {
@@ -205,6 +211,9 @@ istream& Operand::read_att(istream& is) {
     } else {
       is >> dec >> value;
     }
+
+    if(neg)
+      value = -value;
 
     Imm64 imm(value);
     *this = imm;
