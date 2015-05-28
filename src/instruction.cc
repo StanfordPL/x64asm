@@ -25,6 +25,8 @@ limitations under the License.
 #include "src/xmm.h"
 #include "src/ymm.h"
 
+#include <regex>
+
 using namespace std;
 
 namespace x64asm {
@@ -794,14 +796,67 @@ bool Instruction::check() const {
   return true;
 }
 
+string trim(string s) {
+  size_t first_char = s.find_first_not_of(' ');
+  size_t last_char = s.find_last_not_of(' ');
+  assert(!((first_char == string::npos) ^ (last_char == string::npos)));
+
+  if(first_char == string::npos) {
+    return "";
+  } else {
+    return s.substr(first_char, last_char - first_char + 1);
+  }
+}
+
 istream& Instruction::read_att(istream& is) {
 
-  char buffer[100];
-  // case 1: .label:
-  is.getline(buffer, 100);
+  string line;
+  getline(is, line);
 
-  // case 2: opcode <operand1>, <operand2>,...
+  // Take care of comments
+  size_t comment_index = line.find_first_of('#');
+  string comment = "";
+  if(comment_index != string::npos) {
+    comment = trim(line.substr(comment_index+1));
+    line = trim(line.substr(0, comment_index));
+  }
 
+  if(!line.size()) {
+    is.setstate(ios::failbit);
+    return is;
+  }
+
+  // Is it a label?
+  regex is_label("\\.[a-zA-Z0-9_]+:");
+  if(regex_match(line, is_label)) {
+    string s = line.substr(0, line.size()-1);
+    operands_ = {Label(s)};
+    set_opcode(LABEL_DEFN);
+    return is; 
+  }
+
+  // Parse opcode
+  stringstream input(line);
+  string opcode;
+
+  input >> opcode;
+  cout << "Read opcode: " << opcode << endl;
+
+  std::vector<Operand> operands;
+  while(input.good()) {
+    cout << "attempting to read operand." << endl;
+    Operand op = Constants::rax();
+    input >> std::ws >> op;
+    if(input.good() || input.eof()) {
+      cout << "  Operand: " << op << endl;
+      operands.push_back(op);
+    }
+  }
+
+
+  // Parse operands
+
+  is.setstate(ios::failbit);
   return is;
 }
 

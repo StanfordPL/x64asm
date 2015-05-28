@@ -1,4 +1,7 @@
 
+#include <sstream>
+#include <iostream>
+
 #include "src/imm.h"
 #include "src/m.h"
 #include "src/operand.h"
@@ -122,6 +125,78 @@ bool Operand::is_immediate() const {
 
 }
 
+istream& Operand::read_att(istream& is) {
+
+  if(is.peek() == '*')
+    is.ignore();
+
+  // registers
+  if(is.peek() == '%') {
+    string name;
+    is >> name;
+    stringstream tmp(name);
+
+    // R64?
+    cout << "  ... checking r64" << endl;
+    tmp >> *(static_cast<R64*>(this));
+    if(!tmp.fail())
+      return is;
+
+    // R32?
+    cout << "  ... checking r32" << endl;
+    tmp.str(name);
+    tmp.clear();
+    tmp >> *(static_cast<R32*>(this));
+    if(!tmp.fail())
+      return is;
+
+    // R16?
+    cout << "  ... checking r16" << endl;
+    tmp.str(name);
+    tmp.clear();
+    tmp >> *(static_cast<R16*>(this));
+    if(!tmp.fail())
+      return is;
+
+    // R8?
+    cout << "  ... checking r8" << endl;
+    tmp.str(name);
+    tmp.clear();
+    tmp >> *(static_cast<R8*>(this));
+    if(!tmp.fail())
+      return is;
+
+    // RH?
+    cout << "  ... checking rh" << endl;
+    tmp.str(name);
+    tmp.clear();
+    tmp >> *(static_cast<Rh*>(this));
+    if(!tmp.fail())
+      return is;
+
+    // XMM?
+    cout << "  ... checking xmm" << endl;
+    tmp.str(name);
+    tmp.clear();
+    tmp >> *(static_cast<Xmm*>(this));
+    if(!tmp.fail())
+      return is;
+
+    // YMM?
+    cout << "  ... checking ymm" << endl;
+    tmp.str(name);
+    tmp.clear();
+    tmp >> *(static_cast<Ymm*>(this));
+    if(!tmp.fail())
+      return is;
+
+    // SREG?
+  } 
+
+  is.setstate(ios::failbit);
+  return is;
+
+}
 
 ostream& Operand::write_att(ostream& os) const {
   if(Operand::is_immediate()) {

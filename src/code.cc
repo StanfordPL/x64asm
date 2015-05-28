@@ -17,6 +17,7 @@ limitations under the License.
 #include "src/code.h"
 
 #include <sstream>
+#include <iostream>
 
 using namespace std;
 
@@ -36,7 +37,12 @@ istream& Code::read_att(istream& is) {
   while(is.good()) {
     auto instr = Instruction(NOP);
     instr.read_att(is);
-    push_back(instr);
+
+    if(is.rdstate() == ios::failbit) {
+      is.clear();
+    } else if (is.good()) {
+      push_back(instr);
+    }
   }
 
   if(is.eof())
