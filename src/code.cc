@@ -40,12 +40,28 @@ istream& Code::read_att(istream& is) {
     line_no++;
 
     getline(is, line);
-    stringstream line_ss(line);
 
+    // check for empty lines
+    if(!line.size())
+      continue;
+
+    bool nonempty = false;
+    size_t comment = line.find_first_of('#');
+    if(comment != string::npos) {
+      for(size_t i = 0; i < comment; ++i) {
+        if(line[i] != ' ')
+          nonempty = true;
+      }
+      if(!nonempty)
+        continue;
+    }
+
+    // parse an instruction
+    stringstream line_ss(line);
     auto instr = Instruction(NOP);
     line_ss >> instr;
 
-    if (line_ss.good() || line_ss.eof()) {
+    if (!line_ss.fail()) {
       push_back(instr);
     } else {
       cerr << "Failed to parse line " << line_no << ": " << line << endl;
