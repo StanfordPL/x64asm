@@ -196,12 +196,9 @@ public:
     std::swap(val_, rhs.val_);
   }
 
-  /** @todo This method is undefined. */
-  std::istream& read_att(std::istream& is) {
-    is.setstate(std::ios::failbit);
-    return is;
-  }
-  /** Writes this xmm register to an ostream using at&t syntax. */
+  /** Reads a memory reference from an istream using at&t syntax. */
+  std::istream& read_att(std::istream& is);
+  /** Writes this memory reference to an ostream using at&t syntax. */
   std::ostream& write_att(std::ostream& os) const;
 
 protected:

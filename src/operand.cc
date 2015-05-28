@@ -190,6 +190,13 @@ istream& Operand::read_att(istream& is) {
       return is;
 
     // SREG?
+    tmp.str(name);
+    tmp.clear();
+    tmp >> *(static_cast<Sreg*>(this));
+    if(!tmp.fail())
+      return is;
+
+
   } else if (is.peek() == '$') {
     is.ignore();
     uint64_t value = 0;
@@ -221,7 +228,10 @@ istream& Operand::read_att(istream& is) {
     return is;
   }
 
-  is.setstate(ios::failbit);
+  // Memory?
+  M8 m(Constants::rax());
+  is >> m;
+  *this = m;
   return is;
 
 }

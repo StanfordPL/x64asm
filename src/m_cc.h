@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#include <ios>
+
 #include "src/alias.h"
 
 namespace x64asm {
@@ -57,6 +59,114 @@ bool M<T>::check() const {
 
   return true;
 }
+
+template <class T>
+std::istream& M<T>::read_att(std::istream& is) {
+
+  char tmp;
+
+  // Segment register
+  if(is.peek() == '%') {
+    Sreg sreg = ss;
+    is >> sreg;
+    set_seg(sreg);
+
+    if(is.get() != ':') {
+      is.setstate(std::ios::failbit);
+      return is;
+    }
+  }
+
+  // Displacement
+  bool neg = false;
+  uint64_t disp = 0;
+  if(is.peek() == '-') {
+    neg = true;
+    is.ignore();
+  }
+  tmp = is.peek();
+  if(tmp == '0') {
+    is.ignore();
+    tmp = is.peek();
+    if(tmp == 'x') {
+      is.ignore();
+      is >> std::hex >> disp;
+    } else if ('0' <= tmp && tmp <= '9') {
+      is >> std::dec >> disp;
+    } else {
+      disp = 0;
+    }
+  } else if ('1' <= tmp && tmp <= '9') {
+    is >> std::dec >> disp; 
+  }
+  if(neg)
+    disp = -disp;
+  set_disp(Imm32(disp & 0xffffffff));
+
+  // base/index/scale?
+  if(is.peek() == '(') {
+    is.ignore();
+    is >> std::ws;
+
+    // Base
+    if(is.peek() != ',') {
+      R base = rax;
+      is >> base;
+      set_base(base);
+      if(base.size() == 32)
+        set_addr_or(true);
+      else
+        set_addr_or(false);
+    }
+
+    // Index
+    is >> std::ws;
+    if(is.peek() == ',') {
+      is.ignore();
+
+      R index = rax;
+      is >> std::ws >> index;
+      set_index(index);
+      if(index.size() == 32)
+        set_addr_or(true);
+      else
+        set_addr_or(false);
+
+      // Scale
+      is >> std::ws;
+      if(is.peek() == ',')  {
+        is.ignore();
+        size_t n;
+        is >> n;
+        switch(n) {
+          case 1:
+            set_scale(Scale::TIMES_1);
+            break;
+          case 2:
+            set_scale(Scale::TIMES_2);
+            break;
+          case 4:
+            set_scale(Scale::TIMES_4);
+            break;
+          case 8:
+            set_scale(Scale::TIMES_8);
+            break;
+          default:
+            is.setstate(std::ios::failbit);
+        }
+      }
+    }
+    is >> std::ws;
+
+    if(is.get() != ')') {
+      is.setstate(std::ios::failbit);
+    }
+
+  }
+
+  return is;
+}
+
 
 template <class T>
 std::ostream& M<T>::write_att(std::ostream& os) const {

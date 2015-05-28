@@ -34,12 +34,19 @@ istream& Code::read_att(istream& is) {
 
   clear();
 
+  size_t line_no = 0;
+  string line;
   while(is.good()) {
-    auto instr = Instruction(NOP);
-    instr.read_att(is);
+    line_no++;
 
-    if(is.rdstate() == ios::failbit) {
-      is.clear();
+    getline(is, line);
+    stringstream line_ss(line);
+
+    auto instr = Instruction(NOP);
+    line_ss >> instr;
+
+    if(line_ss.rdstate() == ios::failbit) {
+      cout << "Failed to parse line " << line_no << ": " << line << endl;
     } else if (is.good()) {
       push_back(instr);
     }

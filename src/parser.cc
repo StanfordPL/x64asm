@@ -206,7 +206,6 @@ istream& Instruction::read_att(istream& is) {
   string opcode;
 
   input >> opcode;
-  cout << "Read opcode: " << opcode << endl;
 
   // Parse operands
   std::vector<Operand> operands;
@@ -214,7 +213,6 @@ istream& Instruction::read_att(istream& is) {
     Operand op = Constants::rax();
     input >> std::ws >> op;
     if(!input.fail()) {
-      cout << "  Operand: " << op << endl;
       operands.insert(operands.begin(), op);
     } else {
       cerr << "  Error reading operand" << endl;
