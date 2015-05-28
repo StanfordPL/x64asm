@@ -132,18 +132,22 @@ istream& Operand::read_att(istream& is) {
 
   // registers
   if(is.peek() == '%') {
-    string name;
-    is >> name;
+
+    // read the register name
+    stringstream name_builder;
+    for(char c = is.peek(); c == '%' || ('a' <= c && c <= 'z') || ('0' <= c && c <= '9'); c = is.peek()) {
+      is.ignore();
+      name_builder.put(c);
+    }
+    string name(name_builder.str());
     stringstream tmp(name);
 
     // R64?
-    cout << "  ... checking r64" << endl;
     tmp >> *(static_cast<R64*>(this));
     if(!tmp.fail())
       return is;
 
     // R32?
-    cout << "  ... checking r32" << endl;
     tmp.str(name);
     tmp.clear();
     tmp >> *(static_cast<R32*>(this));
@@ -151,7 +155,6 @@ istream& Operand::read_att(istream& is) {
       return is;
 
     // R16?
-    cout << "  ... checking r16" << endl;
     tmp.str(name);
     tmp.clear();
     tmp >> *(static_cast<R16*>(this));
@@ -159,7 +162,6 @@ istream& Operand::read_att(istream& is) {
       return is;
 
     // R8?
-    cout << "  ... checking r8" << endl;
     tmp.str(name);
     tmp.clear();
     tmp >> *(static_cast<R8*>(this));
@@ -167,7 +169,6 @@ istream& Operand::read_att(istream& is) {
       return is;
 
     // RH?
-    cout << "  ... checking rh" << endl;
     tmp.str(name);
     tmp.clear();
     tmp >> *(static_cast<Rh*>(this));
@@ -175,7 +176,6 @@ istream& Operand::read_att(istream& is) {
       return is;
 
     // XMM?
-    cout << "  ... checking xmm" << endl;
     tmp.str(name);
     tmp.clear();
     tmp >> *(static_cast<Xmm*>(this));
@@ -183,7 +183,6 @@ istream& Operand::read_att(istream& is) {
       return is;
 
     // YMM?
-    cout << "  ... checking ymm" << endl;
     tmp.str(name);
     tmp.clear();
     tmp >> *(static_cast<Ymm*>(this));
@@ -191,7 +190,27 @@ istream& Operand::read_att(istream& is) {
       return is;
 
     // SREG?
-  } 
+  } else if (is.peek() == '$') {
+    is.ignore();
+    uint64_t value = 0;
+
+    if(is.peek() == '0') {
+      is.ignore();
+      if(is.peek() == 'x') {
+        is.ignore();
+        is >> hex >> value;
+      } else {
+        is >> dec >> value;
+      }
+    } else {
+      is >> dec >> value;
+    }
+
+    Imm64 imm(value);
+    *this = imm;
+
+    return is;
+  }
 
   is.setstate(ios::failbit);
   return is;

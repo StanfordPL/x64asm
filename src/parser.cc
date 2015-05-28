@@ -1,0 +1,203 @@
+/*
+Copyright 2013 eric schkufza
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+#include "src/instruction.h"
+
+#include "src/constants.h"
+#include "src/label.h"
+#include "src/mm.h"
+#include "src/moffs.h"
+#include "src/opcode.h"
+#include "src/rel.h"
+#include "src/st.h"
+#include "src/xmm.h"
+#include "src/ymm.h"
+
+#include <regex>
+
+using namespace std;
+
+namespace {
+
+  using namespace x64asm;
+
+  typedef std::pair<x64asm::Opcode, std::vector<x64asm::Type>> Entry;
+  typedef std::vector<Entry> Row;
+  typedef std::map<std::string, Row> Table;
+
+  Table att_table = {
+    #include "src/att.table"
+  };
+
+
+  string trim(string s) {
+    size_t first_char = s.find_first_not_of(' ');
+    size_t last_char = s.find_last_not_of(' ');
+    assert(!((first_char == string::npos) ^ (last_char == string::npos)));
+
+    if(first_char == string::npos) {
+      return "";
+    } else {
+      return s.substr(first_char, last_char - first_char + 1);
+    }
+  }
+
+  /** Used by parser in deciding if an operand is memory or not. */
+  bool is_mem(Type t) {
+    return t == Type::M_8           || t == Type::M_16          || 
+           t == Type::M_32          || t == Type::M_64          || 
+           t == Type::M_128         || t == Type::M_256         ||
+           t == Type::M_16_INT      || t == Type::M_32_INT      || 
+           t == Type::M_64_INT      || t == Type::M_32_FP       || 
+           t == Type::M_64_FP       || t == Type::M_80_FP       ||
+           t == Type::M_80_BCD      || t == Type::M_2_BYTE      || 
+           t == Type::M_28_BYTE     || t == Type::M_108_BYTE    || 
+           t == Type::M_512_BYTE    || t == Type::FAR_PTR_16_16 ||
+           t == Type::FAR_PTR_16_32 || t == Type::FAR_PTR_16_64;
+  }
+
+  /** Used in parsing to determine if an operand can be 
+    rewritten to a given type. */
+  bool is_a(const Operand* o, Type target) {
+    Type parse = o->type();
+
+    // These first two parses still have placeholder types.
+    // They should be checked before the generic equality tests.
+    if ( parse == Type::IMM_64 )
+      switch ( target ) {
+        case Type::ZERO:   return ((const Zero*)o)->check();
+        case Type::ONE:    return ((const One*)o)->check();
+        case Type::THREE:  return ((const Three*)o)->check();
+        case Type::IMM_8:  return ((const Imm8*)o)->check();
+        case Type::IMM_16: return ((const Imm16*)o)->check();
+        case Type::IMM_32: return ((const Imm32*)o)->check();
+        case Type::IMM_64: return ((const Imm64*)o)->check();
+        default:           return false;
+      }
+
+    /*
+    if ( parse == Type::MOFFS_8 ) {
+      const auto offs = ((Moffs8*)o)->get_offset();
+      if ( target == Type::MOFFS_8 || target == Type::MOFFS_16 ||
+           target == Type::MOFFS_32 || target == Type::MOFFS_64 )
+        return true;
+      if ( is_mem(target) || target == Type::REL_32 )
+        return ((const Imm32*)&offs)->check();
+      if ( target == Type::REL_8 )
+        return ((const Imm8*)&offs)->check();
+    }
+    */
+
+    // Now it's alright to perform the generic checks.
+    if ( parse == target )
+      return true;
+    if ( is_mem(parse) && is_mem(target) )
+      return true;
+
+    // Now try simple promotions.
+    if ( parse == Type::AL && target == Type::R_8 )
+      return true;
+    if ( parse == Type::CL && target == Type::R_8 )
+      return true;
+
+    if ( parse == Type::AX && target == Type::R_16 )
+      return true;
+    if ( parse == Type::DX && target == Type::R_16 )
+      return true;
+
+    if ( parse == Type::EAX && target == Type::R_32 )
+      return true;
+
+    if ( parse == Type::RAX && target == Type::R_64 )
+      return true;
+
+    if ( parse == Type::FS && target == Type::SREG )
+      return true;
+    if ( parse == Type::GS && target == Type::SREG )
+      return true;
+
+    if ( parse == Type::ST_0 && target == Type::ST)
+      return true;
+
+    if ( parse == Type::XMM_0 && target == Type::XMM)
+      return true;
+
+    return false;
+  }
+
+} //namespace
+
+namespace x64asm {
+
+istream& Instruction::read_att(istream& is) {
+
+  string line;
+  getline(is, line);
+
+  // Take care of comments
+  size_t comment_index = line.find_first_of('#');
+  string comment = "";
+  if(comment_index != string::npos) {
+    comment = trim(line.substr(comment_index+1));
+    line = trim(line.substr(0, comment_index));
+  }
+
+  if(!line.size()) {
+    is.setstate(ios::failbit);
+    return is;
+  }
+
+  // Is it a label?
+  regex is_label("\\.[a-zA-Z0-9_]+:");
+  if(regex_match(line, is_label)) {
+    string s = line.substr(0, line.size()-1);
+    operands_ = {Label(s)};
+    set_opcode(LABEL_DEFN);
+    return is; 
+  }
+
+  // Parse opcode
+  stringstream input(line);
+  string opcode;
+
+  input >> opcode;
+  cout << "Read opcode: " << opcode << endl;
+
+  // Parse operands
+  std::vector<Operand> operands;
+  while(input.good()) {
+    cout << "attempting to read operand." << endl;
+    Operand op = Constants::rax();
+    input >> std::ws >> op;
+    if(!input.fail()) {
+      cout << "  Operand: " << op << endl;
+      operands.insert(operands.begin(), op);
+    } else {
+      cerr << "  Error reading operand" << endl;
+    }
+    if(!input.eof()) {
+      if(input.peek() == ',')
+        input.ignore();
+    }
+  }
+
+  // See if we can match this up to an instruction
+
+  is.setstate(ios::failbit);
+  return is;
+}
+
+} // namespace x64asm
