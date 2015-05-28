@@ -220,6 +220,8 @@ istream& Instruction::read_att(istream& is) {
     if(!input.eof()) {
       if(input.peek() == ',')
         input.ignore();
+      else
+        break;
     }
   }
 
