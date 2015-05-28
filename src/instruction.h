@@ -707,11 +707,8 @@ public:
     std::swap(operands_, rhs.operands_);
   }
 
-  /** @todo This method is undefined. */
-  std::istream& read_att(std::istream& is) {
-    is.setstate(std::ios::failbit);
-    return is;
-  }
+  /** Reads an instruction from an istream using at&t syntax. */
+  std::istream& read_att(std::istream& is);
   /** Writes this instruction to an ostream using at&t syntax. */
   std::ostream& write_att(std::ostream& os) const;
 

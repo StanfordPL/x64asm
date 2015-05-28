@@ -794,6 +794,17 @@ bool Instruction::check() const {
   return true;
 }
 
+istream& Instruction::read_att(istream& is) {
+
+  char buffer[100];
+  // case 1: .label:
+  is.getline(buffer, 100);
+
+  // case 2: opcode <operand1>, <operand2>,...
+
+  return is;
+}
+
 ostream& Instruction::write_att(ostream& os) const {
   assert((size_t)get_opcode() < X64ASM_NUM_OPCODES);
 

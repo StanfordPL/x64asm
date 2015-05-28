@@ -22,24 +22,25 @@ using namespace std;
 
 namespace {
 
-#include "src/att.tab.c"
-#include "src/lex.att.c"
+//#include "src/att.tab.c"
+//#include "src/lex.att.c"
 
 } // namespace
 
 namespace x64asm {
 
 istream& Code::read_att(istream& is) {
-  stringstream ss;
-  ss << is.rdbuf();
 
-  auto buffer = att_scan_string(ss.str().c_str());
-  att_switch_to_buffer(buffer);
+  clear();
 
-  attlineno = 0;
-  attparse(is, *this);
+  while(is.good()) {
+    auto instr = Instruction(NOP);
+    instr.read_att(is);
+    push_back(instr);
+  }
 
-  att_delete_buffer(buffer);
+  if(is.eof())
+    is.clear();
 
   return is;
 }
