@@ -121,6 +121,8 @@ std::istream& M<T>::read_att(std::istream& is) {
         set_addr_or(true);
       else
         set_addr_or(false);
+    } else {
+      set_base(r_null());
     }
 
     // Index
@@ -137,6 +139,7 @@ std::istream& M<T>::read_att(std::istream& is) {
         set_addr_or(false);
 
       // Scale
+      set_scale(Scale::TIMES_1);
       is >> std::ws;
       if(is.peek() == ',')  {
         is.ignore();

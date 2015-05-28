@@ -68,7 +68,7 @@ src/Codegen: src/Codegen.hs src/x86.csv
 
 src/parser.o: src/parser.cc src/instruction.cc src/instruction.h src/Codegen
 	$(GCC) -w -O0 -fno-stack-protector $(INC) -c $< -o $@
-src/%.o: src/%.cc src/%.h src/Codegen
+src/%.o: src/%.cc src/%.h src/Codegen src/*.h
 	$(GCC) $(OPT) $(INC) -c $< -o $@
 
 ##### LIBRARY TARGET
