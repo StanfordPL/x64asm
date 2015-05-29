@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 #include <ios>
+#include <sstream>
 
 #include "src/alias.h"
 
@@ -114,15 +115,29 @@ std::istream& M<T>::read_att(std::istream& is) {
 
     // Base
     if(is.peek() != ',') {
-      R base = rax;
-      is >> base;
-      set_base(base);
-      if(base.size() == 32)
-        set_addr_or(true);
-      else
-        set_addr_or(false);
+
+      std::stringstream name;
+      for(char tmp = is.peek(); ('a' <= tmp && tmp <= 'z') || ('0' <= tmp && tmp <= '9') || tmp == '%'; tmp = is.peek()) {
+        is.ignore();
+        name.put(tmp);
+      }
+
+      if(name.str() == "%rip") {
+        set_base(r_null());
+        set_rip_offset(true);
+      } else {
+        R base = rax;
+        name >> base;
+        set_base(base);
+        set_rip_offset(false);
+        if(base.size() == 32)
+          set_addr_or(true);
+        else
+          set_addr_or(false);
+      }
     } else {
       set_base(r_null());
+      set_rip_offset(false);
     }
 
     // Index
