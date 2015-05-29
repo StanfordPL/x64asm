@@ -209,17 +209,20 @@ istream& Instruction::read_att(istream& is) {
 
   // Parse operands
   std::vector<Operand> operands;
+  input >> std::ws;
   while(input.good()) {
     Operand op = Constants::rax();
-    input >> std::ws >> op;
+    input >> op;
     if(!input.fail()) {
       operands.insert(operands.begin(), op);
     } else {
       cerr << "  Error reading operand" << endl;
     }
     if(!input.eof()) {
-      if(input.peek() == ',')
+      if(input.peek() == ',') {
         input.ignore();
+        input >> std::ws;
+      }
       else
         break;
     }
