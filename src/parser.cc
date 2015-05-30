@@ -186,8 +186,11 @@ istream& Instruction::read_att(istream& is) {
   string comment = "";
   if(comment_index != string::npos) {
     comment = trim(line.substr(comment_index+1));
-    line = trim(line.substr(0, comment_index));
+    line = line.substr(0, comment_index);
   }
+
+  // Trim and handle empty lines
+  line = trim(line);
 
   if(!line.size()) {
     fail(is) << "line was empty";
