@@ -195,12 +195,11 @@ istream& Instruction::read_att(istream& is) {
   }
 
   // Is it a label?
-  regex is_label("\\.[a-zA-Z0-9_]+:");
-  if(regex_match(line, is_label)) {
+  if(line[0] == '.' && line[line.size() - 1] == ':') {
     string s = line.substr(0, line.size()-1);
     operands_ = {Label(s)};
     set_opcode(LABEL_DEFN);
-    return is; 
+    return is;
   }
 
   // Parse opcode
