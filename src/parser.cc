@@ -46,8 +46,8 @@ namespace {
 
 
   string trim(string s) {
-    size_t first_char = s.find_first_not_of(' ');
-    size_t last_char = s.find_last_not_of(' ');
+    size_t first_char = s.find_first_not_of(" \t");
+    size_t last_char = s.find_last_not_of(" \t");
     assert(!((first_char == string::npos) ^ (last_char == string::npos)));
 
     if(first_char == string::npos) {
