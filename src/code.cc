@@ -15,11 +15,13 @@ limitations under the License.
 */
 
 #include "src/code.h"
+#include "src/fail.h"
 
 #include <sstream>
 #include <iostream>
 
 using namespace std;
+using namespace cpputil;
 
 namespace {
 
@@ -65,6 +67,7 @@ istream& Code::read_att(istream& is) {
       push_back(instr);
     } else {
       cerr << "Failed to parse line " << line_no << ": " << line << endl;
+      cerr << "Message: " << fail_msg(line_ss) << endl;
     }
   }
 

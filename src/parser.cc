@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "src/instruction.h"
 
 #include "src/constants.h"
+#include "src/fail.h"
+#include "src/instruction.h"
 #include "src/label.h"
 #include "src/mm.h"
 #include "src/moffs.h"
@@ -29,6 +30,7 @@ limitations under the License.
 #include <regex>
 
 using namespace std;
+using namespace cpputil;
 
 namespace {
 
@@ -188,7 +190,7 @@ istream& Instruction::read_att(istream& is) {
   }
 
   if(!line.size()) {
-    is.setstate(ios::failbit);
+    fail(is) << "line was empty";
     return is;
   }
 
@@ -216,7 +218,7 @@ istream& Instruction::read_att(istream& is) {
     if(!input.fail()) {
       operands.insert(operands.begin(), op);
     } else {
-      cerr << "  Error reading operand" << endl;
+      return is;
     }
     if(!input.eof()) {
       if(input.peek() == ',') {
@@ -231,6 +233,11 @@ istream& Instruction::read_att(istream& is) {
   // See if we can match this up to an instruction
   bool found_poor = false;
   Row possible_encodings = att_table[opcode];
+  if(possible_encodings.size() == 0) {
+    fail(is) << "No such opcode '" << opcode << "' exists";
+    return is;
+  }
+
   for(auto entry : possible_encodings) {
 
     if(entry.second.size() != operands.size())
@@ -256,8 +263,9 @@ istream& Instruction::read_att(istream& is) {
       found_poor = true;
   }
 
-  if(!found_poor)
-    is.setstate(ios::failbit);
+  if(!found_poor) {
+    fail(is) << "Could not match opcode/operands to an x86-64 instruction";
+  }
 
   return is;
 }

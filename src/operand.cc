@@ -2,6 +2,7 @@
 #include <sstream>
 #include <iostream>
 
+#include "src/fail.h"
 #include "src/imm.h"
 #include "src/m.h"
 #include "src/operand.h"
@@ -9,6 +10,7 @@
 
 using namespace x64asm;
 using namespace std;
+using namespace cpputil;
 
 uint16_t Operand::size() const {
 
@@ -135,7 +137,7 @@ istream& Operand::read_att(istream& is) {
 
     // read the register name
     stringstream name_builder;
-    for(char c = is.peek(); c == '%' || ('a' <= c && c <= 'z') || ('0' <= c && c <= '9'); c = is.peek()) {
+    for(char c = is.peek(); c == '%' || c == ':' || ('a' <= c && c <= 'z') || ('0' <= c && c <= '9'); c = is.peek()) {
       is.ignore();
       name_builder.put(c);
     }

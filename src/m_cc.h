@@ -18,6 +18,7 @@ limitations under the License.
 #include <sstream>
 
 #include "src/alias.h"
+#include "src/fail.h"
 
 namespace x64asm {
 
@@ -73,8 +74,11 @@ std::istream& M<T>::read_att(std::istream& is) {
     is >> sreg;
     set_seg(sreg);
 
+    if(cpputil::failed(is))
+      return is;
+
     if(is.get() != ':') {
-      is.setstate(std::ios::failbit);
+      cpputil::fail(is) << "Tried to parse segment register as memory, but no ':' found.";
       return is;
     }
   }
@@ -128,6 +132,10 @@ std::istream& M<T>::read_att(std::istream& is) {
       } else {
         R base = rax;
         name >> base;
+        if(cpputil::failed(name)) {
+          cpputil::fail(is) << "Could not parse register " << name << " as base for memory reference.";
+        }
+
         set_base(base);
         set_rip_offset(false);
         if(base.size() == 32)
@@ -147,6 +155,10 @@ std::istream& M<T>::read_att(std::istream& is) {
 
       R index = rax;
       is >> std::ws >> index;
+
+      if(cpputil::failed(is))
+        return is;
+
       set_index(index);
       if(index.size() == 32)
         set_addr_or(true);
@@ -158,7 +170,7 @@ std::istream& M<T>::read_att(std::istream& is) {
       is >> std::ws;
       if(is.peek() == ',')  {
         is.ignore();
-        size_t n;
+        size_t n = 0;
         is >> n;
         switch(n) {
           case 1:
@@ -174,22 +186,22 @@ std::istream& M<T>::read_att(std::istream& is) {
             set_scale(Scale::TIMES_8);
             break;
           default:
-            is.setstate(std::ios::failbit);
+            cpputil::fail(is) << "Scale on memory reference must be 1, 2, 4, or 8";
         }
       }
     }
     is >> std::ws;
 
     if(is.get() != ')') {
-      is.setstate(std::ios::failbit);
+      cpputil::fail(is) << "Expected ')' at end of memory reference";
       return is;
     }
 
   }
 
-  if(!ok)
-    is.setstate(std::ios::failbit);
-  
+  if(!ok) {
+    cpputil::fail(is) << "Memory reference must have a displacement, base, or index.";
+  }
   return is;
 }
 
