@@ -77,4 +77,15 @@ istream& Code::read_att(istream& is) {
   return is;
 }
 
+ostream& Code::write_att(ostream& os) const {
+  for (size_t i = 0, ie = size(); i < ie; ++i) {
+    (*this)[i].write_att(os);
+    os << "\t\t\t# OPC=" << (uint64_t)(*this)[i].get_opcode();
+    if (i+1 != ie) {
+      os << std::endl;
+    }
+  }
+  return os;
+}
+
 } // namespace x64asm

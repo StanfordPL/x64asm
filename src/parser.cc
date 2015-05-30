@@ -232,6 +232,13 @@ istream& Instruction::read_att(istream& is) {
     }
   }
 
+  // Check for annotations in the comment
+  size_t opc_pos = comment.find("OPC=");
+  uint64_t expected_opcode = 0;
+  if(opc_pos != string::npos) {
+    expected_opcode = strtoull(comment.c_str() + opc_pos + 4, NULL, 10);
+  }
+
   // See if we can match this up to an instruction
   bool found_poor = false;
   Row possible_encodings = att_table[opcode];
@@ -241,6 +248,10 @@ istream& Instruction::read_att(istream& is) {
   }
 
   for(auto entry : possible_encodings) {
+
+    if(expected_opcode && (uint64_t)entry.first != expected_opcode) {
+      continue;
+    }
 
     if(entry.second.size() != operands.size())
       continue;
