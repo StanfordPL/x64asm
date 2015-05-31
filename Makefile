@@ -30,6 +30,7 @@ OBJ=src/assembler.o \
 		src/linker.o \
 		src/opcode.o \
 		src/operand.o \
+		src/parser.o \
 		src/r.o \
 		src/reg_set.o \
 		src/sse.o \
@@ -64,17 +65,10 @@ src/Codegen: src/Codegen.hs src/x86.csv
 		ghc Codegen.hs && \
 		./Codegen && \
 		rm -f *.hi *.o
-src/lex.att.c: src/att.y src/att.l
-	flex $(FLEXOPS) -Patt src/att.l 
-	mv lex.*.* src/
-src/att.tab.c: src/att.y src/att.l src/lex.att.c
-	bison $(BISONOPS) -batt -patt --defines src/att.y && touch att.output 
-	mv *.tab.* src/
-	mv *.output src/
 
-src/code.o: src/code.cc src/code.h src/lex.att.c src/att.tab.c src/Codegen
+src/parser.o: src/parser.cc src/instruction.cc src/instruction.h src/Codegen
 	$(GCC) -w -O0 -fno-stack-protector $(INC) -c $< -o $@
-src/%.o: src/%.cc src/%.h src/Codegen
+src/%.o: src/%.cc src/%.h src/Codegen src/*.h
 	$(GCC) $(OPT) $(INC) -c $< -o $@
 
 ##### LIBRARY TARGET

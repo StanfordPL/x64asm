@@ -1,5 +1,5 @@
 /*
-Copyright 2013 eric schkufza
+Copyright 2013-2015 Stanford University
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -65,7 +65,9 @@ public:
     return !(*this == rhs);
   }
 
-  /** Write this operator to an output stream */
+  /** Read an operand from an input stream */
+  std::istream& read_att(std::istream& is);
+  /** Write this operand to an output stream */
   std::ostream& write_att(std::ostream& os) const;
 
 protected:
@@ -103,7 +105,9 @@ namespace std {
 inline ostream& operator<<(ostream& os, const x64asm::Operand& op) {
   return op.write_att(os);
 }
-
+inline istream& operator>>(istream& os, x64asm::Operand& op) {
+  return op.read_att(os);
+}
 } // namespace std
 
 

@@ -1,5 +1,5 @@
 /*
-Copyright 2013 eric schkufza
+Copyright 2013-2015 Stanford University
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -118,15 +118,8 @@ public:
   /** Reads a code sequence in at&t syntax from an istream. */
   std::istream& read_att(std::istream& is);
   /** Writes a code sequence to an ostream using at&t syntax. */
-  std::ostream& write_att(std::ostream& os) const {
-    for (size_t i = 0, ie = size(); i < ie; ++i) {
-      (*this)[i].write_att(os);
-      if (i+1 != ie) {
-        os << std::endl;
-      }
-    }
-    return os;
-  }
+  std::ostream& write_att(std::ostream& os) const;
+
 };
 
 } // namespace x64asm

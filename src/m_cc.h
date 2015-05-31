@@ -1,5 +1,5 @@
 /*
-Copyright 2013 eric schkufza
+Copyright 2013-2015 Stanford University
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#include <ios>
+#include <sstream>
+
 #include "src/alias.h"
+#include "src/fail.h"
 
 namespace x64asm {
 
@@ -57,6 +61,150 @@ bool M<T>::check() const {
 
   return true;
 }
+
+template <class T>
+std::istream& M<T>::read_att(std::istream& is) {
+
+  bool ok = false;
+  char tmp;
+
+  // Segment register
+  if(is.peek() == '%') {
+    Sreg sreg = ss;
+    is >> sreg;
+    set_seg(sreg);
+
+    if(cpputil::failed(is))
+      return is;
+
+    if(is.get() != ':') {
+      cpputil::fail(is) << "Tried to parse segment register as memory, but no ':' found.";
+      return is;
+    }
+  }
+
+  // Displacement
+  bool neg = false;
+  uint64_t disp = 0;
+  if(is.peek() == '-') {
+    neg = true;
+    is.ignore();
+  }
+  tmp = is.peek();
+  if(tmp == '0') {
+    ok = true;
+    is.ignore();
+    tmp = is.peek();
+    if(tmp == 'x') {
+      is.ignore();
+      is >> std::hex >> disp;
+    } else if ('0' <= tmp && tmp <= '9') {
+      is >> std::dec >> disp;
+    } else {
+      disp = 0;
+    }
+  } else if ('1' <= tmp && tmp <= '9') {
+    ok = true;
+    is >> std::dec >> disp; 
+  }
+  if(neg)
+    disp = -disp;
+  set_disp(Imm32(disp & 0xffffffff));
+
+  // base/index/scale?
+  if(is.peek() == '(') {
+    ok = true;
+    is.ignore();
+    is >> std::ws;
+
+    // Base
+    if(is.peek() != ',') {
+
+      std::stringstream name;
+      for(char tmp = is.peek(); ('a' <= tmp && tmp <= 'z') || ('0' <= tmp && tmp <= '9') || tmp == '%'; tmp = is.peek()) {
+        is.ignore();
+        name.put(tmp);
+      }
+
+      if(name.str() == "%rip") {
+        set_base(r_null());
+        set_rip_offset(true);
+      } else {
+        R base = rax;
+        name >> base;
+        if(cpputil::failed(name)) {
+          cpputil::fail(is) << "Could not parse register " << name << " as base for memory reference.";
+        }
+
+        set_base(base);
+        set_rip_offset(false);
+        if(base.size() == 32)
+          set_addr_or(true);
+        else
+          set_addr_or(false);
+      }
+    } else {
+      set_base(r_null());
+      set_rip_offset(false);
+    }
+
+    // Index
+    is >> std::ws;
+    if(is.peek() == ',') {
+      is.ignore();
+
+      R index = rax;
+      is >> std::ws >> index;
+
+      if(cpputil::failed(is))
+        return is;
+
+      set_index(index);
+      if(index.size() == 32)
+        set_addr_or(true);
+      else
+        set_addr_or(false);
+
+      // Scale
+      set_scale(Scale::TIMES_1);
+      is >> std::ws;
+      if(is.peek() == ',')  {
+        is.ignore();
+        size_t n = 0;
+        is >> n;
+        switch(n) {
+          case 1:
+            set_scale(Scale::TIMES_1);
+            break;
+          case 2:
+            set_scale(Scale::TIMES_2);
+            break;
+          case 4:
+            set_scale(Scale::TIMES_4);
+            break;
+          case 8:
+            set_scale(Scale::TIMES_8);
+            break;
+          default:
+            cpputil::fail(is) << "Scale on memory reference must be 1, 2, 4, or 8";
+        }
+      }
+    }
+    is >> std::ws;
+
+    if(is.get() != ')') {
+      cpputil::fail(is) << "Expected ')' at end of memory reference";
+      return is;
+    }
+
+  }
+
+  if(!ok) {
+    cpputil::fail(is) << "Memory reference must have a displacement, base, or index.";
+  }
+  return is;
+}
+
 
 template <class T>
 std::ostream& M<T>::write_att(std::ostream& os) const {

@@ -20,6 +20,9 @@ int main(int argc, char** argv) {
   if (!cin.good())
     return parse_error();
 
+  cout << endl;
+  cout << "Assembling..." << endl << c << endl << endl << endl;
+  
   cout << Assembler().assemble(c) << endl;
 
   return 0;

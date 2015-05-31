@@ -1,5 +1,5 @@
 /*
-Copyright 2013 eric schkufza
+Copyright 2013-2015 Stanford University
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,10 +20,13 @@ limitations under the License.
 #include "src/label.h"
 #include "src/mm.h"
 #include "src/moffs.h"
+#include "src/opcode.h"
 #include "src/rel.h"
 #include "src/st.h"
 #include "src/xmm.h"
 #include "src/ymm.h"
+
+#include <regex>
 
 using namespace std;
 
@@ -793,6 +796,8 @@ bool Instruction::check() const {
 
   return true;
 }
+
+
 
 ostream& Instruction::write_att(ostream& os) const {
   assert((size_t)get_opcode() < X64ASM_NUM_OPCODES);

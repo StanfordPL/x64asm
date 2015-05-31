@@ -1,4 +1,8 @@
 
+#include <sstream>
+#include <iostream>
+
+#include "src/fail.h"
 #include "src/imm.h"
 #include "src/m.h"
 #include "src/operand.h"
@@ -6,6 +10,7 @@
 
 using namespace x64asm;
 using namespace std;
+using namespace cpputil;
 
 uint16_t Operand::size() const {
 
@@ -122,6 +127,124 @@ bool Operand::is_immediate() const {
 
 }
 
+istream& Operand::read_att(istream& is) {
+
+  if(is.peek() == '*')
+    is.ignore();
+
+  // registers
+  if(is.peek() == '%') {
+
+    // read the register name
+    stringstream name_builder;
+    for(char c = is.peek(); c == '%' || c == ':' || ('a' <= c && c <= 'z') || ('0' <= c && c <= '9'); c = is.peek()) {
+      is.ignore();
+      name_builder.put(c);
+    }
+    string name(name_builder.str());
+    stringstream tmp(name);
+
+    // R64?
+    tmp >> *(static_cast<R64*>(this));
+    if(!tmp.fail())
+      return is;
+
+    // R32?
+    tmp.str(name);
+    tmp.clear();
+    tmp >> *(static_cast<R32*>(this));
+    if(!tmp.fail())
+      return is;
+
+    // R16?
+    tmp.str(name);
+    tmp.clear();
+    tmp >> *(static_cast<R16*>(this));
+    if(!tmp.fail())
+      return is;
+
+    // R8?
+    tmp.str(name);
+    tmp.clear();
+    tmp >> *(static_cast<R8*>(this));
+    if(!tmp.fail())
+      return is;
+
+    // RH?
+    tmp.str(name);
+    tmp.clear();
+    tmp >> *(static_cast<Rh*>(this));
+    if(!tmp.fail())
+      return is;
+
+    // XMM?
+    tmp.str(name);
+    tmp.clear();
+    tmp >> *(static_cast<Xmm*>(this));
+    if(!tmp.fail())
+      return is;
+
+    // YMM?
+    tmp.str(name);
+    tmp.clear();
+    tmp >> *(static_cast<Ymm*>(this));
+    if(!tmp.fail())
+      return is;
+
+    // SREG?
+    tmp.str(name);
+    tmp.clear();
+    tmp >> *(static_cast<Sreg*>(this));
+    if(!tmp.fail())
+      return is;
+
+
+  } else if (is.peek() == '$') {
+    // Immediates
+    is.ignore();
+    uint64_t value = 0;
+
+    bool neg = false;
+    if(is.peek() == '-') {
+      is.ignore();
+      neg = true;
+    }
+
+    if(is.peek() == '0') {
+      is.ignore();
+      if(is.peek() == 'x') {
+        is.ignore();
+        is >> hex >> value;
+      } else {
+        is >> dec >> value;
+      }
+    } else {
+      is >> dec >> value;
+    }
+
+    if(neg)
+      value = -value;
+
+    Imm64 imm(value);
+    *this = imm;
+
+    return is;
+  } else if (is.peek() == '.') {
+    // Labels
+    string name;
+    is >> name;
+    Label label(name);
+    *this = label;
+    return is;
+  }
+
+  // Memory?
+  M8 m(Constants::rax());
+  is >> m;
+  *this = m;
+  return is;
+
+}
 
 ostream& Operand::write_att(ostream& os) const {
   if(Operand::is_immediate()) {

@@ -1,5 +1,5 @@
 /*
-Copyright 2013 eric schkufza
+Copyright 2013-2015 Stanford University
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,33 +15,77 @@ limitations under the License.
 */
 
 #include "src/code.h"
+#include "src/fail.h"
 
 #include <sstream>
+#include <iostream>
 
 using namespace std;
+using namespace cpputil;
 
 namespace {
 
-#include "src/att.tab.c"
-#include "src/lex.att.c"
+//#include "src/att.tab.c"
+//#include "src/lex.att.c"
 
 } // namespace
 
 namespace x64asm {
 
 istream& Code::read_att(istream& is) {
-  stringstream ss;
-  ss << is.rdbuf();
 
-  auto buffer = att_scan_string(ss.str().c_str());
-  att_switch_to_buffer(buffer);
+  clear();
 
-  attlineno = 0;
-  attparse(is, *this);
+  size_t line_no = 0;
+  string line;
+  while(is.good()) {
+    line_no++;
 
-  att_delete_buffer(buffer);
+    getline(is, line);
+
+    // check for empty lines
+    if(!line.size())
+      continue;
+
+    bool nonempty = false;
+    size_t comment = line.find_first_of('#');
+    if(comment != string::npos) {
+      for(size_t i = 0; i < comment; ++i) {
+        if(line[i] != ' ')
+          nonempty = true;
+      }
+      if(!nonempty)
+        continue;
+    }
+
+    // parse an instruction
+    stringstream line_ss(line);
+    auto instr = Instruction(NOP);
+    line_ss >> instr;
+
+    if (!line_ss.fail()) {
+      push_back(instr);
+    } else {
+      cerr << "Failed to parse line " << line_no << ": " << line << endl;
+      cerr << "Message: " << fail_msg(line_ss) << endl;
+    }
+  }
+
+  if(is.eof())
+    is.clear();
 
   return is;
+}
+
+ostream& Code::write_att(ostream& os) const {
+  for (size_t i = 0, ie = size(); i < ie; ++i) {
+    (*this)[i].write_att(os);
+    os << "\t\t\t# OPC=" << (uint64_t)(*this)[i].get_opcode();
+    if (i+1 != ie) {
+      os << std::endl;
+    }
+  }
+  return os;
 }
 
 } // namespace x64asm
