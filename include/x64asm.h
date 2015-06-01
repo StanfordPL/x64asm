@@ -22,6 +22,7 @@ limitations under the License.
 #include "src/constants.h"
 #include "src/env_bits.h"
 #include "src/env_reg.h"
+#include "src/fail.h"
 #include "src/flag.h"
 #include "src/flag_set.h"
 #include "src/function.h"

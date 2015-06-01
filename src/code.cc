@@ -23,13 +23,6 @@ limitations under the License.
 using namespace std;
 using namespace cpputil;
 
-namespace {
-
-//#include "src/att.tab.c"
-//#include "src/lex.att.c"
-
-} // namespace
-
 namespace x64asm {
 
 istream& Code::read_att(istream& is) {
@@ -38,6 +31,8 @@ istream& Code::read_att(istream& is) {
 
   size_t line_no = 0;
   string line;
+  bool failed = false;
+  stringstream failss;
   while(is.good()) {
     line_no++;
 
@@ -66,12 +61,15 @@ istream& Code::read_att(istream& is) {
     if (!line_ss.fail()) {
       push_back(instr);
     } else {
-      cerr << "Failed to parse line " << line_no << ": " << line << endl;
-      cerr << "Message: " << fail_msg(line_ss) << endl;
+      failed = true;
+      failss << "Failed to parse line " << line_no << ": " << line << endl;
+      failss << "Message: " << fail_msg(line_ss) << endl;
     }
   }
 
-  if(is.eof())
+  if(failed || is.bad())
+    fail(is) << failss.str();
+  else 
     is.clear();
 
   return is;
@@ -80,7 +78,6 @@ istream& Code::read_att(istream& is) {
 ostream& Code::write_att(ostream& os) const {
   for (size_t i = 0, ie = size(); i < ie; ++i) {
     (*this)[i].write_att(os);
-    os << "\t\t\t# OPC=" << (uint64_t)(*this)[i].get_opcode();
     if (i+1 != ie) {
       os << std::endl;
     }
