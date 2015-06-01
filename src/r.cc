@@ -174,13 +174,6 @@ istream& R::read_att(istream& is) {
 
   stringstream tmp;
 
-  // R64?
-  tmp.str(name);
-  tmp.clear();
-  static_cast<R64*>(this)->read_att(tmp);
-  if(!tmp.fail())
-    return is;
-
   // R32?
   tmp.str(name);
   tmp.clear();
@@ -188,10 +181,10 @@ istream& R::read_att(istream& is) {
   if(!tmp.fail())
     return is;
 
-  // R16?
+  // R64?
   tmp.str(name);
   tmp.clear();
-  static_cast<R16*>(this)->read_att(tmp);
+  static_cast<R64*>(this)->read_att(tmp);
   if(!tmp.fail())
     return is;
 
@@ -206,6 +199,13 @@ istream& R::read_att(istream& is) {
   tmp.str(name);
   tmp.clear();
   static_cast<Rh*>(this)->read_att(tmp);
+  if(!tmp.fail())
+    return is;
+
+  // R16?
+  tmp.str(name);
+  tmp.clear();
+  static_cast<R16*>(this)->read_att(tmp);
   if(!tmp.fail())
     return is;
 

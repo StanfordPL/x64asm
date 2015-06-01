@@ -146,7 +146,8 @@ std::istream& M<T>::read_att(std::istream& is) {
         else if(base.size() == 64)
           set_addr_or(false);
         else {
-          cpputil::fail(is) << "Base of memory reference must be 32 or 64 bits register." << std::endl;
+          cpputil::fail(is) << "Base (" << base << ") "
+                            << "of memory reference must be 32 or 64 bit register." << std::endl;
           return is;
         }
       }
@@ -159,30 +160,41 @@ std::istream& M<T>::read_att(std::istream& is) {
     is >> std::ws;
     if(is.peek() == ',') {
       is.ignore();
+      is >> std::ws;
+
+      std::stringstream name;
+      for(char tmp = is.peek(); ('a' <= tmp && tmp <= 'z') || ('0' <= tmp && tmp <= '9') || tmp == '%'; tmp = is.peek()) {
+        is.ignore();
+        name.put(tmp);
+      }
 
       R index = rax;
-      is >> std::ws;
-      index.read_att(is);
+      index.read_att(name);
 
-      if(cpputil::failed(is))
+      if(cpputil::failed(name)) {
+        cpputil::fail(is) << cpputil::fail_msg(name);
         return is;
+      }
 
       if(contains_base()) {
-        if(get_base().size() != index.size()) {
-          cpputil::fail(is) << "Base and index registers must have same width." << std::endl;
+        if((addr_or() && index.size() != 32) ||
+            (!addr_or() && index.size() != 64)) {
+          cpputil::fail(is) << "Base (" << get_base() << ") and index (" << index 
+                            << ") registers must have same width." << std::endl;
           return is;
+        }
+      } else {
+        if(index.size() == 32)
+          set_addr_or(true);
+        else if(index.size() == 64)
+          set_addr_or(false);
+        else {
+          cpputil::fail(is) << "Index (" << index << ") "
+                            << "of memory reference must be 32 or 64 bit register." << std::endl;
         }
       }
 
       set_index(index);
-      if(index.size() == 32)
-        set_addr_or(true);
-      else if(index.size() == 64)
-        set_addr_or(false);
-      else {
-        cpputil::fail(is) << "Index of memory reference must be 32 or 64 bit register." << std::endl;
-      }
-
       // Scale
       set_scale(Scale::TIMES_1);
       is >> std::ws;

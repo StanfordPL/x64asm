@@ -228,7 +228,7 @@ istream& Instruction::read_att(istream& is) {
       if(input.peek() == ',') {
         input.ignore();
         input >> std::ws;
-      } else {
+      } else if(!input.eof()) {
         fail(is) << "Expected ',' but found '" << (char)input.peek() << "'";
         return is;
       }
