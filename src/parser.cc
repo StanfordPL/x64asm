@@ -214,21 +214,24 @@ istream& Instruction::read_att(istream& is) {
   // Parse operands
   std::vector<Operand> operands;
   input >> std::ws;
+  size_t operand_count = 1;
   while(input.good()) {
     Operand op = Constants::rax();
     input >> op;
-    if(!input.fail()) {
-      operands.insert(operands.begin(), op);
-    } else {
+    if(failed(input)) {
+      fail(is) << "Could not parse operand " << operand_count << ": " << fail_msg(input);
       return is;
     }
+    operands.insert(operands.begin(), op);
+    operand_count++;
     if(!input.eof()) {
       if(input.peek() == ',') {
         input.ignore();
         input >> std::ws;
+      } else {
+        fail(is) << "Expected ',' but found '" << (char)input.peek() << "'";
+        return is;
       }
-      else
-        break;
     }
   }
 

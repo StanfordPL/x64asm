@@ -144,57 +144,29 @@ istream& Operand::read_att(istream& is) {
     string name(name_builder.str());
     stringstream tmp(name);
 
-    // R64?
-    tmp >> *(static_cast<R64*>(this));
-    if(!tmp.fail())
-      return is;
-
-    // R32?
-    tmp.str(name);
-    tmp.clear();
-    tmp >> *(static_cast<R32*>(this));
-    if(!tmp.fail())
-      return is;
-
-    // R16?
-    tmp.str(name);
-    tmp.clear();
-    tmp >> *(static_cast<R16*>(this));
-    if(!tmp.fail())
-      return is;
-
-    // R8?
-    tmp.str(name);
-    tmp.clear();
-    tmp >> *(static_cast<R8*>(this));
-    if(!tmp.fail())
-      return is;
-
-    // RH?
-    tmp.str(name);
-    tmp.clear();
-    tmp >> *(static_cast<Rh*>(this));
+    // R?
+    static_cast<R*>(this)->read_att(tmp);
     if(!tmp.fail())
       return is;
 
     // XMM?
     tmp.str(name);
     tmp.clear();
-    tmp >> *(static_cast<Xmm*>(this));
+    static_cast<Xmm*>(this)->read_att(tmp);
     if(!tmp.fail())
       return is;
 
     // YMM?
     tmp.str(name);
     tmp.clear();
-    tmp >> *(static_cast<Ymm*>(this));
+    static_cast<Ymm*>(this)->read_att(tmp);
     if(!tmp.fail())
       return is;
 
     // SREG?
     tmp.str(name);
     tmp.clear();
-    tmp >> *(static_cast<Sreg*>(this));
+    static_cast<Sreg*>(this)->read_att(tmp);
     if(!tmp.fail())
       return is;
 
@@ -242,6 +214,7 @@ istream& Operand::read_att(istream& is) {
   M8 m(Constants::rax());
   is >> m;
   *this = m;
+
   return is;
 
 }
