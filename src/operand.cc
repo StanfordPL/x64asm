@@ -184,11 +184,14 @@ istream& Operand::read_att(istream& is) {
 
     if(is.peek() == '0') {
       is.ignore();
-      if(is.peek() == 'x') {
+      char c = is.peek();
+      if(c == 'x') {
         is.ignore();
         is >> hex >> value;
-      } else {
+      } else if ('0' <= c && c <= '9') {
         is >> dec >> value;
+      } else {
+        value = 0;
       }
     } else {
       is >> dec >> value;
