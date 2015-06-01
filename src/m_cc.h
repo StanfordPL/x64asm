@@ -81,6 +81,8 @@ std::istream& M<T>::read_att(std::istream& is) {
       cpputil::fail(is) << "Tried to parse segment register as memory, but no ':' found.";
       return is;
     }
+  } else {
+    clear_seg();
   }
 
   // Displacement
@@ -127,7 +129,7 @@ std::istream& M<T>::read_att(std::istream& is) {
       }
 
       if(name.str() == "%rip") {
-        set_base(r_null());
+        clear_base();
         set_rip_offset(true);
       } else {
         R base = rax;
@@ -144,7 +146,7 @@ std::istream& M<T>::read_att(std::istream& is) {
           set_addr_or(false);
       }
     } else {
-      set_base(r_null());
+      clear_base();
       set_rip_offset(false);
     }
 
@@ -189,6 +191,8 @@ std::istream& M<T>::read_att(std::istream& is) {
             cpputil::fail(is) << "Scale on memory reference must be 1, 2, 4, or 8";
         }
       }
+    } else {
+      clear_index();
     }
     is >> std::ws;
 
