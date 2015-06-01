@@ -65,17 +65,10 @@ public:
     return val_;
   }
 
-  /** @todo This method is undefined. */
-  std::istream& read_att(std::istream& is) {
-    is.setstate(std::ios::failbit);
-    return is;
-  }
+  /** Reads a segment register from an istream using at&t syntax. */
+  std::istream& read_att(std::istream& is);
   /** Writes this segment register to an ostream using at&t syntax. */
-  std::ostream& write_att(std::ostream& os) const {
-    assert(check());
-    const char* sregs[6] = {"es","cs","ss","ds","fs","gs"};
-    return (os << "%" << sregs[val_]);
-  }
+  std::ostream& write_att(std::ostream& os) const;
 
 protected:
   /** Direct access to this constructor is disallowed. */

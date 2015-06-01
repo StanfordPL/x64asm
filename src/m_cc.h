@@ -71,7 +71,7 @@ std::istream& M<T>::read_att(std::istream& is) {
   // Segment register
   if(is.peek() == '%') {
     Sreg sreg = ss;
-    is >> sreg;
+    sreg.read_att(is);
     set_seg(sreg);
 
     if(cpputil::failed(is))
@@ -133,17 +133,22 @@ std::istream& M<T>::read_att(std::istream& is) {
         set_rip_offset(true);
       } else {
         R base = rax;
-        name >> base;
+        base.read_att(name);
         if(cpputil::failed(name)) {
-          cpputil::fail(is) << "Could not parse register " << name << " as base for memory reference.";
+          cpputil::fail(is) << cpputil::fail_msg(name);
+          return is;
         }
 
         set_base(base);
         set_rip_offset(false);
         if(base.size() == 32)
           set_addr_or(true);
-        else
+        else if(base.size() == 64)
           set_addr_or(false);
+        else {
+          cpputil::fail(is) << "Base of memory reference must be 32 or 64 bits register." << std::endl;
+          return is;
+        }
       }
     } else {
       clear_base();
@@ -156,16 +161,27 @@ std::istream& M<T>::read_att(std::istream& is) {
       is.ignore();
 
       R index = rax;
-      is >> std::ws >> index;
+      is >> std::ws;
+      index.read_att(is);
 
       if(cpputil::failed(is))
         return is;
 
+      if(contains_base()) {
+        if(get_base().size() != index.size()) {
+          cpputil::fail(is) << "Base and index registers must have same width." << std::endl;
+          return is;
+        }
+      }
+
       set_index(index);
       if(index.size() == 32)
         set_addr_or(true);
-      else
+      else if(index.size() == 64)
         set_addr_or(false);
+      else {
+        cpputil::fail(is) << "Index of memory reference must be 32 or 64 bit register." << std::endl;
+      }
 
       // Scale
       set_scale(Scale::TIMES_1);
@@ -203,8 +219,8 @@ std::istream& M<T>::read_att(std::istream& is) {
 
   }
 
-  if(!ok) {
-    cpputil::fail(is) << "Memory reference must have a displacement, base, or index.";
+  if(!ok) {  //it doesn't look like a memory reference.  could be anything.
+    cpputil::fail(is) << "Don't know how to parse this!";
   }
   return is;
 }

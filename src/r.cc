@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#include "src/fail.h"
 #include "src/r.h"
 
 #include <array>
@@ -22,6 +23,7 @@ limitations under the License.
 
 #include "src/constants.h"
 
+using namespace cpputil;
 using namespace std;
 using namespace x64asm;
 
@@ -76,7 +78,7 @@ istream& R8::read_att(istream& is) {
     }
   }
 
-  is.setstate(ios::failbit);
+  fail(is) << "No such r8 register \"" << temp << "\"";
   return is;
 }
 
@@ -96,7 +98,7 @@ istream& Rh::read_att(istream& is) {
     }
   }
 
-  is.setstate(ios::failbit);
+  fail(is) << "No such rh register \"" << temp << "\"";
   return is;
 }
 
@@ -116,7 +118,7 @@ istream& R16::read_att(istream& is) {
     }
   }
 
-  is.setstate(ios::failbit);
+  fail(is) << "No such r16 register \"" << temp << "\"";
   return is;
 }
 
@@ -136,7 +138,7 @@ istream& R32::read_att(istream& is) {
     }
   }
 
-  is.setstate(ios::failbit);
+  fail(is) << "No such r32 register \"" << temp << "\"";
   return is;
 }
 
@@ -156,7 +158,7 @@ istream& R64::read_att(istream& is) {
     }
   }
 
-  is.setstate(ios::failbit);
+  fail(is) << "No such r64 register \"" << temp << "\"";
   return is;
 }
 
@@ -164,6 +166,54 @@ ostream& R64::write_att(ostream& os) const {
   assert(check());
   return (os << r64s_()[val_]);
 }
+
+istream& R::read_att(istream& is) {
+
+  string name;
+  is >> name;
+
+  stringstream tmp;
+
+  // R64?
+  tmp.str(name);
+  tmp.clear();
+  static_cast<R64*>(this)->read_att(tmp);
+  if(!tmp.fail())
+    return is;
+
+  // R32?
+  tmp.str(name);
+  tmp.clear();
+  static_cast<R32*>(this)->read_att(tmp);
+  if(!tmp.fail())
+    return is;
+
+  // R16?
+  tmp.str(name);
+  tmp.clear();
+  static_cast<R16*>(this)->read_att(tmp);
+  if(!tmp.fail())
+    return is;
+
+  // R8?
+  tmp.str(name);
+  tmp.clear();
+  static_cast<R8*>(this)->read_att(tmp);
+  if(!tmp.fail())
+    return is;
+
+  // RH?
+  tmp.str(name);
+  tmp.clear();
+  static_cast<Rh*>(this)->read_att(tmp);
+  if(!tmp.fail())
+    return is;
+
+  fail(is) << "No such general-purpose register \"" << name << "\"" << endl;
+  return is;
+
+}
+
 
 ostream& R::write_att(ostream& os) const {
   switch(type()) {

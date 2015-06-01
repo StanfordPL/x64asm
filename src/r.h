@@ -37,6 +37,8 @@ public:
     return val_;
   }
 
+  /** Reads this register from an istream using at&t syntax. */
+  std::istream& read_att(std::istream& is);
   /** Writes this register to an ostream using at&t syntax. */
   std::ostream& write_att(std::ostream& os) const;
 
@@ -389,6 +391,10 @@ inline ostream& operator<<(ostream& os, const x64asm::R64& r) {
   return r.write_att(os);
 }
 
+/** iostream overload. */
+inline istream& operator<<(istream& os, x64asm::R& r) {
+  return r.read_att(os);
+}
 /** iostream overload. */
 inline ostream& operator<<(ostream& os, const x64asm::R& r) {
   return r.write_att(os);
