@@ -3,11 +3,11 @@ Spreadhsset
 
 ### What?
 
-*The* spreadsheet is a list of all x86-64 opcodes that we support.  Every time
-you build a fresh copy of x64asm, this data is used by "Codegen" (a haskell
- program) to generate C++ source for the real assembler.  The intention is
-that the spreadsheet is very similar to the contents of the intel x86-64
-manuals.
+*The* spreadsheet, `x86.csv` is a list of all x86-64 opcodes that we support.
+Every time you build a fresh copy of x64asm, this data is used by "Codegen" (a
+haskell program) to generate C++ source for the real assembler.  The
+intention is that the spreadsheet is very similar to the contents of the intel
+x86-64 manuals.
 
 ### Spreadsheet Columns
 
