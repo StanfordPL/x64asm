@@ -473,7 +473,7 @@ read_instr s = let (o:i:e:p:r:w:u:su:sp:m64:m32:f:a:pr:d:[]) = splitOn "\t" s in
                           (trim r)  (trim w)  (trim u)
                           (trim su) (trim sp) (trim m64) (trim m32) 
                           (trim f) 
-                          (trim a)  (trim pr) (trim d))
+                          (trim a)  "" (trim d))
 
 -- Read all rows
 read_instrs :: String -> [Instr]
@@ -610,19 +610,17 @@ fix_rex_rows is = remove_invalid_rex $ concat $ map fix_r8_row $ remove_rex is
 -- Step 6: Remove duplicate rows by using the preferred encoding
 --------------------------------------------------------------------------------
 
--- Returns a preferred instruction from a list of alternatives
-get_pref :: [Instr] -> Instr
-get_pref [] = error "Can't select preference from empty list!"
-get_pref (i:[]) = i
-get_pref is = case find (\x -> pref x == "YES") is of
-                   (Just i) -> i
-                   _ -> error $ "Ambiguity for " ++ 
-                                (opcode_enum (head is)) ++ ": " ++ 
-                                (intercalate " " (map opcode is))
+-- Returns same instructions with "pref" field to disambiguate
+get_pref :: Int -> [Instr] -> [Instr]
+get_pref index [] = []
+get_pref index (i:[]) = if (index > 0)
+                        then [i { pref = show index }]
+                        else [i]
+get_pref index is = (get_pref index [head is]) ++ (get_pref (index+1) (tail is))
 
--- Remove ambiguity by prefering the shortest encoding
+-- Remove ambiguity by updaing "pref" field of otherwise identical instructions
 remove_ambiguity :: [Instr] -> [Instr]
-remove_ambiguity is = map get_pref $ groupBy eq $ nubBy eq $ sortBy srt is
+remove_ambiguity is = foldl1 (++) $ map (get_pref 0) $ groupBy eq $ sortBy srt is
   where srt x y = compare (assm_decl x) (assm_decl y)
         eq x y = (assm_decl x) == (assm_decl y)	
 
@@ -756,10 +754,12 @@ property_arity_check is = sequence_ $ map check is
 
 -- Converts an instruction into an Opcode enum value
 opcode_enum :: Instr -> String
-opcode_enum i = intercalate "_" $ (mnem i) : (ops i)
-  where mnem i = raw_mnemonic i
+opcode_enum i = name ++ pref_name
+  where name = intercalate "_" $ (mnem i) : (ops i)
+        mnem i = raw_mnemonic i
         ops i = map (up . op2type) (operands i)
-
+        pref_name = if (length (pref i) > 0) then ('_':(pref i)) else ""
+        
 -- Converts all instructions to Opcode enum values
 opcode_enums :: [Instr] -> String
 opcode_enums is = to_table is opcode_enum
@@ -984,6 +984,7 @@ assm_arg_list i = intercalate ", " $ map arg $ zip [0..] (operands i)
 assm_decl :: Instr -> String
 assm_decl i = "void " ++
               (assm_mnemonic i) ++
+              (if (length (pref i) > 0) then '_':(pref i) else "") ++
               "(" ++
               (assm_arg_list i) ++
               ")"
@@ -1217,6 +1218,7 @@ assm_oth_defn i = "  // Non-VEX-Encoded Instruction: \n\n" ++
 assm_src_defn :: Instr -> String
 assm_src_defn i = "void Assembler::" ++
                   (assm_mnemonic i) ++
+                  (if (length (pref i) > 0) then '_':(pref i) else "") ++
                   "(" ++
                   (assm_arg_list i) ++
                   ") {\n" ++
@@ -1242,7 +1244,9 @@ assm_call_arg_list i = intercalate ", " $ map arg $ zip [0..] (operands i)
 
 -- Assembler switch call
 assm_call :: Instr -> String
-assm_call i = (assm_mnemonic i) ++ "(" ++ (assm_call_arg_list i) ++ ");"
+assm_call i = (assm_mnemonic i) ++ 
+              (if (length (pref i) > 0) then '_':(pref i) else "") ++
+              "(" ++ (assm_call_arg_list i) ++ ");"
 
 -- Assembler switch case
 assm_case :: Instr -> String

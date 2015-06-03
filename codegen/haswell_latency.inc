@@ -17,22 +17,29 @@
 , 1		// adcw $0x0, %ax
 , 999		// adcw %es:(%rax,%rax,1), %ax
 , 1		// adcw %ax, %ax
+, 1		// adcw %ax, %ax
 , 1		// adcl $0x0, %eax
 , 1		// adcl $0x0, %eax
 , 999		// adcl %es:(%rax,%rax,1), %eax
+, 1		// adcl %eax, %eax
 , 1		// adcl %eax, %eax
 , 1		// adcq $0x0, %rax
 , 1		// adcq $0x0, %rax
 , 999		// adcq %es:(%rax,%rax,1), %rax
 , 1		// adcq %rax, %rax
+, 1		// adcq %rax, %rax
 , 1		// adcb $0x0, %al
 , 999		// adcb %es:(%rax,%rax,1), %al
 , 1		// adcb %al, %al
+, 1		// adcb %al, %al
+, 1		// adcb %ah, %al
 , 1		// adcb %ah, %al
 , 1		// adcq $0x0, %rax
 , 1		// adcb $0x0, %ah
-, 999		// adcb %es:(%rax,%rax,1), , 
+, 999		// adcb %es:(%rax,%rax,1), ,
 , 1		// adcb %al, %ah
+, 1		// adcb %al, %ah
+, 1		// adcb %ah, %ah
 , 1		// adcb %ah, %ah
 , 1		// addb $0x0, %al
 , 1		// addw $0x0, %ax
@@ -53,22 +60,29 @@
 , 1		// addw $0x0, %ax
 , 999		// addw %es:(%rax,%rax,1), %ax
 , 1		// addw %ax, %ax
+, 1		// addw %ax, %ax
 , 1		// addl $0x0, %eax
 , 1		// addl $0x0, %eax
 , 999		// addl %es:(%rax,%rax,1), %eax
+, 1		// addl %eax, %eax
 , 1		// addl %eax, %eax
 , 1		// addq $0x0, %rax
 , 1		// addq $0x0, %rax
 , 999		// addq %es:(%rax,%rax,1), %rax
 , 1		// addq %rax, %rax
+, 1		// addq %rax, %rax
 , 1		// addb $0x0, %al
 , 999		// addb %es:(%rax,%rax,1), %al
 , 1		// addb %al, %al
+, 1		// addb %al, %al
+, 1		// addb %ah, %al
 , 1		// addb %ah, %al
 , 1		// addq $0x0, %rax
 , 1		// addb $0x0, %ah
-, 999		// addb %es:(%rax,%rax,1), , 
+, 999		// addb %es:(%rax,%rax,1), ,
 , 1		// addb %al, %ah
+, 1		// addb %al, %ah
+, 1		// addb %ah, %ah
 , 1		// addb %ah, %ah
 , 999		// addpd %es:(%rax,%rax,1), %xmm0
 , 1		// addpd %xmm0, %xmm0
@@ -113,22 +127,29 @@
 , 1		// andw $0x0, %ax
 , 999		// andw %es:(%rax,%rax,1), %ax
 , 1		// andw %ax, %ax
+, 1		// andw %ax, %ax
 , 1		// andl $0x0, %eax
 , 1		// andl $0x0, %eax
 , 999		// andl %es:(%rax,%rax,1), %eax
+, 1		// andl %eax, %eax
 , 1		// andl %eax, %eax
 , 1		// andq $0x0, %rax
 , 1		// andq $0x0, %rax
 , 999		// andq %es:(%rax,%rax,1), %rax
 , 1		// andq %rax, %rax
+, 1		// andq %rax, %rax
 , 1		// andb $0x0, %al
 , 999		// andb %es:(%rax,%rax,1), %al
 , 1		// andb %al, %al
+, 1		// andb %al, %al
+, 1		// andb %ah, %al
 , 1		// andb %ah, %al
 , 1		// andq $0x0, %rax
 , 1		// andb $0x0, %ah
-, 999		// andb %es:(%rax,%rax,1), , 
+, 999		// andb %es:(%rax,%rax,1), ,
 , 1		// andb %al, %ah
+, 1		// andb %al, %ah
+, 1		// andb %ah, %ah
 , 1		// andb %ah, %ah
 , 999		// andnl %es:(%rax,%rax,1), %eax, %eax
 , 1		// andnl %eax, %eax, %eax
@@ -236,15 +257,15 @@
 , 0		// callq %es:(%rax,%rax,1)
 , 0		// callq %rax
 , 0		// callq 0
-, 0		// callq 
-, 1		// cbtw 
-, 1		// cltd 
-, 1		// cltq 
-, 1		// clc 
-, 39		// cld 
+, 0		// callq
+, 1		// cbtw
+, 1		// cltd
+, 1		// cltq
+, 1		// clc
+, 39		// cld
 , 999		// clflush %es:(%rax,%rax,1)
-, 999		// cli 
-, 1		// cmc 
+, 999		// cli
+, 1		// cmc
 , 999		// cmovaw %es:(%rax,%rax,1), %ax
 , 1		// cmovaw %ax, %ax
 , 999		// cmoval %es:(%rax,%rax,1), %eax
@@ -444,22 +465,29 @@
 , 1		// cmpw $0x0, %ax
 , 999		// cmpw %es:(%rax,%rax,1), %ax
 , 1		// cmpw %ax, %ax
+, 1		// cmpw %ax, %ax
 , 1		// cmpl $0x0, %eax
 , 1		// cmpl $0x0, %eax
 , 999		// cmpl %es:(%rax,%rax,1), %eax
+, 1		// cmpl %eax, %eax
 , 1		// cmpl %eax, %eax
 , 1		// cmpq $0x0, %rax
 , 1		// cmpq $0x0, %rax
 , 999		// cmpq %es:(%rax,%rax,1), %rax
 , 1		// cmpq %rax, %rax
+, 1		// cmpq %rax, %rax
 , 1		// cmpb $0x0, %al
 , 999		// cmpb %es:(%rax,%rax,1), %al
 , 1		// cmpb %al, %al
+, 1		// cmpb %al, %al
+, 1		// cmpb %ah, %al
 , 1		// cmpb %ah, %al
 , 1		// cmpq $0x0, %rax
 , 1		// cmpb $0x0, %ah
-, 999		// cmpb %es:(%rax,%rax,1), , 
+, 999		// cmpb %es:(%rax,%rax,1), ,
 , 1		// cmpb %al, %ah
+, 1		// cmpb %al, %ah
+, 1		// cmpb %ah, %ah
 , 1		// cmpb %ah, %ah
 , 999		// cmppd $0x0, %es:(%rax,%rax,1), %xmm0
 , 1		// cmppd $0x0, %xmm0, %xmm0
@@ -469,14 +497,14 @@
 , 999		// cmps %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// cmps %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// cmps %es:(%rax,%rax,1), %es:(%rax,%rax,1)
-, 999		// cmpsb 
-, 999		// cmpsl 
+, 999		// cmpsb
+, 999		// cmpsl
 , 999		// cmpsd $0x0, %es:(%rax,%rax,1), %xmm0
 , 1		// cmpsd $0x0, %xmm0, %xmm0
-, 999		// cmpsq 
+, 999		// cmpsq
 , 999		// cmpss $0x0, %es:(%rax,%rax,1), %xmm0
 , 1		// cmpss $0x0, %xmm0, %xmm0
-, 999		// cmpsw 
+, 999		// cmpsw
 , 999		// cmpxchgw %ax, %es:(%rax,%rax,1)
 , 999		// cmpxchgl %eax, %es:(%rax,%rax,1)
 , 999		// cmpxchgq %rax, %es:(%rax,%rax,1)
@@ -495,8 +523,8 @@
 , 1		// comisd %xmm0, %xmm0
 , 999		// comiss %es:(%rax,%rax,1), %xmm0
 , 1		// comiss %xmm0, %xmm0
-, 8154		// cpuid 
-, 1		// cqto 
+, 8154		// cpuid
+, 1		// cqto
 , 999		// crc32w %es:(%rax,%rax,1), %eax
 , 999		// crc32l %es:(%rax,%rax,1), %eax
 , 999		// crc32b %es:(%rax,%rax,1), %eax
@@ -564,8 +592,8 @@
 , 1		// cvttss2si %xmm0, %eax
 , 999		// cvttss2siq %es:(%rax,%rax,1), %rax
 , 1		// cvttss2siq %xmm0, %rax
-, 1		// cwtd 
-, 1		// cwtl 
+, 1		// cwtd
+, 1		// cwtl
 , 999		// decw %es:(%rax,%rax,1)
 , 999		// decl %es:(%rax,%rax,1)
 , 999		// decq %es:(%rax,%rax,1)
@@ -583,7 +611,7 @@
 , 999		// divl %eax
 , 999		// divq %rax
 , 999		// divb %al
-, 999		// divb  
+, 999		// divb
 , 999		// divpd %es:(%rax,%rax,1), %xmm0
 , 1		// divpd %xmm0, %xmm0
 , 999		// divps %es:(%rax,%rax,1), %xmm0
@@ -596,25 +624,25 @@
 , 1		// dppd $0x0, %xmm0, %xmm0
 , 999		// dpps $0x0, %es:(%rax,%rax,1), %xmm0
 , 14		// dpps $0x0, %xmm0, %xmm0
-, 271		// emms 
+, 271		// emms
 , 0		// enterq $0x0, $0x0
 , 0		// enterq $0x0, $0x0
 , 0		// enterq $0x0, $0x0
 , 999		// extractps $0x0, %xmm0, %es:(%rax,%rax,1)
 , 1		// extractps $0x0, %xmm0, %eax
 , 1		// extractps $0x0, %xmm0, %rax
-, 9150		// f2xm1 
-, 1		// fabs 
+, 9150		// f2xm1
+, 1		// fabs
 , 999		// fadds %es:(%rax,%rax,1)
 , 999		// faddl %es:(%rax,%rax,1)
 , 10022		// fadd %st, %st
 , 9185		// fadd %st, %st
-, 8478		// faddp 
+, 8478		// faddp
 , 8475		// faddp %st, %st
 , 999		// fbld %es:(%rax,%rax,1)
 , 999		// fbstp %es:(%rax,%rax,1)
-, 1		// fchs 
-, 1015		// fclex 
+, 1		// fchs
+, 1015		// fclex
 , 1		// fcmovb %st, %st
 , 1		// fcmovbe %st, %st
 , 1		// fcmove %st, %st
@@ -623,30 +651,30 @@
 , 1		// fcmovne %st, %st
 , 1		// fcmovnu %st, %st
 , 1		// fcmovu %st, %st
-, 7907		// fcom 
+, 7907		// fcom
 , 999		// fcoms %es:(%rax,%rax,1)
 , 999		// fcoml %es:(%rax,%rax,1)
 , 7858		// fcom %st
 , 8613		// fcomi %st, %st
 , 8837		// fcomip %st, %st
-, 8368		// fcomp 
+, 8368		// fcomp
 , 999		// fcomps %es:(%rax,%rax,1)
 , 999		// fcompl %es:(%rax,%rax,1)
 , 8372		// fcomp %st
-, 8788		// fcompp 
-, 9173		// fcos 
-, 1		// fdecstp 
+, 8788		// fcompp
+, 9173		// fcos
+, 1		// fdecstp
 , 999		// fdivs %es:(%rax,%rax,1)
 , 999		// fdivl %es:(%rax,%rax,1)
 , 10018		// fdiv %st, %st
 , 9186		// fdiv %st, %st
-, 8477		// fdivp 
+, 8477		// fdivp
 , 8478		// fdivp %st, %st
 , 999		// fdivrs %es:(%rax,%rax,1)
 , 999		// fdivrl %es:(%rax,%rax,1)
 , 10016		// fdivr %st, %st
 , 9190		// fdivr %st, %st
-, 8476		// fdivrp 
+, 8476		// fdivrp
 , 8487		// fdivrp %st, %st
 , 1		// ffreep %st
 , 999		// fiadd %es:(%rax,%rax,1)
@@ -664,8 +692,8 @@
 , 999		// fildll %es:(%rax,%rax,1)
 , 999		// fimul %es:(%rax,%rax,1)
 , 999		// fimull %es:(%rax,%rax,1)
-, 1		// fincstp 
-, 2349		// finit 
+, 1		// fincstp
+, 2349		// finit
 , 999		// fist %es:(%rax,%rax,1)
 , 999		// fistl %es:(%rax,%rax,1)
 , 999		// fistp %es:(%rax,%rax,1)
@@ -682,40 +710,40 @@
 , 999		// fldl %es:(%rax,%rax,1)
 , 999		// fldt %es:(%rax,%rax,1)
 , 8476		// fld %st
-, 8841		// fld1 
+, 8841		// fld1
 , 999		// fldcw %es:(%rax,%rax,1)
 , 999		// fldenvl %es:(%rax,%rax,1)
-, 8854		// fldl2e 
-, 8862		// fldl2t 
-, 8850		// fldlg2 
-, 8849		// fldln2 
-, 8838		// fldpi 
-, 8474		// fldz 
+, 8854		// fldl2e
+, 8862		// fldl2t
+, 8850		// fldlg2
+, 8849		// fldln2
+, 8838		// fldpi
+, 8474		// fldz
 , 999		// fmuls %es:(%rax,%rax,1)
 , 999		// fmull %es:(%rax,%rax,1)
 , 10020		// fmul %st, %st
 , 9182		// fmul %st, %st
-, 8476		// fmulp 
+, 8476		// fmulp
 , 8477		// fmulp %st, %st
-, 1015		// fnclex 
-, 2324		// fninit 
-, 1		// fnop 
+, 1015		// fnclex
+, 2324		// fninit
+, 1		// fnop
 , 999		// fnsave %es:(%rax,%rax,1)
 , 999		// fnstcw %es:(%rax,%rax,1)
 , 999		// fnstenvl %es:(%rax,%rax,1)
 , 1		// fnstsw %ax
 , 999		// fnstsw %es:(%rax,%rax,1)
-, 8854		// fpatan 
-, 8885		// fprem 
-, 8852		// fprem1 
-, 8877		// fptan 
-, 9172		// frndint 
+, 8854		// fpatan
+, 8885		// fprem
+, 8852		// fprem1
+, 8877		// fptan
+, 9172		// frndint
 , 999		// frstor %es:(%rax,%rax,1)
 , 999		// fsave %es:(%rax,%rax,1)
-, 9586		// fscale 
-, 9171		// fsin 
-, 8880		// fsincos 
-, 8778		// fsqrt 
+, 9586		// fscale
+, 9171		// fsin
+, 8880		// fsincos
+, 8778		// fsqrt
 , 999		// fsts %es:(%rax,%rax,1)
 , 999		// fstl %es:(%rax,%rax,1)
 , 1		// fst %st
@@ -731,33 +759,33 @@
 , 999		// fsubl %es:(%rax,%rax,1)
 , 10016		// fsub %st, %st
 , 9186		// fsub %st, %st
-, 8480		// fsubp 
+, 8480		// fsubp
 , 8477		// fsubp %st, %st
 , 999		// fsubrs %es:(%rax,%rax,1)
 , 999		// fsubrl %es:(%rax,%rax,1)
 , 10016		// fsubr %st, %st
 , 9187		// fsubr %st, %st
-, 8480		// fsubrp 
+, 8480		// fsubrp
 , 8480		// fsubrp %st, %st
-, 7897		// ftst 
-, 7894		// fucom 
+, 7897		// ftst
+, 7894		// fucom
 , 7897		// fucom %st
 , 8735		// fucomi %st, %st
 , 8834		// fucomip %st, %st
-, 8368		// fucomp 
+, 8368		// fucomp
 , 8367		// fucomp %st
-, 8788		// fucompp 
-, 1		// fwait 
-, 6850		// fxam 
-, 1		// fxch 
+, 8788		// fucompp
+, 1		// fwait
+, 6850		// fxam
+, 1		// fxch
 , 1		// fxch %st
 , 999		// fxrstor %es:(%rax,%rax,1)
 , 999		// fxrstor64 %es:(%rax,%rax,1)
 , 999		// fxsave %es:(%rax,%rax,1)
 , 999		// fxsave64 %es:(%rax,%rax,1)
-, 8900		// fxtract 
-, 8849		// fyl2x 
-, 8850		// fyl2xp1 
+, 8900		// fxtract
+, 8849		// fyl2x
+, 8850		// fyl2xp1
 , 999		// haddpd %es:(%rax,%rax,1), %xmm0
 , 1		// haddpd %xmm0, %xmm0
 , 999		// haddps %es:(%rax,%rax,1), %xmm0
@@ -774,7 +802,7 @@
 , 999		// idivl %eax
 , 999		// idivq %rax
 , 999		// idivb %al
-, 999		// idivb  
+, 999		// idivb
 , 999		// imulw %es:(%rax,%rax,1)
 , 999		// imull %es:(%rax,%rax,1)
 , 999		// imulq %es:(%rax,%rax,1)
@@ -820,77 +848,77 @@
 , 999		// ins %ax, %es:(%rax,%rax,1)
 , 999		// ins %ax, %es:(%rax,%rax,1)
 , 999		// ins %ax, %es:(%rax,%rax,1)
-, 999		// insb 
-, 999		// insl 
+, 999		// insb
+, 999		// insl
 , 999		// insertps $0x0, %es:(%rax,%rax,1), %xmm0
 , 1		// insertps $0x0, %xmm0, %xmm0
-, 999		// insw 
+, 999		// insw
 , 999		// int $0x0
 , 999		// int $0x0
 , 999		// invpcid %es:(%rax,%rax,1), %rax
-, 0		// iretw 
-, 0		// iretl 
-, 0		// iretq 
+, 0		// iretw
+, 0		// iretl
+, 0		// iretq
 , 0		// ja 0
-, 0		// ja 
+, 0		// ja
 , 0		// ja , 0
-, 0		// ja , 
+, 0		// ja ,
 , 0		// ja 0
 , 0		// ja , 0
 , 0		// jae 0
-, 0		// jae 
+, 0		// jae
 , 0		// jae , 0
-, 0		// jae , 
+, 0		// jae ,
 , 0		// jae 0
 , 0		// jae , 0
 , 0		// jb 0
-, 0		// jb 
+, 0		// jb
 , 0		// jb , 0
-, 0		// jb , 
+, 0		// jb ,
 , 0		// jb 0
 , 0		// jb , 0
 , 0		// jbe 0
-, 0		// jbe 
+, 0		// jbe
 , 0		// jbe , 0
-, 0		// jbe , 
+, 0		// jbe ,
 , 0		// jbe 0
 , 0		// jbe , 0
 , 0		// jc 0
-, 0		// jc 
+, 0		// jc
 , 0		// jc , 0
-, 0		// jc , 
+, 0		// jc ,
 , 0		// jc 0
 , 0		// jc , 0
 , 0		// je 0
-, 0		// je 
+, 0		// je
 , 0		// je , 0
-, 0		// je , 
+, 0		// je ,
 , 0		// je 0
 , 0		// je , 0
 , 0		// jecxz 0
 , 0		// jecxz , 0
 , 0		// jg 0
-, 0		// jg 
+, 0		// jg
 , 0		// jg , 0
-, 0		// jg , 
+, 0		// jg ,
 , 0		// jg 0
 , 0		// jg , 0
 , 0		// jge 0
-, 0		// jge 
+, 0		// jge
 , 0		// jge , 0
-, 0		// jge , 
+, 0		// jge ,
 , 0		// jge 0
 , 0		// jge , 0
 , 0		// jl 0
-, 0		// jl 
+, 0		// jl
 , 0		// jl , 0
-, 0		// jl , 
+, 0		// jl ,
 , 0		// jl 0
 , 0		// jl , 0
 , 0		// jle 0
-, 0		// jle 
+, 0		// jle
 , 0		// jle , 0
-, 0		// jle , 
+, 0		// jle ,
 , 0		// jle 0
 , 0		// jle , 0
 , 0		// jmpq %es:(%rax,%rax,1)
@@ -899,131 +927,131 @@
 , 0		// jmpq %es:(%rax,%rax,1)
 , 0		// jmpq %rax
 , 0		// jmpq 0
-, 0		// jmpq 
+, 0		// jmpq
 , 0		// jmpq 0
 , 0		// jna 0
-, 0		// jna 
+, 0		// jna
 , 0		// jna , 0
-, 0		// jna , 
+, 0		// jna ,
 , 0		// jna 0
 , 0		// jna , 0
 , 0		// jnae 0
-, 0		// jnae 
+, 0		// jnae
 , 0		// jnae , 0
-, 0		// jnae , 
+, 0		// jnae ,
 , 0		// jnae 0
 , 0		// jnae , 0
 , 0		// jnb 0
-, 0		// jnb 
+, 0		// jnb
 , 0		// jnb , 0
-, 0		// jnb , 
+, 0		// jnb ,
 , 0		// jnb 0
 , 0		// jnb , 0
 , 0		// jnbe 0
-, 0		// jnbe 
+, 0		// jnbe
 , 0		// jnbe , 0
-, 0		// jnbe , 
+, 0		// jnbe ,
 , 0		// jnbe 0
 , 0		// jnbe , 0
 , 0		// jnc 0
-, 0		// jnc 
+, 0		// jnc
 , 0		// jnc , 0
-, 0		// jnc , 
+, 0		// jnc ,
 , 0		// jnc 0
 , 0		// jnc , 0
 , 0		// jne 0
-, 0		// jne 
+, 0		// jne
 , 0		// jne , 0
-, 0		// jne , 
+, 0		// jne ,
 , 0		// jne 0
 , 0		// jne , 0
 , 0		// jng 0
-, 0		// jng 
+, 0		// jng
 , 0		// jng , 0
-, 0		// jng , 
+, 0		// jng ,
 , 0		// jng 0
 , 0		// jng , 0
 , 0		// jnge 0
-, 0		// jnge 
+, 0		// jnge
 , 0		// jnge , 0
-, 0		// jnge , 
+, 0		// jnge ,
 , 0		// jnge 0
 , 0		// jnge , 0
 , 0		// jnl 0
-, 0		// jnl 
+, 0		// jnl
 , 0		// jnl , 0
-, 0		// jnl , 
+, 0		// jnl ,
 , 0		// jnl 0
 , 0		// jnl , 0
 , 0		// jnle 0
-, 0		// jnle 
+, 0		// jnle
 , 0		// jnle , 0
-, 0		// jnle , 
+, 0		// jnle ,
 , 0		// jnle 0
 , 0		// jnle , 0
 , 0		// jno 0
-, 0		// jno 
+, 0		// jno
 , 0		// jno , 0
-, 0		// jno , 
+, 0		// jno ,
 , 0		// jno 0
 , 0		// jno , 0
 , 0		// jnp 0
-, 0		// jnp 
+, 0		// jnp
 , 0		// jnp , 0
-, 0		// jnp , 
+, 0		// jnp ,
 , 0		// jnp 0
 , 0		// jnp , 0
 , 0		// jns 0
-, 0		// jns 
+, 0		// jns
 , 0		// jns , 0
-, 0		// jns , 
+, 0		// jns ,
 , 0		// jns 0
 , 0		// jns , 0
 , 0		// jnz 0
-, 0		// jnz 
+, 0		// jnz
 , 0		// jnz , 0
-, 0		// jnz , 
+, 0		// jnz ,
 , 0		// jnz 0
 , 0		// jnz , 0
 , 0		// jo 0
-, 0		// jo 
+, 0		// jo
 , 0		// jo , 0
-, 0		// jo , 
+, 0		// jo ,
 , 0		// jo 0
 , 0		// jo , 0
 , 0		// jp 0
-, 0		// jp 
+, 0		// jp
 , 0		// jp , 0
-, 0		// jp , 
+, 0		// jp ,
 , 0		// jp 0
 , 0		// jp , 0
 , 0		// jpe 0
-, 0		// jpe 
+, 0		// jpe
 , 0		// jpe , 0
-, 0		// jpe , 
+, 0		// jpe ,
 , 0		// jpe 0
 , 0		// jpe , 0
 , 0		// jpo 0
-, 0		// jpo 
+, 0		// jpo
 , 0		// jpo , 0
-, 0		// jpo , 
+, 0		// jpo ,
 , 0		// jpo 0
 , 0		// jpo , 0
 , 0		// jrcxz 0
 , 0		// jrcxz , 0
 , 0		// js 0
-, 0		// js 
+, 0		// js
 , 0		// js , 0
-, 0		// js , 
+, 0		// js ,
 , 0		// js 0
 , 0		// js , 0
 , 0		// jz 0
-, 0		// jz 
+, 0		// jz
 , 0		// jz , 0
-, 0		// jz , 
+, 0		// jz ,
 , 0		// jz 0
 , 0		// jz , 0
-, 1		// lahf 
+, 1		// lahf
 , 999		// larw %es:(%rax,%rax,1), %ax
 , 4010		// larw %ax, %ax
 , 999		// lar %es:(%rax,%rax,1), %eax
@@ -1041,24 +1069,24 @@
 , 1		// leaq (%rax), %rax
 , 1		// leaq (%rax), %rax
 , 1		// leaq (%rax), %rax
-, 0		// leaveq 
-, 0		// leavew 
-, 707		// lfence 
+, 0		// leaveq
+, 0		// leavew
+, 707		// lfence
 , 999		// lfsw %es:(%rax,%rax,1), %ax
 , 999		// lfsl %es:(%rax,%rax,1), %eax
 , 999		// lfs %es:(%rax,%rax,1), %rax
 , 999		// lgsw %es:(%rax,%rax,1), %ax
 , 999		// lgsl %es:(%rax,%rax,1), %eax
 , 999		// lgs %es:(%rax,%rax,1), %rax
-, 999		// lock 
+, 999		// lock
 , 999		// lods %es:(%rax,%rax,1)
 , 999		// lods %es:(%rax,%rax,1)
 , 999		// lods %es:(%rax,%rax,1)
 , 999		// lods %es:(%rax,%rax,1)
-, 999		// lodsb 
-, 999		// lodsl 
-, 999		// lodsq 
-, 999		// lodsw 
+, 999		// lodsb
+, 999		// lodsl
+, 999		// lodsq
+, 999		// lodsw
 , 0		// loop 0
 , 0		// loope 0
 , 0		// loopne 0
@@ -1087,7 +1115,7 @@
 , 1		// maxsd %xmm0, %xmm0
 , 999		// maxss %es:(%rax,%rax,1), %xmm0
 , 1		// maxss %xmm0, %xmm0
-, 1400		// mfence 
+, 1400		// mfence
 , 999		// minpd %es:(%rax,%rax,1), %xmm0
 , 1		// minpd %xmm0, %xmm0
 , 999		// minps %es:(%rax,%rax,1), %xmm0
@@ -1096,7 +1124,7 @@
 , 1		// minsd %xmm0, %xmm0
 , 999		// minss %es:(%rax,%rax,1), %xmm0
 , 1		// minss %xmm0, %xmm0
-, 999		// monitor 
+, 999		// monitor
 , 999		// movabsb %es:0x0, %al
 , 999		// movabsb , %es:0x0, %al
 , 999		// movabsw %es:0x0, %ax
@@ -1118,25 +1146,36 @@
 , 999		// movabsb %al, %es:0x0
 , 999		// movabsb , %al, %es:0x0
 , 1		// movw $0x0, %ax
+, 1		// movw $0x0, %ax
 , 999		// movw %es:(%rax,%rax,1), %ax
+, 1		// movw %ax, %ax
 , 1		// movw %ax, %ax
 , 1		// movw %fs, %ax
 , 1		// movl $0x0, %eax
+, 1		// movl $0x0, %eax
 , 999		// movl %es:(%rax,%rax,1), %eax
+, 1		// movl %eax, %eax
 , 1		// movl %eax, %eax
 , 1		// movq $0x0, %rax
 , 1		// movq $0x0, %rax
 , 999		// movq %es:(%rax,%rax,1), %rax
 , 1		// movq %rax, %rax
+, 1		// movq %rax, %rax
 , 1		// movq %fs, %rax
+, 1		// movb $0x0, %al
 , 1		// movb $0x0, %al
 , 999		// movb %es:(%rax,%rax,1), %al
 , 1		// movb %al, %al
+, 1		// movb %al, %al
+, 1		// movb %ah, %al
 , 1		// movb %ah, %al
 , 999		// movabsq %es:0x0, %rax
 , 1		// movb $0x0, %ah
-, 999		// movb %es:(%rax,%rax,1), , 
+, 1		// movb $0x0, %ah
+, 999		// movb %es:(%rax,%rax,1), ,
 , 1		// movb %al, %ah
+, 1		// movb %al, %ah
+, 1		// movb %ah, %ah
 , 1		// movb %ah, %ah
 , 999		// mov %es:(%rax,%rax,1), %es
 , 999		// mov %es:(%rax,%rax,1), %es
@@ -1145,8 +1184,10 @@
 , 999		// movapd %xmm0, %es:(%rax,%rax,1)
 , 999		// movapd %es:(%rax,%rax,1), %xmm0
 , 1		// movapd %xmm0, %xmm0
+, 1		// movapd %xmm0, %xmm0
 , 999		// movaps %xmm0, %es:(%rax,%rax,1)
 , 999		// movaps %es:(%rax,%rax,1), %xmm0
+, 1		// movaps %xmm0, %xmm0
 , 1		// movaps %xmm0, %xmm0
 , 999		// movbew %ax, %es:(%rax,%rax,1)
 , 999		// movbel %eax, %es:(%rax,%rax,1)
@@ -1168,8 +1209,10 @@
 , 999		// movdqa %xmm0, %es:(%rax,%rax,1)
 , 999		// movdqa %es:(%rax,%rax,1), %xmm0
 , 1		// movdqa %xmm0, %xmm0
+, 1		// movdqa %xmm0, %xmm0
 , 999		// movdqu %xmm0, %es:(%rax,%rax,1)
 , 999		// movdqu %es:(%rax,%rax,1), %xmm0
+, 1		// movdqu %xmm0, %xmm0
 , 1		// movdqu %xmm0, %xmm0
 , 1		// movhlps %xmm0, %xmm0
 , 999		// movhpd %xmm0, %es:(%rax,%rax,1)
@@ -1194,34 +1237,42 @@
 , 999		// movntps %xmm0, %es:(%rax,%rax,1)
 , 999		// movntq %mm0, %es:(%rax,%rax,1)
 , 999		// movq %mm0, %es:(%rax,%rax,1)
+, 999		// movq %mm0, %es:(%rax,%rax,1)
+, 999		// movq %xmm0, %es:(%rax,%rax,1)
 , 999		// movq %xmm0, %es:(%rax,%rax,1)
 , 999		// movq %es:(%rax,%rax,1), %mm0
+, 999		// movq %es:(%rax,%rax,1), %mm0
+, 1		// movq %mm0, %mm0
 , 1		// movq %mm0, %mm0
 , 1		// movq %rax, %mm0
 , 1		// movq %mm0, %rax
 , 1		// movq %xmm0, %rax
 , 999		// movq %es:(%rax,%rax,1), %xmm0
+, 999		// movq %es:(%rax,%rax,1), %xmm0
 , 1		// movq %rax, %xmm0
+, 1		// movq %xmm0, %xmm0
 , 1		// movq %xmm0, %xmm0
 , 1		// movq2dq %mm0, %xmm0
 , 999		// movs %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// movs %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// movs %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// movs %es:(%rax,%rax,1), %es:(%rax,%rax,1)
-, 999		// movsb 
-, 999		// movsl 
+, 999		// movsb
+, 999		// movsl
 , 999		// movsd %xmm0, %es:(%rax,%rax,1)
 , 999		// movsd %es:(%rax,%rax,1), %xmm0
+, 1		// movsd %xmm0, %xmm0
 , 1		// movsd %xmm0, %xmm0
 , 999		// movshdup %es:(%rax,%rax,1), %xmm0
 , 1		// movshdup %xmm0, %xmm0
 , 999		// movsldup %es:(%rax,%rax,1), %xmm0
 , 1		// movsldup %xmm0, %xmm0
-, 999		// movsq 
+, 999		// movsq
 , 999		// movss %xmm0, %es:(%rax,%rax,1)
 , 999		// movss %es:(%rax,%rax,1), %xmm0
 , 1		// movss %xmm0, %xmm0
-, 999		// movsw 
+, 1		// movss %xmm0, %xmm0
+, 999		// movsw
 , 999		// movsbw %es:(%rax,%rax,1), %ax
 , 1		// movsbw %al, %ax
 , 1		// movsbw %ah, %ax
@@ -1239,8 +1290,10 @@
 , 999		// movupd %xmm0, %es:(%rax,%rax,1)
 , 999		// movupd %es:(%rax,%rax,1), %xmm0
 , 1		// movupd %xmm0, %xmm0
+, 1		// movupd %xmm0, %xmm0
 , 999		// movups %xmm0, %es:(%rax,%rax,1)
 , 999		// movups %es:(%rax,%rax,1), %xmm0
+, 1		// movups %xmm0, %xmm0
 , 1		// movups %xmm0, %xmm0
 , 999		// movzbw %es:(%rax,%rax,1), %ax
 , 1		// movzbw %al, %ax
@@ -1277,7 +1330,7 @@
 , 1		// mulxl %eax, %eax, %eax
 , 999		// mulxq %es:(%rax,%rax,1), %rax, %rax
 , 1		// mulxq %rax, %rax, %rax
-, 999		// mwait 
+, 999		// mwait
 , 999		// negw %es:(%rax,%rax,1)
 , 999		// negl %es:(%rax,%rax,1)
 , 999		// negq %es:(%rax,%rax,1)
@@ -1287,7 +1340,7 @@
 , 1		// negq %rax
 , 1		// negb %al
 , 1		// negb %ah
-, 1		// nop 
+, 1		// nop
 , 999		// nopw %es:(%rax,%rax,1)
 , 999		// nopl %es:(%rax,%rax,1)
 , 1		// nopw %ax
@@ -1320,22 +1373,29 @@
 , 1		// orw $0x0, %ax
 , 999		// orw %es:(%rax,%rax,1), %ax
 , 1		// orw %ax, %ax
+, 1		// orw %ax, %ax
 , 1		// orl $0x0, %eax
 , 1		// orl $0x0, %eax
 , 999		// orl %es:(%rax,%rax,1), %eax
+, 1		// orl %eax, %eax
 , 1		// orl %eax, %eax
 , 1		// orq $0x0, %rax
 , 1		// orq $0x0, %rax
 , 999		// orq %es:(%rax,%rax,1), %rax
 , 1		// orq %rax, %rax
+, 1		// orq %rax, %rax
 , 1		// orb $0x0, %al
 , 999		// orb %es:(%rax,%rax,1), %al
 , 1		// orb %al, %al
+, 1		// orb %al, %al
+, 1		// orb %ah, %al
 , 1		// orb %ah, %al
 , 1		// orq $0x0, %rax
 , 1		// orb $0x0, %ah
-, 999		// orb %es:(%rax,%rax,1), , 
+, 999		// orb %es:(%rax,%rax,1), ,
 , 1		// orb %al, %ah
+, 1		// orb %al, %ah
+, 1		// orb %ah, %ah
 , 1		// orb %ah, %ah
 , 999		// orpd %es:(%rax,%rax,1), %xmm0
 , 1		// orpd %xmm0, %xmm0
@@ -1350,9 +1410,9 @@
 , 999		// outs %es:(%rax,%rax,1), %ax
 , 999		// outs %es:(%rax,%rax,1), %ax
 , 999		// outs %es:(%rax,%rax,1), %ax
-, 999		// outsb 
-, 999		// outsl 
-, 999		// outsw 
+, 999		// outsb
+, 999		// outsl
+, 999		// outsw
 , 999		// pabsb %es:(%rax,%rax,1), %mm0
 , 1		// pabsb %mm0, %mm0
 , 999		// pabsb %es:(%rax,%rax,1), %xmm0
@@ -1423,7 +1483,7 @@
 , 1		// pandn %mm0, %mm0
 , 999		// pandn %es:(%rax,%rax,1), %xmm0
 , 1		// pandn %xmm0, %xmm0
-, 707		// pause 
+, 707		// pause
 , 999		// pavgb %es:(%rax,%rax,1), %mm0
 , 1		// pavgb %mm0, %mm0
 , 999		// pavgb %es:(%rax,%rax,1), %xmm0
@@ -1492,7 +1552,9 @@
 , 999		// pextrw $0x0, %xmm0, %es:(%rax,%rax,1)
 , 1		// pextrw $0x0, %mm0, %eax
 , 1		// pextrw $0x0, %xmm0, %eax
+, 1		// pextrw $0x0, %xmm0, %eax
 , 1		// pextrw $0x0, %mm0, %rax
+, 1		// pextrw $0x0, %xmm0, %rax
 , 1		// pextrw $0x0, %xmm0, %rax
 , 999		// phaddd %es:(%rax,%rax,1), %mm0
 , 1		// phaddd %mm0, %mm0
@@ -1627,6 +1689,8 @@
 , 999		// popw %es:(%rax,%rax,1)
 , 999		// popq %es:(%rax,%rax,1)
 , 999		// popw %ax
+, 999		// popw %ax
+, 999		// popq %rax
 , 999		// popq %rax
 , 999		// popcntw %es:(%rax,%rax,1), %ax
 , 1		// popcntw %ax, %ax
@@ -1634,8 +1698,8 @@
 , 1		// popcntl %eax, %eax
 , 999		// popcntq %es:(%rax,%rax,1), %rax
 , 1		// popcntq %rax, %rax
-, 999		// popf 
-, 999		// popfq 
+, 999		// popf
+, 999		// popfq
 , 999		// por %es:(%rax,%rax,1), %mm0
 , 1		// por %mm0, %mm0
 , 999		// por %es:(%rax,%rax,1), %xmm0
@@ -1792,9 +1856,11 @@
 , 999		// pushw %es:(%rax,%rax,1)
 , 999		// pushq %es:(%rax,%rax,1)
 , 999		// pushw %ax
+, 999		// pushw %ax
 , 999		// pushq %rax
-, 999		// pushf 
-, 999		// pushfq 
+, 999		// pushq %rax
+, 999		// pushf
+, 999		// pushfq
 , 999		// pxor %es:(%rax,%rax,1), %mm0
 , 1		// pxor %mm0, %mm0
 , 999		// pxor %es:(%rax,%rax,1), %xmm0
@@ -1868,6 +1934,8 @@
 , 999		// rep insl %ax, %es:(%rax,%rax,1)
 , 999		// rep insq %ax, %es:(%rax,%rax,1)
 , 999		// rep insb %ax, %es:(%rax,%rax,1)
+, 999		// rep insb %ax, %es:(%rax,%rax,1)
+, 1374		// rep lodsb %al
 , 1374		// rep lodsb %al
 , 1374		// rep lodsw %ax
 , 1374		// rep lodsl %eax
@@ -1876,32 +1944,39 @@
 , 999		// rep movsl %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// rep movsq %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// rep movsb %es:(%rax,%rax,1), %es:(%rax,%rax,1)
+, 999		// rep movsb %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// rep outsw %es:(%rax,%rax,1), %ax
 , 999		// rep outsl %es:(%rax,%rax,1), %ax
 , 999		// rep outsq %es:(%rax,%rax,1), %ax
+, 999		// rep outsb %es:(%rax,%rax,1), %ax
 , 999		// rep outsb %es:(%rax,%rax,1), %ax
 , 999		// rep stosw %es:(%rax,%rax,1)
 , 999		// rep stosl %es:(%rax,%rax,1)
 , 999		// rep stosq %es:(%rax,%rax,1)
 , 999		// rep stosb %es:(%rax,%rax,1)
+, 999		// rep stosb %es:(%rax,%rax,1)
 , 999		// repz cmpsw %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// repz cmpsl %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// repz cmpsq %es:(%rax,%rax,1), %es:(%rax,%rax,1)
+, 999		// repz cmpsb %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// repz cmpsb %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// repz scasw %es:(%rax,%rax,1)
 , 999		// repz scasl %es:(%rax,%rax,1)
 , 999		// repz scasq %es:(%rax,%rax,1)
 , 999		// repz scasb %es:(%rax,%rax,1)
+, 999		// repz scasb %es:(%rax,%rax,1)
 , 999		// repnz cmpsw %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// repnz cmpsl %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// repnz cmpsq %es:(%rax,%rax,1), %es:(%rax,%rax,1)
+, 999		// repnz cmpsb %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// repnz cmpsb %es:(%rax,%rax,1), %es:(%rax,%rax,1)
 , 999		// repnz scasw %es:(%rax,%rax,1)
 , 999		// repnz scasl %es:(%rax,%rax,1)
 , 999		// repnz scasq %es:(%rax,%rax,1)
 , 999		// repnz scasb %es:(%rax,%rax,1)
-, 0		// retq 
-, 0		// lretl 
+, 999		// repnz scasb %es:(%rax,%rax,1)
+, 0		// retq
+, 0		// lretl
 , 0		// retq $0x0
 , 0		// retq , $0x0
 , 999		// rolw %al, %es:(%rax,%rax,1)
@@ -1974,7 +2049,7 @@
 , 1		// rsqrtps %xmm0, %xmm0
 , 999		// rsqrtss %es:(%rax,%rax,1), %xmm0
 , 1		// rsqrtss %xmm0, %xmm0
-, 1		// sahf 
+, 1		// sahf
 , 999		// salw %al, %es:(%rax,%rax,1)
 , 999		// salw $0x0, %es:(%rax,%rax,1)
 , 999		// salw $0x0, %es:(%rax,%rax,1)
@@ -2052,31 +2127,38 @@
 , 1		// sbbw $0x0, %ax
 , 999		// sbbw %es:(%rax,%rax,1), %ax
 , 1		// sbbw %ax, %ax
+, 1		// sbbw %ax, %ax
 , 1		// sbbl $0x0, %eax
 , 1		// sbbl $0x0, %eax
 , 999		// sbbl %es:(%rax,%rax,1), %eax
+, 1		// sbbl %eax, %eax
 , 1		// sbbl %eax, %eax
 , 1		// sbbq $0x0, %rax
 , 1		// sbbq $0x0, %rax
 , 999		// sbbq %es:(%rax,%rax,1), %rax
 , 1		// sbbq %rax, %rax
+, 1		// sbbq %rax, %rax
 , 1		// sbbb $0x0, %al
 , 999		// sbbb %es:(%rax,%rax,1), %al
 , 1		// sbbb %al, %al
+, 1		// sbbb %al, %al
+, 1		// sbbb %ah, %al
 , 1		// sbbb %ah, %al
 , 1		// sbbq $0x0, %rax
 , 1		// sbbb $0x0, %ah
-, 999		// sbbb %es:(%rax,%rax,1), , 
+, 999		// sbbb %es:(%rax,%rax,1), ,
 , 1		// sbbb %al, %ah
+, 1		// sbbb %al, %ah
+, 1		// sbbb %ah, %ah
 , 1		// sbbb %ah, %ah
 , 999		// scas %es:(%rax,%rax,1)
 , 999		// scas %es:(%rax,%rax,1)
 , 999		// scas %es:(%rax,%rax,1)
 , 999		// scas %es:(%rax,%rax,1)
-, 999		// scasb 
-, 999		// scasl 
-, 999		// scasq 
-, 999		// scasw 
+, 999		// scasb
+, 999		// scasl
+, 999		// scasq
+, 999		// scasw
 , 999		// seta %es:(%rax,%rax,1)
 , 1		// seta %al
 , 1		// seta %ah
@@ -2167,7 +2249,7 @@
 , 999		// setz %es:(%rax,%rax,1)
 , 1		// setz %al
 , 1		// setz %ah
-, 1		// sfence 
+, 1		// sfence
 , 999		// shlw %al, %es:(%rax,%rax,1)
 , 999		// shlw $0x0, %es:(%rax,%rax,1)
 , 999		// shlw $0x0, %es:(%rax,%rax,1)
@@ -2266,18 +2348,18 @@
 , 1		// sqrtsd %xmm0, %xmm0
 , 999		// sqrtss %es:(%rax,%rax,1), %xmm0
 , 1		// sqrtss %xmm0, %xmm0
-, 1		// stc 
-, 999		// std 
-, 999		// sti 
+, 1		// stc
+, 999		// std
+, 999		// sti
 , 999		// stmxcsr %es:(%rax,%rax,1)
 , 999		// stosw %es:(%rax,%rax,1)
 , 999		// stosl %es:(%rax,%rax,1)
 , 999		// stosq %es:(%rax,%rax,1)
 , 999		// stosb %es:(%rax,%rax,1)
-, 999		// stosb 
-, 999		// stosl 
-, 999		// stosq 
-, 999		// stosw 
+, 999		// stosb
+, 999		// stosl
+, 999		// stosq
+, 999		// stosw
 , 1		// subb $0x0, %al
 , 1		// subw $0x0, %ax
 , 1		// subl $0x0, %eax
@@ -2297,22 +2379,29 @@
 , 1		// subw $0x0, %ax
 , 999		// subw %es:(%rax,%rax,1), %ax
 , 1		// subw %ax, %ax
+, 1		// subw %ax, %ax
 , 1		// subl $0x0, %eax
 , 1		// subl $0x0, %eax
 , 999		// subl %es:(%rax,%rax,1), %eax
+, 1		// subl %eax, %eax
 , 1		// subl %eax, %eax
 , 1		// subq $0x0, %rax
 , 1		// subq $0x0, %rax
 , 999		// subq %es:(%rax,%rax,1), %rax
 , 1		// subq %rax, %rax
+, 1		// subq %rax, %rax
 , 1		// subb $0x0, %al
 , 999		// subb %es:(%rax,%rax,1), %al
 , 1		// subb %al, %al
+, 1		// subb %al, %al
+, 1		// subb %ah, %al
 , 1		// subb %ah, %al
 , 1		// subq $0x0, %rax
 , 1		// subb $0x0, %ah
-, 999		// subb %es:(%rax,%rax,1), , 
+, 999		// subb %es:(%rax,%rax,1), ,
 , 1		// subb %al, %ah
+, 1		// subb %al, %ah
+, 1		// subb %ah, %ah
 , 1		// subb %ah, %ah
 , 999		// subpd %es:(%rax,%rax,1), %xmm0
 , 1		// subpd %xmm0, %xmm0
@@ -2322,13 +2411,13 @@
 , 1		// subsd %xmm0, %xmm0
 , 999		// subss %es:(%rax,%rax,1), %xmm0
 , 1		// subss %xmm0, %xmm0
-, 999		// swapgs 
-, 0		// syscall 
-, 999		// sysenter 
-, 999		// sysexit 
-, 999		// sysexit 
-, 0		// sysret 
-, 0		// sysret 
+, 999		// swapgs
+, 0		// syscall
+, 999		// sysenter
+, 999		// sysexit
+, 999		// sysexit
+, 0		// sysret
+, 0		// sysret
 , 1		// testb $0x0, %al
 , 1		// testw $0x0, %ax
 , 1		// testl $0x0, %eax
@@ -2364,7 +2453,7 @@
 , 1		// ucomisd %xmm0, %xmm0
 , 999		// ucomiss %es:(%rax,%rax,1), %xmm0
 , 1		// ucomiss %xmm0, %xmm0
-, 999		// ud2 
+, 999		// ud2
 , 999		// unpckhpd %es:(%rax,%rax,1), %xmm0
 , 1		// unpckhpd %xmm0, %xmm0
 , 999		// unpckhps %es:(%rax,%rax,1), %xmm0
@@ -2756,6 +2845,7 @@
 , 999		// vgatherqpd %xmm0, %es:(%rax,%rax,1), %xmm0
 , 999		// vgatherqpd %ymm0, %es:(%rax,%rax,1), %ymm0
 , 999		// vgatherqps %xmm0, %es:(%rax,%rax,1), %xmm0
+, 999		// vgatherqps %xmm0, %es:(%rax,%rax,1), %xmm0
 , 999		// vhaddpd %es:(%rax,%rax,1), %xmm0, %xmm0
 , 1		// vhaddpd %xmm0, %xmm0, %xmm0
 , 999		// vhaddpd %es:(%rax,%rax,1), %ymm0, %ymm0
@@ -2818,13 +2908,17 @@
 , 999		// vmovapd %ymm0, %es:(%rax,%rax,1)
 , 999		// vmovapd %es:(%rax,%rax,1), %xmm0
 , 1		// vmovapd %xmm0, %xmm0
+, 1		// vmovapd %xmm0, %xmm0
 , 999		// vmovapd %es:(%rax,%rax,1), %ymm0
+, 1		// vmovapd %ymm0, %ymm0
 , 1		// vmovapd %ymm0, %ymm0
 , 999		// vmovaps %xmm0, %es:(%rax,%rax,1)
 , 999		// vmovaps %ymm0, %es:(%rax,%rax,1)
 , 999		// vmovaps %es:(%rax,%rax,1), %xmm0
 , 1		// vmovaps %xmm0, %xmm0
+, 1		// vmovaps %xmm0, %xmm0
 , 999		// vmovaps %es:(%rax,%rax,1), %ymm0
+, 1		// vmovaps %ymm0, %ymm0
 , 1		// vmovaps %ymm0, %ymm0
 , 999		// vmovd %xmm0, %es:(%rax,%rax,1)
 , 1		// vmovd %xmm0, %eax
@@ -2838,13 +2932,17 @@
 , 999		// vmovdqa %ymm0, %es:(%rax,%rax,1)
 , 999		// vmovdqa %es:(%rax,%rax,1), %xmm0
 , 1		// vmovdqa %xmm0, %xmm0
+, 1		// vmovdqa %xmm0, %xmm0
 , 999		// vmovdqa %es:(%rax,%rax,1), %ymm0
+, 1		// vmovdqa %ymm0, %ymm0
 , 1		// vmovdqa %ymm0, %ymm0
 , 999		// vmovdqu %xmm0, %es:(%rax,%rax,1)
 , 999		// vmovdqu %ymm0, %es:(%rax,%rax,1)
 , 999		// vmovdqu %es:(%rax,%rax,1), %xmm0
 , 1		// vmovdqu %xmm0, %xmm0
+, 1		// vmovdqu %xmm0, %xmm0
 , 999		// vmovdqu %es:(%rax,%rax,1), %ymm0
+, 1		// vmovdqu %ymm0, %ymm0
 , 1		// vmovdqu %ymm0, %ymm0
 , 1		// vmovhlps %xmm0, %xmm0, %xmm0
 , 999		// vmovhpd %xmm0, %es:(%rax,%rax,1)
@@ -2872,12 +2970,16 @@
 , 999		// vmovntps %xmm0, %es:(%rax,%rax,1)
 , 999		// vmovntps %ymm0, %es:(%rax,%rax,1)
 , 999		// vmovq %xmm0, %es:(%rax,%rax,1)
+, 999		// vmovq %xmm0, %es:(%rax,%rax,1)
 , 1		// vmovq %xmm0, %rax
+, 999		// vmovq %es:(%rax,%rax,1), %xmm0
 , 999		// vmovq %es:(%rax,%rax,1), %xmm0
 , 1		// vmovq %rax, %xmm0
 , 1		// vmovq %xmm0, %xmm0
+, 1		// vmovq %xmm0, %xmm0
 , 999		// vmovsd %xmm0, %es:(%rax,%rax,1)
 , 999		// vmovsd %es:(%rax,%rax,1), %xmm0
+, 1		// vmovsd %xmm0, %xmm0, %xmm0
 , 1		// vmovsd %xmm0, %xmm0, %xmm0
 , 999		// vmovshdup %es:(%rax,%rax,1), %xmm0
 , 1		// vmovshdup %xmm0, %xmm0
@@ -2890,17 +2992,22 @@
 , 999		// vmovss %xmm0, %es:(%rax,%rax,1)
 , 999		// vmovss %es:(%rax,%rax,1), %xmm0
 , 1		// vmovss %xmm0, %xmm0, %xmm0
+, 1		// vmovss %xmm0, %xmm0, %xmm0
 , 999		// vmovupd %xmm0, %es:(%rax,%rax,1)
 , 999		// vmovupd %ymm0, %es:(%rax,%rax,1)
 , 999		// vmovupd %es:(%rax,%rax,1), %xmm0
 , 1		// vmovupd %xmm0, %xmm0
+, 1		// vmovupd %xmm0, %xmm0
 , 999		// vmovupd %es:(%rax,%rax,1), %ymm0
+, 1		// vmovupd %ymm0, %ymm0
 , 1		// vmovupd %ymm0, %ymm0
 , 999		// vmovups %xmm0, %es:(%rax,%rax,1)
 , 999		// vmovups %ymm0, %es:(%rax,%rax,1)
 , 999		// vmovups %es:(%rax,%rax,1), %xmm0
 , 1		// vmovups %xmm0, %xmm0
+, 1		// vmovups %xmm0, %xmm0
 , 999		// vmovups %es:(%rax,%rax,1), %ymm0
+, 1		// vmovups %ymm0, %ymm0
 , 1		// vmovups %ymm0, %ymm0
 , 999		// vmpsadbw $0x0, %es:(%rax,%rax,1), %xmm0, %xmm0
 , 1		// vmpsadbw $0x0, %xmm0, %xmm0, %xmm0
@@ -3113,11 +3220,14 @@
 , 1		// vpextrq $0x0, %xmm0, %rax
 , 999		// vpextrw $0x0, %xmm0, %es:(%rax,%rax,1)
 , 1		// vpextrw $0x0, %xmm0, %eax
+, 1		// vpextrw $0x0, %xmm0, %eax
+, 1		// vpextrw $0x0, %xmm0, %rax
 , 1		// vpextrw $0x0, %xmm0, %rax
 , 999		// vpgatherdd %xmm0, %es:(%rax,%rax,1), %xmm0
 , 999		// vpgatherdd %ymm0, %es:(%rax,%rax,1), %ymm0
 , 999		// vpgatherdq %xmm0, %es:(%rax,%rax,1), %xmm0
 , 999		// vpgatherdq %ymm0, %es:(%rax,%rax,1), %ymm0
+, 999		// vpgatherqd %xmm0, %es:(%rax,%rax,1), %xmm0
 , 999		// vpgatherqd %xmm0, %es:(%rax,%rax,1), %xmm0
 , 999		// vpgatherqq %xmm0, %es:(%rax,%rax,1), %xmm0
 , 999		// vpgatherqq %ymm0, %es:(%rax,%rax,1), %ymm0
@@ -3564,15 +3674,15 @@
 , 1		// vxorps %xmm0, %xmm0, %xmm0
 , 999		// vxorps %es:(%rax,%rax,1), %ymm0, %ymm0
 , 1		// vxorps %ymm0, %ymm0, %ymm0
-, 142		// vzeroall 
-, 1		// vzeroupper 
-, 1		// wait 
+, 142		// vzeroall
+, 1		// vzeroupper
+, 1		// wait
 , 999		// wrfsbase %eax
 , 999		// wrfsbase %rax
 , 999		// wrgsbase %eax
 , 999		// wrgsbase %rax
 , 999		// xabort $0x0
-, 1		// xacquire 
+, 1		// xacquire
 , 999		// xaddw %ax, %es:(%rax,%rax,1)
 , 999		// xaddl %eax, %es:(%rax,%rax,1)
 , 999		// xaddq %rax, %es:(%rax,%rax,1)
@@ -3586,7 +3696,7 @@
 , 1		// xaddb %al, %ah
 , 1		// xaddb %ah, %ah
 , 999		// xbegin 0
-, 999		// xbegin 
+, 999		// xbegin
 , 1		// xchgw %ax, %ax
 , 1		// xchgl %eax, %eax
 , 999		// xchgw %ax, %es:(%rax,%rax,1)
@@ -3597,23 +3707,31 @@
 , 1		// xchgw %ax, %ax
 , 999		// xchgw %es:(%rax,%rax,1), %ax
 , 1		// xchgw %ax, %ax
+, 1		// xchgw %ax, %ax
 , 1		// xchgl %eax, %eax
 , 999		// xchgl %es:(%rax,%rax,1), %eax
+, 1		// xchgl %eax, %eax
 , 1		// xchgl %eax, %eax
 , 999		// xchgq %es:(%rax,%rax,1), %rax
 , 1		// xchgq %rax, %rax
 , 1		// xchgq %rax, %rax
+, 1		// xchgq %rax, %rax
 , 999		// xchgb %es:(%rax,%rax,1), %al
 , 1		// xchgb %al, %al
+, 1		// xchgb %al, %al
+, 1		// xchgb %ah, %al
 , 1		// xchgb %ah, %al
 , 1		// xchgq %rax, %rax
-, 999		// xchgb %es:(%rax,%rax,1), , 
+, 999		// xchgb %es:(%rax,%rax,1), ,
+, 1		// xchgb %al, %ah
 , 1		// xchgb %al, %ah
 , 1		// xchgb %ah, %ah
-, 999		// xend 
-, 999		// xgetbv 
+, 1		// xchgb %ah, %ah
+, 999		// xend
+, 999		// xgetbv
 , 999		// xlat %es:(%rax,%rax,1)
-, 999		// xlatb 
+, 999		// xlatb
+, 999		// xlatb
 , 1		// xorb $0x0, %al
 , 1		// xorw $0x0, %ax
 , 1		// xorl $0x0, %eax
@@ -3633,28 +3751,35 @@
 , 1		// xorw $0x0, %ax
 , 999		// xorw %es:(%rax,%rax,1), %ax
 , 1		// xorw %ax, %ax
+, 1		// xorw %ax, %ax
 , 1		// xorl $0x0, %eax
 , 1		// xorl $0x0, %eax
 , 999		// xorl %es:(%rax,%rax,1), %eax
+, 1		// xorl %eax, %eax
 , 1		// xorl %eax, %eax
 , 1		// xorq $0x0, %rax
 , 1		// xorq $0x0, %rax
 , 999		// xorq %es:(%rax,%rax,1), %rax
 , 1		// xorq %rax, %rax
+, 1		// xorq %rax, %rax
 , 1		// xorb $0x0, %al
 , 999		// xorb %es:(%rax,%rax,1), %al
 , 1		// xorb %al, %al
+, 1		// xorb %al, %al
+, 1		// xorb %ah, %al
 , 1		// xorb %ah, %al
 , 1		// xorq $0x0, %rax
 , 1		// xorb $0x0, %ah
-, 999		// xorb %es:(%rax,%rax,1), , 
+, 999		// xorb %es:(%rax,%rax,1), ,
 , 1		// xorb %al, %ah
+, 1		// xorb %al, %ah
+, 1		// xorb %ah, %ah
 , 1		// xorb %ah, %ah
 , 999		// xorpd %es:(%rax,%rax,1), %xmm0
 , 1		// xorpd %xmm0, %xmm0
 , 999		// xorps %es:(%rax,%rax,1), %xmm0
 , 1		// xorps %xmm0, %xmm0
-, 1		// xrelease 
+, 1		// xrelease
 , 999		// xrstor %es:(%rax,%rax,1)
 , 999		// xrstor %es:(%rax,%rax,1)
 , 999		// xrstor %es:(%rax,%rax,1)
@@ -3673,4 +3798,4 @@
 , 999		// xsaveopt64 %es:(%rax,%rax,1)
 , 999		// xsaveopt64 %es:(%rax,%rax,1)
 , 999		// xsaveopt64 %es:(%rax,%rax,1)
-, 999		// xtest 
+, 999		// xtest
