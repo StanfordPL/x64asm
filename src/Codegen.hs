@@ -469,7 +469,7 @@ is_vex_encoded i = any (\x -> head x == 'V') $ opcode_terms i
 read_instr :: String -> Instr
 read_instr s = let (o:i:e:p:r:w:u:su:sp:m64:m32:f:a:pr:d:[]) = splitOn "\t" s in 
                    (Instr (trim o)  (trim i) 
-                          (trim e)  (trim p)
+                          e         (trim p)  --HACK: don't want to trim encoding field because we need offsets for xchg (BRC)
                           (trim r)  (trim w)  (trim u)
                           (trim su) (trim sp) (trim m64) (trim m32) 
                           (trim f) 
