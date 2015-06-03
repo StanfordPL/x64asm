@@ -114,3 +114,8 @@ Note that we have also added underscores to these mnemonics to maintain the one-
 #### Dataflow Values
 
 Some dataflow information is missing and/or incomplete. If you discover an error, please submit a bug report.
+
+#### Further documenation
+
+See SPREADSHEET.md for the tiny bit of documentation on the internals that we
+have, which is focused on the x86.csv file.
