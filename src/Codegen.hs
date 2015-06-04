@@ -248,7 +248,8 @@ rel_op _ = False
 
 -- Returns true for label operands
 label_op :: String -> Bool
-label_op "label" = True
+label_op "label8" = True
+label_op "label32" = True
 label_op _ = False
 
 -- Returns true for sreg operands
@@ -329,7 +330,8 @@ op2type "GS"       = "Gs"
 op2type "p66"      = "Pref66"
 op2type "pw"       = "PrefRexW"
 op2type "far"      = "Far"
-op2type "label"    = "Label"
+op2type "label8"   = "Label"
+op2type "label32"  = "Label"
 op2type "hint"     = "Hint"
 op2type o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
 
@@ -392,7 +394,8 @@ op2tag "GS"       = "GS"
 op2tag "p66"      = "PREF_66"
 op2tag "pw"       = "PREF_REX_W"
 op2tag "far"      = "FAR"
-op2tag "label"    = "LABEL"
+op2tag "label8"   = "LABEL"
+op2tag "label32"  = "LABEL"
 op2tag "hint"     = "HINT"
 op2tag o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
 
@@ -664,7 +667,10 @@ insert_label_variant :: Instr -> [Instr]
 insert_label_variant i
   | "rel32" `elem` (operands i) =
     [i
-    ,i{instruction=(subRegex (mkRegex "rel32") (instruction i) "label")}]
+    ,i{instruction=(subRegex (mkRegex "rel32") (instruction i) "label32")}]
+  | "rel8" `elem` (operands i) =
+    [i
+    ,i{instruction=(subRegex (mkRegex "rel8") (instruction i) "label8")}]
 	| otherwise = [i]
 
 -- Inserts a hint variant for conditional jumps
@@ -686,8 +692,8 @@ insert_missing is = concat $ map insert_label_variant $
 parse_instrs :: String -> IO [Instr]
 parse_instrs file = do f <- readFile file
                        return $ all f
-  where all = insert_missing .
-              remove_ambiguity . 
+  where all = remove_ambiguity . 
+              insert_missing .
               fix_rex_rows . 
               fix_ops . 
               flatten_instrs . 
@@ -1081,6 +1087,7 @@ rex_prefix :: Instr -> String
 rex_prefix i 
   | op_en i == "O" = "rex(arg0," ++ (implied_rex i) ++ ");\n"
   | op_en i == "OI" = "rex(arg0," ++ (implied_rex i) ++ ");\n"
+  | op_en i == " O" = "rex(arg1," ++ (implied_rex i) ++ ");\n"
   | rm_args i /= "" = "rex(" ++ (rm_args i) ++ "," ++ (implied_rex i) ++ ");\n"
   | implied_rex i /= "(uint8_t)0x00" = "rex(" ++ (implied_rex i) ++ ");\n"
   | otherwise = "// No REX Prefix\n"
@@ -1162,7 +1169,10 @@ disp_imm :: Instr -> String
 disp_imm i 
   | op_en i == "II" = "disp_imm(arg0,arg1);\n"
   | otherwise = case disp_imm_index i of
-                     (Just idx) -> "disp_imm(arg" ++ (show idx) ++ ");\n"
+                     (Just idx) -> let operand = (operands i) !! idx
+                                   in if (operand == "label8") 
+                                      then "disp_imm_label8(arg" ++ (show idx) ++ ");\n"
+                                      else "disp_imm(arg" ++ (show idx) ++ ");\n"
                      Nothing -> "// No Displacement/Immediate\n"
 
 -- Emits code for vex immediate byte
@@ -1265,7 +1275,7 @@ assm_cases is = intercalate "\n" $ map assm_case is
 op_order :: [String]
 op_order = ["hint",
   "0","1","3","imm8","imm16","imm32","imm64",
-  "label",
+  "label32", "label8",
   "p66","pw","far",
   "rh","AL","CL","r8","AX","DX","r16","EAX","r32","RAX","r64",
   "rel8","rel32",

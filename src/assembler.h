@@ -96,23 +96,36 @@ public:
   }
 
   /** Finishes compiling a function. Replaces relative placeholders by
-      actual values, and deletes references after doing so.
-  */
-  void finish() {
+      actual values, and deletes references after doing so.  Returns 
+      'false' if an 8-byte displacement was unable to fit; and 'true'
+      otherwise. */
+  bool finish() {
     std::vector<std::pair<size_t, uint64_t>> unresolved;
 
     for (const auto & l : fxn_->label_rels_) {
-      const auto pos = l.first;
+      const size_t pos = l.first >> 1;
+      const bool size8 = l.first & 1;
       const auto itr = fxn_->label_defs_.find(l.second);
 
       if (itr == fxn_->label_defs_.end()) {
         unresolved.push_back(l);
       } else {
-        fxn_->emit_long(itr->second-pos-4, pos);
+        if(size8) {
+          // do a check to make sure the value fits
+          size_t disp = itr->second - pos - 1;
+          if(disp < 0x80 || disp >= 0xffffff80) {
+            fxn_->emit_byte(disp & 0xff, pos);
+          } else {
+            return false;
+          }
+        } else {
+          fxn_->emit_long(itr->second-pos-4, pos);
+        }
       }
     }
 
     fxn_->label_rels_ = unresolved;
+    return true;
   }
 
   /** Assembles an instruction. This method will print a hex dump to
@@ -260,9 +273,14 @@ private:
       bytes.
   */
   void disp_imm(Label l) {
-    fxn_->label_rels_.push_back(std::make_pair(fxn_->size(), l.val_));
+    fxn_->label_rels_.push_back(std::make_pair((fxn_->size()) << 1, l.val_));
     fxn_->emit_long(0);
   }
+  void disp_imm_label8(Label l) {
+    fxn_->label_rels_.push_back(std::make_pair(((fxn_->size()) << 1) + 1, l.val_));
+    fxn_->emit_byte(0);
+  }
+
 
   /** Emits an eight-byte memory offset. */
   void disp_imm(const Moffs& m) {
