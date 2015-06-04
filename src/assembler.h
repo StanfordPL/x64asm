@@ -67,12 +67,12 @@ public:
   }
 
   /** Compiles a code into a preallocated function. */
-  void assemble(Function& fxn, const Code& code) {
+  bool assemble(Function& fxn, const Code& code) {
     start(fxn);
     for (const auto & instr : code) {
       assemble(instr);
     }
-    finish();
+    return finish();
   }
 
   /** Returns the number of bytes in the hex encoding of this instruction */

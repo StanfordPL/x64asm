@@ -261,18 +261,24 @@ istream& Instruction::read_att(istream& is) {
 
   for(auto entry : possible_encodings) {
 
+    cout << "Trying opcode " << (size_t)entry.first << endl;
+
     if(expected_opcode && (uint64_t)entry.first != expected_opcode) {
       continue;
     }
 
-    if(entry.second.size() != operands.size())
+    if(entry.second.size() != operands.size()) {
+      cout << "  Wrong # args" << endl;
       continue;
+    }
 
     bool works = true;
     for(size_t i = 0; i < entry.second.size(); ++i)
       works &= is_a(&operands[i], entry.second[i]);
-    if(!works)
+    if(!works) {
+      cout << "  Bad args" << endl;
       continue;
+    }
 
     bool poor = false;
     for(size_t i = 0; i < entry.second.size(); ++i) {
@@ -284,17 +290,21 @@ istream& Instruction::read_att(istream& is) {
 
     if(expected_size) {
       Assembler assm;
-      Code c({*this});
-      auto fxn = assm.assemble(c);
-      size_t actual = fxn.size();
-      if(actual != expected_size)
+      size_t actual = assm.hex_size(*this);
+      if(actual != expected_size) {
+        cout << "  Bad hex size" << endl;
         continue;
+      }
     }
 
-    if(!poor)
+    if(!poor) {
+      cout << "  Found good encoding" << endl;
       return is;
-    else 
+    }
+    else  {
+      cout << "  Found poor encoding" << endl;
       found_poor = true;
+    }
   }
 
   if(!found_poor) {

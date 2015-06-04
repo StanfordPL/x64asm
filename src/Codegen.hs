@@ -1275,7 +1275,7 @@ assm_cases is = intercalate "\n" $ map assm_case is
 op_order :: [String]
 op_order = ["hint",
   "0","1","3","imm8","imm16","imm32","imm64",
-  "label32", "label8",
+  "label8", "label32",
   "p66","pw","far",
   "rh","AL","CL","r8","AX","DX","r16","EAX","r32","RAX","r64",
   "rel8","rel32",
@@ -1307,9 +1307,9 @@ compare_ops (x:xs) (y:ys) = case compare_op x y of
 -- Compare instructions based on operands, defer to preference info
 compare_instr :: Instr -> Instr -> Ordering
 compare_instr i1 i2
-  | (pref i1 == "YES") && (pref i2 == "YES") = EQ
-  | (pref i1 == "YES") = LT
-  | (pref i2 == "YES") = GT
+  | pref i1 == pref i2 = EQ
+  | pref i2 == "" = GT
+  | pref i1 == "" = LT
   | otherwise = compare_ops (operands i1) (operands i2)
 
 -- Read AT&T code
