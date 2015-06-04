@@ -1081,6 +1081,7 @@ rex_prefix :: Instr -> String
 rex_prefix i 
   | op_en i == "O" = "rex(arg0," ++ (implied_rex i) ++ ");\n"
   | op_en i == "OI" = "rex(arg0," ++ (implied_rex i) ++ ");\n"
+  | op_en i == " O" = "rex(arg1," ++ (implied_rex i) ++ ");\n"
   | rm_args i /= "" = "rex(" ++ (rm_args i) ++ "," ++ (implied_rex i) ++ ");\n"
   | implied_rex i /= "(uint8_t)0x00" = "rex(" ++ (implied_rex i) ++ ");\n"
   | otherwise = "// No REX Prefix\n"
