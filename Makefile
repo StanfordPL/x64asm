@@ -42,7 +42,8 @@ OBJ=src/assembler.o \
 LIB=lib/libx64asm.a
 
 BIN=bin/asm \
-		bin/fuzz
+		bin/fuzz \
+		bin/build_nacl_whitelist
 
 ##### TOP LEVEL TARGETS (release is default)
 
@@ -53,7 +54,7 @@ debug:
 debug_flex:
 	$(MAKE) -C . erthing FLEXOPS="-d" BISONOPS="-t --report=state" OPT="-g"
 release:
-	$(MAKE) -C . erthing OPT="-DNDEBUG -O3"
+	$(MAKE) -C . erthing OPT="-DNDEBUG -O0 -fno-stack-protector"
 profile:
 	$(MAKE) -C . erthing OPT="-DNDEBUG -O3 -pg"
 

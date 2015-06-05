@@ -952,6 +952,19 @@ att_mnemonic i = "\"" ++ (att i) ++ "\""
 att_mnemonics :: [Instr] -> String
 att_mnemonics is = intercalate "\n" $ map (", "++) $ map att_mnemonic is
 
+-- Gets the intel mnemonic for an instruction
+intel :: Instr -> String
+intel i = low $ takeWhile (\x -> x /= ' ') (instruction i)
+
+-- Converts an instruction to a printable intel mnemonic
+intel_mnemonic :: Instr -> String
+intel_mnemonic i = "\"" ++ (intel i) ++ "\""
+
+-- Converts all instructions to printable intel mnemonics
+intel_mnemonics :: [Instr] -> String
+intel_mnemonics is = intercalate "\n" $ map (", "++) $ map intel_mnemonic is
+
+
 -- Common Assembler strings
 --------------------------------------------------------------------------------
 
@@ -1333,6 +1346,21 @@ att_row is = " \t{\"" ++ (mn is) ++ "\", {\n\t\t " ++ (body is) ++ "\n}}"
 att_table :: [Instr] -> String
 att_table is = intercalate "\n, " $ map att_row $ att_group is
 
+-- Group instructions by intel mnemonic
+intel_group :: [Instr] -> [[Instr]]
+intel_group is = groupBy (\x y -> (intel x) == (intel y)) is'
+  where is' = att_sort is
+
+-- Generates a row in the intel parse table
+intel_row :: [Instr] -> String
+intel_row is = " \t{\"" ++ (mn is) ++ "\", {\n\t\t " ++ (body is) ++ "\n}}"
+  where mn is = (intel (head is))
+        body is = intercalate "\n\t\t," $ map att_row_elem $ sortBy compare_instr is
+
+-- Generates the entire intel parse table
+intel_table :: [Instr] -> String
+intel_table is = intercalate "\n, " $ map intel_row $ intel_group is
+
 -- Write code
 --------------------------------------------------------------------------------
 
@@ -1354,8 +1382,9 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "flag.table"        $ flag_table is
                    writeFile "opcode.enum"       $ opcode_enums is
                    writeFile "opcode.att"        $ att_mnemonics is
+                   writeFile "opcode.intel"      $ intel_mnemonics is
+                   writeFile "intel.table"       $ intel_table is		
                    writeFile "att.table"         $ att_table is		
-
 --------------------------------------------------------------------------------
 -- Main (read the spreadsheet and write some code)
 --------------------------------------------------------------------------------

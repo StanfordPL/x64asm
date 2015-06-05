@@ -1,8 +1,9 @@
 src/*.table
 *.o
 src/*.output
-src/opcode.att
 src/opcode.enum
+src/opcode.att
+src/opcode.intel
 src/att.output
 src/att.tab.c
 src/att.tab.h
