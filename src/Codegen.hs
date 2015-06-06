@@ -764,6 +764,18 @@ opcode_enum i = name ++ pref_name
 opcode_enums :: [Instr] -> String
 opcode_enums is = to_table is opcode_enum
 
+
+-- Converts an instruction into an Opcode name
+-- This is identical to enum values, but with at&t syntax
+opcode_name :: Instr -> String
+opcode_name i = intercalate "_" $ (mnem i) : (ops i)
+  where mnem i = att i
+        ops i = map (up . op2type) (operands i)
+
+-- Converts all instructions to names of Opcodes
+opcode_names :: [Instr] -> String
+opcode_names is = to_table is (\x -> low $ "\"" ++ opcode_name x ++ "\"")
+
 -- Instruction
 --------------------------------------------------------------------------------
 
@@ -1355,6 +1367,7 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "opcode.enum"       $ opcode_enums is
                    writeFile "opcode.att"        $ att_mnemonics is
                    writeFile "att.table"         $ att_table is		
+                   writeFile "opcode.names"      $ opcode_names is
 
 --------------------------------------------------------------------------------
 -- Main (read the spreadsheet and write some code)

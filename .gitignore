@@ -3,6 +3,7 @@ src/*.table
 src/*.output
 src/opcode.att
 src/opcode.enum
+src/opcode.names
 src/att.output
 src/att.tab.c
 src/att.tab.h
