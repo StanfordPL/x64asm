@@ -26,9 +26,9 @@ namespace {
 constexpr array<const char*, X64ASM_NUM_OPCODES> att_() {
   return {
     // Internal mnemonics
-    "<label definition>"
+    "<label>"
     // Auto-generated mnemonics
-    #include "src/opcode.att"
+    #include "src/opcode.names"
   };
 }
 
@@ -41,4 +41,20 @@ string opcode_write_att(Opcode o) {
   return string(att_()[o]);
 }
 
+/** Read the string representation of an opcode */
+istream& opcode_read_att(istream& is, x64asm::Opcode& op) {
+  string s;
+  is >> s;
+  for(size_t i = 0; i < X64ASM_NUM_OPCODES; ++i) {
+    if(string(att_()[i]) == s) {
+      op = (Opcode)i;
+      break;
+    }
+  }
+  return is;
+}
+
 } // namespace x64asm
+
+
+

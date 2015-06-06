@@ -764,6 +764,10 @@ opcode_enum i = intercalate "_" $ (mnem i) : (ops i)
 opcode_enums :: [Instr] -> String
 opcode_enums is = to_table is opcode_enum
 
+-- Converts all instructions to names of Opcodes
+opcode_names :: [Instr] -> String
+opcode_names is = to_table is (\x -> low $ "\"" ++ opcode_enum x ++ "\"")
+
 -- Instruction
 --------------------------------------------------------------------------------
 
@@ -1350,6 +1354,7 @@ write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
                    writeFile "opcode.enum"       $ opcode_enums is
                    writeFile "opcode.att"        $ att_mnemonics is
                    writeFile "att.table"         $ att_table is		
+                   writeFile "opcode.names"      $ opcode_names is
 
 --------------------------------------------------------------------------------
 -- Main (read the spreadsheet and write some code)
