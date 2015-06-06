@@ -17,9 +17,11 @@ limitations under the License.
 #include <array>
 
 #include "src/opcode.h"
+#include "src/fail.h"
 
 using namespace std;
 using namespace x64asm;
+using namespace cpputil;
 
 namespace {
 
@@ -45,11 +47,16 @@ string opcode_write_att(Opcode o) {
 istream& opcode_read_att(istream& is, x64asm::Opcode& op) {
   string s;
   is >> s;
+  bool found = true;
   for(size_t i = 0; i < X64ASM_NUM_OPCODES; ++i) {
     if(string(att_()[i]) == s) {
       op = (Opcode)i;
+      found = true;
       break;
     }
+  }
+  if(!found) {
+    fail(is) << "Could not find opcode named '" << s << "'" << endl;
   }
   return is;
 }
