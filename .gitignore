@@ -4,6 +4,7 @@ src/*.output
 src/opcode.enum
 src/opcode.att
 src/opcode.intel
+src/opcode.names
 src/att.output
 src/att.tab.c
 src/att.tab.h

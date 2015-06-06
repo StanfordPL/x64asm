@@ -33,8 +33,25 @@ enum Opcode : int32_t {
 };
 
 std::string opcode_write_att(Opcode o);
+std::ostream& opcode_write_text(std::ostream& os, const x64asm::Opcode&);
+std::istream& opcode_read_text(std::istream& is, x64asm::Opcode&);
 
 } // namespace x64asm
+
+namespace std {
+
+/** ostream overload. */
+inline ostream& operator<<(ostream& os, const x64asm::Opcode& op) {
+  return opcode_write_text(os, op);
+}
+
+/** ostream overload. */
+inline istream& operator>>(istream& is, x64asm::Opcode& op) {
+  return opcode_read_text(is, op);
+}
+
+} // namespace std
+
 
 #define X64ASM_NUM_OPCODES x64asm::Opcode::NUM_OPCODES
 

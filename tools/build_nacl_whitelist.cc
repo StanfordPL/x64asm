@@ -220,6 +220,7 @@ std::vector<Type> parse_operand(string s) {
 /** A simple test program. Reads att syntax and prints human readable hex. */
 int main(int argc, char** argv) {
   string line;
+  cout << "{";
   while(cin.good()) {
     getline(cin, line);
     
@@ -239,21 +240,21 @@ int main(int argc, char** argv) {
     string name;
     ss >> name;
 
-    cout << "Found " << name << endl;
+    //cout << "Found " << name << endl;
 
     vector<Opcode> opcodes;
     vector<vector<Type>> operands;
     while(ss.good()) {
       string op;
       ss >> op;
-      cout << "  Read operand " << op << endl;
+      //cout << "  Read operand " << op << endl;
       vector<Type> operand_options = parse_operand(op);
       operands.push_back(operand_options);
-      cout << "  ";
-      for(Type u : operand_options) {
-        cout << "  " << (uint64_t)u;
-      }
-      cout << endl;
+      //cout << "  ";
+      //for(Type u : operand_options) {
+        //cout << "  " << (uint64_t)u;
+      //}
+      //cout << endl;
     }
 
     // Find all matching opcodes
@@ -284,13 +285,15 @@ int main(int argc, char** argv) {
       }
 
       if(entry_works) {
-        cout << "  opcode " << (uint64_t)entry.first << endl;
+        //cout << "  opcode " << (uint64_t)entry.first << endl;
+        cout << " " << entry.first;
         opcodes.push_back(entry.first);
       }
     }
 
 
   }
+  cout << " }" << endl;
 
   return 0;
 }
