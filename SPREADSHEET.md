@@ -28,7 +28,7 @@ are obscure and rarely come up when using STOKE, and they aren't listed here.
  * rel8, rel16, rel32: a relative offset for a jump target
  * AL, AX, EAX, RAX, CL, DX, XMM0: These are specific registers
 
-BRC is not sure what "Op/En" is about.
+The "Op/En" column specifies how the operands will be encoded.
 
 "Properties" lists, for each operand, if it's read to, written to, or both.  Each operand gets a 'tag', and the tags are comma-separated.  Possible tags include,
  * R: this operand must be read
@@ -45,16 +45,13 @@ undefined in excess of the operands themselves.  Entries in these colums are spa
  * XMM/YMM registers: XMM0...XMM15, YMM0...YMM15
  * Lowercase means "may", uppercase means "must"
 
-The "Useful" column is useless, as far as BRC can tell.
-
-The "Protected", "64-bit Mode", "Compact/32-bit Legacy Mode" columns reflect
-the manual.  I think these tell us some instructions we cannot use.
+The "Useful", "Protected", "64-bit Mode", "Compact/32-bit Legacy Mode" columns are used to filter which instructions are actually used.
 
 The "CPUID Feature Flags" tell us what flags we need on the CPU to run the instruction.
 
 The "AT&T Mnemonic" gives the ATT name for the instruction.
 
-I don't know if we use the "Preferred" column.
+The "Preferred" column is now legacy.  With small changes to codegen it would be possible to use this column to prioritize some instruction encodings over others.
 
 "Description" describes what the instruction does.
 

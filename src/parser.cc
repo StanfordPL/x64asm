@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 
+#include "src/assembler.h"
 #include "src/constants.h"
 #include "src/fail.h"
 #include "src/instruction.h"
@@ -242,6 +243,14 @@ istream& Instruction::read_att(istream& is) {
     expected_opcode = strtoull(comment.c_str() + opc_pos + 4, NULL, 10);
   }
 
+  size_t size_pos = comment.find("SIZE=");
+  uint64_t expected_size = 0;
+  if(size_pos != string::npos) {
+    expected_size = strtoull(comment.c_str() + size_pos + 5, NULL, 10);
+  }
+
+
+
   // See if we can match this up to an instruction
   bool found_poor = false;
   Row possible_encodings = att_table[opcode];
@@ -272,6 +281,15 @@ istream& Instruction::read_att(istream& is) {
     }
 
     set_opcode(entry.first);
+
+    if(expected_size) {
+      Assembler assm;
+      Code c({*this});
+      auto fxn = assm.assemble(c);
+      size_t actual = fxn.size();
+      if(actual != expected_size)
+        continue;
+    }
 
     if(!poor)
       return is;

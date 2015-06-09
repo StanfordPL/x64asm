@@ -180,7 +180,7 @@ public:
   }
   /** Returns true if this instruction is a jmp or jmpcc to an indirect pointer. */
   bool is_any_indirect_jump() const {
-    return opcode_ >= JMP_FARPTR1616 && opcode_ <= JMP_M64;
+    return opcode_ >= JMP_FARPTR1616 && opcode_ <= JMP_R64;
   }
   /** Returns true if this instruction causes a control flow jump. */
   bool is_any_jump() const {
@@ -299,7 +299,7 @@ public:
   }
   /** Is this a variant of the movdqu instruction? */
   bool is_movdqu() const {
-    return opcode_ >= MOVDQU_M128_XMM && opcode_ <= MOVDQU_XMM_XMM;
+    return opcode_ >= MOVDQU_M128_XMM && opcode_ <= MOVDQU_XMM_XMM_1;
   }
   /** Is this a variant of the movs instruction? */
   bool is_movs() const {
@@ -308,11 +308,11 @@ public:
   }
   /** Is this a variant of the movupd instruction? */
   bool is_movupd() const {
-    return opcode_ >= MOVUPD_M128_XMM && opcode_ <= MOVUPD_XMM_XMM;
+    return opcode_ >= MOVUPD_M128_XMM && opcode_ <= MOVUPD_XMM_XMM_1;
   }
   /** Is this a variant of the movups instruction? */
   bool is_movups() const {
-    return opcode_ >= MOVUPS_M128_XMM && opcode_ <= MOVUPS_XMM_XMM;
+    return opcode_ >= MOVUPS_M128_XMM && opcode_ <= MOVUPS_XMM_XMM_1;
   }
   /** Is this a variant of the nop instruction? */
   bool is_nop() const {
@@ -328,7 +328,7 @@ public:
   }
   /** Is this a variant of the pop instruction? */
   bool is_pop() const {
-    return opcode_ >= POP_FS && opcode_ <= POP_R64;
+    return opcode_ >= POP_FS && opcode_ <= POP_R64_1;
   }
   /** Is this a variant of the popf instruction? */
   bool is_popf() const {
@@ -340,7 +340,7 @@ public:
   }
   /** Is this a variant of the push instruction? */
   bool is_push() const {
-    return opcode_ >= PUSH_FS && opcode_ <= PUSH_R64;
+    return opcode_ >= PUSH_FS && opcode_ <= PUSH_R64_1;
   }
   /** Is this a variant of the pushf instruction? */
   bool is_pushf() const {
