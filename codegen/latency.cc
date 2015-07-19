@@ -341,7 +341,12 @@ time_t get_latency(Function& fxn, const Instruction& instr, time_t baseline, boo
     return 999;
   } else {
     const auto m = measure_instruction(fxn, instr);
-    return m > baseline ? (m - baseline)/instr_count() : 1;
+    if(m > baseline) {
+      const auto score = (m-baseline)/(instr_count()*10);
+      return score > 0 ? score : 1;
+    } else {
+      return 1;
+    }
   }
 }
 
