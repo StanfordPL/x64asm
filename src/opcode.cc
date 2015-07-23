@@ -63,7 +63,7 @@ ostream& opcode_write_text(ostream& os, const x64asm::Opcode& op) {
 istream& opcode_read_text(istream& is, x64asm::Opcode& op) {
   string s;
   is >> s;
-  bool found = true;
+  bool found = false;
   for(size_t i = 0; i < X64ASM_NUM_OPCODES; ++i) {
     if(string(names_()[i]) == s) {
       op = (Opcode)i;
