@@ -68,7 +68,8 @@ public:
     head_ = buffer_ + rhs.size();
 
     label_defs_ = rhs.label_defs_;
-    label_rels_ = rhs.label_rels_;
+    label8_rels_ = rhs.label8_rels_;
+    label32_rels_ = rhs.label32_rels_;
   }
   /** Move constructor. */
   Function(Function&& rhs) {
@@ -77,7 +78,8 @@ public:
     head_ = rhs.head_;
 
     label_defs_ = std::move(rhs.label_defs_);
-    label_rels_ = std::move(rhs.label_rels_);
+    label8_rels_ = std::move(rhs.label8_rels_);
+    label32_rels_ = std::move(rhs.label32_rels_);
 
     rhs.buffer_ = (unsigned char*)-1;
   }
@@ -176,7 +178,8 @@ public:
   void clear() {
     head_ = buffer_;
     label_defs_.clear();
-    label_rels_.clear();
+    label8_rels_.clear();
+    label32_rels_.clear();
   }
 
   /** Emits a byte at and increments the write pointer. */
@@ -323,8 +326,10 @@ private:
 
   /** Maps label definitions to code position. */
   std::unordered_map<uint64_t, size_t> label_defs_;
-  /** Keeps track of unresolved label references. */
-  std::vector<std::pair<size_t, uint64_t>> label_rels_;
+  /** Keeps track of unresolved 8-bit label references. */
+  std::vector<std::pair<size_t, uint64_t>> label8_rels_;
+  /** Keeps track of unresolved 32-bit label references. */
+  std::vector<std::pair<size_t, uint64_t>> label32_rels_;
 
   /** Returns the number of bytes remaining in the internal buffer. */
   size_t remaining() const {

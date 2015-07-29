@@ -24,7 +24,7 @@ void Linker::link(Function& fxn) {
   // Record this function if it requires linking. Remember, the assembler
   // will remove label_rels_ whenever they are resolved. So if anything is
   // left in this map, it must require the linker.
-  if (!fxn.label_rels_.empty()) {
+  if (!fxn.label8_rels_.empty() || !fxn.label32_rels_.empty()) {
     fxns_.push_back(&fxn);
   }
 
@@ -43,7 +43,7 @@ void Linker::link(Function& fxn) {
 
 void Linker::finish() {
   for (auto fxn : fxns_) {
-    for (const auto& l : fxn->label_rels_) {
+    for (const auto& l : fxn->label32_rels_) {
       const auto pos = l.first;
 
       const auto itr = label_defs_.find(l.second);
@@ -58,6 +58,27 @@ void Linker::finish() {
       const auto rel = there - here - 4;
 
       fxn->emit_long(rel, pos);
+    }
+
+    for (const auto& l : fxn->label8_rels_) {
+      const auto pos = l.first;
+
+      const auto itr = label_defs_.find(l.second);
+      if (itr == label_defs_.end()) {
+        undef_symbol_ = true;
+        us_symbol_ = l.second;
+        return;
+      }
+
+      const auto here = (uint64_t)fxn->data() + pos;
+      const auto there = itr->second;
+      const auto rel = there - here - 1;
+
+      if(rel > 0x7f && rel < 0xffffffffffffff80) {
+        jump_too_far_ = true;
+        return;
+      }
+      fxn->emit_byte(rel, pos);
     }
   }
 }

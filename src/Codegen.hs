@@ -232,6 +232,12 @@ imm_op "imm32" = True
 imm_op "imm64" = True
 imm_op _ = False
 
+-- Returns true for label operands
+label_op :: String -> Bool
+label_op "label8" = True
+label_op "label32" = True
+label_op _ = False
+
 -- Returns true for moffs operands
 moffs_op :: String -> Bool
 moffs_op "moffs8" = True
@@ -245,11 +251,6 @@ rel_op :: String -> Bool
 rel_op "rel8" = True
 rel_op "rel32" = True
 rel_op _ = False
-
--- Returns true for label operands
-label_op :: String -> Bool
-label_op "label" = True
-label_op _ = False
 
 -- Returns true for sreg operands
 sreg_op :: String -> Bool
@@ -329,7 +330,8 @@ op2type "GS"       = "Gs"
 op2type "p66"      = "Pref66"
 op2type "pw"       = "PrefRexW"
 op2type "far"      = "Far"
-op2type "label"    = "Label"
+op2type "label32"  = "Label"
+op2type "label8"   = "Label"
 op2type "hint"     = "Hint"
 op2type o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
 
@@ -392,7 +394,8 @@ op2tag "GS"       = "GS"
 op2tag "p66"      = "PREF_66"
 op2tag "pw"       = "PREF_REX_W"
 op2tag "far"      = "FAR"
-op2tag "label"    = "LABEL"
+op2tag "label8"   = "LABEL"
+op2tag "label32"  = "LABEL"
 op2tag "hint"     = "HINT"
 op2tag o = error $ "Unrecognized operand type: \"" ++ o ++ "\""
 
@@ -664,7 +667,10 @@ insert_label_variant :: Instr -> [Instr]
 insert_label_variant i
   | "rel32" `elem` (operands i) =
     [i
-    ,i{instruction=(subRegex (mkRegex "rel32") (instruction i) "label")}]
+    ,i{instruction=(subRegex (mkRegex "rel32") (instruction i) "label32")}]
+  | "rel8" `elem` (operands i) =
+    [i
+    ,i {instruction=(subRegex (mkRegex "rel8") (instruction i) "label8")}]
 	| otherwise = [i]
 
 -- Inserts a hint variant for conditional jumps
@@ -686,8 +692,8 @@ insert_missing is = concat $ map insert_label_variant $
 parse_instrs :: String -> IO [Instr]
 parse_instrs file = do f <- readFile file
                        return $ all f
-  where all = insert_missing .
-              remove_ambiguity . 
+  where all = remove_ambiguity .
+              insert_missing . 
               fix_rex_rows . 
               fix_ops . 
               flatten_instrs . 
@@ -1168,7 +1174,7 @@ mod_rm_sib i = case rm_args i of
 -- Does this instruction have a displacement or immediate operand?
 disp_imm_index :: Instr -> Maybe Int
 disp_imm_index i = findIndex disp_imm_op (operands i)
-  where disp_imm_op o = imm_op o || moffs_op o || rel_op o || label_op o
+  where disp_imm_op o = imm_op o || moffs_op o || rel_op o
 
 -- Emits code for displacement or immediate bytes
 disp_imm :: Instr -> String
@@ -1177,6 +1183,14 @@ disp_imm i
   | otherwise = case disp_imm_index i of
                      (Just idx) -> "disp_imm(arg" ++ (show idx) ++ ");\n"
                      Nothing -> "// No Displacement/Immediate\n"
+
+-- Emits code for label displacement
+disp_label :: Instr -> String
+disp_label i = case (findIndex label_op (operands i)) of
+              (Just idx) -> case (operands i) !! idx of
+                "label8" -> "disp_label8(arg" ++ (show idx) ++ ");\n"
+                "label32" -> "disp_label32(arg" ++ (show idx) ++ ");\n"
+              Nothing -> "// No label displacement\n"
 
 -- Emits code for vex immediate byte
 vex_imm :: Instr -> String
@@ -1210,6 +1224,7 @@ assm_vex_defn i = "  // VEX-Encoded Instruction: \n\n" ++
                   "  " ++ vex_opcode i ++
                   "  " ++ mod_rm_sib i ++
                   "  " ++ disp_imm i ++
+                  "  " ++ disp_label i ++
                   "  " ++ vex_imm i ++
 									"  \n"
 
@@ -1225,6 +1240,7 @@ assm_oth_defn i = "  // Non-VEX-Encoded Instruction: \n\n" ++
                   "  " ++ non_vex_opcode i ++
                   "  " ++ mod_rm_sib i ++
                   "  " ++ disp_imm i ++
+                  "  " ++ disp_label i ++
                   "  \n"
 
 -- Assembler src definition
@@ -1278,7 +1294,7 @@ assm_cases is = intercalate "\n" $ map assm_case is
 op_order :: [String]
 op_order = ["hint",
   "0","1","3","imm8","imm16","imm32","imm64",
-  "label",
+  "label32", "label8",
   "p66","pw","far",
   "rh","AL","CL","r8","AX","DX","r16","EAX","r32","RAX","r64",
   "rel8","rel32",

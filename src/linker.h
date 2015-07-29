@@ -31,6 +31,7 @@ public:
   void start() {
     multiple_def_ = false;
     undef_symbol_ = false;
+    jump_too_far_ = false;
     label_defs_.clear();
     fxns_.clear();
   }
@@ -41,7 +42,7 @@ public:
 
   /** Returns true if no errors occurred during linking. */
   bool good() const {
-    return !multiple_def() && !undef_symbol();
+    return !multiple_def() && !undef_symbol() && !jump_too_far();
   }
   /** Returns true if a multiple definition error occurred. */
   bool multiple_def() const {
@@ -61,6 +62,10 @@ public:
     assert(undef_symbol());
     return Label::val2label()[us_symbol_];
   }
+  /** Returns true if there was a jump too big for an 8-bit displacement. */
+  bool jump_too_far() const {
+    return jump_too_far_;
+  }
 
 private:
   /** Label definition map for all functions (uses global addrs). */
@@ -75,6 +80,8 @@ private:
   bool undef_symbol_;
   /** What was the name of this symbol? */
   uint64_t us_symbol_;
+  /** Did we get a jump-too-far error? */
+  bool jump_too_far_;
 };
 
 } // namespace x64asm

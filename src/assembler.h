@@ -59,20 +59,20 @@ public:
   }
 
   /** Convenience method; compiles a code into a newly allocated function. */
-  Function assemble(const Code& code) {
+  std::pair<bool,Function> assemble(const Code& code) {
     Function fxn;
     reserve(fxn, code);
-    assemble(fxn, code);
-    return fxn;
+    bool ok = assemble(fxn, code);
+    return std::pair<bool,Function>(ok, fxn);
   }
 
   /** Compiles a code into a preallocated function. */
-  void assemble(Function& fxn, const Code& code) {
+  bool assemble(Function& fxn, const Code& code) {
     start(fxn);
     for (const auto & instr : code) {
       assemble(instr);
     }
-    finish();
+    return finish();
   }
 
   /** Returns the number of bytes in the hex encoding of this instruction */
@@ -95,13 +95,14 @@ public:
     fxn_->clear();
   }
 
+
   /** Finishes compiling a function. Replaces relative placeholders by
       actual values, and deletes references after doing so.
   */
-  void finish() {
+  bool finish() {
     std::vector<std::pair<size_t, uint64_t>> unresolved;
 
-    for (const auto & l : fxn_->label_rels_) {
+    for (const auto & l : fxn_->label32_rels_) {
       const auto pos = l.first;
       const auto itr = fxn_->label_defs_.find(l.second);
 
@@ -112,7 +113,25 @@ public:
       }
     }
 
-    fxn_->label_rels_ = unresolved;
+    fxn_->label32_rels_ = unresolved;
+    unresolved.clear();
+
+    for (const auto & l : fxn_->label8_rels_) {
+      const auto pos = l.first;
+      const auto itr = fxn_->label_defs_.find(l.second);
+
+      if (itr == fxn_->label_defs_.end()) {
+        unresolved.push_back(l);
+      } else {
+        const auto diff = itr->second-pos-1;
+        if(diff > 0x7f && diff < 0xffffffffffffff80)
+          return false;
+        fxn_->emit_byte(diff & 0xff, pos);
+      }
+    }
+
+    fxn_->label8_rels_ = unresolved;
+    return true;
   }
 
   /** Assembles an instruction. This method will print a hex dump to
@@ -259,10 +278,16 @@ private:
       position and reserves space for the resolved address by emitting zero
       bytes.
   */
-  void disp_imm(Label l) {
-    fxn_->label_rels_.push_back(std::make_pair(fxn_->size(), l.val_));
+  void disp_label8(Label l) {
+    fxn_->label8_rels_.push_back(std::make_pair(fxn_->size(), l.val_));
+    fxn_->emit_byte(0);
+  }
+
+  void disp_label32(Label l) {
+    fxn_->label32_rels_.push_back(std::make_pair(fxn_->size(), l.val_));
     fxn_->emit_long(0);
   }
+
 
   /** Emits an eight-byte memory offset. */
   void disp_imm(const Moffs& m) {
