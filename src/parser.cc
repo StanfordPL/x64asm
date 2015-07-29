@@ -285,7 +285,7 @@ istream& Instruction::read_att(istream& is) {
     if(expected_size) {
       Assembler assm;
       Code c({*this});
-      auto fxn = assm.assemble(c);
+      auto fxn = assm.assemble(c).second;
       size_t actual = fxn.size();
       if(actual != expected_size)
         continue;
