@@ -240,7 +240,11 @@ istream& Instruction::read_att(istream& is) {
   size_t opc_pos = comment.find("OPC=");
   uint64_t expected_opcode = 0;
   if(opc_pos != string::npos) {
-    expected_opcode = strtoull(comment.c_str() + opc_pos + 4, NULL, 10);
+    string opcode_text = comment.substr(opc_pos);
+    stringstream ss(opcode_text);
+    ss >> expected_opcode;
+    if(ss.fail())
+      expected_opcode = 0;
   }
 
   size_t size_pos = comment.find("SIZE=");

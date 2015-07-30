@@ -36,6 +36,9 @@ std::string opcode_write_att(Opcode o);
 std::ostream& opcode_write_text(std::ostream& os, const x64asm::Opcode&);
 std::istream& opcode_read_text(std::istream& is, x64asm::Opcode&);
 
+/** Returns the same opcode with any 32-bit label jumps changed to 8-bit ones. */
+Opcode label32_transform(Opcode c);
+
 } // namespace x64asm
 
 namespace std {

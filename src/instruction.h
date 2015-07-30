@@ -143,6 +143,12 @@ public:
     opcode_ = o;
     fix_operands_type();
   }
+  /** Transforms the opcode to a version that only does a 32-bit jump
+      instead of an 8-bit jump, if possible.  If not applicable, this
+      is a no-op.  Table lookup; pretty fast. */
+  void label32_transform() {
+    set_opcode(x64asm::label32_transform(get_opcode()));
+  }
 
   /** Gets an operand and casts it to a user-specified type. */
   template <typename T>

@@ -686,6 +686,19 @@ insert_missing is = concat $ map insert_label_variant $
                     concat $ map insert_hint_variant $
                     map insert_pref66 is
 
+-- For each instruction, finds an equivalent instruction that doesn't use an 8-bit jump
+label32_transform :: [Instr] -> String
+label32_transform is = to_table is (opcode_enum . (label32_transform_find is))
+
+-- Takes an instruction that performs an 8-bit jump and returns one that does a 32-bit jump (if possible)
+label32_transform_find :: [Instr] -> Instr -> Instr
+label32_transform_find is i = if "label8" `elem` (operands i) 
+                              then case (find (\ins -> ((att i) == (att ins)) && 
+                                                       ((head $ operands ins) == "label32")) is) of
+                                Just j -> j
+                                Nothing -> i
+                              else i
+
 -- Parse input file
 --------------------------------------------------------------------------------
 
@@ -1365,25 +1378,26 @@ att_table is = intercalate "\n, " $ map att_row $ att_group is
 --------------------------------------------------------------------------------
 
 write_code :: [Instr] -> IO ()
-write_code is = do writeFile "assembler.decl"    $ assm_header_decls is
-                   writeFile "assembler.defn"    $ assm_src_defns is
-                   writeFile "assembler.switch"  $ assm_cases is
-                   writeFile "arity.table"       $ arity_table is
-                   writeFile "rex.table"         $ must_rex_table is
-                   writeFile "properties.table"  $ properties_table is
-                   writeFile "type.table"        $ type_table is
-                   writeFile "mem_index.table"   $ mem_index_table is
-                   writeFile "must_read.table"   $ must_read_table is
-                   writeFile "maybe_read.table"  $ maybe_read_table is
-                   writeFile "must_write.table"  $ must_write_table is
-                   writeFile "maybe_write.table" $ maybe_write_table is
-                   writeFile "must_undef.table"  $ must_undef_table is
-                   writeFile "maybe_undef.table" $ maybe_undef_table is
-                   writeFile "flag.table"        $ flag_table is
-                   writeFile "opcode.enum"       $ opcode_enums is
-                   writeFile "opcode.att"        $ att_mnemonics is
-                   writeFile "att.table"         $ att_table is		
-                   writeFile "opcode.names"      $ opcode_names is
+write_code is = do writeFile "assembler.decl"         $ assm_header_decls is
+                   writeFile "assembler.defn"         $ assm_src_defns is
+                   writeFile "assembler.switch"       $ assm_cases is
+                   writeFile "arity.table"            $ arity_table is
+                   writeFile "rex.table"              $ must_rex_table is
+                   writeFile "properties.table"       $ properties_table is
+                   writeFile "type.table"             $ type_table is
+                   writeFile "mem_index.table"        $ mem_index_table is
+                   writeFile "must_read.table"        $ must_read_table is
+                   writeFile "maybe_read.table"       $ maybe_read_table is
+                   writeFile "must_write.table"       $ must_write_table is
+                   writeFile "maybe_write.table"      $ maybe_write_table is
+                   writeFile "must_undef.table"       $ must_undef_table is
+                   writeFile "maybe_undef.table"      $ maybe_undef_table is
+                   writeFile "flag.table"             $ flag_table is
+                   writeFile "opcode.enum"            $ opcode_enums is
+                   writeFile "opcode.att"             $ att_mnemonics is
+                   writeFile "att.table"              $ att_table is		
+                   writeFile "opcode.names"           $ opcode_names is
+                   writeFile "opcode.l32_transform"   $ label32_transform is
 
 --------------------------------------------------------------------------------
 -- Main (read the spreadsheet and write some code)
