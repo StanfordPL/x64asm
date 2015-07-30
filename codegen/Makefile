@@ -1,6 +1,6 @@
 ##### LATENCY TARGETS
 
-OPTS=-O0
+OPTS=-O0 -g
 
 latency: latency.cc
 	g++ $(OPTS) -std=c++11 latency.cc -I.. ../lib/libx64asm.a -o latency

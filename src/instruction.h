@@ -190,11 +190,11 @@ public:
   }
   /** Returns true if this instruction causes a control flow jump. */
   bool is_any_jump() const {
-    return opcode_ >= JA_REL32 && opcode_ <= JZ_REL8_HINT;
+    return opcode_ >= JA_LABEL && opcode_ <= JZ_REL8_HINT;
   }
   /** Returns true if this instruction induces loop behavior. */
   bool is_any_loop() const {
-    return opcode_ >= LOOP_REL8 && opcode_ <= LOOPNE_REL8;
+    return opcode_ >= LOOP_LABEL && opcode_ <= LOOPNE_REL8;
   }
   /** Returns true if this instruction does not modify machine state. */
   bool is_any_nop() const {
@@ -228,7 +228,7 @@ public:
   }
   /** Is this a variant of the call instruction? */
   bool is_call() const {
-    return opcode_ >= CALL_FARPTR1616 && opcode_ <= CALL_LABEL;
+    return opcode_ >= CALL_FARPTR1616 && opcode_ <= CALL_REL32;
   }
   /** Is this a variant of the cmps instruction? */
   bool is_cmps() const {
@@ -269,7 +269,7 @@ public:
   }
   /** Is this a variant of the jcc (jump conditional) instruction? */
   bool is_jcc() const {
-    return opcode_ >= JA_REL32 && opcode_ <= JZ_REL8_HINT && !is_jmp();
+    return opcode_ >= JA_LABEL && opcode_ <= JZ_REL8_HINT && !is_jmp();
   }
   /** Is this a variant of the jmp instruction? */
   bool is_jmp() const {
@@ -422,7 +422,7 @@ public:
   }
   /** Is this a variant of the xbegin instruction? */
   bool is_xbegin() const {
-    return opcode_ >= XBEGIN_REL32 && opcode_ <= XBEGIN_LABEL;
+    return opcode_ == XBEGIN_REL32 || opcode_ == XBEGIN_LABEL;
   }
 
   /** Is this an SSE instruction? */
