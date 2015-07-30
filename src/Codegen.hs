@@ -787,9 +787,7 @@ opcode_enums is = to_table is opcode_enum
 -- Converts an instruction into an Opcode name
 -- This is identical to enum values, but with at&t syntax
 opcode_name :: Instr -> String
-opcode_name i = intercalate "_" $ (mnem i) : (ops i)
-  where mnem i = att i
-        ops i = map (up . op2type) (operands i)
+opcode_name = low . opcode_enum
 
 -- Converts all instructions to names of Opcodes
 opcode_names :: [Instr] -> String
