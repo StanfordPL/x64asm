@@ -186,7 +186,8 @@ public:
   }
   /** Returns true if this instruction is a jmp or jmpcc to an indirect pointer. */
   bool is_any_indirect_jump() const {
-    return opcode_ >= JMP_FARPTR1616 && opcode_ <= JMP_R64;
+    return (opcode_ >= JMP_FARPTR1616 && opcode_ <= JMP_FARPTR1664)
+            || (opcode_ == JMP_R64 || opcode_ == JMP_M64);
   }
   /** Returns true if this instruction causes a control flow jump. */
   bool is_any_jump() const {

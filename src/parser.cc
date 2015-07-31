@@ -238,13 +238,13 @@ istream& Instruction::read_att(istream& is) {
 
   // Check for annotations in the comment
   size_t opc_pos = comment.find("OPC=");
-  uint64_t expected_opcode = 0;
+  Opcode expected_opcode = (Opcode)0;
   if(opc_pos != string::npos) {
-    string opcode_text = comment.substr(opc_pos);
+    string opcode_text = comment.substr(opc_pos+4);
     stringstream ss(opcode_text);
     ss >> expected_opcode;
     if(ss.fail())
-      expected_opcode = 0;
+      expected_opcode = (Opcode)0;
   }
 
   size_t size_pos = comment.find("SIZE=");
@@ -265,7 +265,7 @@ istream& Instruction::read_att(istream& is) {
 
   for(auto entry : possible_encodings) {
 
-    if(expected_opcode && (uint64_t)entry.first != expected_opcode) {
+    if(expected_opcode && entry.first != expected_opcode) {
       continue;
     }
 
