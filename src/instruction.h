@@ -143,6 +143,12 @@ public:
     opcode_ = o;
     fix_operands_type();
   }
+  /** Transforms the opcode to a version that only does a 32-bit jump
+      instead of an 8-bit jump, if possible.  If not applicable, this
+      is a no-op.  Table lookup; pretty fast. */
+  void label32_transform() {
+    set_opcode(x64asm::label32_transform(get_opcode()));
+  }
 
   /** Gets an operand and casts it to a user-specified type. */
   template <typename T>
@@ -180,15 +186,16 @@ public:
   }
   /** Returns true if this instruction is a jmp or jmpcc to an indirect pointer. */
   bool is_any_indirect_jump() const {
-    return opcode_ >= JMP_FARPTR1616 && opcode_ <= JMP_R64;
+    return (opcode_ >= JMP_FARPTR1616 && opcode_ <= JMP_FARPTR1664)
+            || (opcode_ == JMP_R64 || opcode_ == JMP_M64);
   }
   /** Returns true if this instruction causes a control flow jump. */
   bool is_any_jump() const {
-    return opcode_ >= JA_REL32 && opcode_ <= JZ_REL8_HINT;
+    return opcode_ >= JA_LABEL && opcode_ <= JZ_REL8_HINT;
   }
   /** Returns true if this instruction induces loop behavior. */
   bool is_any_loop() const {
-    return opcode_ >= LOOP_REL8 && opcode_ <= LOOPNE_REL8;
+    return opcode_ >= LOOP_LABEL && opcode_ <= LOOPNE_REL8;
   }
   /** Returns true if this instruction does not modify machine state. */
   bool is_any_nop() const {
@@ -222,7 +229,7 @@ public:
   }
   /** Is this a variant of the call instruction? */
   bool is_call() const {
-    return opcode_ >= CALL_FARPTR1616 && opcode_ <= CALL_LABEL;
+    return opcode_ >= CALL_FARPTR1616 && opcode_ <= CALL_REL32;
   }
   /** Is this a variant of the cmps instruction? */
   bool is_cmps() const {
@@ -263,7 +270,7 @@ public:
   }
   /** Is this a variant of the jcc (jump conditional) instruction? */
   bool is_jcc() const {
-    return opcode_ >= JA_REL32 && opcode_ <= JZ_REL8_HINT && !is_jmp();
+    return opcode_ >= JA_LABEL && opcode_ <= JZ_REL8_HINT && !is_jmp();
   }
   /** Is this a variant of the jmp instruction? */
   bool is_jmp() const {
@@ -416,7 +423,7 @@ public:
   }
   /** Is this a variant of the xbegin instruction? */
   bool is_xbegin() const {
-    return opcode_ >= XBEGIN_REL32 && opcode_ <= XBEGIN_LABEL;
+    return opcode_ == XBEGIN_REL32 || opcode_ == XBEGIN_LABEL;
   }
 
   /** Is this an SSE instruction? */

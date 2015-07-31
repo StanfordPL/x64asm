@@ -2,16 +2,16 @@
 , 6		// adcw $0x4050, %ax
 , 4		// adcl $0xc0decafe, %eax
 , 18		// adcw $0x4050, (%rsi)
-, 18		// adcw $0x4, (%rsi)
+, 17		// adcw $0x4, (%rsi)
 , 18		// adcw %cx, (%rsi)
 , 18		// adcl $0xc0decafe, (%rsi)
 , 17		// adcl $0x4, (%rsi)
 , 18		// adcl %edx, (%rsi)
 , 18		// adcq $0xc0decafe, (%rsi)
-, 17		// adcq $0x4, (%rsi)
+, 18		// adcq $0x4, (%rsi)
 , 18		// adcq %rdx, (%rsi)
 , 18		// adcb $0x4, (%rsi)
-, 18		// adcb %dl, (%rsi)
+, 17		// adcb %dl, (%rsi)
 , 20		// adcb %ch, (%rsi)
 , 6		// adcw $0x4050, %cx
 , 4		// adcw $0x4, %cx
@@ -48,10 +48,10 @@
 , 16		// addw $0x4, (%rsi)
 , 14		// addw %cx, (%rsi)
 , 16		// addl $0xc0decafe, (%rsi)
-, 16		// addl $0x4, (%rsi)
+, 17		// addl $0x4, (%rsi)
 , 14		// addl %edx, (%rsi)
 , 16		// addq $0xc0decafe, (%rsi)
-, 17		// addq $0x4, (%rsi)
+, 16		// addq $0x4, (%rsi)
 , 14		// addq %rdx, (%rsi)
 , 16		// addb $0x4, (%rsi)
 , 14		// addb %dl, (%rsi)
@@ -111,11 +111,11 @@
 , 1		// andb $0x4, %al
 , 7		// andw $0x4050, %ax
 , 1		// andl $0xc0decafe, %eax
-, 16		// andw $0x4050, (%rsi)
+, 17		// andw $0x4050, (%rsi)
 , 16		// andw $0x4, (%rsi)
 , 14		// andw %cx, (%rsi)
-, 17		// andl $0xc0decafe, (%rsi)
-, 16		// andl $0x4, (%rsi)
+, 16		// andl $0xc0decafe, (%rsi)
+, 17		// andl $0x4, (%rsi)
 , 14		// andl %edx, (%rsi)
 , 16		// andq $0xc0decafe, (%rsi)
 , 16		// andq $0x4, (%rsi)
@@ -127,7 +127,7 @@
 , 1		// andw $0x4, %cx
 , 1		// andw (%rsi), %cx
 , 1		// andw %cx, %cx
-, 2		// andw %cx, %cx
+, 1		// andw %cx, %cx
 , 1		// andl $0xc0decafe, %edx
 , 1		// andl $0x4, %edx
 , 1		// andl (%rsi), %edx
@@ -254,10 +254,10 @@
 , 0		// callq es:(%rax,%rax,1)
 , 0		// callq es:(%rax,%rax,1)
 , 0		// callq es:(%rax,%rax,1)
+, 0		// callq 
 , 0		// callq es:(%rax,%rax,1)
 , 0		// callq %rax
 , 0		// callq 0
-, 0		// callq 
 , 1		// cbtw 
 , 1		// cltd 
 , 1		// cltq 
@@ -436,15 +436,15 @@
 , 4		// cmovpoq %rdx, %rdx
 , 1		// cmovsw (%rsi), %cx
 , 4		// cmovsw %cx, %cx
-, 1		// cmovsl (%rsi), %edx
+, 2		// cmovsl (%rsi), %edx
 , 4		// cmovsl %edx, %edx
-, 1		// cmovsq (%rsi), %rdx
+, 2		// cmovsq (%rsi), %rdx
 , 4		// cmovsq %rdx, %rdx
-, 1		// cmovzw (%rsi), %cx
+, 2		// cmovzw (%rsi), %cx
 , 4		// cmovzw %cx, %cx
-, 1		// cmovzl (%rsi), %edx
+, 2		// cmovzl (%rsi), %edx
 , 4		// cmovzl %edx, %edx
-, 1		// cmovzq (%rsi), %rdx
+, 2		// cmovzq (%rsi), %rdx
 , 4		// cmovzq %rdx, %rdx
 , 1		// cmpb $0x4, %al
 , 7		// cmpw $0x4050, %ax
@@ -523,7 +523,7 @@
 , 1		// comisd %xmm0, %xmm0
 , 1		// comiss (%rsi), %xmm0
 , 1		// comiss %xmm0, %xmm0
-, 517		// cpuid 
+, 504		// cpuid 
 , 1		// cqto 
 , 6		// crc32w (%rsi), %edx
 , 6		// crc32l (%rsi), %edx
@@ -570,21 +570,21 @@
 , 1		// cvtsi2ssq (%rsi), %xmm0
 , 7		// cvtsi2ssl %edx, %xmm0
 , 4		// cvtsi2ssq %rdx, %xmm0
-, 1		// cvtss2sd (%rsi), %xmm0
+, 2		// cvtss2sd (%rsi), %xmm0
 , 4		// cvtss2sd %xmm0, %xmm0
-, 1		// cvtss2sil (%rsi), %edx
-, 1		// cvtss2sil %xmm0, %edx
-, 1		// cvtss2siq (%rsi), %rdx
-, 1		// cvtss2siq %xmm0, %rdx
-, 1		// cvttpd2dq (%rsi), %xmm0
+, 2		// cvtss2sil (%rsi), %edx
+, 2		// cvtss2sil %xmm0, %edx
+, 2		// cvtss2siq (%rsi), %rdx
+, 2		// cvtss2siq %xmm0, %rdx
+, 2		// cvttpd2dq (%rsi), %xmm0
 , 9		// cvttpd2dq %xmm0, %xmm0
-, 1		// cvttpd2pi (%rsi), %mm0
-, 1		// cvttpd2pi %xmm0, %mm0
+, 2		// cvttpd2pi (%rsi), %mm0
+, 2		// cvttpd2pi %xmm0, %mm0
 , 1		// cvttps2dq (%rsi), %xmm0
 , 7		// cvttps2dq %xmm0, %xmm0
-, 1		// cvttps2pi (%rsi), %mm0
-, 1		// cvttps2pi %xmm0, %mm0
-, 1		// cvttsd2si (%rsi), %edx
+, 2		// cvttps2pi (%rsi), %mm0
+, 2		// cvttps2pi %xmm0, %mm0
+, 2		// cvttsd2si (%rsi), %edx
 , 1		// cvttsd2si %xmm0, %edx
 , 1		// cvttsd2siq (%rsi), %rdx
 , 1		// cvttsd2siq %xmm0, %rdx
@@ -634,15 +634,15 @@
 , 876		// f2xm1 
 , 1		// fabs 
 , 1134		// fadds (%rsi)
-, 1134		// faddl (%rsi)
+, 1153		// faddl (%rsi)
 , 999		// fadd %st, %st
 , 999		// fadd %st, %st
-, 800		// faddp 
+, 806		// faddp 
 , 999		// faddp %st, %st
-, 965		// fbld (%rsi)
-, 906		// fbstp (%rsi)
+, 967		// fbld (%rsi)
+, 907		// fbstp (%rsi)
 , 1		// fchs 
-, 55		// fclex 
+, 64		// fclex 
 , 999		// fcmovb %st, %st
 , 999		// fcmovbe %st, %st
 , 999		// fcmove %st, %st
@@ -651,68 +651,68 @@
 , 999		// fcmovne %st, %st
 , 999		// fcmovnu %st, %st
 , 999		// fcmovu %st, %st
-, 739		// fcom 
+, 738		// fcom 
 , 1032		// fcoms (%rsi)
-, 1032		// fcoml (%rsi)
+, 1049		// fcoml (%rsi)
 , 999		// fcom %st
 , 999		// fcomi %st, %st
 , 999		// fcomip %st, %st
-, 784		// fcomp 
+, 792		// fcomp 
 , 1083		// fcomps (%rsi)
-, 1083		// fcompl (%rsi)
+, 1092		// fcompl (%rsi)
 , 999		// fcomp %st
-, 825		// fcompp 
+, 828		// fcompp 
 , 876		// fcos 
 , 1		// fdecstp 
-, 1170		// fdivs (%rsi)
+, 1184		// fdivs (%rsi)
 , 1170		// fdivl (%rsi)
 , 999		// fdiv %st, %st
 , 999		// fdiv %st, %st
 , 817		// fdivp 
 , 999		// fdivp %st, %st
-, 900		// fdivrs (%rsi)
-, 900		// fdivrl (%rsi)
+, 931		// fdivrs (%rsi)
+, 918		// fdivrl (%rsi)
 , 999		// fdivr %st, %st
 , 999		// fdivr %st, %st
 , 817		// fdivrp 
 , 999		// fdivrp %st, %st
 , 999		// ffreep %st
-, 1042		// fiadd (%rsi)
-, 1042		// fiaddl (%rsi)
-, 989		// ficom (%rsi)
-, 989		// ficoml (%rsi)
-, 1040		// ficomp (%rsi)
-, 1040		// ficompl (%rsi)
-, 1060		// fidiv (%rsi)
-, 1060		// fidivl (%rsi)
-, 1060		// fidivr (%rsi)
-, 1060		// fidivrl (%rsi)
-, 1104		// fild (%rsi)
-, 1104		// fildl (%rsi)
-, 1104		// fildll (%rsi)
-, 1047		// fimul (%rsi)
-, 1047		// fimull (%rsi)
+, 1050		// fiadd (%rsi)
+, 1043		// fiaddl (%rsi)
+, 994		// ficom (%rsi)
+, 995		// ficoml (%rsi)
+, 1046		// ficomp (%rsi)
+, 1042		// ficompl (%rsi)
+, 1072		// fidiv (%rsi)
+, 1064		// fidivl (%rsi)
+, 1063		// fidivr (%rsi)
+, 1071		// fidivrl (%rsi)
+, 1112		// fild (%rsi)
+, 1111		// fildl (%rsi)
+, 1122		// fildll (%rsi)
+, 1055		// fimul (%rsi)
+, 1060		// fimull (%rsi)
 , 1		// fincstp 
 , 216		// finit 
-, 851		// fist (%rsi)
-, 849		// fistl (%rsi)
-, 853		// fistp (%rsi)
-, 852		// fistpl (%rsi)
-, 812		// fistpll (%rsi)
-, 813		// fisttp (%rsi)
+, 862		// fist (%rsi)
+, 874		// fistl (%rsi)
+, 856		// fistp (%rsi)
+, 867		// fistpl (%rsi)
+, 835		// fistpll (%rsi)
+, 819		// fisttp (%rsi)
 , 819		// fisttpl (%rsi)
-, 817		// fisttpll (%rsi)
-, 1042		// fisub (%rsi)
-, 1042		// fisubl (%rsi)
-, 1042		// fisubr (%rsi)
-, 1042		// fisubrl (%rsi)
-, 888		// flds (%rsi)
-, 889		// fldl (%rsi)
-, 857		// fldt (%rsi)
+, 826		// fisttpll (%rsi)
+, 1051		// fisub (%rsi)
+, 1044		// fisubl (%rsi)
+, 1048		// fisubr (%rsi)
+, 1052		// fisubrl (%rsi)
+, 900		// flds (%rsi)
+, 895		// fldl (%rsi)
+, 863		// fldt (%rsi)
 , 999		// fld %st
-, 844		// fld1 
+, 851		// fld1 
 , 999		// fldcw es:(%rax,%rax,1)
-, 317		// fldenvl (%rsi)
+, 344		// fldenvl (%rsi)
 , 999		// fldl2e 
 , 999		// fldl2t 
 , 999		// fldlg2 
@@ -728,64 +728,64 @@
 , 54		// fnclex 
 , 213		// fninit 
 , 1		// fnop 
-, 428		// fnsave (%rsi)
-, 1		// fnstcw (%rsi)
-, 173		// fnstenvl (%rsi)
+, 441		// fnsave (%rsi)
+, 2		// fnstcw (%rsi)
+, 190		// fnstenvl (%rsi)
 , 2		// fnstsw %ax
 , 1		// fnstsw (%rsi)
-, 837		// fpatan 
-, 834		// fprem 
-, 836		// fprem1 
-, 849		// fptan 
-, 874		// frndint 
+, 846		// fpatan 
+, 847		// fprem 
+, 846		// fprem1 
+, 850		// fptan 
+, 886		// frndint 
 , 420		// frstor (%rsi)
 , 423		// fsave (%rsi)
-, 793		// fscale 
-, 877		// fsin 
-, 847		// fsincos 
-, 847		// fsqrt 
+, 798		// fscale 
+, 886		// fsin 
+, 859		// fsincos 
+, 855		// fsqrt 
 , 1		// fsts (%rsi)
 , 1		// fstl (%rsi)
 , 999		// fst %st
 , 4		// fstcw (%rsi)
 , 181		// fstenvl (%rsi)
 , 1106		// fstps (%rsi)
-, 1105		// fstpl (%rsi)
-, 897		// fstpt (%rsi)
+, 1114		// fstpl (%rsi)
+, 904		// fstpt (%rsi)
 , 999		// fstp %st
 , 4		// fstsw %ax
 , 4		// fstsw (%rsi)
-, 1227		// fsubs (%rsi)
-, 1134		// fsubl (%rsi)
+, 1239		// fsubs (%rsi)
+, 1141		// fsubl (%rsi)
 , 999		// fsub %st, %st
 , 999		// fsub %st, %st
-, 800		// fsubp 
+, 823		// fsubp 
 , 999		// fsubp %st, %st
-, 1227		// fsubrs (%rsi)
-, 1136		// fsubrl (%rsi)
+, 1256		// fsubrs (%rsi)
+, 1145		// fsubrl (%rsi)
 , 999		// fsubr %st, %st
 , 999		// fsubr %st, %st
-, 800		// fsubrp 
+, 820		// fsubrp 
 , 999		// fsubrp %st, %st
-, 732		// ftst 
-, 737		// fucom 
+, 742		// ftst 
+, 738		// fucom 
 , 999		// fucom %st
 , 999		// fucomi %st, %st
 , 999		// fucomip %st, %st
-, 783		// fucomp 
+, 789		// fucomp 
 , 999		// fucomp %st
 , 825		// fucompp 
 , 1		// fwait 
-, 634		// fxam 
+, 636		// fxam 
 , 1		// fxch 
 , 999		// fxch %st
 , 999		// fxrstor es:(%rax,%rax,1)
 , 999		// fxrstor64 es:(%rax,%rax,1)
 , 169		// fxsave (%rsi)
 , 169		// fxsave64 (%rsi)
-, 837		// fxtract 
-, 839		// fyl2x 
-, 844		// fyl2xp1 
+, 847		// fxtract 
+, 842		// fyl2x 
+, 852		// fyl2xp1 
 , 12		// haddpd (%rsi), %xmm0
 , 12		// haddpd %xmm0, %xmm0
 , 12		// haddps (%rsi), %xmm0
@@ -809,14 +809,14 @@
 , 6		// imulb (%rsi)
 , 9		// imulw %cx
 , 6		// imulw (%rsi), %cx
-, 6		// imulw $0x4050, (%rsi), %cx
+, 5		// imulw $0x4050, (%rsi), %cx
 , 2		// imulw $0x4, (%rsi), %cx
 , 6		// imulw %cx, %cx
 , 9		// imulw $0x4050, %cx, %cx
 , 9		// imulw $0x4, %cx, %cx
 , 10		// imull %edx
 , 6		// imull (%rsi), %edx
-, 1		// imull $0xc0decafe, (%rsi), %edx
+, 2		// imull $0xc0decafe, (%rsi), %edx
 , 1		// imull $0x4, (%rsi), %edx
 , 6		// imull %edx, %edx
 , 6		// imull $0xc0decafe, %edx, %edx
@@ -859,203 +859,268 @@
 , 0		// iretw 
 , 0		// iretl 
 , 0		// iretq 
-, 0		// ja 0
 , 0		// ja 
-, 0		// ja , 0
+, 0		// ja 
+, 0		// ja , 
 , 0		// ja , 
 , 0		// ja 0
 , 0		// ja , 0
-, 0		// jae 0
+, 0		// ja 0
+, 0		// ja , 0
 , 0		// jae 
-, 0		// jae , 0
+, 0		// jae 
+, 0		// jae , 
 , 0		// jae , 
 , 0		// jae 0
 , 0		// jae , 0
-, 0		// jb 0
+, 0		// jae 0
+, 0		// jae , 0
 , 0		// jb 
-, 0		// jb , 0
+, 0		// jb 
+, 0		// jb , 
 , 0		// jb , 
 , 0		// jb 0
 , 0		// jb , 0
-, 0		// jbe 0
+, 0		// jb 0
+, 0		// jb , 0
 , 0		// jbe 
-, 0		// jbe , 0
+, 0		// jbe 
+, 0		// jbe , 
 , 0		// jbe , 
 , 0		// jbe 0
 , 0		// jbe , 0
-, 0		// jc 0
+, 0		// jbe 0
+, 0		// jbe , 0
 , 0		// jc 
-, 0		// jc , 0
+, 0		// jc 
+, 0		// jc , 
 , 0		// jc , 
 , 0		// jc 0
 , 0		// jc , 0
-, 0		// je 0
+, 0		// jc 0
+, 0		// jc , 0
 , 0		// je 
-, 0		// je , 0
+, 0		// je 
+, 0		// je , 
 , 0		// je , 
 , 0		// je 0
 , 0		// je , 0
+, 0		// je 0
+, 0		// je , 0
+, 0		// jecxz 
+, 0		// jecxz , 
 , 0		// jecxz 0
 , 0		// jecxz , 0
-, 0		// jg 0
 , 0		// jg 
-, 0		// jg , 0
+, 0		// jg 
+, 0		// jg , 
 , 0		// jg , 
 , 0		// jg 0
 , 0		// jg , 0
-, 0		// jge 0
+, 0		// jg 0
+, 0		// jg , 0
 , 0		// jge 
-, 0		// jge , 0
+, 0		// jge 
+, 0		// jge , 
 , 0		// jge , 
 , 0		// jge 0
 , 0		// jge , 0
-, 0		// jl 0
+, 0		// jge 0
+, 0		// jge , 0
 , 0		// jl 
-, 0		// jl , 0
+, 0		// jl 
+, 0		// jl , 
 , 0		// jl , 
 , 0		// jl 0
 , 0		// jl , 0
-, 0		// jle 0
+, 0		// jl 0
+, 0		// jl , 0
 , 0		// jle 
-, 0		// jle , 0
+, 0		// jle 
+, 0		// jle , 
 , 0		// jle , 
 , 0		// jle 0
 , 0		// jle , 0
+, 0		// jle 0
+, 0		// jle , 0
 , 0		// jmpq es:(%rax,%rax,1)
 , 0		// jmpq es:(%rax,%rax,1)
 , 0		// jmpq es:(%rax,%rax,1)
+, 0		// jmpq 
+, 0		// jmpq 
 , 0		// jmpq es:(%rax,%rax,1)
 , 0		// jmpq %rax
 , 0		// jmpq 0
-, 0		// jmpq 
 , 0		// jmpq 0
-, 0		// jna 0
 , 0		// jna 
-, 0		// jna , 0
+, 0		// jna 
+, 0		// jna , 
 , 0		// jna , 
 , 0		// jna 0
 , 0		// jna , 0
-, 0		// jnae 0
+, 0		// jna 0
+, 0		// jna , 0
 , 0		// jnae 
-, 0		// jnae , 0
+, 0		// jnae 
+, 0		// jnae , 
 , 0		// jnae , 
 , 0		// jnae 0
 , 0		// jnae , 0
-, 0		// jnb 0
+, 0		// jnae 0
+, 0		// jnae , 0
 , 0		// jnb 
-, 0		// jnb , 0
+, 0		// jnb 
+, 0		// jnb , 
 , 0		// jnb , 
 , 0		// jnb 0
 , 0		// jnb , 0
-, 0		// jnbe 0
+, 0		// jnb 0
+, 0		// jnb , 0
 , 0		// jnbe 
-, 0		// jnbe , 0
+, 0		// jnbe 
+, 0		// jnbe , 
 , 0		// jnbe , 
 , 0		// jnbe 0
 , 0		// jnbe , 0
-, 0		// jnc 0
+, 0		// jnbe 0
+, 0		// jnbe , 0
 , 0		// jnc 
-, 0		// jnc , 0
+, 0		// jnc 
+, 0		// jnc , 
 , 0		// jnc , 
 , 0		// jnc 0
 , 0		// jnc , 0
-, 0		// jne 0
+, 0		// jnc 0
+, 0		// jnc , 0
 , 0		// jne 
-, 0		// jne , 0
+, 0		// jne 
+, 0		// jne , 
 , 0		// jne , 
 , 0		// jne 0
 , 0		// jne , 0
-, 0		// jng 0
+, 0		// jne 0
+, 0		// jne , 0
 , 0		// jng 
-, 0		// jng , 0
+, 0		// jng 
+, 0		// jng , 
 , 0		// jng , 
 , 0		// jng 0
 , 0		// jng , 0
-, 0		// jnge 0
+, 0		// jng 0
+, 0		// jng , 0
 , 0		// jnge 
-, 0		// jnge , 0
+, 0		// jnge 
+, 0		// jnge , 
 , 0		// jnge , 
 , 0		// jnge 0
 , 0		// jnge , 0
-, 0		// jnl 0
+, 0		// jnge 0
+, 0		// jnge , 0
 , 0		// jnl 
-, 0		// jnl , 0
+, 0		// jnl 
+, 0		// jnl , 
 , 0		// jnl , 
 , 0		// jnl 0
 , 0		// jnl , 0
-, 0		// jnle 0
+, 0		// jnl 0
+, 0		// jnl , 0
 , 0		// jnle 
-, 0		// jnle , 0
+, 0		// jnle 
+, 0		// jnle , 
 , 0		// jnle , 
 , 0		// jnle 0
 , 0		// jnle , 0
-, 0		// jno 0
+, 0		// jnle 0
+, 0		// jnle , 0
 , 0		// jno 
-, 0		// jno , 0
+, 0		// jno 
+, 0		// jno , 
 , 0		// jno , 
 , 0		// jno 0
 , 0		// jno , 0
-, 0		// jnp 0
+, 0		// jno 0
+, 0		// jno , 0
 , 0		// jnp 
-, 0		// jnp , 0
+, 0		// jnp 
+, 0		// jnp , 
 , 0		// jnp , 
 , 0		// jnp 0
 , 0		// jnp , 0
-, 0		// jns 0
+, 0		// jnp 0
+, 0		// jnp , 0
 , 0		// jns 
-, 0		// jns , 0
+, 0		// jns 
+, 0		// jns , 
 , 0		// jns , 
 , 0		// jns 0
 , 0		// jns , 0
-, 0		// jnz 0
+, 0		// jns 0
+, 0		// jns , 0
 , 0		// jnz 
-, 0		// jnz , 0
+, 0		// jnz 
+, 0		// jnz , 
 , 0		// jnz , 
 , 0		// jnz 0
 , 0		// jnz , 0
-, 0		// jo 0
+, 0		// jnz 0
+, 0		// jnz , 0
 , 0		// jo 
-, 0		// jo , 0
+, 0		// jo 
+, 0		// jo , 
 , 0		// jo , 
 , 0		// jo 0
 , 0		// jo , 0
-, 0		// jp 0
+, 0		// jo 0
+, 0		// jo , 0
 , 0		// jp 
-, 0		// jp , 0
+, 0		// jp 
+, 0		// jp , 
 , 0		// jp , 
 , 0		// jp 0
 , 0		// jp , 0
-, 0		// jpe 0
+, 0		// jp 0
+, 0		// jp , 0
 , 0		// jpe 
-, 0		// jpe , 0
+, 0		// jpe 
+, 0		// jpe , 
 , 0		// jpe , 
 , 0		// jpe 0
 , 0		// jpe , 0
-, 0		// jpo 0
+, 0		// jpe 0
+, 0		// jpe , 0
 , 0		// jpo 
-, 0		// jpo , 0
+, 0		// jpo 
+, 0		// jpo , 
 , 0		// jpo , 
 , 0		// jpo 0
 , 0		// jpo , 0
+, 0		// jpo 0
+, 0		// jpo , 0
+, 0		// jrcxz 
+, 0		// jrcxz , 
 , 0		// jrcxz 0
 , 0		// jrcxz , 0
-, 0		// js 0
 , 0		// js 
-, 0		// js , 0
+, 0		// js 
+, 0		// js , 
 , 0		// js , 
 , 0		// js 0
 , 0		// js , 0
-, 0		// jz 0
+, 0		// js 0
+, 0		// js , 0
 , 0		// jz 
-, 0		// jz , 0
+, 0		// jz 
+, 0		// jz , 
 , 0		// jz , 
 , 0		// jz 0
 , 0		// jz , 0
+, 0		// jz 0
+, 0		// jz , 0
 , 1		// lahf 
-, 368		// larw (%rsi), %cx
+, 377		// larw (%rsi), %cx
 , 360		// larw %cx, %cx
-, 368		// lar (%rsi), %edx
-, 361		// lar %edx, %edx
+, 372		// lar (%rsi), %edx
+, 368		// lar %edx, %edx
 , 369		// lar (%rsi), %rdx
 , 360		// lar %edx, %rdx
 , 1		// lddqu (%rsi), %xmm0
@@ -1071,7 +1136,7 @@
 , 1		// leaq (%rsi), %rdx
 , 0		// leaveq 
 , 0		// leavew 
-, 10		// lfence 
+, 14		// lfence 
 , 999		// lfsw es:(%rax,%rax,1), %ax
 , 999		// lfsl es:(%rax,%rax,1), %eax
 , 999		// lfs es:(%rax,%rax,1), %rax
@@ -1087,14 +1152,17 @@
 , 999		// lodsl 
 , 999		// lodsq 
 , 999		// lodsw 
+, 0		// loop 
 , 0		// loop 0
+, 0		// loope 
 , 0		// loope 0
+, 0		// loopne 
 , 0		// loopne 0
-, 365		// lslw (%rsi), %cx
+, 388		// lslw (%rsi), %cx
 , 360		// lslw %cx, %cx
-, 366		// lsl (%rsi), %edx
-, 360		// lsl %edx, %edx
-, 366		// lsl (%rsi), %rdx
+, 367		// lsl (%rsi), %edx
+, 361		// lsl %edx, %edx
+, 393		// lsl (%rsi), %rdx
 , 360		// lsl %edx, %rdx
 , 999		// lssw es:(%rax,%rax,1), %ax
 , 999		// lssl es:(%rax,%rax,1), %eax
@@ -1115,7 +1183,7 @@
 , 7		// maxsd %xmm0, %xmm0
 , 7		// maxss (%rsi), %xmm0
 , 7		// maxss %xmm0, %xmm0
-, 84		// mfence 
+, 90		// mfence 
 , 7		// minpd (%rsi), %xmm0
 , 7		// minpd %xmm0, %xmm0
 , 7		// minps (%rsi), %xmm0
@@ -1145,7 +1213,7 @@
 , 999		// movabsq %rax, es:0x0
 , 999		// movabsb %al, es:0x0
 , 999		// movabsb , %al, es:0x0
-, 4		// movw $0x4050, %cx
+, 5		// movw $0x4050, %cx
 , 4		// movw $0x4050, %cx
 , 1		// movw (%rsi), %cx
 , 1		// movw %cx, %cx
@@ -1188,7 +1256,7 @@
 , 1		// movaps %xmm0, (%rsi)
 , 1		// movaps (%rsi), %xmm0
 , 1		// movaps %xmm0, %xmm0
-, 2		// movaps %xmm0, %xmm0
+, 1		// movaps %xmm0, %xmm0
 , 1		// movbew %cx, (%rsi)
 , 1		// movbel %edx, (%rsi)
 , 1		// movbeq %rdx, (%rsi)
@@ -1259,7 +1327,7 @@
 , 999		// movs es:(%rax,%rax,1), es:(%rax,%rax,1)
 , 999		// movsb 
 , 999		// movsl 
-, 1		// movsd %xmm0, (%rsi)
+, 3		// movsd %xmm0, (%rsi)
 , 1		// movsd (%rsi), %xmm0
 , 1		// movsd %xmm0, %xmm0
 , 1		// movsd %xmm0, %xmm0
@@ -1268,7 +1336,7 @@
 , 1		// movsldup (%rsi), %xmm0
 , 1		// movsldup %xmm0, %xmm0
 , 999		// movsq 
-, 1		// movss %xmm0, (%rsi)
+, 3		// movss %xmm0, (%rsi)
 , 1		// movss (%rsi), %xmm0
 , 1		// movss %xmm0, %xmm0
 , 1		// movss %xmm0, %xmm0
@@ -1287,7 +1355,7 @@
 , 1		// movsbq %dl, %rdx
 , 1		// movslq (%rsi), %rdx
 , 1		// movslq %edx, %rdx
-, 1		// movupd %xmm0, (%rsi)
+, 3		// movupd %xmm0, (%rsi)
 , 1		// movupd (%rsi), %xmm0
 , 1		// movupd %xmm0, %xmm0
 , 1		// movupd %xmm0, %xmm0
@@ -1309,11 +1377,11 @@
 , 1		// movzbq %dl, %rdx
 , 14		// mpsadbw $0x4, (%rsi), %xmm0
 , 17		// mpsadbw $0x4, %xmm0, %xmm0
-, 9		// mulw (%rsi)
+, 10		// mulw (%rsi)
 , 10		// mull (%rsi)
 , 6		// mulq (%rsi)
 , 6		// mulb (%rsi)
-, 9		// mulw %cx
+, 10		// mulw %cx
 , 10		// mull %edx
 , 9		// mulq %rdx
 , 6		// mulb %dl
@@ -1331,10 +1399,10 @@
 , 9		// mulxq (%rsi), %rdx, %rdx
 , 9		// mulxq %rdx, %rdx, %rdx
 , 999		// mwait 
-, 16		// negw (%rsi)
-, 17		// negl (%rsi)
-, 17		// negq (%rsi)
-, 17		// negb (%rsi)
+, 17		// negw (%rsi)
+, 16		// negl (%rsi)
+, 16		// negq (%rsi)
+, 16		// negb (%rsi)
 , 1		// negw %cx
 , 1		// negl %edx
 , 1		// negq %rdx
@@ -1345,7 +1413,7 @@
 , 1		// nopl (%rsi)
 , 1		// nopw %cx
 , 1		// nopl %edx
-, 15		// notw (%rsi)
+, 14		// notw (%rsi)
 , 14		// notl (%rsi)
 , 14		// notq (%rsi)
 , 14		// notb (%rsi)
@@ -1355,21 +1423,21 @@
 , 1		// notb %dl
 , 1		// notb %ch
 , 1		// orb $0x4, %al
-, 4		// orw $0x4050, %ax
+, 5		// orw $0x4050, %ax
 , 1		// orl $0xc0decafe, %eax
 , 16		// orw $0x4050, (%rsi)
-, 17		// orw $0x4, (%rsi)
+, 16		// orw $0x4, (%rsi)
 , 14		// orw %cx, (%rsi)
 , 16		// orl $0xc0decafe, (%rsi)
 , 16		// orl $0x4, (%rsi)
 , 14		// orl %edx, (%rsi)
 , 16		// orq $0xc0decafe, (%rsi)
-, 17		// orq $0x4, (%rsi)
+, 16		// orq $0x4, (%rsi)
 , 14		// orq %rdx, (%rsi)
-, 16		// orb $0x4, (%rsi)
-, 14		// orb %dl, (%rsi)
+, 17		// orb $0x4, (%rsi)
+, 15		// orb %dl, (%rsi)
 , 18		// orb %ch, (%rsi)
-, 4		// orw $0x4050, %cx
+, 6		// orw $0x4050, %cx
 , 1		// orw $0x4, %cx
 , 1		// orw (%rsi), %cx
 , 1		// orw %cx, %cx
@@ -1525,7 +1593,7 @@
 , 1		// pcmpgtd (%rsi), %xmm0
 , 1		// pcmpgtd %xmm0, %xmm0
 , 12		// pcmpgtq (%rsi), %xmm0
-, 1		// pcmpgtq %xmm0, %xmm0
+, 2		// pcmpgtq %xmm0, %xmm0
 , 1		// pcmpgtw (%rsi), %mm0
 , 1		// pcmpgtw %mm0, %mm0
 , 1		// pcmpgtw (%rsi), %xmm0
@@ -1714,7 +1782,7 @@
 , 12		// psadbw %xmm0, %xmm0
 , 1		// pshufb (%rsi), %mm0
 , 1		// pshufb %mm0, %mm0
-, 2		// pshufb (%rsi), %xmm0
+, 1		// pshufb (%rsi), %xmm0
 , 1		// pshufb %xmm0, %xmm0
 , 1		// pshufd $0x4, (%rsi), %xmm0
 , 1		// pshufd $0x4, %xmm0, %xmm0
@@ -1740,7 +1808,7 @@
 , 1		// pslld (%rsi), %mm0
 , 1		// pslld %mm0, %mm0
 , 1		// pslld $0x4, %xmm0
-, 1		// pslld (%rsi), %xmm0
+, 2		// pslld (%rsi), %xmm0
 , 4		// pslld %xmm0, %xmm0
 , 1		// pslldq $0x4, %xmm0
 , 1		// psllq $0x4, %mm0
@@ -1870,7 +1938,7 @@
 , 19		// rclw $0x1, (%rsi)
 , 30		// rcll %cl, (%rsi)
 , 30		// rcll $0x4, (%rsi)
-, 20		// rcll $0x1, (%rsi)
+, 19		// rcll $0x1, (%rsi)
 , 30		// rclq %cl, (%rsi)
 , 30		// rclq $0x4, (%rsi)
 , 19		// rclq $0x1, (%rsi)
@@ -1927,9 +1995,9 @@
 , 999		// rdfsbase %rax
 , 999		// rdgsbase %eax
 , 999		// rdgsbase %rax
-, 872		// rdrand %cx
-, 872		// rdrand %edx
-, 872		// rdrand %rdx
+, 864		// rdrand %cx
+, 861		// rdrand %edx
+, 862		// rdrand %rdx
 , 999		// rep insw %ax, es:(%rax,%rax,1)
 , 999		// rep insl %ax, es:(%rax,%rax,1)
 , 999		// rep insq %ax, es:(%rax,%rax,1)
@@ -2111,16 +2179,16 @@
 , 4		// sbbb $0x4, %al
 , 6		// sbbw $0x4050, %ax
 , 4		// sbbl $0xc0decafe, %eax
-, 18		// sbbw $0x4050, (%rsi)
+, 17		// sbbw $0x4050, (%rsi)
 , 18		// sbbw $0x4, (%rsi)
 , 18		// sbbw %cx, (%rsi)
 , 18		// sbbl $0xc0decafe, (%rsi)
 , 18		// sbbl $0x4, (%rsi)
 , 18		// sbbl %edx, (%rsi)
-, 18		// sbbq $0xc0decafe, (%rsi)
-, 17		// sbbq $0x4, (%rsi)
+, 17		// sbbq $0xc0decafe, (%rsi)
+, 18		// sbbq $0x4, (%rsi)
 , 18		// sbbq %rdx, (%rsi)
-, 18		// sbbb $0x4, (%rsi)
+, 17		// sbbb $0x4, (%rsi)
 , 18		// sbbb %dl, (%rsi)
 , 20		// sbbb %ch, (%rsi)
 , 6		// sbbw $0x4050, %cx
@@ -2363,14 +2431,14 @@
 , 1		// subb $0x4, %al
 , 7		// subw $0x4050, %ax
 , 1		// subl $0xc0decafe, %eax
-, 16		// subw $0x4050, (%rsi)
-, 17		// subw $0x4, (%rsi)
+, 15		// subw $0x4050, (%rsi)
+, 16		// subw $0x4, (%rsi)
 , 14		// subw %cx, (%rsi)
-, 17		// subl $0xc0decafe, (%rsi)
+, 16		// subl $0xc0decafe, (%rsi)
 , 16		// subl $0x4, (%rsi)
 , 14		// subl %edx, (%rsi)
 , 16		// subq $0xc0decafe, (%rsi)
-, 17		// subq $0x4, (%rsi)
+, 16		// subq $0x4, (%rsi)
 , 14		// subq %rdx, (%rsi)
 , 16		// subb $0x4, (%rsi)
 , 14		// subb %dl, (%rsi)
@@ -2566,9 +2634,9 @@
 , 2		// vcvtpd2ps (%rsi), %xmm0
 , 9		// vcvtpd2ps %xmm0, %xmm0
 , 16		// vcvtpd2ps %ymm0, %xmm0
-, 1		// vcvtph2ps (%rsi), %xmm0
+, 2		// vcvtph2ps (%rsi), %xmm0
 , 9		// vcvtph2ps %xmm0, %xmm0
-, 2		// vcvtph2ps (%rsi), %ymm0
+, 3		// vcvtph2ps (%rsi), %ymm0
 , 16		// vcvtph2ps %xmm0, %ymm0
 , 1		// vcvtps2dq (%rsi), %xmm0
 , 7		// vcvtps2dq %xmm0, %xmm0
@@ -2622,7 +2690,7 @@
 , 25		// vdivpd %xmm0, %xmm0, %xmm0
 , 48		// vdivpd (%rsi), %ymm0, %ymm0
 , 48		// vdivpd %ymm0, %ymm0, %ymm0
-, 25		// vdivps (%rsi), %xmm0, %xmm0
+, 24		// vdivps (%rsi), %xmm0, %xmm0
 , 25		// vdivps %xmm0, %xmm0, %xmm0
 , 46		// vdivps (%rsi), %ymm0, %ymm0
 , 45		// vdivps %ymm0, %ymm0, %ymm0
@@ -2636,8 +2704,8 @@
 , 35		// vdpps $0x4, %xmm0, %xmm0, %xmm0
 , 39		// vdpps $0x4, (%rsi), %ymm0, %ymm0
 , 39		// vdpps $0x4, %ymm0, %ymm0, %ymm0
-, 172		// verr (%rsi)
-, 358		// verr %cx
+, 176		// verr (%rsi)
+, 367		// verr %cx
 , 172		// verw (%rsi)
 , 358		// verw %cx
 , 1		// vextractf128 $0x4, %ymm0, (%rsi)
@@ -2827,7 +2895,7 @@
 , 12		// vfnmsub213ss (%rsi), %xmm0, %xmm0
 , 12		// vfnmsub213ss %xmm0, %xmm0, %xmm0
 , 13		// vfnmsub231pd (%rsi), %xmm0, %xmm0
-, 375		// vfnmsub231pd %xmm0, %xmm0, %xmm0
+, 381		// vfnmsub231pd %xmm0, %xmm0, %xmm0
 , 13		// vfnmsub231pd (%rsi), %ymm0, %ymm0
 , 375		// vfnmsub231pd %ymm0, %ymm0, %ymm0
 , 13		// vfnmsub231ps (%rsi), %xmm0, %xmm0
@@ -2835,7 +2903,7 @@
 , 13		// vfnmsub231ps (%rsi), %ymm0, %ymm0
 , 13		// vfnmsub231ps %ymm0, %ymm0, %ymm0
 , 12		// vfnmsub231sd (%rsi), %xmm0, %xmm0
-, 367		// vfnmsub231sd %xmm0, %xmm0, %xmm0
+, 366		// vfnmsub231sd %xmm0, %xmm0, %xmm0
 , 12		// vfnmsub231ss (%rsi), %xmm0, %xmm0
 , 12		// vfnmsub231ss %xmm0, %xmm0, %xmm0
 , 999		// vgatherdpd %xmm0, es:(%rax,%rax,1), %xmm0
@@ -2947,12 +3015,12 @@
 , 1		// vmovhlps %xmm0, %xmm0, %xmm0
 , 1		// vmovhpd %xmm0, (%rsi)
 , 1		// vmovhpd (%rsi), %xmm0, %xmm0
-, 1		// vmovhps %xmm0, (%rsi)
+, 2		// vmovhps %xmm0, (%rsi)
 , 1		// vmovhps (%rsi), %xmm0, %xmm0
 , 1		// vmovlhps %xmm0, %xmm0, %xmm0
-, 1		// vmovlpd %xmm0, (%rsi)
+, 3		// vmovlpd %xmm0, (%rsi)
 , 1		// vmovlpd (%rsi), %xmm0, %xmm0
-, 1		// vmovlps %xmm0, (%rsi)
+, 3		// vmovlps %xmm0, (%rsi)
 , 1		// vmovlps (%rsi), %xmm0, %xmm0
 , 1		// vmovmskpd %xmm0, %edx
 , 1		// vmovmskpd %ymm0, %edx
@@ -3002,7 +3070,7 @@
 , 1		// vmovupd %ymm0, %ymm0
 , 1		// vmovupd %ymm0, %ymm0
 , 1		// vmovups %xmm0, (%rsi)
-, 2		// vmovups %ymm0, (%rsi)
+, 1		// vmovups %ymm0, (%rsi)
 , 1		// vmovups (%rsi), %xmm0
 , 1		// vmovups %xmm0, %xmm0
 , 1		// vmovups %xmm0, %xmm0
@@ -3319,9 +3387,9 @@
 , 1		// vpminub %xmm0, %xmm0, %xmm0
 , 1		// vpminub (%rsi), %ymm0, %ymm0
 , 1		// vpminub %ymm0, %ymm0, %ymm0
-, 1		// vpminud (%rsi), %xmm0, %xmm0
-, 1		// vpminud %xmm0, %xmm0, %xmm0
-, 1		// vpminud (%rsi), %ymm0, %ymm0
+, 2		// vpminud (%rsi), %xmm0, %xmm0
+, 2		// vpminud %xmm0, %xmm0, %xmm0
+, 2		// vpminud (%rsi), %ymm0, %ymm0
 , 1		// vpminud %ymm0, %ymm0, %ymm0
 , 1		// vpminuw (%rsi), %xmm0, %xmm0
 , 1		// vpminuw %xmm0, %xmm0, %xmm0
@@ -3363,9 +3431,9 @@
 , 1		// vpmovzxbq %xmm0, %xmm0
 , 1		// vpmovzxbq (%rsi), %ymm0
 , 7		// vpmovzxbq %xmm0, %ymm0
-, 1		// vpmovzxbw (%rsi), %xmm0
-, 1		// vpmovzxbw %xmm0, %xmm0
-, 1		// vpmovzxbw (%rsi), %ymm0
+, 2		// vpmovzxbw (%rsi), %xmm0
+, 2		// vpmovzxbw %xmm0, %xmm0
+, 2		// vpmovzxbw (%rsi), %ymm0
 , 7		// vpmovzxbw %xmm0, %ymm0
 , 1		// vpmovzxdq (%rsi), %xmm0
 , 1		// vpmovzxdq %xmm0, %xmm0
@@ -3429,7 +3497,7 @@
 , 1		// vpshufhw $0x4, %ymm0, %ymm0
 , 1		// vpshuflw $0x4, (%rsi), %xmm0
 , 1		// vpshuflw $0x4, %xmm0, %xmm0
-, 2		// vpshuflw $0x4, (%rsi), %ymm0
+, 1		// vpshuflw $0x4, (%rsi), %ymm0
 , 1		// vpshuflw $0x4, %ymm0, %ymm0
 , 1		// vpsignb (%rsi), %xmm0, %xmm0
 , 1		// vpsignb %xmm0, %xmm0, %xmm0
@@ -3695,8 +3763,8 @@
 , 4		// xaddb %ch, %dl
 , 4		// xaddb %dl, %ch
 , 4		// xaddb %ch, %ch
-, 999		// xbegin 0
 , 999		// xbegin 
+, 999		// xbegin 0
 , 3		// xchgw %cx, %ax
 , 3		// xchgl %edx, %eax
 , 48		// xchgw %cx, (%rsi)
@@ -3733,17 +3801,17 @@
 , 999		// xlatb 
 , 999		// xlatb 
 , 1		// xorb $0x4, %al
-, 4		// xorw $0x4050, %ax
+, 5		// xorw $0x4050, %ax
 , 1		// xorl $0xc0decafe, %eax
 , 16		// xorw $0x4050, (%rsi)
-, 16		// xorw $0x4, (%rsi)
+, 17		// xorw $0x4, (%rsi)
 , 14		// xorw %cx, (%rsi)
 , 16		// xorl $0xc0decafe, (%rsi)
 , 16		// xorl $0x4, (%rsi)
 , 14		// xorl %edx, (%rsi)
 , 16		// xorq $0xc0decafe, (%rsi)
-, 16		// xorq $0x4, (%rsi)
-, 14		// xorq %rdx, (%rsi)
+, 15		// xorq $0x4, (%rsi)
+, 15		// xorq %rdx, (%rsi)
 , 16		// xorb $0x4, (%rsi)
 , 14		// xorb %dl, (%rsi)
 , 18		// xorb %ch, (%rsi)

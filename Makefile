@@ -90,7 +90,8 @@ check: $(BIN)
 ##### CLEAN TARGETS
 
 clean:
-	rm -rf $(OBJ) $(LIB) $(BIN) src/Codegen
+	rm -rf $(OBJ) $(LIB) $(BIN) src/Codegen src/*.hi src/*.o
 	rm -f src/*.defn src/*.decl src/*.switch src/*.att src/*.enum src/*.table
 	rm -f src/*.tab.c src/*.tab.h src/lex.*.c src/*.output
+	rm -f src/opcode.intel src/opcode.l32_transform src/opcode.names
 	rm -f test/*.s test/*.log test/*.o test/*.out

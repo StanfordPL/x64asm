@@ -21,7 +21,12 @@ int main(int argc, char** argv) {
   cout << endl;
   cout << "Assembling..." << endl << c << endl << endl << endl;
   
-  cout << Assembler().assemble(c) << endl;
+  auto result = Assembler().assemble(c);
+  if(!result.first) {
+    cout << "Could not assemble; 8-bit jump offset was given but target was further away." << endl;
+  } else {
+    cout << result.second << endl;
+  }
 
   return 0;
 }

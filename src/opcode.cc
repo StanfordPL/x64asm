@@ -43,10 +43,22 @@ constexpr array<const char*, X64ASM_NUM_OPCODES> names_() {
   };
 }
 
+constexpr array<Opcode, X64ASM_NUM_OPCODES> label32_transform_() {
+  return {
+    // Internal mnemonics
+    LABEL_DEFN
+    // Auto-generated mnemonics
+    #include "src/opcode.l32_transform"
+  };
+}
 
 } // namespace
 
 namespace x64asm {
+
+Opcode label32_transform(Opcode o) {
+  return (Opcode)label32_transform_()[(size_t)o];
+}
 
 /** Get the at&t string representation of an opcode */
 string opcode_write_att(Opcode o) {
