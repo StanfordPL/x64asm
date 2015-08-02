@@ -89,7 +89,7 @@ private:
   /** Label definition map for all functions (uses global addrs). */
   std::unordered_map<uint64_t, uint64_t> label_defs_;
   /** List of functions that require linking. */
-  std::vector<Function*> fxns_;
+  std::unordered_map<Function*, uint64_t> fxns_;
   /** Did a multiple definition error occur? */
   bool multiple_def_;
   /** What was the name of this symbol? */
