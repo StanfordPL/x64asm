@@ -27,6 +27,11 @@ namespace x64asm {
 
 class Linker {
 public:
+
+  Linker() {
+    start();
+  }
+
   /** Restart the linking process */
   void start() {
     multiple_def_ = false;
@@ -35,8 +40,18 @@ public:
     label_defs_.clear();
     fxns_.clear();
   }
-  /** Link a new function */
-  void link(Function& fxn);
+
+  /** Link a function at a particular address. */
+  void link(Function& fxn, uint64_t offset);
+  /** Link a function using its own address in memory. */
+  inline void link(Function& fxn) {
+    link(fxn, (uint64_t)fxn.data());
+  }
+  /** Link to an external symbol */
+  inline void link(Label symbol, uint64_t offset) {
+    link((uint64_t)symbol, offset);
+  }
+
   /** Finish the linking process */
   void finish();
 
@@ -68,10 +83,13 @@ public:
   }
 
 private:
+  /** Link symbol to address and check for multiple definition errors. */
+  void link(uint64_t symbol, uint64_t address);
+
   /** Label definition map for all functions (uses global addrs). */
-  std::unordered_map<uint64_t, size_t> label_defs_;
+  std::unordered_map<uint64_t, uint64_t> label_defs_;
   /** List of functions that require linking. */
-  std::vector<Function*> fxns_;
+  std::unordered_map<Function*, uint64_t> fxns_;
   /** Did a multiple definition error occur? */
   bool multiple_def_;
   /** What was the name of this symbol? */
