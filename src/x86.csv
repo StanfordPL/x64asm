@@ -1008,7 +1008,7 @@ REX.W+ 0F 03 /r	LSL r64, r32/m16	RM	W, R		E.ZF		YES	NO	V	V		lsl		Load: r64 = seg
 														
 F3 0F BD /r	LZCNT r16, r/m16	RM	W, R		E.ZF E.CF	E.AF E.PF E.SF E.OF			V	V	BMI1	lzcntw		Count the number of leading zero bits in r/m16, return result in r16
 F3 0F BD /r	LZCNT r32, r/m32	RM	W, R		E.ZF E.CF	E.AF E.PF E.SF E.OF			V	V	BMI1	lzcntl		Count the number of leading zero bits in r/m32, return result in r32
-REX.W+ F3 0F BD /r	LZCNT r64, r/m64	MR	W, R		E.ZF E.CF	E.AF E.PF E.SF E.OF			V	NE	BMI1	lzcntq		Count the number of leading zero bits in r/m64, return result in r64
+REX.W+ F3 0F BD /r	LZCNT r64, r/m64	RM	W, R		E.ZF E.CF	E.AF E.PF E.SF E.OF			V	NE	BMI1	lzcntq		Count the number of leading zero bits in r/m64, return result in r64
 														
 66 0F F7 /r 	MASKMOVDQU xmm1, xmm2	RM	R, R						V	V	SSE2	maskmovdqu		Selectively write bytes from xmm1 to memory location using the byte mask in xmm2. The default memory location is specified by DS:DI/EDI/RDI.
 VEX.128.66.0F.WIG F7 /r	VMASKMOVDQU xmm1, xmm2	RM	R, R						V	V	AVX	vmaskmovdqu		Selectively write bytes from xmm1 to memory location using the byte mask in xmm2. The default memory location is specified by DS:DI/EDI/RDI.
