@@ -76,7 +76,7 @@ string opcode_write_att(Opcode o) {
 
 /** Get the Intel string representation of an opcode */
 string opcode_write_intel(Opcode o) {
-  return string(att_()[o]);
+  return string(intel_()[o]);
 }
 
 /** Write the text representation of an opcode */
