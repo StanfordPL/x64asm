@@ -2,6 +2,7 @@ src/*.table
 *.o
 src/*.output
 src/opcode.att
+src/opcode.intel
 src/opcode.enum
 src/opcode.names
 src/opcode.l32_transform
