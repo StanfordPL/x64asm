@@ -985,6 +985,14 @@ att_mnemonic i = "\"" ++ (att i) ++ "\""
 att_mnemonics :: [Instr] -> String
 att_mnemonics is = intercalate "\n" $ map (", "++) $ map att_mnemonic is
 
+-- Converts an instruction to a printable Intel mnemonic
+intel_mnemonic :: Instr -> String
+intel_mnemonic i = "\"" ++ (low (raw_mnemonic i)) ++ "\""
+
+-- Converts all instructions to printable Intel mnemonics
+intel_mnemonics :: [Instr] -> String
+intel_mnemonics is = intercalate "\n" $ map (", "++) $ map intel_mnemonic is
+
 -- Common Assembler strings
 --------------------------------------------------------------------------------
 
@@ -1397,6 +1405,7 @@ write_code is = do writeFile "assembler.decl"         $ assm_header_decls is
                    writeFile "flag.table"             $ flag_table is
                    writeFile "opcode.enum"            $ opcode_enums is
                    writeFile "opcode.att"             $ att_mnemonics is
+                   writeFile "opcode.intel"           $ intel_mnemonics is
                    writeFile "att.table"              $ att_table is		
                    writeFile "opcode.names"           $ opcode_names is
                    writeFile "opcode.l32_transform"   $ label32_transform is

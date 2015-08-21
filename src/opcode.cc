@@ -34,6 +34,15 @@ constexpr array<const char*, X64ASM_NUM_OPCODES> att_() {
   };
 }
 
+constexpr array<const char*, X64ASM_NUM_OPCODES> intel_() {
+  return {
+    // Internal mnemonics
+    "<label>"
+    // Auto-generated mnemonics
+    #include "src/opcode.intel"
+  };
+}
+
 constexpr array<const char*, X64ASM_NUM_OPCODES> names_() {
   return {
     // Internal mnemonics
@@ -62,6 +71,11 @@ Opcode label32_transform(Opcode o) {
 
 /** Get the at&t string representation of an opcode */
 string opcode_write_att(Opcode o) {
+  return string(att_()[o]);
+}
+
+/** Get the Intel string representation of an opcode */
+string opcode_write_intel(Opcode o) {
   return string(att_()[o]);
 }
 
