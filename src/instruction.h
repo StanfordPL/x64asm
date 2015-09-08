@@ -526,6 +526,8 @@ public:
   bool maybe_read_memory() const {
     if(is_explicit_memory_dereference())
       return maybe_read(mem_index());
+    else if(is_push())
+      return true;  // e.g. pushq (%rax)
     else
       return must_read_memory();
   }
@@ -564,6 +566,8 @@ public:
   bool maybe_write_memory() const {
     if(is_explicit_memory_dereference())
       return maybe_write(mem_index());
+    else if(is_pop())
+      return true; // e.g. popq (%rax)
     else
       return must_write_memory();
   }
