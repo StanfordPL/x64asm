@@ -497,7 +497,7 @@ public:
     if(is_explicit_memory_dereference())
       return get_operand<Operand>(mem_index()).size();
     if(is_ret() || is_leave())
-      return 8;
+      return 64;
     assert(false);
     return 0;
   }
