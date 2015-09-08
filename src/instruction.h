@@ -489,6 +489,16 @@ public:
     assert((size_t)get_opcode() < mem_index_.size());
     return mem_index_[get_opcode()];
   }
+  /** Returns the size of the memory dereference.  Assumes there is one. */
+  int mem_dereference_size() const {
+    assert(is_memory_dereference());
+    if(instr.is_push() || instr.is_pop() || instr.is_popf())
+      return get_operand<Operand>(0).size();
+    if(instr.is_explicit_memory_dereference())
+      return get_operand<Operand>(mem_index()).size();
+    if(instr.is_ret() || instr.is_leave())
+      return 8;
+  }
   /** Returns true if this instruction must read the operand at index. */
   bool must_read(size_t index) const {
     assert((size_t)get_opcode() < properties_.size());
