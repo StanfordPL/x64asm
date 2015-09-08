@@ -489,6 +489,18 @@ public:
     assert((size_t)get_opcode() < mem_index_.size());
     return mem_index_[get_opcode()];
   }
+  /** Returns the size of the memory dereference.  Assumes there is one. */
+  int mem_dereference_size() const {
+    assert(is_memory_dereference());
+    if(is_push() || is_pop() || is_popf())
+      return get_operand<Operand>(0).size();
+    if(is_explicit_memory_dereference())
+      return get_operand<Operand>(mem_index()).size();
+    if(is_ret() || is_leave())
+      return 64;
+    assert(false);
+    return 0;
+  }
   /** Returns true if this instruction must read the operand at index. */
   bool must_read(size_t index) const {
     assert((size_t)get_opcode() < properties_.size());
@@ -499,6 +511,9 @@ public:
   bool must_read_memory() const {
     if(is_explicit_memory_dereference())
       return must_read(mem_index());
+    if(is_pop() || is_popf() || is_ret() || is_leave())
+      return true;
+    assert(!is_memory_dereference());
     return false;
   }
   /** Returns true if this instruction might read the operand at index. */
@@ -509,11 +524,10 @@ public:
   }
   /** Returns true if this instruction might read memory. */
   bool maybe_read_memory() const {
-    if(is_implicit_memory_dereference())
-      return true;
     if(is_explicit_memory_dereference())
       return maybe_read(mem_index());
-    return false;
+    else
+      return must_read_memory();
   }
   /** Returns true if this instruction must write the operand at index. */
   bool must_write(size_t index) const {
@@ -525,6 +539,11 @@ public:
   bool must_write_memory() const {
     if(is_explicit_memory_dereference())
       return must_write(mem_index());
+    if(is_push() || is_pushf())
+      return true;
+    if(is_leave() || is_pop() || is_popf() || is_ret())
+      return false;
+    assert(!is_memory_dereference());
     return false;
   }
   /** Returns true if this instruction must write the operand at index and
@@ -543,11 +562,10 @@ public:
   }
   /** Returns true if this instruction might write memory. */
   bool maybe_write_memory() const {
-    if(is_implicit_memory_dereference())
-      return true;
     if(is_explicit_memory_dereference())
       return maybe_write(mem_index());
-    return false;
+    else
+      return must_write_memory();
   }
   /** Returns true if this instruction might write the operand at index and
     zero extend its parent register.
@@ -577,11 +595,10 @@ public:
   }
   /** Returns true if this instruction might undef memory. */
   bool maybe_undef_memory() const {
-    if(is_implicit_memory_dereference())
-      return true;
     if(is_explicit_memory_dereference())
       return maybe_undef(mem_index());
-    return false;
+    else 
+      return must_undef_memory();
   }
 
 
