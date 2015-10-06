@@ -70,6 +70,11 @@ public:
   /** Write this operand to an output stream */
   std::ostream& write_att(std::ostream& os) const;
 
+  /** Comparison based on underlying values. */
+  bool operator<(const Operand& rhs) const {
+    return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
+  }
+
 protected:
   /** Creates an operand with a type and no underlying value. */
   constexpr Operand(Type t) : val_(0), val2_((uint64_t)t << 3) {}
@@ -86,11 +91,6 @@ protected:
   uint64_t val2_;
 
 private:
-  /** Comparison based on underlying values. */
-  bool operator<(const Operand& rhs) const {
-    return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
-  }
-
   /** Forcibly change the underlying type */
   void set_type(Type t) {
     val2_ = ((uint64_t)t << 3) | (val2_ & 0x7);
