@@ -91,9 +91,21 @@ protected:
   uint64_t val2_;
 
 private:
-  /** Forcibly change the underlying type */
-  void set_type(Type t) {
-    val2_ = ((uint64_t)t << 3) | (val2_ & 0x7);
+  /** Forcibly change the underlying type.  Actually, most of the time
+   * this function does nothing, because it believes the caller is stupid
+   * and that it knows better.  In that case, it just ignores the passed type,
+   * and keeps the existing one.  Only for memory types the function believes
+   * the caller and updates the type.
+   *
+   * Yes, this is a huge hack and should not be here.  The problem seems to be
+   * that the parser just thinks everything is M_8, and then later uses this
+   * to fix the type.  However, this can also lead to an Al register have it's
+   * type changed to R8, which for the most part works fine, but causes subtle
+   * bugs (like equality == doesn't work any longer). */
+  void set_type_maybe_unless_I_know_better_hack(Type t) {
+    if (is_typical_memory()) {
+      val2_ = ((uint64_t)t << 3) | (val2_ & 0x7);
+    }
   }
 };
 

@@ -111,7 +111,7 @@ private:
   /** Fix the types of all the operands */
   void fix_operands_type() {
     for(size_t i = 0; i < operands_.size(); ++i) {
-      operands_[i].set_type(type(i));
+      operands_[i].set_type_maybe_unless_I_know_better_hack(type(i));
     }
   }
 
