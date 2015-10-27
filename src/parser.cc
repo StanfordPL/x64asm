@@ -169,7 +169,7 @@ bool Instruction::promote(Operand* op, Type target) {
       return (0x80000000 <= value && value <= 0xffffffff) || (0xffffffff00000000 <= value && value <= 0xffffffff80000000);
     }
     default:
-      op->set_type(target);
+      op->set_type_maybe_unless_I_know_better_hack(target);
       return false;
   }
 
