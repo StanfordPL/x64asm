@@ -50,6 +50,8 @@ template <>
 struct is_operand<Hint> : public std::true_type { };
 
 template <>
+struct is_operand<Imm> : public std::true_type { };
+template <>
 struct is_operand<Imm8> : public std::true_type { };
 template <>
 struct is_operand<Imm16> : public std::true_type { };
@@ -128,6 +130,8 @@ template <>
 struct is_operand<Moffs64> : public std::true_type { };
 
 template <>
+struct is_operand<R> : public std::true_type { };
+template <>
 struct is_operand<R8> : public std::true_type { };
 template <>
 struct is_operand<Rh> : public std::true_type { };
@@ -168,6 +172,8 @@ template <>
 struct is_operand<St0> : public std::true_type { };
 
 template <>
+struct is_operand<Sse> : public std::true_type { };
+template <>
 struct is_operand<Xmm> : public std::true_type { };
 template <>
 struct is_operand<Xmm0> : public std::true_type { };
@@ -180,6 +186,8 @@ struct is_operand<Ymm> : public std::true_type { };
 template <typename T>
 struct is_reg : public std::false_type { };
 
+template <>
+struct is_reg<R> : public std::true_type { };
 template <>
 struct is_reg<R8> : public std::true_type { };
 template <>
