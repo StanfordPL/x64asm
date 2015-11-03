@@ -828,7 +828,7 @@ property_elem i (t,p) = "Properties::none()" ++ (concat (map (elem t) p))
         elem t 'Z' = case mem_op t of 
                           True ->  "+Property::MUST_WRITE"
                           False -> "+Property::MUST_WRITE_ZX"
-        elem t 'W' = case ((reg32_op t) && (raw_mnemonic i /= "XCHG")) of 
+        elem t 'W' = case (reg32_op t) of 
                           True ->  "+Property::MUST_WRITE_ZX"
                           False -> "+Property::MUST_WRITE"
         elem t 'Q' = case mem_op t of 
