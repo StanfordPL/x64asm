@@ -18,6 +18,9 @@ limitations under the License.
 #define X64ASM_SRC_TYPE_H
 
 #include <cassert>
+#include <sstream>
+#include <iostream>
+#include <stdint.h>
 
 namespace x64asm {
 
@@ -96,6 +99,8 @@ enum class Type {
 
   YMM
 };
+
+uint16_t bit_width_of_type(Type t);
 
 } // namespace x64asm
 
