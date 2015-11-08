@@ -17,6 +17,8 @@ limitations under the License.
 #ifndef X64ASM_SRC_TYPE_H
 #define X64ASM_SRC_TYPE_H
 
+#include <cassert>
+
 namespace x64asm {
 
 /** Any of the types which appear in the Intel Manual. */
@@ -96,5 +98,76 @@ enum class Type {
 };
 
 } // namespace x64asm
+
+namespace std {
+
+/** ostream overload. */
+inline ostream& operator<<(ostream& os, const x64asm::Type& t) {
+  switch (t) {
+  case x64asm::Type::IMM_8: os << "imm8" << endl; break;
+  case x64asm::Type::IMM_16: os << "imm16" << endl; break;
+  case x64asm::Type::IMM_32: os << "imm32" << endl; break;
+  case x64asm::Type::IMM_64: os << "imm64" << endl; break;
+  case x64asm::Type::ZERO: os << "zero" << endl; break;
+  case x64asm::Type::HINT: os << "hint" << endl; break;
+  case x64asm::Type::ONE: os << "one" << endl; break;
+  case x64asm::Type::THREE: os << "three" << endl; break;
+  case x64asm::Type::LABEL: os << "label" << endl; break;
+  case x64asm::Type::M_8: os << "m8" << endl; break;
+  case x64asm::Type::M_16: os << "m16" << endl; break;
+  case x64asm::Type::M_32: os << "m32" << endl; break;
+  case x64asm::Type::M_64: os << "m64" << endl; break;
+  case x64asm::Type::M_128: os << "m128" << endl; break;
+  case x64asm::Type::M_256: os << "m256" << endl; break;
+  case x64asm::Type::M_16_INT: os << "m16int" << endl; break;
+  case x64asm::Type::M_32_INT: os << "m32int" << endl; break;
+  case x64asm::Type::M_64_INT: os << "m64int" << endl; break;
+  case x64asm::Type::M_32_FP: os << "m32fp" << endl; break;
+  case x64asm::Type::M_64_FP: os << "m64fp" << endl; break;
+  case x64asm::Type::M_80_FP: os << "m80fp" << endl; break;
+  case x64asm::Type::M_80_BCD: os << "m80bcd" << endl; break;
+  case x64asm::Type::M_2_BYTE: os << "m2byte" << endl; break;
+  case x64asm::Type::M_28_BYTE: os << "m28byte" << endl; break;
+  case x64asm::Type::M_108_BYTE: os << "m108byte" << endl; break;
+  case x64asm::Type::M_512_BYTE: os << "m512byte" << endl; break;
+  case x64asm::Type::FAR_PTR_16_16: os << "farptr1616" << endl; break;
+  case x64asm::Type::FAR_PTR_16_32: os << "farptr1632" << endl; break;
+  case x64asm::Type::FAR_PTR_16_64: os << "farptr1664" << endl; break;
+  case x64asm::Type::MM: os << "mm" << endl; break;
+  case x64asm::Type::MOFFS_8: os << "moffs8" << endl; break;
+  case x64asm::Type::MOFFS_16: os << "moffs16" << endl; break;
+  case x64asm::Type::MOFFS_32: os << "moffs32" << endl; break;
+  case x64asm::Type::MOFFS_64: os << "moffs_64" << endl; break;
+  case x64asm::Type::PREF_66: os << "pref66" << endl; break;
+  case x64asm::Type::PREF_REX_W: os << "prefrexw" << endl; break;
+  case x64asm::Type::FAR: os << "far" << endl; break;
+  case x64asm::Type::RH: os << "rh" << endl; break;
+  case x64asm::Type::AL: os << "al" << endl; break;
+  case x64asm::Type::CL: os << "cl" << endl; break;
+  case x64asm::Type::R_8: os << "r8" << endl; break;
+  case x64asm::Type::AX: os << "ax" << endl; break;
+  case x64asm::Type::DX: os << "dx" << endl; break;
+  case x64asm::Type::R_16: os << "r16" << endl; break;
+  case x64asm::Type::EAX: os << "eax" << endl; break;
+  case x64asm::Type::R_32: os << "r32" << endl; break;
+  case x64asm::Type::RAX: os << "rax" << endl; break;
+  case x64asm::Type::R_64: os << "r64" << endl; break;
+  case x64asm::Type::REL_8: os << "rel8" << endl; break;
+  case x64asm::Type::REL_32: os << "rel32" << endl; break;
+  case x64asm::Type::FS: os << "fs" << endl; break;
+  case x64asm::Type::GS: os << "gs" << endl; break;
+  case x64asm::Type::SREG: os << "sreg" << endl; break;
+  case x64asm::Type::ST_0: os << "st0" << endl; break;
+  case x64asm::Type::ST: os << "st" << endl; break;
+  case x64asm::Type::XMM_0: os << "xmm0" << endl; break;
+  case x64asm::Type::XMM: os << "xmm" << endl; break;
+  case x64asm::Type::YMM: os << "ymm" << endl; break;
+  default:
+    assert(false);
+  }
+  return os;
+}
+
+} // namespace std
 
 #endif
