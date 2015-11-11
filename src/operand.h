@@ -51,6 +51,8 @@ public:
   bool is_gp_register() const;
   /** Is this an SSE register? */
   bool is_sse_register() const;
+  /** Is this an MM register? */
+  bool is_mm_register() const;
   /** Is this a normal 8/16/32/64/128/256-bit memory operand? */
   bool is_typical_memory() const;
   /** Is this an immediate? */

@@ -43,6 +43,10 @@ bool Operand::is_sse_register() const {
          type() == Type::XMM_0;
 }
 
+bool Operand::is_mm_register() const {
+  return type() == Type::MM;
+}
+
 bool Operand::is_typical_memory() const {
 
   switch(type()) {
@@ -117,6 +121,13 @@ istream& Operand::read_att(istream& is) {
     if(!tmp.fail())
       return is;
 
+    // MM?
+    tmp.str(name);
+    tmp.clear();
+    static_cast<Mm*>(this)->read_att(tmp);
+    if(!tmp.fail())
+      return is;
+
     // SREG?
     tmp.str(name);
     tmp.clear();
@@ -188,6 +199,9 @@ ostream& Operand::write_att(ostream& os) const {
   }
   if(Operand::is_sse_register()) {
     return static_cast<const Sse*>(this)->write_att(os);
+  }
+  if(Operand::is_mm_register()) {
+    return static_cast<const Mm*>(this)->write_att(os);
   }
   assert(false); //other Operands not supported for now.
   return os;
