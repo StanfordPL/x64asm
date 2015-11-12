@@ -142,7 +142,7 @@ public:
   }
   /** Creates a register set containing all ymm registers. */
   static constexpr RegSet all_ymms() {
-    return {Mask::EMPTY, Mask::EMPTY, Mask::EMPTY, Mask::EMPTY};
+    return {Mask::EMPTY, Mask::YMMS, Mask::EMPTY, Mask::EMPTY};
   }
   /** Creates a register set containing all xmm registers. */
   static constexpr RegSet all_mms() {
