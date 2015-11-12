@@ -69,6 +69,7 @@ private:
     A_QUAD   = 0xffff000000000000,
     A_XMM    = 0x000000000000ffff,
     A_YMM    = 0x00000000ffff0000,
+    A_MM     = 0x00ff000000000000,
     // All Masks
     HIGHS    = 0x00000000000f0000,
     BYTES    = 0x000000000000ffff,
@@ -77,6 +78,7 @@ private:
     QUADS    = 0xffffffffffffffff,
     XMMS     = 0x000000000000ffff,
     YMMS     = 0x00000000ffffffff,
+    MMS      = 0x00ff000000000000,
     // Top and Bottom
     EMPTY    = 0x0000000000000000,
     UNIV1    = 0xffffffffffffffff,
@@ -140,7 +142,11 @@ public:
   }
   /** Creates a register set containing all ymm registers. */
   static constexpr RegSet all_ymms() {
-    return {Mask::EMPTY, Mask::YMMS, Mask::EMPTY, Mask::EMPTY};
+    return {Mask::EMPTY, Mask::EMPTY, Mask::EMPTY, Mask::EMPTY};
+  }
+  /** Creates a register set containing all xmm registers. */
+  static constexpr RegSet all_mms() {
+    return {Mask::EMPTY, Mask::MMS, Mask::EMPTY, Mask::EMPTY};
   }
   /** Creates a register set containing registers that must be preserved
       by the callee. */
@@ -545,6 +551,10 @@ public:
   constexpr bool contains_any_ymm() {
     return contains_any(Mask::A_YMM, group2_);
   }
+  /** Returns true if this set contains any mm registers. */
+  constexpr bool contains_any_mm() {
+    return contains_any(Mask::A_MM, group2_);
+  }
 
   /** Returns true if this set contains all high registers. */
   constexpr bool contains_all_rh() {
@@ -573,6 +583,10 @@ public:
   /** Returns true if this set contains all ymm registers. */
   constexpr bool contains_all_ymm() {
     return contains_all(Mask::YMMS, group2_);
+  }
+  /** Returns true if this set contains all mm registers. */
+  constexpr bool contains_all_mm() {
+    return contains_all(Mask::XMM, group2_);
   }
 
   /** Iterator over general purpose registers */
