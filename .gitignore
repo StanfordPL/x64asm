@@ -17,3 +17,4 @@ doc/reference.html
 src/Codegen
 test/*.s
 .~lock*
+codegen/latency
