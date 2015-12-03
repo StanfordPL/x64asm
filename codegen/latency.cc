@@ -154,7 +154,7 @@ uint64_t mm_offset = 0;
 uint64_t xmm_offset = 0;
 
 const uint64_t mem_stepsize = 32;
-const uint64_t mem_modulo = 64 * mem_stepsize;
+const uint64_t mem_modulo = 32 * mem_stepsize;
 
 void reset_instruction_state() {
   mem_offset = 0;
@@ -371,6 +371,18 @@ time_t measure_instruction(Function& fxn, const Opcode& opc) {
   Assembler assm;
   assm.start(fxn);
   bool ok = true;
+  // we start with a vzeroall to start in a known-good state for floating point
+  // if we don't do this, then we sometimes use denormalized numbers (which are
+  // much slower for some instructions), or run into floating-point exceptions.
+  assm.assemble(Instruction(Opcode::VZEROALL));
+  // also zero out all memory
+  for (size_t i = 0; i < mem_modulo/8; i++) {
+    Instruction instr(Opcode::MOV_M64_IMM32);
+    instr.set_operand(0, M64(rsi, Imm32(i * 8)));
+    instr.set_operand(1, Imm32(0));
+    assm.assemble(instr);
+  }
+  // get many copies of the instruction
   for(size_t i = 0; i < instr_count(); ++i) {
     auto instr = get_instruction(opc, ok);
     assm.assemble(instr);
@@ -411,7 +423,8 @@ int main() {
   const auto baseline = measure_baseline(fxn);
 
   // bool ok = true;
-  // auto opc = Opcode::BTR_M16_R16;
+  // auto opc = Opcode::CVTSS2SD_XMM_M32; //cvtss2sd_xmm_m32
+  // //opc = Opcode::VMAXPD_XMM_XMM_M128; // vmaskmovps_ymm_ymm_m256
   // cout << get_instruction(opc, ok) << endl;
   // cout << get_instruction(opc, ok) << endl;
   // cout << get_instruction(opc, ok) << endl;
@@ -436,7 +449,7 @@ int main() {
   for (size_t i = 1; i < NUM_OPCODES; ++i) {
     const auto opc = (Opcode)i;
     const auto latency = get_latency(fxn, opc, baseline);
-    cout << ", " << latency << "\t\t// " << opc << endl;
+    cout << ", " << latency << "\t// " << opc << endl;
   }
 
   return 0;
