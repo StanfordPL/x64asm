@@ -19,34 +19,6 @@ constexpr size_t instr_count() {
   return 1000;
 }
 
-/** Time the execution of a function call in 0.01 * nanoseconds */
-time_t measure(const Function& fxn) {
-  const auto begin = high_resolution_clock::now();
-  for (size_t i = 0; i < iterations(); ++i) {
-    fxn.call<int, char*>(garbage_buffer, garbage_buffer, garbage_buffer);
-  }
-  const auto end = high_resolution_clock::now();
-  return 100*duration_cast<nanoseconds>(end-begin).count() / iterations();
-}
-
-/** Time a function that contains a single instruction */
-time_t measure_instruction(Function& fxn, const Instruction& instr) {
-  Assembler assm;
-  assm.start(fxn);
-  for(size_t i = 0; i < instr_count(); ++i)
-    assm.assemble(instr);
-  assm.ret();
-  assm.finish();
-
-  return measure(fxn);
-}
-
-/** Time a function of nops */
-time_t measure_baseline(Function& fxn) {
-  auto instr = Instruction(NOP);
-  return measure_instruction(fxn, instr);
-}
-
 /** Returns true if this is an instruction that induces control flow */
 bool is_control(const Instruction& instr) {
   return instr.is_label_defn() || instr.is_any_jump() || 
@@ -59,12 +31,16 @@ bool is_control(const Instruction& instr) {
 bool is_problematic(const Instruction& instr) {
   return 
       // These can access memory at an index, and cause a segfault
+      instr.get_opcode() == Opcode::BT_M16_R16 ||
       instr.get_opcode() == Opcode::BT_M32_R32 ||
       instr.get_opcode() == Opcode::BT_M64_R64 ||
+      instr.get_opcode() == Opcode::BTC_M16_R16 ||
       instr.get_opcode() == Opcode::BTC_M32_R32 ||
       instr.get_opcode() == Opcode::BTC_M64_R64 ||
+      instr.get_opcode() == Opcode::BTR_M16_R16 ||
       instr.get_opcode() == Opcode::BTR_M32_R32 ||
       instr.get_opcode() == Opcode::BTR_M64_R64 ||
+      instr.get_opcode() == Opcode::BTS_M16_R16 ||
       instr.get_opcode() == Opcode::BTS_M32_R32 ||
       instr.get_opcode() == Opcode::BTS_M64_R64 ||
 
@@ -171,7 +147,25 @@ bool is_problematic(const Instruction& instr) {
       instr.is_implicit_memory_dereference();
 }
 
-/** Returns a valid instance of this instruction */
+// global state for instruction generation
+uint64_t mem_offset = 0;
+uint64_t r_offset = 0;
+uint64_t mm_offset = 0;
+uint64_t xmm_offset = 0;
+
+const uint64_t mem_stepsize = 32;
+const uint64_t mem_modulo = 64 * mem_stepsize;
+
+void reset_instruction_state() {
+  mem_offset = 0;
+  r_offset = 0;
+  mm_offset = 0;
+  xmm_offset = 0;
+}
+
+/** Returns a valid instance of this instruction.  Uses global state to
+  generate different operands on every invocation (to avoid dependencies
+  between instructions). */
 Instruction get_instruction(Opcode o, bool& ok) {
   ok = true;
   Instruction instr(o);
@@ -204,56 +198,56 @@ Instruction get_instruction(Opcode o, bool& ok) {
         break;
 
       case Type::M_8:
-        instr.set_operand(i, M8(rsi));
+        instr.set_operand(i, M8(rsi, Imm32(((mem_offset++) * mem_stepsize) % mem_modulo)));
         break;
       case Type::M_16:
       case Type::M_16_INT:
-        instr.set_operand(i, M16(rsi));
+        instr.set_operand(i, M16(rsi, Imm32(((mem_offset++) * mem_stepsize) % mem_modulo)));
         break;
       case Type::M_32:
       case Type::M_32_INT:
       case Type::M_32_FP:
-        instr.set_operand(i, M32(rsi));
+        instr.set_operand(i, M32(rsi, Imm32(((mem_offset++) * mem_stepsize) % mem_modulo)));
         break;
       case Type::M_64:
       case Type::M_64_INT:
       case Type::M_64_FP:
-        instr.set_operand(i, M64(rsi));
+        instr.set_operand(i, M64(rsi, Imm32(((mem_offset++) * mem_stepsize) % mem_modulo)));
         break;
       case Type::M_80_BCD:
       case Type::M_80_FP:
-        instr.set_operand(i, M80Fp(rsi));
+        instr.set_operand(i, M80Fp(rsi, Imm32(((mem_offset++) * mem_stepsize) % mem_modulo)));
         break;
       case Type::M_128:
-        instr.set_operand(i, M128(rsi));
+        instr.set_operand(i, M128(rsi, Imm32(((mem_offset++) * mem_stepsize) % mem_modulo)));
         break;
       case Type::M_256:
-        instr.set_operand(i, M256(rsi));
+        instr.set_operand(i, M256(rsi, Imm32(((mem_offset++) * mem_stepsize) % mem_modulo)));
         break;
       case Type::M_2_BYTE:
-        instr.set_operand(i, M2Byte(rsi));
+        instr.set_operand(i, M2Byte(rsi, Imm32(((mem_offset++) * mem_stepsize) % mem_modulo)));
         break;
       case Type::M_28_BYTE:
-        instr.set_operand(i, M28Byte(rsi));
+        instr.set_operand(i, M28Byte(rsi, Imm32(((mem_offset++) * mem_stepsize) % mem_modulo)));
         break;
       case Type::M_108_BYTE:
-        instr.set_operand(i, M108Byte(rsi));
+        instr.set_operand(i, M108Byte(rsi, Imm32(((mem_offset++) * mem_stepsize) % mem_modulo)));
         break;
       case Type::M_512_BYTE:
-        instr.set_operand(i, M512Byte(rsi));
+        instr.set_operand(i, M512Byte(rsi, Imm32(((mem_offset++) * mem_stepsize) % mem_modulo)));
         break;
       case Type::FAR_PTR_16_16:
-        instr.set_operand(i, FarPtr1616(rsi));
+        instr.set_operand(i, FarPtr1616(rsi, Imm32(((mem_offset++) * mem_stepsize) % mem_modulo)));
         break;
       case Type::FAR_PTR_16_32:
-        instr.set_operand(i, FarPtr1632(rsi));
+        instr.set_operand(i, FarPtr1632(rsi, Imm32(((mem_offset++) * mem_stepsize) % mem_modulo)));
         break;
       case Type::FAR_PTR_16_64:
-        instr.set_operand(i, FarPtr1664(rsi));
+        instr.set_operand(i, FarPtr1664(rsi, Imm32(((mem_offset++) * mem_stepsize) % mem_modulo)));
         break;
 
       case Type::MM:
-        instr.set_operand(i, mm0);
+        instr.set_operand(i, mms[(mm_offset++) % 8]);
         break;
 
       case Type::PREF_66:
@@ -272,15 +266,25 @@ Instruction get_instruction(Opcode o, bool& ok) {
       case Type::AL:
         instr.set_operand(i, al);
         break;
-      case Type::R_8:
-        instr.set_operand(i, dl);
+      case Type::R_8: {
+        auto r = spl;
+        do {
+          r = r8s[(r_offset++) % 16];
+        } while (r == spl || r == bpl || r == sil);
+        instr.set_operand(i, r);
         break;
+      }
       case Type::CL:
         instr.set_operand(i, cl);
         break;
-      case Type::R_16:
-        instr.set_operand(i, cx);
+      case Type::R_16: {
+        auto r = sp;
+        do {
+          r = r16s[(r_offset++) % 16];
+        } while (r == sp || r == bp || r == si);
+        instr.set_operand(i, r);
         break;
+      }
       case Type::AX:
         instr.set_operand(i, ax);
         break;
@@ -290,15 +294,25 @@ Instruction get_instruction(Opcode o, bool& ok) {
       case Type::EAX:
         instr.set_operand(i, eax);
         break;
-      case Type::R_32:
-        instr.set_operand(i, edx);
+      case Type::R_32: {
+        auto r = esp;
+        do {
+          r = r32s[(r_offset++) % 16];
+        } while (r == esp || r == ebp || r == esi);
+        instr.set_operand(i, r);
         break;
+      }
       case Type::RAX:
         instr.set_operand(i, rax);
         break;
-      case Type::R_64:
-        instr.set_operand(i, rdx);
+      case Type::R_64: {
+        auto r = rsp;
+        do {
+          r = r64s[(r_offset++) % 16];
+        } while (r == rsp || r == rbp || r == rsi);
+        instr.set_operand(i, r);
         break;
+      }
 
         /*
       case Type::SREG:
@@ -316,12 +330,15 @@ Instruction get_instruction(Opcode o, bool& ok) {
         */
 
       case Type::XMM:
+        instr.set_operand(i, xmms[(xmm_offset++) % 16]);
+        break;
+
       case Type::XMM_0:
         instr.set_operand(i, xmm0);
         break;
 
       case Type::YMM:
-        instr.set_operand(i, ymm0);
+        instr.set_operand(i, ymms[(xmm_offset++) % 16]);
         break;
 
       default:
@@ -330,17 +347,55 @@ Instruction get_instruction(Opcode o, bool& ok) {
     }
   }
 
+  if (!instr.check()) {
+    // try again
+    return get_instruction(o, ok);
+  }
+
   return instr;
 }
 
+/** Time the execution of a function call in 0.01 * nanoseconds */
+time_t measure(const Function& fxn) {
+  const auto begin = high_resolution_clock::now();
+  for (size_t i = 0; i < iterations(); ++i) {
+    fxn.call<int, char*>(garbage_buffer, garbage_buffer, garbage_buffer);
+  }
+  const auto end = high_resolution_clock::now();
+  return 100*duration_cast<nanoseconds>(end-begin).count() / iterations();
+}
+
+/** Time a function that contains a single instruction */
+time_t measure_instruction(Function& fxn, const Opcode& opc) {
+  reset_instruction_state();
+  Assembler assm;
+  assm.start(fxn);
+  bool ok = true;
+  for(size_t i = 0; i < instr_count(); ++i) {
+    auto instr = get_instruction(opc, ok);
+    assm.assemble(instr);
+  }
+  assm.ret();
+  assm.finish();
+
+  return measure(fxn);
+}
+
+/** Time a function of nops */
+time_t measure_baseline(Function& fxn) {
+  return measure_instruction(fxn, NOP);
+}
+
 /** Estimates the runtime of an instruction in 0.1xnano-seconds (rounded up) */
-time_t get_latency(Function& fxn, const Instruction& instr, time_t baseline, bool ok) {
+time_t get_latency(Function& fxn, const Opcode& opc, time_t baseline) {
+  bool ok = true;
+  auto instr = get_instruction(opc, ok);
   if (is_control(instr)) {
     return 0;
   } else if (is_problematic(instr) || !ok) {
     return 999;
   } else {
-    const auto m = measure_instruction(fxn, instr);
+    const auto m = measure_instruction(fxn, opc);
     if(m > baseline) {
       const auto score = (m-baseline)/(instr_count()*10);
       return score > 0 ? score : 1;
@@ -355,13 +410,33 @@ int main() {
   fxn.reserve(32*1200);
   const auto baseline = measure_baseline(fxn);
 
+  // bool ok = true;
+  // auto opc = Opcode::BTR_M16_R16;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_instruction(opc, ok) << endl;
+  // cout << get_latency(fxn, opc, baseline) << endl;
+  // return 0;
+
   for (size_t i = 1; i < NUM_OPCODES; ++i) {
     const auto opc = (Opcode)i;
-    bool ok = true;
-    const auto instr = get_instruction(opc, ok);
-    const auto latency = get_latency(fxn, instr, baseline, ok);
-
-    cout << ", " << latency << "\t\t// " << instr << endl;
+    const auto latency = get_latency(fxn, opc, baseline);
+    cout << ", " << latency << "\t\t// " << opc << endl;
   }
 
   return 0;
