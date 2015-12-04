@@ -101,6 +101,11 @@ RegSet& Instruction::explicit_must_read_set(RegSet& ret) const {
   if (is_xor_reg_reg()) {
     return ret;
   }
+  if ((get_opcode() == Opcode::XCHG_EAX_R32 && get_operand<R32>(1) == eax) ||
+      (get_opcode() == Opcode::XCHG_R32_EAX && get_operand<R32>(0) == eax)) {
+    // xchg with eax hard-coded is essentially a nop
+    return ret;
+  }
   for (size_t i = 0, ie = arity(); i < ie; ++i) {
     switch (type(i)) {
     case Type::M_8:
@@ -195,6 +200,11 @@ RegSet& Instruction::explicit_maybe_read_set(RegSet& ret) const {
   if (is_xor_reg_reg()) {
     return ret;
   }
+  if ((get_opcode() == Opcode::XCHG_EAX_R32 && get_operand<R32>(1) == eax) ||
+      (get_opcode() == Opcode::XCHG_R32_EAX && get_operand<R32>(0) == eax)) {
+    // xchg with eax hard-coded is essentially a nop
+    return ret;
+  }
   for (size_t i = 0, ie = arity(); i < ie; ++i) {
     switch (type(i)) {
     case Type::M_8:
@@ -286,6 +296,11 @@ RegSet& Instruction::explicit_maybe_read_set(RegSet& ret) const {
 }
 
 RegSet& Instruction::explicit_must_write_set(RegSet& ret) const {
+  if ((get_opcode() == Opcode::XCHG_EAX_R32 && get_operand<R32>(1) == eax) ||
+      (get_opcode() == Opcode::XCHG_R32_EAX && get_operand<R32>(0) == eax)) {
+    // xchg with eax hard-coded is essentially a nop
+    return ret;
+  }
   for (size_t i = 0, ie = arity(); i < ie; ++i) {
     if (must_extend(i))
       switch (type(i)) {
@@ -355,6 +370,11 @@ RegSet& Instruction::explicit_must_write_set(RegSet& ret) const {
 }
 
 RegSet& Instruction::explicit_maybe_write_set(RegSet& ret) const {
+  if ((get_opcode() == Opcode::XCHG_EAX_R32 && get_operand<R32>(1) == eax) ||
+      (get_opcode() == Opcode::XCHG_R32_EAX && get_operand<R32>(0) == eax)) {
+    // xchg with eax hard-coded is essentially a nop
+    return ret;
+  }
   for (size_t i = 0, ie = arity(); i < ie; ++i) {
     if (maybe_extend(i))
       switch (type(i)) {
