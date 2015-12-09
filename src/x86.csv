@@ -186,11 +186,11 @@ VEX.NDD.LZ.0F38.W1 F3 /1	BLSR r64, r/m64	VM	W, R		E.ZF E.SF E.OF E.CF	E.AF E.PF	
 62 /r	BOUND r32, m32&32								I	V				Check if r32 (array index) is within bounds specified by m16&16.
 														
 0F BC /r	BSF r16, r/m16	RM	uw, R		E.ZF	E.CF E.OF E.SF E.AF E.PF			a	V		bsfw		Bit scan forward on r/m16.
-0F BC /r	BSF r32, r/m32	RM	uw, R		E.ZF	E.CF E.OF E.SF E.AF E.PF			V	V		bsfl		Bit scan forward on r/m32.
+0F BC /r	BSF r32, r/m32	RM	uz, R		E.ZF	E.CF E.OF E.SF E.AF E.PF			V	V		bsfl		Bit scan forward on r/m32.
 REX.W+ 0F BC	BSF r64, r/m64	RM	uw, R		E.ZF	E.CF E.OF E.SF E.AF E.PF			V	NE		bsfq		Bit scan forward on r/m64.
 														
 0F BD /r	BSR r16, r/m16	RM	uw, R		E.ZF	E.CF E.OF E.SF E.AF E.PF			V	V		bsrw		Bit scan reverse on r/m16.
-0F BD /r	BSR r32, r/m32	RM	uw, R		E.ZF	E.CF E.OF E.SF E.AF E.PF			V	V		bsrl		Bit scan reverse on r/m32.
+0F BD /r	BSR r32, r/m32	RM	uz, R		E.ZF	E.CF E.OF E.SF E.AF E.PF			V	V		bsrl		Bit scan reverse on r/m32.
 REX.W+ 0F BD	BSR r64, r/m64	RM	uw, R		E.ZF	E.CF E.OF E.SF E.AF E.PF			V	NE		bsrq		Bit scan reverse on r/m64.
 														
 0F C8 +rd	BSWAP r32	O	RW						V	V		bswap		Reverses the byte order of a 32-bit register.
@@ -239,7 +239,7 @@ FF /3	CALL m16:32	M	R	rdi rsi rdx rcx r8 r9 rax xmm0 xmm1 xmm2 xmm3 xmm4 xmm5 xm
 REX.W+ FF /3	CALL m16:64	M	R	rdi rsi rdx rcx r8 r9 rax xmm0 xmm1 xmm2 xmm3 xmm4 xmm5 xmm6 xmm7	RAX RDX XMM0 XMM1	RDI RSI RCX R8 R9 R10 R11 XMM2 XMM3 XMM4 XMM5 XMM6 XMM7 XMM8 XMM9 XMM10 XMM11 XMM12 XMM13 XMM14 XMM15			V	NE		callq		In 64-bit mode: If selector points to a gate, then RIP = 64-bit displacement taken from gate; else RIP = 64-bit offset from far pointer referenced in the instruction.
 														
 PREF.66+ 98	CBW	NP		AL	AX				V	V		cbtw		AX = sign-extend of AL.
-98	CWDE	NP		AX	EAX				V	V		cwtl		EAX = sign-extend of AX.
+98	CWDE	NP		AX	RAX				V	V		cwtl		EAX = sign-extend of AX.
 REX.W+ 98	CDQE	NP		EAX	RAX				V	NE		cltq		RAX = sign-extend of EAX.
 														
 F8	CLC	NP			E.CF				V	V		clc		Clear CF flag.
@@ -255,94 +255,94 @@ FA	CLI	NP		E.VM E.IOPL E.VIP	e.if e.vif				V	V		cli		Clear interrupt flag; inter
 F5	CMC	NP		E.CF	E.CF				V	V		cmc		Complement CF flag.
 														
 0F 47 /r	CMOVA r16, r/m16 	RM	w, R	E.CF E.ZF					V	V	CMOV	cmovaw		Move if above (CF=0 and ZF=0).
-0F 47 /r 	CMOVA r32, r/m32 	RM	w, R	E.CF E.ZF					V	V	CMOV	cmoval		Move if above (CF=0 and ZF=0).
+0F 47 /r 	CMOVA r32, r/m32 	RM	z, R	E.CF E.ZF					V	V	CMOV	cmoval		Move if above (CF=0 and ZF=0).
 REX.W+ 0F 47 /r 	CMOVA r64, r/m64 	RM	w, R	E.CF E.ZF					V	NE	CMOV	cmovaq		Move if above (CF=0 and ZF=0).
 0F 43 /r	CMOVAE r16, r/m16 	RM	w, R	E.CF					V	V	CMOV	cmovaew		Move if above or equal (CF=0).
-0F 43 /r 	CMOVAE r32, r/m32 	RM	w, R	E.CF					V	V	CMOV	cmovael		Move if above or equal (CF=0).
+0F 43 /r 	CMOVAE r32, r/m32 	RM	z, R	E.CF					V	V	CMOV	cmovael		Move if above or equal (CF=0).
 REX.W+ 0F 43 /r 	CMOVAE r64, r/m64 	RM	w, R	E.CF					V	NE	CMOV	cmovaeq		Move if above or equal (CF=0).
 0F 42 /r	CMOVB r16, r/m16 	RM	w, R	E.CF					V	V	CMOV	cmovbw		Move if below (CF=1).
-0F 42 /r 	CMOVB r32, r/m32 	RM	w, R	E.CF					V	V	CMOV	cmovbl		Move if below (CF=1).
+0F 42 /r 	CMOVB r32, r/m32 	RM	z, R	E.CF					V	V	CMOV	cmovbl		Move if below (CF=1).
 REX.W+ 0F 42 /r 	CMOVB r64, r/m64 	RM	w, R	E.CF					V	NE	CMOV	cmovbq		Move if below (CF=1).
 0F 46 /r	CMOVBE r16, r/m16 	RM	w, R	E.CF E.ZF					V	V	CMOV	cmovbew		Move if below or equal (CF=1 or ZF=1).
-0F 46 /r 	CMOVBE r32, r/m32 	RM	w, R	E.CF E.ZF					V	V	CMOV	cmovbel		Move if below or equal (CF=1 or ZF=1).
+0F 46 /r 	CMOVBE r32, r/m32 	RM	z, R	E.CF E.ZF					V	V	CMOV	cmovbel		Move if below or equal (CF=1 or ZF=1).
 REX.W+ 0F 46 /r 	CMOVBE r64, r/m64	RM	w, R	E.CF E.ZF					V	NE	CMOV	cmovbeq		Move if below or equal (CF=1 or ZF=1).
 0F 42 /r	CMOVC r16, r/m16 	RM	w, R	E.CF					V	V	CMOV	cmovcw		Move if carry (CF=1).
-0F 42 /r 	CMOVC r32, r/m32 	RM	w, R	E.CF					V	V	CMOV	cmovcl		Move if carry (CF=1).
+0F 42 /r 	CMOVC r32, r/m32 	RM	z, R	E.CF					V	V	CMOV	cmovcl		Move if carry (CF=1).
 REX.W+ 0F 42 /r 	CMOVC r64, r/m64 	RM	w, R	E.CF					V	NE	CMOV	cmovcq		Move if carry (CF=1).
 0F 44 /r	CMOVE r16, r/m16 	RM	w, R	E.ZF					V	V	CMOV	cmovew		Move if equal (ZF=1).
-0F 44 /r 	CMOVE r32, r/m32 	RM	w, R	E.ZF					V	V	CMOV	cmovel		Move if equal (ZF=1).
+0F 44 /r 	CMOVE r32, r/m32 	RM	z, R	E.ZF					V	V	CMOV	cmovel		Move if equal (ZF=1).
 REX.W+ 0F 44 /r 	CMOVE r64, r/m64 	RM	w, R	E.ZF					V	NE	CMOV	cmoveq		Move if equal (ZF=1).
 0F 4F /r	CMOVG r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovgw		Move if greater (ZF=0 and SF=OF).
-0F 4F /r 	CMOVG r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovgl		Move if greater (ZF=0 and SF=OF).
+0F 4F /r 	CMOVG r32, r/m32 	RM	z, R	E.ZF E.SF E.OF					V	V	CMOV	cmovgl		Move if greater (ZF=0 and SF=OF).
 REX.W+ 0F 4F /r 	CMOVG r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE	CMOV	cmovgq		Move if greater (ZF=0 and SF=OF).
 0F 4D /r	CMOVGE r16, r/m16 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovgew		Move if greater or equal (SF=OF).
-0F 4D /r 	CMOVGE r32, r/m32 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovgel		Move if greater or equal (SF=OF).
+0F 4D /r 	CMOVGE r32, r/m32 	RM	z, R	E.SF E.OF					V	V	CMOV	cmovgel		Move if greater or equal (SF=OF).
 REX.W+ 0F 4D /r 	CMOVGE r64, r/m64 	RM	w, R	E.SF E.OF					V	NE	CMOV	cmovgeq		Move if greater or equal (SF=OF).
 0F 4C /r	CMOVL r16, r/m16 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovlw		Move if less (SF != OF).
-0F 4C /r 	CMOVL r32, r/m32 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovll		Move if less (SF!= OF).
+0F 4C /r 	CMOVL r32, r/m32 	RM	z, R	E.SF E.OF					V	V	CMOV	cmovll		Move if less (SF!= OF).
 REX.W+ 0F 4C /r 	CMOVL r64, r/m64 	RM	w, R	E.SF E.OF					V	NE	CMOV	cmovlq		Move if less (SF!= OF).
 0F 4E /r	CMOVLE r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovlew		Move if less or equal (ZF=1 or SF!= OF).
-0F 4E /r 	CMOVLE r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovlel		Move if less or equal (ZF=1 or SF!= OF).
+0F 4E /r 	CMOVLE r32, r/m32 	RM	z, R	E.ZF E.SF E.OF					V	V	CMOV	cmovlel		Move if less or equal (ZF=1 or SF!= OF).
 REX.W+ 0F 4E /r 	CMOVLE r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE	CMOV	cmovleq		Move if less or equal (ZF=1 or SF!= OF).
 0F 46 /r	CMOVNA r16, r/m16 	RM	w, R	E.CF E.ZF					V	V	CMOV	cmovnaw		Move if not above (CF=1 or ZF=1).
-0F 46 /r 	CMOVNA r32, r/m32 	RM	w, R	E.CF E.ZF					V	V	CMOV	cmovnal		Move if not above (CF=1 or ZF=1).
+0F 46 /r 	CMOVNA r32, r/m32 	RM	z, R	E.CF E.ZF					V	V	CMOV	cmovnal		Move if not above (CF=1 or ZF=1).
 REX.W+ 0F 46 /r	CMOVNA r64, r/m64 	RM	w, R	E.CF E.ZF					V	NE	CMOV	cmovnaq		Move if not above (CF=1 or ZF=1).
 0F 42 /r	CMOVNAE r16, r/m16 	RM	w, R	E.CF					V	V	CMOV	cmovnaew		Move if not above or equal (CF=1).
-0F 42 /r 	CMOVNAE r32, r/m32 	RM	w, R	E.CF					V	V	CMOV	cmovnael		Move if not above or equal (CF=1).
+0F 42 /r 	CMOVNAE r32, r/m32 	RM	z, R	E.CF					V	V	CMOV	cmovnael		Move if not above or equal (CF=1).
 REX.W+ 0F 42 /r 	CMOVNAE r64, r/m64 	RM	w, R	E.CF					V	NE	CMOV	cmovnaeq		Move if not above or equal (CF=1).
 0F 43 /r	CMOVNB r16, r/m16 	RM	w, R	E.CF					V	V	CMOV	cmovnbw		Move if not below (CF=0).
-0F 43 /r 	CMOVNB r32, r/m32 	RM	w, R	E.CF					V	V	CMOV	cmovnbl		Move if not below (CF=0).
+0F 43 /r 	CMOVNB r32, r/m32 	RM	z, R	E.CF					V	V	CMOV	cmovnbl		Move if not below (CF=0).
 REX.W+ 0F 43 /r 	CMOVNB r64, r/m64 	RM	w, R	E.CF					V	NE	CMOV	cmovnbq		Move if not below (CF=0).
 0F 47 /r	CMOVNBE r16, r/m16	RM	w, R	E.CF E.ZF					V	V	CMOV	cmovnbew		Move if not below or equal (CF=0 and ZF=0).
-0F 47 /r 	CMOVNBE r32, r/m32 	RM	w, R	E.CF E.ZF					V	V	CMOV	cmovnbel		Move if not below or equal (CF=0 and ZF=0).
+0F 47 /r 	CMOVNBE r32, r/m32 	RM	z, R	E.CF E.ZF					V	V	CMOV	cmovnbel		Move if not below or equal (CF=0 and ZF=0).
 REX.W+ 0F 47 /r 	CMOVNBE r64, r/m64 	RM	w, R	E.CF E.ZF					V	NE	CMOV	cmovnbeq		Move if not below or equal (CF=0 and ZF=0).
 0F 43 /r	CMOVNC r16, r/m16 	RM	w, R	E.CF					V	V	CMOV	cmovncw		Move if not carry (CF=0).
-0F 43 /r 	CMOVNC r32, r/m32 	RM	w, R	E.CF					V	V	CMOV	cmovncl		Move if not carry (CF=0).
+0F 43 /r 	CMOVNC r32, r/m32 	RM	z, R	E.CF					V	V	CMOV	cmovncl		Move if not carry (CF=0).
 REX.W+ 0F 43 /r 	CMOVNC r64, r/m64 	RM	w, R	E.CF					V	NE	CMOV	cmovncq		Move if not carry (CF=0).
 0F 45 /r	CMOVNE r16, r/m16 	RM	w, R	E.ZF					V	V	CMOV	cmovnew		Move if not equal (ZF=0).
-0F 45 /r 	CMOVNE r32, r/m32 	RM	w, R	E.ZF					V	V	CMOV	cmovnel		Move if not equal (ZF=0).
+0F 45 /r 	CMOVNE r32, r/m32 	RM	z, R	E.ZF					V	V	CMOV	cmovnel		Move if not equal (ZF=0).
 REX.W+ 0F 45 /r 	CMOVNE r64, r/m64 	RM	w, R	E.ZF					V	NE	CMOV	cmovneq		Move if not equal (ZF=0).
 0F 4E /r	CMOVNG r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovngw		Move if not greater (ZF=1 or SF!= OF).
-0F 4E /r 	CMOVNG r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovngl		Move if not greater (ZF=1 or SF!= OF).
+0F 4E /r 	CMOVNG r32, r/m32 	RM	z, R	E.ZF E.SF E.OF					V	V	CMOV	cmovngl		Move if not greater (ZF=1 or SF!= OF).
 REX.W+ 0F 4E /r 	CMOVNG r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE	CMOV	cmovngq		Move if not greater (ZF=1 or SF!= OF).
 0F 4C /r	CMOVNGE r16, r/m16 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovngew		Move if not greater or equal (SF!= OF).
-0F 4C /r 	CMOVNGE r32, r/m32 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovngel		Move if not greater or equal (SF!= OF).
+0F 4C /r 	CMOVNGE r32, r/m32 	RM	z, R	E.SF E.OF					V	V	CMOV	cmovngel		Move if not greater or equal (SF!= OF).
 REX.W+ 0F 4C /r 	CMOVNGE r64, r/m64 	RM	w, R	E.SF E.OF					V	NE	CMOV	cmovngeq		Move if not greater or equal (SF!= OF).
 0F 4D /r	CMOVNL r16, r/m16 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovnlw		Move if not less (SF=OF).
-0F 4D /r 	CMOVNL r32, r/m32 	RM	w, R	E.SF E.OF					V	V	CMOV	cmovnll		Move if not less (SF=OF).
+0F 4D /r 	CMOVNL r32, r/m32 	RM	z, R	E.SF E.OF					V	V	CMOV	cmovnll		Move if not less (SF=OF).
 REX.W+ 0F 4D /r 	CMOVNL r64, r/m64 	RM	w, R	E.SF E.OF					V	NE	CMOV	cmovnlq		Move if not less (SF=OF).
 0F 4F /r	CMOVNLE r16, r/m16 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovnlew		Move if not less or equal (ZF=0 and SF=OF).
-0F 4F /r 	CMOVNLE r32, r/m32 	RM	w, R	E.ZF E.SF E.OF					V	V	CMOV	cmovnlel		Move if not less or equal (ZF=0 and SF=OF).
+0F 4F /r 	CMOVNLE r32, r/m32 	RM	z, R	E.ZF E.SF E.OF					V	V	CMOV	cmovnlel		Move if not less or equal (ZF=0 and SF=OF).
 REX.W+ 0F 4F /r 	CMOVNLE r64, r/m64 	RM	w, R	E.ZF E.SF E.OF					V	NE	CMOV	cmovnleq		Move if not less or equal (ZF=0 and SF=OF).
 0F 41 /r	CMOVNO r16, r/m16 	RM	w, R	E.OF					V	V	CMOV	cmovnow		Move if not overflow (OF=0).
-0F 41 /r 	CMOVNO r32, r/m32 	RM	w, R	E.OF					V	V	CMOV	cmovnol		Move if not overflow (OF=0).
+0F 41 /r 	CMOVNO r32, r/m32 	RM	z, R	E.OF					V	V	CMOV	cmovnol		Move if not overflow (OF=0).
 REX.W+ 0F 41 /r 	CMOVNO r64, r/m64 	RM	w, R	E.OF					V	NE	CMOV	cmovnoq		Move if not overflow (OF=0).
 0F 4B /r	CMOVNP r16, r/m16 	RM	w, R	E.PF					V	V	CMOV	cmovnpw		Move if not parity (PF=0).
-0F 4B /r 	CMOVNP r32, r/m32 	RM	w, R	E.PF					V	V	CMOV	cmovnpl		Move if not parity (PF=0).
+0F 4B /r 	CMOVNP r32, r/m32 	RM	z, R	E.PF					V	V	CMOV	cmovnpl		Move if not parity (PF=0).
 REX.W+ 0F 4B /r 	CMOVNP r64, r/m64 	RM	w, R	E.PF					V	NE	CMOV	cmovnpq		Move if not parity (PF=0).
 0F 49 /r	CMOVNS r16, r/m16 	RM	w, R	E.SF					V	V	CMOV	cmovnsw		Move if not sign (SF=0).
-0F 49 /r 	CMOVNS r32, r/m32 	RM	w, R	E.SF					V	V	CMOV	cmovnsl		Move if not sign (SF=0).
+0F 49 /r 	CMOVNS r32, r/m32 	RM	z, R	E.SF					V	V	CMOV	cmovnsl		Move if not sign (SF=0).
 REX.W+ 0F 49 /r 	CMOVNS r64, r/m64 	RM	w, R	E.SF					V	NE	CMOV	cmovnsq		Move if not sign (SF=0).
 0F 45 /r	CMOVNZ r16, r/m16 	RM	w, R	E.ZF					V	V	CMOV	cmovnzw		Move if not zero (ZF=0).
-0F 45 /r 	CMOVNZ r32, r/m32 	RM	w, R	E.ZF					V	V	CMOV	cmovnzl		Move if not zero (ZF=0).
+0F 45 /r 	CMOVNZ r32, r/m32 	RM	z, R	E.ZF					V	V	CMOV	cmovnzl		Move if not zero (ZF=0).
 REX.W+ 0F 45 /r 	CMOVNZ r64, r/m64 	RM	w, R	E.ZF					V	NE	CMOV	cmovnzq		Move if not zero (ZF=0).
 0F 40 /r	CMOVO r16, r/m16 	RM	w, R	E.OF					V	V	CMOV	cmovow		Move if overflow (OF=1).
-0F 40 /r 	CMOVO r32, r/m32 	RM	w, R	E.OF					V	V	CMOV	cmovol		Move if overflow (OF=1).
+0F 40 /r 	CMOVO r32, r/m32 	RM	z, R	E.OF					V	V	CMOV	cmovol		Move if overflow (OF=1).
 REX.W+ 0F 40 /r 	CMOVO r64, r/m64 	RM	w, R	E.OF					V	NE	CMOV	cmovoq		Move if overflow (OF=1).
 0F 4A /r	CMOVP r16, r/m16 	RM	w, R	E.PF					V	V	CMOV	cmovpw		Move if parity (PF=1).
-0F 4A /r 	CMOVP r32, r/m32 	RM	w, R	E.PF					V	V	CMOV	cmovpl		Move if parity (PF=1).
+0F 4A /r 	CMOVP r32, r/m32 	RM	z, R	E.PF					V	V	CMOV	cmovpl		Move if parity (PF=1).
 REX.W+ 0F 4A /r 	CMOVP r64, r/m64 	RM	w, R	E.PF					V	NE	CMOV	cmovpq		Move if parity (PF=1).
 0F 4A /r	CMOVPE r16, r/m16 	RM	w, R	E.PF					V	V	CMOV	cmovpew		Move if parity even (PF=1).
-0F 4A /r 	CMOVPE r32, r/m32 	RM	w, R	E.PF					V	V	CMOV	cmovpel		Move if parity even (PF=1).
+0F 4A /r 	CMOVPE r32, r/m32 	RM	z, R	E.PF					V	V	CMOV	cmovpel		Move if parity even (PF=1).
 REX.W+ 0F 4A /r	CMOVPE r64, r/m64	RM	w, R	E.PF					V	NE	CMOV	cmovpeq		Move if parity even (PF=1).
 0F 4B /r	CMOVPO r16, r/m16 	RM	w, R	E.PF					V	V	CMOV	cmovpow		Move if parity odd (PF=0).
-0F 4B /r	CMOVPO r32, r/m32 	RM	w, R	E.PF					V	V	CMOV	cmovpol		Move if parity odd (PF=0).
+0F 4B /r	CMOVPO r32, r/m32 	RM	z, R	E.PF					V	V	CMOV	cmovpol		Move if parity odd (PF=0).
 REX.W+ 0F 4B /r 	CMOVPO r64, r/m64 	RM	w, R	E.PF					V	NE	CMOV	cmovpoq		Move if parity odd (PF=0).
 0F 48 /r	CMOVS r16, r/m16 	RM	w, R	E.SF					V	V	CMOV	cmovsw		Move if sign (SF=1).
-0F 48 /r	CMOVS r32, r/m32 	RM	w, R	E.SF					V	V	CMOV	cmovsl		Move if sign (SF=1).
+0F 48 /r	CMOVS r32, r/m32 	RM	z, R	E.SF					V	V	CMOV	cmovsl		Move if sign (SF=1).
 REX.W+ 0F 48 /r 	CMOVS r64, r/m64 	RM	w, R	E.SF					V	NE	CMOV	cmovsq		Move if sign (SF=1).
 0F 44 /r	CMOVZ r16, r/m16 	RM	w, R	E.ZF					V	V	CMOV	cmovzw		Move if zero (ZF=1).
-0F 44 /r	CMOVZ r32, r/m32 	RM	w, R	E.ZF					V	V	CMOV	cmovzl		Move if zero (ZF=1).
+0F 44 /r	CMOVZ r32, r/m32 	RM	z, R	E.ZF					V	V	CMOV	cmovzl		Move if zero (ZF=1).
 REX.W+ 0F 44 /r	CMOVZ r64, r/m64	RM	w, R	E.ZF					V	NE	CMOV	cmovzq		Move if zero (ZF=1).
 														
 3C ib	CMP AL, imm8 	I	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpb		Compare imm8 with AL.
@@ -369,7 +369,7 @@ REX+ 3A /r	CMP r8, r/m8	RM	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		cmpb		Co
 REX.W+ 3B /r	CMP r64, r/m64	RM	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		cmpq		Compare r/m64 with r64.
 														
 66 0F C2 /r ib	CMPPD xmm1, xmm2/m128, imm8	RMI	RW, R, R						V	V	SSE2	cmppd		Compare packed double-precision floating- point values in xmm2/m128 and xmm1 using imm8 as comparison predicate.
-VEX.NDS.128.66.0F.WIG C2 /r ib	VCMPPD xmm1, xmm2, xmm3/m128, imm8	RVMI	W, R, R, R						V	V	AVX	vcmppd		Compare packed double-precision floating- point values in xmm3/m128 and xmm2 using bits 4:0 of imm8 as a comparison predicate.
+VEX.NDS.128.66.0F.WIG C2 /r ib	VCMPPD xmm1, xmm2, xmm3/m128, imm8	RVMI	Z, R, R, R						V	V	AVX	vcmppd		Compare packed double-precision floating- point values in xmm3/m128 and xmm2 using bits 4:0 of imm8 as a comparison predicate.
 VEX.NDS.256.66.0F.WIG C2 /r ib	VCMPPD ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R, R, R						V	V	AVX	vcmppd		Compare packed double-precision floating- point values in ymm3/m256 and ymm2 using bits 4:0 of imm8 as a comparison predicate.
 														
 0F C2 /r ib	CMPPS xmm1, xmm2/m128, imm8	RMI	RW, R, R						V	V	SSE	cmpps		Compare packed single-precision floating- point values in xmm2/mem and xmm1 using imm8 as comparison predicate.
@@ -386,18 +386,18 @@ A7	CMPSD	NP		E.DF ESI rsi EDI rdi	E.CF E.OF E.SF E.ZF E.AF E.PF				V	V		cmpsl		F
 REX.W+ A7	CMPSQ	NP		E.DF ESI rsi EDI rdi	E.CF E.OF E.SF E.ZF E.AF E.PF				V	NE		cmpsq		Compares quadword at address (R|E)SI with quadword at address (R|E)DI and sets the status flags accordingly.
 														
 F2 0F C2 /r ib	CMPSD xmm1, xmm2/m64, imm8	RMI	RW, R, R						V	V	SSE2	cmpsd		Compare low double-precision floating-point value in xmm2/m64 and xmm1 using imm8 as comparison predicate.
-VEX.NDS.LIG.F2.0F.WIG C2 /r ib	VCMPSD xmm1, xmm2, xmm3/m64, imm8	RVMI	W, R, R, R						V	V	AVX	vcmpsd		Compare low double precision floating-point value in xmm3/m64 and xmm2 using bits 4:0 of imm8 as comparison predicate.
+VEX.NDS.LIG.F2.0F.WIG C2 /r ib	VCMPSD xmm1, xmm2, xmm3/m64, imm8	RVMI	Z, R, R, R						V	V	AVX	vcmpsd		Compare low double precision floating-point value in xmm3/m64 and xmm2 using bits 4:0 of imm8 as comparison predicate.
 														
 F3 0F C2 /r ib	CMPSS xmm1, xmm2/m32, imm8	RMI	RW, R, R						V	V	SSE	cmpss		Compare low single-precision floating-point value in xmm2/m32 and xmm1 using imm8 as comparison predicate.
-VEX.NDS.LIG.F3.0F.WIG C2 /r ib	VCMPSS xmm1, xmm2, xmm3/m32, imm8	RVMI	W, R, R, R						V	V	AVX	vcmpss		Compare low single precision floating-point value in xmm3/m32 and xmm2 using bits 4:0 of imm8 as comparison predicate.
+VEX.NDS.LIG.F3.0F.WIG C2 /r ib	VCMPSS xmm1, xmm2, xmm3/m32, imm8	RVMI	Z, R, R, R						V	V	AVX	vcmpss		Compare low single precision floating-point value in xmm3/m32 and xmm2 using bits 4:0 of imm8 as comparison predicate.
 														
 0F B0 /r	CMPXCHG r/m8, r8	MR	Rw, R	AL	al E.ZF E.CF E.PF E.AF E.SF E.OF				V	V		cmpxchgb		Compare AL with r/m8. If equal, ZF is set and r8 is loaded into r/m8. Else, clear ZF and load r/m8 into AL.
 REX+ 0F B0 /r	CMPXCHG r/m8,r8	MR	Rw, R	AL	al E.ZF E.CF E.PF E.AF E.SF E.OF				V	NE		cmpxchgb		Compare AL with r/m8. If equal, ZF is set and r8 is loaded into r/m8. Else, clear ZF and load r/m8 into AL.
 0F B1 /r	CMPXCHG r/m16, r16	MR	Rw, R	AX	ax E.ZF E.CF E.PF E.AF E.SF E.OF				V	V		cmpxchgw		Compare AX with r/m16. If equal, ZF is set and r16 is loaded into r/m16. Else, clear ZF and load r/m16 into AX.
-0F B1 /r	CMPXCHG r/m32, r32	MR	Rw, R	EAX	eax E.ZF E.CF E.PF E.AF E.SF E.OF				V	V		cmpxchgl		Compare EAX with r/m32. If equal, ZF is set and r32 is loaded into r/m32. Else, clear ZF and load r/m32 into EAX.
+0F B1 /r	CMPXCHG r/m32, r32	MR	Rz, R	EAX	rax E.ZF E.CF E.PF E.AF E.SF E.OF				V	V		cmpxchgl		Compare EAX with r/m32. If equal, ZF is set and r32 is loaded into r/m32. Else, clear ZF and load r/m32 into EAX.
 REX.W+ 0F B1 /r	CMPXCHG r/m64, r64	MR	Rw, R	RAX	Rax E.ZF E.CF E.PF E.AF E.SF E.OF				V	NE		cmpxchgq		Compare RAX with r/m64. If equal, ZF is set and r64 is loaded into r/m64. Else, clear ZF and load r/m64 into RAX.
 														
-0F C7 /1	CMPXCHG8B m64	M	Rw	EAX EDX	eax ebx ecx edx E.ZF				V	V	CX8	cmpxchg8b		Compare EDX:EAX with m64. If equal, set ZF and load ECX:EBX into m64. Else, clear ZF and load m64 into EDX:EAX.
+0F C7 /1	CMPXCHG8B m64	M	Rw	EAX EDX	rax rbx rcx rdx E.ZF				V	V	CX8	cmpxchg8b		Compare EDX:EAX with m64. If equal, set ZF and load ECX:EBX into m64. Else, clear ZF and load m64 into EDX:EAX.
 REX.W+ 0F C7 /1	CMPXCHG16B m128	M	Rw	RAX RDX	rax rbx rcx rdx E.ZF				V	NE	CX16	cmpxchg16b		Compare RDX:RAX with m128. If equal, set ZF and load RCX:RBX into m128. Else, clear ZF and load m128 into RDX:RAX.
 														
 66 0F 2F /r	COMISD xmm1, xmm2/m64	RM	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V	SSE2	comisd		Compare low double-precision floating-point values in xmm1 and xmm2/mem64 and set the EFLAGS flags accordingly.
@@ -406,7 +406,7 @@ VEX.LIG.66.0F.WIG 2F /r	VCOMISD xmm1, xmm2/m64	RM	R, R		E.CF E.OF E.SF E.ZF E.AF
 0F 2F /r	COMISS xmm1, xmm2/m32	RM	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V	SSE	comiss		Compare low single-precision floating-point values in xmm1 and xmm2/mem32 and set the EFLAGS flags accordingly.
 VEX.LIG.0F.WIG 2F /r	VCOMISS xmm1, xmm2/m32	RM	R, R		E.CF E.OF E.SF E.ZF E.AF E.PF				V	V	AVX	vcomiss		Compare low single precision floating-point values in xmm1 and xmm2/mem32 and set the EFLAGS flags accordingly.
 														
-0F A2	CPUID	NP		EAX ecx	EAX EBX ECX EDX				V	V		cpuid		Returns processor identification and feature information to the EAX, EBX, ECX, and EDX registers, as determined by input entered in EAX (in some cases, ECX as well).
+0F A2	CPUID	NP		EAX ecx	RAX RBX RCX RDX				V	V		cpuid		Returns processor identification and feature information to the EAX, EBX, ECX, and EDX registers, as determined by input entered in EAX (in some cases, ECX as well).
 														
 F2 0F 38 F0 /r	CRC32 r32, r/m8	RM	RW, R						V	V		crc32b		Accumulate CRC32 on r/m8.
 F2 REX+ 0F 38 F0 /r	CRC32 r32, r/m8	RM	RW, R						V	NE		crc32b		Accumulate CRC32 on r/m8.
@@ -496,7 +496,7 @@ VEX.LIG.F3.0F.W0 2C /r	VCVTTSS2SI r32, xmm1/m32	RM	W, R						V	V	AVX	vcvttss2sil
 VEX.LIG.F3.0F.W1 2C /r	VCVTTSS2SI r64, xmm1/m32	RM	W, R						V	NE	AVX	vcvttss2siq		Convert one single-precision floating-point value from xmm1/m32 to one signed quadword integer in r64 using truncation.
 														
 PREF.66+ 99	CWD	NP		AX	DX				V	V		cwtd		DX:AX = sign-extend of AX.
-99	CDQ	NP		EAX	EDX				V	V		cltd		EDX:EAX = sign-extend of EAX.
+99	CDQ	NP		EAX	RDX				V	V		cltd		EDX:EAX = sign-extend of EAX.
 REX.W+ 99	CQO	NP		RAX	RDX				V	NE		cqto		RDX:RAX = sign-extend of RAX.
 														
 27	DAA								I	V				Decimal adjust AL after addition.
@@ -514,7 +514,7 @@ REX.W+ FF /1	DEC r/m64 	M	RW		E.OF E.SF E.ZF E.AF E.PF				V	NE		decq		Decrement 
 F6 /6	DIV r/m8	M	R	AX	AX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	V		divb		Unsigned divide AX by r/m8, with result stored in AL = Quotient, AH = Remainder.
 REX+ F6 /6	DIV r/m8	M	R	AX	AX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	NE		divb		Unsigned divide AX by r/m8, with result stored in AL = Quotient, AH = Remainder.
 F7 /6	DIV r/m16 	M	R	AX DX	AX DX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	V		divw		Unsigned divide DX:AX by r/m16, with result stored in AX = Quotient, DX = Remainder.
-F7 /6	DIV r/m32	M	R	EAX EDX	EAX EDX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	V		divl		Unsigned divide EDX:EAX by r/m32, with result stored in EAX = Quotient, EDX = Remainder.
+F7 /6	DIV r/m32	M	R	EAX EDX	RAX RDX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	V		divl		Unsigned divide EDX:EAX by r/m32, with result stored in EAX = Quotient, EDX = Remainder.
 REX.W+ F7 /6	DIV r/m64	M	R	RAX RDX	RAX RDX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	NE		divq		Unsigned divide RDX:RAX by r/m64, with result stored in RAX = Quotient, RDX = Remainder.
 														
 66 0F 5E /r	DIVPD xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	divpd		Divide packed double-precision floating-point values in xmm1 by packed double-precision floating-point values xmm2/m128.
@@ -755,33 +755,33 @@ D9 F1 	FYL2X 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fyl2x		Replace S
 D9 F9 	FYL2XP1 			ST(0) ST(1)	ST(1) S.C1	S.C0 S.C2 S.C3			V	V	FPU	fyl2xp1		Replace ST(1) with ST(1) * log2(ST(0) + 1.0) and pop the register stack.
 														
 66 0F 7C /r 	HADDPD xmm1, xmm2/m128	RM	RW, R						V	V	PNI	haddpd		Horizontal add packed double-precision floating-point values from xmm2/m128 to xmm1.
-VEX.NDS.128.66.0F.WIG 7C /r	VHADDPD xmm1, xmm2, xmm3/m128	RVM	W, R, R						V	V	AVX	vhaddpd		Horizontal add packed double-precision floating-point values from xmm2 and xmm3/mem.
+VEX.NDS.128.66.0F.WIG 7C /r	VHADDPD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vhaddpd		Horizontal add packed double-precision floating-point values from xmm2 and xmm3/mem.
 VEX.NDS.256.66.0F.WIG 7C /r	VHADDPD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	vhaddpd		Horizontal add packed double-precision floating-point values from ymm2 and ymm3/mem.
 														
 F2 0F 7C /r 	HADDPS xmm1, xmm2/m128	RM	RW, R						V	V	PNI	haddps		Horizontal add packed single-precision floating-point values from xmm2/m128 to xmm1.
-VEX.NDS.128.F2.0F.WIG 7C /r	VHADDPS xmm1, xmm2, xmm3/m128	RVM	W, R, R						V	V	AVX	vhaddps		Horizontal add packed single-precision floating-point values from xmm2 and xmm3/mem.
+VEX.NDS.128.F2.0F.WIG 7C /r	VHADDPS xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vhaddps		Horizontal add packed single-precision floating-point values from xmm2 and xmm3/mem.
 VEX.NDS.256.F2.0F.WIG 7C /r	VHADDPS ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	vhaddps		Horizontal add packed single-precision floating-point values from ymm2 and ymm3/mem.
 														
 F4 	HLT 						NO	YES	V	V				Halt
 														
 66 0F 7D /r 	HSUBPD xmm1, xmm2/m128	RM	RW, R						V	V	PNI	hsubpd		Horizontal subtract packed double-precision floating-point values from xmm2/m128 to xmm1.
-VEX.NDS.128.66.0F.WIG 7D /r 	VHSUBPD xmm1, xmm2, xmm3/m128 	RVM	W, R, R						V	V	AVX	vhsubpd		Horizontal subtract packed double-precision floating-point values from xmm2 and xmm3/mem.
+VEX.NDS.128.66.0F.WIG 7D /r 	VHSUBPD xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vhsubpd		Horizontal subtract packed double-precision floating-point values from xmm2 and xmm3/mem.
 VEX.NDS.256.66.0F.WIG 7D /r 	VHSUBPD ymm1, ymm2, ymm3/m256 	RVM	W, R, R						V	V	AVX	vhsubpd		Horizontal subtract packed double-precision floating-point values from ymm2 and ymm3/mem.
 														
 F2 0F 7D /r 	HSUBPS xmm1, xmm2/m128	RM	RW, R						V	V	PNI	hsubps		Horizontal subtract packed single-precision floating-point values from xmm2/m128 to xmm1.
-VEX.NDS.128.F2.0F.WIG 7D /r	VHSUBPS xmm1, xmm2, xmm3/m128	RVM	W, R, R						V	V	AVX	vhsubps		Horizontal subtract packed single-precision floating-point values from xmm2 and xmm3/mem.
+VEX.NDS.128.F2.0F.WIG 7D /r	VHSUBPS xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vhsubps		Horizontal subtract packed single-precision floating-point values from xmm2 and xmm3/mem.
 VEX.NDS.256.F2.0F.WIG 7D /r	VHSUBPS ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	vhsubps		Horizontal subtract packed single-precision floating-point values from ymm2 and ymm3/mem.
 														
 F6 /7 	IDIV r/m8 	M	R	AX	AX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	V		idivb		Signed divide AX by r/m8, with result stored in: AL = Quotient, AH = Remainder.
 REX+ F6 /7 	IDIV r/m8	M	R	AX	AX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	NE		idivb		Signed divide AX by r/m8, with result stored in AL = Quotient, AH = Remainder.
 F7 /7 	IDIV r/m16 	M	R	AX DX	AX DX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	V		idivw		Signed divide DX:AX by r/m16, with result stored in AX = Quotient, DX = Remainder.
-F7 /7 	IDIV r/m32 	M	R	EAX EDX	EAX EDX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	V		idivl		Signed divide EDX:EAX by r/m32, with result stored in EAX = Quotient, EDX = Remainder.
+F7 /7 	IDIV r/m32 	M	R	EAX EDX	RAX RDX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	V		idivl		Signed divide EDX:EAX by r/m32, with result stored in EAX = Quotient, EDX = Remainder.
 REX.W+ F7 /7 	IDIV r/m64 	M	R	RAX RDX	RAX RDX	E.CF E.OF E.SF E.ZF E.AF E.PF			V	NE		idivq		Signed divide RDX:RAX by r/m64, with result stored in RAX = Quotient, RDX = Remainder.
 														
 F6 /5	IMUL r/m8	M	R	AL	AX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulb		AX= AL * r/m byte.
 REX+ F6 /5	IMUL r/m8	M	R	AL	AX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulb		AX= AL * r/m byte.
 F7 /5 	IMUL r/m16 	M	R	AX	AX DX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulw		DX:AX = AX * r/m word.
-F7 /5 	IMUL r/m32 	M	R	EAX	EAX EDX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imull		EDX:EAX = EAX * r/m32.
+F7 /5 	IMUL r/m32 	M	R	EAX	RAX RDX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imull		EDX:EAX = EAX * r/m32.
 REX.W+ F7 /5 	IMUL r/m64 	M	R	RAX	RAX RDX E.CF E.OF	E.SF E.ZF E.AF E.PF			V	NE		imulq		RDX:RAX = RAX * r/m64.
 0F AF /r 	IMUL r16, r/m16 	RM	RW, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imulw		word register = word register * r/m16.
 0F AF /r 	IMUL r32, r/m32 	RM	RW, R		E.CF E.OF	E.SF E.ZF E.AF E.PF			V	V		imull		doubleword register = doubleword register *  r/m32.
@@ -1223,7 +1223,7 @@ A5 	MOVSD 	NP		E.DF ESI rsi EDI rdi					V	V		movsl		For legacy mode, move dword 
 REX.W+ A5 	MOVSQ 	NP		E.DF ESI rsi EDI rdi					V	NE		movsq		Move qword from address (R|E)SI to (R|E)DI.
 														
 F2 0F 10 /r 	MOVSD xmm1, xmm2/m64	RM	RW, R						V	V	SSE2	movsd	YES	Move scalar double-precision floating-point value from xmm2/m64 to xmm1 register.
-VEX.NDS.LIG.F2.0F.WIG 10 /r	VMOVSD xmm1, xmm2, xmm3	RVM	W, R, R						V	V	AVX	vmovsd		Merge scalar double-precision floating-point value from xmm2 and xmm3 to xmm1 register.
+VEX.NDS.LIG.F2.0F.WIG 10 /r	VMOVSD xmm1, xmm2, xmm3	RVM	Z, R, R						V	V	AVX	vmovsd		Merge scalar double-precision floating-point value from xmm2 and xmm3 to xmm1 register.
 VEX.LIG.F2.0F.WIG 10 /r	VMOVSD xmm1, m64	XM	Z, R						V	V	AVX	vmovsd		Load scalar double-precision floating-point value from m64 to xmm1 register.
 F2 0F 11 /r	MOVSD xmm2/m64, xmm1	MR	QW, R						V	V	SSE2	movsd		Move scalar double-precision floating-point value from xmm1 register to xmm2/m64.
 VEX.NDS.LIG.F2.0F.WIG 11 /r	VMOVSD xmm1, xmm2, xmm3	MVR	Z, R, R						V	V	AVX	vmovsd	YES	Merge scalar double-precision floating-point value from xmm2 and xmm3 registers to xmm1.
@@ -1282,7 +1282,7 @@ VEX.NDS.256.66.0F3A.WIG 42 /r ib	VMPSADBW ymm1, ymm2, ymm3/m256, imm8	RVMI	W, R,
 F6 /4 	MUL r/m8 	M	R	AL	AX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	V		mulb		Unsigned multiply (AX = AL * r/m8).
 REX+ F6 /4 	MUL r/m8	M	R	AL	AX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	NE		mulb		Unsigned multiply (AX = AL * r/m8).
 F7 /4 	MUL r/m16 	M	R	AX	AX DX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	V		mulw		Unsigned multiply (DX:AX = AX * r/m16).
-F7 /4 	MUL r/m32 	M	R	EAX	EAX EDX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	V		mull		Unsigned multiply (EDX:EAX = EAX * r/m32).
+F7 /4 	MUL r/m32 	M	R	EAX	RAX RDX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	V		mull		Unsigned multiply (EDX:EAX = EAX * r/m32).
 REX.W+ F7 /4 	MUL r/m64 	M	R	RAX	RAX RDX E.OF E.CF	E.SF E.ZF E.AF E.PF			V	NE		mulq		Unsigned multiply (RDX:RAX = RAX * r/m64.
 														
 66 0F 59 /r 	MULPD xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	mulpd		Multiply packed double-precision floating-point values in xmm2/m128 by xmm1.
@@ -1486,11 +1486,11 @@ VEX.NDS.256.66.0F.WIG 76 /r	VPCMPEQD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	
 VEX.NDS.128.66.0F38.WIG 29 /r 	VPCMPEQQ xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpcmpeqq		Compare packed quadwords in xmm3/m128 and xmm2 for equality.
 VEX.NDS.256.66.0F38.WIG 29 /r	VPCMPEQQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpeqq		Compare packed quadwords in ymm3/m256 and ymm2 for equality.
 														
-66 0F 3A 61 /r	PCMPESTRI xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	ECX E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	SSE4_2	pcmpestri		Perform a packed comparison of string data with explicit lengths, generating an index, and storing the result in ECX.
-VEX.128.66.0F3A.WIG 61 /r ib 	VPCMPESTRI xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	ECX E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	AVX	vpcmpestri		Perform a packed comparison of string data with explicit lengths, generating an index, and storing the result in ECX.
+66 0F 3A 61 /r	PCMPESTRI xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	RCX E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	SSE4_2	pcmpestri		Perform a packed comparison of string data with explicit lengths, generating an index, and storing the result in ECX.
+VEX.128.66.0F3A.WIG 61 /r ib 	VPCMPESTRI xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	RCX E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	AVX	vpcmpestri		Perform a packed comparison of string data with explicit lengths, generating an index, and storing the result in ECX.
 														
 66 0F 3A 60 /r	PCMPESTRM xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	XMM0 E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	SSE4_2	pcmpestrm		Perform a packed comparison of string data with explicit lengths, generating a mask, and storing the result in XMM0
-VEX.128.66.0F3A.WIG 60 /r ib 	VPCMPESTRM xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	XMM0 E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	AVX	vpcmpestrm		Perform a packed comparison of string data with explicit lengths, generating a mask, and storing the result in XMM0.
+VEX.128.66.0F3A.WIG 60 /r ib 	VPCMPESTRM xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX EDX	YMM0 E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	AVX	vpcmpestrm		Perform a packed comparison of string data with explicit lengths, generating a mask, and storing the result in XMM0.
 														
 0F 64 /r 	PCMPGTB mm, mm/m64	RM	RW, R						V	V	MMX	pcmpgtb		Compare packed signed byte integers in mm and mm/m64 for greater than.
 66 0F 64 /r	PCMPGTB xmm1, xmm2/m128	RM	RW, R						V	V	SSE2	pcmpgtb		Compare packed signed byte integers in xmm1 and xmm2/m128 for greater than.
@@ -1509,11 +1509,11 @@ VEX.NDS.256.66.0F.WIG 66 /r	VPCMPGTD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	
 VEX.NDS.128.66.0F38.WIG 37 /r 	VPCMPGTQ xmm1, xmm2, xmm3/m128 	RVM	Z, R, R						V	V	AVX	vpcmpgtq		Compare packed signed qwords in xmm2 and xmm3/m128 for greater than.
 VEX.NDS.256.66.0F38.WIG 37 /r	VPCMPGTQ ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpvmpgtq		Compare packed signed qwords in ymm2 and ymm3/m256 for greater than.
 														
-66 0F 3A 63 /r	PCMPISTRI xmm1, xmm2/m128, imm8 	RM	R, R, R		ECX E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	SSE4_2	pcmpistri		Perform a packed comparison of string data with implicit lengths, generating an index, and storing the result in ECX.
-VEX.128.66.0F3A.WIG 63 /r ib 	VPCMPISTRI xmm1, xmm2/m128, imm8 	RM	R, R, R		ECX E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	AVX	vpcmpistri		Perform a packed comparison of string data with implicit lengths, generating an index, and storing the result in ECX.
+66 0F 3A 63 /r	PCMPISTRI xmm1, xmm2/m128, imm8 	RM	R, R, R		RCX E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	SSE4_2	pcmpistri		Perform a packed comparison of string data with implicit lengths, generating an index, and storing the result in ECX.
+VEX.128.66.0F3A.WIG 63 /r ib 	VPCMPISTRI xmm1, xmm2/m128, imm8 	RM	R, R, R		RCX E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	AVX	vpcmpistri		Perform a packed comparison of string data with implicit lengths, generating an index, and storing the result in ECX.
 														
 66 0F 3A 62 /r	PCMPISTRM xmm1, xmm2/m128, imm8 	RM	R, R, R		XMM0 E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	SSE4_2	pcmpistrm		Perform a packed comparison of string data with implicit lengths, generating a mask, and storing the result in XMM0.
-VEX.128.66.0F3A.WIG 62 /r ib 	VPCMPISTRM xmm1, xmm2/m128, imm8 	RM	R, R, R		XMM0 E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	AVX	vpcmpistrm		Perform a packed comparison of string data with implicit lengths, generating a Mask, and storing the result in XMM0.
+VEX.128.66.0F3A.WIG 62 /r ib 	VPCMPISTRM xmm1, xmm2/m128, imm8 	RM	R, R, R		YMM0 E.CF E.ZF E.SF E.OF E.AF E.PF				V	V	AVX	vpcmpistrm		Perform a packed comparison of string data with implicit lengths, generating a Mask, and storing the result in XMM0.
 														
 VEX.NDS.LZ.F2.0F38.W0 F5 /r	PDEP r32a, r32b, r/m32	RVM	W, R, R						V	V	BMI2	pdepl		Parallel deposit of bits from r32b using mask in r/m32, result is written to r32a.
 VEX.NDS.LZ.F2.0F38.W1 F5 /r	PDEP r64a, r64b, r/m64	RVM	W, R, R						V	NE	BMI2	pdepq		Parallel deposit of bits from r64b using mask in r/m64, result is written to r64a.
@@ -2290,16 +2290,16 @@ REX+ 0F 94 /0	SETZ r/m8	M	W	E.ZF					V	NE		setz		Set byte if zero (ZF=1).
 														
 0F A4	SHLD r/m16, r16, imm8	MRI	Rwu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	V		shldw		Shift r/m16 to left imm8 places while shifting bits from r16 in from the right.
 0F A5	SHLD r/m16, r16, CL	MRC	Rwu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	V		shldw		Shift r/m16 to left CL places while shifting bits from r16 in from the right.
-0F A4	SHLD r/m32, r32, imm8	MRI	Rwu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	V		shldl		Shift r/m32 to left imm8 places while shifting bits from r32 in from the right.
+0F A4	SHLD r/m32, r32, imm8	MRI	Rzu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	V		shldl		Shift r/m32 to left imm8 places while shifting bits from r32 in from the right.
 REX.W+ 0F A4 	SHLD r/m64, r64, imm8	MRI	Rwu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	NE		shldq		Shift r/m64 to left imm8 places while shifting bits from r64 in from the right.
-0F A5	SHLD r/m32, r32, CL	MRC	Rwu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	V		shldl		Shift r/m32 to left CL places while shifting bits from r32 in from the right.
+0F A5	SHLD r/m32, r32, CL	MRC	Rzu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	V		shldl		Shift r/m32 to left CL places while shifting bits from r32 in from the right.
 REX.W+ 0F A5	SHLD r/m64, r64, CL	MRC	Rwu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	NE		shldq		Shift r/m64 to left CL places while shifting bits from r64 in from the right.
 														
 0F AC	SHRD r/m16, r16, imm8	MRI	Rwu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	V		shrdw		Shift r/m16 to right imm8 places while shifting bits from r16 in from the left.
 0F AD	SHRD r/m16, r16, CL	MRC	Rwu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	V		shrdw		Shift r/m16 to right CL places while shifting bits from r16 in from the left.
-0F AC	SHRD r/m32, r32, imm8	MRI	Rwu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	V		shrdl		Shift r/m32 to right imm8 places while shifting bits from r32 in from the left.
+0F AC	SHRD r/m32, r32, imm8	MRI	Rzu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	V		shrdl		Shift r/m32 to right imm8 places while shifting bits from r32 in from the left.
 REX.W+ 0F AC	SHRD r/m64, r64, imm8	MRI	Rwu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	NE		shrdq		Shift r/m64 to right imm8 places while shifting bits from r64 in from the left.
-0F AD	SHRD r/m32, r32, CL	MRC	Rwu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	V		shrdl		Shift r/m32 to right CL places while shifting bits from r32 in from the left.
+0F AD	SHRD r/m32, r32, CL	MRC	Rzu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	V		shrdl		Shift r/m32 to right CL places while shifting bits from r32 in from the left.
 REX.W+ 0F AD	SHRD r/m64, r64, CL	MRC	Rwu, R, R		e.cf e.sf e.zf e.pf	e.of e.sf e.zf e.af e.cf e.pf			V	NE		shrdq		Shift r/m64 to right CL places while shifting bits from r64 in from the left.
 														
 66 0F C6 /r ib	SHUFPD xmm1, xmm2/m128, imm8	RMI	RW, R, R						V	V	SSE2	shufpd		Shuffle packed double-precision floating- point values selected by imm8 from xmm1 and xmm2/m128 to xmm1.
@@ -2464,7 +2464,7 @@ VEX.128.66.0F3A.W0 1D /r ib	VCVTPS2PH xmm1/m64, xmm2, imm8	MR	Z, R, R	M.RC					V
 														
 VEX.256.66.0F3A.W0 19 /r ib	VEXTRACTF128 xmm1/m128, ymm2, imm8	MR	QZ, R, R						V	V	AVX	vextractf128		Extract 128 bits of packed floating-point values from ymm2 and store results in xmm1/mem.
 														
-VEX.256.66.0F3A.W0 39 /r ib	VEXTRACTI128 xmm1/m128, ymm2, imm8	RMI	RW, R, R						V	V	AVX2	vextracti128		Extract 128 bits of integer data from ymm2 and store results in xmm1/mem.
+VEX.256.66.0F3A.W0 39 /r ib	VEXTRACTI128 xmm1/m128, ymm2, imm8	RMI	RZ, R, R						V	V	AVX2	vextracti128		Extract 128 bits of integer data from ymm2 and store results in xmm1/mem.
 														
 VEX.DDS.128.66.0F38.W1 98 /r	VFMADD132PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmadd132pd		Multiply packed double-precision floating-point values from xmm0 and xmm2/mem, add to xmm1 and put result in xmm0.
 VEX.DDS.128.66.0F38.W1 A8 /r	VFMADD213PD xmm0, xmm1, xmm2/m128	RVM	RZ, R, R						V	V	FMA	vfmadd213pd		Multiply packed double-precision floating-point values from xmm0 and xmm1, add to xmm2/mem and put result in xmm0.
