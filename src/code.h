@@ -83,7 +83,6 @@ public:
     auto rs = RegSet::empty();
     for (const auto& instr : *this) {
       rs |= instr.maybe_write_set();
-      rs -= instr.maybe_undef_set();
     }
     return rs;
   }
@@ -101,7 +100,6 @@ public:
     auto rs = RegSet::empty();
     for (const auto& instr : *this) {
       rs |= instr.maybe_undef_set();
-      rs -= instr.maybe_write_set();
     }
     return rs;
   }
