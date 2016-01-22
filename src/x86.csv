@@ -1501,7 +1501,7 @@ VEX.128.66.0F3A.WIG 60 /r ib 	VPCMPESTRM xmm1, xmm2/m128, imm8 	RMI	R, R, R	EAX 
 VEX.NDS.128.66.0F.WIG 64 /r	VPCMPGTB xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpgtb		Compare packed signed byte integers in xmm2 and xmm3/m128 for greater than.
 VEX.NDS.128.66.0F.WIG 65 /r	VPCMPGTW xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpgtw		Compare packed signed word integers in xmm2 and xmm3/m128 for greater than.
 VEX.NDS.128.66.0F.WIG 66 /r	VPCMPGTD xmm1, xmm2, xmm3/m128	RVM	Z, R, R						V	V	AVX	vpcmpgtd		Compare packed signed doubleword integers in xmm2 and xmm3/m128 for greater than.
-VEX.NDS.256.66.0F.WIG 64 /r	VPCMPGTB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX	vpcmpgtb		Compare packed signed byte integers in ymm2 and ymm3/m256 for greater than.
+VEX.NDS.256.66.0F.WIG 64 /r	VPCMPGTB ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpgtb		Compare packed signed byte integers in ymm2 and ymm3/m256 for greater than.
 VEX.NDS.256.66.0F.WIG 65 /r	VPCMPGTW ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpgtw		Compare packed signed word integers in ymm2 and ymm3/m256 for greater than.
 VEX.NDS.256.66.0F.WIG 66 /r	VPCMPGTD ymm1, ymm2, ymm3/m256	RVM	W, R, R						V	V	AVX2	vpcmpgtd		Compare packed signed doubleword integers in ymm2 and ymm3/m256 for greater than.
 														
