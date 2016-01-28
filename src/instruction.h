@@ -513,8 +513,12 @@ public:
       return must_read(mem_index());
     if(is_pop() || is_popf() || is_ret() || is_leave())
       return true;
-    assert(!is_memory_dereference());
-    return false;
+    else if(is_push() || is_pushf())
+      return false; // don't hit the assert below!
+    else {
+      assert(!is_memory_dereference());
+      return false;
+    }
   }
   /** Returns true if this instruction might read the operand at index. */
   bool maybe_read(size_t index) const {
