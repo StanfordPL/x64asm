@@ -39,19 +39,37 @@ bool Instruction::is_xor_reg_reg() const {
   switch (get_opcode()) {
   case PXOR_MM_MM:
   case PXOR_XMM_XMM:
-  case VPXOR_YMM_YMM_YMM:
-  case VPXOR_XMM_XMM_XMM:
-  case XORPD_XMM_XMM:
-  case VXORPD_YMM_YMM_YMM:
   case XOR_R8_R8:
   case XOR_RH_RH:
   case XOR_R16_R16:
   case XOR_R32_R32:
   case XOR_R64_R64:
+  case XORPD_XMM_XMM:
+  case XORPS_XMM_XMM:
     if (get_operand<Operand>(0) == get_operand<Operand>(1)) {
       return true;
     }
     break;
+
+  case VPXOR_XMM_XMM_M128:
+  case VPXOR_XMM_XMM_XMM:
+  case VPXOR_YMM_YMM_M256:
+  case VPXOR_YMM_YMM_YMM:
+
+  case VXORPD_XMM_XMM_M128:
+  case VXORPD_XMM_XMM_XMM:
+  case VXORPD_YMM_YMM_M256:
+  case VXORPD_YMM_YMM_YMM:
+  case VXORPS_XMM_XMM_M128:
+  case VXORPS_XMM_XMM_XMM:
+  case VXORPS_YMM_YMM_M256:
+  case VXORPS_YMM_YMM_YMM:
+
+    if (get_operand<Operand>(1) == get_operand<Operand>(2)) {
+      return true;
+    }
+    break;
+
   default:
     return false;
   }
