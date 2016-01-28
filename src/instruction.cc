@@ -38,59 +38,20 @@ bool Instruction::is_xor_reg_reg() const {
   // safe operation even if the register was undefined before.
   switch (get_opcode()) {
   case PXOR_MM_MM:
-    if (get_operand<Mm>(0) == get_operand<Mm>(1)) {
-      return true;
-    }
-    break;
-
   case PXOR_XMM_XMM:
-    if (get_operand<Xmm>(0) == get_operand<Xmm>(1)) {
-      return true;
-    }
-    break;
-
-  case VPXOR_XMM_XMM_XMM:
-    if (get_operand<Xmm>(1) == get_operand<Xmm>(2)) {
-      return true;
-    }
-    break;
-
   case VPXOR_YMM_YMM_YMM:
-    if (get_operand<Ymm>(1) == get_operand<Ymm>(2)) {
-      return true;
-    }
-    break;
-
+  case VPXOR_XMM_XMM_XMM:
+  case XORPD_XMM_XMM:
+  case VXORPD_YMM_YMM_YMM:
   case XOR_R8_R8:
-    if (get_operand<R8>(0) == get_operand<R8>(1)) {
-      return true;
-    }
-    break;
-
   case XOR_RH_RH:
-    if (get_operand<Rh>(0) == get_operand<Rh>(1)) {
-      return true;
-    }
-    break;
-
   case XOR_R16_R16:
-    if (get_operand<R16>(0) == get_operand<R16>(1)) {
-      return true;
-    }
-    break;
-
   case XOR_R32_R32:
-    if (get_operand<R32>(0) == get_operand<R32>(1)) {
-      return true;
-    }
-    break;
-
   case XOR_R64_R64:
-    if (get_operand<R64>(0) == get_operand<R64>(1)) {
+    if (get_operand<Operand>(0) == get_operand<Operand>(1)) {
       return true;
     }
     break;
-
   default:
     return false;
   }
