@@ -18,7 +18,7 @@ limitations under the License.
 
 using namespace std;
 
-#define DEBUG_LINKER(X) { X }
+//#define DEBUG_LINKER(X) { X }
 
 namespace x64asm {
 
@@ -40,9 +40,9 @@ void Linker::link(uint64_t symbol, uint64_t address) {
   // Check for multiple defs
   const auto itr = label_defs_.find(symbol);
   if (itr != label_defs_.end()) {
-    DEBUG_LINKER(cout << "[linker] mulitple definition error" << endl;)
     multiple_def_ = true;
     md_symbol_ = itr->first;
+    DEBUG_LINKER(cout << "[linker] mulitple definition error: " << Label::val2label()[md_symbol_] << endl;)
     return;
   }
 
@@ -59,9 +59,9 @@ void Linker::finish() {
 
       const auto itr_target = label_defs_.find(l.second);
       if (itr_target == label_defs_.end()) {
-        DEBUG_LINKER(cout << "[linker] undef symbol error" << endl;)
         undef_symbol_ = true;
         us_symbol_ = l.second;
+        DEBUG_LINKER(cout << "[linker] undef symbol error: " << undef_symbol_ << endl;)
         return;
       }
 
@@ -72,8 +72,8 @@ void Linker::finish() {
 
       if(rel > 0x7fffffff && rel < 0xffffffff80000000) {
         cout << "rel = " << hex << rel << endl;
-        DEBUG_LINKER(cout << "[linker] jump too far error" << endl;)
         jump_too_far_ = true;
+        DEBUG_LINKER(cout << "[linker] jump too far error" << endl;)
         return;
       }
 
@@ -85,9 +85,9 @@ void Linker::finish() {
 
       const auto itr = label_defs_.find(l.second);
       if (itr == label_defs_.end()) {
-        DEBUG_LINKER(cout << "[linker] undef symbol error" << endl;)
         undef_symbol_ = true;
         us_symbol_ = l.second;
+        DEBUG_LINKER(cout << "[linker] undef symbol error: " << undef_symbol_ << endl;)
         return;
       }
 
@@ -96,8 +96,8 @@ void Linker::finish() {
       const auto rel = there - here - 1;
 
       if(rel > 0x7f && rel < 0xffffffffffffff80) {
-        DEBUG_LINKER(cout << "[linker] jump too far error" << endl;)
         jump_too_far_ = true;
+        DEBUG_LINKER(cout << "[linker] jump too far error" << endl;)
         return;
       }
       fxn->emit_byte(rel, pos);
