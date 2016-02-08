@@ -22,8 +22,7 @@ limitations under the License.
 
 namespace x64asm {
 
-template <class T>
-bool M<T>::check() const {
+bool Mem::check() const {
   // Check seg
   if (contains_seg() && !get_seg().check()) {
     return false;
@@ -62,8 +61,7 @@ bool M<T>::check() const {
   return true;
 }
 
-template <class T>
-std::istream& M<T>::read_att(std::istream& is) {
+std::istream& Mem::read_att(std::istream& is) {
 
   bool ok = false;
   char tmp;
@@ -238,8 +236,7 @@ std::istream& M<T>::read_att(std::istream& is) {
 }
 
 
-template <class T>
-std::ostream& M<T>::write_att(std::ostream& os) const {
+std::ostream& Mem::write_att(std::ostream& os) const {
   if (contains_seg()) {
     get_seg().write_att(os);
     os << ":";

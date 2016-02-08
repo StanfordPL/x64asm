@@ -33,6 +33,7 @@ class Sreg : public Operand {
   // Needs access to constructor.
   template <class T>
   friend class M;
+  friend class Mem;
   // Needs access to constructor.
   friend class Moffs;
 

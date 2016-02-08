@@ -231,6 +231,7 @@ class R32 : public R {
   // Needs access to consturctor.
   template <class T>
   friend class M;
+  friend class Mem;
 
 public:
   /** Returns true if this register is well-formed. */
@@ -287,6 +288,7 @@ class R64 : public R {
   // Needs access to consturctor.
   template <class T>
   friend class M;
+  friend class Mem;
 
 public:
   /** Returns true if this register is well-formed. */
