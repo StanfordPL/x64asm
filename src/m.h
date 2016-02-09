@@ -656,14 +656,21 @@ struct hash<x64asm::M<T>> {
   }
 };
 
+template <>
+struct hash<x64asm::Mem> {
+  size_t operator()(const x64asm::Mem& m) const {
+    return m.hash();
+  }
+};
+
+
+
 /** iostream overload. */
-template <class T>
-inline istream& operator>>(istream& is, x64asm::M<T>& m) {
+inline istream& operator>>(istream& is, x64asm::Mem& m) {
   return m.read_att(is);
 }
 /** iostream overload. */
-template <class T>
-inline ostream& operator<<(ostream& os, const x64asm::M<T>& m) {
+inline ostream& operator<<(ostream& os, const x64asm::Mem& m) {
   return m.write_att(os);
 }
 

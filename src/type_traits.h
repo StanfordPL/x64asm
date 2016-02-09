@@ -70,6 +70,8 @@ template <>
 struct is_operand<Label> : public std::true_type { };
 
 template <>
+struct is_operand<Mem> : public std::true_type { };
+template <>
 struct is_operand<M8> : public std::true_type { };
 template <>
 struct is_operand<M16> : public std::true_type { };
