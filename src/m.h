@@ -36,9 +36,7 @@ enum class Scale {
   TIMES_8
 };
 
-/** An operand in memory. */
-template <class T>
-class M : public Operand {
+class Mem : public Operand {
 private:
   /** Constant bit masks used to represent absent operands. */
   enum class Null : uint64_t {
@@ -175,15 +173,15 @@ public:
   bool check() const;
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const M& rhs) {
+  constexpr bool operator<(const Mem& rhs) {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const M& rhs) {
+  constexpr bool operator==(const Mem& rhs) {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const M& rhs) {
+  constexpr bool operator!=(const Mem& rhs) {
     return !(*this == rhs);
   }
 
@@ -192,7 +190,7 @@ public:
     return val_;
   }
   /** STL-compliant swap. */
-  void swap(M& rhs) {
+  void swap(Mem& rhs) {
     std::swap(val_, rhs.val_);
   }
 
@@ -222,138 +220,151 @@ protected:
            (rip << (uint64_t)Index::RIP);
   }
 
+
+  /** Creates an operand with a type and no underlying value. */
+  constexpr Mem(Type t) : Operand(t) {}
+  /** Creates an operand with a type and one underlying value. */
+  constexpr Mem(Type t, uint64_t val) : Operand(t, val) {}
+  /** Creates an operand with a type and two underlying values. */
+  constexpr Mem(Type t, uint64_t val, uint64_t val2) : Operand(t, val, val2) {}
+
+};
+
+/** An operand in memory. */
+template <class T>
+class M : public Mem {
 public:
   /** Creates a memory using an existing one.  Used to change types. */
   template <typename U>
   constexpr M(const M<U>& m) :
-    Operand(T::m_type(), init(m.get_disp(), m.get_base(), m.get_index(), m.get_scale(),
+    Mem(T::m_type(), init(m.get_disp(), m.get_base(), m.get_index(), m.get_scale(),
                               m.get_seg(), m.addr_or(), m.rip_offset())) {
   }
   /** Creates a memory using an existing one.  Used to change types. */
   template <typename U>
   constexpr M(const M<U>& m, Type t) :
-    Operand(t, init(m.get_disp(), m.get_base(), m.get_index(), m.get_scale(),
+    Mem(t, init(m.get_disp(), m.get_base(), m.get_index(), m.get_scale(),
                     m.get_seg(), m.addr_or(), m.rip_offset())) {
   }
   /** Creates a memory using disp form. */
   constexpr M(const Imm32& d) :
-    Operand(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
+    Mem(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
   }
   /** Creates a memory using seg:disp form. */
   constexpr M(const Sreg& s, const Imm32& d) :
-    Operand(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s, 0, 0)) {
+    Mem(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s, 0, 0)) {
   }
   /** Creates a memroy using (base64) form. */
   constexpr M(const R32& b) :
-    Operand(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s_null(), 1, 0)) {
+    Mem(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s_null(), 1, 0)) {
   }
   /** Creates a memory using (base32) form. */
   constexpr M(const R64& b) :
-    Operand(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
+    Mem(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
   }
   /** Creates a memory using RIP form. */
   constexpr M(Rip rip) :
-    Operand(T::m_type(), init(Imm32(0), r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 1)) {
+    Mem(T::m_type(), init(Imm32(0), r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 1)) {
   }
   /** Creates a memory using seg:base32 form. */
   constexpr M(const Sreg& s, const R32& b) :
-    Operand(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s, 1, 0)) {
+    Mem(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s, 1, 0)) {
   }
   /** Creates a memory using seg:base64 form. */
   constexpr M(const Sreg& s, const R64& b) :
-    Operand(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s, 0, 0)) {
+    Mem(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s, 0, 0)) {
   }
   /** Creates a memory using seg:RIP form. */
   constexpr M(const Sreg& s, Rip rip) :
-    Operand(T::m_type(), init(Imm32(0), r_null(), r_null(), Scale::TIMES_1, s, 0, 1)) {
+    Mem(T::m_type(), init(Imm32(0), r_null(), r_null(), Scale::TIMES_1, s, 0, 1)) {
   }
   /** Creates a memory using disp(base32) form. */
   constexpr M(const R32& b, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s_null(), 1, 0)) {
+    Mem(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s_null(), 1, 0)) {
   }
   /** Creates a memory using disp(base64) form. */
   constexpr M(const R64& b, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
+    Mem(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
   }
   /** Creates a memory using RIP+disp form. */
   constexpr M(Rip rip, const Imm32& d) :
-    Operand(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 1)) {
+    Mem(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 1)) {
   }
   /** Creates a memory using seg:disp(base32) form. */
   constexpr M(const Sreg& s, const R32& b, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s, 1, 0)) {
+    Mem(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s, 1, 0)) {
   }
   /** Creates a memory using seg:disp(base64) form. */
   constexpr M(const Sreg& s, const R64& b, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s, 0, 0)) {
+    Mem(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s, 0, 0)) {
   }
   /** Creates a memory using seg:RIP+disp form. */
   constexpr M(const Sreg& s, Rip rip, const Imm32& d) :
-    Operand(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s, 0, 1)) {
+    Mem(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s, 0, 1)) {
   }
   /** Creates a memory using (index32,scale) form. */
   constexpr M(const R32& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), r_null(), i, sc, s_null(), 1, 0)) {
+    Mem(T::m_type(), init(Imm32(0), r_null(), i, sc, s_null(), 1, 0)) {
   }
   /** Creates a memory using (index64,scale) form. */
   constexpr M(const R64& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), r_null(), i, sc, s_null(), 0, 0)) {
+    Mem(T::m_type(), init(Imm32(0), r_null(), i, sc, s_null(), 0, 0)) {
   }
   /** Creates a memory using seg:(index32,scale) form. */
   constexpr M(const Sreg& s, const R32& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), r_null(), i, sc, s, 1, 0)) {
+    Mem(T::m_type(), init(Imm32(0), r_null(), i, sc, s, 1, 0)) {
   }
   /** Creates a memory using seg:(index64,scale) form. */
   constexpr M(const Sreg& s, const R64& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), r_null(), i, sc, s, 0, 0)) {
+    Mem(T::m_type(), init(Imm32(0), r_null(), i, sc, s, 0, 0)) {
   }
   /** Creates a memory using disp(index32,scale) form. */
   constexpr M(const R32& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, r_null(), i, sc, s_null(), 1, 0)) {
+    Mem(T::m_type(), init(d, r_null(), i, sc, s_null(), 1, 0)) {
   }
   /** Creates a memory using disp(index64,scale) form. */
   constexpr M(const R64& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, r_null(), i, sc, s_null(), 0, 0)) {
+    Mem(T::m_type(), init(d, r_null(), i, sc, s_null(), 0, 0)) {
   }
   /** Creates a memory using seg:disp(index32,scale) form. */
   constexpr M(const Sreg& s, const R32& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, r_null(), i, sc, s, 1, 0)) {
+    Mem(T::m_type(), init(d, r_null(), i, sc, s, 1, 0)) {
   }
   /** Creates a memory using seg:disp(index64,scale) form. */
   constexpr M(const Sreg& s, const R64& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, r_null(), i, sc, s, 0, 0)) {
+    Mem(T::m_type(), init(d, r_null(), i, sc, s, 0, 0)) {
   }
   /** Creates a memory using (base32,index32,scale) form. */
   constexpr M(const R32& b, const R32& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), b, i, sc, s_null(), 1, 0)) {
+    Mem(T::m_type(), init(Imm32(0), b, i, sc, s_null(), 1, 0)) {
   }
   /** Creates a memory using (base64,index64,scale) form. */
   constexpr M(const R64& b, const R64& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), b, i, sc, s_null(), 0, 0)) {
+    Mem(T::m_type(), init(Imm32(0), b, i, sc, s_null(), 0, 0)) {
   }
   /** Creates a memory using seg:(base32,index32,scale) form. */
   constexpr M(const Sreg& s, const R32& b, const R32& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), b, i, sc, s, 1, 0)) {
+    Mem(T::m_type(), init(Imm32(0), b, i, sc, s, 1, 0)) {
   }
   /** Creates a memory using seg:(base64,index64,scale) form. */
   constexpr M(const Sreg& s, const R64& b, const R64& i, Scale sc) :
-    Operand(T::m_type(), init(Imm32(0), b, i, sc, s, 0, 0)) {
+    Mem(T::m_type(), init(Imm32(0), b, i, sc, s, 0, 0)) {
   }
   /** Creates a memory using disp(base32,index32,scale) form. */
   constexpr M(const R32& b, const R32& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, i, sc, s_null(), 1, 0)) {
+    Mem(T::m_type(), init(d, b, i, sc, s_null(), 1, 0)) {
   }
   /** Creates a memory using disp(base64,index64,scale) form. */
   constexpr M(const R64& b, const R64& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, i, sc, s_null(), 0, 0)) {
+    Mem(T::m_type(), init(d, b, i, sc, s_null(), 0, 0)) {
   }
   /** Creates a memory using seg:disp(base32,index32,scale) form. */
   constexpr M(const Sreg& s, const R32& b, const R32& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, i, sc, s, 1, 0)) {
+    Mem(T::m_type(), init(d, b, i, sc, s, 1, 0)) {
   }
   /** Creates a memory using seg:disp(base64,index64,scale) form. */
   constexpr M(const Sreg& s, const R64& b, const R64& i, Scale sc, const Imm32& d) :
-    Operand(T::m_type(), init(d, b, i, sc, s, 0, 0)) {
+    Mem(T::m_type(), init(d, b, i, sc, s, 0, 0)) {
   }
 };
 
@@ -635,10 +646,6 @@ public:
 } // namespace x64asm
 
 
-/** Implementation of functions; needed due to templating */
-#include "src/m_cc.h"
-
-
 namespace std {
 
 /** STL hash specialization. */
@@ -649,14 +656,21 @@ struct hash<x64asm::M<T>> {
   }
 };
 
+template <>
+struct hash<x64asm::Mem> {
+  size_t operator()(const x64asm::Mem& m) const {
+    return m.hash();
+  }
+};
+
+
+
 /** iostream overload. */
-template <class T>
-inline istream& operator>>(istream& is, x64asm::M<T>& m) {
+inline istream& operator>>(istream& is, x64asm::Mem& m) {
   return m.read_att(is);
 }
 /** iostream overload. */
-template <class T>
-inline ostream& operator<<(ostream& os, const x64asm::M<T>& m) {
+inline ostream& operator<<(ostream& os, const x64asm::Mem& m) {
   return m.write_att(os);
 }
 

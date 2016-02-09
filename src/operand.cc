@@ -4,6 +4,7 @@
 
 #include "src/fail.h"
 #include "src/imm.h"
+#include "src/label.h"
 #include "src/type.h"
 #include "src/m.h"
 #include "src/operand.h"

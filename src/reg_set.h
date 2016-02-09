@@ -19,6 +19,7 @@ limitations under the License.
 
 #include <iostream>
 
+#include "src/alias.h"
 #include "src/env_bits.h"
 #include "src/env_reg.h"
 #include "src/m.h"
