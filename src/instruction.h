@@ -347,7 +347,7 @@ public:
   }
   /** Is this a variant of the push instruction? */
   bool is_push() const {
-    return opcode_ >= PUSH_FS && opcode_ <= PUSH_R64_1;
+    return opcode_ >= PUSH_FS && opcode_ <= PUSHW_IMM8;
   }
   /** Is this a variant of the pushf instruction? */
   bool is_pushf() const {
