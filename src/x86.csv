@@ -1937,9 +1937,11 @@ FF /6	PUSH r/m64	M	R	RSP	RSP				V	NE		pushq		Push r/m64.
 50 +rw	PUSH r16	O	R	RSP	RSP				V	V		pushw	YES	Push r16.
 50 +rd	PUSH r32			RSP	RSP				NE	V				Push r32.
 50 +rd	PUSH r64	O	R	RSP	RSP				V	NE		pushq	YES	Push r64.
-6A	PUSH imm8	I	R	RSP	RSP				V	V		pushq		Push imm8.
-68	PUSH imm16	I	R	RSP	RSP				V	V		pushq		Push imm16.
-68	PUSH imm32	I	R	RSP	RSP				V	V		pushq		Push imm32.
+6A	PUSHQ imm8	I	R	RSP	RSP				V	V		pushq		Push imm8 (sign-extended to 64-bits).
+66 6A	PUSHW imm8	I	R	RSP	RSP				V	V		pushw		Push imm8 (sign-extended to 16-bits).
+68	PUSHQ imm16	I	R	RSP	RSP				V	V		pushq		Push imm16 (sign-extended to 64-bits).
+66 68	PUSHW imm16	I	R	RSP	RSP				V	V		pushw		Push imm16 (sign-extended to 16-bits).
+68	PUSHQ imm32	I	R	RSP	RSP				V	V		pushq		Push imm32 (sign-extended to 64-bits).
 0E	PUSH CS			RSP	RSP				I	V				Push CS.
 16	PUSH SS			RSP	RSP				I	V				Push SS.
 1E	PUSH DS			RSP	RSP				I	V				Push DS.
