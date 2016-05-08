@@ -42,16 +42,16 @@ private:
 
 public:
   /** Returns true if this moffs contains a segment register. */
-  constexpr bool contains_seg() {
+  constexpr bool contains_seg() const {
     return (val2_ & (uint64_t)Mask::SEG) != (uint64_t)Null::SEG;
   }
 
   /** Returns this moffs' segment register; undefined if absent. */
-  constexpr Sreg get_seg() {
+  constexpr Sreg get_seg() const {
     return {val2_ & (uint64_t)Mask::SEG};
   }
   /** Returns this moffs' offset. */
-  constexpr Imm64 get_offset() {
+  constexpr Imm64 get_offset() const {
     return {val_};
   }
 
@@ -70,7 +70,7 @@ public:
   }
 
   /** Returns true if this moffs contains a well-formed segment register. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return (!contains_seg() || get_seg().check()) && get_offset().check();
   }
 
@@ -88,7 +88,7 @@ public:
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() {
+  constexpr size_t hash() const {
     return val_ ^ val2_;
   }
   /** @todo This method is undefined. */

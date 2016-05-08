@@ -32,13 +32,13 @@ data Instr =
         , instruction :: String -- Regular expression-ish name and type
         , op_en       :: String -- Operand type/position tags
         , property    :: String -- Operand read/write/undef properties
-        , imp_read    :: String -- Implicit read set				
-        , imp_write   :: String -- Implicit write set				
-        , imp_undef   :: String -- Implicit undef set				
+        , imp_read    :: String -- Implicit read set
+        , imp_write   :: String -- Implicit write set
+        , imp_undef   :: String -- Implicit undef set
         , useful      :: String -- Is this a useful system instruction?
-        , protected   :: String -- Is this a protected system instruction?			
+        , protected   :: String -- Is this a protected system instruction?
         , mode64      :: String -- Is this instruction valid in 64-bit mode?
-        , mode32      :: String	-- Is this instruction valid in 32-bit mode?
+        , mode32      :: String -- Is this instruction valid in 32-bit mode?
         , flag        :: String -- CPUID flag
         , att         :: String -- att mnemonic (per gcc)
         , pref        :: String -- Prefer this over equally valid alternative
@@ -177,7 +177,7 @@ arity i = length $ operands i
 -- Extract operands 
 operands :: Instr -> [String]
 operands i = let x = (splitOn ",") $ concat $ tail $ words (instruction i) in
-	filter (\o -> o /= "") x
+  filter (\o -> o /= "") x
 
 -- Returns true for register operands
 reg_op :: String -> Bool
@@ -485,7 +485,7 @@ read_instrs s = map read_instr $ lines s
 -- Step 1: Remove formatting
 --------------------------------------------------------------------------------
 
--- Remove license, title row, and empty rows		
+-- Remove license, title row, and empty rows
 remove_format :: [Instr] -> [Instr]
 remove_format is = filter (\x -> keep x) (drop 16 is)
     where keep i = (opcode i) /= "" 
@@ -571,7 +571,7 @@ canonical_op o = o
 fix_op :: Instr -> Instr
 fix_op i = i{instruction=inst}
   where inst = (raw_mnemonic i) ++ " " ++ (intercalate ", " (ops i))
-        ops i = map canonical_op $ operands i	
+        ops i = map canonical_op $ operands i
 
 -- Canonicalize operands for all instructions
 fix_ops :: [Instr] -> [Instr]
@@ -625,7 +625,7 @@ get_pref index is = (get_pref index [head is]) ++ (get_pref (index+1) (tail is))
 remove_ambiguity :: [Instr] -> [Instr]
 remove_ambiguity is = foldl1 (++) $ map (get_pref 0) $ groupBy eq $ sortBy srt is
   where srt x y = compare (assm_decl x) (assm_decl y)
-        eq x y = (assm_decl x) == (assm_decl y)	
+        eq x y = (assm_decl x) == (assm_decl y)
 
 -- Step 7: Insert prefixes and operands
 --------------------------------------------------------------------------------
@@ -671,7 +671,7 @@ insert_label_variant i
   | "rel8" `elem` (operands i) =
     [i
     ,i {instruction=(subRegex (mkRegex "rel8") (instruction i) "label8")}]
-	| otherwise = [i]
+  | otherwise = [i]
 
 -- Inserts a hint variant for conditional jumps
 insert_hint_variant :: Instr -> [Instr]
@@ -748,7 +748,7 @@ uniq_implicits is = nub $ concat imps
 ambig_decls :: [Instr] -> [[Instr]]
 ambig_decls is = filter ambig $ groupBy eq $ sortBy srt is
   where srt x y = compare (assm_decl x) (assm_decl y)
-        eq x y = (assm_decl x) == (assm_decl y)	
+        eq x y = (assm_decl x) == (assm_decl y)
         ambig x = (length x) > 1
 
 -- Pretty print version of ambig_decls
@@ -1252,7 +1252,7 @@ assm_vex_defn i = "  // VEX-Encoded Instruction: \n\n" ++
                   "  " ++ disp_imm i ++
                   "  " ++ disp_label i ++
                   "  " ++ vex_imm i ++
-									"  \n"
+                  "  \n"
 
 -- Other instruction definition
 assm_oth_defn :: Instr -> String
@@ -1409,7 +1409,7 @@ write_code is = do writeFile "assembler.decl"         $ assm_header_decls is
                    writeFile "opcode.enum"            $ opcode_enums is
                    writeFile "opcode.att"             $ att_mnemonics is
                    writeFile "opcode.intel"           $ intel_mnemonics is
-                   writeFile "att.table"              $ att_table is		
+                   writeFile "att.table"              $ att_table is
                    writeFile "opcode.names"           $ opcode_names is
                    writeFile "opcode.l32_transform"   $ label32_transform is
 
@@ -1417,7 +1417,7 @@ write_code is = do writeFile "assembler.decl"         $ assm_header_decls is
 -- Main (read the spreadsheet and write some code)
 --------------------------------------------------------------------------------
 
-main :: IO ()		
+main :: IO ()
 main = do is <- parse_instrs "x86.csv"       
           property_arity_check is 
           write_code is

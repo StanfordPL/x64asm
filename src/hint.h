@@ -37,25 +37,25 @@ public:
   }
 
   /** Comparison based on val_. */
-  constexpr bool operator==(const Hint& rhs) {
+  constexpr bool operator==(const Hint& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on val_. */
-  constexpr bool operator!=(const Hint& rhs) {
+  constexpr bool operator!=(const Hint& rhs) const {
     return !(*this == rhs);
   }
   /** Comparison based on val_. */
-  constexpr bool operator<(const Hint& rhs) {
+  constexpr bool operator<(const Hint& rhs) const {
     return val_ < rhs.val_;
   }
 
   /** Conversion based on val_. */
-  constexpr operator uint64_t() {
+  constexpr operator uint64_t() const {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() {
+  constexpr size_t hash() const {
     return val_;
   }
 

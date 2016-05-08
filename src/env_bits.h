@@ -41,24 +41,24 @@ public:
   }
 
   /** Returns this bit's upper register index. */
-  constexpr size_t index() {
+  constexpr size_t index() const {
     return index_;
   }
   /** Returns the number of bits this register bit spans. */
-  constexpr size_t width() {
+  constexpr size_t width() const {
     return width_;
   }
 
   /** Less than. */
-  constexpr bool operator<(const EnvBits& rhs) {
+  constexpr bool operator<(const EnvBits& rhs) const {
     return index_ == rhs.index_ ? width_ < rhs.width_ : index_ < rhs.index_;
   }
   /** Equality. */
-  constexpr bool operator==(const EnvBits& rhs) {
+  constexpr bool operator==(const EnvBits& rhs) const {
     return index_ == rhs.index_ && width_ == rhs.width_;
   }
   /** Inequality. */
-  constexpr bool operator!=(const EnvBits& rhs) {
+  constexpr bool operator!=(const EnvBits& rhs) const {
     return !(*this == rhs);
   }
 

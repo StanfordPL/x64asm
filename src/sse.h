@@ -29,7 +29,7 @@ class Sse : public Operand {
 
 public:
   /** Conversion based on underlying value. */
-  constexpr operator uint64_t() {
+  constexpr operator uint64_t() const {
     return val_;
   }
 

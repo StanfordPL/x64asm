@@ -62,11 +62,11 @@ public:
   }
 
   /** Inserts a flag into this set. */
-  constexpr FlagSet operator+(Flag f) {
+  constexpr FlagSet operator+(Flag f) const {
     return FlagSet((Flag)(mask_ | (uint64_t)f));
   }
   /** Removes a flag from this set. */
-  constexpr FlagSet operator-(Flag f) {
+  constexpr FlagSet operator-(Flag f) const {
     return FlagSet((Flag)(mask_ & ~(uint64_t)f));
   }
 
@@ -82,15 +82,15 @@ public:
   }
 
   /** Set union. */
-  constexpr FlagSet operator|(FlagSet rhs) {
+  constexpr FlagSet operator|(FlagSet rhs) const {
     return {mask_ | rhs.mask_};
   }
   /** Set difference. */
-  constexpr FlagSet operator-(FlagSet rhs) {
+  constexpr FlagSet operator-(FlagSet rhs) const {
     return {mask_ & ~rhs.mask_};
   }
   /** Set intersection. */
-  constexpr FlagSet operator&(FlagSet rhs) {
+  constexpr FlagSet operator&(FlagSet rhs) const {
     return {mask_ & rhs.mask_};
   }
   /** Set union. */
@@ -110,33 +110,33 @@ public:
   }
 
   /** Does this set contain a flag? */
-  constexpr bool contains(Flag f) {
+  constexpr bool contains(Flag f) const {
     return ((uint64_t)f & mask_) == (uint64_t)f;
   }
   /** Does this set subsume another set? */
-  constexpr bool contains(FlagSet fs) {
+  constexpr bool contains(FlagSet fs) const {
     return ((uint64_t)fs.mask_ & mask_) == (uint64_t)fs.mask_;
   }
   /** Do these sets intersect? */
-  constexpr bool intersects(FlagSet fs) {
+  constexpr bool intersects(FlagSet fs) const {
     return (*this - fs) != *this;
   }
 
   /** Equality based on underlying bit mask. */
-  constexpr bool operator==(FlagSet rhs) {
+  constexpr bool operator==(FlagSet rhs) const {
     return mask_ == rhs.mask_;
   }
   /** Equality based on underlying bit mask. */
-  constexpr bool operator!=(FlagSet rhs) {
+  constexpr bool operator!=(FlagSet rhs) const {
     return mask_ != rhs.mask_;
   }
   /** Equality based on underlying bit mask. */
-  constexpr bool operator<(FlagSet rhs) {
+  constexpr bool operator<(FlagSet rhs) const {
     return mask_ < rhs.mask_;
   }
 
   /** STL compliant hash. */
-  constexpr size_t hash() {
+  constexpr size_t hash() const {
     return mask_;
   }
   /** STL compliant swap. */

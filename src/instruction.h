@@ -79,11 +79,11 @@ private:
     }
 
     /** Inserts a property. */
-    constexpr Properties operator+(Property rhs) {
+    constexpr Properties operator+(Property rhs) const {
       return Properties(mask_ | (uint32_t)rhs);
     }
     /** Removes a property. */
-    constexpr Properties operator-(Property rhs) {
+    constexpr Properties operator-(Property rhs) const {
       return Properties(mask_& ~(uint32_t)rhs);
     }
 
@@ -99,7 +99,7 @@ private:
     }
 
     /** Checks whether a property is set. */
-    constexpr bool contains(Property p) {
+    constexpr bool contains(Property p) const {
       return (mask_ & (uint32_t)p) == (uint32_t)p;
     }
 
