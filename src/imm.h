@@ -28,25 +28,25 @@ namespace x64asm {
 class Imm : public Operand {
 public:
   /** Comparison based on immediate value. */
-  constexpr bool operator==(const Imm& rhs) {
+  constexpr bool operator==(const Imm& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on immediate value. */
-  constexpr bool operator!=(const Imm& rhs) {
+  constexpr bool operator!=(const Imm& rhs) const {
     return !(*this == rhs);
   }
   /** Comparison based on immediate value. */
-  constexpr bool operator<(const Imm& rhs) {
+  constexpr bool operator<(const Imm& rhs) const {
     return val_ < rhs.val_;
   }
 
   /** Conversion based on underlying value. */
-  constexpr operator uint64_t() {
+  constexpr operator uint64_t() const {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() {
+  constexpr size_t hash() const {
     return val_;
   }
 
@@ -80,7 +80,7 @@ public:
   constexpr Imm8(uint8_t i) : Imm(Type::IMM_8, i) {}
 
   /** Checks that this immediate value fits in 8 bits. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
   }
 };
@@ -94,7 +94,7 @@ public:
   constexpr Imm16(uint16_t i) : Imm(Type::IMM_16, i) {}
 
   /** Checks that this immediate value fits in 16 bits. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return ((val_>>16) == 0x0ul) || ((val_>>16) == 0xfffffffffffful);
   }
 };
@@ -109,7 +109,7 @@ public:
   constexpr Imm32(uint32_t i) : Imm(Type::IMM_32, i) {}
 
   /** Check that this immediate value fits in 32 bits. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
   }
 };
@@ -129,7 +129,7 @@ public:
   Imm64(const Function& f) : Imm(Type::IMM_64, (uint64_t)f.data()) {}
 
   /** Checks that this immediate value fits in 64-bits. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return true;
   }
 };
@@ -141,7 +141,7 @@ class Zero : public Imm8 {
 
 public:
   /** Checks that this immediate value equals zero. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ == 0;
   }
 
@@ -157,7 +157,7 @@ class One : public Imm8 {
 
 public:
   /** Checks that this immediate value equals one. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ == 1;
   }
 
@@ -173,7 +173,7 @@ class Three : public Imm8 {
 
 public:
   /** Checks that this immediate value equals three. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ == 3;
   }
 

@@ -33,30 +33,30 @@ class Ymm : public Sse {
 
 public:
   /** Returns true if this xmm register is well-formed. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ < 16;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const Ymm& rhs) {
+  constexpr bool operator<(const Ymm& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const Ymm& rhs) {
+  constexpr bool operator==(const Ymm& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const Ymm& rhs) {
+  constexpr bool operator!=(const Ymm& rhs) const {
     return !(*this == rhs);
   }
 
   /** Conversion based on underlying value. */
-  constexpr operator uint64_t() {
+  constexpr operator uint64_t() const {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() {
+  constexpr size_t hash() const {
     return val_;
   }
 

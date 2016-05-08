@@ -68,45 +68,45 @@ private:
 
 public:
   /** Returns true if this memory contains a segment register. */
-  constexpr bool contains_seg() {
+  constexpr bool contains_seg() const {
     return (val_ & (uint64_t)Mask::SEG) != ((uint64_t)Null::SEG << (uint64_t)Index::SEG);
   }
   /** Returns true if this memory contains a base register. */
-  constexpr bool contains_base() {
+  constexpr bool contains_base() const {
     return (val_ & (uint64_t)Mask::BASE) != (r_null() << (uint64_t)Index::BASE);
   }
   /** Returns true if this memory contains an index register. */
-  constexpr bool contains_index() {
+  constexpr bool contains_index() const {
     return (val_ & (uint64_t)Mask::INDEX) != (r_null() << (uint64_t)Index::INDEX);
   }
 
   /** Returns true if this memory uses a 32-bit address override. */
-  constexpr bool addr_or() {
+  constexpr bool addr_or() const {
     return val_ & (uint64_t)Mask::ADDR_OR;
   }
   /** Returns true if this memory uses RIP+offset form. */
-  constexpr bool rip_offset() {
+  constexpr bool rip_offset() const {
     return val_ & (uint64_t)Mask::RIP;
   }
 
   /** Returns this memory's segment register; undefined if absent. */
-  constexpr Sreg get_seg() {
+  constexpr Sreg get_seg() const {
     return {(val_ & (uint64_t)Mask::SEG) >> (uint64_t)Index::SEG};
   }
   /** Returns this memory's base register; undefined if absent. */
-  constexpr R64 get_base() {
+  constexpr R64 get_base() const {
     return {(val_ & (uint64_t)Mask::BASE) >> (uint64_t)Index::BASE};
   }
   /** Returns this memory's index register; undefined if absent. */
-  constexpr R64 get_index() {
+  constexpr R64 get_index() const {
     return {(val_ & (uint64_t)Mask::INDEX) >> (uint64_t)Index::INDEX};
   }
   /** Returns this memory's index scaling constant; 1 if absent. */
-  constexpr Scale get_scale() {
+  constexpr Scale get_scale() const {
     return (Scale)((val_ & (uint64_t)Mask::SCALE) >> (uint64_t)Index::SCALE);
   }
   /** Returns this memory's displacement; 0 if absent. */
-  constexpr Imm32 get_disp() {
+  constexpr Imm32 get_disp() const {
     return {(uint32_t)(val_ & (uint64_t)Mask::DISP)};
   }
 
@@ -173,20 +173,20 @@ public:
   bool check() const;
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const Mem& rhs) {
+  constexpr bool operator<(const Mem& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const Mem& rhs) {
+  constexpr bool operator==(const Mem& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const Mem& rhs) {
+  constexpr bool operator!=(const Mem& rhs) const {
     return !(*this == rhs);
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() {
+  constexpr size_t hash() const {
     return val_;
   }
   /** STL-compliant swap. */

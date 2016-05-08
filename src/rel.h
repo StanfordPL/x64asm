@@ -27,25 +27,25 @@ namespace x64asm {
 class Rel : public Operand {
 public:
   /** Comparison based on on val_. */
-  constexpr bool operator<(const Rel& rhs) {
+  constexpr bool operator<(const Rel& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const Rel& rhs) {
+  constexpr bool operator==(const Rel& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const Rel& rhs) {
+  constexpr bool operator!=(const Rel& rhs) const {
     return !(*this == rhs);
   }
 
   /** Conversion based on underlying value. */
-  constexpr operator uint64_t() {
+  constexpr operator uint64_t() const {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() {
+  constexpr size_t hash() const {
     return val_;
   }
 
@@ -76,7 +76,7 @@ public:
   constexpr Rel8(int8_t val) : Rel(Type::REL_8, (uint64_t)val) {}
 
   /** Checks that this offset fits in 8 bits. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
   }
 };
@@ -91,7 +91,7 @@ public:
   constexpr Rel32(int64_t val) : Rel(Type::REL_32, (uint64_t)val) {}
 
   /** Checks that this offset value fits in 32-bits. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
   }
 };

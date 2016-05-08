@@ -28,12 +28,12 @@ namespace x64asm {
 class R : public Operand {
 public:
   /** Conversion based on underlying value. */
-  constexpr operator uint64_t() {
+  constexpr operator uint64_t() const {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() {
+  constexpr size_t hash() const {
     return val_;
   }
 
@@ -57,20 +57,20 @@ class R8 : public R {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ < 16;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const R8& rhs) {
+  constexpr bool operator<(const R8& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const R8& rhs) {
+  constexpr bool operator==(const R8& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const R8& rhs) {
+  constexpr bool operator!=(const R8& rhs) const {
     return !(*this == rhs);
   }
 
@@ -92,7 +92,7 @@ class Al : public R8 {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ == 0;
   }
 
@@ -108,7 +108,7 @@ class Cl : public R8 {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ == 1;
   }
 
@@ -124,20 +124,20 @@ class Rh : public R {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ >= 4 && val_ < 8;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const Rh& rhs) {
+  constexpr bool operator<(const Rh& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const Rh& rhs) {
+  constexpr bool operator==(const Rh& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const Rh& rhs) {
+  constexpr bool operator!=(const Rh& rhs) const {
     return !(*this == rhs);
   }
 
@@ -161,20 +161,20 @@ class R16 : public R {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ < 16;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const R16& rhs) {
+  constexpr bool operator<(const R16& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const R16& rhs) {
+  constexpr bool operator==(const R16& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const R16& rhs) {
+  constexpr bool operator!=(const R16& rhs) const {
     return !(*this == rhs);
   }
 
@@ -196,7 +196,7 @@ class Ax : public R16 {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ == 0;
   }
 
@@ -212,7 +212,7 @@ class Dx : public R16 {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ == 2;
   }
 
@@ -235,20 +235,20 @@ class R32 : public R {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ < 16;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const R32& rhs) {
+  constexpr bool operator<(const R32& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const R32& rhs) {
+  constexpr bool operator==(const R32& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const R32& rhs) {
+  constexpr bool operator!=(const R32& rhs) const {
     return !(*this == rhs);
   }
 
@@ -270,7 +270,7 @@ class Eax : public R32 {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ == 0;
   }
 
@@ -292,20 +292,20 @@ class R64 : public R {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ < 16;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const R64& rhs) {
+  constexpr bool operator<(const R64& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const R64& rhs) {
+  constexpr bool operator==(const R64& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const R64& rhs) {
+  constexpr bool operator!=(const R64& rhs) const {
     return !(*this == rhs);
   }
 
@@ -327,7 +327,7 @@ class Rax : public R64 {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() {
+  constexpr bool check() const {
     return val_ == 0;
   }
 

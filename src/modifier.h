@@ -53,7 +53,7 @@ public:
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() {
+  constexpr size_t hash() const {
     return val_;
   }
   /** @todo This method is undefined. */

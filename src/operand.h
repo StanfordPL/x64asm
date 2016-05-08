@@ -42,7 +42,7 @@ class Operand {
 
 public:
   /** Return the type of this operand */
-  constexpr Type type() {
+  constexpr Type type() const {
     return (Type)(val2_ >> 3);
   }
   /** Return the size of this operand */
