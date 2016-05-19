@@ -101,6 +101,11 @@ enum class Type {
 };
 
 uint16_t bit_width_of_type(Type t);
+bool is_type_gp_register(Type t);
+bool is_type_sse_register(Type t);
+bool is_type_mm_register(Type t);
+bool is_type_typical_memory(Type t);
+bool is_type_immediate(Type t);
 
 } // namespace x64asm
 

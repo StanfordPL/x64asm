@@ -89,4 +89,72 @@ uint16_t bit_width_of_type(Type t) {
   return 0;
 }
 
+bool is_type_gp_register(Type t) {
+
+  switch(t) {
+  case Type::RH:
+  case Type::R_8:
+  case Type::AL:
+  case Type::CL:
+  case Type::R_16:
+  case Type::AX:
+  case Type::DX:
+  case Type::R_32:
+  case Type::EAX:
+  case Type::R_64:
+  case Type::RAX:
+    return true;
+
+  default:
+    return false;
+  }
+}
+
+bool is_type_sse_register(Type t) {
+  return t == Type::XMM || t == Type::YMM ||
+         t == Type::XMM_0;
+}
+
+bool is_type_mm_register(Type t) {
+  return t == Type::MM;
+}
+
+bool is_type_typical_memory(Type t) {
+
+  switch(t) {
+  case Type::M_8:
+  case Type::M_16:
+  case Type::M_32:
+  case Type::M_64:
+  case Type::M_128:
+  case Type::M_256:
+  case Type::MOFFS_8:
+  case Type::MOFFS_16:
+  case Type::MOFFS_32:
+  case Type::MOFFS_64:
+    return true;
+
+  default:
+    return false;
+  }
+}
+
+bool is_type_immediate(Type t) {
+
+  switch(t) {
+  case Type::IMM_8:
+  case Type::IMM_16:
+  case Type::IMM_32:
+  case Type::IMM_64:
+  case Type::ZERO:
+  case Type::ONE:
+  case Type::THREE:
+    return true;
+
+  default:
+    return false;
+  }
+
+}
+
 } // namespace x64asm
