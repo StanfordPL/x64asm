@@ -28,6 +28,7 @@ limitations under the License.
 #include <stdint.h>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #ifdef __APPLE__
 #define MAP_ANONYMOUS MAP_ANON
