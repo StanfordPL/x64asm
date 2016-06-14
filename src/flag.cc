@@ -26,7 +26,7 @@ using namespace x64asm;
 
 namespace {
 
-constexpr array<pair<const char*, Flag>, 41> flags_() {
+array<pair<const char*, Flag>, 41> flags_() {
   return {{
     {"fpu", Flag::FPU},
     {"tsc", Flag::TSC},

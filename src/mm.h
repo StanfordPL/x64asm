@@ -31,30 +31,30 @@ class Mm : public Operand {
 
 public:
   /** Returns true if this xmm register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ < 8;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const Mm& rhs) const {
+  bool operator<(const Mm& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const Mm& rhs) const {
+  bool operator==(const Mm& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const Mm& rhs) const {
+  bool operator!=(const Mm& rhs) const {
     return !(*this == rhs);
   }
 
   /** Conversion based on underlying value. */
-  constexpr operator uint64_t() const {
+  operator uint64_t() const {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() const {
+  size_t hash() const {
     return val_;
   }
 
@@ -65,7 +65,7 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr Mm(uint64_t val) : Operand(Type::MM, val) {}
+  Mm(uint64_t val) : Operand(Type::MM, val) {}
 };
 
 } // namespace x64asm

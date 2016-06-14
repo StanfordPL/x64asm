@@ -64,26 +64,26 @@ private:
   class Properties {
   private:
     /** Creates a property set using a bit mask. */
-    constexpr Properties(uint32_t p) : mask_(p) {}
+    Properties(uint32_t p) : mask_(p) {}
     /** Creates a property set using three property masks. */
-    constexpr Properties(Property r, Property w, Property u) :
+    Properties(Property r, Property w, Property u) :
       mask_((uint32_t)r | (uint32_t)w | (uint32_t)u) {}
 
   public:
     /** Creates an empty property set. */
-    constexpr Properties() : mask_((uint32_t)Property::NONE) {}
+    Properties() : mask_((uint32_t)Property::NONE) {}
 
     /** Returns an empty property set. */
-    static constexpr Properties none() {
+    static Properties none() {
       return Properties();
     }
 
     /** Inserts a property. */
-    constexpr Properties operator+(Property rhs) const {
+    Properties operator+(Property rhs) const {
       return Properties(mask_ | (uint32_t)rhs);
     }
     /** Removes a property. */
-    constexpr Properties operator-(Property rhs) const {
+    Properties operator-(Property rhs) const {
       return Properties(mask_& ~(uint32_t)rhs);
     }
 
@@ -99,7 +99,7 @@ private:
     }
 
     /** Checks whether a property is set. */
-    constexpr bool contains(Property p) const {
+    bool contains(Property p) const {
       return (mask_ & (uint32_t)p) == (uint32_t)p;
     }
 
@@ -448,7 +448,7 @@ public:
   }
   /** Is this an SSE instruction (any version) ? */
   bool is_any_sse() const {
-    constexpr auto fs = FlagSet::empty() + Flag::SSE + Flag::SSE2 + Flag::SSSE3 + Flag::SSE4_1 + Flag::SSE4_2;
+    auto fs = FlagSet::empty() + Flag::SSE + Flag::SSE2 + Flag::SSSE3 + Flag::SSE4_1 + Flag::SSE4_2;
     return required_flags().intersects(fs);
   }
 
@@ -462,7 +462,7 @@ public:
   }
   /** Is this any AVX instruction? */
   bool is_any_avx() const {
-    constexpr auto fs = FlagSet::empty() + Flag::AVX + Flag::AVX2;
+    auto fs = FlagSet::empty() + Flag::AVX + Flag::AVX2;
     return required_flags().intersects(fs);
   }
 

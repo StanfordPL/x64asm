@@ -28,25 +28,25 @@ namespace x64asm {
 class Imm : public Operand {
 public:
   /** Comparison based on immediate value. */
-  constexpr bool operator==(const Imm& rhs) const {
+  bool operator==(const Imm& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on immediate value. */
-  constexpr bool operator!=(const Imm& rhs) const {
+  bool operator!=(const Imm& rhs) const {
     return !(*this == rhs);
   }
   /** Comparison based on immediate value. */
-  constexpr bool operator<(const Imm& rhs) const {
+  bool operator<(const Imm& rhs) const {
     return val_ < rhs.val_;
   }
 
   /** Conversion based on underlying value. */
-  constexpr operator uint64_t() const {
+  operator uint64_t() const {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() const {
+  size_t hash() const {
     return val_;
   }
 
@@ -65,7 +65,7 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr Imm(Type t, uint64_t value) : Operand(t, value) {}
+  Imm(Type t, uint64_t value) : Operand(t, value) {}
 };
 
 /** An immediate byte value. The imm8 symbol is a signed number between –128
@@ -77,10 +77,10 @@ protected:
 class Imm8 : public Imm {
 public:
   /** Creates a 8-bit immediate. */
-  constexpr Imm8(uint8_t i) : Imm(Type::IMM_8, i) {}
+  Imm8(uint8_t i) : Imm(Type::IMM_8, i) {}
 
   /** Checks that this immediate value fits in 8 bits. */
-  constexpr bool check() const {
+  bool check() const {
     return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
   }
 };
@@ -91,10 +91,10 @@ public:
 class Imm16 : public Imm {
 public:
   /** Creates a 16-bit immediate. */
-  constexpr Imm16(uint16_t i) : Imm(Type::IMM_16, i) {}
+  Imm16(uint16_t i) : Imm(Type::IMM_16, i) {}
 
   /** Checks that this immediate value fits in 16 bits. */
-  constexpr bool check() const {
+  bool check() const {
     return ((val_>>16) == 0x0ul) || ((val_>>16) == 0xfffffffffffful);
   }
 };
@@ -106,10 +106,10 @@ public:
 class Imm32 : public Imm {
 public:
   /** Creates a 32-bit immediate. */
-  constexpr Imm32(uint32_t i) : Imm(Type::IMM_32, i) {}
+  Imm32(uint32_t i) : Imm(Type::IMM_32, i) {}
 
   /** Check that this immediate value fits in 32 bits. */
-  constexpr bool check() const {
+  bool check() const {
     return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
   }
 };
@@ -121,15 +121,15 @@ public:
 class Imm64 : public Imm {
 public:
   /** Creates a 64-bit immediate. */
-  constexpr Imm64(uint64_t i) : Imm(Type::IMM_64, i) {}
+  Imm64(uint64_t i) : Imm(Type::IMM_64, i) {}
   /** Creates a 64-bit immediate from a 64-bit pointer. */
   template <typename T>
-  constexpr Imm64(T* t) : Imm(Type::IMM_64, (uint64_t)t) {}
+  Imm64(T* t) : Imm(Type::IMM_64, (uint64_t)t) {}
   /** Creates a 64-bit immediate from the address of a function. */
   Imm64(const Function& f) : Imm(Type::IMM_64, (uint64_t)f.data()) {}
 
   /** Checks that this immediate value fits in 64-bits. */
-  constexpr bool check() const {
+  bool check() const {
     return true;
   }
 };
@@ -141,13 +141,13 @@ class Zero : public Imm8 {
 
 public:
   /** Checks that this immediate value equals zero. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ == 0;
   }
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Zero() : Imm8(0) {}
+  Zero() : Imm8(0) {}
 };
 
 /** The immediate constant value one */
@@ -157,13 +157,13 @@ class One : public Imm8 {
 
 public:
   /** Checks that this immediate value equals one. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ == 1;
   }
 
 private:
   /** Direct access to this construcotr is disallowed. */
-  constexpr One() : Imm8(1) {}
+  One() : Imm8(1) {}
 };
 
 /** The immediate constant value three */
@@ -173,13 +173,13 @@ class Three : public Imm8 {
 
 public:
   /** Checks that this immediate value equals three. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ == 3;
   }
 
 private:
   /** Direct access to this constructor is disallosed. */
-  constexpr Three() : Imm8(3) {}
+  Three() : Imm8(3) {}
 };
 
 } // namespace x64asm

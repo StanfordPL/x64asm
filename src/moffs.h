@@ -42,16 +42,16 @@ private:
 
 public:
   /** Returns true if this moffs contains a segment register. */
-  constexpr bool contains_seg() const {
+  bool contains_seg() const {
     return (val2_ & (uint64_t)Mask::SEG) != (uint64_t)Null::SEG;
   }
 
   /** Returns this moffs' segment register; undefined if absent. */
-  constexpr Sreg get_seg() const {
+  Sreg get_seg() const {
     return {val2_ & (uint64_t)Mask::SEG};
   }
   /** Returns this moffs' offset. */
-  constexpr Imm64 get_offset() const {
+  Imm64 get_offset() const {
     return {val_};
   }
 
@@ -70,7 +70,7 @@ public:
   }
 
   /** Returns true if this moffs contains a well-formed segment register. */
-  constexpr bool check() const {
+  bool check() const {
     return (!contains_seg() || get_seg().check()) && get_offset().check();
   }
 
@@ -88,7 +88,7 @@ public:
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() const {
+  size_t hash() const {
     return val_ ^ val2_;
   }
   /** @todo This method is undefined. */
@@ -110,11 +110,11 @@ public:
 
 protected:
   /** Create a moffs using seg:offset form. */
-  constexpr Moffs(Type t, const Sreg& seg, const Imm64& offset) :
+  Moffs(Type t, const Sreg& seg, const Imm64& offset) :
     Operand(t, (uint64_t)offset, seg.val_) {
   }
   /** Create a moffs using offset form. */
-  constexpr Moffs(Type t, const Imm64& offset) :
+  Moffs(Type t, const Imm64& offset) :
     Operand(t, (uint64_t)offset, (uint64_t)Null::SEG) {
   }
 };
@@ -123,36 +123,36 @@ protected:
 class Moffs8 : public Moffs {
 public:
   /** Create a moffs using seg:offset form. */
-  constexpr Moffs8(const Sreg& seg, const Imm64& offset) : Moffs(Type::MOFFS_8, seg, offset) {}
+  Moffs8(const Sreg& seg, const Imm64& offset) : Moffs(Type::MOFFS_8, seg, offset) {}
   /** Create a moffs using offset form. */
-  constexpr Moffs8(const Imm64& offset) : Moffs(Type::MOFFS_8, offset) {}
+  Moffs8(const Imm64& offset) : Moffs(Type::MOFFS_8, offset) {}
 };
 
 /** A simple memory variable (memory offset) of type word. */
 class Moffs16 : public Moffs {
 public:
   /** Create a moffs using seg:offset form. */
-  constexpr Moffs16(const Sreg& seg, const Imm64& offset) : Moffs(Type::MOFFS_16, seg, offset) {}
+  Moffs16(const Sreg& seg, const Imm64& offset) : Moffs(Type::MOFFS_16, seg, offset) {}
   /** Create a moffs using offset form. */
-  constexpr Moffs16(const Imm64& offset) : Moffs(Type::MOFFS_16, offset) {}
+  Moffs16(const Imm64& offset) : Moffs(Type::MOFFS_16, offset) {}
 };
 
 /** A simple memory variable (memory offset) of type doubleword. */
 class Moffs32 : public Moffs {
 public:
   /** Create a moffs using seg:offset form. */
-  constexpr Moffs32(const Sreg& seg, const Imm64& offset) : Moffs(Type::MOFFS_32, seg, offset) {}
+  Moffs32(const Sreg& seg, const Imm64& offset) : Moffs(Type::MOFFS_32, seg, offset) {}
   /** Create a moffs using offset form. */
-  constexpr Moffs32(const Imm64& offset) : Moffs(Type::MOFFS_32, offset) {}
+  Moffs32(const Imm64& offset) : Moffs(Type::MOFFS_32, offset) {}
 };
 
 /** A simple memory variable (memory offset) of type quadword. */
 class Moffs64 : public Moffs {
 public:
   /** Create a moffs using seg:offset form. */
-  constexpr Moffs64(const Sreg& seg, const Imm64& offset) : Moffs(Type::MOFFS_64, seg, offset) {}
+  Moffs64(const Sreg& seg, const Imm64& offset) : Moffs(Type::MOFFS_64, seg, offset) {}
   /** Create a moffs using offset form. */
-  constexpr Moffs64(const Imm64& offset) : Moffs(Type::MOFFS_64, offset) {}
+  Moffs64(const Imm64& offset) : Moffs(Type::MOFFS_64, offset) {}
 };
 
 } // namespace x64asm

@@ -33,7 +33,7 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr EnvReg(size_t val) : val_(val) {}
+  EnvReg(size_t val) : val_(val) {}
 
 private:
   /** Globally unique id. */
@@ -53,7 +53,7 @@ public:
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr FpuData() : EnvReg(0) {}
+  FpuData() : EnvReg(0) {}
 };
 
 /** The FPU Instruction register. */
@@ -69,7 +69,7 @@ public:
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr FpuInstruction() : EnvReg(0) {}
+  FpuInstruction() : EnvReg(0) {}
 };
 
 /** The FPU Opcode regiter. */
@@ -85,7 +85,7 @@ public:
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr FpuOpcode() : EnvReg(0) {}
+  FpuOpcode() : EnvReg(0) {}
 };
 
 /** The instruction pointer register. */
@@ -101,7 +101,7 @@ public:
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Rip() : EnvReg(0) {}
+  Rip() : EnvReg(0) {}
 };
 
 } // namespace x64asm

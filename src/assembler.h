@@ -173,11 +173,11 @@ private:
   }
 
   /** Does this operand require a REX prefix? */
-  constexpr bool requires_rex_byte(const Operand& o) {
+  bool requires_rex_byte(const Operand& o) {
     return o.type() == Type::R_8 && o.val_ > 3;
   }
   /** Does this operand require a REX.[R,X,B] prefix? */
-  constexpr bool requires_rex_bit(const Operand& o) {
+  bool requires_rex_bit(const Operand& o) {
     return o.val_ > 7;
   }
 

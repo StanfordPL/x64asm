@@ -28,12 +28,12 @@ namespace x64asm {
 class R : public Operand {
 public:
   /** Conversion based on underlying value. */
-  constexpr operator uint64_t() const {
+  operator uint64_t() const {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() const {
+  size_t hash() const {
     return val_;
   }
 
@@ -44,7 +44,7 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr R(Type t, uint64_t val) : Operand(t, val) {}
+  R(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 
@@ -57,20 +57,20 @@ class R8 : public R {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ < 16;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const R8& rhs) const {
+  bool operator<(const R8& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const R8& rhs) const {
+  bool operator==(const R8& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const R8& rhs) const {
+  bool operator!=(const R8& rhs) const {
     return !(*this == rhs);
   }
 
@@ -81,8 +81,8 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr R8(uint64_t val) : R(Type::R_8, val) {}
-  constexpr R8(Type t, uint64_t val) : R(t, val) {}
+  R8(uint64_t val) : R(Type::R_8, val) {}
+  R8(Type t, uint64_t val) : R(t, val) {}
 };
 
 /** The byte general-purpose register AL. */
@@ -92,13 +92,13 @@ class Al : public R8 {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ == 0;
   }
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Al() : R8(Type::AL, 0) {}
+  Al() : R8(Type::AL, 0) {}
 };
 
 /** The byte general-purpose register CL. */
@@ -108,13 +108,13 @@ class Cl : public R8 {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ == 1;
   }
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Cl() : R8(Type::CL, 1) {}
+  Cl() : R8(Type::CL, 1) {}
 };
 
 /** One of the byte general-purpose registers: AH, CH, DH, BH. */
@@ -124,20 +124,20 @@ class Rh : public R {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ >= 4 && val_ < 8;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const Rh& rhs) const {
+  bool operator<(const Rh& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const Rh& rhs) const {
+  bool operator==(const Rh& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const Rh& rhs) const {
+  bool operator!=(const Rh& rhs) const {
     return !(*this == rhs);
   }
 
@@ -148,7 +148,7 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr Rh(uint64_t val) : R(Type::RH, val) {}
+  Rh(uint64_t val) : R(Type::RH, val) {}
 };
 
 /** One of the word general-purpose registers: AX, CX, DX, BX, SP, BP, SI, DI;
@@ -161,20 +161,20 @@ class R16 : public R {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ < 16;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const R16& rhs) const {
+  bool operator<(const R16& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const R16& rhs) const {
+  bool operator==(const R16& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const R16& rhs) const {
+  bool operator!=(const R16& rhs) const {
     return !(*this == rhs);
   }
 
@@ -185,8 +185,8 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr R16(uint64_t val) : R(Type::R_16, val) {}
-  constexpr R16(Type t, uint64_t val) : R(t, val) {}
+  R16(uint64_t val) : R(Type::R_16, val) {}
+  R16(Type t, uint64_t val) : R(t, val) {}
 };
 
 /** The word general-purpose register AX. */
@@ -196,13 +196,13 @@ class Ax : public R16 {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ == 0;
   }
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Ax() : R16(Type::AX, 0) {}
+  Ax() : R16(Type::AX, 0) {}
 };
 
 /** The word general-purpose register DX. */
@@ -212,13 +212,13 @@ class Dx : public R16 {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ == 2;
   }
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Dx() : R16(Type::DX, 2) {}
+  Dx() : R16(Type::DX, 2) {}
 };
 
 /** One of the doubleword general-purpose registers: EAX, ECX, EDX, EBX, ESP,
@@ -235,20 +235,20 @@ class R32 : public R {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ < 16;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const R32& rhs) const {
+  bool operator<(const R32& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const R32& rhs) const {
+  bool operator==(const R32& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const R32& rhs) const {
+  bool operator!=(const R32& rhs) const {
     return !(*this == rhs);
   }
 
@@ -259,8 +259,8 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr R32(uint64_t val) : R(Type::R_32, val) {}
-  constexpr R32(Type t, uint64_t val) : R(t, val) {}
+  R32(uint64_t val) : R(Type::R_32, val) {}
+  R32(Type t, uint64_t val) : R(t, val) {}
 };
 
 /** The doubleword general-purpose register EAX. */
@@ -270,13 +270,13 @@ class Eax : public R32 {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ == 0;
   }
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Eax() : R32(Type::EAX, 0) {}
+  Eax() : R32(Type::EAX, 0) {}
 };
 
 /** One of the quadword general-purpose registers: RAX, RBX, RCX, RDX, RDI, RSI,
@@ -292,20 +292,20 @@ class R64 : public R {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ < 16;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const R64& rhs) const {
+  bool operator<(const R64& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const R64& rhs) const {
+  bool operator==(const R64& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const R64& rhs) const {
+  bool operator!=(const R64& rhs) const {
     return !(*this == rhs);
   }
 
@@ -316,8 +316,8 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr R64(uint64_t val) : R(Type::R_64, val) {}
-  constexpr R64(Type t, uint64_t val) : R(t, val) {}
+  R64(uint64_t val) : R(Type::R_64, val) {}
+  R64(Type t, uint64_t val) : R(t, val) {}
 };
 
 /** The quadword general-purpose register RAX. */
@@ -327,13 +327,13 @@ class Rax : public R64 {
 
 public:
   /** Returns true if this register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ == 0;
   }
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Rax() : R64(Type::RAX, 0) {}
+  Rax() : R64(Type::RAX, 0) {}
 };
 
 } // namespace x64asm

@@ -42,7 +42,7 @@ class Operand {
 
 public:
   /** Return the type of this operand */
-  constexpr Type type() const {
+  Type type() const {
     return (Type)(val2_ >> 3);
   }
   /** Return the size of this operand */
@@ -79,20 +79,30 @@ public:
 
 protected:
   /** Creates an operand with a type and no underlying value. */
-  constexpr Operand(Type t) : val_(0), val2_((uint64_t)t << 3) {}
+  Operand(Type t) : 
+    val_(0), val2_((uint64_t)t << 3), uid_(uid_counter_++) {}
   /** Creates an operand with a type and one underlying value. */
-  constexpr Operand(Type t, uint64_t val) : val_(val), val2_((uint64_t)t << 3) {}
+  Operand(Type t, uint64_t val) : 
+    val_(val), val2_((uint64_t)t << 3), uid_(uid_counter_++) {}
   /** Creates an operand with a type and two underlying values. */
-  constexpr Operand(Type t, uint64_t val, uint64_t val2) : val_(val), val2_(val2 | ((uint64_t)t << 3)) {}
+  Operand(Type t, uint64_t val, uint64_t val2) : 
+    val_(val), val2_(val2 | ((uint64_t)t << 3)), uid_(uid_counter_++) {}
   /** Creates an operand with no type and no underlying value. */
-  constexpr Operand() : val_(0), val2_(0) {}
+  Operand() : 
+    val_(0), val2_(0), uid_(uid_counter_++) {}
 
   /** Underlying value. */
   uint64_t val_;
   /** Extended storage space for underlying value. */
   uint64_t val2_;
+  /** A unique id number. */
+  uint64_t uid_;
 
 private:
+
+  /** Uid counter */
+  static uint64_t uid_counter_;
+
   /** Forcibly change the underlying type.  Actually, most of the time
    * this function does nothing, because it believes the caller is stupid
    * and that it knows better.  In that case, it just ignores the passed type,

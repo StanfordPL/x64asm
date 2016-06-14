@@ -32,30 +32,30 @@ class Xmm : public Sse {
 
 public:
   /** Returns true if this xmm register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ < 16;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const Xmm& rhs) const {
+  bool operator<(const Xmm& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const Xmm& rhs) const {
+  bool operator==(const Xmm& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const Xmm& rhs) const {
+  bool operator!=(const Xmm& rhs) const {
     return !(*this == rhs);
   }
 
   /** Conversion based on underlying value. */
-  constexpr operator uint64_t() const {
+  operator uint64_t() const {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() const {
+  size_t hash() const {
     return val_;
   }
   /** STL-compliant swap. */
@@ -70,8 +70,8 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr Xmm(uint64_t val) : Sse(Type::XMM, val) {}
-  constexpr Xmm(Type t, uint64_t val) : Sse(t, val) {}
+  Xmm(uint64_t val) : Sse(Type::XMM, val) {}
+  Xmm(Type t, uint64_t val) : Sse(t, val) {}
 };
 
 /** The XMM register XMM0. */
@@ -81,13 +81,13 @@ class Xmm0 : public Xmm {
 
 public:
   /** Returns true if this xmm register is %xmm0. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ == 0;
   }
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Xmm0() : Xmm(Type::XMM_0, 0) {}
+  Xmm0() : Xmm(Type::XMM_0, 0) {}
 };
 
 } // namespace x64asm

@@ -39,30 +39,30 @@ class Sreg : public Operand {
 
 public:
   /** Returns true if this segment register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ < 6;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const Sreg& rhs) const {
+  bool operator<(const Sreg& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const Sreg& rhs) const {
+  bool operator==(const Sreg& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const Sreg& rhs) const {
+  bool operator!=(const Sreg& rhs) const {
     return !(*this == rhs);
   }
 
   /** Conversion based on underlying value. */
-  constexpr operator uint64_t() const {
+  operator uint64_t() const {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() const {
+  size_t hash() const {
     return val_;
   }
 
@@ -73,8 +73,8 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr Sreg(uint64_t val) : Operand(Type::SREG, val) {}
-  constexpr Sreg(Type t, uint64_t val) : Operand(t, val) {}
+  Sreg(uint64_t val) : Operand(Type::SREG, val) {}
+  Sreg(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 /** The segment register FS. */
@@ -84,13 +84,13 @@ class Fs : public Sreg {
 
 public:
   /** Checks whether this segment register is %fs. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ == 4;
   }
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Fs() : Sreg(Type::FS, 4) {}
+  Fs() : Sreg(Type::FS, 4) {}
 };
 
 /** The segment register GS. */
@@ -100,13 +100,13 @@ class Gs : public Sreg {
 
 public:
   /** Checks whether this segment register is %gs. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ == 5;
   }
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Gs() : Sreg(Type::GS, 5) {}
+  Gs() : Sreg(Type::GS, 5) {}
 };
 
 } // namespace x64asm

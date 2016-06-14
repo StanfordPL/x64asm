@@ -26,7 +26,7 @@ using namespace x64asm;
 
 namespace {
 
-constexpr array<const char*, 22> eflags_() {
+array<const char*, 22> eflags_() {
   return {
     "%cf", "<res1>", "%pf", "<res3>", "%af", "<res5>", "%zf", "%sf",
     "%tf", "%if", "%df", "%of", "%iopl", "%iopl", "%nt", "<res15>",
@@ -34,7 +34,7 @@ constexpr array<const char*, 22> eflags_() {
   };
 }
 
-constexpr array<const char*, 16> control_() {
+array<const char*, 16> control_() {
   return {
     "%control::im", "%control::dm", "%control::zm", "%control::om",
     "%control::um", "%control::pm", "<control::res6>", "<control::res7>",
@@ -43,7 +43,7 @@ constexpr array<const char*, 16> control_() {
   };
 }
 
-constexpr array<const char*, 16> status_() {
+array<const char*, 16> status_() {
   return {
     "%status::ie", "%status::de", "%status::ze", "%status::oe",
     "%status::ue", "%status::pe", "%status::sf", "%status::es",
@@ -52,14 +52,14 @@ constexpr array<const char*, 16> status_() {
   };
 }
 
-constexpr array<const char*, 16> tag_() {
+array<const char*, 16> tag_() {
   return {
     "%tag0", "%tag0", "%tag1", "%tag1", "%tag2", "%tag2", "%tag3", "%tag3",
     "%tag4", "%tag4", "%tag5", "%tag5", "%tag6", "%tag6", "%tag7", "%tag7"
   };
 }
 
-constexpr array<const char*, 16> mxcsr_() {
+array<const char*, 16> mxcsr_() {
   return {
     "%mxcsr::ie", "%mxcsr::de", "%mxcsr::ze", "%mxcsr::oe",
     "%mxcsr::ue", "%mxcsr::pe", "%mxcsr::daz", "%mxcsr::im",

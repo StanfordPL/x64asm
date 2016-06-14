@@ -68,45 +68,45 @@ private:
 
 public:
   /** Returns true if this memory contains a segment register. */
-  constexpr bool contains_seg() const {
+  bool contains_seg() const {
     return (val_ & (uint64_t)Mask::SEG) != ((uint64_t)Null::SEG << (uint64_t)Index::SEG);
   }
   /** Returns true if this memory contains a base register. */
-  constexpr bool contains_base() const {
+  bool contains_base() const {
     return (val_ & (uint64_t)Mask::BASE) != (r_null() << (uint64_t)Index::BASE);
   }
   /** Returns true if this memory contains an index register. */
-  constexpr bool contains_index() const {
+  bool contains_index() const {
     return (val_ & (uint64_t)Mask::INDEX) != (r_null() << (uint64_t)Index::INDEX);
   }
 
   /** Returns true if this memory uses a 32-bit address override. */
-  constexpr bool addr_or() const {
+  bool addr_or() const {
     return val_ & (uint64_t)Mask::ADDR_OR;
   }
   /** Returns true if this memory uses RIP+offset form. */
-  constexpr bool rip_offset() const {
+  bool rip_offset() const {
     return val_ & (uint64_t)Mask::RIP;
   }
 
   /** Returns this memory's segment register; undefined if absent. */
-  constexpr Sreg get_seg() const {
+  Sreg get_seg() const {
     return {(val_ & (uint64_t)Mask::SEG) >> (uint64_t)Index::SEG};
   }
   /** Returns this memory's base register; undefined if absent. */
-  constexpr R64 get_base() const {
+  R64 get_base() const {
     return {(val_ & (uint64_t)Mask::BASE) >> (uint64_t)Index::BASE};
   }
   /** Returns this memory's index register; undefined if absent. */
-  constexpr R64 get_index() const {
+  R64 get_index() const {
     return {(val_ & (uint64_t)Mask::INDEX) >> (uint64_t)Index::INDEX};
   }
   /** Returns this memory's index scaling constant; 1 if absent. */
-  constexpr Scale get_scale() const {
+  Scale get_scale() const {
     return (Scale)((val_ & (uint64_t)Mask::SCALE) >> (uint64_t)Index::SCALE);
   }
   /** Returns this memory's displacement; 0 if absent. */
-  constexpr Imm32 get_disp() const {
+  Imm32 get_disp() const {
     return {(uint32_t)(val_ & (uint64_t)Mask::DISP)};
   }
 
@@ -173,20 +173,20 @@ public:
   bool check() const;
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const Mem& rhs) const {
+  bool operator<(const Mem& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const Mem& rhs) const {
+  bool operator==(const Mem& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const Mem& rhs) const {
+  bool operator!=(const Mem& rhs) const {
     return !(*this == rhs);
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() const {
+  size_t hash() const {
     return val_;
   }
   /** STL-compliant swap. */
@@ -201,15 +201,15 @@ public:
 
 protected:
   /** Helper method: returns a null register. */
-  static constexpr R64 r_null() {
+  static R64 r_null() {
     return {(uint64_t)Null::REG};
   }
   /** Helper method: returns a null segment register. */
-  static constexpr Sreg s_null() {
+  static Sreg s_null() {
     return {(uint64_t)Null::SEG};
   }
   /** Helper method: initializes all internal fields. */
-  static constexpr uint64_t init(const Imm32& d, const R& b, const R& i,
+  static uint64_t init(const Imm32& d, const R& b, const R& i,
                                  Scale sc, const Sreg& s, uint64_t addr_or, uint64_t rip) {
     return ((uint64_t)d & (uint64_t)Mask::DISP) |
            ((uint64_t)b << (uint64_t)Index::BASE) |
@@ -222,11 +222,11 @@ protected:
 
 
   /** Creates an operand with a type and no underlying value. */
-  constexpr Mem(Type t) : Operand(t) {}
+  Mem(Type t) : Operand(t) {}
   /** Creates an operand with a type and one underlying value. */
-  constexpr Mem(Type t, uint64_t val) : Operand(t, val) {}
+  Mem(Type t, uint64_t val) : Operand(t, val) {}
   /** Creates an operand with a type and two underlying values. */
-  constexpr Mem(Type t, uint64_t val, uint64_t val2) : Operand(t, val, val2) {}
+  Mem(Type t, uint64_t val, uint64_t val2) : Operand(t, val, val2) {}
 
 };
 
@@ -236,134 +236,134 @@ class M : public Mem {
 public:
   /** Creates a memory using an existing one.  Used to change types. */
   template <typename U>
-  constexpr M(const M<U>& m) :
+  M(const M<U>& m) :
     Mem(T::m_type(), init(m.get_disp(), m.get_base(), m.get_index(), m.get_scale(),
                               m.get_seg(), m.addr_or(), m.rip_offset())) {
   }
   /** Creates a memory using an existing one.  Used to change types. */
   template <typename U>
-  constexpr M(const M<U>& m, Type t) :
+  M(const M<U>& m, Type t) :
     Mem(t, init(m.get_disp(), m.get_base(), m.get_index(), m.get_scale(),
                     m.get_seg(), m.addr_or(), m.rip_offset())) {
   }
   /** Creates a memory using disp form. */
-  constexpr M(const Imm32& d) :
+  M(const Imm32& d) :
     Mem(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
   }
   /** Creates a memory using seg:disp form. */
-  constexpr M(const Sreg& s, const Imm32& d) :
+  M(const Sreg& s, const Imm32& d) :
     Mem(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s, 0, 0)) {
   }
   /** Creates a memroy using (base64) form. */
-  constexpr M(const R32& b) :
+  M(const R32& b) :
     Mem(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s_null(), 1, 0)) {
   }
   /** Creates a memory using (base32) form. */
-  constexpr M(const R64& b) :
+  M(const R64& b) :
     Mem(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
   }
   /** Creates a memory using RIP form. */
-  constexpr M(Rip rip) :
+  M(Rip rip) :
     Mem(T::m_type(), init(Imm32(0), r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 1)) {
   }
   /** Creates a memory using seg:base32 form. */
-  constexpr M(const Sreg& s, const R32& b) :
+  M(const Sreg& s, const R32& b) :
     Mem(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s, 1, 0)) {
   }
   /** Creates a memory using seg:base64 form. */
-  constexpr M(const Sreg& s, const R64& b) :
+  M(const Sreg& s, const R64& b) :
     Mem(T::m_type(), init(Imm32(0), b, r_null(), Scale::TIMES_1, s, 0, 0)) {
   }
   /** Creates a memory using seg:RIP form. */
-  constexpr M(const Sreg& s, Rip rip) :
+  M(const Sreg& s, Rip rip) :
     Mem(T::m_type(), init(Imm32(0), r_null(), r_null(), Scale::TIMES_1, s, 0, 1)) {
   }
   /** Creates a memory using disp(base32) form. */
-  constexpr M(const R32& b, const Imm32& d) :
+  M(const R32& b, const Imm32& d) :
     Mem(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s_null(), 1, 0)) {
   }
   /** Creates a memory using disp(base64) form. */
-  constexpr M(const R64& b, const Imm32& d) :
+  M(const R64& b, const Imm32& d) :
     Mem(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s_null(), 0, 0)) {
   }
   /** Creates a memory using RIP+disp form. */
-  constexpr M(Rip rip, const Imm32& d) :
+  M(Rip rip, const Imm32& d) :
     Mem(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s_null(), 0, 1)) {
   }
   /** Creates a memory using seg:disp(base32) form. */
-  constexpr M(const Sreg& s, const R32& b, const Imm32& d) :
+  M(const Sreg& s, const R32& b, const Imm32& d) :
     Mem(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s, 1, 0)) {
   }
   /** Creates a memory using seg:disp(base64) form. */
-  constexpr M(const Sreg& s, const R64& b, const Imm32& d) :
+  M(const Sreg& s, const R64& b, const Imm32& d) :
     Mem(T::m_type(), init(d, b, r_null(), Scale::TIMES_1, s, 0, 0)) {
   }
   /** Creates a memory using seg:RIP+disp form. */
-  constexpr M(const Sreg& s, Rip rip, const Imm32& d) :
+  M(const Sreg& s, Rip rip, const Imm32& d) :
     Mem(T::m_type(), init(d, r_null(), r_null(), Scale::TIMES_1, s, 0, 1)) {
   }
   /** Creates a memory using (index32,scale) form. */
-  constexpr M(const R32& i, Scale sc) :
+  M(const R32& i, Scale sc) :
     Mem(T::m_type(), init(Imm32(0), r_null(), i, sc, s_null(), 1, 0)) {
   }
   /** Creates a memory using (index64,scale) form. */
-  constexpr M(const R64& i, Scale sc) :
+  M(const R64& i, Scale sc) :
     Mem(T::m_type(), init(Imm32(0), r_null(), i, sc, s_null(), 0, 0)) {
   }
   /** Creates a memory using seg:(index32,scale) form. */
-  constexpr M(const Sreg& s, const R32& i, Scale sc) :
+  M(const Sreg& s, const R32& i, Scale sc) :
     Mem(T::m_type(), init(Imm32(0), r_null(), i, sc, s, 1, 0)) {
   }
   /** Creates a memory using seg:(index64,scale) form. */
-  constexpr M(const Sreg& s, const R64& i, Scale sc) :
+  M(const Sreg& s, const R64& i, Scale sc) :
     Mem(T::m_type(), init(Imm32(0), r_null(), i, sc, s, 0, 0)) {
   }
   /** Creates a memory using disp(index32,scale) form. */
-  constexpr M(const R32& i, Scale sc, const Imm32& d) :
+  M(const R32& i, Scale sc, const Imm32& d) :
     Mem(T::m_type(), init(d, r_null(), i, sc, s_null(), 1, 0)) {
   }
   /** Creates a memory using disp(index64,scale) form. */
-  constexpr M(const R64& i, Scale sc, const Imm32& d) :
+  M(const R64& i, Scale sc, const Imm32& d) :
     Mem(T::m_type(), init(d, r_null(), i, sc, s_null(), 0, 0)) {
   }
   /** Creates a memory using seg:disp(index32,scale) form. */
-  constexpr M(const Sreg& s, const R32& i, Scale sc, const Imm32& d) :
+  M(const Sreg& s, const R32& i, Scale sc, const Imm32& d) :
     Mem(T::m_type(), init(d, r_null(), i, sc, s, 1, 0)) {
   }
   /** Creates a memory using seg:disp(index64,scale) form. */
-  constexpr M(const Sreg& s, const R64& i, Scale sc, const Imm32& d) :
+  M(const Sreg& s, const R64& i, Scale sc, const Imm32& d) :
     Mem(T::m_type(), init(d, r_null(), i, sc, s, 0, 0)) {
   }
   /** Creates a memory using (base32,index32,scale) form. */
-  constexpr M(const R32& b, const R32& i, Scale sc) :
+  M(const R32& b, const R32& i, Scale sc) :
     Mem(T::m_type(), init(Imm32(0), b, i, sc, s_null(), 1, 0)) {
   }
   /** Creates a memory using (base64,index64,scale) form. */
-  constexpr M(const R64& b, const R64& i, Scale sc) :
+  M(const R64& b, const R64& i, Scale sc) :
     Mem(T::m_type(), init(Imm32(0), b, i, sc, s_null(), 0, 0)) {
   }
   /** Creates a memory using seg:(base32,index32,scale) form. */
-  constexpr M(const Sreg& s, const R32& b, const R32& i, Scale sc) :
+  M(const Sreg& s, const R32& b, const R32& i, Scale sc) :
     Mem(T::m_type(), init(Imm32(0), b, i, sc, s, 1, 0)) {
   }
   /** Creates a memory using seg:(base64,index64,scale) form. */
-  constexpr M(const Sreg& s, const R64& b, const R64& i, Scale sc) :
+  M(const Sreg& s, const R64& b, const R64& i, Scale sc) :
     Mem(T::m_type(), init(Imm32(0), b, i, sc, s, 0, 0)) {
   }
   /** Creates a memory using disp(base32,index32,scale) form. */
-  constexpr M(const R32& b, const R32& i, Scale sc, const Imm32& d) :
+  M(const R32& b, const R32& i, Scale sc, const Imm32& d) :
     Mem(T::m_type(), init(d, b, i, sc, s_null(), 1, 0)) {
   }
   /** Creates a memory using disp(base64,index64,scale) form. */
-  constexpr M(const R64& b, const R64& i, Scale sc, const Imm32& d) :
+  M(const R64& b, const R64& i, Scale sc, const Imm32& d) :
     Mem(T::m_type(), init(d, b, i, sc, s_null(), 0, 0)) {
   }
   /** Creates a memory using seg:disp(base32,index32,scale) form. */
-  constexpr M(const Sreg& s, const R32& b, const R32& i, Scale sc, const Imm32& d) :
+  M(const Sreg& s, const R32& b, const R32& i, Scale sc, const Imm32& d) :
     Mem(T::m_type(), init(d, b, i, sc, s, 1, 0)) {
   }
   /** Creates a memory using seg:disp(base64,index64,scale) form. */
-  constexpr M(const Sreg& s, const R64& b, const R64& i, Scale sc, const Imm32& d) :
+  M(const Sreg& s, const R64& b, const R64& i, Scale sc, const Imm32& d) :
     Mem(T::m_type(), init(d, b, i, sc, s, 0, 0)) {
   }
 };
@@ -377,7 +377,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_8;
   }
 
@@ -392,7 +392,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_16;
   }
 
@@ -407,7 +407,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_32;
   }
 
@@ -419,7 +419,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_64;
   }
 
@@ -431,7 +431,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_128;
   }
 };
@@ -444,7 +444,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_256;
   }
 };
@@ -458,7 +458,7 @@ public:
 
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_16_INT;
   }
 
@@ -472,7 +472,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_32_INT;
   }
 
@@ -487,7 +487,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_64_INT;
   }
 
@@ -503,7 +503,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_32_FP;
   }
 
@@ -519,7 +519,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_64_FP;
   }
 };
@@ -533,7 +533,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_80_FP;
   }
 };
@@ -544,7 +544,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_80_BCD;
   }
 
@@ -556,7 +556,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_2_BYTE;
   }
 };
@@ -567,7 +567,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_28_BYTE;
   }
 
@@ -579,7 +579,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_108_BYTE;
   }
 
@@ -591,7 +591,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::M_512_BYTE;
   }
 
@@ -606,7 +606,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::FAR_PTR_16_16;
   }
 
@@ -622,7 +622,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::FAR_PTR_16_32;
   }
 
@@ -637,7 +637,7 @@ public:
   using M::M;
 
   /** Returns the type of this operand */
-  static constexpr Type m_type() {
+  static Type m_type() {
     return Type::FAR_PTR_16_64;
   }
 

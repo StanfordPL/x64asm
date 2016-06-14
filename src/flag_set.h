@@ -27,16 +27,16 @@ namespace x64asm {
 class FlagSet {
 private:
   /** Creates a flag set from a bit mask. */
-  constexpr FlagSet(uint64_t mask) : mask_(mask) { }
+  FlagSet(uint64_t mask) : mask_(mask) { }
 
 public:
   /** Creates an empty flag set. */
-  constexpr FlagSet() : mask_(0) {}
+  FlagSet() : mask_(0) {}
   /** Creates a flag set with a single element. */
-  constexpr FlagSet(Flag f) : mask_((uint64_t)f) {}
+  FlagSet(Flag f) : mask_((uint64_t)f) {}
 
   /** Copy constructor. */
-  constexpr FlagSet(const FlagSet& rhs) : mask_(rhs.mask_) { }
+  FlagSet(const FlagSet& rhs) : mask_(rhs.mask_) { }
   /** Move constructor. */
   FlagSet(FlagSet&& rhs) {
     mask_ = rhs.mask_;
@@ -53,20 +53,20 @@ public:
   }
 
   /** Creates an empty flag set. */
-  static constexpr FlagSet empty() {
+  static FlagSet empty() {
     return FlagSet();
   }
   /** Creates a full flag set. */
-  static constexpr FlagSet universe() {
+  static FlagSet universe() {
     return FlagSet((Flag)-1);
   }
 
   /** Inserts a flag into this set. */
-  constexpr FlagSet operator+(Flag f) const {
+  FlagSet operator+(Flag f) const {
     return FlagSet((Flag)(mask_ | (uint64_t)f));
   }
   /** Removes a flag from this set. */
-  constexpr FlagSet operator-(Flag f) const {
+  FlagSet operator-(Flag f) const {
     return FlagSet((Flag)(mask_ & ~(uint64_t)f));
   }
 
@@ -82,15 +82,15 @@ public:
   }
 
   /** Set union. */
-  constexpr FlagSet operator|(FlagSet rhs) const {
+  FlagSet operator|(FlagSet rhs) const {
     return {mask_ | rhs.mask_};
   }
   /** Set difference. */
-  constexpr FlagSet operator-(FlagSet rhs) const {
+  FlagSet operator-(FlagSet rhs) const {
     return {mask_ & ~rhs.mask_};
   }
   /** Set intersection. */
-  constexpr FlagSet operator&(FlagSet rhs) const {
+  FlagSet operator&(FlagSet rhs) const {
     return {mask_ & rhs.mask_};
   }
   /** Set union. */
@@ -110,33 +110,33 @@ public:
   }
 
   /** Does this set contain a flag? */
-  constexpr bool contains(Flag f) const {
+  bool contains(Flag f) const {
     return ((uint64_t)f & mask_) == (uint64_t)f;
   }
   /** Does this set subsume another set? */
-  constexpr bool contains(FlagSet fs) const {
+  bool contains(FlagSet fs) const {
     return ((uint64_t)fs.mask_ & mask_) == (uint64_t)fs.mask_;
   }
   /** Do these sets intersect? */
-  constexpr bool intersects(FlagSet fs) const {
+  bool intersects(FlagSet fs) const {
     return (*this - fs) != *this;
   }
 
   /** Equality based on underlying bit mask. */
-  constexpr bool operator==(FlagSet rhs) const {
+  bool operator==(FlagSet rhs) const {
     return mask_ == rhs.mask_;
   }
   /** Equality based on underlying bit mask. */
-  constexpr bool operator!=(FlagSet rhs) const {
+  bool operator!=(FlagSet rhs) const {
     return mask_ != rhs.mask_;
   }
   /** Equality based on underlying bit mask. */
-  constexpr bool operator<(FlagSet rhs) const {
+  bool operator<(FlagSet rhs) const {
     return mask_ < rhs.mask_;
   }
 
   /** STL compliant hash. */
-  constexpr size_t hash() const {
+  size_t hash() const {
     return mask_;
   }
   /** STL compliant swap. */

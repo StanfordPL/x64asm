@@ -25,7 +25,7 @@ using namespace cpputil;
 
 namespace {
 
-constexpr array<const char*, X64ASM_NUM_OPCODES> att_() {
+array<const char*, X64ASM_NUM_OPCODES> att_() {
   return {
     // Internal mnemonics
     "<label>"
@@ -34,7 +34,7 @@ constexpr array<const char*, X64ASM_NUM_OPCODES> att_() {
   };
 }
 
-constexpr array<const char*, X64ASM_NUM_OPCODES> intel_() {
+array<const char*, X64ASM_NUM_OPCODES> intel_() {
   return {
     // Internal mnemonics
     "<label>"
@@ -43,7 +43,7 @@ constexpr array<const char*, X64ASM_NUM_OPCODES> intel_() {
   };
 }
 
-constexpr array<const char*, X64ASM_NUM_OPCODES> names_() {
+array<const char*, X64ASM_NUM_OPCODES> names_() {
   return {
     // Internal mnemonics
     "<label>"
@@ -52,7 +52,7 @@ constexpr array<const char*, X64ASM_NUM_OPCODES> names_() {
   };
 }
 
-constexpr array<Opcode, X64ASM_NUM_OPCODES> label32_transform_() {
+array<Opcode, X64ASM_NUM_OPCODES> label32_transform_() {
   return {
     // Internal mnemonics
     LABEL_DEFN

@@ -33,30 +33,30 @@ class Ymm : public Sse {
 
 public:
   /** Returns true if this xmm register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ < 16;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const Ymm& rhs) const {
+  bool operator<(const Ymm& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const Ymm& rhs) const {
+  bool operator==(const Ymm& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const Ymm& rhs) const {
+  bool operator!=(const Ymm& rhs) const {
     return !(*this == rhs);
   }
 
   /** Conversion based on underlying value. */
-  constexpr operator uint64_t() const {
+  operator uint64_t() const {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() const {
+  size_t hash() const {
     return val_;
   }
 
@@ -67,7 +67,7 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr Ymm(uint64_t val) : Sse(Type::YMM, val) {}
+  Ymm(uint64_t val) : Sse(Type::YMM, val) {}
 };
 
 } // namespace x64asm

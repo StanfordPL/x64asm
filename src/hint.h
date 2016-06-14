@@ -32,30 +32,30 @@ class Hint : public Operand {
 
 public:
   /** Checks that this hint is well-formed. */
-  constexpr bool check() {
+  bool check() const {
     return val_ < 2;
   }
 
   /** Comparison based on val_. */
-  constexpr bool operator==(const Hint& rhs) const {
+  bool operator==(const Hint& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on val_. */
-  constexpr bool operator!=(const Hint& rhs) const {
+  bool operator!=(const Hint& rhs) const {
     return !(*this == rhs);
   }
   /** Comparison based on val_. */
-  constexpr bool operator<(const Hint& rhs) const {
+  bool operator<(const Hint& rhs) const {
     return val_ < rhs.val_;
   }
 
   /** Conversion based on val_. */
-  constexpr operator uint64_t() const {
+  operator uint64_t() const {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() const {
+  size_t hash() const {
     return val_;
   }
 
@@ -71,7 +71,7 @@ public:
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Hint(uint64_t val) : Operand(Type::HINT, val) {}
+  Hint(uint64_t val) : Operand(Type::HINT, val) {}
 };
 
 } // namespace x64asm

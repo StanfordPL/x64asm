@@ -89,18 +89,18 @@ private:
   };
 
   /** Creates a register set from four bit masks. */
-  constexpr RegSet(uint64_t g1, uint64_t g2, uint64_t g3, uint64_t g4) :
+  RegSet(uint64_t g1, uint64_t g2, uint64_t g3, uint64_t g4) :
     group1_(g1), group2_(g2), group3_(g3), group4_(g4) {
   }
 
   /** Creates a register set from four position masks. */
-  constexpr RegSet(Mask g1, Mask g2, Mask g3, Mask g4) :
+  RegSet(Mask g1, Mask g2, Mask g3, Mask g4) :
     group1_((uint64_t)g1), group2_((uint64_t)g2), group3_((uint64_t)g3), group4_((uint64_t)g4) {
   }
 
 public:
   /** Creates an empty register set. */
-  constexpr RegSet() :
+  RegSet() :
     group1_((uint64_t)Mask::EMPTY), group2_((uint64_t)Mask::EMPTY),
     group3_((uint64_t)Mask::EMPTY), group4_((uint64_t)Mask::EMPTY) {
   }
@@ -130,28 +130,28 @@ public:
   }
 
   /** Creates an empty register set. */
-  static constexpr RegSet empty() {
+  static RegSet empty() {
     return {Mask::EMPTY, Mask::EMPTY, Mask::EMPTY, Mask::EMPTY};
   }
   /** Creates a register set containing all general purpose registers. */
-  static constexpr RegSet all_gps() {
+  static RegSet all_gps() {
     return {Mask::QUADS, Mask::EMPTY, Mask::EMPTY, Mask::EMPTY};
   }
   /** Creates a register set containing all xmm registers. */
-  static constexpr RegSet all_xmms() {
+  static RegSet all_xmms() {
     return {Mask::EMPTY, Mask::XMMS, Mask::EMPTY, Mask::EMPTY};
   }
   /** Creates a register set containing all ymm registers. */
-  static constexpr RegSet all_ymms() {
+  static RegSet all_ymms() {
     return {Mask::EMPTY, Mask::YMMS, Mask::EMPTY, Mask::EMPTY};
   }
   /** Creates a register set containing all xmm registers. */
-  static constexpr RegSet all_mms() {
+  static RegSet all_mms() {
     return {Mask::EMPTY, Mask::MMS, Mask::EMPTY, Mask::EMPTY};
   }
   /** Creates a register set containing registers that must be preserved
       by the callee. */
-  static constexpr RegSet linux_call_preserved() {
+  static RegSet linux_call_preserved() {
     return empty() +
            Constants::rbx()  + Constants::rbp()  + Constants::rsp()  +
            Constants::r12()  + Constants::r13()  + Constants::r14()  +
@@ -159,14 +159,14 @@ public:
   }
   /** Creates a regster set containing registers that can be changed by
       the callee at any time. */
-  static constexpr RegSet linux_call_scratch() {
+  static RegSet linux_call_scratch() {
     return all_xmms() +
            Constants::rdi()  + Constants::rsi()  + Constants::rdx()  +
            Constants::rcx()  + Constants::r8()   + Constants::r9() +
            Constants::r10()  + Constants::r11()  + Constants::rax();
   }
   /** Creates a RegSet containing registers used as parameters. */
-  static constexpr RegSet linux_call_parameters() {
+  static RegSet linux_call_parameters() {
     return empty() +
            Constants::xmm0() + Constants::xmm1() + Constants::xmm2() +
            Constants::xmm3() + Constants::xmm4() + Constants::xmm5() +
@@ -176,14 +176,14 @@ public:
            Constants::rax();
   }
   /** Creates a RegSet containing registers returned by linux calls. */
-  static constexpr RegSet linux_call_return() {
+  static RegSet linux_call_return() {
     return empty() +
            Constants::rax() + Constants::rdx() +
            Constants::xmm0() + Constants::xmm1();
   }
 
   /** Creates a retister set containing windows caller save reigsters. */
-  static constexpr RegSet windows_caller_save() {
+  static RegSet windows_caller_save() {
     return empty() +
            Constants::rcx()  + Constants::rdx()  +
            Constants::r8()   + Constants::r9()   +
@@ -191,26 +191,26 @@ public:
            Constants::xmm2() + Constants::xmm3();
   }
   /** Creates a full register set. */
-  static constexpr RegSet universe() {
+  static RegSet universe() {
     return {Mask::UNIV1, Mask::UNIV2, Mask::UNIV3, Mask::UNIV4};
   }
 
   /** Set inversion. */
-  constexpr RegSet operator~() const {
+  RegSet operator~() const {
     return {~group1_, ~group2_, ~group3_, ~group4_};
   }
   /** Set intersection. */
-  constexpr RegSet operator&(const RegSet& rhs) const {
+  RegSet operator&(const RegSet& rhs) const {
     return {group1_ & rhs.group1_, group2_ & rhs.group2_,
             group3_ & rhs.group3_, group4_ & rhs.group4_};
   }
   /** Set union. */
-  constexpr RegSet operator|(const RegSet& rhs) const {
+  RegSet operator|(const RegSet& rhs) const {
     return {group1_ | rhs.group1_, group2_ | rhs.group2_,
             group3_ | rhs.group3_, group4_ | rhs.group4_};
   }
   /** Set difference. */
-  constexpr RegSet operator-(const RegSet& rhs) const {
+  RegSet operator-(const RegSet& rhs) const {
     return {group1_& ~rhs.group1_, group2_& ~rhs.group2_,
             group3_& ~rhs.group3_, group4_& ~rhs.group4_};
   }
@@ -239,97 +239,97 @@ public:
     return *this;
   }
   /** Set equality. */
-  constexpr bool operator==(const RegSet& rhs) const {
+  bool operator==(const RegSet& rhs) const {
     return group1_ == rhs.group1_ && group2_ == rhs.group2_ &&
            group3_ == rhs.group3_ && group4_ == rhs.group4_;
   }
   /** Set inequality. */
-  constexpr bool operator!=(const RegSet& rhs) const {
+  bool operator!=(const RegSet& rhs) const {
     return !(*this == rhs);
   }
   /** Set containment. */
-  constexpr bool contains(const RegSet& rhs) const {
+  bool contains(const RegSet& rhs) const {
     return (*this & rhs) == rhs;
   }
   /** Set intersection. */
-  constexpr bool intersects(const RegSet& rhs) const {
+  bool intersects(const RegSet& rhs) const {
     return (*this - rhs) != *this;
   }
 
   /** Insert a high register. */
-  constexpr RegSet operator+(const Rh& rhs) const {
+  RegSet operator+(const Rh& rhs) const {
     return plus_group1(Mask::HIGH, (uint64_t)rhs-4);
   }
   /** Insert a byte register. */
-  constexpr RegSet operator+(const R8& rhs) const {
+  RegSet operator+(const R8& rhs) const {
     return plus_group1(Mask::BYTE, (uint64_t)rhs);
   }
   /** Insert a word register. */
-  constexpr RegSet operator+(const R16& rhs) const {
+  RegSet operator+(const R16& rhs) const {
     return plus_group1(Mask::WORD, (uint64_t)rhs);
   }
   /** Insert a double register. */
-  constexpr RegSet operator+(const R32& rhs) const {
+  RegSet operator+(const R32& rhs) const {
     return plus_group1(Mask::DOUBLE, (uint64_t)rhs);
   }
   /** Insert a quad register. */
-  constexpr RegSet operator+(const R64& rhs) const {
+  RegSet operator+(const R64& rhs) const {
     return plus_group1(Mask::QUAD, (uint64_t)rhs);
   }
   /** Insert an xmm register. */
-  constexpr RegSet operator+(const Xmm& rhs) const {
+  RegSet operator+(const Xmm& rhs) const {
     return plus_group2(Mask::XMM, (uint64_t)rhs);
   }
   /** Insert a ymm register. */
-  constexpr RegSet operator+(const Ymm& rhs) const {
+  RegSet operator+(const Ymm& rhs) const {
     return plus_group2(Mask::YMM, (uint64_t)rhs);
   }
   /** Insert an mmx register. */
-  constexpr RegSet operator+(const Mm& rhs) const {
+  RegSet operator+(const Mm& rhs) const {
     return plus_group2(Mask::MM, (uint64_t)rhs);
   }
   /** Insert a floating point stack register. */
-  constexpr RegSet operator+(const St& rhs) const {
+  RegSet operator+(const St& rhs) const {
     return plus_group2(Mask::ST, (uint64_t)rhs);
   }
   /** Insert a segment register. */
-  constexpr RegSet operator+(const Sreg& rhs) const {
+  RegSet operator+(const Sreg& rhs) const {
     return plus_group4(Mask::SREG, (uint64_t)rhs);
   }
   /** Insert an environment register. */
-  constexpr RegSet operator+(const FpuData& rhs) const {
+  RegSet operator+(const FpuData& rhs) const {
     return plus_group4(Mask::DATA, 0);
   }
   /** Insert an environment register. */
-  constexpr RegSet operator+(const FpuInstruction& rhs) const {
+  RegSet operator+(const FpuInstruction& rhs) const {
     return plus_group4(Mask::INSTR, 0);
   }
   /** Insert an environment register. */
-  constexpr RegSet operator+(const FpuOpcode& rhs) const {
+  RegSet operator+(const FpuOpcode& rhs) const {
     return plus_group4(Mask::OPCODE, 0);
   }
   /** Insert an environment register. */
-  constexpr RegSet operator+(const Rip& rhs) const {
+  RegSet operator+(const Rip& rhs) const {
     return plus_group4(Mask::RIP, 0);
   }
   /** Insert environment bits. */
-  constexpr RegSet operator+(const Eflags& rhs) const {
+  RegSet operator+(const Eflags& rhs) const {
     return plus_group3(Mask::EFLAG, rhs.index());
   }
   /** Insert environment bits. */
-  constexpr RegSet operator+(const FpuControl& rhs) const {
+  RegSet operator+(const FpuControl& rhs) const {
     return plus_group3(Mask::CONTROL, rhs.index());
   }
   /** Insert environment bits. */
-  constexpr RegSet operator+(const FpuStatus& rhs) const {
+  RegSet operator+(const FpuStatus& rhs) const {
     return plus_group3(Mask::STATUS, rhs.index());
   }
   /** Insert environment bits. */
-  constexpr RegSet operator+(const FpuTag& rhs) const {
+  RegSet operator+(const FpuTag& rhs) const {
     return plus_group4(Mask::TAG, rhs.index());
   }
   /** Insert environment bits. */
-  constexpr RegSet operator+(const Mxcsr& rhs) const {
+  RegSet operator+(const Mxcsr& rhs) const {
     return plus_group4(Mask::MXCSR, rhs.index());
   }
   /** Insert a memory operand. */
@@ -446,147 +446,147 @@ public:
   }
 
   /** Returns true if this set contains a high register. */
-  constexpr bool contains(const Rh& rhs) const {
+  bool contains(const Rh& rhs) const {
     return contains(Mask::HIGH, group1_, (uint64_t)rhs - 4);
   }
   /** Returns true if this set contains a byte register. */
-  constexpr bool contains(const R8& rhs) const {
+  bool contains(const R8& rhs) const {
     return contains(Mask::BYTE, group1_, (uint64_t)rhs);
   }
   /** Returns true if this set contains a word register. */
-  constexpr bool contains(const R16& rhs) const {
+  bool contains(const R16& rhs) const {
     return contains(Mask::WORD, group1_, (uint64_t)rhs);
   }
   /** Returns true if this set contains a double register. */
-  constexpr bool contains(const R32& rhs) const {
+  bool contains(const R32& rhs) const {
     return contains(Mask::DOUBLE, group1_, (uint64_t)rhs);
   }
   /** Returns true if this set contains a quad register. */
-  constexpr bool contains(const R64& rhs) const {
+  bool contains(const R64& rhs) const {
     return contains(Mask::QUAD, group1_, (uint64_t)rhs);
   }
   /** Returns true if this set contains an xmm register. */
-  constexpr bool contains(const Xmm& rhs) const {
+  bool contains(const Xmm& rhs) const {
     return contains(Mask::XMM, group2_, (uint64_t)rhs);
   }
   /** Returns true if this set contains a ymm register. */
-  constexpr bool contains(const Ymm& rhs) const {
+  bool contains(const Ymm& rhs) const {
     return contains(Mask::YMM, group2_, (uint64_t)rhs);
   }
   /** Returns true if this set contains an mmx register. */
-  constexpr bool contains(const Mm& rhs) const {
+  bool contains(const Mm& rhs) const {
     return contains(Mask::MM, group2_, (uint64_t)rhs);
   }
   /** Returns true if this set contains a floating point stack register. */
-  constexpr bool contains(const St& rhs) const {
+  bool contains(const St& rhs) const {
     return contains(Mask::ST, group2_, (uint64_t)rhs);
   }
   /** Returns true if this set contains a segment register. */
-  constexpr bool contains(const Sreg& rhs) const {
+  bool contains(const Sreg& rhs) const {
     return contains(Mask::SREG, group4_, (uint64_t)rhs);
   }
   /** Returns true if this set contains an environment register. */
-  constexpr bool contains(const FpuData& rhs) const {
+  bool contains(const FpuData& rhs) const {
     return contains(Mask::DATA, group4_, 0);
   }
   /** Returns true if this set contains an environment register. */
-  constexpr bool contains(const FpuInstruction& rhs) const {
+  bool contains(const FpuInstruction& rhs) const {
     return contains(Mask::INSTR, group4_, 0);
   }
   /** Returns true if this set contains an environment register. */
-  constexpr bool contains(const FpuOpcode& rhs) const {
+  bool contains(const FpuOpcode& rhs) const {
     return contains(Mask::OPCODE, group4_, 0);
   }
   /** Returns true if this set contains an environment register. */
-  constexpr bool contains(const Rip& rhs) const {
+  bool contains(const Rip& rhs) const {
     return contains(Mask::RIP, group4_, 0);
   }
   /** Returns true if this set contains an environment bit. */
-  constexpr bool contains(const Eflags& rhs) const {
+  bool contains(const Eflags& rhs) const {
     return contains(Mask::EFLAG, group3_, rhs.index());
   }
   /** Returns true if this set contains an environment bit. */
-  constexpr bool contains(const FpuControl& rhs) const {
+  bool contains(const FpuControl& rhs) const {
     return contains(Mask::CONTROL, group3_, rhs.index());
   }
   /** Returns true if this set contains an environment bit. */
-  constexpr bool contains(const FpuStatus& rhs) const {
+  bool contains(const FpuStatus& rhs) const {
     return contains(Mask::STATUS, group3_, rhs.index());
   }
   /** Returns true if this set contains an environment bit. */
-  constexpr bool contains(const FpuTag& rhs) const {
+  bool contains(const FpuTag& rhs) const {
     return contains(Mask::TAG, group4_, rhs.index());
   }
   /** Returns true if this set contains an environment bit. */
-  constexpr bool contains(const Mxcsr& rhs) const {
+  bool contains(const Mxcsr& rhs) const {
     return contains(Mask::MXCSR, group4_, rhs.index());
   }
 
   /** Returns true if this set contains any high registers. */
-  constexpr bool contains_any_rh() const {
+  bool contains_any_rh() const {
     return contains_any(Mask::A_HIGH, group1_);
   }
   /** Returns true if this set contains any byte registers. */
-  constexpr bool contains_any_r8() const {
+  bool contains_any_r8() const {
     return contains_any(Mask::A_BYTE, group1_);
   }
   /** Returns true if this set contains any word registers. */
-  constexpr bool contains_any_word() const {
+  bool contains_any_word() const {
     return contains_any(Mask::A_WORD, group1_) || 
            contains(Constants::ax()) || contains(Constants::bx()) || 
            contains(Constants::cx()) || contains(Constants::dx());
   }
   /** Returns true if this set contains any double registers. */
-  constexpr bool contains_any_double() const {
+  bool contains_any_double() const {
     return contains_any(Mask::A_DOUBLE, group1_);
   }
   /** Returns true if this set contains any quad registers. */
-  constexpr bool contains_any_quad() const {
+  bool contains_any_quad() const {
     return contains_any(Mask::A_QUAD, group1_);
   }
   /** Returns true if this set contains any xmm registers. */
-  constexpr bool contains_any_xmm() const {
+  bool contains_any_xmm() const {
     return contains_any(Mask::A_XMM, group2_);
   }
   /** Returns true if this set contains any ymm registers. */
-  constexpr bool contains_any_ymm() const {
+  bool contains_any_ymm() const {
     return contains_any(Mask::A_YMM, group2_);
   }
   /** Returns true if this set contains any mm registers. */
-  constexpr bool contains_any_mm() const {
+  bool contains_any_mm() const {
     return contains_any(Mask::A_MM, group2_);
   }
 
   /** Returns true if this set contains all high registers. */
-  constexpr bool contains_all_rh() const {
+  bool contains_all_rh() const {
     return contains_all(Mask::HIGHS, group1_);
   }
   /** Returns true if this set contains all byte registers. */
-  constexpr bool contains_all_r8() const {
+  bool contains_all_r8() const {
     return contains_all(Mask::BYTES, group1_);
   }
   /** Returns true if this set contains all word registers. */
-  constexpr bool contains_all_word() const {
+  bool contains_all_word() const {
     return contains_all(Mask::WORDS, group1_);
   }
   /** Returns true if this set contains all double registers. */
-  constexpr bool contains_all_double() const {
+  bool contains_all_double() const {
     return contains_all(Mask::DOUBLES, group1_);
   }
   /** Returns true if this set contains all quad registers. */
-  constexpr bool contains_all_quad() const {
+  bool contains_all_quad() const {
     return contains_all(Mask::QUADS, group1_);
   }
   /** Returns true if this set contains all xmm registers. */
-  constexpr bool contains_all_xmm() const {
+  bool contains_all_xmm() const {
     return contains_all(Mask::XMMS, group2_);
   }
   /** Returns true if this set contains all ymm registers. */
-  constexpr bool contains_all_ymm() const {
+  bool contains_all_ymm() const {
     return contains_all(Mask::YMMS, group2_);
   }
   /** Returns true if this set contains all mm registers. */
-  constexpr bool contains_all_mm() const {
+  bool contains_all_mm() const {
     return contains_all(Mask::XMM, group2_);
   }
 
@@ -870,7 +870,7 @@ public:
     return any_sub_sse_iterator(this, 16);
   }
   /** STL compliant hash. */
-  constexpr size_t hash() const {
+  size_t hash() const {
     return group1_ ^ group2_ ^ group3_ ^ group4_;
   }
   /** STL compliant swap. */
@@ -897,19 +897,19 @@ private:
   uint64_t group4_;
 
   /** Helper method for inserting elements into a group. */
-  constexpr RegSet plus_group1(Mask m, uint64_t val) const {
+  RegSet plus_group1(Mask m, uint64_t val) const {
     return {group1_ | ((uint64_t)m << val), group2_, group3_, group4_};
   }
   /** Helper method for inserting elements into a group. */
-  constexpr RegSet plus_group2(Mask m, uint64_t val) const {
+  RegSet plus_group2(Mask m, uint64_t val) const {
     return {group1_, group2_ | ((uint64_t)m << val), group3_, group4_};
   }
   /** Helper method for inserting elements into a group. */
-  constexpr RegSet plus_group3(Mask m, uint64_t val) const {
+  RegSet plus_group3(Mask m, uint64_t val) const {
     return {group1_, group2_, group3_ | ((uint64_t)m << val), group4_};
   }
   /** Helper method for inserting elements into a group. */
-  constexpr RegSet plus_group4(Mask m, uint64_t val) const {
+  RegSet plus_group4(Mask m, uint64_t val) const {
     return {group1_, group2_, group3_, group4_ | ((uint64_t)m << val)};
   }
   /** Helper method for inserting elements into a group. */
@@ -918,15 +918,15 @@ private:
     return *this;
   }
   /** Helper method for checking containment in a group. */
-  constexpr bool contains(Mask m, uint64_t group, uint64_t val) const {
+  bool contains(Mask m, uint64_t group, uint64_t val) const {
     return ((group >> val) & (uint64_t)m) == (uint64_t)m;
   }
   /** Helper method for checking containment in a group. */
-  constexpr bool contains_any(Mask m, uint64_t group) const {
+  bool contains_any(Mask m, uint64_t group) const {
     return (uint64_t)m & group;
   }
   /** Helper method for checking containment in a group. */
-  constexpr bool contains_all(Mask m, uint64_t group) const {
+  bool contains_all(Mask m, uint64_t group) const {
     return ((uint64_t)m & group) == (uint64_t)m;
   }
 };

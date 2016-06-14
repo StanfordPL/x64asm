@@ -14,6 +14,8 @@ using namespace x64asm;
 using namespace std;
 using namespace cpputil;
 
+uint64_t Operand::uid_counter_ = 0;
+
 uint16_t Operand::size() const {
   return bit_width_of_type(type());
 }

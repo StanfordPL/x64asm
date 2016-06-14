@@ -30,30 +30,30 @@ namespace x64asm {
 class Modifier : public Operand {
 public:
   /** Returns true if this modifier is well-formed. */
-  constexpr bool check() {
+  bool check() const {
     return val_ == 0;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const Modifier& rhs) {
+  bool operator<(const Modifier& rhs) {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const Modifier& rhs) {
+  bool operator==(const Modifier& rhs) {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const Modifier& rhs) {
+  bool operator!=(const Modifier& rhs) {
     return !(*this == rhs);
   }
 
   /** Conversion based on val_. */
-  constexpr operator uint64_t() {
+  operator uint64_t() {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() const {
+  size_t hash() const {
     return val_;
   }
   /** @todo This method is undefined. */
@@ -68,7 +68,7 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr Modifier(Type t) : Operand(t) {}
+  Modifier(Type t) : Operand(t) {}
 };
 
 /** The 32-bit memory address override prefix: 0x66. */
@@ -78,7 +78,7 @@ class Pref66 : public Modifier {
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Pref66() : Modifier(Type::PREF_66) {}
+  Pref66() : Modifier(Type::PREF_66) {}
 };
 
 /** The REX.w prefix: 0x48. */
@@ -88,7 +88,7 @@ class PrefRexW : public Modifier {
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr PrefRexW() : Modifier(Type::PREF_REX_W) {}
+  PrefRexW() : Modifier(Type::PREF_REX_W) {}
 };
 
 /** Far instruction variant. */
@@ -98,7 +98,7 @@ class Far : public Modifier {
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Far() : Modifier(Type::FAR) {}
+  Far() : Modifier(Type::FAR) {}
 };
 
 } // namespace x64asm

@@ -30,7 +30,7 @@ using namespace x64asm;
 namespace {
 
 
-constexpr array<const char*, 6> sregs_() { return {"es","cs","ss","ds","fs","gs"}; }
+array<const char*, 6> sregs_() { return {"es","cs","ss","ds","fs","gs"}; }
 
 } // namespace
 

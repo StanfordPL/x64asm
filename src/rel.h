@@ -27,25 +27,25 @@ namespace x64asm {
 class Rel : public Operand {
 public:
   /** Comparison based on on val_. */
-  constexpr bool operator<(const Rel& rhs) const {
+  bool operator<(const Rel& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const Rel& rhs) const {
+  bool operator==(const Rel& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const Rel& rhs) const {
+  bool operator!=(const Rel& rhs) const {
     return !(*this == rhs);
   }
 
   /** Conversion based on underlying value. */
-  constexpr operator uint64_t() const {
+  operator uint64_t() const {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() const {
+  size_t hash() const {
     return val_;
   }
 
@@ -64,7 +64,7 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr Rel(Type t, uint64_t val) : Operand(t, val) {}
+  Rel(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 /** A relative address in the range from 128 bytes before the end of the
@@ -73,10 +73,10 @@ protected:
 class Rel8 : public Rel {
 public:
   /** Creates an 8-bit relative offset. */
-  constexpr Rel8(int8_t val) : Rel(Type::REL_8, (uint64_t)val) {}
+  Rel8(int8_t val) : Rel(Type::REL_8, (uint64_t)val) {}
 
   /** Checks that this offset fits in 8 bits. */
-  constexpr bool check() const {
+  bool check() const {
     return ((val_>>8) == 0x0ul) || ((val_>>8) == 0xfffffffffffffful);
   }
 };
@@ -88,10 +88,10 @@ public:
 class Rel32 : public Rel {
 public:
   /** Creates a 32-bit relative offset. */
-  constexpr Rel32(int64_t val) : Rel(Type::REL_32, (uint64_t)val) {}
+  Rel32(int64_t val) : Rel(Type::REL_32, (uint64_t)val) {}
 
   /** Checks that this offset value fits in 32-bits. */
-  constexpr bool check() const {
+  bool check() const {
     return ((val_>>32) == 0x0ul) || ((val_>>32) == 0xfffffffful);
   }
 };

@@ -32,30 +32,30 @@ class St : public Operand {
 
 public:
   /** Returns true if this stack register is well-formed. */
-  constexpr bool check() const {
+  bool check() const {
     return val_ < 8;
   }
 
   /** Comparison based on on val_. */
-  constexpr bool operator<(const St& rhs) const {
+  bool operator<(const St& rhs) const {
     return val_ < rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator==(const St& rhs) const {
+  bool operator==(const St& rhs) const {
     return val_ == rhs.val_;
   }
   /** Comparison based on on val_. */
-  constexpr bool operator!=(const St& rhs) const {
+  bool operator!=(const St& rhs) const {
     return !(*this == rhs);
   }
 
   /** Conversion based on underlying value. */
-  constexpr operator uint64_t() const {
+  operator uint64_t() const {
     return val_;
   }
 
   /** STL-compliant hash. */
-  constexpr size_t hash() const {
+  size_t hash() const {
     return val_;
   }
 
@@ -78,8 +78,8 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr St(uint64_t val) : Operand(Type::ST, val) {}
-  constexpr St(Type t, uint64_t val) : Operand(t, val) {}
+  St(uint64_t val) : Operand(Type::ST, val) {}
+  St(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 /** The top element of the FPU register stack. */
@@ -89,13 +89,13 @@ class St0 : public St {
 
 public:
   /** Returns true if this stack register is %st(0). */
-  constexpr bool check() const {
+  bool check() const {
     return val_ == 0;
   }
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr St0() : St(Type::ST_0, 0) {}
+  St0() : St(Type::ST_0, 0) {}
 };
 
 } // namespace x64asm

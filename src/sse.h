@@ -29,7 +29,7 @@ class Sse : public Operand {
 
 public:
   /** Conversion based on underlying value. */
-  constexpr operator uint64_t() const {
+  operator uint64_t() const {
     return val_;
   }
 
@@ -37,7 +37,7 @@ public:
   std::ostream& write_att(std::ostream& os) const;
 
 protected:
-  constexpr Sse(Type t, uint64_t val) : Operand(t, val) {}
+  Sse(Type t, uint64_t val) : Operand(t, val) {}
 };
 
 } // namespace x64asm

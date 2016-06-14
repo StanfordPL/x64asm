@@ -26,9 +26,9 @@ namespace x64asm {
 class EnvBits {
 public:
   /** Copy constructor. */
-  constexpr EnvBits(const EnvBits& rhs) : index_(rhs.index_), width_(rhs.width_) {}
+  EnvBits(const EnvBits& rhs) : index_(rhs.index_), width_(rhs.width_) {}
   /** Move constructor. */
-  constexpr EnvBits(const EnvBits&& rhs) : index_(rhs.index_), width_(rhs.width_) {}
+  EnvBits(const EnvBits&& rhs) : index_(rhs.index_), width_(rhs.width_) {}
   /** Assignment operator. */
   EnvBits& operator=(const EnvBits& rhs) {
     EnvBits(rhs).swap(*this);
@@ -41,24 +41,24 @@ public:
   }
 
   /** Returns this bit's upper register index. */
-  constexpr size_t index() const {
+  size_t index() const {
     return index_;
   }
   /** Returns the number of bits this register bit spans. */
-  constexpr size_t width() const {
+  size_t width() const {
     return width_;
   }
 
   /** Less than. */
-  constexpr bool operator<(const EnvBits& rhs) const {
+  bool operator<(const EnvBits& rhs) const {
     return index_ == rhs.index_ ? width_ < rhs.width_ : index_ < rhs.index_;
   }
   /** Equality. */
-  constexpr bool operator==(const EnvBits& rhs) const {
+  bool operator==(const EnvBits& rhs) const {
     return index_ == rhs.index_ && width_ == rhs.width_;
   }
   /** Inequality. */
-  constexpr bool operator!=(const EnvBits& rhs) const {
+  bool operator!=(const EnvBits& rhs) const {
     return !(*this == rhs);
   }
 
@@ -70,7 +70,7 @@ public:
 
 protected:
   /** Direct access to this constructor is disallowed. */
-  constexpr EnvBits(size_t i, size_t w) : index_(i), width_(w) {}
+  EnvBits(size_t i, size_t w) : index_(i), width_(w) {}
 
   /** This bit's upper register index. */
   uint32_t index_;
@@ -91,7 +91,7 @@ public:
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Eflags(size_t i, size_t w) : EnvBits(i, w) {}
+  Eflags(size_t i, size_t w) : EnvBits(i, w) {}
 };
 
 /** An FPU control register bit. */
@@ -107,7 +107,7 @@ public:
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr FpuControl(size_t i, size_t w) : EnvBits(i, w) {}
+  FpuControl(size_t i, size_t w) : EnvBits(i, w) {}
 };
 
 /** An FPU status register bit. */
@@ -123,7 +123,7 @@ public:
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr FpuStatus(size_t i, size_t w) : EnvBits(i, w) {}
+  FpuStatus(size_t i, size_t w) : EnvBits(i, w) {}
 };
 
 /** An FPU tag register. */
@@ -139,7 +139,7 @@ public:
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr FpuTag(size_t i, size_t w) : EnvBits(i, w) {}
+  FpuTag(size_t i, size_t w) : EnvBits(i, w) {}
 };
 
 /** An MXCSR register bit. */
@@ -155,7 +155,7 @@ public:
 
 private:
   /** Direct access to this constructor is disallowed. */
-  constexpr Mxcsr(size_t i, size_t w) : EnvBits(i, w) {}
+  Mxcsr(size_t i, size_t w) : EnvBits(i, w) {}
 };
 
 } // namespace std
