@@ -2,8 +2,10 @@
 
 OPTS=-O0 -g
 
-latency: latency.cc
-	g++ $(OPTS) -std=c++11 latency.cc -I.. ../lib/libx64asm.a -o latency
+all: haswell_latency.inc
+
+latency: latency.cc cpu_info.cc cpu_info.h
+	g++ $(OPTS) -std=c++11 latency.cc cpu_info.cc -I.. ../lib/libx64asm.a -o latency
 
 haswell_latency.inc: latency
 	@echo "Are you the only one on the system?"

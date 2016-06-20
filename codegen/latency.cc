@@ -3,16 +3,19 @@
 #include <stdint.h>
 
 #include "include/x64asm.h"
+#include "cpu_info.h"
 
 using namespace std;
 using namespace std::chrono;
 using namespace x64asm;
+using namespace stoke;
 
 char garbage_buffer[0x10000] __attribute__((aligned(0x100)));
 
 /** Constant: The number of iterations to run a function for */
 constexpr size_t iterations() {
   return 100000;
+  //return 1000;
 }
 
 constexpr size_t instr_count() {
@@ -29,112 +32,121 @@ bool is_control(const Instruction& instr) {
 
 /** Returns true if simulating this instruction is problematic */
 bool is_problematic(const Instruction& instr) {
+
+  auto available_flags = CpuInfo::get_flags();
+  auto flags_used = instr.required_flags();
+
+  if(!available_flags.contains(flags_used))
+    return true;
+  
+  auto opcode = instr.get_opcode(); 
+
   return 
       // These can access memory at an index, and cause a segfault
-      instr.get_opcode() == Opcode::BT_M16_R16 ||
-      instr.get_opcode() == Opcode::BT_M32_R32 ||
-      instr.get_opcode() == Opcode::BT_M64_R64 ||
-      instr.get_opcode() == Opcode::BTC_M16_R16 ||
-      instr.get_opcode() == Opcode::BTC_M32_R32 ||
-      instr.get_opcode() == Opcode::BTC_M64_R64 ||
-      instr.get_opcode() == Opcode::BTR_M16_R16 ||
-      instr.get_opcode() == Opcode::BTR_M32_R32 ||
-      instr.get_opcode() == Opcode::BTR_M64_R64 ||
-      instr.get_opcode() == Opcode::BTS_M16_R16 ||
-      instr.get_opcode() == Opcode::BTS_M32_R32 ||
-      instr.get_opcode() == Opcode::BTS_M64_R64 ||
+      opcode == Opcode::BT_M16_R16 ||
+      opcode == Opcode::BT_M32_R32 ||
+      opcode == Opcode::BT_M64_R64 ||
+      opcode == Opcode::BTC_M16_R16 ||
+      opcode == Opcode::BTC_M32_R32 ||
+      opcode == Opcode::BTC_M64_R64 ||
+      opcode == Opcode::BTR_M16_R16 ||
+      opcode == Opcode::BTR_M32_R32 ||
+      opcode == Opcode::BTR_M64_R64 ||
+      opcode == Opcode::BTS_M16_R16 ||
+      opcode == Opcode::BTS_M32_R32 ||
+      opcode == Opcode::BTS_M64_R64 ||
 
       // FPE
-      instr.get_opcode() == Opcode::FLDCW_M2BYTE ||
-      instr.get_opcode() == Opcode::FLDL2E ||
-      instr.get_opcode() == Opcode::FLDL2T ||
-      instr.get_opcode() == Opcode::FLDLG2 ||
-      instr.get_opcode() == Opcode::FLDLN2 ||
-      instr.get_opcode() == Opcode::FLDPI ||
-      instr.get_opcode() == Opcode::FLDZ ||
-      instr.get_opcode() == Opcode::FMUL_M32FP ||
-      instr.get_opcode() == Opcode::FMUL_M64FP ||
-      instr.get_opcode() == Opcode::FMUL_ST_ST0 ||
-      instr.get_opcode() == Opcode::FMUL_ST0_ST ||
-      instr.get_opcode() == Opcode::FMULP ||
-      instr.get_opcode() == Opcode::FMULP_ST_ST0 ||
+      opcode == Opcode::FLDCW_M2BYTE ||
+      opcode == Opcode::FLDL2E ||
+      opcode == Opcode::FLDL2T ||
+      opcode == Opcode::FLDLG2 ||
+      opcode == Opcode::FLDLN2 ||
+      opcode == Opcode::FLDPI ||
+      opcode == Opcode::FLDZ ||
+      opcode == Opcode::FMUL_M32FP ||
+      opcode == Opcode::FMUL_M64FP ||
+      opcode == Opcode::FMUL_ST_ST0 ||
+      opcode == Opcode::FMUL_ST0_ST ||
+      opcode == Opcode::FMULP ||
+      opcode == Opcode::FMULP_ST_ST0 ||
 
       // May be fixable
-      instr.get_opcode() == Opcode::FXRSTOR_M512BYTE ||
-      instr.get_opcode() == Opcode::FXRSTOR64_M512BYTE ||
+      opcode == Opcode::FXRSTOR_M512BYTE ||
+      opcode == Opcode::FXRSTOR64_M512BYTE ||
 
       // This is a ring 0 instruction...
-      instr.get_opcode() == Opcode::INVPCID_R64_M128 ||
+      opcode == Opcode::INVPCID_R64_M128 ||
 
       // Messes with MXCSR
-      instr.get_opcode() == Opcode::LDMXCSR_M32 ||
+      opcode == Opcode::LDMXCSR_M32 ||
 
       // Not allowed in 64-bit mode??
-      instr.get_opcode() == Opcode::LFS_R16_FARPTR1616 ||
-      instr.get_opcode() == Opcode::LFS_R32_FARPTR1632 ||
-      instr.get_opcode() == Opcode::LFS_R64_FARPTR1664 ||
-      instr.get_opcode() == Opcode::LGS_R16_FARPTR1616 ||
-      instr.get_opcode() == Opcode::LGS_R32_FARPTR1632 ||
-      instr.get_opcode() == Opcode::LGS_R64_FARPTR1664 ||
-      instr.get_opcode() == Opcode::LSS_R16_FARPTR1616 ||
-      instr.get_opcode() == Opcode::LSS_R32_FARPTR1632 ||
-      instr.get_opcode() == Opcode::LSS_R64_FARPTR1664 ||
+      opcode == Opcode::LFS_R16_FARPTR1616 ||
+      opcode == Opcode::LFS_R32_FARPTR1632 ||
+      opcode == Opcode::LFS_R64_FARPTR1664 ||
+      opcode == Opcode::LGS_R16_FARPTR1616 ||
+      opcode == Opcode::LGS_R32_FARPTR1632 ||
+      opcode == Opcode::LGS_R64_FARPTR1664 ||
+      opcode == Opcode::LSS_R16_FARPTR1616 ||
+      opcode == Opcode::LSS_R32_FARPTR1632 ||
+      opcode == Opcode::LSS_R64_FARPTR1664 ||
 
       // REP
-      (instr.get_opcode() >= Opcode::REP_INS_M16_DX &&
-       instr.get_opcode() <= Opcode::REPNE_SCAS_M8_1) ||
+      (opcode >= Opcode::REP_INS_M16_DX &&
+       opcode <= Opcode::REPNE_SCAS_M8_1) ||
 
       // Illegal instruction !!! BUG
-      instr.get_opcode() == Opcode::VGATHERDPD_XMM_M32_XMM ||
-      instr.get_opcode() == Opcode::VGATHERDPD_YMM_M32_YMM ||
-      instr.get_opcode() == Opcode::VGATHERDPS_XMM_M32_XMM ||
-      instr.get_opcode() == Opcode::VGATHERDPS_YMM_M32_YMM ||
-      instr.get_opcode() == Opcode::VGATHERQPD_XMM_M64_XMM ||
-      instr.get_opcode() == Opcode::VGATHERQPD_YMM_M64_YMM ||
-      instr.get_opcode() == Opcode::VGATHERQPS_XMM_M64_XMM ||
-      instr.get_opcode() == Opcode::VGATHERQPS_XMM_M64_XMM_1 ||
+      opcode == Opcode::VGATHERDPD_XMM_M32_XMM ||
+      opcode == Opcode::VGATHERDPD_YMM_M32_YMM ||
+      opcode == Opcode::VGATHERDPS_XMM_M32_XMM ||
+      opcode == Opcode::VGATHERDPS_YMM_M32_YMM ||
+      opcode == Opcode::VGATHERQPD_XMM_M64_XMM ||
+      opcode == Opcode::VGATHERQPD_YMM_M64_YMM ||
+      opcode == Opcode::VGATHERQPS_XMM_M64_XMM ||
+      opcode == Opcode::VGATHERQPS_XMM_M64_XMM_1 ||
 
       //FPE
-      (instr.get_opcode() >= Opcode::VMULPD_XMM_XMM_M128 &&
-      instr.get_opcode() <= Opcode::VMULSS_XMM_XMM_XMM) ||
+      (opcode >= Opcode::VMULPD_XMM_XMM_M128 &&
+      opcode <= Opcode::VMULSS_XMM_XMM_XMM) ||
 
       // Illegal instruction !!! BUG
-       (instr.get_opcode() >= Opcode::VPGATHERDD_XMM_M32_XMM &&
-        instr.get_opcode() <= Opcode::VPGATHERQQ_YMM_M64_YMM) ||
+       (opcode >= Opcode::VPGATHERDD_XMM_M32_XMM &&
+        opcode <= Opcode::VPGATHERQQ_YMM_M64_YMM) ||
 
       //FPE
-      (instr.get_opcode() >= Opcode::VROUNDPD_XMM_M128_IMM8 &&
-       instr.get_opcode() <= Opcode::VROUNDSS_XMM_XMM_XMM_IMM8) ||
-      (instr.get_opcode() >= Opcode::VSQRTPD_XMM_M128 &&
-       instr.get_opcode() <= Opcode::VSQRTSS_XMM_XMM_XMM) ||
+      (opcode >= Opcode::VROUNDPD_XMM_M128_IMM8 &&
+       opcode <= Opcode::VROUNDSS_XMM_XMM_XMM_IMM8) ||
+      (opcode >= Opcode::VSQRTPD_XMM_M128 &&
+       opcode <= Opcode::VSQRTSS_XMM_XMM_XMM) ||
 
       //stupid
-      instr.get_opcode() == Opcode::XACQUIRE ||
+      opcode == Opcode::XACQUIRE ||
 
       //segfault
-      instr.get_opcode() == Opcode::XLAT_M8 ||
-      instr.get_opcode() == Opcode::XLATB ||
-      instr.get_opcode() == Opcode::XLATB_1 ||
+      opcode == Opcode::XLAT_M8 ||
+      opcode == Opcode::XLATB ||
+      opcode == Opcode::XLATB_1 ||
 
       //stupid
-      instr.get_opcode() >= Opcode::XRELEASE ||
+      opcode >= Opcode::XRELEASE ||
 
 
       // From Eric
-      instr.get_opcode() == Opcode::CLI || 
-      instr.get_opcode() == Opcode::MONITOR ||
-      instr.get_opcode() == Opcode::MOV_SREG_R16 ||
-      instr.get_opcode() == Opcode::MOV_SREG_R64 ||
-      instr.get_opcode() == Opcode::MWAIT ||
-      instr.get_opcode() == Opcode::STD ||
-      instr.get_opcode() == Opcode::STI ||
-      instr.get_opcode() == Opcode::SWAPGS ||
-      instr.get_opcode() == Opcode::UD2 ||
-      instr.get_opcode() == Opcode::XABORT_IMM8 ||
-      instr.get_opcode() == Opcode::XEND ||
-      instr.get_opcode() == Opcode::XGETBV ||
-      instr.get_opcode() == Opcode::XLATB ||
-      instr.get_opcode() == Opcode::XTEST ||
+      opcode == Opcode::CLI || 
+      opcode == Opcode::MONITOR ||
+      opcode == Opcode::MOV_SREG_R16 ||
+      opcode == Opcode::MOV_SREG_R64 ||
+      opcode == Opcode::MWAIT ||
+      opcode == Opcode::STD ||
+      opcode == Opcode::STI ||
+      opcode == Opcode::SWAPGS ||
+      opcode == Opcode::UD2 ||
+      opcode == Opcode::XABORT_IMM8 ||
+      opcode == Opcode::XEND ||
+      opcode == Opcode::XGETBV ||
+      opcode == Opcode::XLATB ||
+      opcode == Opcode::XTEST ||
       instr.is_any_string() ||
       instr.is_div() || instr.is_idiv() || 
       instr.is_in() || instr.is_out() ||
@@ -170,6 +182,7 @@ Instruction get_instruction(Opcode o, bool& ok) {
   ok = true;
   Instruction instr(o);
   if (is_control(instr) || is_problematic(instr)) {
+    ok = false;
     return instr;
   }
 
@@ -357,12 +370,15 @@ Instruction get_instruction(Opcode o, bool& ok) {
 
 /** Time the execution of a function call in 0.01 * nanoseconds */
 time_t measure(const Function& fxn) {
+  size_t i = 0;
+  size_t its = iterations();
+
   const auto begin = high_resolution_clock::now();
-  for (size_t i = 0; i < iterations(); ++i) {
+  for (; i < its; ++i) {
     fxn.call<int, char*>(garbage_buffer, garbage_buffer, garbage_buffer);
   }
   const auto end = high_resolution_clock::now();
-  return 100*duration_cast<nanoseconds>(end-begin).count() / iterations();
+  return 1000*duration_cast<nanoseconds>(end-begin).count() / iterations();
 }
 
 /** Time a function that contains a single instruction */
@@ -407,6 +423,8 @@ time_t get_latency(Function& fxn, const Opcode& opc, time_t baseline) {
   } else if (is_problematic(instr) || !ok) {
     return 999;
   } else {
+    // GOOD PLACE TO DEBUG
+    //cout << instr << endl;
     const auto m = measure_instruction(fxn, opc);
     if(m > baseline) {
       const auto score = (m-baseline)/(instr_count()*10);
@@ -419,7 +437,7 @@ time_t get_latency(Function& fxn, const Opcode& opc, time_t baseline) {
 
 int main() {
   Function fxn;
-  fxn.reserve(32*1200);
+  fxn.reserve(32*instr_count()+1000);
   const auto baseline = measure_baseline(fxn);
 
   // bool ok = true;
