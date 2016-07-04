@@ -185,7 +185,7 @@ VEX.NDD.LZ.0F38.W1 F3 /1	BLSR r64, r/m64	VM	W, R		E.ZF E.SF E.OF E.CF	E.AF E.PF	
 62 /r	BOUND r16, m16&16								I	V				Check if r16 (array index) is within bounds specified by m16&16.
 62 /r	BOUND r32, m32&32								I	V				Check if r32 (array index) is within bounds specified by m16&16.
 														
-0F BC /r	BSF r16, r/m16	RM	uw, R		E.ZF	E.CF E.OF E.SF E.AF E.PF			a	V		bsfw		Bit scan forward on r/m16.
+0F BC /r	BSF r16, r/m16	RM	uw, R		E.ZF	E.CF E.OF E.SF E.AF E.PF			V	V		bsfw		Bit scan forward on r/m16.
 0F BC /r	BSF r32, r/m32	RM	uz, R		E.ZF	E.CF E.OF E.SF E.AF E.PF			V	V		bsfl		Bit scan forward on r/m32.
 REX.W+ 0F BC	BSF r64, r/m64	RM	uw, R		E.ZF	E.CF E.OF E.SF E.AF E.PF			V	NE		bsfq		Bit scan forward on r/m64.
 														
