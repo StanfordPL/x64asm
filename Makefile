@@ -14,10 +14,10 @@
 
 ##### CONSTANT DEFINITIONS
 
-ifndef COMPILERBINARY
-	COMPILERBINARY=g++
+ifndef CXX
+	CXX=g++
 endif
-GCC=ccache ${COMPILERBINARY} -Werror -Wextra -Wall -Wfatal-errors -pedantic -Wno-unused-parameter -Wno-reorder -std=c++11 -fPIC
+GCC=ccache ${CXX} -Werror -Wextra -Wall -Wfatal-errors -pedantic -Wno-unused-parameter -Wno-reorder -std=c++11 -fPIC
 
 INC=-I./
 		
