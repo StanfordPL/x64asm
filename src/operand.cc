@@ -46,10 +46,12 @@ istream& Operand::read_att(istream& is) {
   // read the entire operand
   stringstream name_builder;
   size_t in_parens = 0;
-  for(char c = is.peek(); 
-      ('a' <= c && c <= 'z') || c == '.' || c == '$' || c == ':' || ('0' <= c && c <= '9') || 
-      c == '(' || c == ')' || c == '-' || c == '%' || (c == ',' && in_parens);
-      c = is.peek()) {
+
+  for(char c = is.peek(); '!' <= c && c <= '~' && (c != ',' || in_parens); c = is.peek()) {
+    /** This loop tokenizes the entire operand.  We're looking for any
+     * non-whitespace character, to allow for lots of flexibility in labels.
+     * The only trick is that if we encounter a ',' outside of parenthesis then
+     * the operand needs to be terminated.  */
 
     if(c == '(') {
       if(in_parens) {
