@@ -43,76 +43,105 @@ istream& Operand::read_att(istream& is) {
   if(is.peek() == '*')
     is.ignore();
 
-  // registers
-  if(is.peek() == '%') {
+  // read the entire operand
+  stringstream name_builder;
+  size_t in_parens = 0;
 
-    // read the register name
-    stringstream name_builder;
-    for(char c = is.peek(); c == '%' || c == ':' || ('a' <= c && c <= 'z') || ('0' <= c && c <= '9'); c = is.peek()) {
-      is.ignore();
-      name_builder.put(c);
+  for(char c = is.peek(); ' ' <= c && c <= '~' && (c != ',' || in_parens); c = is.peek()) {
+    /** This loop tokenizes the entire operand.  We're looking for any
+     * non-whitespace character, to allow for lots of flexibility in labels.
+     * The only trick is that if we encounter a ',' outside of parenthesis then
+     * the operand needs to be terminated.  We need to allow whitespace in order
+     * to accomodate things like "(%rsi, %rdi, 2)" */
+
+    if(c == '(') {
+      if(in_parens) {
+        fail(is) << "x64 doesn't have nested parenthesis" << endl;
+        return is;
+      } else {
+        in_parens = 1;
+      }
+    } 
+    if(c == ')') {
+      if(in_parens)
+        in_parens = 0;
+      else {
+        fail(is) << "closeing ')' without opening" << endl;
+        return is;
+      }
     }
-    string name(name_builder.str());
-    stringstream tmp(name);
+
+    is.ignore();
+    name_builder.put(c);
+  }
+  string name(name_builder.str());
+  stringstream tmp(name);
+
+  char first_char = name[0];
+
+  // registers
+  if(first_char == '%') {
 
     // R?
+    tmp.str(name);
+    tmp.clear();
     static_cast<R*>(this)->read_att(tmp);
-    if(!tmp.fail())
+    if(!tmp.fail() && tmp.get() == EOF)
       return is;
 
     // XMM?
     tmp.str(name);
     tmp.clear();
     static_cast<Xmm*>(this)->read_att(tmp);
-    if(!tmp.fail())
+    if(!tmp.fail() && tmp.get() == EOF)
       return is;
 
     // YMM?
     tmp.str(name);
     tmp.clear();
     static_cast<Ymm*>(this)->read_att(tmp);
-    if(!tmp.fail())
+    if(!tmp.fail() && tmp.get() == EOF)
       return is;
 
     // MM?
     tmp.str(name);
     tmp.clear();
     static_cast<Mm*>(this)->read_att(tmp);
-    if(!tmp.fail())
+    if(!tmp.fail() && tmp.get() == EOF)
       return is;
 
     // SREG?
     tmp.str(name);
     tmp.clear();
     static_cast<Sreg*>(this)->read_att(tmp);
-    if(!tmp.fail())
+    if(!tmp.fail() && tmp.get() == EOF)
       return is;
 
 
-  } else if (is.peek() == '$') {
+  } else if (first_char == '$') {
     // Immediates
-    is.ignore();
+    tmp.ignore();
     uint64_t value = 0;
 
     bool neg = false;
-    if(is.peek() == '-') {
-      is.ignore();
+    if(tmp.peek() == '-') {
+      tmp.ignore();
       neg = true;
     }
 
-    if(is.peek() == '0') {
-      is.ignore();
-      char c = is.peek();
+    if(tmp.peek() == '0') {
+      tmp.ignore();
+      char c = tmp.peek();
       if(c == 'x') {
-        is.ignore();
-        is >> hex >> value;
+        tmp.ignore();
+        tmp >> hex >> value;
       } else if ('0' <= c && c <= '9') {
-        is >> dec >> value;
+        tmp >> dec >> value;
       } else {
         value = 0;
       }
     } else {
-      is >> dec >> value;
+      tmp >> dec >> value;
     }
 
     if(neg)
@@ -122,18 +151,23 @@ istream& Operand::read_att(istream& is) {
     *this = imm;
 
     return is;
-  } else if (is.peek() == '.') {
+  } else if (first_char == '.') {
     // Labels
-    string name;
-    is >> name;
-    Label label(name);
+    stringstream ss;
+    ss << name;
+    string label_name;
+    ss >> label_name;
+   
+    Label label(label_name);
     *this = label;
     return is;
   }
 
   // Memory?
+  tmp.str(name);
+  tmp.clear();
   M8 m(Constants::rax());
-  is >> m;
+  tmp >> m;
   *this = m;
 
   return is;

@@ -233,7 +233,7 @@ istream& Instruction::read_att(istream& is) {
         fail(is) << "Expected ',' but found '" << (char)input.peek() << "'";
         return is;
       }
-    }
+    } 
   }
 
   // Check for annotations in the comment

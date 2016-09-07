@@ -20,6 +20,9 @@ limitations under the License.
 #include "src/alias.h"
 #include "src/fail.h"
 
+using namespace std;
+using namespace cpputil;
+
 namespace x64asm {
 
 bool Mem::check() const {
@@ -72,8 +75,10 @@ std::istream& Mem::read_att(std::istream& is) {
     sreg.read_att(is);
     set_seg(sreg);
 
-    if(cpputil::failed(is))
+    if(cpputil::failed(is)) {
       return is;
+    }
+
 
     if(is.get() != ':') {
       cpputil::fail(is) << "Tried to parse segment register as memory, but no ':' found.";
@@ -227,6 +232,10 @@ std::istream& Mem::read_att(std::istream& is) {
       return is;
     }
 
+  } else {
+    clear_base();
+    clear_index();
+    set_rip_offset(false);
   }
 
   if(!ok) {  //it doesn't look like a memory reference.  could be anything.

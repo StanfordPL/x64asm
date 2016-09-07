@@ -37,8 +37,25 @@ constexpr array<const char*, 6> sregs_() { return {"es","cs","ss","ds","fs","gs"
 namespace x64asm {
 
 istream& Sreg::read_att(istream& is) {
-  string temp;
-  is >> temp;
+  char c;
+  is >> c;
+
+  if(c != '%') {
+    fail(is) << "Segment registers must begin with '%'" << endl;
+    return is;
+  }
+
+  char x, y;
+  is >> x >> y;
+  stringstream ss;
+  ss << x << y;
+  string temp = ss.str();
+
+  if (failed(is)) {
+    fail(is) << "Not enough characters for segment register" << endl;
+    return is;
+  }
+
 
   for (size_t i = 0, ie = sregs_().size(); i < ie; ++i) {
     if (temp == sregs_()[i]) {
