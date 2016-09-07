@@ -222,6 +222,8 @@ istream& Instruction::read_att(istream& is) {
     if(failed(input)) {
       fail(is) << "Could not parse operand " << operand_count << ": " << fail_msg(input);
       return is;
+    } else {
+      cout << "Got operand " << op << endl;
     }
     operands.insert(operands.begin(), op);
     operand_count++;

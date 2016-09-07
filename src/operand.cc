@@ -43,76 +43,88 @@ istream& Operand::read_att(istream& is) {
   if(is.peek() == '*')
     is.ignore();
 
-  // registers
-  if(is.peek() == '%') {
+  // read the entire operand
+  stringstream name_builder;
+  for(char c = is.peek(); 
+      ('a' <= c && c <= 'z') || c == '.' || c == '$' || c == ':' || ('0' <= c && c <= '9') || 
+      c == '(' || c == ')' || c == '%';
+      c = is.peek()) {
+    is.ignore();
+    name_builder.put(c);
+  }
+  string name(name_builder.str());
+  stringstream tmp(name);
 
-    // read the register name
-    stringstream name_builder;
-    for(char c = is.peek(); c == '%' || c == ':' || ('a' <= c && c <= 'z') || ('0' <= c && c <= '9'); c = is.peek()) {
-      is.ignore();
-      name_builder.put(c);
-    }
-    string name(name_builder.str());
-    stringstream tmp(name);
+  char first_char = name[0];
+
+  // registers
+  if(first_char == '%') {
 
     // R?
+    tmp.str(name);
+    tmp.clear();
     static_cast<R*>(this)->read_att(tmp);
-    if(!tmp.fail())
+    if(!tmp.fail() && tmp.get() == EOF)
       return is;
+    else {
+      cout << "not an R: " << name << endl;
+      cout << "tmp.fail: " << tmp.fail() << endl;
+      cout << "tmp.get: " << (char)tmp.get() << endl;
+    }
 
     // XMM?
     tmp.str(name);
     tmp.clear();
     static_cast<Xmm*>(this)->read_att(tmp);
-    if(!tmp.fail())
+    if(!tmp.fail() && tmp.get() == EOF)
       return is;
 
     // YMM?
     tmp.str(name);
     tmp.clear();
     static_cast<Ymm*>(this)->read_att(tmp);
-    if(!tmp.fail())
+    if(!tmp.fail() && tmp.get() == EOF)
       return is;
 
     // MM?
     tmp.str(name);
     tmp.clear();
     static_cast<Mm*>(this)->read_att(tmp);
-    if(!tmp.fail())
+    if(!tmp.fail() && tmp.get() == EOF)
       return is;
 
     // SREG?
     tmp.str(name);
     tmp.clear();
     static_cast<Sreg*>(this)->read_att(tmp);
-    if(!tmp.fail())
+    if(!tmp.fail() && tmp.get() == EOF)
       return is;
 
 
-  } else if (is.peek() == '$') {
+  } else if (first_char == '$') {
     // Immediates
-    is.ignore();
+    tmp.ignore();
     uint64_t value = 0;
 
     bool neg = false;
-    if(is.peek() == '-') {
-      is.ignore();
+    if(tmp.peek() == '-') {
+      tmp.ignore();
       neg = true;
     }
 
-    if(is.peek() == '0') {
-      is.ignore();
-      char c = is.peek();
+    if(tmp.peek() == '0') {
+      tmp.ignore();
+      char c = tmp.peek();
       if(c == 'x') {
-        is.ignore();
-        is >> hex >> value;
+        tmp.ignore();
+        tmp >> hex >> value;
       } else if ('0' <= c && c <= '9') {
-        is >> dec >> value;
+        tmp >> dec >> value;
       } else {
         value = 0;
       }
     } else {
-      is >> dec >> value;
+      tmp >> dec >> value;
     }
 
     if(neg)
@@ -122,18 +134,18 @@ istream& Operand::read_att(istream& is) {
     *this = imm;
 
     return is;
-  } else if (is.peek() == '.') {
+  } else if (first_char == '.') {
     // Labels
-    string name;
-    is >> name;
     Label label(name);
     *this = label;
     return is;
   }
 
   // Memory?
+  tmp.str(name);
+  tmp.clear();
   M8 m(Constants::rax());
-  is >> m;
+  tmp >> m;
   *this = m;
 
   return is;
