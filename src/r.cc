@@ -151,16 +151,12 @@ istream& R64::read_att(istream& is) {
   string temp;
   is >> temp;
 
-  cout << "Checking if '" << temp << "' is an R64" << endl;
-
   for (size_t i = 0, ie = r64s_().size(); i < ie; ++i) {
     if (temp == r64s_()[i]) {
       *this = Constants::r64s()[i];
       return is;
     }
   }
-
-  cout << "No such R64 register" << endl;
 
   fail(is) << "No such r64 register \"" << temp << "\"";
   return is;
@@ -176,7 +172,6 @@ istream& R::read_att(istream& is) {
   string name;
   is >> name;
 
-  cout << "Checking if '" << name << "' is a register" << endl;
   stringstream tmp;
 
   // R32?
@@ -185,8 +180,6 @@ istream& R::read_att(istream& is) {
   static_cast<R32*>(this)->read_att(tmp);
   if(!tmp.fail())
     return is;
-  else
-    cout << "Failed on R32: " << fail_msg(tmp) << endl;
 
   // R64?
   tmp.str(name);
@@ -194,8 +187,6 @@ istream& R::read_att(istream& is) {
   static_cast<R64*>(this)->read_att(tmp);
   if(!tmp.fail())
     return is;
-  else
-    cout << "Failed on R64: " << fail_msg(tmp) << endl;
 
   // R8?
   tmp.str(name);

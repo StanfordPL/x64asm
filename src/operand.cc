@@ -45,10 +45,29 @@ istream& Operand::read_att(istream& is) {
 
   // read the entire operand
   stringstream name_builder;
+  size_t in_parens = 0;
   for(char c = is.peek(); 
       ('a' <= c && c <= 'z') || c == '.' || c == '$' || c == ':' || ('0' <= c && c <= '9') || 
-      c == '(' || c == ')' || c == '%';
+      c == '(' || c == ')' || c == '-' || c == '%' || (c == ',' && in_parens);
       c = is.peek()) {
+
+    if(c == '(') {
+      if(in_parens) {
+        fail(is) << "x64 doesn't have nested parenthesis" << endl;
+        return is;
+      } else {
+        in_parens = 1;
+      }
+    } 
+    if(c == ')') {
+      if(in_parens)
+        in_parens = 0;
+      else {
+        fail(is) << "closeing ')' without opening" << endl;
+        return is;
+      }
+    }
+
     is.ignore();
     name_builder.put(c);
   }
@@ -66,11 +85,6 @@ istream& Operand::read_att(istream& is) {
     static_cast<R*>(this)->read_att(tmp);
     if(!tmp.fail() && tmp.get() == EOF)
       return is;
-    else {
-      cout << "not an R: " << name << endl;
-      cout << "tmp.fail: " << tmp.fail() << endl;
-      cout << "tmp.get: " << (char)tmp.get() << endl;
-    }
 
     // XMM?
     tmp.str(name);

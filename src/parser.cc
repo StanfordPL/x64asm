@@ -222,8 +222,6 @@ istream& Instruction::read_att(istream& is) {
     if(failed(input)) {
       fail(is) << "Could not parse operand " << operand_count << ": " << fail_msg(input);
       return is;
-    } else {
-      cout << "Got operand " << op << endl;
     }
     operands.insert(operands.begin(), op);
     operand_count++;
@@ -235,7 +233,7 @@ istream& Instruction::read_att(istream& is) {
         fail(is) << "Expected ',' but found '" << (char)input.peek() << "'";
         return is;
       }
-    }
+    } 
   }
 
   // Check for annotations in the comment
