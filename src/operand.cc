@@ -47,11 +47,12 @@ istream& Operand::read_att(istream& is) {
   stringstream name_builder;
   size_t in_parens = 0;
 
-  for(char c = is.peek(); '!' <= c && c <= '~' && (c != ',' || in_parens); c = is.peek()) {
+  for(char c = is.peek(); ' ' <= c && c <= '~' && (c != ',' || in_parens); c = is.peek()) {
     /** This loop tokenizes the entire operand.  We're looking for any
      * non-whitespace character, to allow for lots of flexibility in labels.
      * The only trick is that if we encounter a ',' outside of parenthesis then
-     * the operand needs to be terminated.  */
+     * the operand needs to be terminated.  We need to allow whitespace in order
+     * to accomodate things like "(%rsi, %rdi, 2)" */
 
     if(c == '(') {
       if(in_parens) {
@@ -152,7 +153,12 @@ istream& Operand::read_att(istream& is) {
     return is;
   } else if (first_char == '.') {
     // Labels
-    Label label(name);
+    stringstream ss;
+    ss << name;
+    string label_name;
+    ss >> label_name;
+   
+    Label label(label_name);
     *this = label;
     return is;
   }
