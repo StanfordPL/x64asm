@@ -807,8 +807,9 @@ ostream& Instruction::write_att(ostream& os) const {
     return os;
   }
 
-  os << opcode_write_att(get_opcode()) << " ";
+  os << opcode_write_att(get_opcode());
   if (arity() > 0)
+    os << " ";
     for (int i = (int)arity() - 1; i >= 0; --i) {
       switch (type(i)) {
       case Type::HINT:
