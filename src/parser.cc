@@ -214,6 +214,7 @@ istream& Instruction::read_att(istream& is) {
 
   // Parse operands
   std::vector<Operand> operands;
+  std::vector<Operand> poor_operands;
   input >> std::ws;
   size_t operand_count = 1;
   while(input.good()) {
@@ -224,6 +225,7 @@ istream& Instruction::read_att(istream& is) {
       return is;
     }
     operands.insert(operands.begin(), op);
+    poor_operands.insert(poor_operands.begin(), op);
     operand_count++;
     if(!input.eof()) {
       if(input.peek() == ',') {
@@ -300,6 +302,9 @@ istream& Instruction::read_att(istream& is) {
       return is;
     else {
       poor_opc = entry.first;
+      for(size_t i = 0; i < operands.size(); ++i) {
+        poor_operands[i] = operands_[i];
+      }
       found_poor = true;
     }
   }
@@ -308,6 +313,9 @@ istream& Instruction::read_att(istream& is) {
     fail(is) << "Could not match opcode/operands to an x86-64 instruction";
   } else {
     set_opcode(poor_opc);
+    for(size_t i = 0; i < operands.size(); ++i) {
+      operands_[i] = poor_operands[i];
+    }
   }
 
   return is;
