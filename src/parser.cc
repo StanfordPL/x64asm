@@ -257,6 +257,7 @@ istream& Instruction::read_att(istream& is) {
 
   // See if we can match this up to an instruction
   bool found_poor = false;
+  Opcode poor_opc;
   Row possible_encodings = att_table[opcode];
   if(possible_encodings.size() == 0) {
     fail(is) << "No such opcode '" << opcode << "' exists";
@@ -297,12 +298,16 @@ istream& Instruction::read_att(istream& is) {
 
     if(!poor)
       return is;
-    else 
+    else {
+      poor_opc = entry.first;
       found_poor = true;
+    }
   }
 
   if(!found_poor) {
     fail(is) << "Could not match opcode/operands to an x86-64 instruction";
+  } else {
+    set_opcode(poor_opc);
   }
 
   return is;
