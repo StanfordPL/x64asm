@@ -769,7 +769,7 @@ private:
 
   // Helper function for read_att that uses the fact that
   // Instruction is a friend of Operand to do the dirty work.
-  static bool promote(Operand* op, Type target);
+  static void promote(Operand* op, Type target);
 
   // Static lookup tables which back the public API of this class.
   static const std::array<size_t, X64ASM_NUM_OPCODES> arity_;
