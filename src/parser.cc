@@ -385,10 +385,10 @@ ostream& Instruction::write_att(ostream& os) const {
 
         // replicate sign bit
         int64_t se_bits = bits;
-        se_bits = (se_bits << (64-w)) >> (64-w);
+        if (w != 64) se_bits = (se_bits << (64-w)) >> (64-w);
 
         // cut off anything beyond imm_max
-        se_bits = se_bits & ((1ULL << imm_max) - 1);
+        if (imm_max != 64) se_bits = se_bits & ((1ULL << imm_max) - 1);
 
         const auto fmt = os.flags();
         os << "$0x" << std::noshowbase << std::hex << se_bits;
