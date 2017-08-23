@@ -112,10 +112,10 @@ namespace {
           uint64_t bits = *((const Imm64*)o);
 
           // check the bits that are to the left of the biggest possible immediate.  they all need to be 0 or 1.
-          uint64_t bits_above = ((-1 << imm_max) & bits) >> imm_max;
+          uint64_t bits_above = ((-1LL << imm_max) & bits) >> imm_max;
           if (bits_above == 0) {
             // all zeros above, that's fine
-          } else if (bits_above == (1 << (64 - imm_max)) - 1) {
+          } else if (bits_above == (1ULL << (64 - imm_max)) - 1) {
             // all ones, check that msb is also 1
             if ((bits >> (imm_max - 1)) & 0x1 == 0x1) {
               // also one, ok
@@ -382,14 +382,13 @@ ostream& Instruction::write_att(ostream& os) const {
         uint16_t imm_max = *max_element(imm_sizes.begin(), imm_sizes.end());
         uint16_t w = bit_width_of_type(type(i));
         uint64_t bits = get_operand<Imm64>(i);
-        uint64_t bits_above = ((-1 << imm_max) & bits) >> imm_max;
 
         // replicate sign bit
         int64_t se_bits = bits;
         se_bits = (se_bits << (64-w)) >> (64-w);
 
         // cut off anything beyond imm_max
-        se_bits = se_bits & ((1 << imm_max) - 1);
+        se_bits = se_bits & ((1ULL << imm_max) - 1);
 
         const auto fmt = os.flags();
         os << "$0x" << std::noshowbase << std::hex << se_bits;
