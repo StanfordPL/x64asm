@@ -1187,8 +1187,8 @@ VEX.128.66.0F38.WIG 2A /r	VMOVNTDQA xmm1, m128	RM	Z, R						V	V	AVX	vmovntdqa		M
 VEX.256.66.0F38.WIG 2A /r	VMOVNTDQA ymm1, m256	RM	W, R						V	V	AVX2	vmovntdqa		Move 256-bit data from m256 to ymm using non-temporal hint if WC memory type.
 														
 66 0F E7 /r 	MOVNTDQ m128, xmm	MR	W, R						V	V	SSE2	movntdq		Move double quadword from xmm to m128 using non-temporal hint.
-VEX.128.66.0F.WIG E7 /r	VMOVNTDQ m128, xmm1	MR	W, R						V	V	AVX	vmovntdqa		Move packed integer values in xmm1 to m128 using non-temporal hint.
-VEX.256.66.0F.WIG E7 /r	MOVNTDQ m256, ymm1	MR	W, R						V	V	AVX	movntdq		Move packed integer values in ymm1 to m256 using non-temporal hint.
+VEX.128.66.0F.WIG E7 /r	VMOVNTDQ m128, xmm1	MR	W, R						V	V	AVX	vmovntdq		Move packed integer values in xmm1 to m128 using non-temporal hint.
+VEX.256.66.0F.WIG E7 /r	VMOVNTDQ m256, ymm1	MR	W, R						V	V	AVX	vmovntdq		Move packed integer values in ymm1 to m256 using non-temporal hint.
 														
 0F C3 /r 	MOVNTI m32, r32 	MR	W, R						V	V		movnti		Move doubleword from r32 to m32 using non-temporal hint.
 REX.W+ 0F C3 /r 	MOVNTI m64, r64 	MR	W, R						V	NE		movnti		Move quadword from r64 to m64 using non-temporal hint.
