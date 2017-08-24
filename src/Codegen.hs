@@ -1445,8 +1445,8 @@ att_row_elem i = "{" ++ e ++ ", vector<Type>{" ++ ops ++ "}}"
         ops = intercalate "," $ map (("Type::"++).op2tag) $ operands i
 
 -- Generates a row in the at&t parse table
-att_row :: [Instr] -> String
-att_row is = " \t{\"" ++ (mn is) ++ "\", {{" ++ target ++ ",{" ++ imm_sizes_text ++ "}}, {\n\t\t " ++ (body is) ++ "\n}}}"
+att_row :: String -> [Instr] -> String
+att_row suffix is = " \t{\"" ++ (mn is) ++ suffix ++ "\", {{" ++ target ++ ",{" ++ imm_sizes_text ++ "}}, {\n\t\t " ++ (body is) ++ "\n}}}"
   where mn is = (att (head is))
         body is = intercalate "\n\t\t," $ map att_row_elem $ sortBy compare_instr is
         all_operands = concat $ map operands is
@@ -1459,7 +1459,10 @@ att_row is = " \t{\"" ++ (mn is) ++ "\", {{" ++ target ++ ",{" ++ imm_sizes_text
 
 -- Generates the entire at&t parse table
 att_table :: [Instr] -> String
-att_table is = intercalate "\n, " $ map att_row $ att_group is
+att_table is = intercalate "\n, " (regular_rows ++ alternate_rows)
+  where regular_rows = map (att_row "") $ att_group is
+        alternate_rows = map (att_row ".s") $ att_group $ alternates is
+        alternates is = filter (\i -> pref i /= "") is
 
 -- Write code
 --------------------------------------------------------------------------------
