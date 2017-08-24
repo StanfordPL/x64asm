@@ -417,7 +417,7 @@ F2 REX.W+ 0F 38 F1 /r	CRC32 r64, r/m64	RM	RW, R						V	NE		crc32q		Accumulate CR
 														
 F3 0F E6	CVTDQ2PD xmm1, xmm2/m64	RM	W, R						V	V	SSE2	cvtdq2pd		Convert two packed signed doubleword integers from xmm2/m128 to two packed double-precision floating-point values in xmm1.
 VEX.128.F3.0F.WIG E6 /r	VCVTDQ2PD xmm1, xmm2/m64	RM	Z, R						V	V	AVX	vcvtdq2pd		Convert two packed signed doubleword integers from xmm2/mem to two packed double-precision floating-point values in xmm1.
-VEX.256.F3.0F.WIG E6 /r	VCVTDQ2PD ymm1, ymm2/m128	RM	W, R						V	V	AVX	vcvtdq2pd		Convert four packed signed doubleword integers from ymm2/mem to four packed double-precision floating-point values in ymm1.
+VEX.256.F3.0F.WIG E6 /r	VCVTDQ2PD ymm1, xmm2/m128	RM	W, R						V	V	AVX	vcvtdq2pd		Convert four packed signed doubleword integers from ymm2/mem to four packed double-precision floating-point values in ymm1.
 														
 0F 5B /r	CVTDQ2PS xmm1, xmm2/m128	RM	W, R						V	V	SSE2	cvtdq2ps		Convert four packed signed doubleword integers from xmm2/m128 to four packed single-precision floating-point values in xmm1.
 VEX.128.0F.WIG 5B /r	VCVTDQ2PS xmm1, xmm2/m128	RM	Z, R						V	V	AVX	vcvtdq2ps		Convert four packed signed doubleword integers from xmm2/mem to four packed single-precision floating-point values in xmm1.

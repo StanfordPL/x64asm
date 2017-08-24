@@ -230,12 +230,16 @@ void Instruction::promote(Operand* op, Type target) {
 
 }
 
-
+// #define DEBUG_PARSER
 
 istream& Instruction::read_att(istream& is) {
 
   string line;
   getline(is, line);
+
+#ifdef DEBUG_PARSER
+  cout << ":: trying to parse '" << line << "'" << endl;
+#endif
 
   // Take care of comments
   size_t comment_index = line.find_first_of('#');
@@ -325,9 +329,16 @@ istream& Instruction::read_att(istream& is) {
     if(entry.second.size() != operands.size())
       continue;
 
+#ifdef DEBUG_PARSER
+    cout << ":: trying to use '" << entry.first << "'" << endl;
+#endif
+
     bool works = true;
     for(size_t i = 0; i < entry.second.size(); ++i)
       works &= is_a(&operands[i], entry.second[i], data.first);
+#ifdef DEBUG_PARSER
+    if (!works) cout << ":: does not work because of operand types" << endl;
+#endif
     if(!works)
       continue;
 
@@ -343,13 +354,23 @@ istream& Instruction::read_att(istream& is) {
       Code c({*this});
       auto fxn = assm.assemble(c).second;
       size_t actual = fxn.size();
-      if(actual != expected_size)
+      if(actual != expected_size) {
+#ifdef DEBUG_PARSER
+        cout << ":: expected size " << expected_size << ", but size is " << actual << "." << endl;
+#endif
         continue;
+      }
     }
 
+#ifdef DEBUG_PARSER
+    cout << ":: parsed as '" << (*this) << "'" << endl;
+#endif
     return is;
   }
 
+#ifdef DEBUG_PARSER
+  cout << ":: failed to parse" << endl;
+#endif
   fail(is) << "Could not match opcode/operands to an x86-64 instruction";
 
   return is;
