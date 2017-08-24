@@ -1736,7 +1736,7 @@ F3 0F B8 /r 	POPCNT r16, r/m16 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	PO
 F3 0F B8 /r 	POPCNT r32, r/m32 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	V	POPCNT	popcntl		POPCNT on r/m32
 F3 REX.W+ 0F B8 /r 	POPCNT r64, r/m64 	RM	W, R		E.OF E.SF E.ZF E.AF E.CF E.PF				V	NE	POPCNT	popcntq		POPCNT on r/m64
 														
-66 9D 	POPF 	NP		RSP	E.* RSP				V	V		popf		Pop top of stack into lower 16 bits of EFLAGS.
+66 9D 	POPF 	NP		RSP	E.* RSP				V	V		popfw		Pop top of stack into lower 16 bits of EFLAGS.
 9D 	POPFD 								NE	V				Pop top of stack into EFLAGS.
 9D 	POPFQ 	NP		RSP	E.* RSP				V	NE		popfq		Pop top of stack and zero-extend into RFLAGS.
 														
@@ -1952,7 +1952,7 @@ FF /6	PUSH r/m64	M	R	RSP	RSP				V	NE		pushq		Push r/m64.
 60	PUSHA			RSP	RSP				I	V				Push AX, CX, DX, BX, original SP, BP, SI, and DI.
 60	PUSHAD			RSP	RSP				I	V				Push EAX, ECX, EDX, EBX, original ESP, EBP, ESI, and EDI.
 														
-66 9C	PUSHF	NP		E.* RSP	RSP				V	V		pushf		Push lower 16 bits of EFLAGS.
+66 9C	PUSHF	NP		E.* RSP	RSP				V	V		pushfw		Push lower 16 bits of EFLAGS.
 9C	PUSHFD								NE	V				Push EFLAGS.
 9C	PUSHFQ	NP		E.* RSP	RSP				V	NE		pushfq		Push RFLAGS.
 														

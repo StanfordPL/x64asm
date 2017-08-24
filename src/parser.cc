@@ -33,6 +33,8 @@ limitations under the License.
 using namespace std;
 using namespace cpputil;
 
+// #define DEBUG_PARSER
+
 namespace {
 
   using namespace x64asm;
@@ -112,7 +114,8 @@ namespace {
           uint64_t bits = *((const Imm64*)o);
 
           // check the bits that are to the left of the biggest possible immediate.  they all need to be 0 or 1.
-          uint64_t bits_above = ((-1LL << imm_max) & bits) >> imm_max;
+          uint64_t bits_above = 0;
+          if (imm_max != 64) bits_above =((-1LL << imm_max) & bits) >> imm_max;
           if (bits_above == 0) {
             // all zeros above, that's fine
           } else if (bits_above == (1ULL << (64 - imm_max)) - 1) {
@@ -131,7 +134,7 @@ namespace {
 
           // replicate sign bit
           int64_t se_bits = bits;
-          se_bits = (se_bits << (64-imm_max)) >> (64-imm_max);
+          if (imm_max != 64) se_bits = (se_bits << (64-imm_max)) >> (64-imm_max);
 
           auto n_leading_ones = number_leading_zeros(~se_bits);
           auto n_leading_zeros = number_leading_zeros(se_bits);
@@ -229,8 +232,6 @@ void Instruction::promote(Operand* op, Type target) {
   }
 
 }
-
-// #define DEBUG_PARSER
 
 istream& Instruction::read_att(istream& is) {
 
