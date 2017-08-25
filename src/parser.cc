@@ -33,12 +33,17 @@ limitations under the License.
 using namespace std;
 using namespace cpputil;
 
+// #define DEBUG_PARSER
+
 namespace {
 
   using namespace x64asm;
 
+  typedef std::vector<uint16_t> ImmSizes;
+  typedef uint16_t TargetSize;
+  typedef std::pair<TargetSize, ImmSizes> SizeInfo;
   typedef std::pair<x64asm::Opcode, std::vector<x64asm::Type>> Entry;
-  typedef std::vector<Entry> Row;
+  typedef std::pair<SizeInfo, std::vector<Entry>> Row;
   typedef std::map<std::string, Row> Table;
 
   Table att_table = {
@@ -73,24 +78,80 @@ namespace {
   }
 
 
+  size_t number_leading_zeros(uint64_t value) {
+    size_t num_zeroes = 0;
+    uint64_t one = 1;
+    for(int i = 63; i >= 0; --i) {
+      if ((value & (one << i)) == 0)
+        ++num_zeroes;
+      else
+        break;
+    }
+    return num_zeroes;
+  }
+
+
   /** Used in parsing to determine if an operand can be 
     rewritten to a given type. */
-  bool is_a(const Operand* o, Type target) {
+  bool is_a(const Operand* o, Type target, SizeInfo& size_info) {
     Type parse = o->type();
 
     // These first two parses still have placeholder types.
     // They should be checked before the generic equality tests.
-    if ( parse == Type::IMM_64 )
+    if ( parse == Type::IMM_64 ) {
       switch ( target ) {
         case Type::ZERO:   return ((const Zero*)o)->check();
         case Type::ONE:    return ((const One*)o)->check();
         case Type::THREE:  return ((const Three*)o)->check();
-        case Type::IMM_8:  return ((const Imm8*)o)->check();
-        case Type::IMM_16: return ((const Imm16*)o)->check();
-        case Type::IMM_32: return ((const Imm32*)o)->check();
-        case Type::IMM_64: return ((const Imm64*)o)->check();
+        case Type::IMM_8:
+        case Type::IMM_16:
+        case Type::IMM_32: {
+          // target_w is the width that the operand will be sign-extended to (if necessary)
+          uint16_t target_w = size_info.first;
+          ImmSizes imm_sizes = size_info.second;
+          uint16_t imm_max = *max_element(imm_sizes.begin(), imm_sizes.end());
+          uint16_t w = bit_width_of_type(target);
+          uint64_t bits = *((const Imm64*)o);
+
+          // check the bits that are to the left of the biggest possible immediate.  they all need to be 0 or 1.
+          uint64_t bits_above = 0;
+          if (imm_max != 64) bits_above =((-1LL << imm_max) & bits) >> imm_max;
+          if (bits_above == 0) {
+            // all zeros above, that's fine
+          } else if (bits_above == (1ULL << (64 - imm_max)) - 1) {
+            // all ones, check that msb is also 1
+            if ((bits >> (imm_max - 1)) & 0x1 == 0x1) {
+              // also one, ok
+            } else {
+              return false;
+            }
+          } else {
+            return false;
+          }
+
+          // if this is the only imm size, or if it is the widest imm size, we can accept
+          if (w == imm_max) return true;
+
+          // replicate sign bit
+          int64_t se_bits = bits;
+          if (imm_max != 64) se_bits = (se_bits << (64-imm_max)) >> (64-imm_max);
+
+          auto n_leading_ones = number_leading_zeros(~se_bits);
+          auto n_leading_zeros = number_leading_zeros(se_bits);
+
+          // is this a positive constant that fits within w bits?
+          if (n_leading_zeros > 64-w) return true;
+
+          // is this a negative constants that fits within w bits?
+          if (n_leading_ones >= 64-w) return true;
+
+          // does not fit
+          return false;
+        }
+        case Type::IMM_64: return true;
         default:           return false;
       }
+    }
 
     /*
     if ( parse == Type::MOFFS_8 ) {
@@ -146,41 +207,40 @@ namespace {
 
 namespace x64asm {
 
-/** Promotes an operand to a given type.  Returns 'true' if 
-  the fit is dangerous and would best be avoided; e.g. if 0x80..0xff are put
-  into an 8-bit immediate, this could mess up the sign.  We can assume is_a()
-  on the same arguments has returned true.  */
-bool Instruction::promote(Operand* op, Type target) {
+/** Promotes an operand to a given type.  */
+void Instruction::promote(Operand* op, Type target) {
 
   switch(target) {
     case Type::IMM_8: {
       uint64_t value = (uint64_t)*static_cast<Imm64*>(op);
       *op = Imm8(value & 0xff);
-      return (0x80 <= value && value <= 0xff) || (0xffffffffffffff00 <= value && value <= 0xffffffffffffff80);
+      return;
     }
     case Type::IMM_16: {
       uint64_t value = (uint64_t)*static_cast<Imm64*>(op);
       *op = Imm16(value & 0xffff);
-      return (0x8000 <= value && value <= 0xffff) || (0xffffffffffff0000 <= value && value <= 0xffffffffffff8000);
+      return;
     }
     case Type::IMM_32: {
       uint64_t value = (uint64_t)*static_cast<Imm64*>(op);
       *op = Imm32(value & 0xffffffff);
-      return (0x80000000 <= value && value <= 0xffffffff) || (0xffffffff00000000 <= value && value <= 0xffffffff80000000);
+      return;
     }
     default:
       op->set_type_maybe_unless_I_know_better_hack(target);
-      return false;
+      return;
   }
 
 }
-
-
 
 istream& Instruction::read_att(istream& is) {
 
   string line;
   getline(is, line);
+
+#ifdef DEBUG_PARSER
+  cout << ":: trying to parse '" << line << "'" << endl;
+#endif
 
   // Take care of comments
   size_t comment_index = line.find_first_of('#');
@@ -253,11 +313,9 @@ istream& Instruction::read_att(istream& is) {
     expected_size = strtoull(comment.c_str() + size_pos + 5, NULL, 10);
   }
 
-
-
   // See if we can match this up to an instruction
-  bool found_poor = false;
-  Row possible_encodings = att_table[opcode];
+  auto data = att_table[opcode];
+  std::vector<Entry> possible_encodings = data.second;
   if(possible_encodings.size() == 0) {
     fail(is) << "No such opcode '" << opcode << "' exists";
     return is;
@@ -272,16 +330,22 @@ istream& Instruction::read_att(istream& is) {
     if(entry.second.size() != operands.size())
       continue;
 
+#ifdef DEBUG_PARSER
+    cout << ":: trying to use '" << entry.first << "'" << endl;
+#endif
+
     bool works = true;
     for(size_t i = 0; i < entry.second.size(); ++i)
-      works &= is_a(&operands[i], entry.second[i]);
+      works &= is_a(&operands[i], entry.second[i], data.first);
+#ifdef DEBUG_PARSER
+    if (!works) cout << ":: does not work because of operand types" << endl;
+#endif
     if(!works)
       continue;
 
-    bool poor = false;
     for(size_t i = 0; i < entry.second.size(); ++i) {
       operands_[i] = operands[i];
-      poor |= promote(&operands_[i], entry.second[i]);
+      promote(&operands_[i], entry.second[i]);
     }
 
     set_opcode(entry.first);
@@ -291,21 +355,183 @@ istream& Instruction::read_att(istream& is) {
       Code c({*this});
       auto fxn = assm.assemble(c).second;
       size_t actual = fxn.size();
-      if(actual != expected_size)
+      if(actual != expected_size) {
+#ifdef DEBUG_PARSER
+        cout << ":: expected size " << expected_size << ", but size is " << actual << "." << endl;
+#endif
         continue;
+      }
     }
 
-    if(!poor)
-      return is;
-    else 
-      found_poor = true;
+#ifdef DEBUG_PARSER
+    cout << ":: parsed as '" << (*this) << "'" << endl;
+#endif
+    return is;
   }
 
-  if(!found_poor) {
-    fail(is) << "Could not match opcode/operands to an x86-64 instruction";
-  }
+#ifdef DEBUG_PARSER
+  cout << ":: failed to parse" << endl;
+#endif
+  fail(is) << "Could not match opcode/operands to an x86-64 instruction";
 
   return is;
 }
+
+
+ostream& Instruction::write_att(ostream& os) const {
+  assert((size_t)get_opcode() < X64ASM_NUM_OPCODES);
+
+  if (get_opcode() == LABEL_DEFN) {
+    get_operand<Label>(0).write_att(os);
+    os << ":";
+    return os;
+  }
+
+  string opcode = opcode_write_att(get_opcode());
+  os << opcode;
+  if (arity() > 0)
+    os << " ";
+    for (int i = (int)arity() - 1; i >= 0; --i) {
+      switch (type(i)) {
+      case Type::HINT:
+        get_operand<Hint>(i).write_att(os);
+        break;
+      case Type::IMM_8:
+      case Type::IMM_16:
+      case Type::IMM_32: {
+        auto data = att_table[opcode];
+        ImmSizes imm_sizes = data.first.second;
+        uint16_t imm_max = *max_element(imm_sizes.begin(), imm_sizes.end());
+        uint16_t w = bit_width_of_type(type(i));
+        uint64_t bits = get_operand<Imm64>(i);
+
+        // replicate sign bit
+        int64_t se_bits = bits;
+        if (w != 64) se_bits = (se_bits << (64-w)) >> (64-w);
+
+        // cut off anything beyond imm_max
+        if (imm_max != 64) se_bits = se_bits & ((1ULL << imm_max) - 1);
+
+        const auto fmt = os.flags();
+        os << "$0x" << std::noshowbase << std::hex << se_bits;
+        os.flags(fmt);
+        break;
+      }
+      case Type::IMM_64:
+        get_operand<Three>(i).write_att(os);
+        break;
+      case Type::ZERO:
+      case Type::ONE:
+      case Type::THREE:
+        get_operand<Three>(i).write_att(os);
+        break;
+
+      case Type::LABEL:
+        get_operand<Label>(i).write_att(os);
+        break;
+
+      case Type::M_8:
+      case Type::M_16:
+      case Type::M_32:
+      case Type::M_64:
+      case Type::M_128:
+      case Type::M_256:
+      case Type::M_16_INT:
+      case Type::M_32_INT:
+      case Type::M_64_INT:
+      case Type::M_32_FP:
+      case Type::M_64_FP:
+      case Type::M_80_FP:
+      case Type::M_80_BCD:
+      case Type::M_2_BYTE:
+      case Type::M_28_BYTE:
+      case Type::M_108_BYTE:
+      case Type::M_512_BYTE:
+      case Type::FAR_PTR_16_16:
+      case Type::FAR_PTR_16_32:
+      case Type::FAR_PTR_16_64:
+        get_operand<FarPtr1664>(i).write_att(os);
+        break;
+
+      case Type::MM:
+        get_operand<Mm>(i).write_att(os);
+        break;
+
+      case Type::MOFFS_8:
+      case Type::MOFFS_16:
+      case Type::MOFFS_32:
+      case Type::MOFFS_64:
+        get_operand<Moffs64>(i).write_att(os);
+        break;
+
+      case Type::PREF_66:
+        get_operand<Pref66>(i).write_att(os);
+        break;
+      case Type::PREF_REX_W:
+        get_operand<PrefRexW>(i).write_att(os);
+        break;
+      case Type::FAR:
+        get_operand<Far>(i).write_att(os);
+        break;
+
+      case Type::RH:
+        get_operand<Rh>(i).write_att(os);
+        break;
+      case Type::AL:
+      case Type::CL:
+      case Type::R_8:
+        get_operand<R8>(i).write_att(os);
+        break;
+      case Type::AX:
+      case Type::DX:
+      case Type::R_16:
+        get_operand<R16>(i).write_att(os);
+        break;
+      case Type::EAX:
+      case Type::R_32:
+        get_operand<R32>(i).write_att(os);
+        break;
+      case Type::RAX:
+      case Type::R_64:
+        get_operand<R64>(i).write_att(os);
+        break;
+
+      case Type::REL_8:
+      case Type::REL_32:
+        get_operand<Rel32>(i).write_att(os);
+        break;
+
+      case Type::FS:
+      case Type::GS:
+      case Type::SREG:
+        get_operand<Sreg>(i).write_att(os);
+        break;
+
+      case Type::ST_0:
+      case Type::ST:
+        get_operand<St>(i).write_att(os);
+        break;
+
+      case Type::XMM_0:
+      case Type::XMM:
+        get_operand<Xmm>(i).write_att(os);
+        break;
+
+      case Type::YMM:
+        get_operand<Ymm>(i).write_att(os);
+        break;
+
+      default:
+        assert(false);
+      }
+
+      if (i != 0) {
+        os << ", ";
+      }
+    }
+
+  return os;
+}
+
 
 } // namespace x64asm

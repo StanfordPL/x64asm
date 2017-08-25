@@ -194,6 +194,68 @@ reg_op "EAX" = True
 reg_op "RAX" = True
 reg_op _ = False
 
+-- Returns the number of bits in a type
+op_width :: String -> Int
+op_width "rh"       = 8
+op_width "r8"       = 8
+op_width "r16"      = 16
+op_width "r32"      = 32
+op_width "r64"      = 64
+op_width "AL"       = 8
+op_width "CL"       = 8
+op_width "AX"       = 16
+op_width "DX"       = 16
+op_width "EAX"      = 32
+op_width "RAX"      = 64
+op_width "m8"       = 8
+op_width "m16"      = 16
+op_width "m32"      = 32
+op_width "m64"      = 64
+op_width "m128"     = 128
+op_width "m256"     = 256
+op_width "m16:16"   = 0
+op_width "m16:32"   = 0
+op_width "m16:64"   = 0
+op_width "m16int"   = 16
+op_width "m32int"   = 32
+op_width "m64int"   = 64
+op_width "m80bcd"   = 80
+op_width "m32fp"    = 32
+op_width "m64fp"    = 64
+op_width "m80fp"    = 80
+op_width "m2byte"   = 2
+op_width "m28byte"  = 28
+op_width "m108byte" = 108
+op_width "m512byte" = 512
+op_width "imm8"     = 8
+op_width "imm16"    = 16
+op_width "imm32"    = 32
+op_width "imm64"    = 64
+op_width "0"        = 0
+op_width "1"        = 0
+op_width "3"        = 0
+op_width "mm"       = 64
+op_width "xmm"      = 128
+op_width "<XMM0>"   = 128
+op_width "ymm"      = 256
+op_width "ST"       = 0
+op_width "ST(i)"    = 0
+op_width "rel8"     = 8
+op_width "rel32"    = 32
+op_width "moffs8"   = 8
+op_width "moffs16"  = 16
+op_width "moffs32"  = 32
+op_width "moffs64"  = 64
+op_width "Sreg"     = 0
+op_width "FS"       = 0
+op_width "GS"       = 0
+op_width "p66"      = 0
+op_width "pw"       = 0
+op_width "far"      = 0
+op_width "label32"  = 0
+op_width "label8"   = 0
+op_width "hint"     = 0
+
 -- Returns true for 32-bit register operands
 reg32_op :: String -> Bool
 reg32_op "r32" = True
@@ -1350,12 +1412,19 @@ compare_ops (x:xs) (y:ys) = case compare_op x y of
   EQ -> compare_ops xs ys
 
 -- Compare instructions based on operands, defer to preference info
-compare_instr :: Instr -> Instr -> Ordering
-compare_instr i1 i2
+compare_pref :: Instr -> Instr -> Ordering
+compare_pref i1 i2
   | (pref i1 == "YES") && (pref i2 == "YES") = EQ
   | (pref i1 == "YES") = LT
   | (pref i2 == "YES") = GT
-  | otherwise = compare_ops (operands i1) (operands i2)
+  | otherwise = EQ
+
+-- Compare instructions based on operands, defer to preference info
+compare_instr :: Instr -> Instr -> Ordering
+compare_instr i1 i2 = case compare_ops (reverse $ operands i1) (reverse $ operands i2) of
+  LT -> LT
+  GT -> GT
+  EQ -> compare_pref i1 i2
 
 -- Read AT&T code
 --------------------------------------------------------------------------------
@@ -1373,19 +1442,27 @@ att_group is = groupBy (\x y -> (att x) == (att y)) is'
 att_row_elem :: Instr -> String
 att_row_elem i = "{" ++ e ++ ", vector<Type>{" ++ ops ++ "}}"
   where e = opcode_enum i
-        ops = case (length (operands i)) of 
-                   0 -> ""
-                   _ -> intercalate "," $ map (("Type::"++).op2tag) $ operands i
+        ops = intercalate "," $ map (("Type::"++).op2tag) $ operands i
 
 -- Generates a row in the at&t parse table
-att_row :: [Instr] -> String
-att_row is = " \t{\"" ++ (mn is) ++ "\", {\n\t\t " ++ (body is) ++ "\n}}"
+att_row :: String -> [Instr] -> String
+att_row suffix is = " \t{\"" ++ (mn is) ++ suffix ++ "\", {{" ++ target ++ ",{" ++ imm_sizes_text ++ "}}, {\n\t\t " ++ (body is) ++ "\n}}}"
   where mn is = (att (head is))
         body is = intercalate "\n\t\t," $ map att_row_elem $ sortBy compare_instr is
+        all_operands = concat $ map operands is
+        all_sizes = nub $ filter (\x -> x /= 0) $ map op_width $ all_operands
+        imm_sizes = nub $ filter (\x -> x /= 0) $ map op_width $ filter imm_op $ all_operands
+        imm_sizes_text = intercalate "," $ map show imm_sizes
+        target = show $ case (length all_sizes) of
+                          0 -> 0
+                          _ -> maximum all_sizes
 
 -- Generates the entire at&t parse table
 att_table :: [Instr] -> String
-att_table is = intercalate "\n, " $ map att_row $ att_group is
+att_table is = intercalate "\n, " (regular_rows ++ alternate_rows)
+  where regular_rows = map (att_row "") $ att_group is
+        alternate_rows = map (att_row ".s") $ att_group $ alternates is
+        alternates is = filter (\i -> pref i /= "") is
 
 -- Write code
 --------------------------------------------------------------------------------
