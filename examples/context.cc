@@ -39,7 +39,7 @@ int main() {
     {INC_M64, {M64{rax}}},
     {RET}
   };
-  const auto f1 = assm.assemble(c1);
+  const auto f1 = assm.assemble(c1).second;
 
   // Calling the function should increment the value of x
   cout << "Before: x = " << x << endl;
@@ -56,7 +56,7 @@ int main() {
     {MOV_M64_R64, {M64{rax}, rdx}},
     {RET}
   };
-  const auto f2 = assm.assemble(c2);
+  const auto f2 = assm.assemble(c2).second;
 
   // Calling the function should place the value of rdx in x
   cout << "Before: x = " << x << endl;
