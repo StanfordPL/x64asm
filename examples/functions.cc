@@ -40,7 +40,7 @@ int main() {
     {CALL_R64, {rax}},
     {RET}
   };
-  const auto f1 = assm.assemble(c1);
+  const auto f1 = assm.assemble(c1).second;
 
   // Calling this function should invoke hello()
   f1.call<void>();
@@ -53,7 +53,7 @@ int main() {
     {CALL_R64, {rax}},
     {RET}
   };
-  const auto f2 = assm.assemble(c2);
+  const auto f2 = assm.assemble(c2).second;
 
   // Calling this function will indirectly invoke hello()
   f2.call<void>();
@@ -80,7 +80,7 @@ int main() {
     {MOV_R64_IMM64, {rax, Imm64{1}}},
     {RET}
   };
-  const auto f3 = assm.assemble(c3);
+  const auto f3 = assm.assemble(c3).second;
 
   // Calling this function should compute fibbonaci
   cout << "fib(5) = " << f3.call<int, int>(5) << endl;

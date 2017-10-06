@@ -36,7 +36,7 @@ int main() {
     {INC_R64, {rax}},
     {RET}
   };
-  auto f1 = assm.assemble(c1);
+  auto f1 = assm.assemble(c1).second;
 
   // Compile a function that references f1
   Code c2 {
@@ -47,7 +47,7 @@ int main() {
     {CALL_LABEL, {Label{"f1"}}},
     {RET}
   };
-  auto f2 = assm.assemble(c2);
+  auto f2 = assm.assemble(c2).second;
 
   // Example 1:
   // Linking just f2 should cause an undefined symbol error

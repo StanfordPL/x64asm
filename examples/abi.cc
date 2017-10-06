@@ -39,7 +39,7 @@ int main() {
     // The semantics of this return statement depend on usage.
     {RET}
   };
-  const auto f1 = assm.assemble(c1);
+  const auto f1 = assm.assemble(c1).second;
 
   // Calling the function as one that takes and returns a floating point value
   // will make use of the first path. The linux abi will return the floating

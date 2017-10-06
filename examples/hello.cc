@@ -38,7 +38,7 @@ Function from_file() {
   ifs >> c;
 
   // Assemble the code and return the result.
-  return assm.assemble(c);
+  return assm.assemble(c).second;
 }
 
 // Example 2: Write code using in-memory RTL.
@@ -64,7 +64,7 @@ Function from_code() {
   };
 
   // Assemble the code and return the result.
-  return assm.assemble(c);
+  return assm.assemble(c).second;
 }
 
 // Example 3: Use the assembler API.
