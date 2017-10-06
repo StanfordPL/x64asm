@@ -144,6 +144,11 @@ public:
     fxn_->label_defs_[label.val_] = fxn_->size();
   }
 
+  /** Get a copy of the underlying function object */
+  const Function* get_fxn() {
+    return fxn_;
+  }
+
   // void adc(const Al& arg0, const Imm8& arg1); ...
   #include "src/assembler.decl"
 
