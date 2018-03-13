@@ -21,6 +21,7 @@ limitations under the License.
 #include <iostream>
 #include <map>
 #include <string>
+#include <mutex>
 
 #include "src/operand.h"
 
@@ -34,6 +35,7 @@ class Label : public Operand {
 public:
   /** Creates a new, globally unique label. */
   Label() : Operand(Type::LABEL) {
+    std::lock_guard<std::mutex> guard(maps_mutex);
     val_ = next_val()++;
     std::string s(".__x64asm_L" + std::to_string(val_));
     label2val()[s] = val_;
@@ -41,6 +43,7 @@ public:
   }
   /** Creates a named label. Repeated calls will produce identical results. */
   Label(const std::string& s) : Operand(Type::LABEL) {
+    std::lock_guard<std::mutex> guard(maps_mutex);
     auto itr = label2val().find(s);
     if (itr == label2val().end()) {
       val_ = next_val()++;
@@ -50,6 +53,11 @@ public:
       val_ = itr->second;
     }
   }
+  /** Creates a label from an existing one. */
+  Label(const Label& label) : Operand(Type::LABEL) {
+    val_ = label.val_;
+  }
+
 
   /** Returns true if this label is well-formed. */
   bool check() const {
@@ -96,6 +104,10 @@ public:
   }
 
 private:
+
+  /** Ensure these global maps aren't modified from multiple threads simultaneously. */
+  static std::mutex maps_mutex;
+
   /** The next previously unused label value. */
   static uint64_t& next_val() {
 		static uint64_t val = 0;

@@ -14,6 +14,8 @@ using namespace x64asm;
 using namespace std;
 using namespace cpputil;
 
+mutex Label::maps_mutex;
+
 uint16_t Operand::size() const {
   return bit_width_of_type(type());
 }
