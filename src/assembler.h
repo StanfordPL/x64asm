@@ -77,7 +77,7 @@ public:
 
   /** Returns the number of bytes in the hex encoding of this instruction */
   size_t hex_size(const Instruction& instr) {
-    static Function f;
+    static thread_local Function f;
 
     const auto backup = fxn_;
     start(f);
