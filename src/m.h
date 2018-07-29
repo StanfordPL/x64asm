@@ -172,17 +172,17 @@ public:
   */
   bool check() const;
 
-  /** Comparison based on on val_. */
-  constexpr bool operator<(const Mem& rhs) const {
-    return val_ < rhs.val_;
+  /** Comparison based on underlying values. */
+  bool operator==(const Mem& rhs) const {
+    return std::make_pair(val_, val2_) == std::make_pair(rhs.val_, rhs.val2_);
   }
-  /** Comparison based on on val_. */
-  constexpr bool operator==(const Mem& rhs) const {
-    return val_ == rhs.val_;
-  }
-  /** Comparison based on on val_. */
-  constexpr bool operator!=(const Mem& rhs) const {
+  /** Comparison based on underlying values. */
+  bool operator!=(const Mem& rhs) const {
     return !(*this == rhs);
+  }
+  /** Comparison based on underlying values. */
+  bool operator<(const Mem& rhs) const {
+    return std::make_pair(val_, val2_) < std::make_pair(rhs.val_, rhs.val2_);
   }
 
   /** STL-compliant hash. */
