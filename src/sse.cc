@@ -30,11 +30,11 @@ ostream& Sse::write_att(ostream& os) const {
   switch(type()) {
   case Type::XMM_0:
   case Type::XMM:
-    return static_cast<const Xmm * const>(this)->write_att(os);
+    return static_cast<const Xmm*>(this)->write_att(os);
     break;
 
   case Type::YMM:
-    return static_cast<const Ymm * const>(this)->write_att(os);
+    return static_cast<const Ymm*>(this)->write_att(os);
     break;
 
   default:
