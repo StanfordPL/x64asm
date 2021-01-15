@@ -218,29 +218,29 @@ istream& R::read_att(istream& is) {
 ostream& R::write_att(ostream& os) const {
   switch(type()) {
   case Type::RH:
-    return static_cast<const Rh* const>(this)->write_att(os);
+    return static_cast<const Rh *>(this)->write_att(os);
     break;
 
   case Type::R_8:
   case Type::AL:
   case Type::CL:
-    return static_cast<const R8* const>(this)->write_att(os);
+    return static_cast<const R8 *>(this)->write_att(os);
     break;
 
   case Type::R_16:
   case Type::AX:
   case Type::DX:
-    return static_cast<const R16 * const>(this)->write_att(os);
+    return static_cast<const R16 *>(this)->write_att(os);
     break;
 
   case Type::R_32:
   case Type::EAX:
-    return static_cast<const R32 * const>(this)->write_att(os);
+    return static_cast<const R32 *>(this)->write_att(os);
     break;
 
   case Type::R_64:
   case Type::RAX:
-    return static_cast<const R64 * const>(this)->write_att(os);
+    return static_cast<const R64 *>(this)->write_att(os);
     break;
 
   default:
